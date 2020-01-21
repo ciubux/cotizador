@@ -185,8 +185,10 @@ namespace DataLayer
         }
 
 
-        public void UpdateRequerimiento(Requerimiento requerimiento)
+        public List<String> UpdateRequerimiento(Requerimiento requerimiento)
         {
+
+            List<String> emailList = new List<string>();
             this.BeginTransaction(IsolationLevel.ReadCommitted);
             var objCommand = GetSqlCommand("CLIENTE.pu_requerimiento");
             
@@ -338,8 +340,13 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "topePresupuesto", requerimiento.topePresupuesto);
             InputParameterAdd.Guid(objCommand, "idPeriodo", requerimiento.periodo.idPeriodoSolicitud);
             InputParameterAdd.Int(objCommand, "idRequerimiento", requerimiento.idRequerimiento);
-            ExecuteNonQuery(objCommand);
+            DataSet  dataSet = ExecuteDataSet(objCommand);
 
+
+            DataTable dataTableEmailList1 = dataSet.Tables[0];
+            DataTable dataTableEmailList2 = dataSet.Tables[1];
+
+          
 
             foreach (RequerimientoDetalle requerimientoDetalle in requerimiento.requerimientoDetalleList)
             {
@@ -347,7 +354,23 @@ namespace DataLayer
                 //requerimientoDetalle.usuario = requerimiento.usuario;
                 this.InsertRequerimientoDetalle(requerimientoDetalle, requerimiento.usuario);
             }
-       this.Commit();
+       
+            foreach (DataRow row in dataTableEmailList1.Rows)
+            {
+                emailList.Add(Converter.GetString(row, "email"));
+            }
+            foreach (DataRow row in dataTableEmailList2.Rows)
+            {
+                String email = Converter.GetString(row, "email");
+                String email2 = emailList.Where(e => e.Contains(email)).FirstOrDefault();
+                if (email2 == null)
+                    emailList.Add(email);
+            }
+                      
+            
+            this.Commit();
+
+            return emailList;
         }           
     
         #endregion
@@ -374,9 +397,9 @@ namespace DataLayer
         }
 
 
-        public void AprobarRequerimientos(List<Requerimiento> requerimientoList, Int64 numeroGrupo)
+        public List<String> AprobarRequerimientos(List<Requerimiento> requerimientoList, Int64 numeroGrupo)
         {
-
+            List<String> emailList = new List<string>();
             this.BeginTransaction(IsolationLevel.ReadCommitted);
 
 
@@ -403,9 +426,21 @@ namespace DataLayer
             InputParameterAdd.BigInt(objCommand, "numeroGrupo", numeroGrupo);
 
             //InputParameterAdd.Varchar(objCommand, "idMovimientoAlmacenList", idMovimientoAlmacenList);
-            ExecuteNonQuery(objCommand);
+            DataSet dataSet = ExecuteDataSet(objCommand);
 
-            this.Commit();
+
+            DataTable dataTableEmailList1 = dataSet.Tables[0];
+
+
+
+            foreach (DataRow row in dataTableEmailList1.Rows)
+            {
+                emailList.Add(Converter.GetString(row, "email"));
+            } 
+  this.Commit();
+            return emailList;
+
+          
         }
 
 

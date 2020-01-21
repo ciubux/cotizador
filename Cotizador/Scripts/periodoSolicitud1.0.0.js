@@ -86,6 +86,13 @@ jQuery(function ($) {
     });
 
 
+
+    $(document).on('change', ".chkCanastaAll", function () {
+        //  alert("s")
+        $(".chkCanasta").prop('checked', $('.chkCanastaAll').is(':checked'));
+        //  alert($('.chkCanastaAll').is(':checked'))
+    });
+
     $(document).on('change', ".chkCanasta", function () {
         var idProducto = $(this).attr("idProducto");
         if ($(this).is(":checked")) {
@@ -551,7 +558,7 @@ jQuery(function ($) {
                         '<td>  ' + list[i].fechaFinFormato + '  </td>' +
                         '<td>  ' + list[i].nombreEstado + '  </td>' +
                         '<td>' +
-                        '<button type="button" class="' + list[i].idPeriodoSolicitud + ' btnEditarPeriodoSolicitud btn btn-primary ">Editar</button>' +
+                        '<button type="button" class="' + list[i].idPeriodoSolicitud + ' btnVerPeriodoSolicitud btn btn-primary ">Ver</button>' +
                         '&nbsp;&nbsp;<button type="button" class="' + list[i].idPeriodoSolicitud + ' btnEliminarPeriodoSolicitud btn btn-danger ">Eliminar</button>' +
                         '</td>' +
                         '</tr>';
@@ -573,14 +580,87 @@ jQuery(function ($) {
         });
     }
 
+    var idPeriodoSolicitud = '';
 
-    $(document).on('click', "button.btnEditarPeriodoSolicitud", function () {
+
+    $(document).on('click', "button.btnVerPeriodoSolicitud ", function (e) {
+        e.preventDefault();
+        $('body').loadingModal({
+            text: 'Abriendo Periodo...'
+        });
+        $('body').loadingModal('show');
+
+        var arrrayClass = event.target.getAttribute("class").split(" ");
+        idPeriodoSolicitud = arrrayClass[0];
+//        var codigoCliente = arrrayClass[1];
+
+        $.ajax({
+            url: "/PeriodoSolicitud/Show",
+            data: {
+                idPeriodoSolicitud: idPeriodoSolicitud
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) {
+                $('body').loadingModal('hide');
+                mostrarMensajeErrorProceso();
+            },
+            success: function (result) {
+                $('body').loadingModal('hide');
+
+                var preciosList = result.canasta;
+                var margenText = "";
+                var canastaText = "";
+                var disabledCanasta = "disabled";
+
+                $("#tableListaPrecios > tbody").empty();
+                for (var i = 0; i < preciosList.length; i++) {
+                 
+               //     alert("S")
+
+                    var checkedCanasta = "";
+                    if (preciosList[i].producto.precioClienteProducto.estadoCanasta) {
+                        checkedCanasta = "checked";
+                    }
+
+
+                 /*   if ($("#tableListaPrecios th.listaPreciosCanasta").length) {
+                        canastaText = '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + ' ' + disabledCanasta + '>  </td>';
+                    }*/
+
+                    var preciosRow = '<tr data-expanded="true">' +
+                        '<td>  ' + preciosList[i].producto.idProducto + '</td>' +
+                        canastaText +
+                        '<td>  ' + preciosList[i].producto.proveedor + '  </td>' +
+                        '<td>  ' + preciosList[i].producto.sku + '  </td>' +
+                        '<td>  ' + preciosList[i].producto.skuProveedor + ' - ' + preciosList[i].producto.descripcion + ' </td>' +
+                        '<td>  ' + preciosList[i].unidad + '</td>' +
+                        '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + preciosList[i].producto.image + '">  </td>' +
+                        '</tr>';
+
+                    $("#tableListaPrecios").append(preciosRow);
+             //       alert("A")
+                }
+
+                FooTable.init('#tableListaPrecios');
+                $("#modalVerPeriodo").modal('show');
+            }
+        })
+    })
+
+
+
+
+
+   // $(document).on('click', "button.btnEditarPeriodo", function () {
+
+    $("#btnEditarPeriodo").click(function () {
       //  desactivarBotonesVer();
         //Se identifica si existe cotizacion en curso, la consulta es sincrona
 
-        var arrrayClass = event.target.getAttribute("class").split(" ");
-        var idPeriodoSolicitud = arrrayClass[0];
-        
+     //   var arrrayClass = event.target.getAttribute("class").split(" ");
+     //   var idPeriodoSolicitud = arrrayClass[0];
+        //alert("s");
         $.ajax({
             url: "/PeriodoSolicitud/ConsultarSiExistePeriodoSolicitud",
             type: 'POST',

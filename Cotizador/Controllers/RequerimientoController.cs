@@ -338,10 +338,39 @@ namespace Cotizador.Controllers
                 //requerimiento.cliente.idCliente, requerimiento.fechaPrecios, requerimiento.ciudad.esProvincia,
                 requerimientoSearch.cliente = usuario.clienteList.Where(c => c.sedePrincipal).FirstOrDefault();
 
-                requerimientoSearch = requerimientoBL.obtenerProductosAPartirdePreciosRegistrados(requerimientoSearch, familia, proveedor, usuario);
+                
+
+                if (requerimientoSearch.periodo.idPeriodoSolicitud == Guid.Empty)
+                {
+                    requerimientoSearch.documentoDetalle = new List<DocumentoDetalle>();
+                }
+                else
+                {
+                    requerimientoSearch = requerimientoBL.obtenerProductosAPartirdePreciosRegistrados(requerimientoSearch, familia, proveedor, usuario);
+                    PeriodoSolicitudBL periodoSolicitudBL = new PeriodoSolicitudBL();
+                    PeriodoSolicitud periodoSolicitud = periodoSolicitudBL.getPeriodoSolicitud(requerimientoSearch.periodo.idPeriodoSolicitud, usuario.idUsuario, usuario);
+
+
+                    foreach (DocumentoDetalle documentoDetalle in requerimientoSearch.documentoDetalle)
+                    {
+                        documentoDetalle.producto.precioClienteProducto.estadoCanasta = true;
+                    }
+
+
+                    foreach (DocumentoDetalle documentoDetalle in requerimientoSearch.documentoDetalle)
+                    {
+                        documentoDetalle.producto.precioClienteProducto.estadoCanasta = periodoSolicitud.canasta.Where(c => c.producto.idProducto == documentoDetalle.producto.idProducto && c.producto.precioClienteProducto.estadoCanasta).FirstOrDefault() != null;
+                    }
+
+                }
+                
+
                 this.RequerimientoSession = requerimientoSearch;
 
                 ViewBag.requerimiento = requerimientoSearch;
+
+
+
                 DocumentoVenta documentoVenta = new DocumentoVenta();
                 documentoVenta.tipoPago = DocumentoVenta.TipoPago.NoAsignado;
                 documentoVenta.formaPago = DocumentoVenta.FormaPago.NoAsignado;
@@ -454,7 +483,7 @@ namespace Cotizador.Controllers
             {
                 
                 this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoRequerimientos;
-
+                Usuario usuario = null;
                 //Si no hay usuario, se dirige el logueo
                 if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
                 {
@@ -462,7 +491,7 @@ namespace Cotizador.Controllers
                 }
                 else
                 {
-                    Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                    usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                     if (!usuario.tomaPedidos)
                     {
                         return RedirectToAction("Login", "Account");
@@ -501,6 +530,29 @@ namespace Cotizador.Controllers
                 ViewBag.fechaEntregaDesde = requerimiento.fechaEntregaDesde == null ? "" : requerimiento.fechaEntregaDesde.Value.ToString(Constantes.formatoFecha);
                 ViewBag.fechaEntregaHasta = requerimiento.fechaEntregaHasta == null ? "" : requerimiento.fechaEntregaHasta.Value.ToString(Constantes.formatoFecha);
 
+
+                if (requerimiento.periodo.idPeriodoSolicitud == Guid.Empty)
+                {
+                    requerimiento.documentoDetalle = new List<DocumentoDetalle>();
+                }
+                else
+                {
+                    PeriodoSolicitudBL periodoSolicitudBL = new PeriodoSolicitudBL();
+                    PeriodoSolicitud periodoSolicitud = periodoSolicitudBL.getPeriodoSolicitud(requerimiento.periodo.idPeriodoSolicitud, usuario.idUsuario, usuario);
+
+
+                    foreach (DocumentoDetalle documentoDetalle in requerimiento.documentoDetalle)
+                    {
+                        documentoDetalle.producto.precioClienteProducto.estadoCanasta = true;
+                    }
+
+
+                    foreach (DocumentoDetalle documentoDetalle in requerimiento.documentoDetalle)
+                    {
+                        documentoDetalle.producto.precioClienteProducto.estadoCanasta = periodoSolicitud.canasta.Where(c => c.producto.idProducto == documentoDetalle.producto.idProducto && c.producto.precioClienteProducto.estadoCanasta).FirstOrDefault() != null;
+                    }
+
+                }
 
 
                 ViewBag.requerimiento = requerimiento;
@@ -769,6 +821,7 @@ namespace Cotizador.Controllers
 
                 requerimiento = requerimientoBL.obtenerProductosAPartirdePreciosRegistrados(requerimiento, familia, proveedor, usuario);
                 requerimientoBL.calcularMontosTotales(requerimiento);
+
                 this.RequerimientoSession = requerimiento;
             }
             catch (Exception e)
@@ -1331,6 +1384,13 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             Requerimiento requerimiento = this.RequerimientoSession;
+
+        /*    if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.BusquedaRequerimientos)
+            {
+                requerimiento = (Requerimiento)this.Session[Constantes.VAR_SESSION_REQUERIMIENTO_BUSQUEDA];
+            }
+            */
+        
             String idPeriodo = this.Request.Params["idPeriodo"];
             PeriodoSolicitud periodoSolicitud = new PeriodoSolicitud();
             periodoSolicitud.canasta = new List<DocumentoDetalle>();
@@ -1355,7 +1415,18 @@ namespace Cotizador.Controllers
                 documentoDetalle.producto.precioClienteProducto.estadoCanasta = periodoSolicitud.canasta.Where(c => c.producto.idProducto == documentoDetalle.producto.idProducto && c.producto.precioClienteProducto.estadoCanasta).FirstOrDefault() != null;
             }
 
-            this.RequerimientoSession = requerimiento;
+
+
+            /* if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.BusquedaRequerimientos)
+             {
+
+                 this.Session[Constantes.VAR_SESSION_REQUERIMIENTO_BUSQUEDA] = requerimiento;
+             }
+             else {*/
+            this.RequerimientoSession = requerimiento;/*}*/
+
+
+            
         }
 
         public String ChangeIdCiudad()
@@ -1614,7 +1685,8 @@ namespace Cotizador.Controllers
             List<Pedido> list = (List<Pedido>)this.Session[Constantes.VAR_SESSION_REQUERIMIENTO_LISTA];
 
             PedidoSearch excel = new PedidoSearch();
-            return excel.generateExcel(list);
+            Requerimiento requerimiento = this.RequerimientoSession;
+            return excel.generateExcel(list, requerimiento);
         }
 
         [HttpGet]
@@ -1623,7 +1695,8 @@ namespace Cotizador.Controllers
             List<Requerimiento> list = (List<Requerimiento>)this.Session[Constantes.VAR_SESSION_REQUERIMIENTO_LISTA];
 
             PedidoSearch excel = new PedidoSearch();
-            return excel.generateExcelRequerimientos(list);
+            Requerimiento requerimiento = this.RequerimientoSession;
+            return excel.generateExcelRequerimientos(list, requerimiento);
         }
 
         public String Search()

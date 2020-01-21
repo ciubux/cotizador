@@ -21,6 +21,10 @@ namespace BusinessLayer
                 //cliente.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 List<DocumentoDetalle> listaPrecios = clienteBl.getPreciosVigentesCliente(cliente.idCliente);
 
+                //Solo se obtienen los productos de la canasta habitual de compras
+                listaPrecios = listaPrecios.Where(l => l.producto.precioClienteProducto.estadoCanasta).ToList();
+
+
                 foreach (DocumentoDetalle precio in listaPrecios)
                 {
                     precio.producto.precioClienteProducto.estadoCanasta = obj.canasta.Where(c => c.producto.idProducto == precio.producto.idProducto ).FirstOrDefault() != null;

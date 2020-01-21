@@ -20,7 +20,7 @@ namespace Cotizador.ExcelExport
    
     public class PedidoSearch
     {
-        public FileStreamResult generateExcel(List<Pedido> list)
+        public FileStreamResult generateExcel(List<Pedido> list, Requerimiento requerimiento)
         {
             
             HSSFWorkbook wb;
@@ -141,7 +141,7 @@ namespace Cotizador.ExcelExport
             }
         }
 
-        public FileStreamResult generateExcelRequerimientos(List<Requerimiento> list)
+        public FileStreamResult generateExcelRequerimientos(List<Requerimiento> list, Requerimiento requerimiento)
         {
 
             HSSFWorkbook wb;
@@ -236,7 +236,7 @@ namespace Cotizador.ExcelExport
                  * ub.provincia,  ub.departamento, ma.observaciones,*/
 
                 /*Cabecera, Sub total*/
-                int rTotal = (list.Count) + 9;
+                int rTotal = (list.Count) + 20;
                 int cTotal = 14 + 3;
 
                 /*Se crean todas las celdas*/
@@ -250,20 +250,6 @@ namespace Cotizador.ExcelExport
                 }
 
 
-                UtilesHelper.setColumnWidth(sheet, "A", 2800);
-                UtilesHelper.setColumnWidth(sheet, "B", 5000);
-                UtilesHelper.setColumnWidth(sheet, "C", 3200);
-                UtilesHelper.setColumnWidth(sheet, "D", 12000);
-                UtilesHelper.setColumnWidth(sheet, "E", 10000);
-
-                UtilesHelper.setColumnWidth(sheet, "F", 7000);
-                UtilesHelper.setColumnWidth(sheet, "G", 2200);
-                UtilesHelper.setColumnWidth(sheet, "H", 2200);
-                UtilesHelper.setColumnWidth(sheet, "I", 2200);
-                UtilesHelper.setColumnWidth(sheet, "J", 2200);
-                UtilesHelper.setColumnWidth(sheet, "K", 2200);
-                UtilesHelper.setColumnWidth(sheet, "L", 1000);
-                UtilesHelper.setColumnWidth(sheet, "M", 3000);
 
                 UtilesHelper.setRowHeight(sheet, 1, 350);
                 UtilesHelper.combinarCeldas(sheet, 1, 1, "A", "E");
@@ -272,9 +258,6 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, 1, "C", "", titleMasterCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "D", "", titleMasterCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "E", "", titleMasterCellStyle);
-                
-                
-               
 
                 UtilesHelper.setRowHeight(sheet, 2, 540);
                 UtilesHelper.setValorCelda(sheet, 2, "A", "Productos", titleCellStyle);
@@ -283,28 +266,52 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, 2, "D", "Descripción", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 2, "E", "Unidad", titleCellStyle);
 
-                UtilesHelper.setRowHeight(sheet, 3, 540);
-                UtilesHelper.setValorCelda(sheet, 3, "A", "Prod 1", dataCellStyle);
-                UtilesHelper.setValorCelda(sheet, 3, "B", "HJ1F20", dataCenterCellStyle);
-                UtilesHelper.setValorCelda(sheet, 3, "C", "30197006", dataCenterCellStyle);
-                UtilesHelper.setValorCelda(sheet, 3, "D", "Jabón Espuma Kleenex Dermo Supreme", dataCellStyle);
-                UtilesHelper.setValorCelda(sheet, 3, "E", "Sachet x 800 ml", dataCellStyle);
+                int i = 3;
+                int contadorCanasta = 1;
+                foreach (DocumentoDetalle requerimientoDetalle in requerimiento.documentoDetalle)
+                {
+                    if (requerimientoDetalle.producto.precioClienteProducto.estadoCanasta)
+                    {
+                       
+                        UtilesHelper.setRowHeight(sheet, i, 540);
+                        UtilesHelper.setValorCelda(sheet, i, "A", "Prod "+ contadorCanasta, dataCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "B", requerimientoDetalle.producto.sku, dataCenterCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "C", requerimientoDetalle.producto.skuProveedor, dataCenterCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "D", requerimientoDetalle.producto.descripcion, dataCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "E", requerimientoDetalle.unidad, dataCellStyle);
+                        i++;
+                        contadorCanasta++;
+                    }
+                }
 
-                UtilesHelper.setRowHeight(sheet, 4, 540);
-                UtilesHelper.setValorCelda(sheet, 4, "A", "Prod 2", dataCellStyle);
-                UtilesHelper.setValorCelda(sheet, 4, "B", "HH2S81", dataCenterCellStyle);
-                UtilesHelper.setValorCelda(sheet, 4, "C", "30228044", dataCenterCellStyle);
-                UtilesHelper.setValorCelda(sheet, 4, "D", "Papel higiénico Scott JRT Super Económico Ahorramax con pre-corte (rollo x 550m)", dataCellStyle);
-                UtilesHelper.setValorCelda(sheet, 4, "E", "Bls x 4 x 550 mts", dataCellStyle);
 
-          /*     UtilesHelper.setRowHeight(sheet, 5, 540);
-                UtilesHelper.setValorCelda(sheet, 5, "A", "Prod 3", dataCellStyle);
-                UtilesHelper.setValorCelda(sheet, 5, "B", "MPXX01", dataCenterCellStyle);
-                UtilesHelper.setValorCelda(sheet, 5, "C", "85894835", dataCenterCellStyle);
-                UtilesHelper.setValorCelda(sheet, 5, "D", "Soporte técnico de dispensadores", dataCellStyle);
-                UtilesHelper.setValorCelda(sheet, 5, "E", "Unidad", dataCellStyle);*/
+                contadorCanasta = contadorCanasta - 1;
 
-                int i = 8;
+
+
+
+                UtilesHelper.setColumnWidth(sheet, "A", 2800);
+                UtilesHelper.setColumnWidth(sheet, "B", 5000);
+                UtilesHelper.setColumnWidth(sheet, "C", 3200);
+                UtilesHelper.setColumnWidth(sheet, "D", 12000);
+                UtilesHelper.setColumnWidth(sheet, "E", 10000);
+                int columna = contadorCanasta;
+                int cc = 0;
+                for (cc = 0; cc < columna; cc++)
+                {
+                    UtilesHelper.setColumnWidth(sheet, UtilesHelper.columnas[contadorCanasta + cc], 2200);
+                    //UtilesHelper.setValorCelda(sheet, i - 1, UtilesHelper.columnas[contadorCanasta + cc], "", titleMasterCellStyle);
+                }
+                columna = cc + contadorCanasta;
+
+            
+                UtilesHelper.setColumnWidth(sheet, UtilesHelper.columnas[columna], 2200);
+                UtilesHelper.setColumnWidth(sheet, UtilesHelper.columnas[columna+1], 7200);
+                UtilesHelper.setColumnWidth(sheet, UtilesHelper.columnas[columna+2], 3000);
+                UtilesHelper.setColumnWidth(sheet, UtilesHelper.columnas[columna+3], 1500);
+                
+
+                i = i+4;
                 UtilesHelper.setRowHeight(sheet, i-1, 350);
                 UtilesHelper.combinarCeldas(sheet, i - 1, i - 1, "A", "M");
                 UtilesHelper.setValorCelda(sheet, i - 1, "A", "REQUERIMIENTOS", titleMasterCellStyle);
@@ -312,15 +319,31 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i - 1, "C", "", titleMasterCellStyle);
                 UtilesHelper.setValorCelda(sheet, i - 1, "D", "", titleMasterCellStyle);
                 UtilesHelper.setValorCelda(sheet, i - 1, "E", "", titleMasterCellStyle);
-                UtilesHelper.setValorCelda(sheet, i - 1, "F", "", titleMasterCellStyle);
-                UtilesHelper.setValorCelda(sheet, i - 1, "G", "", titleMasterCellStyle);
-                UtilesHelper.setValorCelda(sheet, i - 1, "H", "", titleMasterCellStyle);
-                UtilesHelper.setValorCelda(sheet, i - 1, "I", "", titleMasterCellStyle);
-                UtilesHelper.setValorCelda(sheet, i - 1, "J", "", titleMasterCellStyle);
-                UtilesHelper.setValorCelda(sheet, i - 1, "K", "", titleMasterCellStyle);
+
+                columna = contadorCanasta;
+                cc = 0;
+                for (cc=0; cc < columna; cc++)
+                {
+                    UtilesHelper.setValorCelda(sheet, i - 1, UtilesHelper.columnas[contadorCanasta + cc], "", titleMasterCellStyle);
+                }
+                columna = cc + contadorCanasta;
+
+
+                UtilesHelper.setValorCelda(sheet, i - 1, UtilesHelper.columnas[columna], "", titleMasterCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, UtilesHelper.columnas[columna + 1], "", titleMasterCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, UtilesHelper.columnas[columna + 2], "", titleMasterCellStyle);
+                UtilesHelper.setValorCelda(sheet, i - 1, UtilesHelper.columnas[columna + 3], "", titleMasterCellStyle);
+                //UtilesHelper.setValorCelda(sheet, i - 1, UtilesHelper.columnas[columna + 5], "", titleMasterCellStyle);
                 /*  UtilesHelper.setValorCelda(sheet, i - 1, "K", "", titleMasterCellStyle);
                     UtilesHelper.setValorCelda(sheet, i - 1, "L", "", titleMasterCellStyle);
                     UtilesHelper.setValorCelda(sheet, i - 1, "M", "", titleMasterCellStyle);*/
+
+
+
+
+
+
+
 
                 UtilesHelper.setRowHeight(sheet, i, 540);
                 UtilesHelper.setValorCelda(sheet, i, "A", "N° Req", titleCellStyle);
@@ -329,12 +352,23 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i, "D", "Distrito", titleCellStyle);
                 //UtilesHelper.setValorCelda(sheet, i, "E", "Dirección", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "E", "Obs. Uso interno", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "F", "Cant. Prod 1", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "G", "Cant. Prod 2", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "H", "Total (No Incl. IGV)", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "I", "Estado", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "J", "Tope Ppto.", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "K", "Excedió Presupuesto.", titleCellStyle);
+
+
+                columna = contadorCanasta;
+                cc = 0;
+                for (cc = 0; cc < columna; cc++)
+                {
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[contadorCanasta + cc], "Cant. Prod "+(cc+1), titleCellStyle);
+                }
+                columna = cc + contadorCanasta;
+                
+
+
+
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[columna], "Total (No Incl. IGV)", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[columna + 1], "Estado", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[columna + 2], "Tope Ppto.", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[columna + 3], "Excedió Presupuesto.", titleCellStyle);
 
 
                 i++;
@@ -370,27 +404,45 @@ namespace Cotizador.ExcelExport
 
                     UtilesHelper.setValorCelda(sheet, i, "E",des, dataCellStyle);
                     UtilesHelper.setValorCelda(sheet, i, "F", obj.observaciones, dataCenterCellStyle);*/
-                    foreach (RequerimientoDetalle pedidoDetalle in obj.requerimientoDetalleList)
+               /*     foreach (RequerimientoDetalle pedidoDetalle in obj.requerimientoDetalleList)
                     {
                         switch (pedidoDetalle.producto.sku)
                         {
+
+
+
+
                             case "HJ1F20": UtilesHelper.setValorCelda(sheet, i, "F", pedidoDetalle.cantidad, dataCenterCellStyle); break;
                             case "HH2S81": UtilesHelper.setValorCelda(sheet, i, "G", pedidoDetalle.cantidad, dataCenterCellStyle); break;
                 //            case "MPXX01": UtilesHelper.setValorCelda(sheet, i, "I", pedidoDetalle.cantidad, dataCenterCellStyle); break;
                      //       default: UtilesHelper.setValorCelda(sheet, i, "I", pedidoDetalle.cantidad, dataCenterCellStyle); break;
                         }
                     }
+                    */
 
-                   UtilesHelper.setValorCelda(sheet, i, "H", (double)obj.montoTotal, twoDecCellStyle);
+
+
+                    columna = contadorCanasta;
+                    cc = 0;
+                    for (cc = 0; cc < columna; cc++)
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[contadorCanasta + cc], obj.requerimientoDetalleList[cc].cantidad, dataCenterCellStyle);
+                    }
+                    columna = cc + contadorCanasta;
+
+
+
+
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[columna], (double)obj.montoTotal, twoDecCellStyle);
            // 
                   
 
-                    UtilesHelper.setValorCelda(sheet, i, "I", obj.estadoRequerimientoString, dataCenterCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "J", (double)obj.topePresupuesto, twoDecCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[columna + 1], obj.estadoRequerimientoString, dataCenterCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[columna + 2], (double)obj.topePresupuesto, twoDecCellStyle);
                     if (obj.excedioPresupuesto)
                     {
-                        sheet.GetRow(i - 1).GetCell(9).CellStyle = twoDecErrorCellStyle;
-                        UtilesHelper.setValorCelda(sheet, i, "K", "X", dataCenterCellStyle);
+                        sheet.GetRow(i - 1).GetCell(columna).CellStyle = twoDecErrorCellStyle;
+                        UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[columna + 3], "X", dataCenterCellStyle);
                     }
                     else
                     {
@@ -400,14 +452,14 @@ namespace Cotizador.ExcelExport
                 }
 
                UtilesHelper.setRowHeight(sheet, i, 540);
-                sheet.GetRow(i - 1).GetCell(6-1).CellFormula = "SUM(" + UtilesHelper.columnas[6 - 1] + "2:" + UtilesHelper.columnas[6 - 1] + (i - 1) + ")";
-                sheet.GetRow(i - 1).GetCell(6 - 1).CellStyle = dataCenterCellStyle;
+                sheet.GetRow(i - 1).GetCell(columna).CellFormula = "SUM(" + UtilesHelper.columnas[columna ] + "2:" + UtilesHelper.columnas[columna] + (i - 1) + ")";
+                sheet.GetRow(i - 1).GetCell(columna ).CellStyle = dataCenterCellStyle;
                 
-                sheet.GetRow(i - 1).GetCell(7 - 1).CellFormula = "SUM(" + UtilesHelper.columnas[7 - 1] + "2:" + UtilesHelper.columnas[7 - 1] + (i - 1) + ")";
-                sheet.GetRow(i - 1).GetCell(7 - 1).CellStyle = dataCenterCellStyle;
+           ///     sheet.GetRow(i - 1).GetCell(columna+1).CellFormula = "SUM(" + UtilesHelper.columnas[columna + 1] + "2:" + UtilesHelper.columnas[columna + 1] + (i - 1) + ")";
+           ///     sheet.GetRow(i - 1).GetCell(columna + 1).CellStyle = dataCenterCellStyle;
 
-                sheet.GetRow(i - 1).GetCell(8 - 1).CellFormula = "SUM(" + UtilesHelper.columnas[8 - 1] + "2:" + UtilesHelper.columnas[8 - 1] + (i - 1) + ")";
-                sheet.GetRow(i - 1).GetCell(8 - 1).CellStyle = dataCenterCellStyle;
+                sheet.GetRow(i - 1).GetCell(columna + 2).CellFormula = "SUM(" + UtilesHelper.columnas[columna  + 2] + "2:" + UtilesHelper.columnas[columna + 2] + (i - 1) + ")";
+                sheet.GetRow(i - 1).GetCell(columna + 2).CellStyle = dataCenterCellStyle;
 
           /*      sheet.GetRow(i - 1).GetCell(9).CellFormula = "SUM(" + UtilesHelper.columnas[9] + "2:" + UtilesHelper.columnas[9] + (i - 1) + ")";
                 sheet.GetRow(i - 1).GetCell(9).CellStyle = twoDecCellStyle;

@@ -1880,7 +1880,7 @@ namespace Cotizador.Controllers
             List<Pedido> list = (List<Pedido>) this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA];
 
             PedidoSearch excel = new PedidoSearch();
-            return excel.generateExcel(list);
+            return excel.generateExcel(list, null);
         }
 
         [HttpGet]
@@ -1889,7 +1889,8 @@ namespace Cotizador.Controllers
             List<Requerimiento> list = (List<Requerimiento>)this.Session[Constantes.VAR_SESSION_REQUERIMIENTO_LISTA];
 
             PedidoSearch excel = new PedidoSearch();
-            return excel.generateExcelRequerimientos(list);
+
+            return excel.generateExcelRequerimientos(list,null);
         }
 
         public String Search()

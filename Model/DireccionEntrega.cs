@@ -27,7 +27,7 @@ namespace Model
         public String direccionDomicilioLegal { get; set; }
 
         public String direccionConSede { get {
-                return descripcion +" "+ (nombre == null ? "" : "(" + nombre+ (codigoCliente == null ? "" : "/" + codigoCliente )+ ")");
+                return descripcion +" "+ (nombre == null ? "" : "(" + nombre + ")");
             } }
         [Display(Name = "Email Recepción Facturas:")]
         public String emailRecepcionFacturas { get; set; }
@@ -48,6 +48,9 @@ namespace Model
 
         [Display(Name = "Dirección Entrega Proveedor:")]
         public Boolean esDireccionAcopio { get; set; }
+
+        public Usuario usuarioList { get; set; }
+
 
     }
 }

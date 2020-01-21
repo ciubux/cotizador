@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Búsqueda Direcciones";
+    ViewBag.Title = "Búsqueda Direcciones de Establecimiento";
     Model.Cliente cliente = ViewBag.cliente;
     Model.DireccionEntrega direccionEntrega = new Model.DireccionEntrega();
 }
@@ -29,25 +29,28 @@
            data-editing-add-text="Agregar Dirección">
         <thead>
             <tr>
+
+
+                <th data-name="nombre" data-sortable="false">Nombre Establecimiento</th>
+                <th data-name="codigoCliente" data-sortable="false">Código (Centro de Costos)</th>
+                <th data-name="codigoMP" data-visible="true" data-breakpoints="xs">Código Único</th>
+
                 <th data-name="idDireccionEntrega" data-visible="false"></th>
                 <th data-name="idCliente" data-visible="false"></th>
                 <th data-name="idCiudad" data-visible="false"></th>
                 <th data-name="idDomicilioLegal" data-sortable="false" data-visible="false"></th>
                 <th data-name="codigoUbigeo" data-sortable="false" data-visible="false"></th>
-
-                <th data-name="codigo" data-sortable="false">Código</th>
-                <th data-name="sede" data-visible="true">Sede MP</th>
+                <th data-name="codigo"  data-visible="false" data-sortable="false">Código</th>
+                <th data-name="sede"  data-visible="false">Sede MP</th>
                 <th data-name="ubigeo" data-sortable="false">Ubigeo</th>
-                <th data-name="direccionEntrega" data-sortable="false">Dirección</th>
+                <th data-name="direccionEntrega" data-sortable="false">Dirección Establecimiento</th>
                 <th data-name="contacto" data-sortable="false" data-breakpoints="xs">Nombre Contacto</th>
-                <th data-name="telefono" data-sortable="false">Teléfono Contacto</th>
-                <th data-name="codigoCliente" data-sortable="false">Código Cliente</th>
-                <th data-name="nombre" data-sortable="false">Nombre</th>
-                <th data-name="codigoMP" data-visible="false" data-breakpoints="xs">Código MP</th>
+                <th data-name="telefono" data-sortable="false">Teléfono Contacto</th>                
+
                 <th data-name="emailRecepcionFacturas" data-sortable="false" data-breakpoints="xs">Email Recepción Facturas</th>
                 <th data-name="direccionDomicilioLegal" data-sortable="false" data-breakpoints="xs">Dirección en Factura/Guía</th>
-                <th data-name="direccionAlmacen" data-sortable="false" data-breakpoints="xs">Dirección Entrega</th>
-                <th data-name="idDireccionAlmacen" data-sortable="false" data-visible="false" data-breakpoints="xs">Dirección Entrega</th>
+                <th data-name="direccionAlmacen" data-sortable="false" data-breakpoints="xs">Dirección Entrega Proveedor</th>
+                <th data-name="idDireccionAlmacen" data-sortable="false" data-visible="false" data-breakpoints="xs">Dirección Entrega Proveedor</th>
 
             </tr>
         </thead>
@@ -189,16 +192,23 @@
 
 
                 <div class="form-group">
-                    <label for="direccionEntrega_nombre" class="col-sm-3 control-label">Nombre Centro de Costos:</label>
+                    <label for="direccionEntrega_nombre" class="col-sm-3 control-label">Nombre Establecimiento:</label>
                     <div class="col-sm-9">
                         @Html.TextBoxFor(p => direccionEntrega.nombre, htmlAttributes: new { @class = "form-control" })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="direccionEntrega_codigoCliente" class="col-sm-3 control-label">Código Centro de Costos:</label>
+                    <label for="direccionEntrega_codigoCliente" class="col-sm-3 control-label">Código (Centro de Costos):</label>
                     <div class="col-sm-9">
                         @Html.TextBoxFor(p => direccionEntrega.codigoCliente, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="direccionEntrega_codigoMP" class="col-sm-3 control-label">Código Único :</label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(p => direccionEntrega.codigoMP, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
                     </div>
                 </div>
 
@@ -206,30 +216,30 @@
                     <label for="firstName" class="col-sm-3 control-label">Departamento:</label>
                     <div class="col-sm-9">
                         @Html.Action("GetDepartamentos", "Ubigeo",
-                  new
-                  {
-                      departamentoSelectId = "Departamento",
-                      provinciaSelectId = "Provincia",
-                      distritoSelectId = "Distrito",
-                      provinciaDivId = "dvProvincias",
-                      distritoDivId = "dvDistritos",
-                      selectedValue = ""
-                  })
+                new
+                {
+                    departamentoSelectId = "Departamento",
+                    provinciaSelectId = "Provincia",
+                    distritoSelectId = "Distrito",
+                    provinciaDivId = "dvProvincias",
+                    distritoDivId = "dvDistritos",
+                    selectedValue = ""
+                })
                     </div>
                 </div>
                 <div class="form-group required">
                     <label for="lastName" class="col-sm-3 control-label">Provincia:</label>
                     <div id="dvProvincias" class="col-sm-9">
                         @Html.Action("GetProvinciasPorDepartamento", "Ubigeo",
-                  new
-                  {
-                      departamentoSelectId = "Departamento",
-                      provinciaSelectId = "Provincia",
-                      distritoSelectId = "Distrito",
-                      distritoDivId = "dvDistritos",
-                      codigoDepartamento = "",// pedido.ubigeoEntrega.Id.Substring(0, 2),
-                             selectedValue = ""//pedido.ubigeoEntrega.Id.Substring(0, 4)
-                         })
+                new
+                {
+                    departamentoSelectId = "Departamento",
+                    provinciaSelectId = "Provincia",
+                    distritoSelectId = "Distrito",
+                    distritoDivId = "dvDistritos",
+                    codigoDepartamento = "",// pedido.ubigeoEntrega.Id.Substring(0, 2),
+                           selectedValue = ""//pedido.ubigeoEntrega.Id.Substring(0, 4)
+                       })
                     </div>
                 </div>
                 <div class="form-group required">
@@ -249,11 +259,11 @@
                     @Html.LabelFor(p => direccionEntrega.cliente.ciudad, htmlAttributes: new { @class = "control-label col-sm-3", @for = "idCiudad" })
                     <div class="col-sm-9">
                         @Html.Action("GetCiudades", "Ciudad",
-          new
-          {
-              ciudadSelectId = "idCiudad",
-              selectedValue = ""
-          })
+        new
+        {
+            ciudadSelectId = "idCiudad",
+            selectedValue = ""
+        })
                     </div>
                 </div>
 
@@ -277,7 +287,7 @@
                     </div>
                     <div class="col-sm-9">
                         @Html.CheckBoxFor(p => direccionEntrega.esDireccionAcopio)
-                        <span>La dirección también es la dirección de entrega</span>
+                        <span>La dirección del establecimiento también es la dirección de entrega para el proveedor.</span>
                     </div>
                 </div>
 
@@ -333,6 +343,8 @@
         </form>
     </div>
 </div>
+
+
 
 
 

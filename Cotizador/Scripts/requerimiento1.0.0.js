@@ -1600,12 +1600,17 @@ jQuery(function ($) {
         }
 
 
+
         if (verificarSiExisteDetalle()) {
             //alert("No deben existir productos agregados al requerimiento.");
             return false;
         }
 
-        $("#btnObtenerProductos").click();
+      
+        if ($('#idPeriodo option:selected').text() != "Seleccione el periodo")
+            $("#btnObtenerProductos").click();
+
+        
 
     });
 
@@ -2324,34 +2329,57 @@ jQuery(function ($) {
         });*/
 
 
+    function validarDetalle() {
+        var $j_object = $("td.detcantidad");
+        var sinCantidad = 0;
+        $.each($j_object, function (key, value) {
+            var arrId = value.getAttribute("class").split(" ");
+            var cantidad = $("." + arrId[0] + ".detincantidad").val();
+
+            if (cantidad == "" && sinCantidad==0) {
+                alert("Al menos a un producto no se le agregó la cantidad");
+                sinCantidad++;
+            }
+
+        });
+        return sinCantidad==0;
+        //return true;
+    }
+
 
     $("#btnFinalizarCreacionRequerimiento").click(function () {
-        var json = finalizarDetalle();
-        $.ajax({
-            url: "/Requerimiento/ChangeDetalle",
-            type: 'POST',
-            data: json,
-            dataType: 'json',
-            contentType: 'application/json',
-            success: function (respuesta) {
-                crearRequerimiento(0);
-            }
-        });
+        
+        if (validarDetalle()) {
+            var json = finalizarDetalle();
+            $.ajax({
+                url: "/Requerimiento/ChangeDetalle",
+                type: 'POST',
+                data: json,
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (respuesta) {
+                    crearRequerimiento(0);
+                }
+            });
+        }
     });
+    
 
 
     $("#btnFinalizarEdicionRequerimiento").click(function () { 
-        var json = finalizarDetalle();
-        $.ajax({
-            url: "/Requerimiento/ChangeDetalle",
-            type: 'POST',
-            data: json,
-            dataType: 'json',
-            contentType: 'application/json',
-            success: function (respuesta) {
-                editarRequerimiento(0);
-            }
-        });
+        if (validarDetalle()) {
+           var json = finalizarDetalle();
+            $.ajax({
+                url: "/Requerimiento/ChangeDetalle",
+                type: 'POST',
+                data: json,
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (respuesta) {
+                    editarRequerimiento(0);
+                }
+            });
+        }
     });
 
     
@@ -3575,6 +3603,8 @@ jQuery(function ($) {
 
             var arrId = value.getAttribute("class").split(" ");
             var cantidad = value.innerText.trim();
+            if (cantidad == 0)
+                cantidad = "";
             value.innerHTML = "<input style='width: 100px' class='" + arrId[0] + " detincantidad form-control' value='" + cantidad + "' type='number'/>";
         });
 
@@ -3647,6 +3677,9 @@ jQuery(function ($) {
 
     /*Evento que se dispara cuando se hace clic en FINALIZAR en la edición de la grilla*/
     $(document).on('click', "button.footable-hide", function () {
+
+
+
         var json = finalizarDetalle();
 
         $.ajax({
@@ -3660,6 +3693,10 @@ jQuery(function ($) {
             }
         });
     });
+
+
+
+
 
     function finalizarDetalle() {
 
@@ -3697,6 +3734,12 @@ jQuery(function ($) {
             var costo = $("." + arrId[0] + ".detcostoLista").text();
 
             var observacion = $("." + arrId[0] + ".detobservacionarea").val();
+
+
+            if (cantidad == "") {
+                alert("SSS")
+                return false
+            }
 
             json = json + '{"idProducto":"' + arrId[0] + '", "cantidad":"' + cantidad + '", "porcentajeDescuento":"' + porcentajeDescuento + '", "precio":"' + precio + '", "flete":"' + flete + '",  "costo":"' + costo + '", "observacion":"' + observacion + '"},'
         });

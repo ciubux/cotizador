@@ -154,7 +154,7 @@ namespace Cotizador.Controllers
 
             foreach (DocumentoDetalle precio in listaPrecios)
             {
-                precio.producto.precioClienteProducto.estadoCanasta = false;
+                precio.producto.precioClienteProducto.estadoCanasta = true;
             }
 
             obj.canasta = listaPrecios;

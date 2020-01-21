@@ -120,10 +120,11 @@ jQuery(function ($) {
                     $editor.find('#direccionEntrega_telefono').val(values.telefono.trim());
                     $editor.find('#direccionEntrega_emailRecepcionFacturas').val(values.emailRecepcionFacturas.trim());
                     $editor.find('#direccionEntrega_codigoCliente').val(values.codigoCliente.trim());
+                    $editor.find('#direccionEntrega_codigoMP').val(values.codigoMP.trim());
                     $editor.find('#direccionEntrega_nombre').val(values.nombre.trim());
                     $editor.find('#direccionEntrega_idDomicilioLegal').val(values.idDomicilioLegal.trim());
                     $modal.data('row', row);
-                    $editorTitle.text('Editando Dirección de Entrega: ' + values.direccionEntrega);
+                    $editorTitle.text('Editando Dirección de Establecimiento: ' + values.direccionEntrega);
                     $modal.modal('show');
                 },
                 deleteRow: function (row) {
@@ -466,6 +467,14 @@ jQuery(function ($) {
             $("#fechaVentasDesde").attr('disabled', 'disabled');
         }
     }
+
+
+    $('#direccionEntrega_codigoCliente').change(function () {       
+        $('#direccionEntrega_codigoMP').val($("#direccionEntrega_codigoCliente").val())
+    });
+
+
+
 
     $('#chkFechaVentasEsModificada').change(function () {
         var fechaEsModificada = 1;
@@ -2078,7 +2087,6 @@ jQuery(function ($) {
                 mostrarMensajeErrorProceso();
             },
             success: function (result) {
-              
                 /**
                  * DIRECCIONES
                  */
@@ -2122,6 +2130,11 @@ jQuery(function ($) {
                     var emailRecepcionFacturas = direccionEntregaList[i].emailRecepcionFacturas == null ? "" : direccionEntregaList[i].emailRecepcionFacturas;
 
                     var direccionEntregaRow = '<tr data-expanded="true">' +
+                        '<td>' + nombre + '</td>' +
+                        '<td>' + codigoCliente + '</td>' +
+                        '<td>' + codigoMP + '</td>' +
+
+
                         '<td>' + direccionEntregaList[i].idDireccionEntrega + '</td>' +
                         '<td>' + direccionEntregaList[i].cliente.idCliente + '</td>' +
                         '<td>' + direccionEntregaList[i].cliente.ciudad.idCiudad + '</td>' +
@@ -2134,9 +2147,8 @@ jQuery(function ($) {
                         '<td>' + direccionEntregaList[i].descripcion + '</td>' +
                         '<td>' + contacto + '</td>' +
                         '<td>' + telefono + '</td>' +
-                        '<td>' + codigoCliente + '</td>' +
-                        '<td>' + nombre + '</td>' +
-                        '<td>' + codigoMP + '</td>' +
+                        
+                        
                         '<td>' + emailRecepcionFacturas + '</td>' +
                         '<td>' + direccionDomicilioLegal + '</td>' +
                         '<td>' + direccionEntregaList[i].direccionEntregaAlmacen.descripcion + '</td>' +
@@ -2158,6 +2170,7 @@ jQuery(function ($) {
                         telefono: telefono,
                         codigoCliente: codigoCliente,
                         nombre: nombre,
+                        codigoMP: codigoMP,
                         emailRecepcionFacturas: emailRecepcionFacturas,
                         direccionDomicilioLegal: direccionDomicilioLegal,
                         direccionAlmacen: direccionEntregaList[i].direccionEntregaAlmacen.descripcion,

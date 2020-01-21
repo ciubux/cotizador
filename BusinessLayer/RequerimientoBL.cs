@@ -59,10 +59,23 @@ namespace BusinessLayer
 
         public void AprobarRequerimientos(List<Requerimiento> requerimientoList, Int64 numeroGrupo)
         {
+            List<String> destinatarios = new List<string>();
             using (var dal = new RequerimientoDAL())
             {
-                dal.AprobarRequerimientos(requerimientoList, numeroGrupo);
+                destinatarios = dal.AprobarRequerimientos(requerimientoList, numeroGrupo);
             }
+
+
+          
+            MailService mail = new MailService();
+            RequerimientoEmail emailTemplate = new RequerimientoEmail();
+            String template = emailTemplate.BuildTemplate(requerimientoList);
+            if (destinatarios.Count > 0)
+            {
+                String asunto = "Aprobación de requerimientos" ;
+                mail.enviar(destinatarios, asunto, template, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
+            }
+
 
         }
 
@@ -101,10 +114,19 @@ namespace BusinessLayer
 
         public void UpdateRequerimiento(Requerimiento requerimiento)
         {
+            List<String> destinatarios = new List<string>();
             using (var dal = new RequerimientoDAL())
             {
                 validarRequerimientoVenta(requerimiento);
-                dal.UpdateRequerimiento(requerimiento);
+                destinatarios = dal.UpdateRequerimiento(requerimiento);
+            }
+            MailService mail = new MailService();
+            RequerimientoEmail  emailTemplate = new RequerimientoEmail();
+            String template = emailTemplate.BuildTemplate(requerimiento);
+            if (destinatarios.Count > 0)
+            {
+                String asunto = "Se ha modificado el requerimiento: " + requerimiento.numeroRequerimientoString;
+                mail.enviar(destinatarios, asunto, template, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
             }
         }
 
@@ -253,7 +275,21 @@ namespace BusinessLayer
         {
 
             ProductoBL productoBL = new ProductoBL();
-            List<DocumentoDetalle> documentoDetalleList = productoBL.obtenerProductosAPartirdePreciosRegistradosParaPedido(requerimiento.cliente.idCliente, requerimiento.fechaPrecios, requerimiento.ciudad.esProvincia, requerimiento.incluidoIGV, familia, proveedor);
+          
+
+            Cliente cliente = usuario.clienteList.Where(c => c.sedePrincipal).FirstOrDefault();
+
+            ClienteBL clienteBl = new ClienteBL();
+            //cliente.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            List<DocumentoDetalle> listaPrecios = clienteBl.getPreciosVigentesCliente(cliente.idCliente);
+
+            /*foreach (DocumentoDetalle precio in listaPrecios)
+            {
+                precio.producto.precioClienteProducto.estadoCanasta = false;
+            }*/
+
+
+            List<DocumentoDetalle> documentoDetalleList = productoBL.obtenerProductosAPartirdePreciosRegistradosParaPedido(cliente.idCliente, requerimiento.fechaPrecios, requerimiento.ciudad.esProvincia, requerimiento.incluidoIGV, familia, proveedor);
 
             requerimiento.requerimientoDetalleList = new List<RequerimientoDetalle>();
             //Detalle de la cotizacion

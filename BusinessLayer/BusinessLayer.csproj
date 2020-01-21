@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Email\RequerimientoEmail.cs" />
     <Compile Include="RequerimientoBL.cs" />
     <Compile Include="PeriodoSolicitudBL.cs" />
     <Compile Include="RolBL.cs" />

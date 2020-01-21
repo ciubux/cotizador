@@ -298,7 +298,7 @@
         </div>
 
         <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px; display: none;">
-            <button id="btnExportRequerimientosExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchRequerimientosExcel", "Pedido")">Exportar</button>
+            <button id="btnExportRequerimientosExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchRequerimientosExcel", "Requerimiento")">Exportar</button>
         </div>
 
         <div class="row">
@@ -324,8 +324,10 @@
                     <tbody>
 
                         @{int contador = 1;}
-                        @foreach (Model.RequerimientoDetalle requerimientoDetalle in requerimiento.requerimientoDetalleList)
+                        @foreach (Model.DocumentoDetalle requerimientoDetalle in requerimiento.documentoDetalle)
                         {
+                            if (requerimientoDetalle.producto.precioClienteProducto.estadoCanasta)
+                            {
                             <tr>
                             <td>Prod @contador</td>
                             <td>@requerimientoDetalle.producto.sku</td>
@@ -334,9 +336,10 @@
                             <td>@requerimientoDetalle.unidad</td>
                             </tr>
 
-                            contador++;
+                                contador++;
+                            }
                         }
-                      
+
                     </tbody>
                 </table>
 
@@ -345,12 +348,15 @@
 
 
         @{contador = 0;}
-        @foreach (Model.RequerimientoDetalle requerimientoDetalle in requerimiento.requerimientoDetalleList)
+        @foreach (Model.DocumentoDetalle requerimientoDetalle in requerimiento.documentoDetalle)
         {
-            string nombreInputProducto = "productosku" + contador;
+            if (requerimientoDetalle.producto.precioClienteProducto.estadoCanasta)
+            {
+                string nombreInputProducto = "productosku" + contador;
 
-           <input hidden="hidden"  id=@nombreInputProducto value="@requerimientoDetalle.producto.sku"  />
-            contador++;
+                <input hidden="hidden"  id=@nombreInputProducto value="@requerimientoDetalle.producto.sku"  />
+                contador++;
+            }
         }
 
 
@@ -395,10 +401,13 @@
 
 
                     @{contador = 1;}
-                    @foreach (Model.RequerimientoDetalle requerimientoDetalle in requerimiento.requerimientoDetalleList)
-                    {                        
-                        <th data-name=@requerimientoDetalle.producto.sku data-sortable="true" data-breakpoints="xs">Prod @contador</th>
-                        contador++;
+                    @foreach (Model.DocumentoDetalle requerimientoDetalle in requerimiento.documentoDetalle)
+                    {
+                        if (requerimientoDetalle.producto.precioClienteProducto.estadoCanasta)
+                        {
+                            <th data-name=@requerimientoDetalle.producto.sku data-sortable="true" data-breakpoints="xs">Prod @contador</th>
+                            contador++;
+                        }
                     }
 
                     <th data-name="total" data-sortable="true" data-breakpoints="xs">Total (No Incl. IGV)</th>

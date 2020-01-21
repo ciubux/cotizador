@@ -40,6 +40,7 @@ namespace DataLayer
                         Distrito = Converter.GetString(row, "distrito")
                     },
                     codigoCliente = Converter.GetString(row, "codigo_cliente"),
+                    codigoMP = Converter.GetString(row, "codigo_unico"),
                     observaciones = Converter.GetString(row, "observaciones"),
                     nombre = Converter.GetString(row, "nombre"),
                     direccionDomicilioLegal = Converter.GetString(row, "direccionDomicilioLegal"),
