@@ -236,6 +236,9 @@ namespace Model
 
         public bool modificaUsuario { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_USUARIO)).FirstOrDefault() != null; } }
         public bool visualizaUsuarios { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_USUARIOS)).FirstOrDefault() != null; } }
+
+        public bool buscaNotasIngresoTodasSedes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.BUSCA_NOTAS_INGRESO_TODAS_SEDES)).FirstOrDefault() != null; } }
+        public bool validaReponsablescomercialesAsignados { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VALIDA_RESPONSABLES_COMERCIALES_ASIGNADOS)).FirstOrDefault() != null; } }
     }
 }
 

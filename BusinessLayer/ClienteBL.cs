@@ -1,6 +1,7 @@
 ﻿
 using DataLayer;
 using System.Collections.Generic;
+using System.Linq;
 using System;
 using Model;
 using Model.ServiceSunatPadron;
@@ -9,6 +10,7 @@ using System.Net;
 using System.IO;
 using System.Text;
 using ServiceLayer;
+
 
 namespace BusinessLayer
 {
@@ -485,6 +487,40 @@ namespace BusinessLayer
                     clienteDAL.insertClienteReasignacionHistorico(cliente.chrAsesor);
 
                     // Notificar
+                    Vendedor asesorAnt = cliente.usuario.vendedorList.Where(item => item.idVendedor.Equals(clientePrev.responsableComercial.idVendedor)).FirstOrDefault();
+                    Vendedor asesorNuevo = cliente.usuario.vendedorList.Where(item => item.idVendedor.Equals(cliente.responsableComercial.idVendedor)).FirstOrDefault();
+                    Vendedor supervisor = cliente.usuario.vendedorList.Where(item => item.idVendedor.Equals(cliente.supervisorComercial.idVendedor)).FirstOrDefault();
+
+
+                    Mensaje notificacion = new Mensaje();
+                    notificacion.titulo = "REASIGNACIÓN DE ASESOR COMERCIAL";
+                    notificacion.mensaje = "Se cambió el asesor comercial para el cliente \"" + cliente.razonSocialSunat + "\". Antes era  \"" + asesorAnt.descripcion + " ahora es: \"" + asesorNuevo.descripcion + ".";
+                    notificacion.fechaInicioMensaje = DateTime.Now;
+                    notificacion.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
+                    notificacion.user = cliente.usuario;
+                    notificacion.importancia = "Alta";
+
+                    UsuarioDAL usuarioDal = new UsuarioDAL();
+                    notificacion.listUsuario = usuarioDal.selectUsuariosPorPermiso(Constantes.VALIDA_RESPONSABLES_COMERCIALES_ASIGNADOS, 3);
+
+
+                    if (asesorAnt != null && notificacion.listUsuario.Where(item => item.idUsuario.Equals(asesorAnt.usuario.idUsuario)).FirstOrDefault() == null)
+                    {
+                        notificacion.listUsuario.Add(asesorAnt.usuario);
+                    }
+
+                    if (asesorNuevo != null && notificacion.listUsuario.Where(item => item.idUsuario.Equals(asesorNuevo.usuario.idUsuario)).FirstOrDefault() == null)
+                    {
+                        notificacion.listUsuario.Add(asesorNuevo.usuario);
+                    }
+
+                    if (supervisor != null && notificacion.listUsuario.Where(item => item.idUsuario.Equals(supervisor.usuario.idUsuario)).FirstOrDefault() == null)
+                    {
+                        notificacion.listUsuario.Add(supervisor.usuario);
+                    }
+
+                    MensajeDAL mensajeDal = new MensajeDAL();
+                    mensajeDal.insertMensaje(notificacion);
                 }
 
                 if (!cliente.supervisorComercial.idVendedor.ToString().Equals(cliente.chrSupervisor.preValor))
