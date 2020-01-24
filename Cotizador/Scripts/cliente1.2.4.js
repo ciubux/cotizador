@@ -3289,15 +3289,22 @@ jQuery(function ($) {
 
                 // var producto = $.parseJSON(respuesta);
                 $("#tableHistorialReasignaciones > tbody").empty();
-
+                var puedeEditar = $("#puedeEditarRepsonableComercial").val();
+                var actionEliminar = "";
                 for (var i = 0; i < lista.length; i++) {
-
-                    $("#tableHistorialReasignaciones").append('<tr data-expanded="true">' +
-                        '<td>' + lista[i].FechaInicioVigenciaDesc + '</td>' +
-                        '<td>' + lista[i].dataA + ' - ' + lista[i].dataB + '</td>' +
+                    if (puedeEditar == "True") {
+                        actionEliminar = "<td></td>";
+                        if (i < (lista.length - 1)) {
+                            actionEliminar = '<td><button type="button" class="btnEliminarAsignacion btn btn-danger">Eliminar</button></td>';
+                        }
+                    }
+                    
+                    $("#tableHistorialReasignaciones").append('<tr data-expanded="true" idHistorialReasignacion="' + lista[i].idClienteReasignacionHistorico  + '">' +
+                        '<td class="colFecInicioVendedor">' + lista[i].FechaInicioVigenciaDesc + '</td>' +
+                        '<td class="colNombreVendedor">' + lista[i].dataA + ' - ' + lista[i].dataB + '</td>' +
                         '<td>' + lista[i].FechaEdicionDesc + '</td>' +
                         '<td>' + lista[i].dataC + '</td>' +
-                        '<td>' + lista[i].observacion + '</td>' +
+                        '<td>' + lista[i].observacion + '</td>' + actionEliminar +
                         '</tr>');
 
                 }
@@ -3307,6 +3314,62 @@ jQuery(function ($) {
         });
         $("#modalVerHistorialReasignaciones").modal();
     }
+
+    $("#modalVerHistorialReasignaciones").on('click', ".btnEliminarAsignacion", function () {
+        var nombreVendedor = $(this).closest("tr").find("td.colNombreVendedor").html();
+        var fechaInicioVendedor = $(this).closest("tr").find("td.colFecInicioVendedor").html();
+        var idAsignacionVendedor = $(this).closest("tr").attr("idHistorialReasignacion");
+        var that = this;
+        var tipo = "";
+
+        $.confirm({
+            title: 'Confirmación',
+            content: '¿Está seguro de eliminar la asignación de "' + nombreVendedor + '" con fecha de inicio de vigencia el ' + fechaInicioVendedor + '?',
+            type: 'orange',
+            buttons: {
+                confirm: {
+                    text: 'Sí',
+                    btnClass: 'btn-red',
+                    action: function () {
+                        $('body').loadingModal({
+                            text: 'Eliminando'
+                        });
+
+                        $.ajax({
+                            url: "/Cliente/EliminarHistorialReasignacion",
+                            type: 'POST',
+                            data: {
+                                idHistorialReasignacion: idAsignacionVendedor,
+                                tipo: tipo
+                            },
+                            error: function (detalle) {
+                                $('body').loadingModal('hide')
+                                mostrarMensajeErrorProceso("Ocurrió un error");
+                            },
+                            success: function () {
+                                row.delete();
+                                $.alert({
+                                    title: "Operación exitosa",
+                                    type: 'green',
+                                    content: "Se eliminó el registro correctamente.",
+                                    buttons: {
+                                        OK: function () {
+                                            $(this).closest("tr").remove();
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+                },
+                cancel: {
+                    text: 'No',
+                    action: function () {
+                    }
+                }
+            },
+        });
+    });
 
     $("#chkSoloCanasta").change(function () {
         if ($(this).is(":checked")) {

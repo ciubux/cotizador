@@ -494,7 +494,11 @@ namespace BusinessLayer
 
                     Mensaje notificacion = new Mensaje();
                     notificacion.titulo = "REASIGNACIÓN DE ASESOR COMERCIAL";
-                    notificacion.mensaje = "Se cambió el asesor comercial para el cliente \"" + cliente.razonSocialSunat + "\". Antes era  \"" + asesorAnt.descripcion + " ahora es: \"" + asesorNuevo.descripcion + ".";
+                    notificacion.mensaje = "Se cambió el asesor comercial para el cliente \"" + cliente.razonSocialSunat + "\". <br/><br/> <b>Se cambió:</b>  " + asesorAnt.descripcion + " <br/> <b>Por:</b> " + asesorNuevo.descripcion + ".";
+                    if (!cliente.chrAsesor.observacion.Trim().Equals(""))
+                    {
+                        notificacion.mensaje = notificacion.mensaje + "<br/><br/><b>Observación:</b> " + cliente.chrAsesor.observacion; 
+                    }
                     notificacion.fechaInicioMensaje = DateTime.Now;
                     notificacion.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
                     notificacion.user = cliente.usuario;
@@ -518,6 +522,8 @@ namespace BusinessLayer
                     {
                         notificacion.listUsuario.Add(supervisor.usuario);
                     }
+
+                    notificacion.listUsuario.RemoveAll(item => item.idUsuario == cliente.usuario.idUsuario);
 
                     MensajeDAL mensajeDal = new MensajeDAL();
                     mensajeDal.insertMensaje(notificacion);

@@ -96,7 +96,7 @@ namespace DataLayer
         public List<Usuario> selectUsuariosPorPermiso(String codigoPermiso, int tipo = 1)
         {
             var objCommand = GetSqlCommand("ps_usuariosPorPermisoCodigo");
-            InputParameterAdd.Char(objCommand, "idPermiso", codigoPermiso);
+            InputParameterAdd.Char(objCommand, "codigo", codigoPermiso);
             InputParameterAdd.Int(objCommand, "tipo", tipo);
             DataTable dataTable = Execute(objCommand);
             List<Usuario> usuarioList = new List<Usuario>();

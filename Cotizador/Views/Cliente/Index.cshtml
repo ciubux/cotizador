@@ -312,14 +312,14 @@
         </div>
 
         <table id="tableClientes" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
-                data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
-                data-editing-allow-add="false"
-                data-editing-allow-delete="false"
-                data-editing-allow-edit="false"
-                data-sorting="true"
-                data-show-toggle="false"
-                data-editing-hide-text="Finalizar edición"
-                data-editing-add-text="Descartar cambios">
+               data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+               data-editing-allow-add="false"
+               data-editing-allow-delete="false"
+               data-editing-allow-edit="false"
+               data-sorting="true"
+               data-show-toggle="false"
+               data-editing-hide-text="Finalizar edición"
+               data-editing-add-text="Descartar cambios">
             <thead>
                 <tr>
                     <th data-name="idCliente" data-visible="false"></th>
@@ -342,7 +342,7 @@
             </thead>
             <tbody></tbody>
         </table>
-</form>
+    </form>
 </div>
 
 
@@ -516,35 +516,35 @@
 
                             <!--ESTADO CONTRIBUYENTE CLIENTE-->
 
-                        <div class="row">
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="form-group">
-                                    @Html.LabelFor(c => cliente.estadoContribuyente, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                    <div class="col-xs-8">
-                                        <p class="form-control-static" id="verEstadoContribuyente"></p>
+                            <div class="row">
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.estadoContribuyente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                        <div class="col-xs-8">
+                                            <p class="form-control-static" id="verEstadoContribuyente"></p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!--DONDICIÓN CONTRIBUYENTE CLIENTE-->
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="form-group">
-                                    @Html.LabelFor(c => cliente.condicionContribuyente, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                    <div class="col-xs-8">
-                                        <p class="form-control-static" id="verCondicionContribuyente"></p>
+                                <!--DONDICIÓN CONTRIBUYENTE CLIENTE-->
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.condicionContribuyente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                        <div class="col-xs-8">
+                                            <p class="form-control-static" id="verCondicionContribuyente"></p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="form-group">
-                                    @Html.LabelFor(c => cliente.rubro, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                    <div class="col-xs-8">
-                                        <p class="form-control-static" id="verRubro"></p>
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.rubro, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                        <div class="col-xs-8">
+                                            <p class="form-control-static" id="verRubro"></p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
                             <div class="row">
                                 <!--Nombre COmercial CLIENTE-->
@@ -731,11 +731,11 @@
                                         </div>
                                     </div>
                                     @*<div class="form-group">
-                                        @Html.LabelFor(c => cliente.bloqueado, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
-                                        <div class="col-xs-8 col-sm-8 col-lg-8">
-                                            <p class="form-control-static" id="verBloqueado"></p>
-                                        </div>
-                                    </div>*@
+                                            @Html.LabelFor(c => cliente.bloqueado, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                                            <div class="col-xs-8 col-sm-8 col-lg-8">
+                                                <p class="form-control-static" id="verBloqueado"></p>
+                                            </div>
+                                        </div>*@
                                 </div>
 
                             </div>
@@ -885,7 +885,7 @@
                                     <h5 id="lblChkCanasta" style="width: 80%; margin-left: 45px; margin-top: -22px; font-weight:bold; cursor:pointer;" class="text-muted">Ver solo canasta de compra habitual</h5>
 
                                 </div>
-                                <div class="col-sm-6 col-lg-6 text-right"> 
+                                <div class="col-sm-6 col-lg-6 text-right">
                                     <button id="btnExportCanasta" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastShowCanasta", "Cliente")">Exportar Canasta</button>
                                 </div>
                             </div>
@@ -913,9 +913,9 @@
                                         <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                                         <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
                                         @if (cliente.usuario.visualizaMargen)
-    {
-                                    <th data-name="porcentajeMargen" class="porcentajeMargen" data-sortable="false" data-breakpoints="xs sm">Margen</th>
-}
+                                        {
+                                            <th data-name="porcentajeMargen" class="porcentajeMargen" data-sortable="false" data-breakpoints="xs sm">Margen</th>
+                                        }
                                         <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
                                     </tr>
                                 </thead>
@@ -925,11 +925,11 @@
 
                         <div id="cliente_direccionesEntrega" class="tab-pane fade">
                             <!--    <table id="tableListaDireccionesEntrega" class="table">
-         </table>
-    -->
+                                 </table>
+                            -->
                             <div class="row">
                                 <div class="col-sm-6 col-lg-6">
-                                    
+
                                 </div>
                                 <div class="col-sm-6 col-lg-6 text-right">
                                     <button id="btnExportDirecciones" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastShowDirecciones", "Cliente")">Exportar Direcciones</button>
@@ -1123,7 +1123,7 @@
                 <input id="idDireccionEntrega" name="idDireccionEntrega" class="hidden" />
                 <input id="direccionEntrega_codigo" name="direccionEntrega_codigo" class="hidden" />
                 <input id="direccionEntrega_cliente_ciudad_sede" name="direccionEntrega_cliente_ciudad_sede" class="hidden" />
-              <!--  <input id="idCliente" name="idCliente" class="hidden" />-->
+                <!--  <input id="idCliente" name="idCliente" class="hidden" />-->
 
 
                 <div class="form-group required">
@@ -1228,7 +1228,7 @@
 
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" id="btnGuardarCambiosDireccionEntrega" >Guardar Cambios</button>
+                <button class="btn btn-primary" id="btnGuardarCambiosDireccionEntrega">Guardar Cambios</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
             </div>
         </form>
@@ -1263,11 +1263,24 @@
                             <th data-name="fechaRegistro" data-sortable="false" data-breakpoints="xs">Fecha Registro</th>
                             <th data-name="usuario" data-sortable="false" data-breakpoints="xs">Usuario</th>
                             <th data-name="observacion" data-sortable="false" data-visible="true" data-breakpoints="xs">Observaciones</th>
+                            @if (cliente.usuario.validaReponsablescomercialesAsignados)
+                            {
+                                <th></th>
+                            }
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
 
+                <input type="hidden" id="puedeEditarRepsonableComercial" value="@cliente.usuario.validaReponsablescomercialesAsignados.ToString()" />
+                @if (cliente.usuario.validaReponsablescomercialesAsignados)
+                {
+                    <div class="pull-right">
+                        <button type="button" id="btnAgregarReasignacion" class="btn btn-primary">Agregar Reasignación</button>
+
+                    </div>
+                    <br />
+                }
             </div>
 
             <div class="modal-footer">
@@ -1281,6 +1294,63 @@
 </div>
 
 
+
+<div class="modal fade" id="modalAgregarReasignacion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalAgregarReasignacion"><b>Agregar reasignación de <span id="historial_reasignaciones_tipo_vendedor"></span></b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <!--Responsable Comercial-->
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            @Html.LabelFor(c => cliente.responsableComercial, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idResponsableComercial" })
+                            <div class="col-xs-8">
+                                @Html.Action("GetResponsablesComerciales", "Vendedor",
+                                new
+                                {
+                                    vendedorSelectId = "idResponsableComercial",
+                                    prevValue = cliente.chrAsesor.preValor,
+                                    selectedValue = cliente.responsableComercial.idVendedor
+                                })
+                            </div>
+                        </div>
+                        <div id="divChrAsesor">
+                            <div class="row">
+                                <!--Fecha Inicio Vigencia-->
+                                <label class="control-label col-xs-4" for="file">Inicio <br />Vigencia:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="text" id="chrFechaInicioVigenciaAsesor" name="chrFechaInicioVigenciaAsesor" value="@cliente.chrAsesor.FechaInicioVigenciaDesc" readonly style="cursor:pointer;">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!--Observacion-->
+                                <label class="control-label col-xs-4" for="file">Observación:</label>
+                                <div class="col-xs-8">
+                                    <textarea class="form-control" name="chrObservacionAsesor" id="chrObservacionAsesor" value="@cliente.chrAsesor.observacion"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="pull-right">
+                        <button type="button" id="btnCloseAgregarReasignacion" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" id="btnRegitrarReasignacion" class="btn btn-primary" data-dismiss="modal">Registrar</button>
+                    </div>
+
+                </div>
+            </div>
+    </div>
+</div>
 
 @section Scripts {
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/cliente")

@@ -415,7 +415,9 @@ namespace Model
 
         public const String BUSCA_NOTAS_INGRESO_TODAS_SEDES = "P320";
         public const String VALIDA_RESPONSABLES_COMERCIALES_ASIGNADOS = "P780";
-        
+
+        public const String MODIFICA_REASIGNACIONES_CLIENTE = "P780";
+
         public enum paginas
         {
             /*COTIZACION*/

@@ -912,9 +912,16 @@ jQuery(function ($) {
 
         var idProducto = event.target.getAttribute("class").split(" ")[0];
         var idCliente = GUID_EMPTY;
-        var sessionCotizacion = "cotizacion"
+        var idGrupoCliente = 0;
+        var sessionCotizacion = "cotizacion";
+        var actionUrl = "GetPreciosRegistrados";
+
         if ($("#pagina").val() == "0") {
             idCliente = $("#verIdCliente").val();
+            idGrupoCliente = parseInt($("#verIdGrupoCliente").val());
+            if (idGrupoCliente > 0) {
+                actionUrl = "GetPreciosRegistradosGrupoCliente";
+            }
             sessionCotizacion = "cotizacionVer";
         }
         else {
@@ -927,12 +934,13 @@ jQuery(function ($) {
         }
 
         $.ajax({
-            url: "/Precio/GetPreciosRegistrados",
+            url: "/Precio/" + actionUrl,
             type: 'POST',
             dataType: 'JSON',
             data: {
                 idProducto: idProducto,
                 idCliente: idCliente,
+                idGrupoCliente: idGrupoCliente,
                 controller: sessionCotizacion
             },
             success: function (producto) {
@@ -1904,6 +1912,7 @@ jQuery(function ($) {
                 $("#verCondicionesPago").html(cotizacion.textoCondicionesPago);
                 $("#verIdCotizacion").val(cotizacion.idCotizacion);
                 $("#verIdCliente").val(cotizacion.cliente_idCliente);
+                $("#verIdGrupoCliente").val(cotizacion.grupo_idGrupoCliente);
                 $("#verNumero").html(cotizacion.codigo);
                 $("#verCiudad").html(cotizacion.ciudad_nombre);
                 $("#verContacto").html(cotizacion.contacto);
