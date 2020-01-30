@@ -724,7 +724,9 @@ jQuery(function ($) {
                                         type: 'green',
                                         content: resultado.message,
                                         buttons: {
-                                            OK: function () { }
+                                            OK: function () {
+                                                location.reload();
+                                            }
                                         }
                                     });
                                 } else {

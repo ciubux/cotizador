@@ -337,7 +337,7 @@ namespace BusinessLayer
         {
             using (var productoDal = new ProductoDAL())
             {
-                List<DocumentoDetalle> items = productoDal.getPreciosVigentesCliente(idCliente);
+                List<DocumentoDetalle> items = productoDal.getPreciosVigentesClienteCanastaHabitual(idCliente);
                 foreach (DocumentoDetalle pedidoDetalle in items)
                 {
                     if (pedidoDetalle.producto.image == null)

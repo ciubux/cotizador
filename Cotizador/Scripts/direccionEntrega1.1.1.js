@@ -7,7 +7,9 @@ jQuery(function ($) {
     var TITLE_EXITO = 'Operación Realizada';
     var SELECCIONE_DIRECCION_ACOPIO = "Seleccione dirección de entrega";
     
- 
+
+    $("#idDireccionAlmacen").chosen({ placeholder_text_single: "Buscar dirección de establecimiento", no_results_text: "No se encontró dirección de establecimiento" });
+
     cargarDireccionesEntrega();
 
     $("#direccionEntrega_esDireccionAcopio").change(
@@ -17,12 +19,14 @@ jQuery(function ($) {
                 $("#idDireccionAlmacen").attr('disabled', 'disabled');
                 $("#idDireccionAlmacen").val(GUID_EMPTY)
                 $("#idDireccionAlmacen").find("option:selected").text($('#direccionEntrega_descripcion').val());
+                $('#idDireccionAlmacen').trigger("chosen:updated");
                 //$('#idDireccionAlmacen option:contains("Newest")').text('TEMPEST');
             }
             else {
                 $("#idDireccionAlmacen").val(GUID_EMPTY)
                 $("#idDireccionAlmacen").find("option:selected").text(SELECCIONE_DIRECCION_ACOPIO);
                 $("#idDireccionAlmacen").removeAttr('disabled');
+                $('#idDireccionAlmacen').trigger("chosen:updated");
             }
         }
     )
@@ -2194,6 +2198,7 @@ jQuery(function ($) {
                 }));
 
                 var domicilioLegalList = result.domicilioLegalList;
+                $('#idDireccionAlmacen').trigger("chosen:updated");
 
                 for (var i = 0; i < domicilioLegalList.length; i++) {
 

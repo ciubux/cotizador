@@ -144,6 +144,8 @@ namespace Cotizador.Controllers
 
         public ActionResult Index(Guid? idPedido = null)
         {
+            
+            
             try
             {
                 this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPedidos;
@@ -160,6 +162,8 @@ namespace Cotizador.Controllers
                         return RedirectToAction("Login", "Account");
                     }
                 }
+
+                return RedirectToAction("Aprobar", "Requerimiento");
 
                 if (this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] == null)
                 {
@@ -246,6 +250,8 @@ namespace Cotizador.Controllers
                 logger.Error(e, agregarUsuarioAlMensaje(e.Message));
                 throw e;
             }
+
+
         }
 
 

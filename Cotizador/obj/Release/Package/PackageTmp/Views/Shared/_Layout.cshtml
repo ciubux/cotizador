@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "310";
+    TempData["ScriptVersion"] = "312";
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
 }
@@ -194,8 +194,8 @@
 
                                         @if (usuario.modificaPeriodoSolicitud)
                                     {
-                                            <li id="linkBusquedaPeriodoSolicitud" class="@linkBusquedaPeriodoSolicitud">@Html.ActionLink("Periodo Requerimeinto - Búsqueda", "List", "PeriodoSolicitud")</li>
-                                            <li id="linkMantenimientoPeriodoSolicitud" class="@linkMantenimientoPeriodoSolicitud">@Html.ActionLink("Periodo Requerimeinto - Crear/Modificar", "Editar", "PeriodoSolicitud")</li>
+                                            <li id="linkBusquedaPeriodoSolicitud" class="@linkBusquedaPeriodoSolicitud">@Html.ActionLink("Periodo Requerimiento - Búsqueda", "List", "PeriodoSolicitud")</li>
+                                            <li id="linkMantenimientoPeriodoSolicitud" class="@linkMantenimientoPeriodoSolicitud">@Html.ActionLink("Periodo Requerimiento - Crear/Modificar", "Editar", "PeriodoSolicitud")</li>
                                     }
                                         @if (usuario.modificaUsuario)
                                     {

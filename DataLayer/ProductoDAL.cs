@@ -499,6 +499,22 @@ namespace DataLayer
             return documentoDetalleList;
         }
 
+        public List<DocumentoDetalle> getPreciosVigentesClienteCanastaHabitual(Guid idCliente)
+        {
+            List<DocumentoDetalle> result = new List<DocumentoDetalle>();
+            List<DocumentoDetalle> lista = this.getPreciosVigentesCliente(idCliente);
+
+            foreach (DocumentoDetalle item in lista)
+            {
+                if (item.producto.precioClienteProducto.estadoCanasta)
+                { 
+                    result.Add(item);
+                }
+            }
+
+            return result;
+        }
+
         public List<DocumentoDetalle> getPreciosVigentesCliente(Guid idCliente)
         {
             var objCommand = GetSqlCommand("ps_productosVigentesCliente");
