@@ -80,5 +80,29 @@ namespace BusinessLayer
             }
         }
 
+        public Mensaje verificarLeido(Guid idMensaje)
+        {
+            using (var dal = new MensajeDAL())
+            {
+                return dal.verificarLeido(idMensaje);
+            }
+        }
+
+        public List<Mensaje> getRespuestasUsuario(Mensaje obj, Guid usuarioSeleccionado)
+        {
+            using (var dal = new MensajeDAL())
+            {
+                return dal.getRespuestasUsuario(obj,usuarioSeleccionado);
+            }
+        }
+
+        public List<Usuario> getUsuariosRespuesta(Mensaje obj)
+        {
+            using (var dal = new MensajeDAL())
+            {
+                return dal.getUsuariosRespuesta(obj);
+            }
+        }
+
     }
 }

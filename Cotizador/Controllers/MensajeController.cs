@@ -80,7 +80,7 @@ namespace Cotizador.Controllers
             Mensaje obj = new Mensaje();
             obj.user = new Usuario();
             obj.id_mensaje = Guid.Empty;
-            obj.prioridad = "no";
+            obj.importancia = "no";
             obj.mensaje = String.Empty;
             obj.titulo = String.Empty;
             obj.estado = 1;
@@ -142,25 +142,29 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(list);
         }
 
+        public String ConsultarSiMensajeLeido()
+        {
+            Guid idMensaje = Guid.Parse(Request["idMensaje"].ToString());           
+            MensajeBL bL = new MensajeBL();
+            Mensaje obj = bL.verificarLeido(idMensaje);
+            String resultado = JsonConvert.SerializeObject(obj);
+            return resultado;
+        }
+
         public String ConsultarSiExisteMensaje()
         {
             Guid idMensaje = Guid.Parse(Request["idMensaje"].ToString());
             MensajeBL bL = new MensajeBL();
-            Mensaje obj = bL.getMensajeById(idMensaje);
-
+            Mensaje obj = bL.getMensajeById(idMensaje);            
             String resultado = JsonConvert.SerializeObject(obj);
             this.Session[Constantes.VAR_SESSION_MENSAJE_VER] = obj;
-
             obj = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE];
             if (obj == null || obj.id_mensaje == Guid.Empty)
                 return "{\"existe\":\"false\",\"idMensaje\":\"0\"}";
             else
                 return "{\"existe\":\"true\",\"idMensaje\":\"" + obj.id_mensaje + "\"}";
         }
-
-
-
-
+        
         private Mensaje MensajeSession
         {
             get
@@ -423,7 +427,7 @@ namespace Cotizador.Controllers
                 instanciarMensaje();
                 Mensaje instanciaMensaje = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE];
                 instanciaMensaje.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
-                instanciaMensaje.prioridad = "si";
+                instanciaMensaje.importancia = "Alta";
             }
             Mensaje mensaje = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE];
             if (mensaje.user == null) { mensaje.user = new Usuario(); }
@@ -462,7 +466,31 @@ namespace Cotizador.Controllers
 
             list = mensajebl.getHiloMensaje(obj);
             return JsonConvert.SerializeObject(list);
-        }    
-               
+        }
+
+        public String verUsuariosRespuesta()
+        {
+            List<Usuario> list = new List<Usuario>();
+            Mensaje obj = new Mensaje();
+            MensajeBL mensajebl = new MensajeBL();
+            obj.id_mensaje = Guid.Parse(Request["idMensaje"].ToString());
+            list = mensajebl.getUsuariosRespuesta(obj);
+            return JsonConvert.SerializeObject(list);
+        }
+
+        public String verRespuestaUsuario()
+        {
+            List<Mensaje> list = new List<Mensaje>();
+            Mensaje obj = new Mensaje();
+            obj.user = new Usuario();
+            MensajeBL mensajebl = new MensajeBL();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            obj.user.idUsuario = usuario.idUsuario;
+            obj.id_mensaje = Guid.Parse(Request["idMensaje"].ToString());
+            Guid usuarioSeleccionado = Guid.Parse(Request["idUsuario"].ToString());
+            list = mensajebl.getRespuestasUsuario(obj, usuarioSeleccionado);
+            return JsonConvert.SerializeObject(list);
+        }
+
     }
 }

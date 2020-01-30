@@ -171,12 +171,12 @@
         changeInputString("titulo", $("#titulo").val());
     });
 
-    $("#vendedor_prioridad_si").change(function () {
-        changeInputString("prioridad", "si");
+    $("#vendedor_mensaje_alta").change(function () {
+        changeInputString("mensaje", "Alta");
     });
 
-    $("#vendedor_prioridad_no").change(function () {
-        changeInputString("prioridad", "no");
+    $("#vendedor_mensaje_alta").change(function () {
+        changeInputString("mensaje", "Normal");
     });
 
     function crearMensaje() {
@@ -266,8 +266,8 @@
     }
 
 
-    $(".navbar-header").on("click", "a.btnModal", function () {
-        $('#Mensaje1').modal('show');
+    $(".navbar-header").on("click", "a.btnModal", function () {         
+        $('#Mensaje1').modal('show');       
     });
 
 
@@ -275,8 +275,8 @@
 
         var arrayOut = {};
         var unicos = arrayIn.filter(function (e) {
-            return arrayOut[e.id_mensaje] ? false : (arrayOut[e.id_mensaje] = true);
-        });
+            return arrayOut[e.id_mensaje] ? false : (arrayOut[e.id_mensaje_hilo.id_mensaje] = true);
+        });        
         return unicos;
     }
 
@@ -306,7 +306,7 @@
                         var esVisible = $(".ModalMensajeAlerta").is(":visible");
 
                         for (var i = 0; i < list.length; i++) {
-                            if (list[i].prioridad == 'si') {
+                            if (list[i].mensaje == 'Alta') {
                                 verAutomaticamente = true;
                             }
                             var BtnLabel = list.length === 1 ? "Marcar como leído" : "Marcar como leído y mostrar siguiente";
@@ -314,9 +314,9 @@
                             if (list.length - 1 === i) {
                                 BtnLabel = "Marcar como leído";
                             }
-                            var imagenAdvertencia = list[i].prioridad == "si" ? '<img src = "/images/advertencia.svg" style="vertical-align: middle; margin-bottom:5px;  margin-right:10px;" width = "20px" height = "20px"  >' +
+                            var imagenAdvertencia = list[i].importancia == "Alta" ? '<img src = "/images/advertencia.svg" style="vertical-align: middle; margin-bottom:5px;  margin-right:10px;" width = "20px" height = "20px"  >' +
                                 '<svg width="1px" height="1px" xmlns="https://www.w3.org/2000/svg"></svg>' : "";
-
+                            
                             var ItemRow =
                                 '<div id="Mensaje' + numeroModal + '" class="modal fade ModalMensajeAlerta" tabindex="-1" role="dialog">' +
                                 '<div class="modal-dialog" id="MensajeDialog' + numeroModal + '">' +
@@ -370,7 +370,7 @@
 
         }
     }
-    $('body').on('show.bs.modal', '.ModalMensajeAlerta', function () {
+    $('body').on('show.bs.modal', '.ModalMensajeAlerta', function () {        
         var arrayClass = $(this).find('.Leido').attr('class').split(" ");
         var idMensaje = arrayClass[3];
         var numeroModal = $(this).find('.Responder').attr('id');
@@ -408,14 +408,13 @@
 
     });
 
-
-
     $('body').on("click", "button.Responder", function () {
         var num = $(this).attr('id');
         $('#respuesta' + num + '').show();
         $('.botonesRespuesta' + num + '').show();
         $('.Responder').hide();
-
+        $('#respuesta' + num + '').after('<br id="saltoLinea">');
+        $('#respuesta'+num+'').focus();
     });
 
     $('body').on("click", "button.EnviarRespuesta", function () {
@@ -423,7 +422,7 @@
         var txtRespuesta = $('#respuesta' + num + '').val();
         var arrayClass = $(this).attr('class').split(" ");
         var idMensaje = arrayClass[3];
-
+        
         if (txtRespuesta.trim() === "") {
             $(this).closest('.modal-content').find('button.Leido').click();
         }
@@ -439,15 +438,22 @@
                     let dialog = $('.' + idMensaje + '').closest('.modal');
                     var btnFinal = dialog.find('.Leido').html();
                     if (btnFinal == "Marcar como leído") {
-                        dialog.modal('hide');
+                        dialog.modal('hide');    
+                        location.reload();
                     }
                     else {
                         dialog.modal('hide');
                         dialog.next().modal('show');
                     }
                     $('.' + idMensaje + '').closest('#MensajeDialog').find('#modalRespuesta' + num + '').empty();
-                    ActulizarMensaje();
 
+                    $('#respuesta' + num + '').empty;
+                    var num = $(this).attr('id');
+                    $('#respuesta' + num + '').hide();
+                    $('.botonesRespuesta' + num + '').hide();                  
+                    $('#respuesta' + num + '').val("");
+                    $('.Responder').show();
+                    ActulizarMensaje();
                 }
             });
         }
@@ -461,7 +467,7 @@
         //$('#botonesRespuesta' + num + '').hide();
         $('#respuesta' + num + '').val("");
         $('.Responder').show();
-
+        $('#saltoLinea').remove();
     });
 
     $('body').on("click", "button.Leido", function () {
@@ -479,7 +485,8 @@
                 let dialog = $('.' + idMensaje + '').closest('.modal');
                 var btnFinal = dialog.find('.Leido').html();
                 if (btnFinal == "Marcar como leído") {
-                    dialog.modal('hide');
+                    dialog.modal('hide');  
+                    location.reload();
                 }
                 else {
                     dialog.modal('hide');
@@ -487,7 +494,6 @@
                 }
                 $('.' + idMensaje + '').closest('#MensajeDialog').find('#modalRespuesta' + num + '').empty();
                 ActulizarMensaje();
-
             }
         });
     });
@@ -640,9 +646,10 @@
                         '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) + '  </td>' +
                         '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaVencimientoMensaje)) + '  </td>' +
                         '<td>' +
-                        '<div class="btn-group">' +
-                        '<button type="button" class="' + list[i].id_mensaje + ' btnEditarMensaje btn btn-primary">Editar</button>' +                        
-                        '</div>' +
+                        
+                        '<button type="button" class="' + list[i].id_mensaje + ' btnEditarMensaje btn btn-primary">Editar</button>' +   '<br>'+
+                        '<button type="button" class="' + list[i].id_mensaje + ' btnVerMensaje btn btn-success">Ver</button>' +    
+                       
                         '</td>' +
                         '</tr>';
 
@@ -652,50 +659,171 @@
             }
         });
     });
+
+    $('body').on('click', "button.btnVerMensaje", function () {
+
+        var arrrayClass = event.target.getAttribute("class").split(" ");
+        var idMensaje = arrrayClass[0];
+        $('#idMensajeRespuesta').val(idMensaje);
+        $.ajax({
+            url: "/Mensaje/verUsuariosRespuesta",
+            type: 'POST',  
+            async: false,
+            dataType: 'JSON',
+            data: {
+                idMensaje: idMensaje
+            },
+            success: function (resultado)
+            {
+                $('#UsuariosRespuesta').empty();
+                
+                $('#UsuariosRespuesta').append('<option value=" ">Selecciona un Usuario</option>');
+                for (var i = 0; i < resultado.length; i++) 
+                {
+                    var listaUsuario = '<option value="' + resultado[i].idUsuario + '">' + resultado[i].nombre + '</option>';
+                    $('#UsuariosRespuesta').append(listaUsuario);
+                }                                 
+                $('#respuestasUsuarios').empty();
+                $('[id^=respuestasUser]').remove();
+                $('#Prueba2').remove();
+                $('#modalListado').modal('show');
+            }
+        });
+    });
+    
+    $('body').on('change', "#UsuariosRespuesta", function () {
+
+        var idUsuario = $('#UsuariosRespuesta').val(); 
+        var idMensaje = $('#idMensajeRespuesta').val(); 
+        if (idUsuario == " ")
+        {           
+            $('[id^=respuestasUser]').remove();
+            $('#Prueba2').remove();
+        }
+        else
+        {
+            $.ajax({
+            url: "/Mensaje/verRespuestaUsuario",
+            type: 'POST',
+            async: false,
+            dataType: 'JSON',
+            data: {
+                idMensaje: idMensaje,
+                idUsuario: idUsuario
+            },
+                success: function (list)
+                {                    
+                    $('[id^=respuestasUser]').remove();
+                    $('#Prueba2').remove();
+
+                    var imagenAdvertencia = list[list.length-1].importancia == "Alta" ? '<img src = "/images/advertencia.svg" style="vertical-align: middle; margin-bottom:5px;  margin-right:10px;" width = "20px" height="20px">' +
+                        '<svg width="1px" height="1px" xmlns="https://www.w3.org/2000/svg"></svg>' : "";
+
+                    var titulo = '<h4 id="Prueba2" style="display: inline-block;">' + imagenAdvertencia + '<u>' + list[list.length-1].titulo + '</u></h4>';
+
+                    $('#Prueba').after(titulo);
+
+                    for (var i=0;i< list.length; i++)
+                    {
+                        var date = new Date(list[i].fechaCreacionMensaje);
+                        hora = (date.getHours() < 10 ? '0' : '') + date.getHours();
+                        minuto = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+                        segundo = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
+                        horaImprimible = hora + ":" + minuto + ":" + segundo;
+                       
+                        var a = '<div id="respuestasUser"><br>' +                           
+                            '<b><P STYLE="margin-bottom: 0.11in"><A NAME="_GoBack"></A><SPAN LANG="es-PE">' + list[i].user.nombre + '</SPAN></b><FONT SIZE=3><SPAN LANG="es-PE"> </SPAN></FONT> <FONT SIZE=2 > <SPAN LANG="es-PE">' +
+                            '</SPAN></FONT> <FONT COLOR="#808080"><FONT SIZE=2><SPAN LANG="es-PE">'
+                            + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) + ' ' + horaImprimible + '</SPAN></FONT></FONT > <FONT COLOR="#808080"><FONT SIZE=2 STYLE="font-size: 9pt"><SPAN LANG="es-PE">' +
+                            '</SPAN></FONT></FONT>' +
+                            '</P>' +
+                            '<P STYLE="margin-bottom: 0.11in"><FONT SIZE=3><SPAN LANG="es-PE">' + list[i].mensaje + '' + '</SPAN></FONT></P></div>';
+                            
+                        $('#Prueba2').after(a);
+                    }
+                }
+            });
+        }               
+    });
     
     $('body').on('click', "button.btnEditarMensaje", function () {
 
         var arrrayClass = event.target.getAttribute("class").split(" ");
         var idMensaje = arrrayClass[0];
 
-        $.ajax({
-            url: "/Mensaje/ConsultarSiExisteMensaje",
-            type: 'POST',
-            async: false,
-            dataType: 'JSON',
-            data: {
-                idMensaje: idMensaje
-            },
-            success: function (resultado) {
-                if (resultado.existe == "false") {
+                   $.ajax({
+                            url: "/Mensaje/ConsultarSiExisteMensaje",
+                            type: 'POST',
+                            async: false,
+                            dataType: 'JSON',
+                            data: {
+                                idMensaje: idMensaje
+                            },
+                       success: function (resultado)
+                       {
 
-                    $.ajax({
-                        url: "/Mensaje/iniciarEdicionMensaje",
-                        type: 'POST',
-                        error: function (detalle) {
-                            alert("Ocurrió un problema al iniciar la edición del mensaje.");
-                        },
-                        success: function (fileName) {
-                            window.location = '/Mensaje/Editar';
+                            if (resultado.existe == "false") {
+                                $.ajax({
+                                    url: "/Mensaje/iniciarEdicionMensaje",
+                                    type: 'POST',
+                                    async: false,
+                                    error: function (detalle) {
+                                        alert("Ocurrió un problema al iniciar la edición del mensaje.");
+                                    },
+                                    success: function (fileName) {
+                                        window.location = '/Mensaje/Editar'; 
+                                        ConsultaMensajeLeido();
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                if (resultado.idVendedor == 0) {
+                                    alert('Está creando un nuevo mensaje; para continuar por favor diríjase a la página "Crear/Modificar Vendedor" y luego haga clic en el botón Cancelar.');
+                                }
 
-                        }
-                    });
-
-                }
-                else {
-                    if (resultado.idVendedor == 0) {
-                        alert('Está creando un nuevo mensaje; para continuar por favor diríjase a la página "Crear/Modificar Vendedor" y luego haga clic en el botón Cancelar.');
+                                else {
+                                    alert('Ya se encuentra editando un mensaje para continuar por favor dirigase a la página "Crear/Modificar Mensaje".');
+                                     }
+                            }
                     }
-
-                    else {
-                        alert('Ya se encuentra editando un mensaje para continuar por favor dirigase a la página "Crear/Modificar Mensaje".');
-                    }
-                }
-            }
-        });
-
-
+                });
     });
+
+    ConsultaMensajeLeido();
+    function ConsultaMensajeLeido() {
+
+        if (window.location.pathname == '/Mensaje/Editar') {
+        var idMensaje = $('#idMensaje').val();         
+
+            $.ajax({
+                url: "/Mensaje/ConsultarSiMensajeLeido",
+                type: 'POST',
+                async: true,
+                dataType: 'JSON',
+                data: {
+                    idMensaje: idMensaje
+                },
+                success: function (resultado) {
+
+                    if (resultado.leido == 1) {  
+                        alert('El mensaje ya se encuentra leido no se puede modificar');
+                        $("#vendedor_importancia_si").prop('disabled', true);
+                        $("#vendedor_importancia_no").prop('disabled', true);
+                        $("#mensaje_fechaInicioMensaje").prop('disabled', true);
+                        $("#mensaje_fechaVencimientoMensaje_edit").prop('disabled', true);
+                        $("#titulo").prop('disabled', true);
+                        $("#txtMensaje").prop('disabled', true);                        
+                        $('#idUsuarioBusquedaMensaje').prop('disabled', true).trigger("chosen:updated");
+                        $('[id*=rol_]').prop('disabled', true);
+                        $('#btnEnviarMensaje').remove();  
+                                               
+                    }
+                }
+            });
+        }
+    }
+
 
     $("#btnCancelarMensaje").click(function () {
 
@@ -838,11 +966,11 @@
     }, 3000);
 
 
-    $('body').on('change', '#mensaje_prioridad_si_modal', function (event) {
-        changeInputString("prioridad", "si");
+    $('body').on('change', '#mensaje_mensaje_alta_modal', function (event) {
+        changeInputString("mensaje", "Alta");
     });
-    $('body').on('change', '#mensaje_prioridad_no_modal', function (event) {
-        changeInputString("prioridad", "no");
+    $('body').on('change', '#mensaje_mensaje_normal_modal', function (event) {
+        changeInputString("mensaje", "Normal");
     });
     $(document).on('change', '#tituloModal', function (event) {
         changeInputString("titulo", $("#tituloModal").val());

@@ -27,26 +27,26 @@
             <div class="col-md-5">
                 <div class="radio-inline">
                     <label class="radio-label">
-                        @if (mensaje.prioridad == "si")
+                        @if (mensaje.importancia == "Alta")
                         {
-                            <input class="radio-input" checked type="radio" name="mensaje_prioridad" id="vendedor_prioridad_si" value="1"><span style="font-weight: normal">Si</span>
+                            <input class="radio-input" checked type="radio" name="mensaje_importancia" id="vendedor_importancia_si" value="1"><span style="font-weight: normal">Si</span>
                         }                        
                         else
                         {
-                        <input class="radio-input" type="radio" name="mensaje_prioridad" id="vendedor_prioridad_si" value="1"><span style="font-weight: normal">Si</span>
+                        <input class="radio-input" type="radio" name="mensaje_importancia" id="vendedor_importancia_si" value="1"><span style="font-weight: normal">Si</span>
                         }
 
                     </label>
                 </div>
                 <div class="radio-inline">
                     <label class="radio-label">
-                        @if (mensaje.prioridad == "no")
+                        @if (mensaje.importancia == "Normal")
                         {
-                            <input class="radio-input" checked type="radio" name="mensaje_prioridad" id="vendedor_prioridad_no" value="0"><span style="font-weight: normal">No</span>
+                            <input class="radio-input" checked type="radio" name="mensaje_importancia" id="vendedor_importancia_no" value="0"><span style="font-weight: normal">No</span>
                         }
                         else
                         {
-                            <input class="radio-input" type="radio" name="mensaje_prioridad" id="vendedor_prioridad_no" value="0"><span style="font-weight: normal">No</span>
+                            <input class="radio-input" type="radio" name="mensaje_importancia" id="vendedor_importancia_no" value="0"><span style="font-weight: normal">No</span>
                         }
                     </label>
                 </div>

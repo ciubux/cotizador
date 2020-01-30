@@ -93,9 +93,9 @@ namespace DataLayer
 
             var objCommand = GetSqlCommand("pi_vendedor");
             InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo);
-            //InputParameterAdd.Varchar(objCommand, "cargo", obj.cargo);
-            //InputParameterAdd.Varchar(objCommand, "nombre", obj.descripcion);
-            //InputParameterAdd.Varchar(objCommand, "contacto", obj.contacto);
+            
+            InputParameterAdd.Varchar(objCommand, "nombre", obj.descripcion);           
+
             InputParameterAdd.Int(objCommand, "estado", obj.estado);
             InputParameterAdd.Guid(objCommand, "usuario_creacion", obj.usuario.idUsuario);
             InputParameterAdd.Decimal(objCommand, "maximo_descuento", obj.maxdesapro);

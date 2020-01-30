@@ -1,5 +1,5 @@
 ﻿jQuery(function ($) {
-    $(document).on('click', "button#password_modal_save", function () {
+    $('body').on('click', "button#password_modal_save", function () {
 
         $('#avisoCambioPasswordActual').hide();
         $('#avisoCambioPasswordConfirmacion').hide();

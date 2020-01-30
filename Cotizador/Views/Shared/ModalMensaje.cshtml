@@ -7,59 +7,35 @@
 </div>
 
 
-
-<div class="modal fade" tabindex="-1" role="dialog" id="modalListado">
-    <div class="modal-dialog" role="document" id="MensajeVerLista">
+<div class="modal fade verMensajeLista" tabindex="-1" role="dialog" id="modalListado">
+    <div class="modal-dialog"  id="MensajeVerLista">
 
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="tituloMensaje"></h4>
+                <h4 class="modal-title" id="tituloMensaje"> Respuestas</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 </br>
             </div>
-            <div class="modal-body">
 
-                <table id="tableMensajeVer" class="table footable footable-4 breakpoint-lg"
-                       data-editing="false" data-editing-allow-add="false"
-                       data-editing-allow-delete="false" data-editing-allow-edit="false"
-                       data-show-toggle="false" style="">
+            <div class="modal-body" id="modalRespuestaUsuario">
 
-                    <thead>
-                        <tr>
-                            <th data-name="Numero" data-visible="true" data-sortable="true">N°</th>
-                            <th data-name="nombre" data-visible="true">Usuario</th>
-                            <th data-name="nombre" data-visible="true">Fecha de Confirmación</th>
-                            <th data-name="titulo" data-visible="true" data-sortable="true">Titulo del mensaje</th>
+                <input type="hidden" id="idMensajeRespuesta" value="" />
 
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-
-
+                <div class="col-sm-6 col-lg-10 form-group">
+                    <label class="control-label col-xs-4">Usuario:</label>
+                    <div class="col-xs-12 col-lg-8">
+                        <select class="form-control" id="UsuariosRespuesta"></select>
+                    </div>
+                </div>
+                
+               <br id="saltoEliminado"><br id="Prueba">
 
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            </div>
+            
         </div>
     </div>
 </div>
-
-
-
-
-
-<div id="MensajeRapido" class="modal fade ModalMensajeRapido" role="dialog" tabindex="-1" data-url='@Url.Action("EditarRapido","Mensaje")'>
-    <div class="modal-dialog" id="MensajeRapidoDialog">
-
-
-
-    </div>
-</div>
-
-
 
 

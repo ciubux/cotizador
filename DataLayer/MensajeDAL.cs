@@ -27,7 +27,7 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pi_mensaje");
             InputParameterAdd.Varchar(objCommand, "titulo", obj.titulo);
             InputParameterAdd.Text(objCommand, "mensaje", obj.mensaje);
-            InputParameterAdd.Varchar(objCommand, "prioridad", obj.prioridad);
+            InputParameterAdd.Varchar(objCommand, "importancia", obj.importancia);
             InputParameterAdd.Guid(objCommand, "id_usuario_creacion", obj.user.idUsuario);
             InputParameterAdd.Guid(objCommand, "id_usuario_modificacion", obj.user.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fecha_vencimiento", obj.fechaVencimientoMensaje);
@@ -77,7 +77,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "id_mensaje", obj.id_mensaje);
             InputParameterAdd.Varchar(objCommand, "titulo", obj.titulo);
             InputParameterAdd.Text(objCommand, "mensaje", obj.mensaje);
-            InputParameterAdd.Varchar(objCommand, "prioridad", obj.prioridad);
+            InputParameterAdd.Varchar(objCommand, "importancia", obj.importancia);
             InputParameterAdd.Guid(objCommand, "id_usuario_modificacion", obj.user.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fecha_vencimiento", obj.fechaVencimientoMensaje);
             InputParameterAdd.DateTime(objCommand, "fecha_inicio", obj.fechaInicioMensaje);
@@ -128,15 +128,18 @@ namespace DataLayer
             foreach (DataRow row in dataTable.Rows)
             {
                 Mensaje obj = new Mensaje();
+                obj.id_mensaje_hilo = new Mensaje();
                 obj.user = new Usuario();
                 obj.id_mensaje = Converter.GetGuid(row, "id_mensaje");
+                obj.id_mensaje_hilo.id_mensaje = Converter.GetGuid(row, "id_hilo_mensaje");
                 obj.titulo = Converter.GetString(row, "titulo");
                 obj.mensaje = Converter.GetString(row, "mensaje");
-                obj.prioridad = Converter.GetString(row, "prioridad");
+                obj.importancia = Converter.GetString(row, "importancia");
                 obj.fechaCreacionMensaje = Converter.GetDateTime(row, "fecha_creacion");
                 obj.fechaVencimientoMensaje = Converter.GetDateTime(row, "fecha_vencimiento");
                 obj.fechaInicioMensaje = Converter.GetDateTime(row, "fecha_inicio");
                 obj.usuario_creacion = Converter.GetString(row, "nombre");
+
                 lista.Add(obj);
             }
             return lista;
@@ -204,7 +207,7 @@ namespace DataLayer
                 obj.fechaVencimientoMensaje = Converter.GetDateTime(row, "fecha_vencimiento");
                 obj.fechaInicioMensaje = Converter.GetDateTime(row, "fecha_inicio");
                 obj.titulo = Converter.GetString(row, "titulo");
-                obj.prioridad = Converter.GetString(row, "prioridad");
+                obj.importancia = Converter.GetString(row, "importancia");
                 obj.mensaje = Converter.GetString(row, "mensaje");
             }
 
@@ -225,8 +228,6 @@ namespace DataLayer
                 user.email = Converter.GetString(row, "email");
                 obj.listUsuario.Add(user);
             }
-
-
             return obj;
         }
         public Mensaje MensajeVistoRespuesta(Mensaje obj)
@@ -236,7 +237,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "id_usuario", obj.user.idUsuario);
             InputParameterAdd.Varchar(objCommand, "respuesta", obj.mensaje);
             InputParameterAdd.Varchar(objCommand, "titulo", obj.titulo);
-            InputParameterAdd.Varchar(objCommand, "prioridad", obj.prioridad);
+            InputParameterAdd.Varchar(objCommand, "importancia", obj.importancia);
 
             ExecuteNonQuery(objCommand);
             return obj;
@@ -260,6 +261,60 @@ namespace DataLayer
                 mensaje.fechaCreacionMensaje = Converter.GetDateTime(row, "fecha_creacion");
                 mensaje.user.email = Converter.GetString(row, "email");
                 mensaje.mensaje = Converter.GetString(row, "mensaje");
+                list.Add(mensaje);
+            }
+            return list;
+        }
+
+        public Mensaje verificarLeido(Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_mensaje_si_leido"); 
+            InputParameterAdd.Guid(objCommand, "id_mensaje", idUsuario);
+            DataTable dataTable = Execute(objCommand);
+            Mensaje obj = new Mensaje();
+            foreach (DataRow row in dataTable.Rows)
+            {                             
+                obj.id_mensaje = Converter.GetGuid(row, "id_mensaje");
+                obj.titulo = Converter.GetString(row, "titulo");
+                obj.leido = Converter.GetString(row, "leido");
+                return obj;
+            }
+            return obj;
+        }
+
+        public List<Mensaje> getRespuestasUsuario(Mensaje obj, Guid usuarioSeleccionado)
+        {
+            var objCommand = GetSqlCommand("ps_ver_respuestas_usuario");
+            InputParameterAdd.Guid(objCommand, "id_mensaje", obj.id_mensaje);
+            InputParameterAdd.Guid(objCommand, "id_usuario_destinatario", usuarioSeleccionado);
+            InputParameterAdd.Guid(objCommand, "id_usuario_remitente", obj.user.idUsuario);
+            List<Mensaje> list = new List<Mensaje>();
+            DataTable dataTable = Execute(objCommand);
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Mensaje mensaje = new Mensaje();
+                mensaje.user = new Usuario();                
+                mensaje.fechaCreacionMensaje = Converter.GetDateTime(row, "fecha_creacion");                
+                mensaje.mensaje = Converter.GetString(row, "mensaje");
+                mensaje.user.nombre = Converter.GetString(row, "nombre");
+                mensaje.titulo = Converter.GetString(row, "titulo");
+                mensaje.importancia = Converter.GetString(row, "importancia");
+                list.Add(mensaje);
+            }
+            return list;
+        }
+
+        public List<Usuario> getUsuariosRespuesta(Mensaje obj)
+        {
+            var objCommand = GetSqlCommand("ps_ver_usuario_respuestas");
+            InputParameterAdd.Guid(objCommand, "id_mensaje", obj.id_mensaje);  
+            List<Usuario> list = new List<Usuario>();
+            DataTable dataTable = Execute(objCommand);
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Usuario mensaje = new Usuario();               
+                mensaje.nombre = Converter.GetString(row, "nombre");
+                mensaje.idUsuario = Converter.GetGuid(row, "id_usuario");
                 list.Add(mensaje);
             }
             return list;
