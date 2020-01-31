@@ -80,7 +80,7 @@ namespace Cotizador.Controllers
             Mensaje obj = new Mensaje();
             obj.user = new Usuario();
             obj.id_mensaje = Guid.Empty;
-            obj.importancia = "no";
+            obj.importancia = "Normal";
             obj.mensaje = String.Empty;
             obj.titulo = String.Empty;
             obj.estado = 1;

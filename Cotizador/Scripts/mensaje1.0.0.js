@@ -647,7 +647,7 @@
                         '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaVencimientoMensaje)) + '  </td>' +
                         '<td>' +
                         
-                        '<button type="button" class="' + list[i].id_mensaje + ' btnEditarMensaje btn btn-primary">Editar</button>' +   '<br>'+
+                        '<button type="button" style="margin-right:13px;" class="' + list[i].id_mensaje + ' btnEditarMensaje btn btn-primary">Editar</button>' +
                         '<button type="button" class="' + list[i].id_mensaje + ' btnVerMensaje btn btn-success">Ver</button>' +    
                        
                         '</td>' +
@@ -699,6 +699,7 @@
         {           
             $('[id^=respuestasUser]').remove();
             $('#Prueba2').remove();
+            $('[id^=saltoEmilinar]').remove();
         }
         else
         {
@@ -714,7 +715,9 @@
                 success: function (list)
                 {                    
                     $('[id^=respuestasUser]').remove();
+                    $('[id^=saltoEmilinar]').remove();
                     $('#Prueba2').remove();
+
 
                     var imagenAdvertencia = list[list.length-1].importancia == "Alta" ? '<img src = "/images/advertencia.svg" style="vertical-align: middle; margin-bottom:5px;  margin-right:10px;" width = "20px" height="20px">' +
                         '<svg width="1px" height="1px" xmlns="https://www.w3.org/2000/svg"></svg>' : "";
@@ -725,19 +728,24 @@
 
                     for (var i=0;i< list.length; i++)
                     {
+                        //var color2 = i % 2 == 0 ? 'class="bg-primary text-white"' : 'class="class="bg-primary text-white""'; 
+                        var color2 = i % 2 == 0 ? 'style="padding-top: 0px; padding-bottom: 0px;padding-left: 10px;padding-right: 10px; background-color: #E0FFD6; border-style: solid; border-width: 2px; border-radius: 8px; border-color: #33D200;"'
+                            : 'style="background-color: #D6F4FF; border-style: solid; border-width: 2px; border-radius: 8px; border-color: #009FDA; padding-top: 0px; padding-bottom: 0px;padding-left: 10px;padding-right: 10px; "'; 
+                       
                         var date = new Date(list[i].fechaCreacionMensaje);
                         hora = (date.getHours() < 10 ? '0' : '') + date.getHours();
                         minuto = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
                         segundo = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
                         horaImprimible = hora + ":" + minuto + ":" + segundo;
                        
-                        var a = '<div id="respuestasUser"><br>' +                           
-                            '<b><P STYLE="margin-bottom: 0.11in"><A NAME="_GoBack"></A><SPAN LANG="es-PE">' + list[i].user.nombre + '</SPAN></b><FONT SIZE=3><SPAN LANG="es-PE"> </SPAN></FONT> <FONT SIZE=2 > <SPAN LANG="es-PE">' +
-                            '</SPAN></FONT> <FONT COLOR="#808080"><FONT SIZE=2><SPAN LANG="es-PE">'
+                        var a = '<br id="saltoEmilinar">'+
+                            '<div id = "respuestasUser" '+color2+' >' +                           
+                            '<b><P STYLE="margin-bottom: 0.11in;font-size:11px;"><SPAN LANG="es-PE">' + list[i].user.nombre + '</SPAN></b><FONT SIZE=3><SPAN LANG="es-PE"> </SPAN></FONT> <FONT SIZE=2 > <SPAN LANG="es-PE">' +
+                            '</SPAN></FONT> <FONT COLOR="#808080"><SPAN LANG="es-PE">'
                             + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) + ' ' + horaImprimible + '</SPAN></FONT></FONT > <FONT COLOR="#808080"><FONT SIZE=2 STYLE="font-size: 9pt"><SPAN LANG="es-PE">' +
-                            '</SPAN></FONT></FONT>' +
-                            '</P>' +
-                            '<P STYLE="margin-bottom: 0.11in"><FONT SIZE=3><SPAN LANG="es-PE">' + list[i].mensaje + '' + '</SPAN></FONT></P></div>';
+                            '</SPAN></FONT></P>' +
+                            '<P STYLE="margin-bottom: 0.11in"><FONT SIZE=3><SPAN LANG="es-PE">' + list[i].mensaje + '' + '</SPAN></FONT></P>'+
+                            '</div>';
                             
                         $('#Prueba2').after(a);
                     }
@@ -807,7 +815,7 @@
                 success: function (resultado) {
 
                     if (resultado.leido == 1) {  
-                        alert('El mensaje ya se encuentra leido no se puede modificar');
+                        alert('El mensaje no se puede modificar debido a que ya fue leido por un receptor');
                         $("#vendedor_importancia_si").prop('disabled', true);
                         $("#vendedor_importancia_no").prop('disabled', true);
                         $("#mensaje_fechaInicioMensaje").prop('disabled', true);
@@ -966,10 +974,10 @@
     }, 3000);
 
 
-    $('body').on('change', '#mensaje_mensaje_alta_modal', function (event) {
+    $('body').on('change', '#mensaje_importancia_si_modal', function (event) {
         changeInputString("mensaje", "Alta");
     });
-    $('body').on('change', '#mensaje_mensaje_normal_modal', function (event) {
+    $('body').on('change', '#mensaje_importancia_no_modal', function (event) {
         changeInputString("mensaje", "Normal");
     });
     $(document).on('change', '#tituloModal', function (event) {
