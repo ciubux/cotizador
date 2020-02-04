@@ -953,6 +953,20 @@ namespace DataLayer
         }
 
 
+        public Boolean deleteClienteReasignacionHistorico(Guid idClienteHistorialReasignacion, Guid idCliente, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pd_cliente_historial_reasignacion");
+            //InputParameterAdd.Guid(objCommand, "idPedido", pedidoAdjunto.idPedido);
+            InputParameterAdd.Guid(objCommand, "idClienteHistorialReasignacion", idClienteHistorialReasignacion);
+            InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            ExecuteNonQuery(objCommand);
+
+            return true;
+        }
+
+
         public List<ClienteReasignacionHistorico> getHistorialReasignacionesClientePorCampo(String campo, Guid idCliente)
         {
             var objCommand = GetSqlCommand("ps_cliente_historial_reasignacion_vendedor");
@@ -966,6 +980,7 @@ namespace DataLayer
             {
                 //SELECT cr.valor, cr.observacion, cr.fecha_inicio_vigencia, cr.fecha_modificacion, v.codigo, v.descripcion
                 ClienteReasignacionHistorico item = new ClienteReasignacionHistorico();
+                item.idClienteReasignacionHistorico = Converter.GetGuid(row, "id_cliente_historial_reasignacion");
                 item.valor = Converter.GetString(row, "valor");
                 item.observacion = Converter.GetString(row, "observacion");
                 if (item.observacion == null) item.observacion = "";

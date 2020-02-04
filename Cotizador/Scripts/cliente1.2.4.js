@@ -391,6 +391,8 @@ jQuery(function ($) {
 
         var fecha = $("#chrFechaInicioVigenciaAsistente").val();
         $("#chrFechaInicioVigenciaAsistente").datepicker({ dateFormat: "dd/mm/yy", minDate: $("#fechaRegistro").val() }).datepicker("setDate", fecha);
+
+        $("#insertCHRFechaInicioVigencia").datepicker({ dateFormat: "dd/mm/yy", maxDate: $("#fechaHoy").val() });
     });
 
     var fechaDesde = $("#fechaVentasDesdetmp").val();
@@ -442,13 +444,14 @@ jQuery(function ($) {
 
 
     function verificarSiExisteCliente() {
-        if ($("#idCliente").val().trim() != GUID_EMPTY) {
+
+        if ($("#idCliente").length && $("#idCliente").val().trim() != GUID_EMPTY) {
             $("#idCiudad").attr("disabled", "disabled");
             $("#tipoDocumentoIdentidad").attr("disabled", "disabled");
             $("#cliente_ruc").attr("disabled", "disabled");
             $("#btnFinalizarEdicionCliente").html('Finalizar Edición');            
         }
-        else {
+        else { 
             //Si recién se está creando el cliente, el usuario puede seleccionar el responsable comercial
             $("#idResponsableComercial").removeAttr("disabled");
             $("#btnFinalizarEdicionCliente").html('Finalizar Creación');
@@ -2810,6 +2813,13 @@ jQuery(function ($) {
                 $("#verSupervisorComercial").html(cliente.supervisorComercial.descripcion);
                 $("#verAsistenteServicioCliente").html(cliente.asistenteServicioCliente.descripcion);
 
+                /*$("#insertCHRIdResponsableComercial option").show();
+                $("#insertCHRIdResponsableComercial option[value='" + cliente.responsableComercial.idVendedor + "']").hide();
+                $("#insertCHRIdSupervisorComercial option").show();
+                $("#insertCHRIdSupervisorComercial option[value='" + cliente.supervisorComercial.idVendedor + "']").hide();
+                $("#insertCHRIdAsistenteServicioCliente option").show();
+                $("#insertCHRIdAsistenteServicioCliente option[value='" + cliente.asistenteServicioCliente.idVendedor + "']").hide();*/
+
                 $("#spnVerOrigen").html(cliente.origen.nombre);
 
                 if (cliente.habilitadoNegociacionGrupal) {
@@ -3274,8 +3284,10 @@ jQuery(function ($) {
         }
     });
 
-    function cargarModalHistoricoReasignaciones(campo, idCliente) {
+    var tipoReasignacionView = "";
 
+    function cargarModalHistoricoReasignaciones(campo, idCliente) {
+        tipoReasignacionView = campo;
         $.ajax({
             url: "/Cliente/GetHistorialReasignaciones",
             type: 'POST',
@@ -3294,7 +3306,7 @@ jQuery(function ($) {
                 for (var i = 0; i < lista.length; i++) {
                     if (puedeEditar == "True") {
                         actionEliminar = "<td></td>";
-                        if (i < (lista.length - 1)) {
+                        if (i > 0) {
                             actionEliminar = '<td><button type="button" class="btnEliminarAsignacion btn btn-danger">Eliminar</button></td>';
                         }
                     }
@@ -3319,8 +3331,8 @@ jQuery(function ($) {
         var nombreVendedor = $(this).closest("tr").find("td.colNombreVendedor").html();
         var fechaInicioVendedor = $(this).closest("tr").find("td.colFecInicioVendedor").html();
         var idAsignacionVendedor = $(this).closest("tr").attr("idHistorialReasignacion");
+        var row = $(this).closest("tr");
         var that = this;
-        var tipo = "";
 
         $.confirm({
             title: 'Confirmación',
@@ -3336,28 +3348,41 @@ jQuery(function ($) {
                         });
 
                         $.ajax({
-                            url: "/Cliente/EliminarHistorialReasignacion",
+                            url: "/Cliente/EliminarClienteReasignacionHistorico",
                             type: 'POST',
+                            dataType: 'JSON',
                             data: {
-                                idHistorialReasignacion: idAsignacionVendedor,
-                                tipo: tipo
+                                idClienteReasignacionHistorico: idAsignacionVendedor
                             },
                             error: function (detalle) {
                                 $('body').loadingModal('hide')
                                 mostrarMensajeErrorProceso("Ocurrió un error");
                             },
-                            success: function () {
-                                row.delete();
-                                $.alert({
-                                    title: "Operación exitosa",
-                                    type: 'green',
-                                    content: "Se eliminó el registro correctamente.",
-                                    buttons: {
-                                        OK: function () {
-                                            $(this).closest("tr").remove();
+                            success: function (res) {
+                                $('body').loadingModal('hide')
+                                if (res.success == 1) {
+                                    $.alert({
+                                        title: "Operación exitosa",
+                                        type: 'green',
+                                        content: "Se eliminó el registro correctamente.",
+                                        buttons: {
+                                            OK: function () {
+                                                $(that).closest("tr").remove();
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                } else {
+                                    $.alert({
+                                        title: "Error",
+                                        type: 'red',
+                                        content: "Ocurrió un Error. Vuelva a buscar el cliente e intentelo de nuevo.",
+                                        buttons: {
+                                            OK: function () {
+                                                $(that).closest("tr").remove();
+                                            }
+                                        }
+                                    });
+                                }
                             }
                         });
                     }
@@ -3368,6 +3393,97 @@ jQuery(function ($) {
                     }
                 }
             },
+        });
+    });
+
+    $("#btnAgregarReasignacion").click(function () {
+        if (tipoReasignacionView == "responsableComercial") {
+            $("#spn_agregar_reasignacion_tipo_vendedor").html("Asesor Comercial");
+            $("#insertCHRResponsableComercial").show();
+            $("#insertCHRSupervisorComercial").hide();
+            $("#insertCHRAsistenteServicioCliente").hide();
+        }
+
+        if (tipoReasignacionView == "supervisorComercial") {
+            $("#spn_agregar_reasignacion_tipo_vendedor").html("Supervisión Comercial");
+            $("#insertCHRResponsableComercial").hide();
+            $("#insertCHRSupervisorComercial").show();
+            $("#insertCHRAsistenteServicioCliente").hide();
+        }
+
+        if (tipoReasignacionView == "asistenteServicioCliente") {
+            $("#spn_agregar_reasignacion_tipo_vendedor").html("Asistente Servicio Cliente");
+            $("#insertCHRResponsableComercial").hide();
+            $("#insertCHRSupervisorComercial").hide();
+            $("#insertCHRAsistenteServicioCliente").show();
+        }
+
+        $("#modalAgregarReasignacion").modal();
+    });
+
+    $("#btnRegitrarReasignacion").click(function () {
+        var observacion = $("#insertCHRObservacionAsesor").val();
+        var fechaInicio = $("#insertCHRFechaInicioVigencia").val();
+        var idVendedor = "";
+
+        if (tipoReasignacionView == "responsableComercial") {
+            idVendedor = $("#insertCHRIdResponsableComercial").val();
+        }
+
+        if (tipoReasignacionView == "supervisorComercial") {
+            idVendedor = $("#insertCHRIdSupervisorComercial").val();
+        }
+
+        if (tipoReasignacionView == "asistenteServicioCliente") {
+            idVendedor = $("#insertCHRIdAsistenteServicioCliente").val();
+        }
+
+        $('body').loadingModal({
+            text: 'Registrando...'
+        });
+
+        $.ajax({
+            url: "/Cliente/InsertarClienteReasignacionHistorico",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idVendedor: idVendedor,
+                fechaInicioVigencia: fechaInicio,
+                observacion: observacion,
+                tipo: tipoReasignacionView
+            },
+            error: function (detalle) {
+                $('body').loadingModal('hide')
+                mostrarMensajeErrorProceso("Ocurrió un error");
+            },
+            success: function (res) {
+                $('body').loadingModal('hide')
+                if (res.success == 1) {
+                    $.alert({
+                        title: "Operación exitosa",
+                        type: 'green',
+                        content: "Se registró la reasignación correctamente.",
+                        buttons: {
+                            OK: function () {
+                                $('body').loadingModal('hide');
+                                $('body').loadingModal('hide');
+                                cargarModalHistoricoReasignaciones(tipoReasignacionView, idClienteView);
+                            }
+                        }
+                    });
+                } else {
+                    $.alert({
+                        title: "Error",
+                        type: 'red',
+                        content: "Ocurrió un Error. Vuelva a buscar el cliente e intentelo de nuevo.",
+                        buttons: {
+                            OK: function () {
+                                $(this).closest("tr").remove();
+                            }
+                        }
+                    });
+                }
+            }
         });
     });
 

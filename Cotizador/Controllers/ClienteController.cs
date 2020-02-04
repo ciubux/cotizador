@@ -355,6 +355,70 @@ namespace Cotizador.Controllers
         }
 
 
+        public String EliminarClienteReasignacionHistorico()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            int success = 1;
+
+            if (usuario.validaReponsablescomercialesAsignados)
+            {
+                ClienteBL clienteBL = new ClienteBL();
+                Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
+                Guid idClienteReasignacionHistorico = Guid.Parse(Request["idClienteReasignacionHistorico"].ToString());
+
+                clienteBL.deleteClienteReasignacionHistorico(idClienteReasignacionHistorico, cliente.idCliente, usuario.idUsuario);
+            } else
+            {
+                success = 0;
+            }
+
+
+            return "{\"success\": " + success.ToString() + ",\"message\": \"" + "" + "\"}";
+        }
+
+
+        public String InsertarClienteReasignacionHistorico()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            int success = 1;
+
+            if (usuario.validaReponsablescomercialesAsignados)
+            {
+                ClienteBL clienteBL = new ClienteBL();
+                Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
+                ClienteReasignacionHistorico crh = new ClienteReasignacionHistorico();
+
+                String observacion = this.Request.Params["observacion"];
+                String[] fiv = this.Request.Params["fechaInicioVigencia"].Split('/');
+                crh.fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
+                String campo = this.Request.Params["tipo"];
+
+                
+                crh.usuario = usuario;
+                crh.observacion = observacion;
+                crh.idCliente = cliente.idCliente;
+                
+                crh.campo = "supervisorComercial";
+                crh.fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
+                crh.valor = this.Request.Params["idVendedor"].ToString();
+
+                switch (campo)
+                {
+                    case "responsableComercial": crh.campo = "responsableComercial"; break;
+                    case "supervisorComercial": crh.campo = "supervisorComercial"; break;
+                    case "asistenteServicioCliente": crh.campo = "asistenteServicioCliente"; break;
+                }
+
+                clienteBL.insertarClienteReasignacionHistorico(crh);
+            }
+            else
+            {
+                success = 0;
+            }
+
+
+            return "{\"success\": " + success.ToString() + ",\"message\": \"" + "" + "\"}";
+        }
         public String GetCliente()
         {
             Cliente cliente = this.ClienteSession; 
@@ -494,7 +558,7 @@ namespace Cotizador.Controllers
             return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
         }
 
-
+        
         public String ChangeDireccionDomicilioLegalSunat()
         {
             String direccionDomicilioLegalSunat = Request["direccionDomicilioLegalSunat"].ToString();

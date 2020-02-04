@@ -1757,7 +1757,8 @@ namespace Cotizador.Controllers
                         item.observacion = observacion;
                         item.unidad = prod.unidad;
                         item.flete = prod.flete;
-
+                        
+                        
                         if (prod.ProductoPresentacion == null)
                         {
                             idProductoPresentacion = 0;
@@ -1765,6 +1766,10 @@ namespace Cotizador.Controllers
                         else
                         {
                             idProductoPresentacion = prod.ProductoPresentacion.IdProductoPresentacion;
+                        }
+
+                        if (idProductoPresentacion == 0 && prod.esPrecioAlternativo) {
+                            idProductoPresentacion = 1;
                         }
 
                         switch (idProductoPresentacion)

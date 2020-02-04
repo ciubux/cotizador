@@ -72,8 +72,8 @@ namespace BusinessLayer
                     {
                         direccion.Add(" ");
                         direccion.Add(clienteSunat.tipozona);
-                    }                  
-                                 
+                    }
+
                     if (clienteSunat.manzana != "-")
                     {
                         direccion.Add(" MZ. ");
@@ -99,7 +99,7 @@ namespace BusinessLayer
                     throw new Exception(clienteSunat.Message);
                 }
 
-               cliente.direccionDomicilioLegalSunat = String.Join("", direccion);
+                cliente.direccionDomicilioLegalSunat = String.Join("", direccion);
             }
 
             UbigeoBL ubigeoBL = new UbigeoBL();
@@ -127,7 +127,7 @@ namespace BusinessLayer
                 */
 
                 StreamReader reader = new StreamReader(stream, Encoding.GetEncoding("utf-8"));
-            
+
                 string linea;
 
                 linea = reader.ReadLine();
@@ -142,23 +142,23 @@ namespace BusinessLayer
                     {
                         linea = reader.ReadLine().TrimEnd().TrimStart();
 
-                /*     if (linea.Contains("-"))
-                        {
-                           
-                            break;
-                        }*/
-                        
-                     
+                        /*     if (linea.Contains("-"))
+                                {
 
-                      //  value =\"BANCO DE CREDITO DEL PERU\" />"
+                                    break;
+                                }*/
+
+
+
+                        //  value =\"BANCO DE CREDITO DEL PERU\" />"
 
                         int inicio = linea.IndexOf("<td>");
                         linea = linea.Substring(inicio + 4);
 
                         int fin = linea.IndexOf("\t");
 
-                        var rs2 = linea.Substring(0,fin);
-                     //   var rs2 = rs1.Substring(0, 25);
+                        var rs2 = linea.Substring(0, fin);
+                        //   var rs2 = rs1.Substring(0, 25);
 
                         nombreComercial = rs2.ToString();
                         break;
@@ -174,7 +174,7 @@ namespace BusinessLayer
             }
             return nombreComercial;
         }
-        public String getCLientesBusqueda(String textoBusqueda,Guid idCiudad)
+        public String getCLientesBusqueda(String textoBusqueda, Guid idCiudad)
         {
             using (var clienteDAL = new ClienteDAL())
             {
@@ -234,7 +234,7 @@ namespace BusinessLayer
             }
         }
 
-        public List<Cliente> getCLientesBusquedaCotizacion(String textoBusqueda,Guid idCiudad)
+        public List<Cliente> getCLientesBusquedaCotizacion(String textoBusqueda, Guid idCiudad)
         {
             using (var clienteDAL = new ClienteDAL())
             {
@@ -266,7 +266,7 @@ namespace BusinessLayer
                 return lista;
             }
         }
-        
+
         public List<DocumentoDetalle> getPreciosVigentesCliente(Guid idCliente)
         {
             using (var productoDal = new ProductoDAL())
@@ -285,23 +285,23 @@ namespace BusinessLayer
                         pedidoDetalle.producto.image = storeStream.GetBuffer();
                     }
 
-                    
+
                     //Se agrega el IGV al precioLista
                     pedidoDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedidoDetalle.producto.precioSinIgv));
                     pedidoDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, pedidoDetalle.producto.costoSinIgv));
 
 
 
-              /*      if (pedidoDetalle.esPrecioAlternativo)
-                    {
-                        pedidoDetalle.producto.precioClienteProducto.precioUnitario =
-                        pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.ProductoPresentacion.Equivalencia;
-                    }*/
+                    /*      if (pedidoDetalle.esPrecioAlternativo)
+                          {
+                              pedidoDetalle.producto.precioClienteProducto.precioUnitario =
+                              pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.ProductoPresentacion.Equivalencia;
+                          }*/
 
-                    pedidoDetalle.porcentajeDescuento = (1 - (pedidoDetalle.precioNeto / (pedidoDetalle.precioLista == 0 ? 1 : pedidoDetalle.precioLista)))*100;
+                    pedidoDetalle.porcentajeDescuento = (1 - (pedidoDetalle.precioNeto / (pedidoDetalle.precioLista == 0 ? 1 : pedidoDetalle.precioLista))) * 100;
                     pedidoDetalle.porcentajeMargen = (1 - (pedidoDetalle.costoLista / (pedidoDetalle.precioNeto == 0 ? 1 : pedidoDetalle.precioNeto))) * 100;
                 }
-                
+
 
                 return items;
             }
@@ -363,7 +363,7 @@ namespace BusinessLayer
             }
         }
 
-        public Guid getClienteId(String ruc,String codigoSedeMP)
+        public Guid getClienteId(String ruc, String codigoSedeMP)
         {
             using (var clienteDAL = new ClienteDAL())
             {
@@ -389,7 +389,7 @@ namespace BusinessLayer
                     cliente.asistenteServicioCliente.idVendedor = Constantes.ID_VENDEDOR_POR_ASIGNAR;
                     cliente.vendedoresAsignados = false;
                 }
-                else 
+                else
                 {
                     cliente.vendedoresAsignados = cliente.usuario.modificaResponsableComercial;
                 }
@@ -407,10 +407,11 @@ namespace BusinessLayer
                 {
                     cliente.sedePrincipal = false;
                 }
-                
+
 
                 cliente = clienteDAL.insertClienteSunat(cliente);
-                if(cliente.responsableComercial.idVendedor > 0) {
+                if (cliente.responsableComercial.idVendedor > 0)
+                {
                     cliente.chrAsesor.idCliente = cliente.idCliente;
                     cliente.chrAsesor.usuario = cliente.usuario;
                     cliente.chrAsesor.valor = cliente.responsableComercial.idVendedor.ToString();
@@ -473,7 +474,7 @@ namespace BusinessLayer
                 {
                     cliente.sedePrincipal = false;
                 }
-                
+
                 Cliente clientePrev = clienteDAL.getCliente(cliente.idCliente);
 
                 cliente = clienteDAL.updateClienteSunat(cliente);
@@ -497,7 +498,7 @@ namespace BusinessLayer
                     notificacion.mensaje = "Se cambió el asesor comercial para el cliente \"" + cliente.razonSocialSunat + "\". <br/><br/> <b>Se cambió:</b>  " + asesorAnt.descripcion + " <br/> <b>Por:</b> " + asesorNuevo.descripcion + ".";
                     if (!cliente.chrAsesor.observacion.Trim().Equals(""))
                     {
-                        notificacion.mensaje = notificacion.mensaje + "<br/><br/><b>Observación:</b> " + cliente.chrAsesor.observacion; 
+                        notificacion.mensaje = notificacion.mensaje + "<br/><br/><b>Observación:</b> " + cliente.chrAsesor.observacion;
                     }
                     notificacion.fechaInicioMensaje = DateTime.Now;
                     notificacion.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
@@ -547,7 +548,7 @@ namespace BusinessLayer
                     clienteDAL.insertClienteReasignacionHistorico(cliente.chrAsistente);
                 }
 
-                if ((cliente.usuario == null || !cliente.usuario.modificaMiembrosGrupoCliente) && 
+                if ((cliente.usuario == null || !cliente.usuario.modificaMiembrosGrupoCliente) &&
                     ((cliente.grupoCliente == null && clientePrev.grupoCliente != null) || (cliente.grupoCliente != null && clientePrev.grupoCliente == null) || cliente.grupoCliente.idGrupoCliente != clientePrev.grupoCliente.idGrupoCliente))
                 {
                     AlertaValidacion alerta = new AlertaValidacion();
@@ -562,7 +563,9 @@ namespace BusinessLayer
                     if (clientePrev.grupoCliente != null && clientePrev.grupoCliente.idGrupoCliente != 0)
                     {
                         alerta.data.PrevData = clientePrev.grupoCliente.codigoNombre;
-                    } else {
+                    }
+                    else
+                    {
                         alerta.data.PrevData = AlertaValidacion.NO_DATA_TEXT;
                     }
 
@@ -580,7 +583,7 @@ namespace BusinessLayer
                     AlertaValidacionDAL alertaDal = new AlertaValidacionDAL();
                     alertaDal.insertAlertaValidacion(alerta);
                 }
-            
+
                 /*Si existen cambios en la solicitud o aprobacion de créditos*/
                 if (cliente.existenCambiosCreditos)
                 {
@@ -590,7 +593,7 @@ namespace BusinessLayer
                 return cliente;
             }
         }
-        
+
         public bool agregarProductoCanasta(Guid idCliente, Guid idProducto, Usuario usuario)
         {
             using (var dal = new PrecioClienteProductoDAL())
@@ -609,7 +612,7 @@ namespace BusinessLayer
                 return dal.retiraProductoCanastaCliente(idCliente, idProducto, usuario.idUsuario);
             }
         }
-        
+
 
         private void enviarNotificacionSolicitudCredito(Cliente cliente)
         {
@@ -719,12 +722,29 @@ namespace BusinessLayer
             }
         }
 
-        
+
         public List<ClienteReasignacionHistorico> getHistorialReasignacionesClientePorCampo(String campo, Guid idCliente)
         {
             using (var dal = new ClienteDAL())
             {
                 return dal.getHistorialReasignacionesClientePorCampo(campo, idCliente);
+            }
+        }
+
+        public Boolean deleteClienteReasignacionHistorico(Guid idClienteHistorialReasignacion, Guid idCliente, Guid idUsuario)
+        {
+            using (var dal = new ClienteDAL())
+            {
+                return dal.deleteClienteReasignacionHistorico(idClienteHistorialReasignacion, idCliente, idUsuario);
+            }
+        }
+
+        public Boolean insertarClienteReasignacionHistorico(ClienteReasignacionHistorico chr)
+        {
+            using (var dal = new ClienteDAL())
+            {
+                dal.insertClienteReasignacionHistorico(chr);
+                return true;
             }
         }
     }
