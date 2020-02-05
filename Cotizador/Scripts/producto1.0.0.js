@@ -415,6 +415,14 @@ jQuery(function ($) {
         changeInputBoolean('inafecto', valor)
     });
 
+    $("#producto_descontinuado").change(function () {
+        var valor = 1;
+        if (!$('#producto_descontinuado').prop('checked')) {
+            valor = 0;
+        }
+        changeInputInt('descontinuado', valor)
+    });
+
     $(".chk_campo_registra").change(function () {
         if ($(this).prop('checked')) {
             $(this).closest("tr").find(".chk_campo_persiste").removeAttr("disabled");
@@ -484,8 +492,15 @@ jQuery(function ($) {
                 $("#verEquivalenciaProveedor").html(producto.equivalenciaProveedor);
                 $("#verUnidadEstandarInternacional").html(producto.unidadEstandarInternacional);
                 $("#verTipo").html(producto.tipoProductoToString);
-                
-                
+
+
+                if (producto.descontinuado == 1) {
+                    $("#verDescontinuado").html("Sí");
+                }
+                else {
+                    $("#verDescontinuado").html("No");
+                }
+
                 if (producto.exoneradoIgv) {
                     $("#verExoneradoIgv").html("Sí");
                 }

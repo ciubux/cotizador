@@ -165,6 +165,7 @@ namespace Cotizador.Controllers
             producto.proveedor = "Todos";
             producto.Estado = 1;
             producto.tipoProductoVista = 0;
+            producto.descontinuado = -1;
 
             this.Session["familia"] = "Todas";
             this.Session["proveedor"] = "Todos";

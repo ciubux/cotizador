@@ -975,6 +975,7 @@ namespace DataLayer
             InputParameterAdd.VarcharEmpty(objCommand, "skuProveedor", producto.skuProveedor);
             InputParameterAdd.VarcharEmpty(objCommand, "descripcion", producto.descripcion);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
+            InputParameterAdd.Int(objCommand, "descontinuado", producto.descontinuado);
             InputParameterAdd.Int(objCommand, "tipo", producto.tipoProductoVista);
             InputParameterAdd.Varchar(objCommand, "familia", producto.familia);
             InputParameterAdd.Varchar(objCommand, "proveedor", producto.proveedor);
@@ -1024,6 +1025,7 @@ namespace DataLayer
 
                 item.image = Converter.GetBytes(row, "imagen");
                 item.Estado = Converter.GetInt(row, "estado");
+                item.descontinuado = Converter.GetInt(row, "descontinuado");
                 item.FechaEdicion = Converter.GetDateTime(row, "fecha_modificacion");
 
                 productoList.Add(item);
@@ -1087,7 +1089,7 @@ namespace DataLayer
                 item.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
 
                 item.image = Converter.GetBytes(row, "imagen");
-                
+                item.descontinuado = Converter.GetInt(row, "descontinuado");
             }
 
             return item;
@@ -1111,6 +1113,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "equivalencia", producto.equivalenciaAlternativa);
             InputParameterAdd.Int(objCommand, "equivalenciaProveedor", producto.equivalenciaProveedor);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
+            InputParameterAdd.Int(objCommand, "descontinuado", producto.descontinuado);
             InputParameterAdd.Int(objCommand, "exoneradoIgv", (producto.exoneradoIgv ? 1 : 0));
             InputParameterAdd.Int(objCommand, "inafecto", producto.inafecto ? 1 : 0);
             InputParameterAdd.Int(objCommand, "tipo", (int) producto.tipoProducto);
@@ -1135,6 +1138,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "precioOriginal", producto.precioOriginal);
             InputParameterAdd.Decimal(objCommand, "precioProvinciaOriginal", producto.precioProvinciasOriginal);
             InputParameterAdd.Decimal(objCommand, "tipoCambio", producto.tipoCambio);
+            
             
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
 
@@ -1195,6 +1199,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "equivalencia", producto.equivalenciaAlternativa);
             InputParameterAdd.Int(objCommand, "equivalenciaProveedor", producto.equivalenciaProveedor);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
+            InputParameterAdd.Int(objCommand, "descontinuado", producto.descontinuado);
             InputParameterAdd.Int(objCommand, "exoneradoIgv", producto.exoneradoIgv ? 1 : 0);
             InputParameterAdd.Int(objCommand, "inafecto", producto.inafecto ? 1 : 0);
             InputParameterAdd.Int(objCommand, "tipo", (int)producto.tipoProducto);
