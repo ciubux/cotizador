@@ -112,6 +112,9 @@
                         var linkCrearMensaje = "";
                         var linkBusquedaMensaje = "";
 
+                        var linkMantenimientoParametro = "";
+                        var linkBusquedaParametro = "";
+
                         var linkCrearFacturaConsolidada = "";
 
                         var linkBusquedaNotasIngreso = "";
@@ -475,11 +478,15 @@
                                         <li id="linkCrearMensaje" class="@linkCrearMensaje">@Html.ActionLink("Mensaje - Crear/Modificar", "Editar", "Mensaje")</li>
                                     }
 
-
+                                    @if (usuario.modificaParametro)
+                                    {
+                                        <li id="linkMantenimientoParametro" class="@linkMantenimientoParametro">@Html.ActionLink("Parametro - Búsqueda", "Lista", "Parametro")</li>
+                                    }
+                                    
                                     @*@if (usuario.modificaUsuario)
-                                        {
-                                            <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
-                                        }*@
+                                    {
+                                      <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
+                                    }*@
 
 
                                     @if (usuario.administraPermisos)

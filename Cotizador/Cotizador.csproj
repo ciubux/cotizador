@@ -240,6 +240,7 @@
     <Compile Include="Controllers\MensajeController.cs" />
     <Compile Include="Controllers\NotaDebitoController.cs" />
     <Compile Include="Controllers\NotaIngresoController.cs" />
+    <Compile Include="Controllers\ParametroController.cs" />
     <Compile Include="Controllers\RolController.cs" />
     <Compile Include="Controllers\RubroController.cs" />
     <Compile Include="Controllers\ValidacionController.cs" />
@@ -431,6 +432,7 @@
     <Content Include="Scripts\documentoVenta1.0.0.js" />
     <Content Include="Scripts\grupoCliente1.2.4.js" />
     <Content Include="Scripts\AlertaValidacion1.0.0.js" />
+    <Content Include="Scripts\parametro1.0.0.js" />
     <Content Include="Scripts\logcampo1.0.0.js" />
     <Content Include="Scripts\pedidoLoad.js" />
     <Content Include="Scripts\rubro1.0.0.js" />
@@ -626,6 +628,7 @@
     <Content Include="Views\Usuario\Editar.cshtml" />
     <Content Include="Views\Shared\CambiarPassword.cshtml" />
     <Content Include="Views\Mensaje\EditarRapido.cshtml" />
+    <Content Include="Views\Parametro\Lista.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

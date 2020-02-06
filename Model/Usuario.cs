@@ -217,6 +217,10 @@ namespace Model
         public bool modificaMensaje { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_MENSAJE)).FirstOrDefault() != null; } }
 
         public bool visualizaMensaje { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.LISTA_MENSAJE)).FirstOrDefault() != null; } }
+
+        /*Parametro*/
+        public bool modificaParametro { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_PARAMETRO)).FirstOrDefault() != null; } }
+        
         /*Notificacion de Documento de Venta*/
         public bool visualizaDocumentoVentaNotificacion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_DOCUMENTOVENTANOTIFICACION)).FirstOrDefault() != null; } }
 

@@ -37,5 +37,21 @@ namespace BusinessLayer
 
             return valor;
         }
+        
+        public List<Parametro> getListParametro(Parametro param)
+        {
+            using (var dal = new ParametroDAL())
+            {
+                return dal.getListaParametro(param);
+            }
+        }
+
+        public void modificarParametro(Parametro param,Usuario user)
+        {
+            using (var dal = new ParametroDAL())
+            {
+                dal.modificarParametro(param,user);
+            }
+        }
     }
 }
