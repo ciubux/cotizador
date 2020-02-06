@@ -54,13 +54,14 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
         
-        public List<Producto> getProductosBusqueda(String textoBusqueda,bool considerarDescontinuados, String proveedor, String familia, Pedido.tiposPedido? tipoPedido = null)
+        public List<Producto> getProductosBusqueda(String textoBusqueda,bool considerarDescontinuados, String proveedor, String familia, Pedido.tiposPedido? tipoPedido = null, int incluyeDescontinuados = 1)
         {
             var objCommand = GetSqlCommand("ps_getproductos_search");
             InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
             InputParameterAdd.Varchar(objCommand, "proveedor", proveedor);
             InputParameterAdd.Varchar(objCommand, "familia", familia);
             InputParameterAdd.Int(objCommand, "considerarDescontinuados", considerarDescontinuados ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "incluyeDescontinuados", incluyeDescontinuados);
             InputParameterAdd.Char(objCommand, "tipoPedido", tipoPedido == null? null: ((Char)tipoPedido).ToString());
 
             DataTable dataTable = Execute(objCommand);
@@ -72,6 +73,7 @@ namespace DataLayer
                 {
                     idProducto = Converter.GetGuid(row, "id_producto"),
                     descripcion = Converter.GetString(row, "descripcion"),
+                    descontinuado = Converter.GetInt(row, "descontinuado"),
                     sku = Converter.GetString(row, "sku")
                 };
                 lista.Add(obj);
@@ -158,6 +160,7 @@ namespace DataLayer
                 producto.precioClienteProducto.idPrecioClienteProducto = Guid.Empty;
                 producto.tipoProducto = (Producto.TipoProducto) Converter.GetInt(row, "tipo_producto");
 
+                producto.descontinuado = Converter.GetInt(row, "descontinuado");
                 producto.exoneradoIgv = Converter.GetInt(row, "exonerado_igv") == 1 ? true : false;
                 producto.inafecto = Converter.GetInt(row, "inafecto") == 1 ? true : false;
 

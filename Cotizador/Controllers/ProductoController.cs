@@ -198,13 +198,25 @@ namespace Cotizador.Controllers
         public String Search()
         {
             String texto_busqueda = this.Request.Params["data[q]"];
+            int incluyeDescontinuados = 0;
+            if (this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"] != null)
+            {
+                incluyeDescontinuados = int.Parse(this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"].ToString());
+            }
             ProductoBL bl = new ProductoBL();
-            String resultado = bl.getProductosBusqueda(texto_busqueda, false, this.Session["proveedor"] != null ? (String)this.Session["proveedor"] : "Todos", this.Session["familia"] != null ? (String)this.Session["familia"] : "Todas");
+            String resultado = bl.getProductosBusqueda(texto_busqueda, false, this.Session["proveedor"] != null ? (String)this.Session["proveedor"] : "Todos", this.Session["familia"] != null ? (String)this.Session["familia"] : "Todas", null, incluyeDescontinuados);
             return resultado;
         }
 
 
-      
+        public void SetSearchParam()
+        {
+            String parametro = this.Request.Params["parametro"];
+            String valor = this.Request.Params["valor"];
+            this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + parametro] = valor;
+        }
+
+
 
         // GET: Producto
         [HttpGet]

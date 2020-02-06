@@ -94,6 +94,8 @@ namespace Model
         public static String VAR_SESSION_PRODUCTO_LISTA = "productoList";
         public static String VAR_SESSION_PRODUCTO_VER = "productoVer";
 
+        public static String VAR_SESSION_PRODUCTO_SEARCH_PARAM = "productoSearchParamn_";
+
         public static String VAR_SESSION_ORIGEN = "origen";
         public static String VAR_SESSION_ORIGEN_BUSQUEDA = "origenBusqueda";
         public static String VAR_SESSION_ORIGEN_LISTA = "origenList";

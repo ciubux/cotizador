@@ -686,7 +686,12 @@ jQuery(function ($) {
                 $("#porcentajeDescuento").val(Number(producto.porcentajeDescuento).toFixed(4));
                 $("#cantidad").val(1);
 
-
+                alert(producto.descontinuado);
+                if (producto.descontinuado == 1) {
+                    $("#lblProductoDescontinuado").show();
+                } else {
+                    $("#lblProductoDescontinuado").hide();
+                }
 
                 $('#precioUnitarioAlternativoSinIGV').val(producto.precioUnitarioAlternativoSinIGV);
                 $('#costoAlternativoSinIGV').val(producto.costoAlternativoSinIGV);
@@ -735,6 +740,7 @@ jQuery(function ($) {
             }
         });
     });
+
 
 
     ///////////////////CAMPO PRESENTACIÓN
@@ -2659,7 +2665,29 @@ jQuery(function ($) {
     });
 
 
+    $(".chkProductSerchCheckParam").change(function () {
+        var param = $(this).attr("paramName");
+        var valor = 0;
+        if ($(this).is(":checked")) {
+            valor = $(this).attr("checkValue");
+        } else {
+            valor = $(this).attr("unCheckValue");
+        }
 
+
+        $.ajax({
+            url: "/Producto/SetSearchParam",
+            type: 'POST',
+            data: {
+                parametro: param,
+                valor: valor
+            },
+            success: function () {
+
+            }
+        });
+
+    });
 
     $("#chkAjusteCalculoPrecios").change(function () {
         if ($("#chkAjusteCalculoPrecios").is(":checked")) {

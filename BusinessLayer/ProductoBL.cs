@@ -9,14 +9,12 @@ namespace BusinessLayer
 {
     public class ProductoBL
     {
-        public String getProductosBusqueda(String textoBusqueda, bool considerarDescontinuados, String proveedor, String familia, Pedido.tiposPedido? tipoPedido = null)
+        public String getProductosBusqueda(String textoBusqueda, bool considerarDescontinuados, String proveedor, String familia, Pedido.tiposPedido? tipoPedido = null, int incluyeDescontinuados = 1)
         {
-
-
             List<Producto> productoList = new List<Producto>();
             using (var dal = new ProductoDAL())
             {
-                productoList = dal.getProductosBusqueda(textoBusqueda, considerarDescontinuados, proveedor, familia, tipoPedido);
+                productoList = dal.getProductosBusqueda(textoBusqueda, considerarDescontinuados, proveedor, familia, tipoPedido, incluyeDescontinuados);
             }
 
 
@@ -24,7 +22,7 @@ namespace BusinessLayer
             Boolean existe = false;
             foreach (Producto prod in productoList)
             {
-                resultado += "{\"id\":\"" + prod.idProducto + "\",\"text\":\"" + prod.ToString() + "\"},";
+                resultado += "{\"id\":\"" + prod.idProducto + "\",\"text\":\"" + prod.ToString() + "\",\"descontinuado\": " + prod.descontinuado.ToString() + "},";
                 existe = true;
             }
 

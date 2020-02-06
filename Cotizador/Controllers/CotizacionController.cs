@@ -309,7 +309,11 @@ namespace Cotizador.Controllers
                 ViewBag.numero = cotizacion.codigo;
 
                 ViewBag.cotizacion = cotizacion;
-
+                ViewBag.busquedaProductosIncluyeDescontinuados = 0;
+                if (this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"] != null)
+                {
+                    ViewBag.busquedaProductosIncluyeDescontinuados = int.Parse(this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"].ToString());
+                }
             }
             catch (Exception ex)
             {
@@ -925,6 +929,7 @@ namespace Cotizador.Controllers
                 "\"unidad_alternativa\":\"" + producto.unidad_alternativa + "\"," +
                 "\"proveedor\":\"" + producto.proveedor + "\"," +
                 "\"familia\":\"" + producto.familia + "\"," +
+                "\"descontinuado\":" + producto.descontinuado + "," +
                 "\"precioUnitarioSinIGV\":\"" + producto.precioSinIgv + "\"," +
              //   "\"precioUnitarioAlternativoSinIGV\":\"" + producto.precioAlternativoSinIgv + "\"," +
                 "\"precioLista\":\"" + producto.precioLista + "\"," +
