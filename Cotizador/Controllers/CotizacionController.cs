@@ -389,6 +389,12 @@ namespace Cotizador.Controllers
                 ViewBag.fechaInicioVigenciaPrecios = cotizacion.fechaInicioVigenciaPrecios == null ? null : cotizacion.fechaInicioVigenciaPrecios.Value.ToString(Constantes.formatoFecha);
                 ViewBag.fechaFinVigenciaPrecios = cotizacion.fechaFinVigenciaPrecios == null ? null : cotizacion.fechaFinVigenciaPrecios.Value.ToString(Constantes.formatoFecha);
 
+                ViewBag.busquedaProductosIncluyeDescontinuados = 0;
+                if (this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"] != null)
+                {
+                    ViewBag.busquedaProductosIncluyeDescontinuados = int.Parse(this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"].ToString());
+                }
+
                 //Se agrega el viewbag numero para poder mostrar el campo vacío cuando no se está creando una cotización
                 ViewBag.numero = cotizacion.codigo;
 
@@ -1091,6 +1097,7 @@ namespace Cotizador.Controllers
             {
                 idProducto = detalle.producto.idProducto,
                 codigoProducto = detalle.producto.sku,
+                descontinuado = detalle.producto.descontinuado,
                 subTotalItem = detalle.subTotal.ToString(),
                 nombreProducto = nombreProducto,
                 unidad = detalle.unidad,
@@ -1914,6 +1921,9 @@ namespace Cotizador.Controllers
                 int colPrecioNeto = 9;
                 int colFlete = 10;
                 int colObservaciones = 13;
+
+                HSSFFormulaEvaluator formula = new HSSFFormulaEvaluator(hssfwb);
+                formula.EvaluateAll();
 
                 for (row = CotizacionDetalleFormatoExcel.filaInicioDatos - 1; row <= cantidad; row++)
                 {

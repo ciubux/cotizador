@@ -545,7 +545,14 @@ else
                         <td class="detalleCotizacion">  @cotizacionDetalle.producto.idProducto  </td>
                         <td>  @cotizacionDetalle.esPrecioAlternativo  </td>
                         <td>  @cotizacionDetalle.producto.proveedor  </td>
-                        <td>  @cotizacionDetalle.producto.sku  </td>
+                        <td>
+                            @cotizacionDetalle.producto.sku
+                            @if (cotizacionDetalle.producto.descontinuado == 1)
+                            {
+                                <br />
+                                <label class="lblAlertaProductoDescontinuado" style=""><img src="~/images/icon_warning_18.png" /> PRODUCTO DESCONTINUADO</label>
+                            }
+                        </td>
                         <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
                         @if (cotizacion.mostrarCodigoProveedor && (int)cotizacion.considerarCantidades == 2)
                         {
@@ -792,7 +799,9 @@ else
                             <div class="form-group">
                                 <label for="producto" class="control-label col-xs-3">Producto:</label>
                                 <div class="col-xs-9">
-                                    <label id="lblProductoDescontinuado" style="background-color: #111111; border-radius: 3px; color: #f0ad4e; font-size: 12px; padding: 1px 3px; display: none;">El producto está descontinuado.</label>
+                                    <span id="spnProductoDescontinuado" style="display: none;">
+                                        <label class="lblAlertaProductoDescontinuado" style=""><img src="~/images/icon_warning_18.png" /> PRODUCTO DESCONTINUADO</label>
+                                    </span>
                                     <select class="form-control" id="producto" name="producto">
                                         <option value=""></option>
                                     </select>

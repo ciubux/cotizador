@@ -565,6 +565,8 @@ jQuery(function ($) {
         $('#valorAlternativo').attr('type', 'hidden');
         $('#precio').val(0);
         $('#cantidad').val(1);
+        $('#spnProductoDescontinuado').hide();
+        
 
         // $("#proveedor").val(producto.proveedor);
         // $("#familia").val(producto.familia);
@@ -686,11 +688,11 @@ jQuery(function ($) {
                 $("#porcentajeDescuento").val(Number(producto.porcentajeDescuento).toFixed(4));
                 $("#cantidad").val(1);
 
-                alert(producto.descontinuado);
+
                 if (producto.descontinuado == 1) {
-                    $("#lblProductoDescontinuado").show();
+                    $("#spnProductoDescontinuado").show();
                 } else {
-                    $("#lblProductoDescontinuado").hide();
+                    $("#spnProductoDescontinuado").hide();
                 }
 
                 $('#precioUnitarioAlternativoSinIGV').val(producto.precioUnitarioAlternativoSinIGV);
@@ -1050,36 +1052,39 @@ jQuery(function ($) {
             },
             success: function (detalle) {
                 var considerarCantidades = $("#considerarCantidades").val();
-           //     var esRecotizacion = "";
-         /*       if ($("#esRecotizacion").val() == "1") {
-                    esRecotizacion = '<td class="' + detalle.idProducto + ' detprecioNetoAnterior" style="text-align:right; color: #B9371B">0.00</td>' +
-                        '<td class="' + detalle.idProducto + ' detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">0.0 %</td>' +
-                        '<td class="' + detalle.idProducto + ' detvarPrecioLista" style="text-align:right; color: #B9371B">0.0 %</td>' +
-                        '<td class="' + detalle.idProducto + ' detvarCosto" style="text-align:right; color: #B9371B">0.0 %</td>' +
-                        '<td class="' + detalle.idProducto + ' detcostoAnterior" style="text-align:right; color: #B9371B">0.0</td>';
-                }
-                else {*/
-                var    esRecotizacion = '<td class="' + detalle.idProducto + ' detprecioNetoAnterior" style="text-align:right; color: #B9371B">' + detalle.precioNetoAnt + '</td>' +
-                        '<td class="' + detalle.idProducto + ' detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">' + detalle.varprecioNetoAnterior + ' %</td>' +
-                        '<td class="' + detalle.idProducto + ' detvarPrecioLista" style="text-align:right; color: #B9371B">' + detalle.variacionPrecioListaAnterior + ' %</td>' +
-                        '<td class="' + detalle.idProducto + ' detvarCosto" style="text-align:right; color: #B9371B">' + detalle.variacionCosto + ' %</td>' +
-                        '<td class="' + detalle.idProducto + ' detcostoAnterior" style="text-align:right; color: #B9371B">' + detalle.costoListaAnterior + '</td>';
-            //    }
+                //     var esRecotizacion = "";
+                /*       if ($("#esRecotizacion").val() == "1") {
+                           esRecotizacion = '<td class="' + detalle.idProducto + ' detprecioNetoAnterior" style="text-align:right; color: #B9371B">0.00</td>' +
+                               '<td class="' + detalle.idProducto + ' detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">0.0 %</td>' +
+                               '<td class="' + detalle.idProducto + ' detvarPrecioLista" style="text-align:right; color: #B9371B">0.0 %</td>' +
+                               '<td class="' + detalle.idProducto + ' detvarCosto" style="text-align:right; color: #B9371B">0.0 %</td>' +
+                               '<td class="' + detalle.idProducto + ' detcostoAnterior" style="text-align:right; color: #B9371B">0.0</td>';
+                       }
+                       else {*/
+                var esRecotizacion = '<td class="' + detalle.idProducto + ' detprecioNetoAnterior" style="text-align:right; color: #B9371B">' + detalle.precioNetoAnt + '</td>' +
+                    '<td class="' + detalle.idProducto + ' detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">' + detalle.varprecioNetoAnterior + ' %</td>' +
+                    '<td class="' + detalle.idProducto + ' detvarPrecioLista" style="text-align:right; color: #B9371B">' + detalle.variacionPrecioListaAnterior + ' %</td>' +
+                    '<td class="' + detalle.idProducto + ' detvarCosto" style="text-align:right; color: #B9371B">' + detalle.variacionCosto + ' %</td>' +
+                    '<td class="' + detalle.idProducto + ' detcostoAnterior" style="text-align:right; color: #B9371B">' + detalle.costoListaAnterior + '</td>';
+                //    }
 
                 var observacionesEnDescripcion = "";
-                if (considerarCantidades == CANT_CANTIDADES_Y_OBSERVACIONES)
-                {
+                if (considerarCantidades == CANT_CANTIDADES_Y_OBSERVACIONES) {
                     observacionesEnDescripcion = "<br /><span class='" + detalle.idProducto + " detproductoObservacion'  style='color: darkred'>" + detalle.observacion + "</span>";
                 }
-            
+
                 $('#tableDetalleCotizacion tbody tr.footable-empty').remove();
 
+                var descontinuadoLabel = "";
+                if (detalle.descontinuado == 1) {
+                    descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html(); 
+                }
 
                 $("#tableDetalleCotizacion tbody").append('<tr data-expanded="false">' +
                     '<td>' + detalle.idProducto + '</td>' +
                     '<td>' + esPrecioAlternativo + '</td>' +
                     '<td>' + proveedor + '</td>' +
-                    '<td>' + detalle.codigoProducto + '</td>' +
+                    '<td>' + detalle.codigoProducto + descontinuadoLabel + '</td>' +
                     '<td>' + detalle.nombreProducto + observacionesEnDescripcion +'</td>' +
                     '<td>' + detalle.unidad + '</td>' +
                     '<td class="column-img"><img class="table-product-img" src="' + $("#imgProducto").attr("src") + '"></td>' +
@@ -1106,6 +1111,7 @@ jQuery(function ($) {
                 $('#tableDetalleCotizacion thead tr th.footable-editing').remove();
                 $('#tableDetalleCotizacion tbody tr td.footable-editing').remove();
 
+                $("#spnProductoDescontinuado").hide();
 
                 $('#montoIGV').html(detalle.igv);
                 $('#montoSubTotal').html(detalle.subTotal);
@@ -2002,9 +2008,14 @@ jQuery(function ($) {
                         // costo = lista[i].producto.costoListaAlternativo.toFixed(cantidadDecimales)
                     }
 
+                    var descontinuadoLabel = "";
+                    if (lista[i].producto.descontinuado == 1) {
+                        descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
+                    }
+
                     d += '<tr>' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
-                        '<td>' + lista[i].producto.sku + '</td>' +
+                        '<td>' + lista[i].producto.sku + descontinuadoLabel + '</td>' +
                         '<td>' + lista[i].producto.descripcion + '</td>' +
                         '<td>' + lista[i].unidad + '</td>' +
                         '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + lista[i].producto.image + '"> </td>' +
