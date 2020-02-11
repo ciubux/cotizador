@@ -953,20 +953,28 @@ namespace Cotizador.Controllers
                             productoStaging.Estado = 0;
                         }
 
+                        pos = posicionInicial + 31;
+                        try
+                        {
+                            productoStaging.descontinuado = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper().Equals("SI") ? 1 : 0;
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.descontinuado = 0;
+                        }
+
                         //UtilesHelper.setValorCelda(sheet, 1, "AC", Producto.nombreAtributo("tipoProducto"), titleCellStyle);
 
-                        
+
                         Guid idRegistro = productoBL.getAllProductoId(productoStaging.sku);
                             
 
                         if (idRegistro == Guid.Empty)
                         {
-                            //TO DO: Realizar nuevo registro en el proceso de aplicar cambios 
                             idRegistro = Guid.NewGuid();
                             isNew = true;
                         }
 
-                        // estos productos no se toman en cuenta?:'SG7A08','YXDM600'
 
                         productoStaging.costoSinIgv = productoStaging.costoOriginal / (productoStaging.equivalenciaProveedor == 0 ? 1 : productoStaging.equivalenciaProveedor);
                         if (productoStaging.monedaProveedor == "D")

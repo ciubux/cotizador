@@ -3397,6 +3397,8 @@ jQuery(function ($) {
     });
 
     $("#btnAgregarReasignacion").click(function () {
+        limpiarFormularioRegistrarReasignacionHistorica();
+
         if (tipoReasignacionView == "responsableComercial") {
             $("#spn_agregar_reasignacion_tipo_vendedor").html("Asesor Comercial");
             $("#insertCHRResponsableComercial").show();
@@ -3486,6 +3488,14 @@ jQuery(function ($) {
             }
         });
     });
+
+    function limpiarFormularioRegistrarReasignacionHistorica() {
+        $("#insertCHRIdResponsableComercial").val("");
+        $("#insertCHRIdAsistenteServicioCliente").val("");
+        $("#insertCHRIdSupervisorComercial").val("");
+        $("#insertCHRObservacionAsesor").val("");
+        $("#insertCHRFechaInicioVigencia").val("");
+    }
 
     $("#chkSoloCanasta").change(function () {
         if ($(this).is(":checked")) {

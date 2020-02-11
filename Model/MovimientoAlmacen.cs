@@ -71,7 +71,7 @@ namespace Model
         [Display(Name = "Fecha Emisión:")]
         public String fechaEmisionFormatoImpresion
         {
-            get { return fechaEmision.ToString("dd-MMM-yy", CultureInfo.CreateSpecificCulture("es-ES")); }
+            get { return fechaEmision.ToString("dd-MMM-yyyy", CultureInfo.CreateSpecificCulture("es-ES")); }
         }
         
         [Display(Name = "Fecha Traslado:")]
@@ -79,7 +79,7 @@ namespace Model
 
         [Display(Name = "Fecha Traslado:")]
         public String fechaTrasladoFormatoImpresion {
-            get { return fechaTraslado.ToString("dd-MMM-yy", CultureInfo.CreateSpecificCulture("es-ES")); }
+            get { return fechaTraslado.ToString("dd-MMM-yyyy", CultureInfo.CreateSpecificCulture("es-ES")); }
         }
 
         

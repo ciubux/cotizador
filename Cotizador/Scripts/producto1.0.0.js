@@ -495,10 +495,10 @@ jQuery(function ($) {
 
 
                 if (producto.descontinuado == 1) {
-                    $("#verDescontinuado").html("Sí");
+                    $("#spnVerProductoDescontinuado").show();
                 }
                 else {
-                    $("#verDescontinuado").html("No");
+                    $("#spnVerProductoDescontinuado").hide();
                 }
 
                 if (producto.exoneradoIgv) {
@@ -764,9 +764,14 @@ jQuery(function ($) {
                         estado = '<span style="color: red; font-weight: bold;">' + list[i].EstadoDesc+'</span>';
                     }
 
+                    var descontinuadoHTML = "";
+                    if (list[i].descontinuado == 1) {
+                        descontinuadoHTML = "<br/>" + $("#spnVerProductoDescontinuado").html();
+                    }
+
                     var ItemRow = '<tr data-expanded="true">' +
                         '<td>  ' + list[i].idProducto + '</td>' +
-                        '<td>  ' + list[i].sku + '  </td>' +
+                        '<td>  ' + list[i].sku + descontinuadoHTML + '  </td>' +
                         '<td>  ' + list[i].skuProveedor + '  </td>' +
                         '<td>  ' + list[i].proveedor + ' </td>' +
                         '<td>  ' + list[i].familia + '</td>' +
