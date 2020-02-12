@@ -40,7 +40,7 @@ namespace Cotizador.Controllers
             VentaBL ventaBL = new VentaBL();
             Venta venta = new Venta();
             venta.guiaRemision = new GuiaRemision();
-            venta.guiaRemision.idMovimientoAlmacen = Guid.Parse(Request["idMovimientoAlmacen"].ToString());           
+            venta.guiaRemision.idMovimientoAlmacen = Guid.Parse(Request["idMovimientoAlmacen"].ToString());
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             venta = ventaBL.GetVenta(venta, usuario);
             this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta;
@@ -422,17 +422,17 @@ namespace Cotizador.Controllers
             {
                 instanciarBusquedaVenta();
             }
-            
+
             Venta objSearch = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA];
-            Venta guiaRemisionSearch = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA] ;
+            Venta guiaRemisionSearch = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA];
             int existeCliente = 0;
             if (objSearch.guiaRemision.pedido.cliente.idCliente != Guid.Empty)
             {
-             existeCliente = 1;
-            }
-           
-            ViewBag.Venta = objSearch; 
-           
+                existeCliente = 1;
+            }           
+            
+            ViewBag.Venta = objSearch;
+
             ViewBag.guiaRemision = guiaRemisionSearch.guiaRemision;
 
             ViewBag.pagina = (int)Constantes.paginas.BusquedaVenta;
@@ -446,7 +446,8 @@ namespace Cotizador.Controllers
 
             return View();
         }
-        
+
+
         private void instanciarBusquedaVenta()
         {
             Venta obj = new Venta();
@@ -460,7 +461,7 @@ namespace Cotizador.Controllers
             obj.ciudad = new Ciudad();
             obj.guiaRemision.pedido = new Pedido();
             obj.guiaRemision.pedido.cliente = new Cliente();
-            obj.guiaRemision.numero = 0;            
+            obj.guiaRemision.numero = 0;
             obj.guiaRemision.fechaEmisionDesde = DateTime.Now.AddDays(-10);
             obj.guiaRemision.fechaEmisionHasta = DateTime.Now.AddDays(1);
             obj.guiaRemision.motivoTrasladoBusqueda = GuiaRemision.motivosTrasladoBusqueda.Venta;
@@ -584,8 +585,8 @@ namespace Cotizador.Controllers
             Venta obj = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA];
             obj.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             VentaBL bL = new VentaBL();
-            List<Venta> list = bL.getListVenta(obj);           
-            
+            List<Venta> list = bL.getListVenta(obj);
+
             //Se retorna la cantidad de elementos encontrados
             return JsonConvert.SerializeObject(list);
         }
@@ -619,23 +620,23 @@ namespace Cotizador.Controllers
 
         public String ShowList()
         {
-            int? rectificar_venta=null;
+            int? rectificar_venta = null;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             if (usuario.rectificarVenta == true)
             {
                 rectificar_venta = 1;
-            }           
+            }
             VentaBL ventaBL = new VentaBL();
             Venta venta = new Venta();
             venta.guiaRemision = new GuiaRemision();
             venta.guiaRemision.idMovimientoAlmacen = Guid.Parse(Request["idMovimientoAlmacen"].ToString());
             venta.idVenta = Guid.Parse(Request["idVenta"].ToString());
             venta = ventaBL.GetVentaList(venta, usuario);
-            this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta; 
-            
+            this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta;            
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
             string jsonVenta = JsonConvert.SerializeObject(venta);
-            dynamic jsonPermisorectificarventa = JsonConvert.DeserializeObject("{'Permiso': '"+ rectificar_venta + "'}");
+            dynamic jsonPermisorectificarventa = JsonConvert.DeserializeObject("{'Permiso': '" + rectificar_venta + "'}");
+            
             Ciudad ciudad = usuario.sedesMPPedidos.Where(s => s.idCiudad == venta.pedido.ciudad.idCiudad).FirstOrDefault();
 
             string jsonSeries = "[]";
@@ -645,6 +646,7 @@ namespace Cotizador.Controllers
                 jsonSeries = JsonConvert.SerializeObject(serieDocumentoElectronicoList);
             }
 
+
             String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + ",\"PermisoRectificarVenta\":" + jsonPermisorectificarventa + "}";
             return json;
         }
@@ -652,12 +654,35 @@ namespace Cotizador.Controllers
         public void RectificarVentaCheck()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            
-            Guid id_detalle_producto= Guid.Parse(this.Request.Params["id_detalle_producto"]);
+
+            Guid id_detalle_producto = Guid.Parse(this.Request.Params["id_detalle_producto"]);
             int estadoCheck = int.Parse(this.Request.Params["valor"]);
             VentaBL obj = new VentaBL();
-            obj.rectificacfionVenta(estadoCheck,id_detalle_producto,usuario.idUsuario);
+            obj.rectificacfionVenta(estadoCheck, id_detalle_producto, usuario.idUsuario);
         }
+
+        public void updateModificarDatosVenta()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            
+            Venta venta = new Venta();
+            venta.usuario = new Usuario();
+            venta.usuario.idUsuario =usuario.idUsuario;
+
+            venta.idVenta = Guid.Parse(this.Request.Params["idVenta"]);
+            venta.idAsistente = int.Parse(this.Request.Params["asistenteCliente"]);
+            venta.idResponsableComercial = int.Parse(this.Request.Params["reponsableComercial"]);
+            venta.idSupervisorComercial = int.Parse(this.Request.Params["supervisorComercial"]);
+            venta.idOrigen = int.Parse(this.Request.Params["origen"]);
+            PropertyInfo propertyInfo = venta.GetType().GetProperty(this.Request.Params["propiedad"]);
+            if (propertyInfo != null)
+            {
+                propertyInfo.SetValue(venta, 1);
+            }  
+            VentaBL obj = new VentaBL();
+            obj.modificacionDatosVenta(venta);
+        }
+
 
     }
 }
