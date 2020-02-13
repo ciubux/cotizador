@@ -97,7 +97,7 @@ namespace Model
         public List<GrupoClienteAdjunto> grupoClienteAdjuntoList { get; set; }
 
         public List<Cliente> miembros { get; set; }
-
+        public List<DocumentoDetalle> listaPrecios { get; set; }
 
         public int modificaMiembros
         {

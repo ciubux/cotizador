@@ -39,6 +39,17 @@ namespace Cotizador.Controllers
                 }
             }
 
+            foreach (PrecioClienteProducto precio in precioClienteProductoList)
+            {
+                if (precio.numeroCotizacion == null)
+                {
+                    precio.numeroCotizacion = "No Identificado";
+                } else
+                {
+                    precio.numeroCotizacion = precio.numeroCotizacion + " (" + precio.tipoCotizacion + ")";
+                }
+            }
+
             String jsonPrecioLista = JsonConvert.SerializeObject(precioClienteProductoList);
 
             String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto + "\", \"precioLista\": " + jsonPrecioLista + "}";
@@ -83,6 +94,18 @@ namespace Cotizador.Controllers
             Producto producto = productoBL.getProductoById(idProducto);
             String nombreProducto = producto.descripcion;
             String skuProducto = producto.sku;
+
+            foreach (PrecioClienteProducto precio in precioClienteProductoList)
+            {
+                if (precio.numeroCotizacion == null)
+                {
+                    precio.numeroCotizacion = "No Identificado";
+                }
+                else
+                {
+                    precio.numeroCotizacion = precio.numeroCotizacion + " (" + precio.tipoCotizacion + ")";
+                }
+            }
 
             String jsonPrecioLista = JsonConvert.SerializeObject(precioClienteProductoList);
 

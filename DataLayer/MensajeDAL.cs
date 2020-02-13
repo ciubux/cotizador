@@ -167,6 +167,7 @@ namespace DataLayer
                 obj.id_mensaje = Converter.GetGuid(row, "id_mensaje");
                 obj.fechaCreacionMensaje = Converter.GetDateTime(row, "fecha_creacion");
                 obj.titulo = Converter.GetString(row, "titulo");
+                obj.mensaje = Converter.GetString(row, "mensaje");
                 obj.usuario_creacion = Converter.GetString(row, "nombre");
                 obj.fechaVencimientoMensaje = Converter.GetDateTime(row, "fecha_vencimiento");
                 obj.fechaInicioMensaje = Converter.GetDateTime(row, "fecha_inicio");

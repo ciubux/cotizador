@@ -73,10 +73,11 @@ namespace DataLayer
             return usuarioList;
         }
 
-        public List<Usuario> selectUsuariosPorPermiso(Permiso permiso)
+        public List<Usuario> selectUsuariosPorPermiso(Permiso permiso, int tipo = 1)
         {
             var objCommand = GetSqlCommand("ps_usuariosPorPermiso");
             InputParameterAdd.Int(objCommand, "idPermiso", permiso.idPermiso);
+            InputParameterAdd.Int(objCommand, "tipo", tipo);
             DataTable dataTable = Execute(objCommand);
             List<Usuario> usuarioList = new List<Usuario>();
 
@@ -91,6 +92,27 @@ namespace DataLayer
 
             return usuarioList;
         }
+
+        public List<Usuario> selectUsuariosPorPermiso(String codigoPermiso, int tipo = 1)
+        {
+            var objCommand = GetSqlCommand("ps_usuariosPorPermisoCodigo");
+            InputParameterAdd.Char(objCommand, "codigo", codigoPermiso);
+            InputParameterAdd.Int(objCommand, "tipo", tipo);
+            DataTable dataTable = Execute(objCommand);
+            List<Usuario> usuarioList = new List<Usuario>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Usuario usuario = new Usuario();
+                usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
+                usuario.email = Converter.GetString(row, "email");
+                usuario.nombre = Converter.GetString(row, "nombre");
+                usuarioList.Add(usuario);
+            }
+
+            return usuarioList;
+        }
+
 
         public void updatePermiso(List<Usuario> usuarioLit, Permiso permiso, Usuario usuario)
         {
@@ -463,6 +485,7 @@ namespace DataLayer
                     vendedor.esSupervisorComercial = Converter.GetBool(row, "es_supervisor_comercial");
                     vendedor.usuario = new Usuario();
                     vendedor.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
+                    vendedor.idSupervisorComercial = Converter.GetInt(row, "id_supervisor_comercial");
                     vendedorList.Add(vendedor);
 
                     if (vendedor.usuario.idUsuario == usuario.idUsuario)

@@ -99,6 +99,8 @@ namespace Cotizador.Controllers
             guiaRemision.seguimientoMovimientoAlmacenSalida.estado = SeguimientoMovimientoAlmacenSalida.estadosSeguimientoMovimientoAlmacenSalida.Enviado;
             guiaRemision.ciudadOrigen = new Ciudad();
             guiaRemision.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            guiaRemision.estadoFiltro = GuiaRemision.EstadoFiltro.Todos;
+
 
             guiaRemision.pedido = new Pedido();
             guiaRemision.pedido.cliente = new Cliente();
@@ -1133,6 +1135,12 @@ namespace Cotizador.Controllers
         #region Changes
 
 
+        public void ChangeEstadoFiltro()
+        {
+            GuiaRemision guiaRemision = this.GuiaRemisionSession;
+            guiaRemision.estadoFiltro = (GuiaRemision.EstadoFiltro)int.Parse(this.Request.Params["estado"]);
+            this.GuiaRemisionSession = guiaRemision;
+        }
 
         public void ChangeEstaAnulado()
         {
@@ -1318,6 +1326,7 @@ namespace Cotizador.Controllers
 
 
         #endregion
+
 
 
         #region ChangesConsolidacionGuias

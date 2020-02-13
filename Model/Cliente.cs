@@ -37,6 +37,16 @@ namespace Model
             this.horaFinSegundoTurnoEntrega = "";
             this.CargaMasiva = false;
             this.clienteAdjuntoList = new List<ClienteAdjunto>();
+
+            this.chrAsesor = new ClienteReasignacionHistorico();
+            this.chrAsesor.fechaInicioVigencia = DateTime.Now;
+            this.chrAsesor.preValor = this.responsableComercial.idVendedor.ToString();
+            this.chrAsistente = new ClienteReasignacionHistorico();
+            this.chrAsistente.fechaInicioVigencia = DateTime.Now;
+            this.chrAsistente.preValor = this.asistenteServicioCliente.idVendedor.ToString();
+            this.chrSupervisor = new ClienteReasignacionHistorico();
+            this.chrSupervisor.fechaInicioVigencia = DateTime.Now;
+            this.chrSupervisor.preValor = this.supervisorComercial.idVendedor.ToString();
         }
 
         public Guid idCliente { get; set; }
@@ -257,6 +267,10 @@ namespace Model
         {
             get; set;
         }
+
+        public ClienteReasignacionHistorico chrAsesor { get; set; }
+        public ClienteReasignacionHistorico chrSupervisor { get; set; }
+        public ClienteReasignacionHistorico chrAsistente { get; set; }
 
         public int modificaCanasta 
         {

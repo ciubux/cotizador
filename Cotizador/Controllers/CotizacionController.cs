@@ -309,7 +309,11 @@ namespace Cotizador.Controllers
                 ViewBag.numero = cotizacion.codigo;
 
                 ViewBag.cotizacion = cotizacion;
-
+                ViewBag.busquedaProductosIncluyeDescontinuados = 0;
+                if (this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"] != null)
+                {
+                    ViewBag.busquedaProductosIncluyeDescontinuados = int.Parse(this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"].ToString());
+                }
             }
             catch (Exception ex)
             {
@@ -384,6 +388,12 @@ namespace Cotizador.Controllers
                 ViewBag.fechaLimiteValidezOferta = cotizacion.fechaLimiteValidezOferta.ToString(Constantes.formatoFecha);
                 ViewBag.fechaInicioVigenciaPrecios = cotizacion.fechaInicioVigenciaPrecios == null ? null : cotizacion.fechaInicioVigenciaPrecios.Value.ToString(Constantes.formatoFecha);
                 ViewBag.fechaFinVigenciaPrecios = cotizacion.fechaFinVigenciaPrecios == null ? null : cotizacion.fechaFinVigenciaPrecios.Value.ToString(Constantes.formatoFecha);
+
+                ViewBag.busquedaProductosIncluyeDescontinuados = 0;
+                if (this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"] != null)
+                {
+                    ViewBag.busquedaProductosIncluyeDescontinuados = int.Parse(this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"].ToString());
+                }
 
                 //Se agrega el viewbag numero para poder mostrar el campo vacío cuando no se está creando una cotización
                 ViewBag.numero = cotizacion.codigo;
@@ -925,6 +935,7 @@ namespace Cotizador.Controllers
                 "\"unidad_alternativa\":\"" + producto.unidad_alternativa + "\"," +
                 "\"proveedor\":\"" + producto.proveedor + "\"," +
                 "\"familia\":\"" + producto.familia + "\"," +
+                "\"descontinuado\":" + producto.descontinuado + "," +
                 "\"precioUnitarioSinIGV\":\"" + producto.precioSinIgv + "\"," +
              //   "\"precioUnitarioAlternativoSinIGV\":\"" + producto.precioAlternativoSinIgv + "\"," +
                 "\"precioLista\":\"" + producto.precioLista + "\"," +
@@ -937,9 +948,6 @@ namespace Cotizador.Controllers
                 "\"productoPresentacionList\":" + jsonProductoPresentacion + "," +
                 "\"costoLista\":\"" + producto.costoLista + "\"" +
                 "}";
-
-
-
 
 
             return resultado;
@@ -1089,6 +1097,7 @@ namespace Cotizador.Controllers
             {
                 idProducto = detalle.producto.idProducto,
                 codigoProducto = detalle.producto.sku,
+                descontinuado = detalle.producto.descontinuado,
                 subTotalItem = detalle.subTotal.ToString(),
                 nombreProducto = nombreProducto,
                 unidad = detalle.unidad,
@@ -1706,6 +1715,181 @@ namespace Cotizador.Controllers
             return ajustaPrecios;
         }
 
+        [HttpGet]
+        public ActionResult CargarProductosCanasta(int tipo)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Cotizacion cotizacion = this.CotizacionSession;
+            List<DocumentoDetalle> canasta = new List<DocumentoDetalle>();
+
+            Constantes.paginas pag = (Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA];
+
+            switch (pag)
+            {
+                case Constantes.paginas.MantenimientoCotizacion:
+                    ClienteBL clienteBl = new ClienteBL();
+                    canasta = clienteBl.getPreciosVigentesCliente(cotizacion.cliente.idCliente);
+                    break;
+                case Constantes.paginas.MantenimientoCotizacionGrupal:
+                    GrupoClienteBL grupoBl = new GrupoClienteBL();
+                    canasta = grupoBl.getPreciosVigentesGrupoCliente(cotizacion.grupo.idGrupoCliente);
+                    break;
+            }
+
+
+            ProductoBL productoBL = new ProductoBL();
+
+            string unidad = "";
+            int idProductoPresentacion = 0;
+            int cantidad = 1;
+            string observacion = "";
+            foreach (DocumentoDetalle prod in canasta)
+            {
+                if (tipo == 1 || (tipo == 2 && prod.producto.precioClienteProducto.estadoCanasta))
+                {
+                    CotizacionDetalle item = new CotizacionDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
+                    item.producto = new Producto();
+
+                    if (cotizacion.cliente != null)
+                    {
+                        item.producto = productoBL.getProducto(prod.producto.idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, cotizacion.cliente.idCliente);
+                    }
+                    else
+                    {
+                        item.producto = productoBL.getProducto(prod.producto.idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, Guid.Empty);
+                    }
+
+
+
+                    if (item.producto.idProducto != Guid.Empty)
+                    {
+                        cotizacion.cotizacionDetalleList.Remove(cotizacion.cotizacionDetalleList.Where(p => p.producto.idProducto == item.producto.idProducto).FirstOrDefault());
+
+                        item.cantidad = cantidad;
+                        item.observacion = observacion;
+                        item.unidad = prod.unidad;
+                        item.flete = prod.flete;
+                        
+                        
+                        if (prod.ProductoPresentacion == null)
+                        {
+                            idProductoPresentacion = 0;
+                        }
+                        else
+                        {
+                            idProductoPresentacion = prod.ProductoPresentacion.IdProductoPresentacion;
+                        }
+
+                        if (idProductoPresentacion == 0 && prod.esPrecioAlternativo) {
+                            idProductoPresentacion = 1;
+                        }
+
+                        switch (idProductoPresentacion)
+                        {
+                            case 1: item.esPrecioAlternativo = true; break;
+                            case 2: item.esPrecioAlternativo = true; break;
+                            default: item.esPrecioAlternativo = false; break;
+                        }
+
+
+                        decimal precioNetoAnterior = 0;
+
+
+                        if (item.esPrecioAlternativo)
+                        {
+                            //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
+                            //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
+                            item.ProductoPresentacion = item.producto.getProductoPresentacion(idProductoPresentacion);
+
+                            if (item.ProductoPresentacion == null)
+                            {
+                                item.esPrecioAlternativo = false;
+                                item.precioNeto = prod.precioNeto;
+                                precioNetoAnterior = item.producto.precioClienteProducto.precioNeto;
+                            }
+                            else
+                            {
+                                item.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, prod.precioNeto * item.ProductoPresentacion.Equivalencia));
+
+
+                                precioNetoAnterior = item.producto.precioClienteProducto.precioNetoAlternativo;
+                            }
+                        }
+                        else
+                        {
+                            item.precioNeto = prod.precioNeto;
+                            precioNetoAnterior = item.producto.precioClienteProducto.precioNeto;
+                        }
+
+
+
+                        item.precioNetoAnterior = precioNetoAnterior;
+                        cotizacion.cotizacionDetalleList.Add(item);
+
+
+                        if (cotizacion.ajusteCalculoPrecios)
+                        {
+                            switch (idProductoPresentacion)
+                            {
+                                //Normal
+                                case 0:
+                                    if (item.producto.equivalenciaAlternativa > 1)
+                                    {
+                                        decimal precioA = item.precioNeto / item.producto.equivalenciaAlternativa;
+                                        precioA = Math.Truncate(precioA * 10000);
+                                        decimal precioN = precioA * item.producto.equivalenciaAlternativa / 10000;
+
+                                        while ((precioN * 100) - (Math.Truncate(precioN * 100)) > (decimal)0.001)
+                                        {
+                                            precioA--;
+                                            precioN = precioA * item.producto.equivalenciaAlternativa / 10000;
+                                        }
+                                        item.precioNeto = precioA * item.producto.equivalenciaAlternativa / 10000;
+                                    }
+                                    break;
+
+                                //Proveedor
+                                case 2:
+                                    if (item.producto.equivalenciaProveedor > 1 || item.producto.equivalenciaAlternativa > 1)
+                                    {
+                                        decimal equivalenciaA = item.producto.equivalenciaAlternativa * item.producto.equivalenciaProveedor;
+                                        decimal precioA = item.precioNeto / equivalenciaA;
+                                        precioA = Math.Truncate(precioA * 10000);
+                                        decimal precioN = (precioA * equivalenciaA) / 10000;
+
+                                        while ((precioN * 100) - (Math.Truncate(precioN * 100)) > (decimal)0.001)
+                                        {
+                                            precioA--;
+                                            precioN = precioA * equivalenciaA / 10000;
+                                        }
+
+                                        item.precioNeto = (precioA * item.producto.equivalenciaAlternativa) / 10000;
+                                    }
+
+                                    break;
+                            }
+                        }
+
+
+                        item.porcentajeDescuento = (1 - (item.precioNeto / item.precioLista)) * 100;
+                        //Calcula los montos totales de la cabecera de la cotizacion
+                        HelperDocumento.calcularMontosTotales(cotizacion);
+
+                        this.CotizacionSession = cotizacion;
+                    }
+                }
+            }
+
+
+            switch (pag)
+            {
+                case Constantes.paginas.MantenimientoCotizacion: return RedirectToAction("Cotizar", "Cotizacion"); break;
+                case Constantes.paginas.MantenimientoCotizacionGrupal: return RedirectToAction("CotizarGrupo", "Cotizacion"); break;
+            }
+
+            return RedirectToAction("Index", "Cotizacion");
+        }
+
         [HttpPost]
         public String LoadProductosByExcel(HttpPostedFileBase file)
         {
@@ -1737,6 +1921,9 @@ namespace Cotizador.Controllers
                 int colPrecioNeto = 9;
                 int colFlete = 10;
                 int colObservaciones = 13;
+
+                HSSFFormulaEvaluator formula = new HSSFFormulaEvaluator(hssfwb);
+                formula.EvaluateAll();
 
                 for (row = CotizacionDetalleFormatoExcel.filaInicioDatos - 1; row <= cantidad; row++)
                 {
@@ -1788,7 +1975,17 @@ namespace Cotizador.Controllers
                                 /* precio unitario  */
                                 if (sheet.GetRow(row).GetCell(colPrecioNeto) != null)
                                 {
-                                    precioNeto = Decimal.Parse(sheet.GetRow(row).GetCell(colPrecioNeto).ToString());
+                                    ICell precioCell = sheet.GetRow(row).GetCell(colPrecioNeto);
+                                    if (precioCell.CellType == CellType.Formula)
+                                    {
+                                        precioNeto = (decimal) precioCell.NumericCellValue;
+                                    }
+                                    else
+                                    {
+                                        precioNeto = Decimal.Parse(sheet.GetRow(row).GetCell(colPrecioNeto).ToString());
+                                    }
+
+                                    precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
                                 }
 
                                 /* flete */
@@ -1912,13 +2109,6 @@ namespace Cotizador.Controllers
                                 HelperDocumento.calcularMontosTotales(cotizacion);
 
 
-
-
-                                var nombreProducto = item.producto.descripcion;
-                                if (cotizacion.mostrarCodigoProveedor)
-                                {
-                                    nombreProducto = item.producto.skuProveedor + " - " + item.producto.descripcion;
-                                }
 
                                 this.CotizacionSession = cotizacion;
                             }

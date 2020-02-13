@@ -94,6 +94,8 @@ namespace Model
         public static String VAR_SESSION_PRODUCTO_LISTA = "productoList";
         public static String VAR_SESSION_PRODUCTO_VER = "productoVer";
 
+        public static String VAR_SESSION_PRODUCTO_SEARCH_PARAM = "productoSearchParamn_";
+
         public static String VAR_SESSION_ORIGEN = "origen";
         public static String VAR_SESSION_ORIGEN_BUSQUEDA = "origenBusqueda";
         public static String VAR_SESSION_ORIGEN_LISTA = "origenList";
@@ -420,6 +422,11 @@ namespace Model
         public const String MODIFICA_RUBRO = "P750";
         public const String VISUALIZA_RUBROS = "P751";
 
+
+        public const String BUSCA_NOTAS_INGRESO_TODAS_SEDES = "P320";
+        public const String VALIDA_RESPONSABLES_COMERCIALES_ASIGNADOS = "P780";
+
+        public const String MODIFICA_REASIGNACIONES_CLIENTE = "P780";
 
         public enum paginas
         {

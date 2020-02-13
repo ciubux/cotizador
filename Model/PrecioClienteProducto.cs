@@ -15,6 +15,8 @@ namespace Model
 
         public String unidad { get; set; }
 
+        public String skuCliente { get; set; }
+
         public Decimal precioNeto { get; set; }
         public Decimal flete { get; set; }
         public Decimal precioUnitario { get; set; }
@@ -35,6 +37,7 @@ namespace Model
 
         public String numeroCotizacion { get; set; }
 
+        public String tipoCotizacion { get; set; }
         public Decimal equivalencia { get; set; }
 
         public Cliente cliente { get; set; }

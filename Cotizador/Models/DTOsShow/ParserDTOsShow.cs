@@ -84,6 +84,7 @@ namespace Cotizador.Models.DTOsShow
             cotizacionDTOshow.cliente_codigoRazonSocial = cotizacion.cliente.codigoRazonSocial;
             cotizacionDTOshow.tipoCotizacion = (int)cotizacion.tipoCotizacion;
             cotizacionDTOshow.contacto = cotizacion.contacto;
+            cotizacionDTOshow.grupo_idGrupoCliente = cotizacion.grupo.idGrupoCliente;
             return cotizacionDTOshow;
         }
 

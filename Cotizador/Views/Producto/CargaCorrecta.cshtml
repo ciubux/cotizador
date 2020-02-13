@@ -1,8 +1,19 @@
 ﻿<div class="container">
-    @if (ViewBag.tipoCarga == "archivo") {
+    @if (ViewBag.tipoCarga == "archivo")
+    {
         <h1>La carga del archivo de productos se realizó correctamente</h1>
+        if (ViewBag.contInsert > 0)
+        {
+<h2>Se agregaron @ViewBag.contInsert registros.</h2>
+        }
+        
+        if (ViewBag.contUpdate > 0)
+        {
+            <h2>Se actualizaron @ViewBag.contUpdate registros.</h2>
+        }
     }
-    else if (ViewBag.tipoCarga == "tipo_cambio") {
+    else if (ViewBag.tipoCarga == "tipo_cambio")
+    {
         <h1>Se actualizó el tipo de cambio en los productos correctamente.</h1>
     }
 </div>

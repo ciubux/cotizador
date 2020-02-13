@@ -298,6 +298,8 @@
             <div class="pull-left">
                 <!--  <button id="btnAgregarProductosDesdePreciosRegistrados" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBuscarPreciosRegistrados">Importar Detalle Desde Precios Registrados en Facturación</button>-->
                 <button id="btnModalCargarProductos" type="button" data-toggle="modal" data-target="#modalCargarProductos" class="btn btn-primary bouton-image botonExcel">Cargar Productos desde Archivo</button>
+                &nbsp;
+                <button id="btnAgregarCanasta" type="button" class="btn btn-primary">Importar Productos Cotizados</button>
             </div>
 
             <div class="pull-right">
@@ -474,7 +476,14 @@
                         <td class="detalleCotizacion">  @cotizacionDetalle.producto.idProducto  </td>
                         <td>  @cotizacionDetalle.esPrecioAlternativo  </td>
                         <td>  @cotizacionDetalle.producto.proveedor  </td>
-                        <td>  @cotizacionDetalle.producto.sku  </td>
+                        <td>
+                            @cotizacionDetalle.producto.sku
+                            @if (cotizacionDetalle.producto.descontinuado == 1)
+                            {
+                                <br />
+                                <label class="lblAlertaProductoDescontinuado" style=""><img src="~/images/icon_warning_18.png" /> PRODUCTO DESCONTINUADO</label>
+                            }
+                        </td>
                         <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
                         @if (cotizacion.mostrarCodigoProveedor && (int)cotizacion.considerarCantidades == 2)
                         {
@@ -725,10 +734,23 @@
                             <div class="form-group">
                                 <label for="producto" class="control-label col-xs-3">Producto:</label>
                                 <div class="col-xs-9">
+                                    <span id="spnProductoDescontinuado" style="display: none;">
+                                        <label class="lblAlertaProductoDescontinuado" style=""><img src="~/images/icon_warning_18.png" /> PRODUCTO DESCONTINUADO</label>
+                                    </span>
                                     <select class="form-control" id="producto" name="producto">
                                         <option value=""></option>
                                     </select>
-                                    <!--  <label><input type="checkbox" id="considerarDescontinuados" />Considerar Descontinuados</label>-->
+                                    <label class="radio-label" style="margin-top: 5px;">
+                                        @if (ViewBag.busquedaProductosIncluyeDescontinuados == 1)
+                                        {
+                                            <input checked type="checkbox" class="chkProductSerchCheckParam" paramName="incluyeDescontinuados" checkValue="1" unCheckValue="0" value="1">
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" class="chkProductSerchCheckParam" paramName="incluyeDescontinuados" checkValue="1" unCheckValue="0" value="1">
+                                        }
+                                        Incluir productos descontinuados
+                                    </label>
                                 </div>
                             </div>
 

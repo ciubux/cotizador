@@ -238,6 +238,7 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "AC", obj.tipoProducto.ToString());
                     UtilesHelper.setValorCelda(sheet, i, "AD", (double)obj.tipoCambio);
                     UtilesHelper.setValorCelda(sheet, i, "AE", obj.Estado == 1 ? "SI" : "NO");
+                    UtilesHelper.setValorCelda(sheet, i, "AF", obj.descontinuado == 1 ? "SI" : "NO");
 
                     i++;
                 }
@@ -280,6 +281,7 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, 1, "AD", "Tipo Cambio", titleCellStyle);
                 UtilesHelper.setColumnDefaultStyle(sheet, "AD", blockedCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "AE", "Activo", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "AF", "Descontinuado", titleCellStyle);
 
                 MemoryStream ms = new MemoryStream();
                 using (MemoryStream tempStream = new MemoryStream())

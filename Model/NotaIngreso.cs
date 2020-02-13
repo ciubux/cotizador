@@ -13,6 +13,7 @@ namespace Model
         public NotaIngreso()
         {
             this.motivoTraslado = motivosTraslado.Compra;
+            this.estadoFiltro = EstadoFiltro.Todos;
             this.tipoDocumentoVentaReferencia = TiposDocumentoVentaReferencia.Ninguno;
             this.motivoExtornoGuiaRemision = MotivosExtornoGuiaRemision.AnulacionOperacion;
             this.tipoExtorno = TiposExtorno.SinExtorno;
@@ -71,6 +72,23 @@ namespace Model
 
         [Display(Name = "Motivo Traslado:")]
         public motivosTraslado motivoTraslado { get; set; }
+
+        [Display(Name = "Estado:")]
+        public EstadoFiltro estadoFiltro { get; set; }
+
+        public enum EstadoFiltro
+        {
+            [Display(Name = "Todos")]
+            Todos = 0,
+            [Display(Name = "Registrada")]
+            Registrada = 1,
+            [Display(Name = "Registrada (con Nota de Crédito)")]
+            RegistradaNotaCredito = 2,
+            [Display(Name = "Registrada (con Factura Compra)")]
+            RegistradaFacturaCompra = 3,
+            [Display(Name = "Anulada")]
+            Anulada = 4
+        }
         public enum motivosTraslado
         {
             [Display(Name = "Compra")]

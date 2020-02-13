@@ -551,6 +551,48 @@ namespace BusinessLayer
             return pedido;
         }
 
+        public Pedido obtenerProductosAPartirdePreciosCotizados(Pedido pedido, Boolean canastaHabitual, Usuario usuario)
+        {
+
+            ClienteBL clienteBL = new ClienteBL();
+            List<DocumentoDetalle> documentoDetalleList = clienteBL.getPreciosVigentesCliente(pedido.cliente.idCliente);
+
+            if(pedido.pedidoDetalleList == null) {
+                pedido.pedidoDetalleList = new List<PedidoDetalle>();
+            }
+
+            //Detalle de la cotizacion
+            foreach (DocumentoDetalle documentoDetalle in documentoDetalleList)
+            {
+                if (!canastaHabitual || (canastaHabitual && documentoDetalle.producto.precioClienteProducto.estadoCanasta))
+                {
+                    pedido.pedidoDetalleList.Remove(pedido.pedidoDetalleList.Where(p => p.producto.idProducto == documentoDetalle.producto.idProducto).FirstOrDefault());
+
+                    PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
+                    pedidoDetalle.producto = new Producto();
+                    pedidoDetalle.cantidad = 1;
+                    pedidoDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
+                    pedidoDetalle.unidad = documentoDetalle.unidad;
+                    pedidoDetalle.producto = documentoDetalle.producto;
+                    if (pedidoDetalle.esPrecioAlternativo)
+                    {
+                        pedidoDetalle.ProductoPresentacion = documentoDetalle.ProductoPresentacion;
+                        pedidoDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.ProductoPresentacion.Equivalencia;
+                    }
+                    else
+                    {
+                        pedidoDetalle.precioNeto = documentoDetalle.precioNeto;
+                    }
+                    pedidoDetalle.flete = documentoDetalle.flete;
+                    pedidoDetalle.observacion = documentoDetalle.observacion;
+                    pedidoDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;
+                    pedido.pedidoDetalleList.Add(pedidoDetalle);
+                }
+            }
+
+            return pedido;
+        }
+
 
         public Int64 GetSiguienteNumeroGrupoPedido()
         {

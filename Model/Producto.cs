@@ -17,6 +17,7 @@ namespace Model
             this.tipoProducto = TipoProducto.Bien;
             this.ProductoPresentacionList = new List<ProductoPresentacion>();
             this.CargaMasiva = false;
+            this.descontinuado = 0;
         }
 
 
@@ -291,6 +292,9 @@ namespace Model
 
         public int Stock { get; set; }
 
+        [Display(Name = "Descontinuado:")]
+        public int descontinuado { get; set; }
+
         public static List<CampoPersistir> obtenerCampos(List<LogCampo> campos, bool soloPersistentes = false) 
         {
             List<CampoPersistir> lista = new List<CampoPersistir>();
@@ -334,6 +338,8 @@ namespace Model
                     case "equivalencia_unidad_proveedor_unidad_conteo": cp.nombre = Producto.nombreAtributo("equivalenciaUnidadProveedorUnidadConteo"); break;
                     case "tipo_cambio": cp.nombre = Producto.nombreAtributo("tipoCambio"); break;
                     case "estado": cp.nombre = Producto.nombreAtributo("Estado"); break;
+
+                    case "descontinuado": cp.nombre = Producto.nombreAtributo("descontinuado"); break;
 
                     default: cp.nombre = "[NOT_FOUND]"; break;
 
@@ -419,6 +425,7 @@ namespace Model
                     case "codigo_sunat": lc = instanciarLogCambio(campo); lc.valor = this.codigoSunat; break;
                     case "exonerado_igv": lc = instanciarLogCambio(campo); lc.valor = this.exoneradoIgv.ToString(); break;
                     case "estado": lc = instanciarLogCambio(campo); lc.valor = this.Estado.ToString(); break;
+                    case "descontinuado": lc = instanciarLogCambio(campo); lc.valor = this.descontinuado.ToString(); break;
                 }
 
                 if (soloRegistro && !campo.registra)
@@ -870,7 +877,7 @@ namespace Model
                         }
                         break;
                     case "tipo":
-                        if (this.tipoProducto == (TipoProducto) int.Parse(cambio.valor))
+                        if (this.tipoProducto == (TipoProducto)int.Parse(cambio.valor))
                         {
                             if (cambio.persisteCambio)
                             {
@@ -880,7 +887,7 @@ namespace Model
                         }
                         else
                         {
-                            this.tipoProducto = (TipoProducto) int.Parse(cambio.valor);
+                            this.tipoProducto = (TipoProducto)int.Parse(cambio.valor);
                             lista.Add(cambio);
                         }
                         break;
@@ -911,6 +918,21 @@ namespace Model
                         else
                         {
                             this.Estado = int.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "descontinuado":
+                        if (this.descontinuado == int.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.descontinuado = int.Parse(cambio.valor);
                             lista.Add(cambio);
                         }
                         break;

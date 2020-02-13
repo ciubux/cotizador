@@ -760,6 +760,17 @@ namespace Cotizador.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult CargarProductosCanasta(int tipo)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Pedido pedido = this.PedidoSession;
+            PedidoBL pedidoBL = new PedidoBL();
+
+            pedidoBL.obtenerProductosAPartirdePreciosCotizados(pedido, tipo==2, usuario);
+
+            return RedirectToAction("Pedir", "Pedido");
+        }
 
         public String SearchProductos()
         {

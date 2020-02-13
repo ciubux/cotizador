@@ -869,12 +869,12 @@ namespace DataLayer
             return MovimientoAlmacenExtornantesList;
         }
 
-        
+
 
         public List<GuiaRemision> SelectGuiasRemision(GuiaRemision guiaRemision)
         {
             List<GuiaRemision> guiaRemisionList = new List<GuiaRemision>();
-            
+
             var objCommand = GetSqlCommand("ps_guiasRemision");
             InputParameterAdd.BigInt(objCommand, "numeroDocumento", guiaRemision.numeroDocumento);
             InputParameterAdd.Guid(objCommand, "idCiudad", guiaRemision.ciudadOrigen.idCiudad);
@@ -884,9 +884,10 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", guiaRemision.usuario.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fechaTrasladoDesde", guiaRemision.fechaTrasladoDesde);
             InputParameterAdd.DateTime(objCommand, "fechaTrasladoHasta", guiaRemision.fechaTrasladoHasta);
-            InputParameterAdd.Int(objCommand, "anulado", guiaRemision.estaAnulado?1:0);
+            InputParameterAdd.Int(objCommand, "anulado", guiaRemision.estaAnulado ? 1 : 0);
             InputParameterAdd.Int(objCommand, "facturado", guiaRemision.estaFacturado ? 1 : 0);
             InputParameterAdd.BigInt(objCommand, "numeroPedido", guiaRemision.pedido.numeroPedido);
+            InputParameterAdd.Int(objCommand, "estadoFiltro", (int)guiaRemision.estadoFiltro);
             InputParameterAdd.Char(objCommand, "motivoTraslado", ((Char)guiaRemision.motivoTrasladoBusqueda).ToString());
             InputParameterAdd.Varchar(objCommand, "sku", guiaRemision.sku);
 
@@ -982,7 +983,7 @@ namespace DataLayer
                 guiaRemision.pedido.idPedido = Converter.GetGuid(row, "id_pedido");
                 guiaRemision.pedido.numeroPedido = Converter.GetLong(row, "numero_pedido");
                 guiaRemision.pedido.numeroGrupoPedido = Converter.GetLong(row, "numero_grupo_pedido");
-                
+
                 //CLIENTE
                 guiaRemision.pedido.cliente = new Cliente();
                 guiaRemision.pedido.cliente.codigo = Converter.GetString(row, "codigo");
@@ -991,7 +992,9 @@ namespace DataLayer
                 guiaRemision.pedido.cliente.ruc = Converter.GetString(row, "ruc");
                 guiaRemision.pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
 
-                
+                guiaRemision.pedido.direccionEntrega = new DireccionEntrega();
+                guiaRemision.pedido.direccionEntrega.nombre = Converter.GetString(row, "nombre_direccion_entrega");
+                if (guiaRemision.pedido.direccionEntrega.nombre == null) { guiaRemision.pedido.direccionEntrega.nombre = ""; }
                 //USUARIO
                 guiaRemision.usuario = new Usuario();
                 guiaRemision.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
@@ -1186,6 +1189,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "numeroGuiaReferencia", notaIngreso.numeroGuiaReferencia);
             InputParameterAdd.BigInt(objCommand, "numeroPedido", notaIngreso.pedido.numeroPedido);
             InputParameterAdd.Char(objCommand, "motivoTraslado", ((Char)notaIngreso.motivoTrasladoBusqueda).ToString());
+            InputParameterAdd.Int(objCommand, "estadoFiltro", (int) notaIngreso.estadoFiltro);
             InputParameterAdd.Varchar(objCommand, "sku", notaIngreso.sku);
             DataTable dataTable = Execute(objCommand);
 

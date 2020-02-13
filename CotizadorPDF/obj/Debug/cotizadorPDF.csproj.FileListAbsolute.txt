@@ -594,7 +594,6 @@ G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Model.dll.config
 G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\DataLayer.pdb
 G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\DataLayer.dll.config
 G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\ServiceLayer.pdb
-G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\NPOI.xml
 G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.pdb
 G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.Settings.pdb
 G:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Newtonsoft.Json.xml
