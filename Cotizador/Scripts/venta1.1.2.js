@@ -4430,14 +4430,12 @@ jQuery(function ($) {
 
     $('body').on('click', "button#btnModificarDatosVenta", function () {
         
-        var arrrayClass = $('.btnVerVentaList').attr('class').split(" ");
-        var idMovimientoAlmacen = arrrayClass[0];
+        var arrrayClass = $('.btnVerVentaList').attr('class').split(" ");       
         var idVenta = arrrayClass[1];  
 
         $.ajax({
-            url: "/Venta/ShowList",
-            data: {
-                idMovimientoAlmacen: idMovimientoAlmacen,
+            url: "/Venta/verModificacionDatosVenta",
+            data: {                
                 idVenta: idVenta
             },
             type: 'POST',
@@ -4447,9 +4445,8 @@ jQuery(function ($) {
                 mostrarMensajeErrorVenta();
                 detalle.rectificarVenta.rectificar_venta;
             },
-            success: function (resultado)
-            {
-            var venta = resultado.venta;
+            success: function (venta)
+            {           
             $('#idAsistenteCliente').attr('name', venta.idAsistente);
             $('#idResponsableComercial').attr('name', venta.idResponsableComercial);
             $('#idSupervisorComercial').attr('name', venta.idSupervisorComercial);

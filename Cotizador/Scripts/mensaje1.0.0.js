@@ -306,7 +306,7 @@
                         var esVisible = $(".ModalMensajeAlerta").is(":visible");
 
                         for (var i = 0; i < list.length; i++) {
-                            if (list[i].mensaje == 'Alta') {
+                            if (list[i].importancia == 'Alta') {
                                 verAutomaticamente = true;
                             }
                             var BtnLabel = list.length === 1 ? "Marcar como leído" : "Marcar como leído y mostrar siguiente";

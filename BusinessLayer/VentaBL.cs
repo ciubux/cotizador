@@ -278,9 +278,18 @@ namespace BusinessLayer
         {
             using (var dal = new VentaDAL())
             {
-               dal.modificacionDatosVenta(venta);
+             dal.modificacionDatosVenta(venta);
             }
         }
-        
+
+        public Venta verModificacionDatos(Venta venta)
+        {
+            using (var dal = new VentaDAL())
+            {
+                return dal.verModificacionDatos(venta);
+            }
+        }
+
+
     }
 }

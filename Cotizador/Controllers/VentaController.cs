@@ -661,6 +661,16 @@ namespace Cotizador.Controllers
             obj.rectificacfionVenta(estadoCheck, id_detalle_producto, usuario.idUsuario);
         }
 
+
+        public String verModificacionDatosVenta()
+        {
+            VentaBL ventaBL = new VentaBL();
+            Venta venta = new Venta();
+            venta.idVenta = Guid.Parse(Request["idVenta"].ToString());
+            venta = ventaBL.verModificacionDatos(venta);
+            return JsonConvert.SerializeObject(venta);
+        }
+
         public void updateModificarDatosVenta()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
