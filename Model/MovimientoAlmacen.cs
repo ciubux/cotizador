@@ -24,8 +24,8 @@ namespace Model
         public Boolean estaFacturado { get; set; }
 
         public Boolean estaNoEntregado { get; set; }
-        
-     
+
+
 
         public String comentarioAnulado { get; set; }
 
@@ -40,12 +40,12 @@ namespace Model
 
         public tiposMovimiento tipoMovimiento { get; set; }
 
-        public Usuario usuario { get; set; }
 
         public SeguimientoMovimientoAlmacenSalida seguimientoMovimientoAlmacenSalida { get; set; }
 
         public SeguimientoMovimientoAlmacenEntrada seguimientoMovimientoAlmacenEntrada { get; set; }
 
+        
 
         public enum estadosMovimiento {
             [Display(Name = "Anulado")]
@@ -71,7 +71,7 @@ namespace Model
         [Display(Name = "Fecha Emisión:")]
         public String fechaEmisionFormatoImpresion
         {
-            get { return fechaEmision.ToString("dd-MMM-yy", CultureInfo.CreateSpecificCulture("es-ES")); }
+            get { return fechaEmision.ToString("dd-MMM-yyyy", CultureInfo.CreateSpecificCulture("es-ES")); }
         }
         
         [Display(Name = "Fecha Traslado:")]
@@ -79,7 +79,7 @@ namespace Model
 
         [Display(Name = "Fecha Traslado:")]
         public String fechaTrasladoFormatoImpresion {
-            get { return fechaTraslado.ToString("dd-MMM-yy", CultureInfo.CreateSpecificCulture("es-ES")); }
+            get { return fechaTraslado.ToString("dd-MMM-yyyy", CultureInfo.CreateSpecificCulture("es-ES")); }
         }
 
         

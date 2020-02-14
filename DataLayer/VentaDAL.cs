@@ -1271,28 +1271,27 @@ namespace DataLayer
 
         public Venta verModificacionDatos(Venta venta)
         {
-            var objCommand = GetSqlCommand("sp_modificacion_datos");
-            Venta lista = new Venta();
+            var objCommand = GetSqlCommand("sp_modificacion_datos");            
                       
             InputParameterAdd.Guid(objCommand, "id_venta", venta.idVenta);
 
-
             DataTable dataTable = Execute(objCommand);
-
+            Venta obj = new Venta();
             foreach (DataRow row in dataTable.Rows)
             {
-                venta.idAsistente = Converter.GetInt(row, "id_asistente_servicio_cliente");
-                venta.idOrigen = Converter.GetInt(row, "id_origen");
-                venta.perteneceCanalLima = Converter.GetInt(row, "pertenece_canal_lima");
-                venta.perteneceCanalPcp = Converter.GetInt(row, "pertenece_canal_pcp");
-                venta.perteneceCanalProvincia = Converter.GetInt(row, "pertenece_canal_provincia");
-                venta.idResponsableComercial = Converter.GetInt(row, "id_responsable_comercial");
-                venta.idSupervisorComercial = Converter.GetInt(row, "id_supervisor_comercial");
-                venta.perteneceCanalMultiregional = Converter.GetInt(row, "pertenece_canal_multiregional");
-
+                
+                obj.idAsistente = Converter.GetInt(row, "id_asistente_servicio_cliente");
+                obj.idOrigen = Converter.GetInt(row, "id_origen");
+                obj.perteneceCanalLima = Converter.GetInt(row, "pertenece_canal_lima");
+                obj.perteneceCanalPcp = Converter.GetInt(row, "pertenece_canal_pcp");
+                obj.perteneceCanalProvincia = Converter.GetInt(row, "pertenece_canal_provincia");
+                obj.idResponsableComercial = Converter.GetInt(row, "id_responsable_comercial");
+                obj.idSupervisorComercial = Converter.GetInt(row, "id_supervisor_comercial");
+                obj.perteneceCanalMultiregional = Converter.GetInt(row, "pertenece_canal_multiregional");
+                
             }
 
-            return lista;
+            return obj;
         }
 
     }

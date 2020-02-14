@@ -2307,6 +2307,18 @@ jQuery(function ($) {
 
 
 
+    $("#estadoFiltro").on("click", function () {
+        var estado = $("#estadoFiltro").val();
+        $.ajax({
+            url: "/NotaIngreso/ChangeEstadoFiltro",
+            type: 'POST',
+            data: {
+                estado: estado
+            },
+            success: function () {
+            }
+        });
+    });
 
 
 

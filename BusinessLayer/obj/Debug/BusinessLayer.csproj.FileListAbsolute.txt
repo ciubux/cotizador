@@ -564,7 +564,6 @@ G:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Framework.WebCommon.pdb
 G:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Model.pdb
 G:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Model.dll.config
 G:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\ServiceLayer.pdb
-G:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\NPOI.xml
 G:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Framework.DAL.Settings.pdb
 G:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Newtonsoft.Json.xml
 G:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csprojAssemblyReference.cache

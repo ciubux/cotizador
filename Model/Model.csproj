@@ -55,6 +55,7 @@
     <Compile Include="Parametro.cs" />
     <Compile Include="ClienteSunat.cs" />
     <Compile Include="CONFIGCLASSES\ClienteConfiguracion.cs" />
+    <Compile Include="ClienteReasignacionHistorico.cs" />
     <Compile Include="LogCambio.cs" />
     <Compile Include="LogTabla.cs" />
     <Compile Include="LogCampo.cs" />

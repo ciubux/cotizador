@@ -1930,7 +1930,53 @@ jQuery(function ($) {
 
     });
 
-    
+
+    $("#btnAgregarCanasta").click(function () {
+        var idCliente = $("#idCliente").val();
+
+        if (idCliente == "" || idCliente == '00000000-0000-0000-0000-000000000000') {
+            $.alert({
+                title: "Error",
+                type: "red", 
+                content: 'Debe seleccionar un cliente.',
+                buttons: {
+                    OK: function () {
+                    }
+                }
+            });       
+            return false;
+        }
+
+        $.confirm({
+            title: 'IMPORTAR PRODUCTOS COTIZADOS',
+            content: 'Seleccione una de las opciones para importar los productos cotizados.',
+            type: 'orange',
+            buttons: {
+                aplica: {
+                    text: 'PRECIOS VIGENTES',
+                    btnClass: 'btn-success',
+                    action: function () {
+                        window.location = '/Pedido/CargarProductosCanasta?tipo=1';
+                    }
+                },
+                noAplica: {
+                    text: 'CANASTA HABITUAL',
+                    btnClass: 'btn-warning',
+                    action: function () {
+                        window.location = '/Pedido/CargarProductosCanasta?tipo=2';
+                    }
+                },
+                cancelar: {
+                    text: 'CANCELAR',
+                    btnClass: '',
+                    action: function () {
+
+                    }
+                }
+            }
+        });
+
+    });
 
 
 

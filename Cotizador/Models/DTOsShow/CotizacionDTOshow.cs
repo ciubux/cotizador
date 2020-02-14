@@ -42,6 +42,6 @@ namespace Cotizador.Models.DTOshow
         public String cliente_codigoRazonSocial { get; set; }
         public int tipoCotizacion { get; set; }
 
-
+        public int grupo_idGrupoCliente { get; set; }
     }
 }

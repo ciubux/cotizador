@@ -183,7 +183,7 @@ namespace Cotizador.Controllers
             cliente.configuraciones = new Model.CONFIGCLASSES.ClienteConfiguracion();
             cliente.tipoPagoFactura = DocumentoVenta.TipoPago.Contado;
             cliente.plazoCreditoSolicitado = DocumentoVenta.TipoPago.Contado;
-
+            cliente.FechaRegistro = DateTime.Now;
 
             this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
         }
@@ -292,12 +292,21 @@ namespace Cotizador.Controllers
 
 
         [HttpGet]
-        public ActionResult ExportLastShowCanasta()
+        public ActionResult ExportLastShowCanasta(int tipoDescarga)
         {
             Cliente obj = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
 
             CanastaCliente excel = new CanastaCliente();
-            return excel.generateExcel(obj);
+            ClienteBL bl = new ClienteBL();
+
+            bool soloCanastaHabitual = false;
+            switch(tipoDescarga)
+            {
+                case 2: soloCanastaHabitual = true; break;
+                case 3: obj.listaPrecios = bl.getPreciosHistoricoCliente(obj.idCliente);break;
+            }
+
+            return excel.generateExcel(obj, soloCanastaHabitual);
         }
 
 
@@ -334,7 +343,82 @@ namespace Cotizador.Controllers
             //return pedidoList.Count();
         }
 
+        public String GetHistorialReasignaciones()
+        {
+            ClienteBL clienteBL = new ClienteBL();
+            List<ClienteReasignacionHistorico> lista = clienteBL.getHistorialReasignacionesClientePorCampo(Request["campo"].ToString(), Guid.Parse(Request["idCliente"].ToString()));
+            //return JsonConvert.SerializeObject(clienteList);
+            int success = 1;
+            string jsonLista = JsonConvert.SerializeObject(lista);
+            
+            return "{\"success\": " + success.ToString() + ",\"message\": \"" + "" + "\", \"lista\": " + jsonLista + "}";
+        }
 
+
+        public String EliminarClienteReasignacionHistorico()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            int success = 1;
+
+            if (usuario.validaReponsablescomercialesAsignados)
+            {
+                ClienteBL clienteBL = new ClienteBL();
+                Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
+                Guid idClienteReasignacionHistorico = Guid.Parse(Request["idClienteReasignacionHistorico"].ToString());
+
+                clienteBL.deleteClienteReasignacionHistorico(idClienteReasignacionHistorico, cliente.idCliente, usuario.idUsuario);
+            } else
+            {
+                success = 0;
+            }
+
+
+            return "{\"success\": " + success.ToString() + ",\"message\": \"" + "" + "\"}";
+        }
+
+
+        public String InsertarClienteReasignacionHistorico()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            int success = 1;
+
+            if (usuario.validaReponsablescomercialesAsignados)
+            {
+                ClienteBL clienteBL = new ClienteBL();
+                Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
+                ClienteReasignacionHistorico crh = new ClienteReasignacionHistorico();
+
+                String observacion = this.Request.Params["observacion"];
+                String[] fiv = this.Request.Params["fechaInicioVigencia"].Split('/');
+                crh.fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
+                String campo = this.Request.Params["tipo"];
+
+                
+                crh.usuario = usuario;
+                crh.observacion = observacion;
+                crh.idCliente = cliente.idCliente;
+                
+                crh.campo = "supervisorComercial";
+                crh.fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
+                crh.valor = this.Request.Params["idVendedor"].ToString();
+
+                switch (campo)
+                {
+                    case "responsableComercial": crh.campo = "responsableComercial"; break;
+                    case "supervisorComercial": crh.campo = "supervisorComercial"; break;
+                    case "asistenteServicioCliente": crh.campo = "asistenteServicioCliente"; break;
+                }
+
+                clienteBL.insertarClienteReasignacionHistorico(crh);
+            }
+            else
+            {
+                success = 0;
+            }
+
+
+            return "{\"success\": " + success.ToString() + ",\"message\": \"" + "" + "\"}";
+        }
         public String GetCliente()
         {
             Cliente cliente = this.ClienteSession; 
@@ -372,6 +456,41 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+        [HttpPost]
+        public String ActualizarSKUCliente()
+        {
+            int success = 1;
+            string message = "";
+            ClienteBL clienteBl = new ClienteBL();
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
+
+            string skuCliente = this.Request.Params["skuCliente"].ToString();
+            Guid idProducto = Guid.Parse(this.Request.Params["idProducto"]);
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (cliente.modificaCanasta == 1)
+            {
+                DocumentoDetalle prod = cliente.listaPrecios.Where(p => p.producto.idProducto == idProducto).FirstOrDefault();
+                int isdas = 0;
+                if (cliente.listaPrecios.Where(p => p.producto.idProducto == idProducto).FirstOrDefault() != null &&clienteBl.setSKUCliente(skuCliente, cliente.idCliente, usuario.idUsuario, idProducto))
+                {
+                    message = "Se registró el SKU del cliente.";
+                }
+                else
+                {
+                    success = 0;
+                    message = "No se pudo registrar el SKU.";
+                }
+            }
+            else
+            {
+                success = 0;
+                message = "No tiene permiso para realizar esta acción.";
+            }
+
+
+            return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
+        }
 
         [HttpPost]
         public String AgregarProductoACanasta()
@@ -395,6 +514,10 @@ namespace Cotizador.Controllers
                     success = 0;
                     message = "No se pudo agregar el producto a la canasta.";
                 }
+            } else
+            {
+                success = 0;
+                message = "No tiene permiso para realizar esta acción.";
             }
             
 
@@ -426,11 +549,16 @@ namespace Cotizador.Controllers
                     message = "No se pudo retirar el producto de la canasta.";
                 }
             }
+            else
+            {
+                success = 0;
+                message = "No tiene permiso para realizar esta acción.";
+            }
 
             return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
         }
 
-
+        
         public String ChangeDireccionDomicilioLegalSunat()
         {
             String direccionDomicilioLegalSunat = Request["direccionDomicilioLegalSunat"].ToString();
@@ -749,13 +877,55 @@ namespace Cotizador.Controllers
         }
 
         /*MANTENIMIENTO DE VENDEDORES*/
-        public void ChangeIdResponsableComercial()
+        public String ChangeIdResponsableComercial()
         {
+            int idSupervisor = -1;
             if (this.Request.Params["idResponsableComercial"] == null || this.Request.Params["idResponsableComercial"] == String.Empty)
+            {
                 ClienteSession.responsableComercial.idVendedor = 0;
+            }
             else
-                ClienteSession.responsableComercial.idVendedor = Int32.Parse(this.Request.Params["idResponsableComercial"]);
+            {
+                int idVendedor = Int32.Parse(this.Request.Params["idResponsableComercial"]);
+                if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.MantenimientoCliente)
+                {
+                    Usuario usuario = ((Usuario)this.Session[Constantes.VAR_SESSION_USUARIO]);
+                    Vendedor asesor = usuario.vendedorList.Where(v => v.idVendedor == idVendedor).FirstOrDefault();
+                    Vendedor supervisor = null;
+                    if (asesor != null && (ClienteSession.supervisorComercial == null || ClienteSession.supervisorComercial.idVendedor == 0
+                             || ClienteSession.supervisorComercial.idVendedor == 21 || ClienteSession.supervisorComercial.idVendedor == Constantes.ID_VENDEDOR_POR_ASIGNAR))
+                    {
+                        supervisor = usuario.supervisorComercialList.Where(v => v.idVendedor == asesor.idSupervisorComercial).FirstOrDefault();
+                        if (supervisor != null)
+                        {
+                            ClienteSession.supervisorComercial.idVendedor = supervisor.idVendedor;
+                            idSupervisor = ClienteSession.supervisorComercial.idVendedor;
+                        }
+                    }
+                }
+                ClienteSession.responsableComercial.idVendedor = idVendedor;
+            }
+
+            return "{\"success\":\"true\",\"idSupervisor\":" + idSupervisor + "}";
         }
+
+        public void ChangeCHRFIVAsesor()
+        {
+            if (this.Request.Params["val"] != null && this.Request.Params["val"] != String.Empty)
+            {
+                String[] fiv = this.Request.Params["val"].Split('/');
+                ClienteSession.chrAsesor.fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
+            }
+        }
+
+        public void ChangeCHRObservacionAsesor()
+        {
+            if (this.Request.Params["val"] != null && this.Request.Params["val"] != String.Empty)
+            {
+                ClienteSession.chrAsesor.observacion = this.Request.Params["val"];
+            }
+        }
+
         public void ChangeIdAsistenteServicioCliente()
         {
             if (this.Request.Params["idAsistenteServicioCliente"] == null || this.Request.Params["idAsistenteServicioCliente"] == String.Empty)
@@ -763,12 +933,47 @@ namespace Cotizador.Controllers
             else
                 ClienteSession.asistenteServicioCliente.idVendedor = Int32.Parse(this.Request.Params["idAsistenteServicioCliente"]);
         }
+
+        public void ChangeCHRFIVAsistente()
+        {
+            if (this.Request.Params["val"] != null && this.Request.Params["val"] != String.Empty)
+            {
+                String[] fiv = this.Request.Params["val"].Split('/');
+                ClienteSession.chrAsistente.fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
+            }
+        }
+
+        public void ChangeCHRObservacionAsistente()
+        {
+            if (this.Request.Params["val"] != null && this.Request.Params["val"] != String.Empty)
+            {
+                ClienteSession.chrAsistente.observacion = this.Request.Params["val"];
+            }
+        }
+
         public void ChangeIdSupervisorComercial()
         {
             if (this.Request.Params["idSupervisorComercial"] == null || this.Request.Params["idSupervisorComercial"] == String.Empty)
                 ClienteSession.supervisorComercial.idVendedor = 0;
             else
                 ClienteSession.supervisorComercial.idVendedor = Int32.Parse(this.Request.Params["idSupervisorComercial"]);
+        }
+
+        public void ChangeCHRFIVSupervisor()
+        {
+            if (this.Request.Params["val"] != null && this.Request.Params["val"] != String.Empty)
+            {
+                String[] fiv = this.Request.Params["val"].Split('/');
+                ClienteSession.chrSupervisor.fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
+            }
+        }
+
+        public void ChangeCHRObservacionSupervisor()
+        {
+            if (this.Request.Params["val"] != null && this.Request.Params["val"] != String.Empty)
+            {
+                ClienteSession.chrSupervisor.observacion = this.Request.Params["val"];
+            }
         }
 
         public void ChangeIdSubDistribuidor()

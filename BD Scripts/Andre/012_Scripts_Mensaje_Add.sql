@@ -1,5 +1,5 @@
 /***************************** ALTER PU_MENSAJE - USUARIO AÑADIDO **********************************/
-ALTER   procedure [dbo].[pu_mensaje]
+CREATE   procedure [dbo].[pu_mensaje]
 (@id_mensaje uniqueidentifier, 
 @titulo varchar(50),
 @mensaje text,
@@ -69,7 +69,7 @@ BEGIN
 END
 end 
 /***************************** ALTER ps_alerta_mensaje_usuario - USUARIO AÑADIDO **********************************/
-ALTER procedure [dbo].[ps_alerta_mensaje_usuario] 
+CREATE procedure [dbo].[ps_alerta_mensaje_usuario] 
 (@id_usuario uniqueidentifier)
 as begin 
 select mensaje.id_mensaje,titulo,mensaje,importancia,mensaje.fecha_creacion,USUARIO.nombre,mensaje.fecha_vencimiento,mensaje.fecha_inicio from mensaje
@@ -83,7 +83,7 @@ and fecha_inicio <= convert(date,dbo.getlocaldate())  and fecha_vencimiento >= c
 order by  mensaje.fecha_creacion desc
 end
 /********************************** ALTER ps_detalle_mensaje - USUARIO AÑADIDO  **************************************/
-ALTER procedure [dbo].[ps_detalle_mensaje] 
+CREATE procedure [dbo].[ps_detalle_mensaje] 
 (@id_mensaje uniqueidentifier)
 as 
 begin

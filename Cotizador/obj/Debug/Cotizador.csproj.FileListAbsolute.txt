@@ -3069,7 +3069,6 @@ G:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.CodeDom.Providers.DotNetCompil
 G:\Repo\freelos\cotizador\Cotizador\bin\Moq.pdb
 G:\Repo\freelos\cotizador\Cotizador\bin\Moq.xml
 G:\Repo\freelos\cotizador\Cotizador\bin\NLog.xml
-G:\Repo\freelos\cotizador\Cotizador\bin\NPOI.xml
 G:\Repo\freelos\cotizador\Cotizador\bin\System.Runtime.CompilerServices.Unsafe.xml
 G:\Repo\freelos\cotizador\Cotizador\bin\System.Threading.Tasks.Extensions.xml
 G:\Repo\freelos\cotizador\Cotizador\bin\System.Web.Helpers.xml

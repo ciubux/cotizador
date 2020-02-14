@@ -70,7 +70,7 @@ namespace Model
         {
             get
             {
-                return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, _porcentajeDescuento));
+                return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, this.porcentajeDescuento));
             }
         }
                   

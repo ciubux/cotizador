@@ -19,12 +19,12 @@ using System.Web.Mvc;
 
 namespace Cotizador.ExcelExport
 {
-    public class CanastaCliente
+    public class CanastaGrupoCliente
     {
         protected int cantFilasRegistrosAdicionales = 3;
         public static int filaInicioDatos { get { return 2; } }
 
-        public FileStreamResult generateExcel(Cliente obj, bool soloCanastaHabitual = false)
+        public FileStreamResult generateExcel(GrupoCliente obj, bool soloCanastaHabitual = false)
         {
             HSSFWorkbook wb;
             //  Dictionary<String, ICellStyle> styles = CreateExcelStyles(wb);
@@ -324,7 +324,7 @@ namespace Cotizador.ExcelExport
                     ms.Position = 0;
                     FileStreamResult result = new FileStreamResult(ms, "application/vnd.ms-excel");
 
-                    result.FileDownloadName = "CANASTA_CLIENTE_" + obj.codigo + " .xls";
+                    result.FileDownloadName = "CANASTA_GRUPO_CLIENTE_" + obj.codigo + " .xls";
 
                     return result;
                 }

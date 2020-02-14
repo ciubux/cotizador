@@ -21,7 +21,7 @@ namespace Cotizador.Controllers
         }
         */
 
-        public ActionResult GetResponsablesComerciales(string vendedorSelectId, string selectedValue = null, string disabled = null)
+        public ActionResult GetResponsablesComerciales(string vendedorSelectId, string selectedValue = null, string mostrarFormCHR = "0", string prevValue = "0", string disabled = null)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
@@ -30,13 +30,15 @@ namespace Cotizador.Controllers
                 Data = usuario.responsableComercialList,
                 VendedorSelectId = vendedorSelectId,
                 SelectedValue = selectedValue,
+                mostrarFormCHR = mostrarFormCHR,
+                prevValue = prevValue,
                 Disabled = disabled == null || disabled != "disabled" ? false : true
             };
 
             return PartialView("_Vendedor", model);
         }
 
-        public ActionResult GetSupervisoresComerciales(string vendedorSelectId, string selectedValue = null, string disabled = null)
+        public ActionResult GetSupervisoresComerciales(string vendedorSelectId, string selectedValue = null, string mostrarFormCHR = "0", string prevValue = "0", string disabled = null)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
@@ -45,13 +47,15 @@ namespace Cotizador.Controllers
                 Data = usuario.supervisorComercialList,
                 VendedorSelectId = vendedorSelectId,
                 SelectedValue = selectedValue,
+                mostrarFormCHR = mostrarFormCHR,
+                prevValue = prevValue,
                 Disabled = disabled == null || disabled != "disabled" ? false : true
             };
 
             return PartialView("_Vendedor", model);
         }
 
-        public ActionResult GetAsistentesServicioCliente(string vendedorSelectId, string selectedValue = null, string disabled = null)
+        public ActionResult GetAsistentesServicioCliente(string vendedorSelectId, string selectedValue = null, string mostrarFormCHR = "0", string prevValue = "0", string disabled = null)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
@@ -60,6 +64,8 @@ namespace Cotizador.Controllers
                 Data = usuario.asistenteServicioClienteList,
                 VendedorSelectId = vendedorSelectId,
                 SelectedValue = selectedValue,
+                mostrarFormCHR = mostrarFormCHR,
+                prevValue = prevValue,
                 Disabled = disabled == null || disabled != "disabled" ? false : true
             };
 
@@ -74,9 +80,17 @@ namespace Cotizador.Controllers
         {
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (!usuario.modificaVendedor)
+
+            if (usuario == null)
             {
                 return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                if (!usuario.modificaVendedor)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
             }
 
             return View();
@@ -86,6 +100,19 @@ namespace Cotizador.Controllers
         [HttpGet]
         public ActionResult Lista()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (usuario == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                if (!usuario.modificaVendedor)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+            }
 
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaVendedores;
             if (this.Session[Constantes.VAR_SESSION_VENDEDOR_BUSQUEDA] == null)

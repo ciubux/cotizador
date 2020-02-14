@@ -243,7 +243,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modalVerCotizacion"><b>Información de Cotización</b></h4>
+                <h4 class="modal-title" id="modalVerCotizacion"><b>Información de Cotización <span id="spnTitleGrupo">(Grupal)</span></b></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -256,6 +256,7 @@
                 <form class="form-horizontal">
                     <input type="hidden" id="verIdCotizacion" value="" />
                     <input type="hidden" id="verIdCliente" value="" />
+                    <input type="hidden" id="verIdGrupoCliente" value="" />
                     <input type="hidden" id="idProducto" value="" />
                     <div class="row">
                         <!--NÚMERO COTIZACION-->
@@ -729,6 +730,9 @@
     </div>
 </div>
 
+<span id="spnProductoDescontinuado" style="display: none;">
+    <label class="lblAlertaProductoDescontinuado" style=""><img src="~/images/icon_warning_18.png" /> PRODUCTO DESCONTINUADO</label>
+</span>
 
 @section Scripts {
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/cotizacion")

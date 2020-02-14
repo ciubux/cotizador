@@ -59,6 +59,20 @@
 
             </div>
 
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => guiaRemision.estadoFiltro, htmlAttributes: new { @class = "control-label col-xs-4" })
+
+                    <div class="col-xs-8">
+                        @Html.DropDownList("estadoFiltro",
+                                   EnumHelper.GetSelectList(typeof(Model.GuiaRemision.EstadoFiltro), guiaRemision.estadoFiltro),
+                                   new { @class = "form-control" }
+                                   )
+                    </div>
+                </div>
+
+            </div>
         </div>
 
 

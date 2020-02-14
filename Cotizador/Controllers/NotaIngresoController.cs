@@ -83,6 +83,7 @@ namespace Cotizador.Controllers
             notaIngreso.seguimientoMovimientoAlmacenSalida.estado = SeguimientoMovimientoAlmacenSalida.estadosSeguimientoMovimientoAlmacenSalida.Enviado;
             notaIngreso.ciudadDestino = new Ciudad();
             notaIngreso.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            notaIngreso.estadoFiltro = NotaIngreso.EstadoFiltro.Todos;
 
             notaIngreso.pedido = new Pedido();
             notaIngreso.pedido.cliente = new Cliente();
@@ -796,6 +797,16 @@ namespace Cotizador.Controllers
             notaIngreso.tipoDocumentoVentaReferencia = (NotaIngreso.TiposDocumentoVentaReferencia)int.Parse(this.Request.Params["tipoDocumentoVentaReferencia"]);
             this.NotaIngresoSession = notaIngreso;
         }
+
+
+        public void ChangeEstadoFiltro()
+        {
+            NotaIngreso notaIngreso = this.NotaIngresoSession;
+            notaIngreso.estadoFiltro = (NotaIngreso.EstadoFiltro)int.Parse(this.Request.Params["estado"]);
+            this.NotaIngresoSession = notaIngreso;
+        }
+
+        
 
         public void ChangeInputStringTransportista()
         {

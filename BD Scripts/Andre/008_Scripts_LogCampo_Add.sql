@@ -1,3 +1,6 @@
+alter table CATALOGO_CAMPO 
+add es_funcional int 
+	
 /******** ALTER PS_DETALLE_CATALOGO_CAMPO - Se agrega la exclusion de es funcional *********/
 ALTER procedure [dbo].[PS_DETALLE_CATALOGO_CAMPO]
 (@ID_CATALOGO_TABLA INT)

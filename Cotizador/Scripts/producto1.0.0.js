@@ -415,6 +415,14 @@ jQuery(function ($) {
         changeInputBoolean('inafecto', valor)
     });
 
+    $("#producto_descontinuado").change(function () {
+        var valor = 1;
+        if (!$('#producto_descontinuado').prop('checked')) {
+            valor = 0;
+        }
+        changeInputInt('descontinuado', valor)
+    });
+
     $(".chk_campo_registra").change(function () {
         if ($(this).prop('checked')) {
             $(this).closest("tr").find(".chk_campo_persiste").removeAttr("disabled");
@@ -484,8 +492,15 @@ jQuery(function ($) {
                 $("#verEquivalenciaProveedor").html(producto.equivalenciaProveedor);
                 $("#verUnidadEstandarInternacional").html(producto.unidadEstandarInternacional);
                 $("#verTipo").html(producto.tipoProductoToString);
-                
-                
+
+
+                if (producto.descontinuado == 1) {
+                    $("#spnVerProductoDescontinuado").show();
+                }
+                else {
+                    $("#spnVerProductoDescontinuado").hide();
+                }
+
                 if (producto.exoneradoIgv) {
                     $("#verExoneradoIgv").html("Sí");
                 }
@@ -749,9 +764,14 @@ jQuery(function ($) {
                         estado = '<span style="color: red; font-weight: bold;">' + list[i].EstadoDesc+'</span>';
                     }
 
+                    var descontinuadoHTML = "";
+                    if (list[i].descontinuado == 1) {
+                        descontinuadoHTML = "<br/>" + $("#spnVerProductoDescontinuado").html();
+                    }
+
                     var ItemRow = '<tr data-expanded="true">' +
                         '<td>  ' + list[i].idProducto + '</td>' +
-                        '<td>  ' + list[i].sku + '  </td>' +
+                        '<td>  ' + list[i].sku + descontinuadoHTML + '  </td>' +
                         '<td>  ' + list[i].skuProveedor + '  </td>' +
                         '<td>  ' + list[i].proveedor + ' </td>' +
                         '<td>  ' + list[i].familia + '</td>' +

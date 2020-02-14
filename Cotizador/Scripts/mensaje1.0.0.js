@@ -641,12 +641,12 @@
 
                         '<td>  ' + list[i].id_mensaje + '  </td>' +
                         '<td>  ' + list[i].titulo + '  </td>' +
+                        '<td>  ' + list[i].mensaje + '  </td>' +
                         '<td>  ' + list[i].usuario_creacion + '  </td>' +
-                        '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) + '  </td>' +
+                        //'<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) + '  </td>' +
                         '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) + '  </td>' +
                         '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaVencimientoMensaje)) + '  </td>' +
                         '<td>' +
-                        
                         '<button type="button" style="margin-right:13px;" class="' + list[i].id_mensaje + ' btnEditarMensaje btn btn-primary">Editar</button>' +
                         '<button type="button" class="' + list[i].id_mensaje + ' btnVerMensaje btn btn-success">Ver</button>' +    
                        

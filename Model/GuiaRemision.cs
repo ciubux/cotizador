@@ -15,6 +15,7 @@ namespace Model
             this.motivoTraslado = motivosTraslado.Venta;
             this.tipoExtorno = TiposExtorno.SinExtorno;
             this.motivoExtornoNotaIngreso = MotivosExtornoNotaIngreso.DevolucionTotal;
+            this.estadoFiltro = EstadoFiltro.Todos;
         }
 
 
@@ -175,6 +176,23 @@ namespace Model
         }
 
 
+        [Display(Name = "Estado:")]
+        public EstadoFiltro estadoFiltro { get; set; }
+
+        public enum EstadoFiltro
+        {
+            [Display(Name = "Todos")]
+            Todos = 0,
+            [Display(Name = "Emitida")]
+            Emitida = 1,
+            [Display(Name = "Emitida y Facturada")]
+            EmitidaFacturada = 2,
+            [Display(Name = "Extornada")]
+            Extornada = 3,
+            [Display(Name = "Anulada")]
+            Anulada = 4
+
+        }
         public String motivoTrasladoString
         {
             get

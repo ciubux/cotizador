@@ -565,6 +565,8 @@ jQuery(function ($) {
         $('#valorAlternativo').attr('type', 'hidden');
         $('#precio').val(0);
         $('#cantidad').val(1);
+        $('#spnProductoDescontinuado').hide();
+        
 
         // $("#proveedor").val(producto.proveedor);
         // $("#familia").val(producto.familia);
@@ -687,6 +689,11 @@ jQuery(function ($) {
                 $("#cantidad").val(1);
 
 
+                if (producto.descontinuado == 1) {
+                    $("#spnProductoDescontinuado").show();
+                } else {
+                    $("#spnProductoDescontinuado").hide();
+                }
 
                 $('#precioUnitarioAlternativoSinIGV').val(producto.precioUnitarioAlternativoSinIGV);
                 $('#costoAlternativoSinIGV').val(producto.costoAlternativoSinIGV);
@@ -735,6 +742,7 @@ jQuery(function ($) {
             }
         });
     });
+
 
 
     ///////////////////CAMPO PRESENTACIÓN
@@ -912,9 +920,16 @@ jQuery(function ($) {
 
         var idProducto = event.target.getAttribute("class").split(" ")[0];
         var idCliente = GUID_EMPTY;
-        var sessionCotizacion = "cotizacion"
+        var idGrupoCliente = 0;
+        var sessionCotizacion = "cotizacion";
+        var actionUrl = "GetPreciosRegistrados";
+
         if ($("#pagina").val() == "0") {
             idCliente = $("#verIdCliente").val();
+            idGrupoCliente = parseInt($("#verIdGrupoCliente").val());
+            if (idGrupoCliente > 0) {
+                actionUrl = "GetPreciosRegistradosGrupoCliente";
+            }
             sessionCotizacion = "cotizacionVer";
         }
         else {
@@ -927,12 +942,13 @@ jQuery(function ($) {
         }
 
         $.ajax({
-            url: "/Precio/GetPreciosRegistrados",
+            url: "/Precio/" + actionUrl,
             type: 'POST',
             dataType: 'JSON',
             data: {
                 idProducto: idProducto,
                 idCliente: idCliente,
+                idGrupoCliente: idGrupoCliente,
                 controller: sessionCotizacion
             },
             success: function (producto) {
@@ -1036,36 +1052,39 @@ jQuery(function ($) {
             },
             success: function (detalle) {
                 var considerarCantidades = $("#considerarCantidades").val();
-           //     var esRecotizacion = "";
-         /*       if ($("#esRecotizacion").val() == "1") {
-                    esRecotizacion = '<td class="' + detalle.idProducto + ' detprecioNetoAnterior" style="text-align:right; color: #B9371B">0.00</td>' +
-                        '<td class="' + detalle.idProducto + ' detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">0.0 %</td>' +
-                        '<td class="' + detalle.idProducto + ' detvarPrecioLista" style="text-align:right; color: #B9371B">0.0 %</td>' +
-                        '<td class="' + detalle.idProducto + ' detvarCosto" style="text-align:right; color: #B9371B">0.0 %</td>' +
-                        '<td class="' + detalle.idProducto + ' detcostoAnterior" style="text-align:right; color: #B9371B">0.0</td>';
-                }
-                else {*/
-                var    esRecotizacion = '<td class="' + detalle.idProducto + ' detprecioNetoAnterior" style="text-align:right; color: #B9371B">' + detalle.precioNetoAnt + '</td>' +
-                        '<td class="' + detalle.idProducto + ' detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">' + detalle.varprecioNetoAnterior + ' %</td>' +
-                        '<td class="' + detalle.idProducto + ' detvarPrecioLista" style="text-align:right; color: #B9371B">' + detalle.variacionPrecioListaAnterior + ' %</td>' +
-                        '<td class="' + detalle.idProducto + ' detvarCosto" style="text-align:right; color: #B9371B">' + detalle.variacionCosto + ' %</td>' +
-                        '<td class="' + detalle.idProducto + ' detcostoAnterior" style="text-align:right; color: #B9371B">' + detalle.costoListaAnterior + '</td>';
-            //    }
+                //     var esRecotizacion = "";
+                /*       if ($("#esRecotizacion").val() == "1") {
+                           esRecotizacion = '<td class="' + detalle.idProducto + ' detprecioNetoAnterior" style="text-align:right; color: #B9371B">0.00</td>' +
+                               '<td class="' + detalle.idProducto + ' detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">0.0 %</td>' +
+                               '<td class="' + detalle.idProducto + ' detvarPrecioLista" style="text-align:right; color: #B9371B">0.0 %</td>' +
+                               '<td class="' + detalle.idProducto + ' detvarCosto" style="text-align:right; color: #B9371B">0.0 %</td>' +
+                               '<td class="' + detalle.idProducto + ' detcostoAnterior" style="text-align:right; color: #B9371B">0.0</td>';
+                       }
+                       else {*/
+                var esRecotizacion = '<td class="' + detalle.idProducto + ' detprecioNetoAnterior" style="text-align:right; color: #B9371B">' + detalle.precioNetoAnt + '</td>' +
+                    '<td class="' + detalle.idProducto + ' detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">' + detalle.varprecioNetoAnterior + ' %</td>' +
+                    '<td class="' + detalle.idProducto + ' detvarPrecioLista" style="text-align:right; color: #B9371B">' + detalle.variacionPrecioListaAnterior + ' %</td>' +
+                    '<td class="' + detalle.idProducto + ' detvarCosto" style="text-align:right; color: #B9371B">' + detalle.variacionCosto + ' %</td>' +
+                    '<td class="' + detalle.idProducto + ' detcostoAnterior" style="text-align:right; color: #B9371B">' + detalle.costoListaAnterior + '</td>';
+                //    }
 
                 var observacionesEnDescripcion = "";
-                if (considerarCantidades == CANT_CANTIDADES_Y_OBSERVACIONES)
-                {
+                if (considerarCantidades == CANT_CANTIDADES_Y_OBSERVACIONES) {
                     observacionesEnDescripcion = "<br /><span class='" + detalle.idProducto + " detproductoObservacion'  style='color: darkred'>" + detalle.observacion + "</span>";
                 }
-            
+
                 $('#tableDetalleCotizacion tbody tr.footable-empty').remove();
 
+                var descontinuadoLabel = "";
+                if (detalle.descontinuado == 1) {
+                    descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html(); 
+                }
 
                 $("#tableDetalleCotizacion tbody").append('<tr data-expanded="false">' +
                     '<td>' + detalle.idProducto + '</td>' +
                     '<td>' + esPrecioAlternativo + '</td>' +
                     '<td>' + proveedor + '</td>' +
-                    '<td>' + detalle.codigoProducto + '</td>' +
+                    '<td>' + detalle.codigoProducto + descontinuadoLabel + '</td>' +
                     '<td>' + detalle.nombreProducto + observacionesEnDescripcion +'</td>' +
                     '<td>' + detalle.unidad + '</td>' +
                     '<td class="column-img"><img class="table-product-img" src="' + $("#imgProducto").attr("src") + '"></td>' +
@@ -1092,6 +1111,7 @@ jQuery(function ($) {
                 $('#tableDetalleCotizacion thead tr th.footable-editing').remove();
                 $('#tableDetalleCotizacion tbody tr td.footable-editing').remove();
 
+                $("#spnProductoDescontinuado").hide();
 
                 $('#montoIGV').html(detalle.igv);
                 $('#montoSubTotal').html(detalle.subTotal);
@@ -1295,7 +1315,42 @@ jQuery(function ($) {
         indicarProveedorTodos();
     });
 
+    $("#btnAgregarCanasta").click(function () {
 
+        if (!validarSeleccionClienteOGrupo()) {
+            return false;
+        }
+
+        $.confirm({
+            title: 'IMPORTAR PRODUCTOS COTIZADOS',
+            content: 'Seleccione una de las opciones para importar los productos cotizados.',
+            type: 'orange',
+            buttons: {
+                aplica: {
+                    text: 'PRECIOS VIGENTES',
+                    btnClass: 'btn-success',
+                    action: function () {
+                        window.location = '/Cotizacion/CargarProductosCanasta?tipo=1';
+                    }
+                },
+                noAplica: {
+                    text: 'CANASTA HABITUAL',
+                    btnClass: 'btn-warning',
+                    action: function () {
+                        window.location = '/Cotizacion/CargarProductosCanasta?tipo=2';
+                    }
+                },
+                cancelar: {
+                    text: 'CANCELAR',
+                    btnClass: '',
+                    action: function () {
+                        
+                    }
+                }
+            }
+        });
+
+    });
 
 
     $("#btnObtenerProductosParaGrupo").click(function () {
@@ -1869,6 +1924,7 @@ jQuery(function ($) {
                 $("#verCondicionesPago").html(cotizacion.textoCondicionesPago);
                 $("#verIdCotizacion").val(cotizacion.idCotizacion);
                 $("#verIdCliente").val(cotizacion.cliente_idCliente);
+                $("#verIdGrupoCliente").val(cotizacion.grupo_idGrupoCliente);
                 $("#verNumero").html(cotizacion.codigo);
                 $("#verCiudad").html(cotizacion.ciudad_nombre);
                 $("#verContacto").html(cotizacion.contacto);
@@ -1876,11 +1932,13 @@ jQuery(function ($) {
                 if (cotizacion.cliente_idCliente == GUID_EMPTY) {
                     $("#labelCliente").hide();
                     $("#labelGrupo").show();
+                    $("#spnTitleGrupo").show();
                     $("#verClienteGrupo").html(cotizacion.grupo_codigoNombre);
                 }
                 else {
                     $("#labelCliente").show();
                     $("#labelGrupo").hide();
+                    $("#spnTitleGrupo").hide();
                     $("#verClienteGrupo").html(cotizacion.cliente_codigoRazonSocial);
                 }     
 
@@ -1950,9 +2008,14 @@ jQuery(function ($) {
                         // costo = lista[i].producto.costoListaAlternativo.toFixed(cantidadDecimales)
                     }
 
+                    var descontinuadoLabel = "";
+                    if (lista[i].producto.descontinuado == 1) {
+                        descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
+                    }
+
                     d += '<tr>' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
-                        '<td>' + lista[i].producto.sku + '</td>' +
+                        '<td>' + lista[i].producto.sku + descontinuadoLabel + '</td>' +
                         '<td>' + lista[i].producto.descripcion + '</td>' +
                         '<td>' + lista[i].unidad + '</td>' +
                         '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + lista[i].producto.image + '"> </td>' +
@@ -2613,13 +2676,35 @@ jQuery(function ($) {
     });
 
 
+    $(".chkProductSerchCheckParam").change(function () {
+        var param = $(this).attr("paramName");
+        var valor = 0;
+        if ($(this).is(":checked")) {
+            valor = $(this).attr("checkValue");
+        } else {
+            valor = $(this).attr("unCheckValue");
+        }
 
+
+        $.ajax({
+            url: "/Producto/SetSearchParam",
+            type: 'POST',
+            data: {
+                parametro: param,
+                valor: valor
+            },
+            success: function () {
+
+            }
+        });
+
+    });
 
     $("#chkAjusteCalculoPrecios").change(function () {
         if ($("#chkAjusteCalculoPrecios").is(":checked")) {
-            $("#chkAjusteCalculoPreciosModal").prop("checked", false);
-        } else {
             $("#chkAjusteCalculoPreciosModal").prop("checked", true);
+        } else {
+            $("#chkAjusteCalculoPreciosModal").prop("checked", false);
         }
 
         cambioChkAjusteCalculoPrecios();
@@ -2627,9 +2712,9 @@ jQuery(function ($) {
 
     $("#chkAjusteCalculoPreciosModal").change(function () {
         if ($("#chkAjusteCalculoPreciosModal").is(":checked")) {
-            $("#chkAjusteCalculoPrecios").prop("checked", false);
-        } else {
             $("#chkAjusteCalculoPrecios").prop("checked", true);
+        } else {
+            $("#chkAjusteCalculoPrecios").prop("checked", false);
         }
 
         cambioChkAjusteCalculoPrecios();
