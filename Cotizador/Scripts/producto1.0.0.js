@@ -494,11 +494,11 @@ jQuery(function ($) {
                 $("#verTipo").html(producto.tipoProductoToString);
 
 
-                if (producto.descontinuado == 1) {
-                    $("#spnVerProductoDescontinuado").show();
+                if (producto.descontinuado) {
+                    $("#verDescontinuado").html("Sí");
                 }
                 else {
-                    $("#spnVerProductoDescontinuado").hide();
+                    $("#verDescontinuado").html("No");
                 }
 
                 if (producto.exoneradoIgv) {

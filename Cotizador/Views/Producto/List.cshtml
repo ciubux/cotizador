@@ -430,9 +430,12 @@ else
 
                     <div class="row">
                         <div class="col-sm-6 col-lg-4">
-                            <span id="spnVerProductoDescontinuado" style="display: none;">
-                                <label class="lblAlertaProductoDescontinuado"><img src="~/images/icon_warning_18.png" /> PRODUCTO DESCONTINUADO</label>
-                            </span>
+                            <div class="form-group">
+                                @Html.LabelFor(c => producto.descontinuado, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-6">
+                                    <p class="form-control-static" id="verDescontinuado"></p>
+                                </div>
+                            </div>
                         </div>
 
                         <!--Exonerado IGV-->

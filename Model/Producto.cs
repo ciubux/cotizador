@@ -292,7 +292,7 @@ namespace Model
 
         public int Stock { get; set; }
 
-        [Display(Name = "Descontinuado:")]
+        [Display(Name = "Venta Restringida:")]
         public int descontinuado { get; set; }
 
         public static List<CampoPersistir> obtenerCampos(List<LogCampo> campos, bool soloPersistentes = false) 
