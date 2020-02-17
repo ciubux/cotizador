@@ -743,11 +743,7 @@ jQuery(function ($) {
             },
             success: function () { }
         });
-    }
-
-    $("#usuario_maximoPorcentajeDescuentoAprobacion").change(function () {
-        ChangeInputDecimalMantenedor("maximoPorcentajeDescuentoAprobacion", $("#usuario_maximoPorcentajeDescuentoAprobacion").val());
-    });
+    }  
     
     $("#usuario_estado_si_mantenedor").click(function () {
         var valCheck = 1;

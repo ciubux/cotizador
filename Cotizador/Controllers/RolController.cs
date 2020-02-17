@@ -476,7 +476,20 @@ namespace Cotizador.Controllers
             return RedirectToAction("List", "Rol");
 
         }
+
+        [HttpPost]
+        public String ListUsuarios(int? idRol)
+        {
+            RolBL bl = new RolBL();
+            Rol rol = new Rol(); 
+            rol = bl.getRol(idRol.Value);     
+            rol.usuarios = bl.getUsuarios(rol.idRol);
+            return JsonConvert.SerializeObject(rol.usuarios);
+           
+        }
+
+
+
+
     }
-
-
 }

@@ -11,8 +11,13 @@
             <a class="dropdown-toggle" data-toggle="dropdown">
                 <img src="~/images/user_icon_2.png" height="22" style="vertical-align:bottom; margin-right: 2px;" /> @usuario.nombre
                 <span class="caret"></span>
-            </a>
+            </a>            
             <ul class="dropdown-menu" role="menu">
+                @if (usuario.modificaMensaje)
+                {
+                    <li><a id="MensajeRapidoMenu"><!--data-toggle="modal" data-target="#MensajeRapido"-->Mensaje Rapido</a></li> 
+                }  
+                <li><a href="#ModalcambiarPassword" data-toggle="modal">Cambiar contraseña</a></li>
                 <li>  @Html.ActionLink("Salir", "Exit", "General")</li>
             </ul>
         </li>
@@ -39,7 +44,7 @@
 
                 @Html.ActionLink("Hola " + usuario.nombre, "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
                 <!--@Html.ActionLink("Hola " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })-->
-            </li>
+            </li>            
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Cerrar sesión</a></li>
         </ul>
     }

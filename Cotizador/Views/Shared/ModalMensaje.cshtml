@@ -1,9 +1,41 @@
-﻿<div id="Mensaje" class="modal fade ModalMensaje" role="dialog">
-    <div class="modal-dialog" id="MensajeDialog">
-
-
+﻿<div id="MensajeRapido" class="modal fade ModalMensajeRapido" role="dialog" tabindex="-1" data-url='@Url.Action("EditarRapido","Mensaje")'>
+    <div class="modal-dialog" id="MensajeRapidoDialog">
 
 
 
     </div>
 </div>
+
+
+<div class="modal fade verMensajeLista" tabindex="-1" role="dialog" id="modalListado">
+    <div class="modal-dialog"  id="MensajeVerLista">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="tituloMensaje"> Respuestas</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </br>
+            </div>
+
+            <div class="modal-body" id="modalRespuestaUsuario">
+
+                <input type="hidden" id="idMensajeRespuesta" value="" />
+
+                <div class="col-sm-6 col-lg-10 form-group">
+                    <label class="control-label col-xs-4">Usuario:</label>
+                    <div class="col-xs-12 col-lg-8">
+                        <select class="form-control" id="UsuariosRespuesta"></select>
+                    </div>
+                </div>
+                
+               <br id="saltoEliminado"><br id="Prueba">
+
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+

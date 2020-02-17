@@ -30,17 +30,19 @@ namespace DataLayer
             InputParameterAdd.VarcharEmpty(objCommand, "cod", vendedor.codigo);
             InputParameterAdd.VarcharEmpty(objCommand, "descripcion", vendedor.descripcion);
             InputParameterAdd.VarcharEmpty(objCommand, "email", vendedor.email);
+            InputParameterAdd.Guid(objCommand, "ciudad", vendedor.ciudad.idCiudad);
             DataTable dataTable = Execute(objCommand);
             foreach (DataRow row in dataTable.Rows)
             {
                 Vendedor obj = new Vendedor();
-
+                obj.ciudad = new Ciudad();
                 obj.idVendedor = Converter.GetInt(row, "id_vendedor");
                 obj.descripcion = Converter.GetString(row, "descripcion");
                 obj.codigo = Converter.GetString(row, "codigo");
                 obj.cargo = Converter.GetString(row, "cargo");
                 obj.email = Converter.GetString(row, "email");
                 obj.estado = Converter.GetInt(row, "estado");
+                obj.ciudad.nombre = Converter.GetString(row, "nombre");
                 lista.Add(obj);
             }
             return lista;
@@ -55,10 +57,9 @@ namespace DataLayer
             Vendedor obj = new Vendedor();
             obj.supervisor = new Vendedor();
             obj.supervisor.usuario = new Usuario();
-
+            obj.ciudad = new Ciudad();
             foreach (DataRow row in dataTable.Rows)
             {
-
                 obj.idVendedor = Converter.GetInt(row, "id_vendedor");
 
                 obj.idUsuarioVendedor = Converter.GetGuid(row, "id_usuario");
@@ -70,25 +71,18 @@ namespace DataLayer
                 obj.estado = Converter.GetInt(row, "estado");
                 obj.cargo = Converter.GetString(row, "cargo");
                 obj.contacto = Converter.GetString(row, "contacto");
-                obj.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                obj.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 obj.maxdesapro = Converter.GetDecimal(row, "maximo_porcentaje_descuento_aprobacion");
 
                 obj.supervisor.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
                 obj.supervisor.usuario.email = Converter.GetString(row, "email");
                 obj.supervisor.usuario.nombre = Converter.GetString(row, "nombre");
 
-
                 obj.supervisor.idVendedor = Converter.GetInt(row, "id_supervisor_comercial");
                 obj.supervisor.idUsuarioVendedor = Converter.GetGuid(row, "id_usuario_supervisor");
                 obj.supervisor.descripcion = Converter.GetString(row, "nombre_supervisor");
                 obj.supervisor.email = Converter.GetString(row, "email_supervisor");
-
-
-
-
-
-
-
+                
             }
 
             return obj;
@@ -99,15 +93,13 @@ namespace DataLayer
 
             var objCommand = GetSqlCommand("pi_vendedor");
             InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo);
-            InputParameterAdd.Varchar(objCommand, "cargo", obj.cargo);
-            InputParameterAdd.Varchar(objCommand, "nombre", obj.descripcion);
-            InputParameterAdd.Varchar(objCommand, "contacto", obj.contacto);
+            
+            InputParameterAdd.Varchar(objCommand, "nombre", obj.descripcion);           
+
             InputParameterAdd.Int(objCommand, "estado", obj.estado);
             InputParameterAdd.Guid(objCommand, "usuario_creacion", obj.usuario.idUsuario);
             InputParameterAdd.Decimal(objCommand, "maximo_descuento", obj.maxdesapro);
-            InputParameterAdd.Guid(objCommand, "id_ciudad", obj.idCiudad);
-            
-          
+            InputParameterAdd.Guid(objCommand, "id_ciudad", obj.ciudad.idCiudad); 
             InputParameterAdd.Guid(objCommand, "id_usuario_vendedor", obj.supervisor.usuario.idUsuario);
             InputParameterAdd.Bit(objCommand, "es_supervisor_comercial", obj.esSupervisorComercial);
             InputParameterAdd.Bit(objCommand, "es_responsable_comercial", obj.esResponsableComercial);
@@ -131,12 +123,12 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "id_vendedor", obj.idVendedor);
             InputParameterAdd.Guid(objCommand, "usuario_modificacion", obj.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo);
-            InputParameterAdd.Varchar(objCommand, "cargo", obj.cargo);
-            InputParameterAdd.Varchar(objCommand, "nombre", obj.descripcion);
-            InputParameterAdd.Varchar(objCommand, "contacto", obj.contacto);
+            //InputParameterAdd.Varchar(objCommand, "cargo", obj.cargo);
+            //InputParameterAdd.Varchar(objCommand, "nombre", obj.descripcion);
+            //InputParameterAdd.Varchar(objCommand, "contacto", obj.contacto);
             InputParameterAdd.Decimal(objCommand, "max_por_des_apro", obj.maxdesapro);
             InputParameterAdd.Int(objCommand, "estado", obj.estado);
-            InputParameterAdd.Guid(objCommand, "id_ciudad", obj.idCiudad);
+            InputParameterAdd.Guid(objCommand, "id_ciudad", obj.ciudad.idCiudad);
 
             InputParameterAdd.Guid(objCommand, "id_usuario_vendedor", obj.supervisor.usuario.idUsuario);
             InputParameterAdd.Bit(objCommand, "es_supervisor_comercial", obj.esSupervisorComercial);

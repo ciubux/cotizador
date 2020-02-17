@@ -416,16 +416,6 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = obj;
         }
 
-        public void ChangeInputDecimalMantenedor()
-        {
-            Usuario obj = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
-            PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
-            propertyInfo.SetValue(obj, Decimal.Parse(this.Request.Params["valor"]));
-            this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = obj;
-        }
-
-
-
         public String ChangeIdCiudad()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
@@ -469,6 +459,34 @@ namespace Cotizador.Controllers
             PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(obj, Int32.Parse(this.Request.Params["valor"]));
             this.UsuarioSession = obj;
+        }
+
+        //[HttpPost]
+        public void cambiarPassword(/*Guid idUsuarioCambioPass, string passActual, string passNuevo*/)
+        {
+            Usuario user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Guid idUsuarioCambioPass = user.idUsuario;            
+            String passNuevo = Request["passNuevo"].ToString();
+            UsuarioBL userBl = new UsuarioBL();
+            userBl.updateUsuarioCambioPassword(passNuevo, idUsuarioCambioPass); 
+        }
+
+        public int confirmarPasswordActual(/*Guid idUsuarioCambioPass, string passActual, string passNuevo*/)
+        {
+            Usuario user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Guid idUsuarioCambioPass = user.idUsuario;
+            String passActual = Request["passActual"].ToString();          
+
+            UsuarioBL userBl = new UsuarioBL();
+            bool a = userBl.confirmarPassword(passActual, idUsuarioCambioPass);
+            if (a == true)
+            {                
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }

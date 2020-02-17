@@ -18,9 +18,9 @@ namespace Model
         public String usuario_creacion { get; set; }
         [Display(Name = "Fecha de Creación:")]
 
-        public DateTime fechaCreacionMensaje { get; set; }        
+        public DateTime fechaCreacionMensaje { get; set; }
         public DateTime? fechaCreacionMensajeDesde { get; set; }
-        public DateTime?  fechaCreacionMensajeHasta { get; set; }
+        public DateTime? fechaCreacionMensajeHasta { get; set; }
 
         public DateTime? fechaInicioMensaje { get; set; }
 
@@ -39,17 +39,14 @@ namespace Model
 
         public String importancia { get; set; }
 
+        public String leido { get; set; }
 
         [Display(Name = "Estado:")]
         public int estado { get; set; }
 
         public Usuario user { get; set; }
 
-
-
-
-
-        /*--------------ROL----------------------------*/
+        public Mensaje id_mensaje_hilo { get; set; }
 
         public List<Rol> roles { get; set; }
 
@@ -57,13 +54,7 @@ namespace Model
         public bool TieneRol(int idRol)
         {
             return this.roles.Where(item => item.idRol.Equals(idRol)).FirstOrDefault() != null;
-        }
-        /*
-        public bool TieneUsuario(int idUsuario)
-        {
-            return this.listUsuario.Where(item => item.idUsuario.Equals(idUsuario)).FirstOrDefault() != null;
-        }
-        */
+        }        
 
     }
 }

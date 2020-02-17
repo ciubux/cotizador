@@ -90,6 +90,9 @@ namespace Cotizador
             bundles.Add(new ScriptBundle("~/bundles/mensaje").Include(
                "~/Scripts/mensaje1.0.0.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/parametro").Include(
+              "~/Scripts/parametro1.0.0.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/documentoVenta").Include(
                  "~/Scripts/documentoVenta1.0.0.js"));
 
@@ -105,10 +108,13 @@ namespace Cotizador
                      "~/Scripts/rol1.0.0.js"
                      ));
 
+            bundles.Add(new ScriptBundle("~/bundles/account").Include(
+                     "~/Scripts/account1.0.0.js"
+                     ));
+
             bundles.Add(new ScriptBundle("~/bundles/usuario").Include(
                      "~/Scripts/usuario1.0.0.js"
                      ));
-
             bundles.Add(new ScriptBundle("~/bundles/guiaRemision").Include(
                         "~/Scripts/guiaRemision1.2.3.js"
                         ));
@@ -120,7 +126,8 @@ namespace Cotizador
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-3.1.1.min.js",
                         "~/Scripts/footable.min.js",
-                        "~/Scripts/jquery-timepicker/jquery.timepicker.min.js"
+                        "~/Scripts/jquery-timepicker/jquery.timepicker.min.js",
+                        "~/Content/tipso/tipso.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-ui").Include(
@@ -171,7 +178,8 @@ namespace Cotizador
                       "~/Content/chosen/chosen.css",
                       "~/Content/jquery.loadingModal.css",
                       "~/Scripts/jquery-timepicker/jquery.timepicker.min.css",
-                      "~/Content/jquery-confirm.css"));
+                      "~/Content/jquery-confirm.css",
+                      "~/Content/tipso/tipso.css"));
 
             bundles.Add(new StyleBundle("~/Content/PrintGuiaL").Include(
                        "~/Content/PrintGuiaL.css"

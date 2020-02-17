@@ -1008,7 +1008,7 @@ namespace DataLayer
             return lista;
         }
 
-        public Venta SelectVentaList(Venta venta, Usuario usuario)
+        public Venta  SelectVentaList(Venta venta, Usuario usuario)
         {
             var objCommand = GetSqlCommand("ps_venta_lista_detalle");
             InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", venta.guiaRemision.idMovimientoAlmacen);
@@ -1017,10 +1017,11 @@ namespace DataLayer
             DataTable ventaDataTable = dataSet.Tables[0];
             DataTable ventaDetalleDataTable = dataSet.Tables[1];
             DataTable pedidoAdjuntoDataTable = dataSet.Tables[2];
-
-
+            DataTable ventaDatosDataTable = dataSet.Tables[3];
+           
             //   DataTable dataTable = Execute(objCommand);
             //Datos de la cotizacion
+
             venta.pedido = new Pedido();
             Pedido pedido = venta.pedido;
 
@@ -1132,8 +1133,6 @@ namespace DataLayer
 
             }
 
-            
-            
 
             pedido.pedidoDetalleList = new List<PedidoDetalle>();
             //Detalle de la cotizacion           
@@ -1226,6 +1225,20 @@ namespace DataLayer
                 pedido.pedidoAdjuntoList.Add(pedidoAdjunto);
             }
 
+            foreach (DataRow row in ventaDatosDataTable.Rows)
+            {                
+                venta.idAsistente = Converter.GetInt(row, "id_asistente_servicio_cliente");
+                venta.idOrigen = Converter.GetInt(row, "id_origen");
+                venta.perteneceCanalLima = Converter.GetInt(row, "pertenece_canal_lima");
+                venta.perteneceCanalPcp = Converter.GetInt(row, "pertenece_canal_pcp");
+                venta.perteneceCanalProvincia = Converter.GetInt(row, "pertenece_canal_provincia");
+                venta.idResponsableComercial = Converter.GetInt(row, "id_responsable_comercial");
+                venta.idSupervisorComercial = Converter.GetInt(row, "id_supervisor_comercial");
+                venta.perteneceCanalMultiregional = Converter.GetInt(row, "pertenece_canal_multiregional");
+
+            }
+
+
             return venta;
         }
 
@@ -1237,6 +1250,48 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "id_usuario", usuario);
             InputParameterAdd.Int(objCommand, "valor", estadoCheck);
             ExecuteNonQuery(objCommand);
+        }
+        
+        public void modificacionDatosVenta(Venta venta)
+        {
+            var objCommand = GetSqlCommand("pu_modificacion_datos_venta");
+
+            InputParameterAdd.Guid(objCommand, "id_venta", venta.idVenta);
+            InputParameterAdd.Int(objCommand, "asistente_cliente", venta.idAsistente);
+            InputParameterAdd.Int(objCommand, "responsable_comercial", venta.idResponsableComercial);
+            InputParameterAdd.Int(objCommand, "supervisor_comercial", venta.idSupervisorComercial);
+            InputParameterAdd.Int(objCommand, "origen", venta.idOrigen);
+            InputParameterAdd.Int(objCommand, "canal_lima", venta.perteneceCanalLima);
+            InputParameterAdd.Int(objCommand, "canal_multiregional", venta.perteneceCanalMultiregional);
+            InputParameterAdd.Int(objCommand, "canal_pcp", venta.perteneceCanalPcp);
+            InputParameterAdd.Int(objCommand, "canal_provincia", venta.perteneceCanalProvincia);
+            InputParameterAdd.Guid(objCommand, "id_usuario", venta.usuario.idUsuario);
+            ExecuteNonQuery(objCommand);           
+        }
+
+        public Venta verModificacionDatos(Venta venta)
+        {
+            var objCommand = GetSqlCommand("sp_modificacion_datos");            
+                      
+            InputParameterAdd.Guid(objCommand, "id_venta", venta.idVenta);
+
+            DataTable dataTable = Execute(objCommand);
+            Venta obj = new Venta();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                
+                obj.idAsistente = Converter.GetInt(row, "id_asistente_servicio_cliente");
+                obj.idOrigen = Converter.GetInt(row, "id_origen");
+                obj.perteneceCanalLima = Converter.GetInt(row, "pertenece_canal_lima");
+                obj.perteneceCanalPcp = Converter.GetInt(row, "pertenece_canal_pcp");
+                obj.perteneceCanalProvincia = Converter.GetInt(row, "pertenece_canal_provincia");
+                obj.idResponsableComercial = Converter.GetInt(row, "id_responsable_comercial");
+                obj.idSupervisorComercial = Converter.GetInt(row, "id_supervisor_comercial");
+                obj.perteneceCanalMultiregional = Converter.GetInt(row, "pertenece_canal_multiregional");
+                
+            }
+
+            return obj;
         }
 
     }

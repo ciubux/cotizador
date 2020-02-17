@@ -2983,8 +2983,12 @@ C:\REPO\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
 C:\REPO\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CopyComplete
 C:\REPO\cotizador\Cotizador\obj\Debug\Cotizador.dll
 C:\REPO\cotizador\Cotizador\obj\Debug\Cotizador.pdb
-G:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csprojAssemblyReference.cache
-G:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
+C:\REPO\cotizador\Cotizador\bin\ICSharpCode.SharpZipLib.dll
+C:\REPO\cotizador\Cotizador\bin\NPOI.dll
+C:\REPO\cotizador\Cotizador\bin\NPOI.OOXML.dll
+C:\REPO\cotizador\Cotizador\bin\NPOI.OpenXml4Net.dll
+C:\REPO\cotizador\Cotizador\bin\NPOI.OpenXmlFormats.dll
+C:\REPO\cotizador\Cotizador\bin\NPOI.xml
 G:\Repo\freelos\cotizador\Cotizador\bin\ApplicationInsights.config
 G:\Repo\freelos\cotizador\Cotizador\bin\roslyn\csc.exe
 G:\Repo\freelos\cotizador\Cotizador\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -3005,6 +3009,7 @@ G:\Repo\freelos\cotizador\Cotizador\bin\Antlr3.Runtime.dll
 G:\Repo\freelos\cotizador\Cotizador\bin\BusinessLayer.dll
 G:\Repo\freelos\cotizador\Cotizador\bin\Castle.Core.dll
 G:\Repo\freelos\cotizador\Cotizador\bin\CotizadorPDF.dll
+G:\Repo\freelos\cotizador\Cotizador\bin\DataLayer.dll
 G:\Repo\freelos\cotizador\Cotizador\bin\EntityFramework.dll
 G:\Repo\freelos\cotizador\Cotizador\bin\EntityFramework.SqlServer.dll
 G:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AI.Agent.Intercept.dll
@@ -3044,7 +3049,6 @@ G:\Repo\freelos\cotizador\Cotizador\bin\System.Web.WebPages.Deployment.dll
 G:\Repo\freelos\cotizador\Cotizador\bin\System.Web.WebPages.dll
 G:\Repo\freelos\cotizador\Cotizador\bin\System.Web.WebPages.Razor.dll
 G:\Repo\freelos\cotizador\Cotizador\bin\WebGrease.dll
-G:\Repo\freelos\cotizador\Cotizador\bin\DataLayer.dll
 G:\Repo\freelos\cotizador\Cotizador\bin\Spire.Pdf.dll
 G:\Repo\freelos\cotizador\Cotizador\bin\Framework.DAL.dll
 G:\Repo\freelos\cotizador\Cotizador\bin\Framework.DAL.Settings.dll
@@ -3054,6 +3058,8 @@ G:\Repo\freelos\cotizador\Cotizador\bin\Framework.WebCommon.dll
 G:\Repo\freelos\cotizador\Cotizador\bin\BusinessLayer.pdb
 G:\Repo\freelos\cotizador\Cotizador\bin\BusinessLayer.dll.config
 G:\Repo\freelos\cotizador\Cotizador\bin\CotizadorPDF.pdb
+G:\Repo\freelos\cotizador\Cotizador\bin\DataLayer.pdb
+G:\Repo\freelos\cotizador\Cotizador\bin\DataLayer.dll.config
 G:\Repo\freelos\cotizador\Cotizador\bin\Model.pdb
 G:\Repo\freelos\cotizador\Cotizador\bin\Model.dll.config
 G:\Repo\freelos\cotizador\Cotizador\bin\ServiceLayer.pdb
@@ -3092,8 +3098,6 @@ G:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.OAuth.xml
 G:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.Google.xml
 G:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.Twitter.xml
 G:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-G:\Repo\freelos\cotizador\Cotizador\bin\DataLayer.pdb
-G:\Repo\freelos\cotizador\Cotizador\bin\DataLayer.dll.config
 G:\Repo\freelos\cotizador\Cotizador\bin\Framework.DAL.pdb
 G:\Repo\freelos\cotizador\Cotizador\bin\Framework.DAL.Settings.pdb
 G:\Repo\freelos\cotizador\Cotizador\bin\Framework.WebCommon.pdb
@@ -3116,12 +3120,8 @@ G:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Facebook.reso
 G:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Google.resources.dll
 G:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
 G:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
+G:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csprojAssemblyReference.cache
+G:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
 G:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CopyComplete
 G:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.dll
 G:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.pdb
-C:\REPO\cotizador\Cotizador\bin\ICSharpCode.SharpZipLib.dll
-C:\REPO\cotizador\Cotizador\bin\NPOI.dll
-C:\REPO\cotizador\Cotizador\bin\NPOI.OOXML.dll
-C:\REPO\cotizador\Cotizador\bin\NPOI.OpenXml4Net.dll
-C:\REPO\cotizador\Cotizador\bin\NPOI.OpenXmlFormats.dll
-C:\REPO\cotizador\Cotizador\bin\NPOI.xml

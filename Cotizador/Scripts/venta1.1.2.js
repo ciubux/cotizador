@@ -1,6 +1,6 @@
 
 jQuery(function ($) {
-    
+
     var TITLE_EXITO = 'Operación Realizada';
 
     //CONSTANTES POR DEFECTO
@@ -3936,8 +3936,8 @@ jQuery(function ($) {
                 }
             });
             return false;
-        }        
-       
+        }
+
         return true;
     }
 
@@ -4157,7 +4157,7 @@ jQuery(function ($) {
         cargarChosenClienteList();
         $("#VentaList_tipoDocumento").find("option[value='7']").remove();
         $("#VentaList_tipoDocumento").find("option[value='8']").remove();
-       
+
         $("#btnBusquedaVentaList").click();
 
     });
@@ -4203,6 +4203,7 @@ jQuery(function ($) {
 
     function mostrarModalVenta(resultado) {
         //var cotizacion = $.parseJSON(respuesta);
+        var modificacionDatosVenta = resultado.modificacionVenta;
         var permiso = resultado.PermisoRectificarVenta.Permiso;
         var venta = resultado.venta;
         var pedido = resultado.venta.pedido;
@@ -4210,7 +4211,7 @@ jQuery(function ($) {
         var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
 
         //  var usuario = resultado.usuario;
-        
+
 
         $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
         $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaHasta.substr(0, 10)));
@@ -4318,7 +4319,7 @@ jQuery(function ($) {
         $("#tableDetallePedido > tbody").empty();
 
         FooTable.init('#tableDetallePedido');
-        
+
         //    $("#formVerGuiasRemision").html("");
 
         var d = '';
@@ -4330,9 +4331,8 @@ jQuery(function ($) {
             var RectificarVenta;
             if (permiso == 1) {
 
-                if (lista[i].excluirVenta == 1 && lista[i].estadoVenta == 1)
-                {                    
-                    RectificarVenta = '<td><input type="checkbox" checked class="chkRectificarVenta" id="' + lista[i].idVentaDetalle+'"" name="rectificarVenta"></td>';
+                if (lista[i].excluirVenta == 1 && lista[i].estadoVenta == 1) {
+                    RectificarVenta = '<td><input type="checkbox" checked class="chkRectificarVenta" id="' + lista[i].idVentaDetalle + '"" name="rectificarVenta"></td>';
                 }
                 else
                     RectificarVenta = '<td><input type="checkbox" class="chkRectificarVenta" id="' + lista[i].idVentaDetalle + '"" name="rectificarVenta"></td>';
@@ -4342,8 +4342,8 @@ jQuery(function ($) {
             }
 
 
-            d += '<tr>' +               
-                 RectificarVenta +
+            d += '<tr>' +
+                RectificarVenta +
                 '<td>' + lista[i].producto.proveedor + '</td>' +
                 '<td>' + lista[i].producto.sku + '</td>' +
                 '<td>' + lista[i].producto.descripcion + '</td>' +
@@ -4415,58 +4415,215 @@ jQuery(function ($) {
 
         $("#tableDetallePedido").append(d);
 
+        $('#btnEditarVentaModal').remove();
+
+        var a = pedido.documentoVenta.numero == null ? '<button type="button" id="btnEditarVentaModal" class="btn btn-danger">Editar Venta</button>' : "";
+
+        $('#btnExcluirItemsVenta').after(a);
+
+        $('#btnModificarDatosVenta').remove();
+        
+        $('#btnExcluirItemsVenta').before('<button type="button" id="btnModificarDatosVenta" class="btn btn-success">Modificar Datos Venta</button> ');
+               
         $("#modalFacturar").modal('show');
     }
 
-    $(document).on('click', "button#btnExcluirItemsVenta", function () {
-        var total = $('.chkRectificarVenta').length;        
-        var error = 0;
-        var success = 0;
-        $('.chkRectificarVenta').each(function () {
-            var valor;
-           
-            var id_detalle_producto;
-            if ($(this).prop('checked')) {
-                id_detalle_producto = $(this).attr("id");
-                 valor = 1;
-                AjaxCheck();    
+    $('body').on('click', "button#btnModificarDatosVenta", function () {
+        
+        var arrrayClass = $('.btnVerVentaList').attr('class').split(" ");       
+        var idVenta = arrrayClass[1];  
+
+        $.ajax({
+            url: "/Venta/verModificacionDatosVenta",
+            data: {                
+                idVenta: idVenta
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            async:false,
+            error: function (detalle) {
+                mostrarMensajeErrorVenta();
+                detalle.rectificarVenta.rectificar_venta;
+            },
+            success: function (venta)
+            {           
+            $('#idAsistenteCliente').attr('name', venta.idAsistente);
+            $('#idResponsableComercial').attr('name', venta.idResponsableComercial);
+            $('#idSupervisorComercial').attr('name', venta.idSupervisorComercial);
+            $('#idOrigen').attr('name', venta.idOrigen);
+            venta.perteneceCanalLima == 1 ? $("#idCanales").attr('name', 1) : '';
+            venta.perteneceCanalMultiregional == 1 ? $("#idCanales").attr('name', 2) : '';
+            venta.perteneceCanalPcp == 1 ? $("#idCanales").attr('name', 3) : '';
+            venta.perteneceCanalProvincia == 1 ? $("#idCanales").attr('name', 4) : '';
+                if (venta.perteneceCanalLima == 0 && venta.perteneceCanalMultiregional == 0 && venta.perteneceCanalPcp == 0 && venta.perteneceCanalProvincia == 0 ) {
+                    $("#idCanales").attr('name', "");
+                }
             }
-            if ($(this).prop('checked')==false) {
-                id_detalle_producto = $(this).attr("id");
-                 valor = 0;
-                AjaxCheck();
-            }
-            function AjaxCheck()
-            {
-                $.ajax({
-                    url: "/Venta/RectificarVentaCheck",
-                    type: 'POST', 
-                    async: false,
-                    data: {
-                        id_detalle_producto: id_detalle_producto,
-                        valor: valor
-                    },
-                    success:function()
-                    {
-                        success = success + 1;
-                    },
-                    error: function()
-                    {
-                        error = error + 1;
-                    }
-                });
+        });
+        
+        var asistenteCliente= $('#idAsistenteCliente').attr('name');
+        var reponsableComercial = $('#idResponsableComercial').attr('name');
+        var supervisorComercial = $('#idSupervisorComercial').attr('name');
+        var origen = $('#idOrigen').attr('name');
+        var canal = $('#idCanales').attr('name');
+        
+        $.ajax({
+            url: "/Vendedor/GetResponsablesComerciales",
+            type: 'POST',
+            async: false,
+            data: { vendedorSelectId: reponsableComercial},
+            success: function (list) {
+                $('#idResponsableComercial').html(list);
+                reponsableComercial == 0 ? '' : $("#idResponsableComercial").val(reponsableComercial);
                 
             }
-            if (total == success)
+            
+        });
+
+        $.ajax({
+            url: "/Vendedor/GetSupervisoresComerciales",
+            type: 'POST',
+            async: false,
+            data: { vendedorSelectId: supervisorComercial },
+            success: function (list) {
+                $('#idSupervisorComercial').html(list);                
+                supervisorComercial == 0 ? '' : $("#idSupervisorComercial").val(supervisorComercial);
+            }
+
+        });
+
+        $.ajax({
+            url: "/Vendedor/GetAsistentesServicioCliente",
+            type: 'POST',
+            async: false,
+            data: { vendedorSelectId: asistenteCliente },
+            success: function (list) {
+                $('#idAsistenteCliente').html(list);               
+                asistenteCliente == 0 ? '' : $("#idAsistenteCliente").val(asistenteCliente);
+            }
+
+        });
+        
+        $.ajax({
+            url: "/Origen/GetOrigenes",
+            type: 'POST',
+            async: false,
+            data: { origenSelectId: origen},
+            success: function (list) {
+                $('#idOrigen').html(list);
+                origen == 0 ? '' : $("#idOrigen").val(origen);
+            }
+
+        });
+        $('#idCanales').val(canal);
+        $("#modificarDatosVenta").modal('show');
+    });
+
+
+    $('body').on('click', "button#btnSaveModificarDatosVenta", function () {
+        
+        var arrrayClass = $('.btnVerVentaList').attr('class').split(" ");
+        var idVenta = arrrayClass[1];  
+
+        var asistenteCliente = $('#idAsistenteCliente').val() == "" ? 0 : $('#idAsistenteCliente').val();
+        var reponsableComercial = $('#idResponsableComercial').val() == "" ? 0 : $('#idResponsableComercial').val();
+        var supervisorComercial = $('#idSupervisorComercial').val() == "" ? 0 : $('#idSupervisorComercial').val();
+        var origen = $('#idOrigen').val() == "" ? 0 : $('#idOrigen').val();
+        var canal = $('#idCanales').val() == "" ? 0 : $('#idCanales').val();
+        
+        if (canal == "1") { canal = 'perteneceCanalLima';}
+        if (canal == "2") { canal = 'perteneceCanalMultiregional'; }
+        if (canal == "3") { canal = 'perteneceCanalPcp';}
+        if (canal == "4") { canal = 'perteneceCanalProvincia';}  
+
+        $.ajax({
+            url: "/Venta/updateModificarDatosVenta",
+            type: 'POST',
+            async: false,
+            data: {
+                idVenta: idVenta,
+                asistenteCliente: asistenteCliente,
+                reponsableComercial: reponsableComercial,
+                supervisorComercial: supervisorComercial,
+                origen: origen,
+                propiedad: canal                
+                     },
+            success: function (list)
             {
                 $.alert({
                     title: TITLE_EXITO,
                     type: 'green',
                     content: 'Se guardaron correctamente los cambios.',
                     buttons: {
-                        OK: function ()
-                        {
-                           
+                        OK: function () {
+                            $("#modalFacturar").modal('hide');
+                        }
+                    }
+                });
+
+            },
+            error: function () {
+                $.alert({
+                    title: 'Error',
+                    type: 'red',
+                    content: 'Ocurrió un problema al guardar los cambios.',
+                    buttons: {
+                        OK: function () {
+
+                        }
+                    }
+                });
+            }
+
+        });
+
+
+    });      
+
+    $('body').on('click', "button#btnExcluirItemsVenta", function () {
+        var total = $('.chkRectificarVenta').length;
+        var error = 0;
+        var success = 0;
+        $('.chkRectificarVenta').each(function () {
+            var valor;
+
+            var id_detalle_producto;
+            if ($(this).prop('checked')) {
+                id_detalle_producto = $(this).attr("id");
+                valor = 1;
+                AjaxCheck();
+            }
+            if ($(this).prop('checked') == false) {
+                id_detalle_producto = $(this).attr("id");
+                valor = 0;
+                AjaxCheck();
+            }
+            function AjaxCheck() {
+                $.ajax({
+                    url: "/Venta/RectificarVentaCheck",
+                    type: 'POST',
+                    async: false,
+                    data: {
+                        id_detalle_producto: id_detalle_producto,
+                        valor: valor
+                    },
+                    success: function () {
+                        success = success + 1;
+                    },
+                    error: function () {
+                        error = error + 1;
+                    }
+                });
+
+            }
+            if (total == success) {
+                $.alert({
+                    title: TITLE_EXITO,
+                    type: 'green',
+                    content: 'Se guardaron correctamente los cambios.',
+                    buttons: {
+                        OK: function () {
+
                         }
                     }
                 });
@@ -4483,13 +4640,13 @@ jQuery(function ($) {
                     }
                 });
             }
-           
 
-            
+
+
         });
     });
 
-    $(document).on('click', "button.btnMostrarPreciosVentaList", function () {
+    $('body').on('click', "button.btnMostrarPreciosVentaList", function () {
 
         var idProducto = event.target.getAttribute("class").split(" ")[0];
         var idCliente = $("#idClienteFacturacion").val();
@@ -4548,5 +4705,29 @@ jQuery(function ($) {
         $("#modalMostrarPrecios").modal();
 
     });
+    
+    $('#modalFacturar').on('click', "#btnEditarVentaModal", function () {
 
+        $("#btnCancelarFacturarPedido").click();
+        // desactivarBotonesVer();
+
+        $.ajax({
+            url: "/Venta/iniciarEdicionVenta",
+            type: 'POST',
+            error: function (detalle) { alert("Ocurrió un problema al iniciar la edición de la venta."); },
+            success: function (fileName) {
+
+                var popupWindow = window.open(
+                    "/Venta/Vender",
+                    "Edición de Venta",
+                    "resizable,scrollbars,status"
+                );
+
+            }
+        });
+    });
+
+
+    
+    
 });

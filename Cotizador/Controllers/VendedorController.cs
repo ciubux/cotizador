@@ -130,13 +130,14 @@ namespace Cotizador.Controllers
         private void instanciarVendedorBusqueda()
         {
             Vendedor obj = new Vendedor();
+            obj.ciudad = new Ciudad();
             obj.estado = 1;
             obj.codigo = String.Empty;
             obj.descripcion = String.Empty;
             obj.email = String.Empty;
             obj.contacto = String.Empty;
             obj.pass = String.Empty;
-            obj.idCiudad = Guid.Empty;
+            obj.ciudad.idCiudad = Guid.Empty;
 
             this.Session[Constantes.VAR_SESSION_VENDEDOR_BUSQUEDA] = obj;
         }
@@ -184,14 +185,12 @@ namespace Cotizador.Controllers
             {
                 if (obj.esSupervisorComercial == true)
                 {
-                    obj.supervisor.idVendedor = 0;
-                    obj.esAsistenteServicioCliente = false;
+                    obj.supervisor.idVendedor = 0;                    
                 }
                 obj = bL.updateVendedor(obj);
                 this.Session[Constantes.VAR_SESSION_VENDEDOR] = null;
             }
             String resultado = JsonConvert.SerializeObject(obj);
-
             return resultado;
         }
 
@@ -242,10 +241,7 @@ namespace Cotizador.Controllers
             {
                 idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
             }
-
-            //CiudadBL ciudadBL = new CiudadBL();
-            //Ciudad ciudadNueva = ciudadBL.getCiudad(idCiudad);
-            vendedor.idCiudad = idCiudad;
+            vendedor.ciudad.idCiudad = idCiudad;            
             this.VendedorSession = vendedor;
             return "{\"idCiudad\": \"" + idCiudad + "\"}";
 
@@ -322,10 +318,12 @@ namespace Cotizador.Controllers
         private void instanciarVendedor()
         {
             Vendedor obj = new Vendedor();
+            obj.ciudad = new Ciudad(); 
             obj.usuario = new Usuario();
             obj.idVendedor = 0;
             obj.estado = 1;
             obj.cargo = " ";
+            obj.maxdesapro = 0.00M;
             Usuario user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             obj.usuario = user;
             obj.supervisor = new Vendedor();
@@ -393,12 +391,13 @@ namespace Cotizador.Controllers
             Vendedor vendedor = (Vendedor)this.Session[Constantes.VAR_SESSION_VENDEDOR];
             vendedor.supervisor.usuario = new Usuario();
             Guid idVendedor = Guid.Parse(Request["idVendedor"].ToString());
-            UsuarioBL clienteBl = new UsuarioBL();
-            vendedor.supervisor.usuario = clienteBl.getUsuarioVendedor(idVendedor);
+            UsuarioBL usuarioBl = new UsuarioBL();
+            vendedor.supervisor.usuario = usuarioBl.getUsuarioVendedor(idVendedor);
             vendedor.cargo = vendedor.supervisor.usuario.cargo;
             vendedor.descripcion = vendedor.supervisor.usuario.nombre;
             vendedor.idCiudad = vendedor.supervisor.usuario.sedeMP.idCiudad;
             vendedor.contacto = vendedor.supervisor.usuario.contacto;
+            vendedor.maxdesapro = vendedor.supervisor.usuario.maximoPorcentajeDescuentoAprobacion;
             String resultado = JsonConvert.SerializeObject(vendedor.supervisor.usuario);
             this.Session[Constantes.VAR_SESSION_VENDEDOR] = vendedor;
 
@@ -418,5 +417,11 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_VENDEDOR] = vendedor;
             return resultado;
         }
+
+        public void CleanBusqueda()
+        {
+            instanciarVendedorBusqueda();
+        }
+
     }
 }

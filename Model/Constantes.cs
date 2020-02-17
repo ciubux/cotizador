@@ -116,6 +116,11 @@ namespace Model
         public static String VAR_SESSION_MENSAJE_LISTA = "mensajeList";
         public static String VAR_SESSION_MENSAJE_VER = "mensajeVer";
 
+        public static String VAR_SESSION_PARAMETRO = "parametro";
+        public static String VAR_SESSION_PARAMETRO_BUSQUEDA = "parametroBusqueda";
+        public static String VAR_SESSION_PARAMETRO_LISTA = "parametroList";
+        public static String VAR_SESSION_PARAMETRO_VER = "parametroVer";
+
 
         public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA = "notificacionDocumentoVenta";
         public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA_BUSQUEDA = "notificacionDocumentoVentaBusqueda";
@@ -406,6 +411,9 @@ namespace Model
         public const String MODIFICA_MENSAJE = "P831";
         public const String LISTA_MENSAJE = "P830";
 
+        public const String MODIFICA_PARAMETRO = "P890";
+       
+
         public const String VISUALIZA_VENTAS = "P730";
 
 
@@ -541,6 +549,11 @@ namespace Model
             BusquedaMensaje = 48,
             [Display(Name = "MANTENIMIENTO MENSAJES")]
             MantenimientoMensaje = 49,
+
+            /*PARAMETRO*/            
+            [Display(Name = "MANTENIMIENTO PARAMETRO")]
+            MantenimientoParametro = 51,
+            BusquedaParametro = 52,
 
             /*LISTA DE VENTAS*/
             [Display(Name = "BUSQUEDA VENTAS")]

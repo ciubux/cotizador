@@ -43,5 +43,37 @@ namespace DataLayer
 
 
         }
+
+        public List<Parametro> getListaParametro(Parametro param)
+        {
+            var objCommand = GetSqlCommand("ps_lista_parametros");
+            List<Parametro> lista = new List<Parametro>();
+            InputParameterAdd.VarcharEmpty(objCommand, "codigo", param.codigo);
+            
+            DataTable dataTable = Execute(objCommand);
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Parametro obj = new Parametro();
+                obj.idParametro = Converter.GetGuid(row, "id_parametro");
+                obj.codigo = Converter.GetString(row, "codigo");
+                obj.descripcion = Converter.GetString(row, "descripcion");
+                obj.valor = Converter.GetString(row, "valor");
+                lista.Add(obj);
+            }
+
+            return lista;
+        }
+                
+        public void modificarParametro(Parametro param,Usuario user)
+        {
+            var objCommand = GetSqlCommand("pu_parametros");           
+            InputParameterAdd.Guid(objCommand, "id_parametro", param.idParametro);            
+            InputParameterAdd.Varchar(objCommand, "valor", param.valor);
+            InputParameterAdd.VarcharEmpty(objCommand, "descripcion", param.descripcion);
+            InputParameterAdd.Guid(objCommand, "usuario_modificacion", user.idUsuario);
+            ExecuteNonQuery(objCommand);
+        }
+
+
     }
-}
+    }

@@ -713,9 +713,13 @@ $darkred: darken($red, 0.2);*/
 .ModalMensaje p {
     word-wrap: break-word;
 }
-/*#MensajeDialog {
-    width: 50%;
-}*/
+#changePassword {
+    width: 450px;
+}
+
+.tooltip-inner {
+    white-space: pre-wrap;
+}
 
 
 

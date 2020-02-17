@@ -46,7 +46,7 @@ namespace Model
         [Display(Name = "Cargo:")]
         public string cargo { get; set; }
 
-        [Display(Name = "Maximo Descuento:")]
+        [Display(Name = "Maximo Descuento de Aprobación (%):")]
         public Decimal maxdesapro { get; set; }
 
         [Display(Name = "Ciudad:")]

@@ -1,0 +1,131 @@
+﻿@{ViewBag.Title = "Mensaje - Rapido";
+    Model.Mensaje mensaje = ViewBag.Mensaje;
+    List<Model.Rol> roles = ViewBag.roles;
+}
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h3>@ViewBag.Title</h3>
+        </div>
+
+        <input type="email" name="email" style="opacity: 0;position: absolute;"><!-- Can be type="text" -->
+        <input type="password" name="password" autocomplete="new-password" style="opacity: 0;position: absolute;">
+        <div class="modal-body form-horizontal container">
+
+            <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+            <input type="hidden" value="@ViewBag.debug" />
+            <div class="container">
+                <div class="container">
+                    <input type="hidden" id="idMensaje" name="idMensaje" value="@mensaje.id_mensaje" />
+
+
+
+                    <div class="row form-group">
+                        <label for="color" class="col-form-label col-md-3">Prioridad:</label>
+
+                        <div class="col-md-9">
+                            <div class="radio-inline">
+                                <label class="radio-label">
+                                    @if (mensaje.importancia == "Alta")
+                                    {
+                                        <input class="radio-input" checked type="radio" name="mensaje_importancia_modal" id="mensaje_importancia_si_modal" value="1"><span style="font-weight: normal">Si</span>
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" type="radio" name="mensaje_importancia_modal" id="mensaje_importancia_si_modal" value="1"><span style="font-weight: normal">Si</span>
+                                    }
+
+                                </label>
+                            </div>
+                            <div class="radio-inline">
+                                <label class="radio-label">
+                                    @if (mensaje.importancia == "Normal")
+                                    {
+                                        <input class="radio-input" checked type="radio" name="mensaje_importancia_modal" id="mensaje_importancia_no_modal" value="0"><span style="font-weight: normal">No</span>
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" type="radio" name="mensaje_importancia_modal" id="mensaje_importancia_no_modal" value="0"><span style="font-weight: normal">No</span>
+                                    }
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class=" row form-group">
+                        <label for="fechaHasta" class="col-form-label col-md-3">Fecha de Inicio:</label>
+                        <div class="col-md-9">
+                            <input class="form-control datepicker" type="text" id="mensajeFechaInicioMensajeModal" name="fechaHasta" value="" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class=" row form-group">
+                        <label for="fechaHasta" class="col-form-label col-md-3">Fecha de Vencimiento:</label>
+                        <div class="col-md-9">
+                            <input class="form-control datepicker" type="text" id="mensajeFechaVencimientoMensajeModal" name="fechaHasta" value="" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <label for="titulo" class="col-form-label col-md-3">Titulo:</label>
+                        <div class="col-md-9">
+                            <input name="titulo" id="tituloModal" type="text" class="form-control" value="@mensaje.titulo">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="mensaje" class="col-form-label col-md-3">Mensaje:</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control" name="mensaje" id="txtMensajeModal" rows="10" required>@mensaje.mensaje</textarea>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <label for="idCliente" class="col-form-label col-md-3">Usuario:</label>
+                        <div class="col-md-9">
+                            <select multiple class="form-control form-control" id="idUsuarioBusquedaMensajeModal" name="UsuarioMensajeRapido" required>
+
+                                @foreach (var item in mensaje.listUsuario)
+                                {
+
+                                    <option selected value="@item.idUsuario">@item.nombre (@item.email)</option>
+
+                                }
+
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+
+                        <label class="col-form-label col-md-3">Roles:</label>
+
+                        <div class="col-md-9">
+                            @foreach (Model.Rol ro in roles)
+                            {
+                                string itemChecked = mensaje.TieneRol(ro.idRol) ? "checked" : "";
+
+                                <div class="col-sm-6 col-lg-4 col-xs-12">
+                                    <label class="radio-label" for="permiso_@ro.idRol">
+                                        <input type="checkbox" @itemChecked class="chk-rol RolMensajeModal" name="rol_@ro.idRol" id="rol_@ro.idRol" value="1">
+                                        <span class="listaUsuarioRoles" id="tooltip_@ro.idRol" data-toggle="tooltip" data-tipso="">@ro.nombre - (@ro.codigo)</span>
+                                    </label>
+                                </div>
+
+
+                            }
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button hidden type="button" id="btnCancelarMensajeModal" class="btn btn-danger"> Cancelar</button>
+            <button class="btn btn-primary" id="btnEnviarMensajeModal">Finalizar Creación</button>
+        </div>
+
+
+    </div>

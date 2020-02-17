@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "433";
+    TempData["ScriptVersion"] = "434";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -19,7 +19,7 @@
 
 <body>
     @RenderPage("ModalMensaje.cshtml")
-
+    @RenderPage("CambiarPassword.cshtml")
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -111,6 +111,9 @@
 
                         var linkCrearMensaje = "";
                         var linkBusquedaMensaje = "";
+
+                        var linkMantenimientoParametro = "";
+                        var linkBusquedaParametro = "";
 
                         var linkCrearFacturaConsolidada = "";
 
@@ -466,7 +469,7 @@
                                         <li id="linkMantenimientoUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar", "Editar", "Usuario")</li>
                                     }
 
-                                    @if (usuario.visualizaMensaje || usuario.modificaMensaje)
+                                    @if (false && (usuario.visualizaMensaje || usuario.modificaMensaje))
                                     {
                                         <li id="linkBusquedaMensaje" class="@linkBusquedaMensaje">@Html.ActionLink("Mensaje - Búsqueda", "Lista", "Mensaje")</li>
                                     }
@@ -475,11 +478,15 @@
                                         <li id="linkCrearMensaje" class="@linkCrearMensaje">@Html.ActionLink("Mensaje - Crear/Modificar", "Editar", "Mensaje")</li>
                                     }
 
-
+                                    @if (usuario.modificaParametro)
+                                    {
+                                        <li id="linkMantenimientoParametro" class="@linkMantenimientoParametro">@Html.ActionLink("Parametro - Búsqueda", "Lista", "Parametro")</li>
+                                    }
+                                    
                                     @*@if (usuario.modificaUsuario)
-                                        {
-                                            <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
-                                        }*@
+                                    {
+                                      <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
+                                    }*@
 
 
                                     @if (usuario.administraPermisos)
@@ -526,6 +533,7 @@
     @Scripts.Render("~/bundles/loadingModal")
     @Scripts.Render("~/bundles/confirm")
     @Scripts.Render("~/bundles/utiles")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/account")
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/mensaje")
 </body>
 </html>

@@ -547,6 +547,12 @@ C:\REPO\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompileInputs
 C:\REPO\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CopyComplete
 C:\REPO\cotizador\BusinessLayer\obj\Debug\BusinessLayer.dll
 C:\REPO\cotizador\BusinessLayer\obj\Debug\BusinessLayer.pdb
+C:\REPO\cotizador\BusinessLayer\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\REPO\cotizador\BusinessLayer\bin\Debug\NPOI.dll
+C:\REPO\cotizador\BusinessLayer\bin\Debug\NPOI.OOXML.dll
+C:\REPO\cotizador\BusinessLayer\bin\Debug\NPOI.OpenXml4Net.dll
+C:\REPO\cotizador\BusinessLayer\bin\Debug\NPOI.OpenXmlFormats.dll
+C:\REPO\cotizador\BusinessLayer\bin\Debug\NPOI.xml
 G:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\BusinessLayer.dll.config
 G:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\BusinessLayer.dll
 G:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\BusinessLayer.pdb
@@ -571,9 +577,3 @@ G:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompi
 G:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CopyComplete
 G:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.dll
 G:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.pdb
-C:\REPO\cotizador\BusinessLayer\bin\Debug\ICSharpCode.SharpZipLib.dll
-C:\REPO\cotizador\BusinessLayer\bin\Debug\NPOI.dll
-C:\REPO\cotizador\BusinessLayer\bin\Debug\NPOI.OOXML.dll
-C:\REPO\cotizador\BusinessLayer\bin\Debug\NPOI.OpenXml4Net.dll
-C:\REPO\cotizador\BusinessLayer\bin\Debug\NPOI.OpenXmlFormats.dll
-C:\REPO\cotizador\BusinessLayer\bin\Debug\NPOI.xml

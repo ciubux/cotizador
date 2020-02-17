@@ -166,6 +166,22 @@ namespace BusinessLayer
                 return dal.updateUsuarioMantenedor(usuario);
             }
         }
+        public bool confirmarPassword(string passActual,Guid idUsuario)
+        {
+            bool usuario;
+            using (var usuarioDAL = new UsuarioDAL())
+            {
+               usuario = usuarioDAL.confirmarPassword(passActual, idUsuario);
+            }
+            return usuario;
+        }
 
+        public void updateUsuarioCambioPassword(string passNuevo, Guid idUsuario)
+        {            
+            using (var usuarioDAL = new UsuarioDAL())
+            {
+               usuarioDAL.updateUsuarioCambioPassword(passNuevo, idUsuario);
+            }           
+        }
     }
 }
