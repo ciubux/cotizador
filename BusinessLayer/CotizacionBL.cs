@@ -97,7 +97,6 @@ namespace BusinessLayer
                 {
                     PrecioClienteProducto precioClienteProducto = cotizacionDetalle.producto.precioClienteProducto;
 
-
                     int evaluarDescuento = 0;
                     //¿Tiene precio registrado para facturación? y eliente es el mismo?
                     if (precioClienteProducto.idPrecioClienteProducto != Guid.Empty)// && precioClienteProducto.cliente.idCliente == cotizacion.cliente.idCliente)
@@ -150,6 +149,8 @@ namespace BusinessLayer
                         evaluarDescuento = 3;
                     }
 
+                    
+
                     if (evaluarDescuento > 0)
                     {
                         if (cotizacionDetalle.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION || cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial)
@@ -178,10 +179,14 @@ namespace BusinessLayer
                             cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
                         }
                         
-                    }               
+                    }
                 }
 
-
+                if (cotizacionDetalle.producto.descontinuado == 1 && !cotizacion.usuario.apruebaCotizacionesVentaRestringida)
+                {
+                    cotizacion.seguimientoCotizacion.observacion = "El producto " + cotizacionDetalle.producto.sku + " es de venta restringida.";
+                    cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
+                }
             }
            
             if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada)

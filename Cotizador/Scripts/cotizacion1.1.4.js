@@ -1997,6 +1997,7 @@ jQuery(function ($) {
 
                 var d = '';
                 var lista = cotizacion.cotizacionDetalleList;
+                var tieneProductoRestringido = false;
                 for (var i = 0; i < cotizacion.cotizacionDetalleList.length; i++) {
 
                     var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
@@ -2010,6 +2011,7 @@ jQuery(function ($) {
 
                     var descontinuadoLabel = "";
                     if (lista[i].producto.descontinuado == 1) {
+                        tieneProductoRestringido = true;
                         descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
                     }
 
@@ -2101,10 +2103,12 @@ jQuery(function ($) {
                 if (cotizacion.cliente_idCliente == GUID_EMPTY) {
                     if (
                         (cotizacion.seguimientoCotizacion_estado == ESTADO_PENDIENTE_APROBACION ||
-                            cotizacion.seguimientoCotizacion_estado == ESTADO_DENEGADA) &&
-                        (
-                            usuario.apruebaCotizacionesGrupales &&
+                            cotizacion.seguimientoCotizacion_estado == ESTADO_DENEGADA)
+                        &&
+                        (usuario.apruebaCotizacionesGrupales &&
                             usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
+                        &&
+                        (!tieneProductoRestringido || (tieneProductoRestringido && usuario.apruebaCotizacionesVentaRestringida))
                     ) {
                         $("#btnAprobarCotizacion").show();
                     }
@@ -2113,12 +2117,12 @@ jQuery(function ($) {
                     }
 
                     if (
-
-
-                        (cotizacion.seguimientoCotizacion_estado == ESTADO_PENDIENTE_APROBACION) &&
-                        (
-                            usuario.apruebaCotizacionesGrupales &&
+                        (cotizacion.seguimientoCotizacion_estado == ESTADO_PENDIENTE_APROBACION)
+                        &&
+                        (usuario.apruebaCotizacionesGrupales &&
                             usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
+                        &&
+                        (!tieneProductoRestringido || (tieneProductoRestringido && usuario.apruebaCotizacionesVentaRestringida))
                     ) {
 
 
@@ -2127,6 +2131,7 @@ jQuery(function ($) {
                     else {
                         $("#btnDenegarCotizacion").hide();
                     }
+
 
                 }
                 else {

@@ -326,8 +326,10 @@ namespace Model
         public const String ADMINISTRA_PERMISOS = "P001";
         public const String APRUEBA_COTIZACIONES_LIMA = "P002";
         public const String APRUEBA_COTIZACIONES_PROVINCIAS = "P003";
+        public const String APRUEBA_COTIZACIONES_VENTA_RESTRINGIDA = "P219";
         public const String APRUEBA_PEDIDOS_LIMA = "P004";
         public const String APRUEBA_PEDIDOS_PROVINCIAS = "P005";
+        public const String APRUEBA_PEDIDOS_VENTA_RESTRINGIDA = "P319";
         public const String CREA_GUIAS = "P006";
         public const String ADMINISTRA_GUIAS_LIMA = "P007";
         public const String ADMINISTRA_GUIAS_PROVINCIAS = "P008";
