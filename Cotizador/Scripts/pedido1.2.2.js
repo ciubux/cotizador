@@ -1170,7 +1170,7 @@ jQuery(function ($) {
         $('#valorAlternativo').attr('type', 'hidden');
         $('#precio').val(0);
         $('#cantidad').val(1);
-
+        $('#spnProductoDescontinuado').hide();
 
         //Se agrega chosen al campo PRODUCTO
         $("#producto").chosen({ placeholder_text_single: "Seleccione el producto", no_results_text: "No se encontró Producto" });
@@ -1685,6 +1685,10 @@ jQuery(function ($) {
                     }
                 }
 
+                var descontinuadoLabel = "";
+                if (detalle.descontinuado == 1) {
+                    descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html(); 
+                }
 
                 $('#tableDetallePedido tbody tr.footable-empty').remove();
                 $("#tableDetallePedido tbody").append('<tr data-expanded="true">' +
@@ -1692,7 +1696,9 @@ jQuery(function ($) {
                     '<td>' + esPrecioAlternativo + '</td>' +
 
                     '<td>' + proveedor + '</td>' +
-                    '<td>' + detalle.codigoProducto + '</td>' +
+                    '<td>' + detalle.codigoProducto + descontinuadoLabel + '</td>' +
+                     
+
                     '<td>' + detalle.nombreProducto + observacionesEnDescripcion + '</td>' +
                     '<td>' + detalle.unidad + '</td>' +
                     '<td class="column-img"><img class="table-product-img" src="' + $("#imgProducto").attr("src") + '"></td>' +
@@ -1720,6 +1726,7 @@ jQuery(function ($) {
                 $('#tableDetallePedido thead tr th.footable-editing').remove();
                 $('#tableDetallePedido tbody tr td.footable-editing').remove();
 
+                $("#spnProductoDescontinuado").hide();
 
                 $('#montoIGV').html(detalle.igv);
                 $('#montoSubTotal').html(detalle.subTotal);
@@ -2943,10 +2950,16 @@ jQuery(function ($) {
 
                     var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
 
+                    var descontinuadoLabel = "";
+                    if (lista[i].producto.descontinuado == 1) {
+                        tieneProductoRestringido = true;
+                        descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
+                    }
+
                     d += '<tr>' +
                         '<td>' + imgIndicadorAprobacion + '</td>' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
-                        '<td>' + lista[i].producto.sku + '</td>' +
+                        '<td>' + lista[i].producto.sku + descontinuadoLabel + '</td>' +
                         '<td>' + lista[i].producto.descripcion + '</td>' +
                         '<td>' + lista[i].unidad + '</td>' +
                         '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + lista[i].producto.image + '"> </td>' +

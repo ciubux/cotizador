@@ -2121,11 +2121,7 @@ jQuery(function ($) {
                         &&
                         (usuario.apruebaCotizacionesGrupales &&
                             usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
-                        &&
-                        (!tieneProductoRestringido || (tieneProductoRestringido && usuario.apruebaCotizacionesVentaRestringida))
                     ) {
-
-
                         $("#btnDenegarCotizacion").show();
                     }
                     else {
@@ -2137,14 +2133,13 @@ jQuery(function ($) {
                 else {
                     if (
                         (cotizacion.seguimientoCotizacion_estado == ESTADO_PENDIENTE_APROBACION ||
-                            cotizacion.seguimientoCotizacion_estado == ESTADO_DENEGADA) &&
-                        (
-                            usuario.apruebaCotizaciones &&
+                            cotizacion.seguimientoCotizacion_estado == ESTADO_DENEGADA)
+                        &&
+                        (usuario.apruebaCotizaciones &&
                             usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
+                        &&
+                        (!tieneProductoRestringido || (tieneProductoRestringido && usuario.apruebaCotizacionesVentaRestringida))
                     ) {
-
-
-
                         $("#btnAprobarCotizacion").show();
                     }
                     else {
@@ -2152,9 +2147,9 @@ jQuery(function ($) {
                     }
 
                     if (
-                        (cotizacion.seguimientoCotizacion_estado == ESTADO_PENDIENTE_APROBACION) &&
-                        (
-                            usuario.apruebaCotizaciones &&
+                        (cotizacion.seguimientoCotizacion_estado == ESTADO_PENDIENTE_APROBACION)
+                        &&
+                        (usuario.apruebaCotizaciones &&
                             usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
                     ) {
 

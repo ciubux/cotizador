@@ -91,7 +91,6 @@ namespace BusinessLayer
                 /*Si es venta se valida los precios de lo contrario pasa directamente sin aprobacion*/
                 if (pedido.tipoPedido == Pedido.tiposPedido.Venta)
                 {
-
                     if (!pedido.usuario.apruebaPedidos)
                     {
                         //Si cliente está bloqueado
@@ -186,7 +185,13 @@ namespace BusinessLayer
                         }
 
                         //pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
-                    }                   
+                    }
+
+                    if (pedidoDetalle.producto.descontinuado == 1 && !pedido.usuario.apruebaPedidosVentaRestringida)
+                    {
+                        pedido.seguimientoPedido.observacion = "El producto " + pedidoDetalle.producto.sku + " es de venta restringida.";
+                        pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                    }
                 }
             }
 
