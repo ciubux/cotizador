@@ -1257,6 +1257,12 @@ jQuery(function ($) {
                 $("#cantidad").val(1);
                 $("#stock").val(producto.Stock);
 
+                if (producto.descontinuado == 1) {
+                    $("#spnProductoDescontinuado").show();
+                } else {
+                    $("#spnProductoDescontinuado").hide();
+                }
+
                 $("#tableMostrarPrecios > tbody").empty();
 
                 $("#verProducto").html(producto.nombre);
@@ -1588,18 +1594,28 @@ jQuery(function ($) {
     });
     
 
+    $(".chkPedidoSerchProductCheckParam").change(function () {
+        var param = $(this).attr("paramName");
+        var valor = 0;
+        if ($(this).is(":checked")) {
+            valor = $(this).attr("checkValue");
+        } else {
+            valor = $(this).attr("unCheckValue");
+        }
 
-    $("#considerarDescontinuados").change(function () {
-        var considerarDescontinuados = $('#considerarDescontinuados').prop('checked');
+
         $.ajax({
-            url: "/Pedido/updateConsiderarDescontinuados",
+            url: "/Pedido/SetSearchProductParam",
             type: 'POST',
             data: {
-                considerarDescontinuados: considerarDescontinuados
+                parametro: param,
+                valor: valor
             },
             success: function () {
+
             }
         });
+
     });
 
 
@@ -2782,6 +2798,7 @@ jQuery(function ($) {
                 $('body').loadingModal('hide');
                 //var cotizacion = $.parseJSON(respuesta);
                 var pedido = resultado.pedido;
+                var usuario = resultado.usuario;
                 var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
 
                 //  var usuario = resultado.usuario;
@@ -2939,6 +2956,7 @@ jQuery(function ($) {
 
                 var d = '';
                 var lista = pedido.pedidoDetalleList;
+                var tieneProductoRestringido = false;
                 for (var i = 0; i < lista.length; i++) {
 
                     var imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Aprobado"> <img class="table-product-img"  src="/images/semaforo_verde_small.png"  srcset="semaforo_verde_min.png 2x"/></a>';
@@ -3126,9 +3144,10 @@ jQuery(function ($) {
 
 
                 //APROBAR PEDIDO
-                if (
-                    (pedido.seguimientoPedido_estado == ESTADO_PENDIENTE_APROBACION ||
-                        pedido.seguimientoPedido_estado == ESTADO_DENEGADO)
+                if ((pedido.seguimientoPedido_estado == ESTADO_PENDIENTE_APROBACION ||
+                    pedido.seguimientoPedido_estado == ESTADO_DENEGADO)
+                    &&
+                    (!tieneProductoRestringido || (tieneProductoRestringido && usuario.apruebaPedidosVentaRestringida))
                 ) {
 
                     $("#btnAprobarIngresoPedido").show();

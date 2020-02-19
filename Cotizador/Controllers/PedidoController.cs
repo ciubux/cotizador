@@ -486,7 +486,13 @@ namespace Cotizador.Controllers
                 ViewBag.pedido = pedido;
                 ViewBag.VARIACION_PRECIO_ITEM_PEDIDO = Constantes.VARIACION_PRECIO_ITEM_PEDIDO;
 
-                ViewBag.fechaPrecios = DateTime.Now.AddDays(-Constantes.DIAS_MAX_BUSQUEDA_PRECIOS).ToString(Constantes.formatoFecha);  
+                ViewBag.fechaPrecios = DateTime.Now.AddDays(-Constantes.DIAS_MAX_BUSQUEDA_PRECIOS).ToString(Constantes.formatoFecha);
+
+                ViewBag.busquedaProductosIncluyeDescontinuados = 0;
+                if (this.Session[Constantes.VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM + "incluyeDescontinuados"] != null)
+                {
+                    ViewBag.busquedaProductosIncluyeDescontinuados = int.Parse(this.Session[Constantes.VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM + "incluyeDescontinuados"].ToString());
+                }
 
                 ViewBag.pagina = (int)Constantes.paginas.MantenimientoPedido;
                 return View();
@@ -778,8 +784,15 @@ namespace Cotizador.Controllers
             {
                 String texto_busqueda = this.Request.Params["data[q]"];
                 ProductoBL bl = new ProductoBL();
+
+                int incluyeDescontinuados = 0;
+                if (this.Session[Constantes.VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM + "incluyeDescontinuados"] != null)
+                {
+                    incluyeDescontinuados = int.Parse(this.Session[Constantes.VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM + "incluyeDescontinuados"].ToString());
+                }
+
                 Pedido pedido = this.PedidoSession;
-                String resultado = bl.getProductosBusqueda(texto_busqueda, false, this.Session["proveedor"] != null ? (String)this.Session["proveedor"] : "Todos", this.Session["familia"] != null ? (String)this.Session["familia"] : "Todas", pedido.tipoPedido);
+                String resultado = bl.getProductosBusqueda(texto_busqueda, false, this.Session["proveedor"] != null ? (String)this.Session["proveedor"] : "Todos", this.Session["familia"] != null ? (String)this.Session["familia"] : "Todas", pedido.tipoPedido, incluyeDescontinuados);
                 return resultado;
             }
             catch (Exception e)
@@ -787,6 +800,13 @@ namespace Cotizador.Controllers
                 logger.Error(e,agregarUsuarioAlMensaje(e.Message));
                 throw e;
             }
+        }
+
+        public void SetSearchProductParam()
+        {
+            String parametro = this.Request.Params["parametro"];
+            String valor = this.Request.Params["valor"];
+            this.Session[Constantes.VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM + parametro] = valor;
         }
 
 
@@ -929,13 +949,14 @@ namespace Cotizador.Controllers
                     "\"proveedor\":\"" + producto.proveedor + "\"," +
                     "\"familia\":\"" + producto.familia + "\"," +
                     "\"precioUnitarioSinIGV\":\"" + producto.precioSinIgv + "\"," +
-             //       "\"precioUnitarioAlternativoSinIGV\":\"" + producto.precioAlternativoSinIgv + "\"," +
+                    //       "\"precioUnitarioAlternativoSinIGV\":\"" + producto.precioAlternativoSinIgv + "\"," +
                     "\"precioLista\":\"" + producto.precioLista + "\"," +
                     "\"costoSinIGV\":\"" + producto.costoSinIgv + "\"," +
-             //       "\"costoAlternativoSinIGV\":\"" + producto.costoAlternativoSinIgv + "\"," +
+                    //       "\"costoAlternativoSinIGV\":\"" + producto.costoAlternativoSinIgv + "\"," +
                     "\"fleteDetalle\":\"" + fleteDetalle + "\"," +
                     "\"precioUnitario\":\"" + precioUnitario + "\"," +
                     "\"porcentajeDescuento\":\"" + porcentajeDescuento + "\"," +
+                    "\"descontinuado\":\"" + producto.descontinuado.ToString() + "\"," +
                     "\"precioListaList\":" + jsonPrecioLista + "," +
                     "\"productoPresentacionList\":" + jsonProductoPresentacion + "," +
                     "\"costoLista\":\"" + producto.costoLista + "\"" +
@@ -1925,7 +1946,7 @@ namespace Cotizador.Controllers
             }
 
           
-            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"pedido\":" + jsonPedido + "}";
+            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"pedido\":" + jsonPedido + ", \"pedido\":" + jsonPedido + ", \"usuario\":" + jsonUsuario + "}";
             return json;
         }
 

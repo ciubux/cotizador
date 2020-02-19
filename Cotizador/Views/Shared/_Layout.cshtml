@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "436";
+    TempData["ScriptVersion"] = "438";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -429,7 +429,6 @@
                                     Sistema
                                     <span class="caret"></span>
                                 </a>
-
                                 <ul class="dropdown-menu" role="menu">
                                     @if (usuario.administraPermisos)
                                     {
