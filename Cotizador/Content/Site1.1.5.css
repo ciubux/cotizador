@@ -735,6 +735,7 @@ $darkred: darken($red, 0.2);*/
     border-radius: 3px;
     color: #111111;
     font-size: 10px;
+    text-align: center;
     padding: 2px 3px 1px 3px;
     font-weight: bold;
 }

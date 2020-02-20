@@ -395,7 +395,7 @@
                                 <span class="input-group-text" id="basic-addon1">Desde:</span>
                             </div>
                             <input type="hidden" id="fechaEntregaDesdetmp" value="@ViewBag.fechaEntregaDesde" />
-                            <input class="form-control" type="text" id="pedido_fechaEntregaDesde" name="pedido_fechaEntregaDesde">
+                            <input class="form-control" type="text" id="pedido_fechaEntregaDesde" name="pedido_fechaEntregaDesde" autocomplete="off">
                         </div>
                         <label for="fechaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
                         <div class="input-group col-xs-6 col-lg-8">
@@ -404,7 +404,7 @@
                                 <span class="input-group-text" id="basic-addon1">Hasta:</span>
                             </div>
                             <input type="hidden" id="fechaEntregaHastatmp" value="@ViewBag.fechaEntregaHasta" />
-                            <input class="form-control" type="text" id="pedido_fechaEntregaHasta" name="pedido_fechaEntregaHasta">
+                            <input class="form-control" type="text" id="pedido_fechaEntregaHasta" name="pedido_fechaEntregaHasta" autocomplete="off">
 
                         </div>
                     </div>
@@ -420,15 +420,15 @@
                             <div class="input-group-addon" style="width:70px">
                                 <span class="input-group-text" id="basic-addon1">1er Turno:</span>
                             </div>
-                            <input class="form-control" type="time" id="pedido_horaEntregaDesde" name="pedido_horaEntregaDesde" value="@pedido.horaEntregaDesde">
-                            <input class="form-control" type="time" id="pedido_horaEntregaHasta" name="pedido_horaEntregaHasta" value="@pedido.horaEntregaHasta">
+                            <input class="form-control" type="time" id="pedido_horaEntregaDesde" name="pedido_horaEntregaDesde" value="@pedido.horaEntregaDesde" autocomplete="off">
+                            <input class="form-control" type="time" id="pedido_horaEntregaHasta" name="pedido_horaEntregaHasta" value="@pedido.horaEntregaHasta" autocomplete="off">
                         </div>
                         <div class="input-group col-xs-4 col-lg-4">
                             <div class="input-group-addon" style="width:70px">
                                 <span class="input-group-text" id="basic-addon1">2do Turno:</span>
                             </div>
-                            <input class="form-control" type="time" id="pedido_horaEntregaAdicionalDesde" name="pedido_horaEntregaAdicionalDesde" value="@pedido.horaEntregaAdicionalDesde">
-                            <input class="form-control" type="time" id="pedido_horaEntregaAdicionalHasta" name="pedido_horaEntregaAdicionalHasta" value="@pedido.horaEntregaAdicionalHasta">
+                            <input class="form-control" type="time" id="pedido_horaEntregaAdicionalDesde" name="pedido_horaEntregaAdicionalDesde" value="@pedido.horaEntregaAdicionalDesde" autocomplete="off">
+                            <input class="form-control" type="time" id="pedido_horaEntregaAdicionalHasta" name="pedido_horaEntregaAdicionalHasta" value="@pedido.horaEntregaAdicionalHasta" autocomplete="off">
                         </div>
                     </div>
                 </div>
@@ -499,7 +499,7 @@
                         <div class="input-group col-xs-8 col-lg-8">
 
                             <input type="hidden" id="fechaSolicitudTmp" value="@ViewBag.fechaSolicitud" />
-                            <input class="form-control" type="text" id="fechaSolicitud" name="fechaSolicitud">
+                            <input class="form-control" type="text" id="fechaSolicitud" name="fechaSolicitud" autocomplete="off">
                         </div>
                     </div>
                 </div>

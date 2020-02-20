@@ -1099,6 +1099,7 @@ namespace Cotizador.Controllers
                     subTotal = pedido.montoSubTotal.ToString(),
                     margen = detalle.margen,
                     precioUnitario = detalle.precioUnitario,
+                    descontinuado = detalle.producto.descontinuado,
                     observacion = detalle.observacion,
                     total = pedido.montoTotal.ToString(),
                     precioUnitarioRegistrado = precioUnitarioRegistrado

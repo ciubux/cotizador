@@ -310,10 +310,12 @@
                         @if (producto.descontinuado == 1)
                         {
                             <input checked type="checkbox" id="producto_descontinuado" name="producto_descontinuado" />
+                            <textarea id="motivoRestriccion" placeholder="Motivo de restricción" style="width: 100%; padding: 0px 3px;">@producto.motivoRestriccion</textarea>
                         }
                         else
                         {
                             <input type="checkbox" id="producto_descontinuado" name="producto_descontinuado" />
+                            <textarea id="motivoRestriccion" placeholder="Motivo de restricción" style="width: 100%; padding: 0px 3px; display: none;">@producto.motivoRestriccion</textarea>
                         }
                     </div>
                 </div>

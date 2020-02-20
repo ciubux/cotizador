@@ -135,6 +135,7 @@ namespace Cotizador.Controllers
             producto.unidadProveedor = String.Empty;
             producto.unidad_alternativa = String.Empty;
             producto.unidadEstandarInternacional = String.Empty;
+            producto.motivoRestriccion = String.Empty;
             FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
             MemoryStream storeStream = new MemoryStream();
             storeStream.SetLength(inStream.Length);

@@ -1706,6 +1706,7 @@ jQuery(function ($) {
                     descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html(); 
                 }
 
+
                 $('#tableDetallePedido tbody tr.footable-empty').remove();
                 $("#tableDetallePedido tbody").append('<tr data-expanded="true">' +
                     '<td>' + detalle.idProducto + '</td>' +

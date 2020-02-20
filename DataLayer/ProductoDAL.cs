@@ -161,6 +161,7 @@ namespace DataLayer
                 producto.tipoProducto = (Producto.TipoProducto) Converter.GetInt(row, "tipo_producto");
 
                 producto.descontinuado = Converter.GetInt(row, "descontinuado");
+                producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
                 producto.exoneradoIgv = Converter.GetInt(row, "exonerado_igv") == 1 ? true : false;
                 producto.inafecto = Converter.GetInt(row, "inafecto") == 1 ? true : false;
 
@@ -1029,6 +1030,7 @@ namespace DataLayer
                 item.image = Converter.GetBytes(row, "imagen");
                 item.Estado = Converter.GetInt(row, "estado");
                 item.descontinuado = Converter.GetInt(row, "descontinuado");
+                item.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
                 item.FechaEdicion = Converter.GetDateTime(row, "fecha_modificacion");
 
                 productoList.Add(item);
@@ -1093,6 +1095,7 @@ namespace DataLayer
 
                 item.image = Converter.GetBytes(row, "imagen");
                 item.descontinuado = Converter.GetInt(row, "descontinuado");
+                item.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
             }
 
             return item;
@@ -1117,6 +1120,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "equivalenciaProveedor", producto.equivalenciaProveedor);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
             InputParameterAdd.Int(objCommand, "descontinuado", producto.descontinuado);
+            InputParameterAdd.VarcharEmpty(objCommand, "motivoRestriccion", producto.motivoRestriccion);
             InputParameterAdd.Int(objCommand, "exoneradoIgv", (producto.exoneradoIgv ? 1 : 0));
             InputParameterAdd.Int(objCommand, "inafecto", producto.inafecto ? 1 : 0);
             InputParameterAdd.Int(objCommand, "tipo", (int) producto.tipoProducto);
@@ -1203,6 +1207,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "equivalenciaProveedor", producto.equivalenciaProveedor);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
             InputParameterAdd.Int(objCommand, "descontinuado", producto.descontinuado);
+            InputParameterAdd.VarcharEmpty(objCommand, "motivoRestriccion", producto.motivoRestriccion);
             InputParameterAdd.Int(objCommand, "exoneradoIgv", producto.exoneradoIgv ? 1 : 0);
             InputParameterAdd.Int(objCommand, "inafecto", producto.inafecto ? 1 : 0);
             InputParameterAdd.Int(objCommand, "tipo", (int)producto.tipoProducto);

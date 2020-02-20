@@ -295,6 +295,8 @@ namespace Model
         [Display(Name = "Venta Restringida:")]
         public int descontinuado { get; set; }
 
+        [Display(Name = "Motivo Restricción:")]
+        public String motivoRestriccion { get; set; }
         public static List<CampoPersistir> obtenerCampos(List<LogCampo> campos, bool soloPersistentes = false) 
         {
             List<CampoPersistir> lista = new List<CampoPersistir>();
@@ -340,6 +342,7 @@ namespace Model
                     case "estado": cp.nombre = Producto.nombreAtributo("Estado"); break;
 
                     case "descontinuado": cp.nombre = Producto.nombreAtributo("descontinuado"); break;
+                    case "motivo_restriccion": cp.nombre = Producto.nombreAtributo("motivoRestriccion"); break;
 
                     default: cp.nombre = "[NOT_FOUND]"; break;
 
@@ -426,6 +429,7 @@ namespace Model
                     case "exonerado_igv": lc = instanciarLogCambio(campo); lc.valor = this.exoneradoIgv.ToString(); break;
                     case "estado": lc = instanciarLogCambio(campo); lc.valor = this.Estado.ToString(); break;
                     case "descontinuado": lc = instanciarLogCambio(campo); lc.valor = this.descontinuado.ToString(); break;
+                    case "motivo_restriccion": lc = instanciarLogCambio(campo); lc.valor = this.motivoRestriccion; break;
                 }
 
                 if (soloRegistro && !campo.registra)
@@ -933,6 +937,22 @@ namespace Model
                         else
                         {
                             this.descontinuado = int.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+
+                    case "motivo_restriccion":
+                        if (this.motivoRestriccion == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.motivoRestriccion = cambio.valor;
                             lista.Add(cambio);
                         }
                         break;

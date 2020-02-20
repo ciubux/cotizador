@@ -1276,6 +1276,7 @@ namespace DataLayer
                 pedidoDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 pedidoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
                 pedidoDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
+                pedidoDetalle.producto.descontinuado = Converter.GetInt(row, "descontinuado");
 
                 pedidoDetalle.producto.image = Converter.GetBytes(row, "imagen");
 

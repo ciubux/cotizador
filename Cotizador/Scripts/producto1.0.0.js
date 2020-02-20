@@ -351,6 +351,10 @@ jQuery(function ($) {
 
     }
 
+    $("#motivoRestriccion").change(function () {
+        changeInputString("motivoRestriccion", $("#motivoRestriccion").val());
+    });
+
     $("#producto_skuProveedor").change(function () {
         changeInputString("skuProveedor", $("#producto_skuProveedor").val());
     });
@@ -417,9 +421,16 @@ jQuery(function ($) {
 
     $("#producto_descontinuado").change(function () {
         var valor = 1;
+        
         if (!$('#producto_descontinuado').prop('checked')) {
             valor = 0;
+            $("#motivoRestriccion").hide();
         }
+
+        if (valor == 1) {
+            $("#motivoRestriccion").show();
+        }
+
         changeInputInt('descontinuado', valor)
     });
 
@@ -766,7 +777,7 @@ jQuery(function ($) {
 
                     var descontinuadoHTML = "";
                     if (list[i].descontinuado == 1) {
-                        descontinuadoHTML = "<br/>" + $("#spnVerProductoDescontinuado").html();
+                        descontinuadoHTML = "<br/>" + $("#spnProductoDescontinuado").html();
                     }
 
                     var ItemRow = '<tr data-expanded="true">' +
