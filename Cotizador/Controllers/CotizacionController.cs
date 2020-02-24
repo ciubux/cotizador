@@ -936,6 +936,7 @@ namespace Cotizador.Controllers
                 "\"proveedor\":\"" + producto.proveedor + "\"," +
                 "\"familia\":\"" + producto.familia + "\"," +
                 "\"descontinuado\":" + producto.descontinuado + "," +
+                "\"motivoRestriccion\":\"" + producto.motivoRestriccion + "\"," +
                 "\"precioUnitarioSinIGV\":\"" + producto.precioSinIgv + "\"," +
              //   "\"precioUnitarioAlternativoSinIGV\":\"" + producto.precioAlternativoSinIgv + "\"," +
                 "\"precioLista\":\"" + producto.precioLista + "\"," +
@@ -1098,6 +1099,7 @@ namespace Cotizador.Controllers
                 idProducto = detalle.producto.idProducto,
                 codigoProducto = detalle.producto.sku,
                 descontinuado = detalle.producto.descontinuado,
+                motivoRestriccion = detalle.producto.motivoRestriccion,
                 subTotalItem = detalle.subTotal.ToString(),
                 nombreProducto = nombreProducto,
                 unidad = detalle.unidad,

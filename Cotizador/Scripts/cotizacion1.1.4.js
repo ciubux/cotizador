@@ -691,6 +691,16 @@ jQuery(function ($) {
 
                 if (producto.descontinuado == 1) {
                     $("#spnProductoDescontinuado").show();
+
+                    if (producto.motivoRestriccion != null) {
+                        producto.motivoRestriccion = producto.motivoRestriccion.trim();
+
+                        $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").removeClass("tooltip-motivo-restriccion");
+                        if (producto.motivoRestriccion != "") {
+                            $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").addClass("tooltip-motivo-restriccion");
+                            $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado .tooltip-label-text").html(producto.motivoRestriccion);
+                        }
+                    }
                 } else {
                     $("#spnProductoDescontinuado").hide();
                 }
@@ -1078,6 +1088,15 @@ jQuery(function ($) {
                 var descontinuadoLabel = "";
                 if (detalle.descontinuado == 1) {
                     descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html(); 
+
+                    if (detalle.motivoRestriccion != null) {
+                        detalle.motivoRestriccion = detalle.motivoRestriccion.trim();
+                        descontinuadoLabel = descontinuadoLabel.replace("_DATA_TIPSO_", detalle.motivoRestriccion);
+
+                        if (detalle.motivoRestriccion != "") {
+                            descontinuadoLabel = descontinuadoLabel.replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+                        }
+                    }
                 }
 
                 $("#tableDetalleCotizacion tbody").append('<tr data-expanded="false">' +
@@ -2013,6 +2032,15 @@ jQuery(function ($) {
                     if (lista[i].producto.descontinuado == 1) {
                         tieneProductoRestringido = true;
                         descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
+
+                        if (lista[i].producto.motivoRestriccion != null) {
+                            lista[i].producto.motivoRestriccion = lista[i].producto.motivoRestriccion.trim();
+                            descontinuadoLabel = descontinuadoLabel.replace("_DATA_TIPSO_", lista[i].producto.motivoRestriccion);
+
+                            if (lista[i].producto.motivoRestriccion != "") {
+                                descontinuadoLabel = descontinuadoLabel.replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+                            }
+                        }
                     }
 
                     d += '<tr>' +

@@ -504,9 +504,13 @@ jQuery(function ($) {
                 $("#verUnidadEstandarInternacional").html(producto.unidadEstandarInternacional);
                 $("#verTipo").html(producto.tipoProductoToString);
 
-
+               
                 if (producto.descontinuado) {
-                    $("#verDescontinuado").html("Sí");
+                    var spnMotivoRestriccion = "";
+                    if (producto.motivoRestriccion != null) {
+                        spnMotivoRestriccion = '<br/><span style="font-style: italic;">' + producto.motivoRestriccion + '</span>';
+                    }
+                    $("#verDescontinuado").html("Sí" + spnMotivoRestriccion);
                 }
                 else {
                     $("#verDescontinuado").html("No");
@@ -778,6 +782,15 @@ jQuery(function ($) {
                     var descontinuadoHTML = "";
                     if (list[i].descontinuado == 1) {
                         descontinuadoHTML = "<br/>" + $("#spnProductoDescontinuado").html();
+
+                        if (list[i].motivoRestriccion != null) {
+                            list[i].motivoRestriccion = list[i].motivoRestriccion.trim();
+                            descontinuadoHTML = descontinuadoHTML.replace("_DATA_TIPSO_", list[i].motivoRestriccion);
+
+                            if (list[i].motivoRestriccion != "") {
+                                descontinuadoHTML = descontinuadoHTML.replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+                            }
+                        }
                     }
 
                     var ItemRow = '<tr data-expanded="true">' +
@@ -807,6 +820,19 @@ jQuery(function ($) {
 
                 }
 
+                /*
+                setTimeout(function () {
+                    $('.tooltip-motivo-restriccion').tipso(
+                        {
+                            titleContent: 'MOTIVO',
+                            titleBackground: '#f0ad4e',
+                            titleColor: '#111111',
+                            background: '#ffffff',
+                            color: '#000000',
+                            width: 300
+                        });
+                }, 1000);
+                */
                 if (ItemRow.length > 0) {
                     $("#msgBusquedaSinResultados").hide();
                     $("#divExportButton").show();
@@ -819,7 +845,7 @@ jQuery(function ($) {
             }
         });
     });
-    
+
     $("#btnEditarProducto").click(function () {
       //  desactivarBotonesVer();
         //Se identifica si existe cotizacion en curso, la consulta es sincrona

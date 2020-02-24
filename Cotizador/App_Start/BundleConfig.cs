@@ -165,6 +165,7 @@ namespace Cotizador
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
+                      "~/Scripts/bootstrap-tooltip.js",
                       "~/Scripts/respond.js"));
 
 

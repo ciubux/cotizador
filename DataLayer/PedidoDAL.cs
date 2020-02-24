@@ -939,6 +939,7 @@ namespace DataLayer
                 pedidoDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
                 pedidoDetalle.producto.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo_producto");
                 pedidoDetalle.producto.descontinuado = Converter.GetInt(row, "descontinuado");
+                pedidoDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
 
                 pedidoDetalle.producto.image = Converter.GetBytes(row, "imagen");
 
@@ -1277,6 +1278,7 @@ namespace DataLayer
                 pedidoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
                 pedidoDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
                 pedidoDetalle.producto.descontinuado = Converter.GetInt(row, "descontinuado");
+                pedidoDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
 
                 pedidoDetalle.producto.image = Converter.GetBytes(row, "imagen");
 

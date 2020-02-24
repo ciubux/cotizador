@@ -700,7 +700,18 @@
                             @if (pedidoDetalle.producto.descontinuado == 1)
                             {
                                 <br />
-                                <label class="lblAlertaProductoDescontinuado" style=""><img src="~/images/icon_warning_18.png" /> PRODUCTO RESTRINGIDO</label>
+                                if (pedidoDetalle.producto.motivoRestriccion != null && !pedidoDetalle.producto.motivoRestriccion.Trim().IsEmpty())
+                                {
+                                    string descontinuadoLabel = Html.Partial("../Producto/_LabelRestringido").ToString();
+                                    descontinuadoLabel = descontinuadoLabel.Replace("_DATA_TIPSO_", pedidoDetalle.producto.motivoRestriccion);
+                                    descontinuadoLabel = descontinuadoLabel.Replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+
+                                    @Html.Raw(descontinuadoLabel)
+                                }
+                                else
+                                {
+                                    @Html.Partial("../Producto/_LabelRestringido")
+                                }
                             }
                         </td>
 
@@ -989,7 +1000,7 @@
                                 <label for="producto" class="control-label col-xs-3">Producto:</label>
                                 <div class="col-xs-9">
                                     <span id="spnProductoDescontinuado" style="display: none;">
-                                        <label class="lblAlertaProductoDescontinuado" style=""><img src="~/images/icon_warning_18.png" /> PRODUCTO RESTRINGIDO</label>
+                                        @Html.Partial("../Producto/_LabelRestringido")
                                     </span>
                                     <select class="form-control" id="producto" name="producto">
                                         <option value=""></option>

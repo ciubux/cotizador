@@ -2973,6 +2973,17 @@ jQuery(function ($) {
                     if (lista[i].producto.descontinuado == 1) {
                         tieneProductoRestringido = true;
                         descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
+
+
+                        if (lista[i].producto.motivoRestriccion != null) {
+                            lista[i].producto.motivoRestriccion = lista[i].producto.motivoRestriccion.trim();
+
+                            $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").removeClass("tooltip-motivo-restriccion");
+                            if (lista[i].producto.motivoRestriccion != "") {
+                                $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").addClass("tooltip-motivo-restriccion");
+                                $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado .tooltip-label-text").html(lista[i].producto.motivoRestriccion);
+                            }
+                        }
                     }
 
                     d += '<tr>' +

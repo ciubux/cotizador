@@ -309,7 +309,6 @@ namespace BusinessLayer
 
                 foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
                 {
-
                     cotizacionDetalle.validar = validar;
 
                     if (cotizacionDetalle.producto.image == null)
@@ -338,31 +337,25 @@ namespace BusinessLayer
 
 
                     if (cotizacion.incluidoIGV)
-                        {
-                            //Se agrega el IGV al precioLista
-                            decimal precioSinIgv = cotizacionDetalle.producto.precioSinIgv;
-                            decimal precioLista = precioSinIgv + (precioSinIgv * cotizacion.igv);
-                            cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioLista));
-                            //Se agrega el IGV al costoLista
-                            decimal costoSinIgv = cotizacionDetalle.producto.costoSinIgv;
-                            decimal costoLista = costoSinIgv + (costoSinIgv * cotizacion.igv);
-                            cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costoLista));
-                        }
-                        else
-                        {
-                            cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioSinIgv));
-                            cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.costoSinIgv));
-                        }
-
-                
-                    
+                    {
+                        //Se agrega el IGV al precioLista
+                        decimal precioSinIgv = cotizacionDetalle.producto.precioSinIgv;
+                        decimal precioLista = precioSinIgv + (precioSinIgv * cotizacion.igv);
+                        cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioLista));
+                        //Se agrega el IGV al costoLista
+                        decimal costoSinIgv = cotizacionDetalle.producto.costoSinIgv;
+                        decimal costoLista = costoSinIgv + (costoSinIgv * cotizacion.igv);
+                        cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costoLista));
+                    }
+                    else
+                    {
+                        cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioSinIgv));
+                        cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.costoSinIgv));
+                    }
                 }
-
-
             }
             return cotizacion;
         }
-
 
 
 
