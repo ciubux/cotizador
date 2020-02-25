@@ -36,7 +36,7 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoMensaje;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            if (!usuario.modificaMensaje)
+            if (!usuario.modificaMensaje || !usuario.enviaMensaje)
             {
                 return RedirectToAction("Lista", "Mensaje");
             }
@@ -84,7 +84,7 @@ namespace Cotizador.Controllers
             obj.mensaje = String.Empty;
             obj.titulo = String.Empty;
             obj.estado = 1;
-            obj.fechaInicioMensaje = DateTime.Now;
+            obj.fechaInicioMensaje = DateTime.Now;            
             obj.fechaVencimientoMensaje = DateTime.Now;
             obj.listUsuario = new List<Usuario>();
             obj.user = (Usuario)Session[Constantes.VAR_SESSION_USUARIO];
@@ -94,6 +94,12 @@ namespace Cotizador.Controllers
         [HttpGet]
         public ActionResult Lista()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (!usuario.enviaMensaje)
+            {
+                return RedirectToAction("Lista", "Mensaje");
+            }
+
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaMensaje;
 
             if (this.Session[Constantes.VAR_SESSION_MENSAJE_BUSQUEDA] == null)
@@ -117,9 +123,11 @@ namespace Cotizador.Controllers
             obj.id_mensaje = Guid.Empty;
             obj.fechaCreacionMensajeDesde = null;
             obj.fechaCreacionMensajeHasta = null;
-
+            obj.bandeja = 0;
             obj.fechaVencimientoMensajeDesde = null;
             obj.fechaVencimientoMensajeHasta = null;
+            obj.fechaMensajeEntradaDesde = DateTime.Today.AddDays(-30);
+            obj.fechaMensajeEntradaHasta= DateTime.Today;
 
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -300,7 +308,9 @@ namespace Cotizador.Controllers
             this.MensajeSession = obj;
         }
 
-        public String ShowMensaje()
+       
+
+            public String ShowMensaje()
         {
             Guid idUsuario;
             idUsuario = Guid.Parse(Request["idUsuario"].ToString());
@@ -368,6 +378,15 @@ namespace Cotizador.Controllers
                 propertyInfo.SetValue(obj, new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0])));
             }
 
+            this.MensajeSession = obj;
+
+        }
+        public void ChangeFecha()
+        {
+            Mensaje obj = (Mensaje)this.MensajeSession;
+            String[] fecha = this.Request.Params["fecha"].Split('/');
+            PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(obj, new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0])));
             this.MensajeSession = obj;
 
         }

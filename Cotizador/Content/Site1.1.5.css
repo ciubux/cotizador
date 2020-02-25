@@ -743,3 +743,93 @@ $darkred: darken($red, 0.2);*/
     margin-top: -2px;
     margin-left: -3px;
 }
+
+
+/* Efecto Parpadeo */
+
+.labelModificado {
+    display: inline;
+    padding: .1em .6em .2em;
+    font-size: 75%;
+    font-weight: bold;
+    line-height: 1;
+    color: #ffffff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
+
+.parpadea {
+    animation-name: parpadeo;
+    animation-duration: 0.2s;
+    animation-timing-function: linear;
+    animation-iteration-count: 1;
+    -webkit-animation-name: parpadeo;
+    -webkit-animation-duration: 0.2s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: 1;
+}
+
+
+@-moz-keyframes parpadeo {
+    0% {
+        font-size: 14px;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    50% {
+        font-size: 24px;
+        margin-left: -5px;
+        margin-right: -5px;
+    }
+
+    100% {
+        font-size: 14px;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+}
+
+
+@-webkit-keyframes parpadeo {
+    0% {
+        font-size: 14px;
+        margin-left: 0px;
+        margin-top: 0px;
+    }
+
+    50% {
+        font-size: 24px;
+        margin-left: -5px;
+        margin-top: -5px;
+    }
+
+    100% {
+        font-size: 14px;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+}
+
+
+@keyframes parpadeo {
+    0% {
+        font-size: 14px;
+        margin-left: 0px;
+        margin-top: 0px;
+    }
+
+    50% {
+        font-size: 24px;
+        margin-left: -5px;
+        margin-top: -5px;
+    }
+
+    100% {
+        font-size: 14px;
+        margin-left: 0px;
+        margin-top: 0px;
+    }
+}

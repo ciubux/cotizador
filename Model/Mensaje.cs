@@ -24,6 +24,8 @@ namespace Model
 
         public DateTime? fechaInicioMensaje { get; set; }
 
+        public DateTime fechaMensajeEntradaDesde { get; set; }
+        public DateTime fechaMensajeEntradaHasta { get; set; }
 
         [Display(Name = "Fecha de Vencimiento:")]
         public DateTime? fechaVencimientoMensaje { get; set; }
@@ -43,6 +45,9 @@ namespace Model
 
         [Display(Name = "Estado:")]
         public int estado { get; set; }
+
+        [Display(Name = "Bandeja:")]
+        public int bandeja { get; set; }
 
         public Usuario user { get; set; }
 

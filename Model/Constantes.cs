@@ -410,6 +410,8 @@ namespace Model
 
         public const String MODIFICA_MENSAJE = "P831";
         public const String LISTA_MENSAJE = "P830";
+        public const String ENVIA_MENSAJE = "P832";
+
 
         public const String MODIFICA_PARAMETRO = "P890";
        
@@ -550,7 +552,7 @@ namespace Model
             [Display(Name = "MANTENIMIENTO MENSAJES")]
             MantenimientoMensaje = 49,
 
-            /*PARAMETRO*/            
+            /*PARAMETRO*/
             [Display(Name = "MANTENIMIENTO PARAMETRO")]
             MantenimientoParametro = 51,
             BusquedaParametro = 52,

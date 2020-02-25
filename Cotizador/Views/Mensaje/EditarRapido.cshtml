@@ -1,4 +1,4 @@
-﻿@{ViewBag.Title = "Mensaje - Rapido";
+﻿@{ViewBag.Title = "Envió de mensaje";
     Model.Mensaje mensaje = ViewBag.Mensaje;
     List<Model.Rol> roles = ViewBag.roles;
 }
@@ -96,7 +96,7 @@
                         </div>
                     </div>
 
-                    <div class="row form-group">
+                    <div class="row form-group" id="etiquetaRolesModal">
 
                         <label class="col-form-label col-md-3">Roles:</label>
 
@@ -123,9 +123,8 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button hidden type="button" id="btnCancelarMensajeModal" class="btn btn-danger"> Cancelar</button>
-            <button class="btn btn-primary" id="btnEnviarMensajeModal">Finalizar Creación</button>
+            <button hidden type="button" id="btnCancelarMensajeModal" class="btn btn-danger">Cancelar</button>
+            <button class="btn btn-primary" id="btnEnviarMensajeModal">Enviar</button>
         </div>
-
 
     </div>

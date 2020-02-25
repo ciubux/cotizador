@@ -218,6 +218,9 @@ namespace Model
 
         public bool visualizaMensaje { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.LISTA_MENSAJE)).FirstOrDefault() != null; } }
 
+        public bool enviaMensaje { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ENVIA_MENSAJE)).FirstOrDefault() != null; } }
+
+
         /*Parametro*/
         public bool modificaParametro { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_PARAMETRO)).FirstOrDefault() != null; } }
         

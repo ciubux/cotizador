@@ -40,8 +40,22 @@
     var fechaVencimientoHastaDesde = $("#mensaje_fechaVencimientoDesde").val();
     var fechaVencimientoHastaHasta = $("#mensaje_fechaVencimientoHasta").val();
 
+    var fechaRecibidosDesde = $("#mensaje_fechaMensajeEntradaDesde").val();
+    var fechaRecibidosHasta = $("#mensaje_fechaMensajeEntradaHasta").val();
+
 
     var fechaVencimientoedit = $("#mensaje_fechaVencimientoMensaje_edit").val();
+
+
+
+    $("#mensaje_fechaMensajeEntradaDesde").datepicker({
+        dateFormat: 'dd/mm/yy'
+    }).datepicker("setDate", fechaRecibidosDesde);
+    $("#mensaje_fechaMensajeEntradaHasta").datepicker({
+        dateFormat: 'dd/mm/yy'
+    }).datepicker("setDate", fechaRecibidosHasta);
+
+
 
     $("#mensaje_fechaVencimientoMensaje_edit").datepicker({
         dateFormat: 'dd/mm/yy'
@@ -240,7 +254,12 @@
             url: "/Mensaje/Limpiar",
             type: 'POST',
             success: function () {
+                var a = $('#mensaje_bandeja_enviados').prop('checked');
                 location.reload();
+                if (a==true)
+                {
+                    $('#mensaje_bandeja_enviados').click();
+                }
             }
         });
     });
@@ -266,8 +285,8 @@
     }
 
 
-    $(".navbar-header").on("click", "a.btnModal", function () {         
-        $('#Mensaje1').modal('show');       
+    $(".navbar-header").on("click", "a.btnModal", function () {
+        $('#Mensaje1').modal('show');
     });
 
 
@@ -276,7 +295,7 @@
         var arrayOut = {};
         var unicos = arrayIn.filter(function (e) {
             return arrayOut[e.id_mensaje] ? false : (arrayOut[e.id_mensaje_hilo.id_mensaje] = true);
-        });        
+        });
         return unicos;
     }
 
@@ -316,15 +335,13 @@
                             }
                             var imagenAdvertencia = list[i].importancia == "Alta" ? '<img src = "/images/advertencia.svg" style="vertical-align: middle; margin-bottom:5px;  margin-right:10px;" width = "20px" height = "20px"  >' +
                                 '<svg width="1px" height="1px" xmlns="https://www.w3.org/2000/svg"></svg>' : "";
-                            
+
                             var ItemRow =
                                 '<div id="Mensaje' + numeroModal + '" class="modal fade ModalMensajeAlerta" tabindex="-1" role="dialog">' +
                                 '<div class="modal-dialog" id="MensajeDialog' + numeroModal + '">' +
                                 '<div class="modal-content">' +
                                 '<div class="modal-header">' +
-                                '<div class="btn-group" style="float:left">' +
-                                '<button  type="button"  class="btn btn-default Responder" id="' + numeroModal + '"">Responder</button>' +
-                                '</div>' +
+
                                 '<div class="btn-group" style="float:right">' +
                                 '<button  type="button"  class="Leido btn btn-primary ' + list[i].id_mensaje + ' ">' + BtnLabel + '</button>' +
                                 '</div><br><br>' +
@@ -334,8 +351,14 @@
                                 '<h5> <b>DE: </b>' + list[i].usuario_creacion + ' - <b> FECHA: </b>' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) + '</h5>' +
 
                                 '<h4 style="display: inline-block;">' + imagenAdvertencia + '<u>' + list[i].titulo + '</u></h4>' +
-                                '<p>' + list[i].mensaje + '</p>' +
+                                '<p style="margin-bottom: 0.11in"><font size="3"><span lang="es-PE">' + list[i].mensaje + '</span></font></p>' +
+
                                 '<textarea class="form-control" id ="respuesta' + numeroModal + '" rows="4" style="display:none" placeholder="Respuesta..."> </textarea>' +
+
+                                '<div class="btn-group" style="float:right">' +
+                                '<button  type="button"  class="btn btn-success Responder" id="' + numeroModal + '"">Responder</button>' +
+                                '</div>' +
+
                                 '<div class="botonesRespuesta' + numeroModal + ' pull-right btn-group" style="display:none">' +
 
                                 '<button   class="cerrarRespuesta btn btn-default" id="' + numeroModal + '">Cancelar</button>' +
@@ -370,7 +393,7 @@
 
         }
     }
-    $('body').on('show.bs.modal', '.ModalMensajeAlerta', function () {        
+    $('body').on('show.bs.modal', '.ModalMensajeAlerta', function () {
         var arrayClass = $(this).find('.Leido').attr('class').split(" ");
         var idMensaje = arrayClass[3];
         var numeroModal = $(this).find('.Responder').attr('id');
@@ -390,7 +413,7 @@
                     minuto = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
                     segundo = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
                     horaImprimible = hora + ":" + minuto + ":" + segundo;
-
+                    var ultimoSalto = i + 1 == list.length ? '' : '<br>';
                     var a =
 
                         '<b><P STYLE="margin-bottom: 0.11in"><A NAME="_GoBack"></A><SPAN LANG="es-PE">' + list[i].user.nombre + '</SPAN></b><FONT SIZE=3><SPAN LANG="es-PE"> </SPAN></FONT> <FONT SIZE=2 > <SPAN LANG="es-PE">' +
@@ -398,9 +421,14 @@
                         + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) + ' ' + horaImprimible + '</SPAN></FONT></FONT > <FONT COLOR="#808080"><FONT SIZE=2 STYLE="font-size: 9pt"><SPAN LANG="es-PE">' +
                         '</SPAN></FONT></FONT>' +
                         '</P>' +
-                        '<P STYLE="margin-bottom: 0.11in"><FONT SIZE=3><SPAN LANG="es-PE">' + list[i].mensaje + '' + '</SPAN></FONT></P></br>';
+                        '<P STYLE="margin-bottom: 0.11in"><FONT SIZE=3><SPAN LANG="es-PE">' + list[i].mensaje + '' + '</SPAN></FONT></P>' +
+                        ultimoSalto + '';
 
-
+                    if (i > 3) {
+                        $('[id="scrollRemober"]').remove();
+                        $('#modalHistorialMensaje' + numeroModal + '').before('<br id="scrollRemober">');
+                        $('#modalHistorialMensaje' + numeroModal + '').attr('style', 'height: 300px;overflow: auto;');
+                    }
                     $('#modalHistorialMensaje' + numeroModal + '').append(a);
                 }
             }
@@ -414,7 +442,7 @@
         $('.botonesRespuesta' + num + '').show();
         $('.Responder').hide();
         $('#respuesta' + num + '').after('<br id="saltoLinea">');
-        $('#respuesta'+num+'').focus();
+        $('#respuesta' + num + '').focus();
     });
 
     $('body').on("click", "button.EnviarRespuesta", function () {
@@ -422,7 +450,7 @@
         var txtRespuesta = $('#respuesta' + num + '').val();
         var arrayClass = $(this).attr('class').split(" ");
         var idMensaje = arrayClass[3];
-        
+
         if (txtRespuesta.trim() === "") {
             $(this).closest('.modal-content').find('button.Leido').click();
         }
@@ -438,7 +466,7 @@
                     let dialog = $('.' + idMensaje + '').closest('.modal');
                     var btnFinal = dialog.find('.Leido').html();
                     if (btnFinal == "Marcar como leído") {
-                        dialog.modal('hide');    
+                        dialog.modal('hide');
                         location.reload();
                     }
                     else {
@@ -450,7 +478,7 @@
                     $('#respuesta' + num + '').empty;
                     var num = $(this).attr('id');
                     $('#respuesta' + num + '').hide();
-                    $('.botonesRespuesta' + num + '').hide();                  
+                    $('.botonesRespuesta' + num + '').hide();
                     $('#respuesta' + num + '').val("");
                     $('.Responder').show();
                     ActulizarMensaje();
@@ -474,6 +502,7 @@
         var num = $(this).closest('.modal-header').find(".Responder").attr('id');
         var arrrayClass = $(this).attr('class').split(" ");
         var idMensaje = arrrayClass[3];
+
         $.ajax({
             url: "/Mensaje/UpdateMensajeVisto",
             type: 'POST',
@@ -485,13 +514,14 @@
                 let dialog = $('.' + idMensaje + '').closest('.modal');
                 var btnFinal = dialog.find('.Leido').html();
                 if (btnFinal == "Marcar como leído") {
-                    dialog.modal('hide');  
+                    dialog.modal('hide');
                     location.reload();
                 }
                 else {
                     dialog.modal('hide');
                     dialog.next().modal('show');
                 }
+                //$('.Responder').show();
                 $('.' + idMensaje + '').closest('#MensajeDialog').find('#modalRespuesta' + num + '').empty();
                 ActulizarMensaje();
             }
@@ -554,6 +584,16 @@
         });
     }
 
+    $("#mensaje_fechaMensajeEntradaDesde").change(function () {
+        var valor = $("#mensaje_fechaMensajeEntradaDesde").val();
+        Changefecha('fechaMensajeEntradaDesde', valor);
+    });
+
+    $("#mensaje_fechaMensajeEntradaHasta").change(function () {
+        var valor = $("#mensaje_fechaMensajeEntradaHasta").val();
+        Changefecha('fechaMensajeEntradaHasta', valor);
+    });
+
 
     $("#mensaje_fechaCreacionDesde").change(function () {
         var valor = $("#mensaje_fechaCreacionDesde").val();
@@ -586,6 +626,21 @@
         $("#mensaje_fechaVencimientoDesde").val(null);
         $("#mensaje_fechaVencimientoHasta").val(null);
     });
+
+    function Changefecha(propiedad, valor) {
+
+        $.ajax({
+            url: "/Mensaje/ChangeFecha",
+            type: 'POST',
+            data: {
+                fecha: valor,
+                propiedad: propiedad
+            },
+            success: function () {
+            }
+        });
+    }
+
 
     function ChangefechaCreacion(propiedad, valor) {
 
@@ -634,22 +689,23 @@
                         "enabled": true
                     }
                 });
-
+                
+               
                 for (var i = 0; i < list.length; i++) {
-
+                    var btnEditar = $("#mensaje_bandeja_enviados").prop('checked') ? '<button type = "button" style = "margin-right:13px;" class="' + list[i].id_mensaje + ' btnEditarMensaje btn btn-primary" > Editar</button >' : '';
                     var ItemRow = '<tr data-expanded="true">' +
 
                         '<td>  ' + list[i].id_mensaje + '  </td>' +
                         '<td>  ' + list[i].titulo + '  </td>' +
-                        '<td>  ' + list[i].mensaje + '  </td>' +
+                        //'<td>  ' + list[i].mensaje + '  </td>' +
                         '<td>  ' + list[i].usuario_creacion + '  </td>' +
-                        //'<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) + '  </td>' +
+                        '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) + '  </td>' +
                         '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) + '  </td>' +
                         '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaVencimientoMensaje)) + '  </td>' +
                         '<td>' +
-                        '<button type="button" style="margin-right:13px;" class="' + list[i].id_mensaje + ' btnEditarMensaje btn btn-primary">Editar</button>' +
-                        '<button type="button" class="' + list[i].id_mensaje + ' btnVerMensaje btn btn-success">Ver</button>' +    
-                       
+                        btnEditar+
+                        '<button type="button" class="' + list[i].id_mensaje + ' btnVerMensaje btn btn-success">Ver</button>' +
+
                         '</td>' +
                         '</tr>';
 
@@ -667,142 +723,143 @@
         $('#idMensajeRespuesta').val(idMensaje);
         $.ajax({
             url: "/Mensaje/verUsuariosRespuesta",
-            type: 'POST',  
+            type: 'POST',
             async: false,
             dataType: 'JSON',
             data: {
                 idMensaje: idMensaje
             },
-            success: function (resultado)
-            {
+            success: function (resultado) {
                 $('#UsuariosRespuesta').empty();
-                
+
                 $('#UsuariosRespuesta').append('<option value=" ">Selecciona un Usuario</option>');
-                for (var i = 0; i < resultado.length; i++) 
-                {
+                for (var i = 0; i < resultado.length; i++) {
                     var listaUsuario = '<option value="' + resultado[i].idUsuario + '">' + resultado[i].nombre + '</option>';
                     $('#UsuariosRespuesta').append(listaUsuario);
-                }                                 
+                }
                 $('#respuestasUsuarios').empty();
                 $('[id^=respuestasUser]').remove();
                 $('#Prueba2').remove();
                 $('#modalListado').modal('show');
+                
+                if ($('#mensaje_bandeja_recibidos').prop('checked') == true && $('#UsuariosRespuesta option').length == 2 ) {
+                    $("#UsuariosRespuesta").prop("selectedIndex", 1).change();  
+                    $('#UsuariosRespuesta').prop("disabled", true);
+                }
+                if ($('#mensaje_bandeja_recibidos').prop('checked') == true && $('#UsuariosRespuesta option').length > 2) {
+                    $("#UsuariosRespuesta").prop("selectedIndex", 2).change();
+                    $('#UsuariosRespuesta').prop("disabled", true);
+                }
             }
         });
     });
-    
+
     $('body').on('change', "#UsuariosRespuesta", function () {
 
-        var idUsuario = $('#UsuariosRespuesta').val(); 
-        var idMensaje = $('#idMensajeRespuesta').val(); 
-        if (idUsuario == " ")
-        {           
+        var idUsuario = $('#UsuariosRespuesta').val();
+        var idMensaje = $('#idMensajeRespuesta').val();
+        if (idUsuario == " ") {
             $('[id^=respuestasUser]').remove();
             $('#Prueba2').remove();
             $('[id^=saltoEmilinar]').remove();
         }
-        else
-        {
+        else {
             $.ajax({
-            url: "/Mensaje/verRespuestaUsuario",
-            type: 'POST',
-            async: false,
-            dataType: 'JSON',
-            data: {
-                idMensaje: idMensaje,
-                idUsuario: idUsuario
-            },
-                success: function (list)
-                {                    
+                url: "/Mensaje/verRespuestaUsuario",
+                type: 'POST',
+                async: false,
+                dataType: 'JSON',
+                data: {
+                    idMensaje: idMensaje,
+                    idUsuario: idUsuario
+                },
+                success: function (list) {
                     $('[id^=respuestasUser]').remove();
                     $('[id^=saltoEmilinar]').remove();
                     $('#Prueba2').remove();
 
 
-                    var imagenAdvertencia = list[list.length-1].importancia == "Alta" ? '<img src = "/images/advertencia.svg" style="vertical-align: middle; margin-bottom:5px;  margin-right:10px;" width = "20px" height="20px">' +
+                    var imagenAdvertencia = list[list.length - 1].importancia == "Alta" ? '<img src = "/images/advertencia.svg" style="vertical-align: middle; margin-bottom:5px;  margin-right:10px;" width = "20px" height="20px">' +
                         '<svg width="1px" height="1px" xmlns="https://www.w3.org/2000/svg"></svg>' : "";
 
-                    var titulo = '<h4 id="Prueba2" style="display: inline-block;">' + imagenAdvertencia + '<u>' + list[list.length-1].titulo + '</u></h4>';
+                    var titulo = '<h4 id="Prueba2" style="display: inline-block;">' + imagenAdvertencia + '<u>' + list[list.length - 1].titulo + '</u></h4>';
 
                     $('#Prueba').after(titulo);
 
-                    for (var i=0;i< list.length; i++)
-                    {
+                    for (var i = 0; i < list.length; i++) {
                         //var color2 = i % 2 == 0 ? 'class="bg-primary text-white"' : 'class="class="bg-primary text-white""'; 
                         var color2 = i % 2 == 0 ? 'style="padding-top: 0px; padding-bottom: 0px;padding-left: 10px;padding-right: 10px; background-color: #E0FFD6; border-style: solid; border-width: 2px; border-radius: 8px; border-color: #33D200;"'
-                            : 'style="background-color: #D6F4FF; border-style: solid; border-width: 2px; border-radius: 8px; border-color: #009FDA; padding-top: 0px; padding-bottom: 0px;padding-left: 10px;padding-right: 10px; "'; 
-                       
+                            : 'style="background-color: #D6F4FF; border-style: solid; border-width: 2px; border-radius: 8px; border-color: #009FDA; padding-top: 0px; padding-bottom: 0px;padding-left: 10px;padding-right: 10px; "';
+
                         var date = new Date(list[i].fechaCreacionMensaje);
                         hora = (date.getHours() < 10 ? '0' : '') + date.getHours();
                         minuto = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
                         segundo = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
                         horaImprimible = hora + ":" + minuto + ":" + segundo;
-                       
-                        var a = '<br id="saltoEmilinar">'+
-                            '<div id = "respuestasUser" '+color2+' >' +                           
+
+                        var a = '<br id="saltoEmilinar">' +
+                            '<div id = "respuestasUser" ' + color2 + ' >' +
                             '<b><P STYLE="margin-bottom: 0.11in;font-size:11px;"><SPAN LANG="es-PE">' + list[i].user.nombre + '</SPAN></b><FONT SIZE=3><SPAN LANG="es-PE"> </SPAN></FONT> <FONT SIZE=2 > <SPAN LANG="es-PE">' +
                             '</SPAN></FONT> <FONT COLOR="#808080"><SPAN LANG="es-PE">'
                             + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) + ' ' + horaImprimible + '</SPAN></FONT></FONT > <FONT COLOR="#808080"><FONT SIZE=2 STYLE="font-size: 9pt"><SPAN LANG="es-PE">' +
                             '</SPAN></FONT></P>' +
-                            '<P STYLE="margin-bottom: 0.11in"><FONT SIZE=3><SPAN LANG="es-PE">' + list[i].mensaje + '' + '</SPAN></FONT></P>'+
+                            '<P STYLE="margin-bottom: 0.11in"><FONT SIZE=3><SPAN LANG="es-PE">' + list[i].mensaje + '' + '</SPAN></FONT></P>' +
                             '</div>';
-                            
+
                         $('#Prueba2').after(a);
                     }
                 }
             });
-        }               
+        }
     });
-    
+
     $('body').on('click', "button.btnEditarMensaje", function () {
 
         var arrrayClass = event.target.getAttribute("class").split(" ");
         var idMensaje = arrrayClass[0];
 
-                   $.ajax({
-                            url: "/Mensaje/ConsultarSiExisteMensaje",
-                            type: 'POST',
-                            async: false,
-                            dataType: 'JSON',
-                            data: {
-                                idMensaje: idMensaje
-                            },
-                       success: function (resultado)
-                       {
+        $.ajax({
+            url: "/Mensaje/ConsultarSiExisteMensaje",
+            type: 'POST',
+            async: false,
+            dataType: 'JSON',
+            data: {
+                idMensaje: idMensaje
+            },
+            success: function (resultado) {
 
-                            if (resultado.existe == "false") {
-                                $.ajax({
-                                    url: "/Mensaje/iniciarEdicionMensaje",
-                                    type: 'POST',
-                                    async: false,
-                                    error: function (detalle) {
-                                        alert("Ocurrió un problema al iniciar la edición del mensaje.");
-                                    },
-                                    success: function (fileName) {
-                                        window.location = '/Mensaje/Editar'; 
-                                        ConsultaMensajeLeido();
-                                    }
-                                });
-                            }
-                            else
-                            {
-                                if (resultado.idVendedor == 0) {
-                                    alert('Está creando un nuevo mensaje; para continuar por favor diríjase a la página "Crear/Modificar Vendedor" y luego haga clic en el botón Cancelar.');
-                                }
-
-                                else {
-                                    alert('Ya se encuentra editando un mensaje para continuar por favor dirigase a la página "Crear/Modificar Mensaje".');
-                                     }
-                            }
+                if (resultado.existe == "false") {
+                    $.ajax({
+                        url: "/Mensaje/iniciarEdicionMensaje",
+                        type: 'POST',
+                        async: false,
+                        error: function (detalle) {
+                            alert("Ocurrió un problema al iniciar la edición del mensaje.");
+                        },
+                        success: function (fileName) {
+                            window.location = '/Mensaje/Editar';
+                            ConsultaMensajeLeido();
+                        }
+                    });
+                }
+                else {
+                    if (resultado.idVendedor == 0) {
+                        alert('Está creando un nuevo mensaje; para continuar por favor diríjase a la página "Crear/Modificar Vendedor" y luego haga clic en el botón Cancelar.');
                     }
-                });
+
+                    else {
+                        alert('Ya se encuentra editando un mensaje para continuar por favor dirigase a la página "Crear/Modificar Mensaje".');
+                    }
+                }
+            }
+        });
     });
 
     ConsultaMensajeLeido();
     function ConsultaMensajeLeido() {
 
         if (window.location.pathname == '/Mensaje/Editar') {
-        var idMensaje = $('#idMensaje').val();         
+            var idMensaje = $('#idMensaje').val();
 
             $.ajax({
                 url: "/Mensaje/ConsultarSiMensajeLeido",
@@ -814,18 +871,18 @@
                 },
                 success: function (resultado) {
 
-                    if (resultado.leido == 1) {  
+                    if (resultado.leido == 1) {
                         alert('El mensaje no se puede modificar debido a que ya fue leido por un receptor');
                         $("#vendedor_importancia_si").prop('disabled', true);
                         $("#vendedor_importancia_no").prop('disabled', true);
                         $("#mensaje_fechaInicioMensaje").prop('disabled', true);
                         $("#mensaje_fechaVencimientoMensaje_edit").prop('disabled', true);
                         $("#titulo").prop('disabled', true);
-                        $("#txtMensaje").prop('disabled', true);                        
+                        $("#txtMensaje").prop('disabled', true);
                         $('#idUsuarioBusquedaMensaje').prop('disabled', true).trigger("chosen:updated");
                         $('[id*=rol_]').prop('disabled', true);
-                        $('#btnEnviarMensaje').remove();  
-                                               
+                        $('#btnEnviarMensaje').remove();
+
                     }
                 }
             });
@@ -873,6 +930,20 @@
         var valCheck = 0;
         changeInputInt("estado", valCheck);
     });
+
+
+    $("#mensaje_bandeja_enviados").click(function () {
+        var valCheck = 1;
+        changeInputInt("bandeja", valCheck);
+        location.reload();
+    });
+
+    $("#mensaje_bandeja_recibidos").click(function () {
+        var valCheck = 0;
+        changeInputInt("bandeja", valCheck);
+        location.reload();        
+    });
+
 
     function changeInputInt(propiedad, valor) {
         $.ajax({
@@ -965,12 +1036,11 @@
     });
 
     setTimeout(function () {
-    $('body').on('click', '#MensajeRapidoMenu', function (event) {
-        event.preventDefault();        
-        var url = $('#MensajeRapido').data('url');        
-        $("#MensajeRapidoDialog").load(url, function (data)
-        { $("#MensajeRapido").modal("show"); });        
-    });
+        $('body').on('click', '#MensajeRapidoMenu', function (event) {
+            event.preventDefault();
+            var url = $('#MensajeRapido').data('url');
+            $("#MensajeRapidoDialog").load(url, function (data) { $("#MensajeRapido").modal("show"); });
+        });
     }, 3000);
 
 
@@ -987,41 +1057,30 @@
         changeInputString("mensaje", $("#txtMensajeModal").val());
     });
 
-    $(document).on('change', "#idUsuarioBusquedaMensajeModal", function () {
-        var idUsuario = $("#idUsuarioBusquedaMensajeModal").val();
-        $.ajax({
-            url: "/Mensaje/ChangeUsuarioMensaje",
-            type: 'POST',
-            data: {
-                idUsuario: idUsuario
-            },
-            success: function () {
-            }
-        });
-    });
 
     $('body').on('click', "#btnCancelarMensajeModal", function () {
         $("#MensajeRapido").modal("hide");
     });
 
-    
-        $('body').on('shown.bs.modal', '#MensajeRapido', function () {
-            cargarTooltipLista();            
-            $('#idUsuarioBusquedaMensajeModal', this).chosen('destroy').chosen({ placeholder_text: "Buscar Usuario", no_results_text: "No se encontró Usuario", allow_single_deselect: true }).on('chosen:showing_dropdown');
-            $('#mensajeFechaInicioMensajeModal').datepicker().datepicker("setDate", new Date());
-            $('#mensajeFechaVencimientoMensajeModal').datepicker().datepicker("setDate", '+7');
 
-            $('#idUsuarioBusquedaMensajeModal', this).ajaxChosen({
-                dataType: "json",
-                type: "GET",
-                minTermLength: 3,
-                afterTypeDelay: 300,
-                cache: false,
-                url: "/Usuario/SearchUsuarios"
-            }, {
-                    loadingImg: "Content/chosen/images/loading.gif"
-                }, { placeholder_text_single: "Buscar Usuario", no_results_text: "No se encontró Usuario" });
-        });
+    $('body').on('shown.bs.modal', '#MensajeRapido', function () {
+        cargarTooltipLista();
+        ConteoUsuario();
+        $('#idUsuarioBusquedaMensajeModal', this).chosen('destroy').chosen({ placeholder_text: "Buscar Usuario", no_results_text: "No se encontró Usuario", allow_single_deselect: true }).on('chosen:showing_dropdown');
+        $('#mensajeFechaInicioMensajeModal').datepicker().datepicker("setDate", new Date());
+        $('#mensajeFechaVencimientoMensajeModal').datepicker().datepicker("setDate", '+7');
+
+        $('#idUsuarioBusquedaMensajeModal', this).ajaxChosen({
+            dataType: "json",
+            type: "GET",
+            minTermLength: 3,
+            afterTypeDelay: 300,
+            cache: false,
+            url: "/Usuario/SearchUsuarios"
+        }, {
+                loadingImg: "Content/chosen/images/loading.gif"
+            }, { placeholder_text_single: "Buscar Usuario", no_results_text: "No se encontró Usuario" });
+    });
 
 
 
@@ -1052,13 +1111,102 @@
         });
     });
 
+
     $(document).on('change', ".RolMensajeModal", function () {
         var valor = 0;
+
         if ($(this).prop("checked")) {
             valor = 1;
         }
+
         changeInputPermiso($(this).attr("id"), valor);
+
+        ConteoUsuario();
+
     });
+
+    $(document).on('change', "#idUsuarioBusquedaMensajeModal", function () {
+        var idUsuario = $("#idUsuarioBusquedaMensajeModal").val();
+
+        $.ajax({
+            url: "/Mensaje/ChangeUsuarioMensaje",
+            type: 'POST',
+            data: {
+                idUsuario: idUsuario
+            },
+            success: function () {
+            }
+        });
+        ConteoUsuario();
+    });
+
+    function eliminateDuplicados(arrayIn) {
+
+        var arrayOut = new Array();
+        var unicos = arrayIn.filter(function (e) {
+            return arrayOut[e] ? false : (arrayOut[e] = true);
+        });
+        return unicos;
+    }
+
+    function ConteoUsuario() {
+        var numUsuarios = $("#idUsuarioBusquedaMensajeModal").val();
+
+        $('.RolMensajeModal').each(function () {
+
+            var id_rol;
+            if ($(this).prop('checked')) {
+                id_rol = $(this).attr("id");
+                id_rol = id_rol.replace('rol_', '');
+                AjaxNumeroUsuarios();
+            }
+            function AjaxNumeroUsuarios() {
+                $.ajax({
+                    url: "/Rol/ListUsuarios",
+                    type: 'POST',
+                    async: false,
+                    dataType: 'JSON',
+                    data:
+                    {
+                        idRol: id_rol
+                    },
+                    success: function (list) {
+
+                        for (i = 0; i < list.length; i++) {
+                            numUsuarios.push(list[i].idUsuario);
+                        }
+
+                    }
+
+                });
+            }
+        });
+        numUsuarios = eliminateDuplicados(numUsuarios);
+        numerofinal = numUsuarios.length;
+
+        $('#etiquetaUsuariosModalNumero').remove();
+
+        var etiqueta = '<div class="row form-group" id="etiquetaUsuariosModalNumero"> <label class="col-form-label col-md-3"></label> <div class="col-md-9"> <h5 class="text-danger"><b>Este mensaje se enviará a <span id="numerosa" style="position:absolute; font-size: 1em;" class="labelModificado label-danger">' + numerofinal + '</span><span class="labelModificado label-danger" id="numerosaShadow" style="font-size: 1em;">' + numerofinal+'</span> usuario(s)</b></h5></div></div>';
+        etiqueta = numerofinal == 0 ? $('#etiquetaUsuariosModalNumero').remove() : etiqueta;
+        $('#etiquetaRolesModal').before(etiqueta);
+
+
+        var element = document.getElementById("numerosa");
+        var elementShadow = document.getElementById("numerosaShadow");
+        if (element != null && elementShadow != null)
+        {
+            element.innerHTML = numerofinal;
+            elementShadow.innerHTML = numerofinal;
+            element.classList.remove("parpadea");
+
+            setTimeout(function () {
+                element.classList.add("parpadea");
+                setTimeout(function () {
+                    element.classList.remove("parpadea");
+                }, 300);
+            }, 100);
+        }
+    }
 
     $(document).on('click', "#btnEnviarMensajeModal", function () {
         crearMensajeModal();
@@ -1089,7 +1237,7 @@
 
                 $.alert({
                     title: TITLE_EXITO,
-                    content: 'El mensaje se creó correctamente.',
+                    content: 'Mensaje enviado.',
                     type: 'green',
                     buttons: {
                         OK: function () {
@@ -1172,14 +1320,13 @@
 
     }
 
-    function cargarTooltipLista() 
-    {
+    function cargarTooltipLista() {
         var idRol;
         $(".listaUsuarioRoles").each(function () {
             idRol = $(this).attr('id');
             idRol = idRol.replace('tooltip_', '');
             UsuariosRoles(idRol);
-        });               
+        });
     }
 
     function UsuariosRoles(idRol) {
@@ -1192,6 +1339,7 @@
                 idRol: idRol
             },
             success: function (list) {
+
                 var lista = "";
                 for (var i = 0; i < list.length; i++) {
                     lista += list[i].nombre + ' (' + list[i].email + ')' + '</br> ';
@@ -1211,5 +1359,4 @@
     }
 
 });
-
 

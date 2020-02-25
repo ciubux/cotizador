@@ -469,14 +469,16 @@
                                         <li id="linkMantenimientoUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar", "Editar", "Usuario")</li>
                                     }
 
-                                    @if (usuario.visualizaMensaje || usuario.modificaMensaje)
+                                    @if (usuario.visualizaMensaje || usuario.modificaMensaje || usuario.enviaMensaje )
                                     {
                                         <li id="linkBusquedaMensaje" class="@linkBusquedaMensaje">@Html.ActionLink("Mensaje - Búsqueda", "Lista", "Mensaje")</li>
                                     }
-                                    @if (usuario.modificaMensaje)
+
+                                    @*if (usuario.modificaMensaje)
                                     {
                                         <li id="linkCrearMensaje" class="@linkCrearMensaje">@Html.ActionLink("Mensaje - Crear/Modificar", "Editar", "Mensaje")</li>
                                     }
+                                    *@
 
                                     @if (usuario.modificaParametro)
                                     {

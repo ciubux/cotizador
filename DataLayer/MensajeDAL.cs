@@ -159,6 +159,10 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fecha_vencimiento_hasta", mensaje.fechaVencimientoMensajeHasta);
 
             InputParameterAdd.Guid(objCommand, "id_usuario_creacion", mensaje.user.idUsuario);
+            InputParameterAdd.Int(objCommand, "bandeja", mensaje.bandeja);
+            InputParameterAdd.DateTime(objCommand, "fecha_entrada_desde", mensaje.fechaMensajeEntradaDesde);
+            InputParameterAdd.DateTime(objCommand, "fecha_entrada_hasta", mensaje.fechaMensajeEntradaHasta);
+
             DataTable dataTable = Execute(objCommand);
             foreach (DataRow row in dataTable.Rows)
             {
