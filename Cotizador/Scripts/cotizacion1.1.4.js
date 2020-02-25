@@ -695,7 +695,7 @@ jQuery(function ($) {
                     if (producto.motivoRestriccion != null) {
                         producto.motivoRestriccion = producto.motivoRestriccion.trim();
 
-                        $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").removeClass("tooltip-motivo-restriccion");
+                        $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").removeClass("tooltip-label");
                         if (producto.motivoRestriccion != "") {
                             $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").addClass("tooltip-motivo-restriccion");
                             $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado .tooltip-label-text").html(producto.motivoRestriccion);

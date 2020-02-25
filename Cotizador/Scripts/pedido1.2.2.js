@@ -1259,6 +1259,16 @@ jQuery(function ($) {
 
                 if (producto.descontinuado == 1) {
                     $("#spnProductoDescontinuado").show();
+
+                    if (producto.motivoRestriccion != null) {
+                        producto.motivoRestriccion = producto.motivoRestriccion.trim();
+
+                        $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").removeClass("tooltip-label");
+                        if (producto.motivoRestriccion != "") {
+                            $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").addClass("tooltip-motivo-restriccion");
+                            $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado .tooltip-label-text").html(producto.motivoRestriccion);
+                        }
+                    }
                 } else {
                     $("#spnProductoDescontinuado").hide();
                 }
@@ -1704,6 +1714,15 @@ jQuery(function ($) {
                 var descontinuadoLabel = "";
                 if (detalle.descontinuado == 1) {
                     descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html(); 
+
+                    if (detalle.motivoRestriccion != null) {
+                        detalle.motivoRestriccion = detalle.motivoRestriccion.trim();
+                        descontinuadoLabel = descontinuadoLabel.replace("_DATA_TIPSO_", detalle.motivoRestriccion);
+
+                        if (detalle.motivoRestriccion != "") {
+                            descontinuadoLabel = descontinuadoLabel.replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+                        }
+                    }
                 }
 
 

@@ -964,6 +964,16 @@ namespace Cotizador.Controllers
                             productoStaging.descontinuado = 0;
                         }
 
+                        pos = posicionInicial + 32;
+                        try
+                        {
+                            productoStaging.motivoRestriccion = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.motivoRestriccion = "";
+                        }
+
                         //UtilesHelper.setValorCelda(sheet, 1, "AC", Producto.nombreAtributo("tipoProducto"), titleCellStyle);
 
 

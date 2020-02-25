@@ -957,6 +957,7 @@ namespace Cotizador.Controllers
                     "\"precioUnitario\":\"" + precioUnitario + "\"," +
                     "\"porcentajeDescuento\":\"" + porcentajeDescuento + "\"," +
                     "\"descontinuado\":\"" + producto.descontinuado.ToString() + "\"," +
+                    "\"motivoRestriccion\":\"" + producto.motivoRestriccion + "\"," +
                     "\"precioListaList\":" + jsonPrecioLista + "," +
                     "\"productoPresentacionList\":" + jsonProductoPresentacion + "," +
                     "\"costoLista\":\"" + producto.costoLista + "\"" +
@@ -1100,6 +1101,7 @@ namespace Cotizador.Controllers
                     margen = detalle.margen,
                     precioUnitario = detalle.precioUnitario,
                     descontinuado = detalle.producto.descontinuado,
+                    motivoRestriccion = detalle.producto.motivoRestriccion,
                     observacion = detalle.observacion,
                     total = pedido.montoTotal.ToString(),
                     precioUnitarioRegistrado = precioUnitarioRegistrado
