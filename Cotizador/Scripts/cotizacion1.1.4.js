@@ -944,10 +944,16 @@ jQuery(function ($) {
         }
         else {
             idCliente = $("#idCliente").val();
-            if (idCliente.trim() == "") {
-                alert("Debe seleccionar un cliente.");
-                $('#idCliente').trigger('chosen:activate');
-                return false;
+            idGrupoCliente = $("#idGrupoCliente").val();
+            
+            if (idGrupoCliente > 0) {
+                actionUrl = "GetPreciosRegistradosGrupoCliente";
+            } else {
+                if (idCliente.trim() == "") {
+                    alert("Debe seleccionar un cliente.");
+                    $('#idCliente').trigger('chosen:activate');
+                    return false;
+                }
             }
         }
 

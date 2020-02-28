@@ -95,7 +95,7 @@ namespace DataLayer
             InputParameterAdd.SmallInt(objCommand, "persisteCambio", log.persisteCambio ? (short) 1 : (short) 0);
 
             InputParameterAdd.Varchar(objCommand, "idRegistro", log.idRegistro);
-            InputParameterAdd.Varchar(objCommand, "valor", log.valor);
+            InputParameterAdd.VarcharEmpty(objCommand, "valor", log.valor);
             InputParameterAdd.Varchar(objCommand, "fechaInicioVigencia", log.fechaInicioVigencia.ToString("yyyy-MM-dd"));
 
             ExecuteNonQuery(objCommand);

@@ -2577,6 +2577,13 @@ jQuery(function ($) {
                     action: function () {
                         window.location.href = actionLink + "?tipoDescarga=3";
                     }
+                },
+                cancel: {
+                    text: 'CANCELAR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                    btnClass: '',
+                    action: function () {
+
+                    }
                 }
             },
         });

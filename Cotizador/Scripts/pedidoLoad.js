@@ -1,14 +1,28 @@
 ﻿jQuery(function ($) {
 
+    
+    $("#btnCargarPedidos").click(function () {
+        $("#btnCargarPedidos").attr("disabled", true);
+        $('body').loadingModal({
+            text: 'Cargando pedidos...'
+        });
+
+        $("#formLoad").submit();
+    });
+
     $("#btnActualizarRUC").click(function () {
         $('body').loadingModal({
             text: 'Actualizando RUC para carga masiva'
         });
+        var ruc = $("#ruc").val();
+        ruc = ruc.trim();
+        $("#ruc").val(ruc);
+
         $.ajax({
             url: "/General/actualizarParametroRUCCargaMasiva",
             type: 'POST',
             data: {
-                ruc: $("#ruc").val()
+                ruc: ruc
             },
             error: function (detalle) {
                 $('body').loadingModal('hide')
