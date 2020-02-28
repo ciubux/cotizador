@@ -731,7 +731,7 @@
             },
             success: function (resultado) {
                 $('#UsuariosRespuesta').empty();
-
+                $('[id^=VerContenedor]').remove(); 
                 $('#UsuariosRespuesta').append('<option value=" ">Selecciona un Usuario</option>');
                 for (var i = 0; i < resultado.length; i++) {
                     var listaUsuario = '<option value="' + resultado[i].idUsuario + '">' + resultado[i].nombre + '</option>';
@@ -785,7 +785,7 @@
                     var titulo = '<h4 id="Prueba2" style="display: inline-block;">' + imagenAdvertencia + '<u>' + list[list.length - 1].titulo + '</u></h4>';
 
                     $('#Prueba').after(titulo);
-                    $('#VerContenedor').remove();
+                    $('[id^=VerContenedor]').remove();                    
                     $('#Prueba2').after('<div id="VerContenedor">');
                     for (var i = 0; i < list.length; i++) {
                        
@@ -808,9 +808,9 @@
                             '</div>' + salto;
 
                         $('#VerContenedor').append(a);
-                        if (i > 4)
+                        if (i > 3)
                         {                                                  
-                            $('#VerContenedor').attr('style','height: 350px;overflow: auto;');
+                            $('#VerContenedor').attr('style','height:400px; overflow:auto;');
                         }
                     }
                 }
