@@ -685,6 +685,9 @@ jQuery(function ($) {
                         text: 'SI',
                         btnClass: 'btn-success',
                         action: function () {
+                            $('body').loadingModal({
+                                text: 'Leyendo Archivo...'
+                            });
                             $("#formCargarProductos").submit();
                         }
                     },
@@ -706,6 +709,9 @@ jQuery(function ($) {
                         text: 'SI',
                         btnClass: 'btn-success',
                         action: function () {
+                            $('body').loadingModal({
+                                text: 'Leyendo Archivo...'
+                            });
                             $("#formCargarProductos").submit();
                         }
                     },
