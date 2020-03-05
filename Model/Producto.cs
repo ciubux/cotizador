@@ -17,7 +17,7 @@ namespace Model
             this.tipoProducto = TipoProducto.Bien;
             this.ProductoPresentacionList = new List<ProductoPresentacion>();
             this.CargaMasiva = false;
-            this.descontinuado = 0;
+            this.ventaRestringida = TipoVentaRestringida.SinRestriccion;
         }
 
 
@@ -279,7 +279,66 @@ namespace Model
                 return EnumHelper<TipoProducto>.GetDisplayValue(this.tipoProducto);
             }
         }
-        
+
+        public enum TipoVentaRestringida
+        {
+            [Display(Name = "Sin Restricción")]
+            SinRestriccion = 0,
+            [Display(Name = "Descontinuado")]
+            Descontinuado = 1,
+            [Display(Name = "Inestabilidad de precios")]
+            InestabilidadPrecios = 2,
+            [Display(Name = "Stock limitado")]
+            StockLimitado = 3
+        }
+
+
+        public String tipoVentaRestingidaToString
+        {
+            get
+            {
+                return EnumHelper<TipoVentaRestringida>.GetDisplayValue(this.ventaRestringida);
+            }
+        }
+
+        public bool validaCotizacionVentaRestringida(Usuario validador = null)
+        {
+            if (validador == null)
+            {
+                validador = this.usuario;
+            }
+
+            switch (this.ventaRestringida)
+            {
+                case TipoVentaRestringida.SinRestriccion: return true; break;
+                case TipoVentaRestringida.Descontinuado: if (validador.apruebaCotizacionesVentaRestringida) { return true; } break;
+                case TipoVentaRestringida.InestabilidadPrecios: if (validador.apruebaCotizacionesVentaRestringida) { return true; } break;
+                case TipoVentaRestringida.StockLimitado: if (validador.apruebaCotizacionesVentaRestringida) { return true; } break;
+
+            }
+
+            return false;
+        }
+
+        public bool validaPedidoVentaRestringida(Usuario validador = null)
+        {
+            if (validador == null)
+            {
+                validador = this.usuario;
+            }
+
+            switch(this.ventaRestringida)
+            {
+                case TipoVentaRestringida.SinRestriccion: return true; break;
+                case TipoVentaRestringida.Descontinuado: if (validador.apruebaPedidosVentaRestringida) { return true; } break;
+                case TipoVentaRestringida.InestabilidadPrecios: if (validador.apruebaPedidosVentaRestringida) { return true; } break;
+                case TipoVentaRestringida.StockLimitado: if (validador.apruebaPedidosVentaRestringida) { return true; } break;
+
+            }
+            
+            return false;
+        }
+
         public List<ProductoPresentacion> ProductoPresentacionList { get; set; }
 
         public ProductoPresentacion getProductoPresentacion(int idProductoPresentacion) {
@@ -293,10 +352,31 @@ namespace Model
         public int Stock { get; set; }
 
         [Display(Name = "Venta Restringida:")]
-        public int descontinuado { get; set; }
+        public TipoVentaRestringida ventaRestringida { get; set; }
+
+        private int _descontinuado;
+        [Display(Name = "Venta Restringida:")]
+        public int descontinuado {
+            get {
+                if (this.ventaRestringida != TipoVentaRestringida.SinRestriccion)
+                {
+                    return 1;
+                }
+                return 0;
+            }
+            set
+            {
+                _descontinuado = value;
+            }
+        }
 
         [Display(Name = "Motivo Restricción:")]
-        public String motivoRestriccion { get; set; }
+        public String motivoRestriccion {
+            get; set;
+        }
+
+        public string motivoRestriccionCompuesto { get { return this.tipoVentaRestingidaToString + ". " + this.motivoRestriccion; } }
+
         public static List<CampoPersistir> obtenerCampos(List<LogCampo> campos, bool soloPersistentes = false) 
         {
             List<CampoPersistir> lista = new List<CampoPersistir>();
@@ -428,7 +508,7 @@ namespace Model
                     case "codigo_sunat": lc = instanciarLogCambio(campo); lc.valor = this.codigoSunat; break;
                     case "exonerado_igv": lc = instanciarLogCambio(campo); lc.valor = this.exoneradoIgv.ToString(); break;
                     case "estado": lc = instanciarLogCambio(campo); lc.valor = this.Estado.ToString(); break;
-                    case "descontinuado": lc = instanciarLogCambio(campo); lc.valor = this.descontinuado.ToString(); break;
+                    case "descontinuado": lc = instanciarLogCambio(campo); lc.valor = ((int) this.ventaRestringida).ToString(); break;
                     case "motivo_restriccion": lc = instanciarLogCambio(campo); lc.valor = this.motivoRestriccion; break;
                 }
 
@@ -926,7 +1006,7 @@ namespace Model
                         }
                         break;
                     case "descontinuado":
-                        if (this.descontinuado == int.Parse(cambio.valor))
+                        if (this.ventaRestringida == (Producto.TipoVentaRestringida) int.Parse(cambio.valor))
                         {
                             if (cambio.persisteCambio)
                             {
@@ -936,7 +1016,7 @@ namespace Model
                         }
                         else
                         {
-                            this.descontinuado = int.Parse(cambio.valor);
+                            this.ventaRestringida = (Producto.TipoVentaRestringida) int.Parse(cambio.valor);
                             lista.Add(cambio);
                         }
                         break;

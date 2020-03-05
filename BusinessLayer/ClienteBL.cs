@@ -479,7 +479,7 @@ namespace BusinessLayer
 
                 cliente = clienteDAL.updateClienteSunat(cliente);
                 
-                if (!cliente.responsableComercial.idVendedor.ToString().Equals(clientePrev.responsableComercial.idVendedor))
+                if (cliente.responsableComercial.idVendedor != clientePrev.responsableComercial.idVendedor)
                 {
                     cliente.chrAsesor.idCliente = cliente.idCliente;
                     cliente.chrAsesor.usuario = cliente.usuario;
@@ -530,7 +530,7 @@ namespace BusinessLayer
                     mensajeDal.insertMensaje(notificacion);
                 }
 
-                if (!cliente.supervisorComercial.idVendedor.ToString().Equals(clientePrev.supervisorComercial.idVendedor))
+                if (cliente.supervisorComercial.idVendedor != clientePrev.supervisorComercial.idVendedor)
                 {
                     cliente.chrSupervisor.idCliente = cliente.idCliente;
                     cliente.chrSupervisor.usuario = cliente.usuario;
@@ -539,7 +539,7 @@ namespace BusinessLayer
                     clienteDAL.insertClienteReasignacionHistorico(cliente.chrSupervisor);
                 }
 
-                if (!cliente.asistenteServicioCliente.idVendedor.ToString().Equals(clientePrev.asistenteServicioCliente.idVendedor))
+                if (cliente.asistenteServicioCliente.idVendedor != clientePrev.asistenteServicioCliente.idVendedor)
                 {
                     cliente.chrAsistente.idCliente = cliente.idCliente;
                     cliente.chrAsistente.usuario = cliente.usuario;

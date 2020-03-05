@@ -73,7 +73,6 @@ namespace DataLayer
                 {
                     idProducto = Converter.GetGuid(row, "id_producto"),
                     descripcion = Converter.GetString(row, "descripcion"),
-                    descontinuado = Converter.GetInt(row, "descontinuado"),
                     sku = Converter.GetString(row, "sku")
                 };
                 lista.Add(obj);
@@ -160,7 +159,7 @@ namespace DataLayer
                 producto.precioClienteProducto.idPrecioClienteProducto = Guid.Empty;
                 producto.tipoProducto = (Producto.TipoProducto) Converter.GetInt(row, "tipo_producto");
 
-                producto.descontinuado = Converter.GetInt(row, "descontinuado");
+                producto.ventaRestringida = (Producto.TipoVentaRestringida) Converter.GetInt(row, "descontinuado");
                 producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
                 producto.exoneradoIgv = Converter.GetInt(row, "exonerado_igv") == 1 ? true : false;
                 producto.inafecto = Converter.GetInt(row, "inafecto") == 1 ? true : false;
@@ -979,7 +978,7 @@ namespace DataLayer
             InputParameterAdd.VarcharEmpty(objCommand, "skuProveedor", producto.skuProveedor);
             InputParameterAdd.VarcharEmpty(objCommand, "descripcion", producto.descripcion);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
-            InputParameterAdd.Int(objCommand, "descontinuado", producto.descontinuado);
+            InputParameterAdd.Int(objCommand, "descontinuado", (int) producto.ventaRestringida);
             InputParameterAdd.Int(objCommand, "tipo", producto.tipoProductoVista);
             InputParameterAdd.Varchar(objCommand, "familia", producto.familia);
             InputParameterAdd.Varchar(objCommand, "proveedor", producto.proveedor);
@@ -1029,7 +1028,7 @@ namespace DataLayer
 
                 item.image = Converter.GetBytes(row, "imagen");
                 item.Estado = Converter.GetInt(row, "estado");
-                item.descontinuado = Converter.GetInt(row, "descontinuado");
+                item.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");
                 item.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
                 item.FechaEdicion = Converter.GetDateTime(row, "fecha_modificacion");
 
@@ -1094,7 +1093,7 @@ namespace DataLayer
                 item.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
 
                 item.image = Converter.GetBytes(row, "imagen");
-                item.descontinuado = Converter.GetInt(row, "descontinuado");
+                item.ventaRestringida = (Producto.TipoVentaRestringida) Converter.GetInt(row, "descontinuado");
                 item.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
             }
 
@@ -1119,7 +1118,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "equivalencia", producto.equivalenciaAlternativa);
             InputParameterAdd.Int(objCommand, "equivalenciaProveedor", producto.equivalenciaProveedor);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
-            InputParameterAdd.Int(objCommand, "descontinuado", producto.descontinuado);
+            InputParameterAdd.Int(objCommand, "descontinuado", (int) producto.ventaRestringida);
             InputParameterAdd.VarcharEmpty(objCommand, "motivoRestriccion", producto.motivoRestriccion);
             InputParameterAdd.Int(objCommand, "exoneradoIgv", (producto.exoneradoIgv ? 1 : 0));
             InputParameterAdd.Int(objCommand, "inafecto", producto.inafecto ? 1 : 0);
@@ -1206,7 +1205,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "equivalencia", producto.equivalenciaAlternativa);
             InputParameterAdd.Int(objCommand, "equivalenciaProveedor", producto.equivalenciaProveedor);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
-            InputParameterAdd.Int(objCommand, "descontinuado", producto.descontinuado);
+            InputParameterAdd.Int(objCommand, "descontinuado", (int) producto.ventaRestringida);
             if (producto.motivoRestriccion == null)
             {
                 producto.motivoRestriccion = "";

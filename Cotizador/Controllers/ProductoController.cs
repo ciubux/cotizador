@@ -957,11 +957,14 @@ namespace Cotizador.Controllers
                         pos = posicionInicial + 31;
                         try
                         {
-                            productoStaging.descontinuado = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper().Equals("SI") ? 1 : 0;
+                            //productoStaging.descontinuado = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper().Equals("SI") ? 1 : 0;
+                            string tipoVentaRestringida = sheet.GetRow(row).GetCell(pos).ToString();
+                            productoStaging.ventaRestringida = (Producto.TipoVentaRestringida) Enum.Parse(typeof(Producto.TipoVentaRestringida), tipoVentaRestringida);
+
                         }
                         catch (Exception e)
                         {
-                            productoStaging.descontinuado = 0;
+                            productoStaging.ventaRestringida = Producto.TipoVentaRestringida.SinRestriccion;
                         }
 
                         pos = posicionInicial + 32;

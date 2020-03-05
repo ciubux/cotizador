@@ -11,6 +11,7 @@ using Model;
 using Newtonsoft.Json;
 using NPOI.HSSF.Model;
 using NPOI.HSSF.Util;
+using NPOI.SS.Util;
 using BusinessLayer;
 
 using System.Web.Mvc;
@@ -147,6 +148,8 @@ namespace Cotizador.ExcelExport
                 wb = HSSFWorkbook.Create(InternalWorkbook.CreateWorkbook());
 
 
+                string[] tiposVentaRestringida = Enum.GetNames(typeof(Producto.TipoVentaRestringida));
+
                 HSSFFont titleFont = (HSSFFont)wb.CreateFont();
                 titleFont.FontHeightInPoints = (short)11;
                 titleFont.FontName = "Arial";
@@ -193,9 +196,14 @@ namespace Cotizador.ExcelExport
                 }
 
                 int i = 0;
-                
-                
 
+
+                var markConstraint = DVConstraint.CreateExplicitListConstraint(tiposVentaRestringida);
+                var markColumn = new CellRangeAddressList(1, 1 + list.Count, 31, 31) ;
+                var markdv = new HSSFDataValidation(markColumn, markConstraint);
+                markdv.EmptyCellAllowed = true;
+                markdv.CreateErrorBox("Valor Incorrecto", "Por favor seleccione un tipo de la lista");
+                sheet.AddValidationData(markdv);
 
                 i = 2;
 
@@ -238,7 +246,11 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "AC", obj.tipoProducto.ToString());
                     UtilesHelper.setValorCelda(sheet, i, "AD", (double)obj.tipoCambio);
                     UtilesHelper.setValorCelda(sheet, i, "AE", obj.Estado == 1 ? "SI" : "NO");
-                    UtilesHelper.setValorCelda(sheet, i, "AF", obj.descontinuado == 1 ? "SI" : "NO");
+                    UtilesHelper.setValorCelda(sheet, i, "AF", Enum.GetName(typeof(Producto.TipoVentaRestringida), obj.ventaRestringida));
+
+                    
+
+
                     UtilesHelper.setValorCelda(sheet, i, "AG", obj.motivoRestriccion == null || obj.motivoRestriccion.Trim().Equals("") ? "" : obj.motivoRestriccion);
                     i++;
                 }
