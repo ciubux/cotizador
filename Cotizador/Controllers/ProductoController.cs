@@ -1275,6 +1275,16 @@ namespace Cotizador.Controllers
             ProductoSession.tipoProductoVista = valor;
         }
 
+        public void ChangeVentaRestringida()
+        {
+            int valor = Int32.Parse(this.Request.Params["ventaRestringida"]);
+            if (valor > -1)
+            {
+                ProductoSession.ventaRestringida = (Producto.TipoVentaRestringida)valor;
+            }
+        }
+
+
         public ActionResult CancelarCreacionProducto()
         {
             this.Session[Constantes.VAR_SESSION_PRODUCTO] = null;

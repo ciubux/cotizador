@@ -348,7 +348,27 @@ jQuery(function ($) {
                 });
             }
         });
+    }
 
+    function ChangeTipoVentaRestringida(tipoVentaRestringida) {
+        $.ajax({
+            url: "/Producto/ChangeVentaRestringida",
+            type: 'POST',
+            data: { ventaRestringida: tipoVentaRestringida },
+            success: function () {
+
+            },
+            error: function () {
+                $.alert({
+                    title: 'Error',
+                    content: MENSAJE_ERROR,
+                    type: 'red',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            }
+        });
     }
 
     $("#motivoRestriccion").change(function () {
@@ -419,19 +439,17 @@ jQuery(function ($) {
         changeInputBoolean('inafecto', valor)
     });
 
-    $("#producto_descontinuado").change(function () {
-        var valor = 1;
+    
+    $("#ventaRestringida").change(function () {
+        ChangeTipoVentaRestringida($("#ventaRestringida").val());
+
+        var valor = parseInt($("#ventaRestringida").val());
         
-        if (!$('#producto_descontinuado').prop('checked')) {
-            valor = 0;
+        if (valor > 0) {
+            $("#motivoRestriccion").show();
+        } else {
             $("#motivoRestriccion").hide();
         }
-
-        if (valor == 1) {
-            $("#motivoRestriccion").show();
-        }
-
-        changeInputInt('descontinuado', valor)
     });
 
     $(".chk_campo_registra").change(function () {
@@ -510,7 +528,7 @@ jQuery(function ($) {
                     if (producto.motivoRestriccion != null) {
                         spnMotivoRestriccion = '<br/><span style="font-style: italic;">' + producto.motivoRestriccion + '</span>';
                     }
-                    $("#verDescontinuado").html("Sí" + spnMotivoRestriccion);
+                    $("#verDescontinuado").html(producto.tipoVentaRestingidaToString + spnMotivoRestriccion);
                 }
                 else {
                     $("#verDescontinuado").html("No");
@@ -791,7 +809,7 @@ jQuery(function ($) {
 
                         if (list[i].motivoRestriccion != null) {
                             list[i].motivoRestriccion = list[i].motivoRestriccion.trim();
-                            descontinuadoHTML = descontinuadoHTML.replace("_DATA_TIPSO_", list[i].motivoRestriccion);
+                            descontinuadoHTML = descontinuadoHTML.replace("_DATA_TIPSO_", list[i].motivoRestriccionCompuesto);
 
                             if (list[i].motivoRestriccion != "") {
                                 descontinuadoHTML = descontinuadoHTML.replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
