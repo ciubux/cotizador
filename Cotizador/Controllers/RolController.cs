@@ -487,9 +487,20 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(rol.usuarios);
            
         }
-
-
-
+        
+        [HttpPost]
+        public String ListUsuariosRoles(List<int> ListRol)
+        {           
+            RolBL bl = new RolBL();
+            List<Usuario> and = new List<Usuario>();
+            for (var i=0; i< ListRol.Count;i++)
+            {                         
+                and.AddRange(bl.getUsuarios(ListRol[i]));
+            }
+            //rol.usuarios = bl.getUsuarios(ListRol);
+            return JsonConvert.SerializeObject(and);
+        }
+        
 
     }
 }

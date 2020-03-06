@@ -97,7 +97,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             if (!usuario.enviaMensaje)
             {
-                return RedirectToAction("Lista", "Mensaje");
+                return RedirectToAction("index", "Pedido");
             }
 
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaMensaje;
@@ -144,6 +144,19 @@ namespace Cotizador.Controllers
             obj.user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             MensajeBL bL = new MensajeBL();
             List<Mensaje> list = bL.getListMensajes(obj);
+            //Se coloca en session el resultado de la búsqueda
+            this.Session[Constantes.VAR_SESSION_MENSAJE_LISTA] = list;
+            //Se retorna la cantidad de elementos encontrados
+            return JsonConvert.SerializeObject(list);
+        }
+
+        public String BusquedaMensaje()
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaMensaje;
+            Mensaje obj = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE_BUSQUEDA];
+            obj.user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            MensajeBL bL = new MensajeBL();
+            List<Mensaje> list = bL.getBusquedaMensaje(obj);
             //Se coloca en session el resultado de la búsqueda
             this.Session[Constantes.VAR_SESSION_MENSAJE_LISTA] = list;
             //Se retorna la cantidad de elementos encontrados
@@ -509,6 +522,30 @@ namespace Cotizador.Controllers
             Guid usuarioSeleccionado = Guid.Parse(Request["idUsuario"].ToString());
             list = mensajebl.getRespuestasUsuario(obj, usuarioSeleccionado);
             return JsonConvert.SerializeObject(list);
+        }
+
+        [HttpGet]
+        public ActionResult List()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (!usuario.modificaMensaje)
+            {
+                return RedirectToAction("Lista", "Mensaje");
+            }
+
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaMensaje;
+
+            if (this.Session[Constantes.VAR_SESSION_MENSAJE_BUSQUEDA] == null)
+            {
+                instanciarBusquedaMensaje();
+            }
+
+            Mensaje objSearch = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE_BUSQUEDA];
+
+            ViewBag.pagina = (int)Constantes.paginas.BusquedaMensaje;
+            ViewBag.Mensaje = objSearch;
+
+            return View();
         }
 
     }

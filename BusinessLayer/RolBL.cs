@@ -66,5 +66,14 @@ namespace BusinessLayer
                 dal.quitarUsuarioRol(idRol, idUsuario);
             }
         }
+        /*
+        public List<Usuario> getUsuariosRoles(List<int?> idRol)
+        {
+            using (var dal = new RolDAL())
+            {
+                return dal.getUsuariosRoles(idRol);
+            }
+        }
+        */
     }
 }

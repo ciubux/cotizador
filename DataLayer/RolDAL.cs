@@ -177,5 +177,42 @@ namespace DataLayer
 
             ExecuteNonQuery(objCommand);
         }
+        /*
+        
+        public List<Usuario> getUsuariosRoles(List<int?> idRol)
+        {
+            var objCommand = GetSqlCommand("ps_rol_list_usuarios");
+            
+            DataTable dataTable = Execute(objCommand);
+            List<Usuario> lista = new List<Usuario>();
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(int)));
+
+            foreach (int rol in idRol)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = rol;
+                tvp.Rows.Add(rowObj);
+            }
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@roles", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.IntegerList";
+
+
+            DataTable dataTabler = ExecuteReader(objCommand);
+            foreach (DataRow row in dataTabler.Rows)
+            {
+                Usuario obj = new Usuario();
+                obj.idUsuario = Converter.GetGuid(row, "id_usuario");
+                obj.email = Converter.GetString(row, "email");
+                obj.nombre = Converter.GetString(row, "nombre");
+                lista.Add(obj);
+            }
+
+            return lista;
+        }
+        */
+        
     }
 }

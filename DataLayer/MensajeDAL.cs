@@ -324,5 +324,40 @@ namespace DataLayer
             }
             return list;
         }
+
+
+        public List<Mensaje> getBusquedaMensaje(Mensaje mensaje)
+        {
+
+            var objCommand = GetSqlCommand("ps_busqueda_mensaje");
+            List<Mensaje> lista = new List<Mensaje>();
+            InputParameterAdd.Int(objCommand, "estado", mensaje.estado);
+            InputParameterAdd.DateTime(objCommand, "fecha_creacion_desde", mensaje.fechaCreacionMensajeDesde);
+            InputParameterAdd.DateTime(objCommand, "fecha_creacion_hasta", mensaje.fechaCreacionMensajeHasta);
+
+            InputParameterAdd.DateTime(objCommand, "fecha_vencimiento_desde", mensaje.fechaVencimientoMensajeDesde);
+            InputParameterAdd.DateTime(objCommand, "fecha_vencimiento_hasta", mensaje.fechaVencimientoMensajeHasta);
+
+            InputParameterAdd.Guid(objCommand, "id_usuario_creacion", mensaje.user.idUsuario);           
+            InputParameterAdd.DateTime(objCommand, "fecha_entrada_desde", mensaje.fechaMensajeEntradaDesde);
+            InputParameterAdd.DateTime(objCommand, "fecha_entrada_hasta", mensaje.fechaMensajeEntradaHasta);
+
+            DataTable dataTable = Execute(objCommand);
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Mensaje obj = new Mensaje();
+                obj.user = new Usuario();
+                obj.id_mensaje = Converter.GetGuid(row, "id_mensaje");
+                obj.fechaCreacionMensaje = Converter.GetDateTime(row, "fecha_creacion");
+                obj.titulo = Converter.GetString(row, "titulo");
+                obj.mensaje = Converter.GetString(row, "mensaje");
+                obj.usuario_creacion = Converter.GetString(row, "nombre");
+                obj.fechaVencimientoMensaje = Converter.GetDateTime(row, "fecha_vencimiento");
+                obj.fechaInicioMensaje = Converter.GetDateTime(row, "fecha_inicio");
+                lista.Add(obj);
+            }
+
+            return lista;
+        }
     }
 }

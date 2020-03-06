@@ -335,13 +335,9 @@ namespace Cotizador.Controllers
 
         public ActionResult CancelarCreacionVendedor()
         {
-            this.Session[Constantes.VAR_SESSION_VENDEDOR] = null;
-            UsuarioBL usuarioBL = new UsuarioBL();
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-
-            //   usuarioBL.updateCotizacionSerializada(usuario, null);
+            this.Session[Constantes.VAR_SESSION_VENDEDOR] = null;            
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];            
             return RedirectToAction("Lista", "Vendedor");
-
         }
 
         public void iniciarEdicionVendedor()

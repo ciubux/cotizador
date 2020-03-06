@@ -111,6 +111,7 @@
 
                         var linkCrearMensaje = "";
                         var linkBusquedaMensaje = "";
+                        var linkBandejaMensaje = "";
 
                         var linkMantenimientoParametro = "";
                         var linkBusquedaParametro = "";
@@ -422,7 +423,7 @@
                             </li>
                         }
 
-                        if (usuario.visualizaRoles || usuario.modificaRol || usuario.administraPermisos || usuario.visualizaVendedor || usuario.modificaVendedor || usuario.visualizaMensaje || usuario.modificaMensaje)
+                        if (usuario.visualizaRoles || usuario.modificaRol || usuario.administraPermisos || usuario.visualizaVendedor || usuario.modificaVendedor || usuario.visualizaMensaje || usuario.modificaMensaje || usuario.enviaMensaje)
                         {
                             <li class="@linkMaestros">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
@@ -469,9 +470,14 @@
                                         <li id="linkMantenimientoUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar", "Editar", "Usuario")</li>
                                     }
 
-                                    @if (usuario.visualizaMensaje || usuario.modificaMensaje || usuario.enviaMensaje )
+                                    @if (usuario.modificaMensaje)
                                     {
-                                        <li id="linkBusquedaMensaje" class="@linkBusquedaMensaje">@Html.ActionLink("Mensaje - Búsqueda", "Lista", "Mensaje")</li>
+                                        <li id="linkBusquedaMensaje" class="@linkBusquedaMensaje">@Html.ActionLink("Mensaje - Búsqueda", "List", "Mensaje")</li>
+                                    }
+
+                                    @if (usuario.enviaMensaje || usuario.modificaMensaje)
+                                    {
+                                        <li id="linkBandejaMensaje" class="@linkBandejaMensaje">@Html.ActionLink("Bandeja de mensajes", "Lista", "Mensaje")</li>
                                     }
 
                                     @*if (usuario.modificaMensaje)
@@ -484,11 +490,11 @@
                                     {
                                         <li id="linkMantenimientoParametro" class="@linkMantenimientoParametro">@Html.ActionLink("Parametro - Búsqueda", "Lista", "Parametro")</li>
                                     }
-                                    
+
                                     @*@if (usuario.modificaUsuario)
-                                    {
-                                      <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
-                                    }*@
+        {
+          <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
+        }*@
 
 
                                     @if (usuario.administraPermisos)

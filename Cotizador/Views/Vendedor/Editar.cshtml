@@ -7,225 +7,226 @@
     <h3>@ViewBag.Title</h3>
 </div>
 <div class="container">
-    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
-    <input type="hidden" value="@ViewBag.debug" />
+    <input type="hidden" id="pagina" value="@ViewBag.pagina"/>
+    <input type="hidden" value="@ViewBag.debug"/>    
+
     <form class="form-horizontal">
         <div class="row">
             <input type="hidden" id="idVendedor" name="idVendedor" value="@vendedor.idVendedor" />
-            <div class="row">
+            <input type="hidden" id="ciudadOriginal" name="idCiudad" value="@vendedor.ciudad.idCiudad" />
 
 
-                <div class="col-sm-12  col-lg-8">
-                    <div class="form-group">
-                        @Html.LabelFor(dv => vendedor.codigo, htmlAttributes: new { @class = "control-label  col-xs-3" })
-                        <div class="col-xs-7">
-                            @Html.TextBoxFor(c => vendedor.codigo, htmlAttributes: new { @class = "form-control" })
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-sm-12  col-lg-8">
-                    <div class="form-group">
-                        <label class="control-label col-xs-3">Ciudad:</label>
-                        <div class="col-xs-7 col-lg-7">
-                            @Html.Action("GetCiudades", "Ciudad",
-                              new
-                              {
-                                  ciudadSelectId = "vendedor_idCiudad",
-                                  selectedValue = vendedor.ciudad.idCiudad
-                              })
-                        </div>
+            <div class="col-sm-12  col-lg-8">
+                <div class="form-group">
+                    @Html.LabelFor(dv => vendedor.codigo, htmlAttributes: new { @class = "control-label  col-xs-3" })
+                    <div class="col-xs-7">
+                        @Html.TextBoxFor(c => vendedor.codigo, htmlAttributes: new { @class = "form-control" })
                     </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-sm-12  col-lg-8">
-                    <div class="form-group">
-                        <label for="idCliente" class="control-label col-xs-3">Usuario:</label>
+            <div class="col-sm-12  col-lg-8">
+                <div class="form-group">
+                    <label class="control-label col-xs-3">Ciudad:</label>
 
-                        <div class="col-xs-7">
-                            <select class="form-control form-control" id="idUsuarioBusquedaList" name="idCliente" required>
-                                @if (ViewBag.existeUsuario == 1)
+                    <div class="col-xs-7 col-lg-7">
+                        @Html.Action("GetCiudades", "Ciudad",
+                          new
+                          {
+                              ciudadSelectId = "vendedor_idCiudad",
+                              selectedValue = vendedor.ciudad.idCiudad
+                          })
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-sm-12  col-lg-8">
+                <div class="form-group">
+                    <label for="idCliente" class="control-label col-xs-3">Usuario:</label>
+
+                    <div class="col-xs-7">
+                        <select class="form-control form-control" id="idUsuarioBusquedaList" name="idCliente" required>
+                            @if (ViewBag.existeUsuario == 1)
+                            {
+                                <option selected value="@vendedor.supervisor.usuario.idUsuario">Nombre: @vendedor.supervisor.usuario.nombre - Email: @vendedor.supervisor.usuario.email</option>
+                            }
+                            else
+                            {
+                                <option value=""></option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-sm-12  col-lg-8">
+                <div class="form-group">
+                    <label class="control-label col-xs-3">Tipo:</label>
+
+                    <div class="col-xs-7">
+
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                @if (vendedor.esResponsableComercial == true)
                                 {
-                                    <option selected value="@vendedor.supervisor.usuario.idUsuario">Nombre: @vendedor.supervisor.usuario.nombre - Email: @vendedor.supervisor.usuario.email</option>
+                                    <input class="form-check-input" type="checkbox" name="vendedor_tipo" id="responsable_comercial_vendedor" value="1" checked><span>Responsable Comercial</span>
                                 }
                                 else
                                 {
-                                    <option value=""></option>
+                                    <input class="form-check-input" type="checkbox" name="vendedor_tipo" id="responsable_comercial_vendedor" value="0"><span>Responsable Comercial</span>
                                 }
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                            </label>
 
-            <div class="row">
-                <div class="col-sm-12  col-lg-8">
-                    <div class="form-group">
-                        <label class="control-label col-xs-3">Tipo:</label>
-
-                        <div class="col-xs-7">
-
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    @if (vendedor.esResponsableComercial == true)
-                                    {
-                                        <input class="form-check-input" type="checkbox" name="vendedor_tipo" id="responsable_comercial_vendedor" value="1" checked><span>Responsable Comercial</span>
-                                    }
-                                    else
-                                    {
-                                        <input class="form-check-input" type="checkbox" name="vendedor_tipo" id="responsable_comercial_vendedor" value="0"><span>Responsable Comercial</span>
-                                    }
-                                </label>
-
-                            </div>
-
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    @if (vendedor.esSupervisorComercial == true)
-                                    {
-                                        <input class="form-check-input" checked type="checkbox" name="vendedor_tipo" id="supervisor_vendedor" value="1"><span>Supervisor Comercial</span>
-                                    }
-                                    else
-                                    {
-                                        <input class="form-check-input" type="checkbox" name="vendedor_tipo" id="supervisor_vendedor" value="0"><span>Supervisor Comercial</span>
-                                    }
-
-                                </label>
-                            </div>
-
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    @if (vendedor.esAsistenteServicioCliente == true)
-                                    {
-                                        <input class="form-check-input" checked type="checkbox" name="vendedor_tipo" id="atencion_cliente_vendedor" value="1"><span>Atencion al Cliente</span>
-                                    }
-                                    else
-                                    {
-                                        <input class="form-check-input" type="checkbox" name="vendedor_tipo" id="atencion_cliente_vendedor" value="0"><span>Atencion al Cliente</span>
-                                    }
-                                </label>
-                            </div>
-                            </>
                         </div>
 
-                    </div>
-                </div>
-            </div>
-
-
-
-
-            <div class="row">
-                <div class="col-sm-12 col-lg-8">
-                    <div class="form-group">
-                        <label for="idCliente" class="control-label col-xs-3">Supervisor:</label>
-
-                        <div class="col-xs-7">
-                            <select class="form-control form-control" id="idVendedorBusquedaList" name="idCliente" required>
-                                @if (ViewBag.existeSupervisor == 1 && vendedor.esSupervisorComercial != true)
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                @if (vendedor.esSupervisorComercial == true)
                                 {
-                                    <option selected value="@vendedor.supervisor.idUsuarioVendedor">Nombre: @vendedor.supervisor.descripcion - Email: @vendedor.supervisor.email</option>
+                                    <input class="form-check-input" checked type="checkbox" name="vendedor_tipo" id="supervisor_vendedor" value="1"><span>Supervisor Comercial</span>
                                 }
                                 else
                                 {
-                                    <option value=""></option>
+                                    <input class="form-check-input" type="checkbox" name="vendedor_tipo" id="supervisor_vendedor" value="0"><span>Supervisor Comercial</span>
                                 }
-                            </select>
+
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                @if (vendedor.esAsistenteServicioCliente == true)
+                                {
+                                    <input class="form-check-input" checked type="checkbox" name="vendedor_tipo" id="atencion_cliente_vendedor" value="1"><span>Atencion al Cliente</span>
+                                }
+                                else
+                                {
+                                    <input class="form-check-input" type="checkbox" name="vendedor_tipo" id="atencion_cliente_vendedor" value="0"><span>Atencion al Cliente</span>
+                                }
+                            </label>
+                        </div>
+                        </>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+
+
+            <div class="col-sm-12 col-lg-8">
+                <div class="form-group">
+                    <label for="idCliente" class="control-label col-xs-3">Supervisor:</label>
+
+                    <div class="col-xs-7">
+                        <select class="form-control form-control" id="idVendedorBusquedaList" name="idCliente" required>
+                            @if (ViewBag.existeSupervisor == 1 && vendedor.esSupervisorComercial != true)
+                            {
+                                <option selected value="@vendedor.supervisor.idUsuarioVendedor">Nombre: @vendedor.supervisor.descripcion - Email: @vendedor.supervisor.email</option>
+                            }
+                            else
+                            {
+                                <option value=""></option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-sm-12 col-lg-8">
+                <div class="form-group">
+                    @Html.LabelFor(dv => vendedor.cargo, htmlAttributes: new { @class = "control-label col-xs-3" })
+                    <div class="col-xs-7">
+                        @Html.TextBoxFor(c => vendedor.cargo, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-sm-12 col-lg-8">
+                <div class="form-group">
+                    @Html.LabelFor(dv => vendedor.descripcion, htmlAttributes: new { @class = "control-label col-xs-3" })
+                    <div class="col-xs-7">
+                        @Html.TextBoxFor(c => vendedor.descripcion, htmlAttributes: new { @class = "form-control ", @disabled = "disabled" })
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-sm-12 col-lg-8">
+                <div class="form-group">
+                    <label class="control-label col-xs-3">Teléfono:</label>
+                    <div class="col-xs-7">
+                        @Html.TextBoxFor(c => vendedor.contacto, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-sm-12 col-lg-8">
+                <div class="form-group">
+                    @Html.LabelFor(dv => vendedor.maxdesapro, htmlAttributes: new { @class = "control-label col-xs-3" })
+                    <div class="col-xs-3 col-lg-2">
+                        @Html.TextBoxFor(c => vendedor.maxdesapro, htmlAttributes: new { @class = "form-control", @type = "number", @step = "0.05", @min = "0", @max = "100" })
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-sm-6 col-lg-6">
+                <div class="form-group">
+                    @Html.LabelFor(c => vendedor.estado, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-7">
+                        <div class="radio radio-inline">
+                            <label class="radio-label">
+                                @if (vendedor.estado == 1)
+                                {
+                                    <input class="radio-input" checked type="radio" name="vendedor_estado" id="vendedor_estado_si" value="1"><span>Activo</span>
+                                }
+                                else
+                                {
+                                    <input class="radio-input" type="radio" name="vendedor_estado" id="vendedor_estado_si" value="1"><span>Activo</span>
+                                }
+                            </label>
+                        </div>
+                        <div class="radio radio-inline">
+                            <label class="radio-label">
+                                @if (vendedor.estado == 0)
+                                {
+                                    <input class="radio-input" checked type="radio" name="vendedor_estado" id="vendedor_estado_no" value="0"><span>Inactivo</span>
+                                }
+                                else
+                                {
+                                    <input class="radio-input" type="radio" name="vendedor_estado" id="vendedor_estado_no" value="0"><span>Inactivo</span>
+                                }
+                            </label>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-sm-12 col-lg-8">
-                    <div class="form-group">
-                        @Html.LabelFor(dv => vendedor.cargo, htmlAttributes: new { @class = "control-label col-xs-3" })
-                        <div class="col-xs-7">
-                            @Html.TextBoxFor(c => vendedor.cargo, htmlAttributes: new { @class = "form-control" , @disabled = "disabled" })
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col-sm-12 col-lg-8">
-                    <div class="form-group">
-                        @Html.LabelFor(dv => vendedor.descripcion, htmlAttributes: new { @class = "control-label col-xs-3" })
-                        <div class="col-xs-7">
-                            @Html.TextBoxFor(c => vendedor.descripcion, htmlAttributes: new { @class = "form-control ", @disabled = "disabled"})
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-12 col-lg-8">
-                    <div class="form-group">
-                        <label class="control-label col-xs-3">Teléfono:</label>
-                        <div class="col-xs-7">
-                            @Html.TextBoxFor(c => vendedor.contacto, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-12 col-lg-8">
-                    <div class="form-group">
-                        @Html.LabelFor(dv => vendedor.maxdesapro, htmlAttributes: new { @class = "control-label col-xs-3" })
-                        <div class="col-xs-3 col-lg-2">
-                            @Html.TextBoxFor(c => vendedor.maxdesapro, htmlAttributes: new { @class = "form-control", @type = "number", @step = "0.05", @min = "0", @max = "100" })
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-6 col-lg-6">
-                    <div class="form-group">
-                        @Html.LabelFor(c => vendedor.estado, htmlAttributes: new { @class = "control-label col-xs-4" })
-                        <div class="col-xs-7">
-                            <div class="radio radio-inline">
-                                <label class="radio-label">
-                                    @if (vendedor.estado == 1)
-                                    {
-                                        <input class="radio-input" checked type="radio" name="vendedor_estado" id="vendedor_estado_si" value="1"><span>Activo</span>
-                                    }
-                                    else
-                                    {
-                                        <input class="radio-input" type="radio" name="vendedor_estado" id="vendedor_estado_si" value="1"><span>Activo</span>
-                                    }
-                                </label>
-                            </div>
-                            <div class="radio radio-inline">
-                                <label class="radio-label">
-                                    @if (vendedor.estado == 0)
-                                    {
-                                        <input class="radio-input" checked type="radio" name="vendedor_estado" id="vendedor_estado_no" value="0"><span>Inactivo</span>
-                                    }
-                                    else
-                                    {
-                                        <input class="radio-input" type="radio" name="vendedor_estado" id="vendedor_estado_no" value="0"><span>Inactivo</span>
-                                    }
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
-
-
-
-        <div class="row">
+       
             <div class="pull-right">
                 <button type="button" id="btnCancelarVendedor" class="btn btn-danger">Cancelar</button>
                 <button id="btnFinalizarEdicionVendedor" type="button" class="btn btn-success">Finalizar Creación</button>
             </div>
-        </div>
-
+        
+      
     </form>
 </div>
 

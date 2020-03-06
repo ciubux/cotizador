@@ -7,6 +7,7 @@
 
     $(document).ready(function () {
         $("#btnBusquedaMensaje").click();
+        $("#btnBandejaMensaje").click();
         verificarSiExisteMensaje();
         cargarChosenUsuarioMensaje();
         cargarTooltipLista();
@@ -670,19 +671,19 @@
         });
     });
 
-    $("#btnBusquedaMensaje").click(function () {
+    $("#btnBusquedaTodosMensajes").click(function () {
 
-        $("#btnBusquedaMensaje").attr("disabled", "disabled");
+        $("#btnBusquedaTodosMensajes").attr("disabled", "disabled");
         $.ajax({
-            url: "/Mensaje/SearchList",
+            url: "/Mensaje/BusquedaMensaje",
             type: 'POST',
             dataType: 'JSON',
             error: function () {
-                $("#btnBusquedaMensaje").removeAttr("disabled");
+                $("#btnBusquedaTodosMensajes").removeAttr("disabled");
             },
 
             success: function (list) {
-                $("#btnBusquedaMensaje").removeAttr("disabled");
+                $("#btnBusquedaTodosMensajes").removeAttr("disabled");
                 $("#tableMensaje > tbody").empty();
                 $("#tableMensaje").footable({
                     "paging": {
@@ -704,6 +705,52 @@
                         '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaVencimientoMensaje)) + '  </td>' +
                         '<td>' +
                         btnEditar+
+                        '<button type="button" class="' + list[i].id_mensaje + ' btnVerMensaje btn btn-success">Ver</button>' +
+
+                        '</td>' +
+                        '</tr>';
+
+                    $("#tableMensaje").append(ItemRow);
+
+                }
+            }
+        });
+    });
+
+    $("#btnBusquedaMensaje").click(function () {
+
+        $("#btnBusquedaBandejaMensaje").attr("disabled", "disabled");
+        $.ajax({
+            url: "/Mensaje/SearchList",
+            type: 'POST',
+            dataType: 'JSON',
+            error: function () {
+                $("#btnBusquedaBandejaMensaje").removeAttr("disabled");
+            },
+
+            success: function (list) {
+                $("#btnBusquedaBandejaMensaje").removeAttr("disabled");
+                $("#tableMensaje > tbody").empty();
+                $("#tableMensaje").footable({
+                    "paging": {
+                        "enabled": true
+                    }
+                });
+
+
+                for (var i = 0; i < list.length; i++) {
+                    var btnEditar = $("#mensaje_bandeja_enviados").prop('checked') ? '<button type = "button" style = "margin-right:13px;" class="' + list[i].id_mensaje + ' btnEditarMensaje btn btn-primary" > Editar</button >' : '';
+                    var ItemRow = '<tr data-expanded="true">' +
+
+                        '<td>  ' + list[i].id_mensaje + '  </td>' +
+                        '<td>  ' + list[i].titulo + '  </td>' +
+                        //'<td>  ' + list[i].mensaje + '  </td>' +
+                        '<td>  ' + list[i].usuario_creacion + '  </td>' +
+                        '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) + '  </td>' +
+                        '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) + '  </td>' +
+                        '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaVencimientoMensaje)) + '  </td>' +
+                        '<td>' +
+                        btnEditar +
                         '<button type="button" class="' + list[i].id_mensaje + ' btnVerMensaje btn btn-success">Ver</button>' +
 
                         '</td>' +
@@ -1068,13 +1115,12 @@
     });
 
 
-    $('body').on('shown.bs.modal', '#MensajeRapido', function () {
-        cargarTooltipLista();
-        ConteoUsuario();
+    $('body').on('shown.bs.modal', '#MensajeRapido', function () {       
+        cargarTooltipLista();        
         $('#idUsuarioBusquedaMensajeModal', this).chosen('destroy').chosen({ placeholder_text: "Buscar Usuario", no_results_text: "No se encontró Usuario", allow_single_deselect: true }).on('chosen:showing_dropdown');
         $('#mensajeFechaInicioMensajeModal').datepicker().datepicker("setDate", new Date());
         $('#mensajeFechaVencimientoMensajeModal').datepicker().datepicker("setDate", '+7');
-
+        ConteoUsuario();
         $('#idUsuarioBusquedaMensajeModal', this).ajaxChosen({
             dataType: "json",
             type: "GET",
@@ -1153,66 +1199,62 @@
         });
         return unicos;
     }
-
+    
     function ConteoUsuario() {
         var numUsuarios = $("#idUsuarioBusquedaMensajeModal").val();
+        var listRol = new Array();
 
-        $('.RolMensajeModal').each(function () {
-
-            var id_rol;
-            if ($(this).prop('checked')) {
-                id_rol = $(this).attr("id");
-                id_rol = id_rol.replace('rol_', '');
-                AjaxNumeroUsuarios();
+        var idRoles = $('.RolMensajeModal:checkbox:checked');
+        if (idRoles.length != 0) {
+            for (i = 0; i < idRoles.length; i++) {                
+                listRol.push($(idRoles[i]).val());
             }
-            function AjaxNumeroUsuarios() {
-                $.ajax({
-                    url: "/Rol/ListUsuarios",
-                    type: 'POST',
-                    async: false,
-                    dataType: 'JSON',
-                    data:
-                    {
-                        idRol: id_rol
-                    },
-                    success: function (list) {
-
-                        for (i = 0; i < list.length; i++) {
-                            numUsuarios.push(list[i].idUsuario);
-                        }
-
-                    }
-
-                });
-            }
-        });
-        numUsuarios = eliminateDuplicados(numUsuarios);
-        numerofinal = numUsuarios.length;
-
-        $('#etiquetaUsuariosModalNumero').remove();
-
-        var etiqueta = '<div class="row form-group" id="etiquetaUsuariosModalNumero"> <label class="col-form-label col-md-3"></label> <div class="col-md-9"> <h5 class="text-danger"><b>Este mensaje se enviará a <span id="numerosa" style="position:absolute; font-size: 1em;" class="labelModificado label-danger">' + numerofinal + '</span><span class="labelModificado label-danger" id="numerosaShadow" style="font-size: 1em;">' + numerofinal+'</span> usuario(s)</b></h5></div></div>';
-        etiqueta = numerofinal == 0 ? $('#etiquetaUsuariosModalNumero').remove() : etiqueta;
-        $('#etiquetaRolesModal').before(etiqueta);
-
-
-        var element = document.getElementById("numerosa");
-        var elementShadow = document.getElementById("numerosaShadow");
-        if (element != null && elementShadow != null)
-        {
-            element.innerHTML = numerofinal;
-            elementShadow.innerHTML = numerofinal;
-            element.classList.remove("parpadea");
-
-            setTimeout(function () {
-                element.classList.add("parpadea");
-                setTimeout(function () {
-                    element.classList.remove("parpadea");
-                }, 300);
-            }, 100);
-        }
+        } else { listRol = 0;}          
+         AjaxNumeroUsuarios(listRol, numUsuarios);
     }
+    function AjaxNumeroUsuarios(listRol,numUsuarios) {
+            $.ajax({
+                url: "/Rol/ListUsuariosRoles",
+                type: 'POST',
+                async: false,
+                dataType: 'JSON',
+                data:
+                {
+                    ListRol: listRol
+                },
+                success: function (list) {
 
+                    for (i = 0; i < list.length; i++) {
+                        numUsuarios.push(list[i].idUsuario);
+                    }
+                        numUsuarios = eliminateDuplicados(numUsuarios);
+                        numerofinal = numUsuarios.length;
+
+                        $('#etiquetaUsuariosModalNumero').remove();
+
+                        var etiqueta = '<div class="row form-group" id="etiquetaUsuariosModalNumero"> <label class="col-form-label col-md-3"></label> <div class="col-md-9"> <h5 class="text-danger"><b>Este mensaje se enviará a <span id="numerosa" style="position:absolute; font-size: 1em;" class="labelModificado label-danger">' + numerofinal + '</span><span class="labelModificado label-danger" id="numerosaShadow" style="font-size: 1em;">' + numerofinal + '</span> usuario(s)</b></h5></div></div>';
+                        etiqueta = numerofinal == 0 ? $('#etiquetaUsuariosModalNumero').remove() : etiqueta;
+                        $('#etiquetaRolesModal').before(etiqueta);
+
+
+                        var element = document.getElementById("numerosa");
+                        var elementShadow = document.getElementById("numerosaShadow");
+                        if (element != null && elementShadow != null) {
+                            element.innerHTML = numerofinal;
+                            elementShadow.innerHTML = numerofinal;
+                            element.classList.remove("parpadea");
+
+                            setTimeout(function () {
+                                element.classList.add("parpadea");
+                                setTimeout(function () {
+                                    element.classList.remove("parpadea");
+                                }, 300);
+                            }, 100);
+                        }
+                    }
+            });
+        }  
+    
     $(document).on('click', "#btnEnviarMensajeModal", function () {
         crearMensajeModal();
     });

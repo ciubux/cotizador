@@ -104,5 +104,13 @@ namespace BusinessLayer
             }
         }
 
+        public List<Mensaje> getBusquedaMensaje(Mensaje mensaje)
+        {
+            using (var dal = new MensajeDAL())
+            {
+                return dal.getBusquedaMensaje(mensaje);
+            }
+
+        }
     }
 }

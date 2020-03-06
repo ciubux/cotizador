@@ -632,6 +632,7 @@
     <Content Include="Views\Mensaje\EditarRapido.cshtml" />
     <Content Include="Views\Parametro\Lista.cshtml" />
     <Content Include="Views\Mensaje\Lista.cshtml" />
+    <Content Include="Views\Mensaje\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

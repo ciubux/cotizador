@@ -100,12 +100,12 @@
 
     $("#vendedor_estado_si").click(function () {
         var valCheck = 1;
-        changeInputInt("estado", valCheck)
+        changeInputInt("estado", valCheck);
     });
 
     $("#vendedor_estado_no").click(function () {
         var valCheck = 0;
-        changeInputInt("estado", valCheck)
+        changeInputInt("estado", valCheck);
     });
 
     function changeInputInt(propiedad, valor) {
@@ -495,8 +495,7 @@
         if ($("#supervisor_vendedor").prop('checked') == false)
         {
             $("#idVendedorBusquedaList").removeAttr('disabled').trigger("chosen:updated");
-        }
-        
+        }        
     });
 
 
@@ -513,7 +512,7 @@
     }
 
 
-    var ciudadOriginal;
+    
     $("#idUsuarioBusquedaList").change(function () {
         //  $("#contacto").val("");
         var idVendedor = $("#idUsuarioBusquedaList").val();
@@ -526,9 +525,9 @@
             data: {
                 idVendedor: idVendedor
             },
-            success: function (usuario) {                                               
-                $("#vendedor_idCiudad").val(usuario.sedeMP.idCiudad); 
-                ciudadOriginal = usuario.sedeMP.idCiudad;
+            success: function (usuario) { 
+                $("#vendedor_idCiudad").val(usuario.sedeMP.idCiudad);
+                $("#ciudadOriginal").val(usuario.sedeMP.idCiudad);  
                 $("#vendedor_cargo").val(usuario.cargo);
                 $("#vendedor_descripcion").val(usuario.nombre);
                 $("#vendedor_contacto").val(usuario.contacto);
@@ -537,22 +536,26 @@
         });
         
     });
-
+   
     $("#vendedor_idCiudad").change(function () {        
         var idCiudad = $("#vendedor_idCiudad").val();
-        var textCiudad = $("#vendedor_idCiudad option:selected").text();
-        if (ciudadOriginal != idCiudad && ciudadOriginal != undefined)
+        
+        if (window.location.pathname == "/Vendedor/Editar")
         {
-            $.alert({
-                title: "Cambio de sede a Usuario",
-                type: 'orange',
-                content: 'Si cambia la sede tambien cambiara la sede del usuario asignado.',
-                buttons: {
-                    OK: function () { $('#responsable_comercial_vendedor').focus(); }
-                }
-            });
+            var idCiudadOriginal = $("#ciudadOriginal").val();
+            var idVendedor = $("#idUsuarioBusquedaList").val();
+            if (idCiudadOriginal != idCiudad && idCiudadOriginal != "00000000-0000-0000-0000-000000000000" && idVendedor != "")
+            {
+                $.alert({
+                    title: "Cambio de sede a Usuario",
+                    type: 'orange',
+                    content: 'Si cambia la sede tambien cambiara la sede del usuario asignado.',
+                    buttons: {
+                        OK: function () { $("#vendedor_idCiudad").focus(); }
+                    }
+                });
+            }
         }
-
             $.ajax({
                 url: "/Vendedor/ChangeIdCiudad",
                 type: 'POST',
@@ -564,12 +567,11 @@
                     location.reload();
                 },
                 success: function (ciudad) {
+
+
                 }
-            });
-        
+            });        
     });
-
-
 
     $("#idVendedorBusquedaList").change(function () {
         //  $("#contacto").val("");
