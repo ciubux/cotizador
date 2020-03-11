@@ -95,9 +95,9 @@ namespace Cotizador.Controllers
         public ActionResult Lista()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (!usuario.enviaMensaje)
+            if (!usuario.enviaMensaje && !usuario.modificaMensaje)
             {
-                return RedirectToAction("index", "Pedido");
+                return RedirectToAction("Login", "Account");
             }
 
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaMensaje;

@@ -3969,6 +3969,14 @@ jQuery(function ($) {
             }
         });
     });
+    function eliminateDuplicates(arrayIn) {
+
+        var arrayOut = {};
+        var unicos = arrayIn.filter(function (e) {
+            return arrayOut[e.guiaRemision.idMovimientoAlmacen] ? false : (arrayOut[e.guiaRemision.idMovimientoAlmacen] = true);
+        });
+        return unicos;
+    }
 
     function mostrarListVenta(ventaList) {
         $("#btnBusquedaVentaList").removeAttr("disabled");
@@ -3978,10 +3986,10 @@ jQuery(function ($) {
                 "enabled": true
             }
         });
-
+        ventaList=eliminateDuplicates(ventaList);
         for (var i = 0; i < ventaList.length; i++) {
             if (ventaList[i].documentoVenta.numero == "-") { ventaList[i].documentoVenta.numero = " "; }
-            if (ventaList[i].cliente.responsableComercial.codigo == null) { ventaList[i].cliente.responsableComercial.codigo = " "; }
+            if (ventaList[i].cliente.responsableComercial.descripcion == null) { ventaList[i].cliente.responsableComercial.descripcion = " "; }
             var Venta = '<tr data-expanded="true">' +
                 '<td>  ' + ventaList[i].idVenta + '</td>' +
                 '<td>  ' + ventaList[i].pedido.numeroPedidoString + '</td>' +

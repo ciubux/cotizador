@@ -265,6 +265,16 @@
         });
     });
 
+    $("#btnLimpiarBusqueda").click(function () {
+        $.ajax({
+            url: "/Mensaje/Limpiar",
+            type: 'POST',
+            success: function () {
+                location.reload();
+            }
+        });
+    });
+
     $(".chk-rol").change(function () {
         var valor = 0;
         if ($(this).prop("checked")) {
@@ -334,11 +344,11 @@
                             if (list.length - 1 === i) {
                                 BtnLabel = "Marcar como leído";
                             }
-                            var imagenAdvertencia = list[i].importancia == "Alta" ? '<img src = "/images/advertencia.svg" style="vertical-align: middle; margin-bottom:5px;  margin-right:10px;" width = "20px" height = "20px"  >' +
+                            var imagenAdvertencia = list[i].importancia == "Alta" ? '<img src = "/images/advertencia.svg" style="vertical-align: middle; margin-bottom:5px;  margin-right:10px;" width = "20px" height = "20px">' +
                                 '<svg width="1px" height="1px" xmlns="https://www.w3.org/2000/svg"></svg>' : "";
 
                             var ItemRow =
-                                '<div id="Mensaje' + numeroModal + '" class="modal fade ModalMensajeAlerta" tabindex="-1" role="dialog">' +
+                                '<div id="Mensaje' + numeroModal + '" class="modal fade ModalMensajeAlerta ModalMensaje" tabindex="-1" role="dialog">' +
                                 '<div class="modal-dialog" id="MensajeDialog' + numeroModal + '">' +
                                 '<div class="modal-content">' +
                                 '<div class="modal-header">' +
@@ -367,7 +377,7 @@
                                 '</div>' +
                                 '</div>' +
 
-                                '<div class="modal-body" id="modalHistorialMensaje' + numeroModal + '">' +
+                                '<div class="VerContenedor modal-body" id="modalHistorialMensaje' + numeroModal + '">' +
 
                                 '</div>' +
 
@@ -829,15 +839,15 @@
                     var imagenAdvertencia = list[list.length - 1].importancia == "Alta" ? '<img src = "/images/advertencia.svg" style="vertical-align: middle; margin-bottom:5px;  margin-right:10px;" width = "20px" height="20px">' +
                         '<svg width="1px" height="1px" xmlns="https://www.w3.org/2000/svg"></svg>' : "";
 
-                    var titulo = '<h4 id="Prueba2" style="display: inline-block;">' + imagenAdvertencia + '<u>' + list[list.length - 1].titulo + '</u></h4>';
+                    var titulo = '<h4 id="Prueba2" class="float-left">' + imagenAdvertencia + '<u>' + list[list.length - 1].titulo + '</u></h4>';
 
                     $('#Prueba').after(titulo);
                     $('[id^=VerContenedor]').remove();                    
-                    $('#Prueba2').after('<div id="VerContenedor">');
+                    $('#Prueba2').after('<div id="VerContenedor" class="VerContenedor">');
                     for (var i = 0; i < list.length; i++) {
-                       
-                        var color2 = i % 2 == 0 ? 'style="padding-top: 0px; padding-bottom: 0px;padding-left: 10px;padding-right: 10px; background-color: #E0FFD6; border-style: solid; border-width: 2px; border-radius: 8px; border-color: #33D200;"'
-                            : 'style="background-color: #D6F4FF; border-style: solid; border-width: 2px; border-radius: 8px; border-color: #009FDA; padding-top: 0px; padding-bottom: 0px;padding-left: 10px;padding-right: 10px; "';
+                        
+                        var color2 = i % 2 == 0 ? 'style="background-color: #D6F4FF; border-style: solid; border-width: 2px; border-radius: 8px; border-color: #009FDA; padding-top: 0px; padding-bottom: 0px;padding-left: 10px;padding-right: 10px; "'
+                            : 'style="padding-top: 0px; padding-bottom: 0px;padding-left: 10px;padding-right: 10px; background-color: #E0FFD6; border-style: solid; border-width: 2px; border-radius: 8px; border-color: #33D200;"' ;
 
                         var date = new Date(list[i].fechaCreacionMensaje);
                         hora = (date.getHours() < 10 ? '0' : '') + date.getHours();

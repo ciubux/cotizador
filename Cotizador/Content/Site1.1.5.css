@@ -833,43 +833,23 @@ $darkred: darken($red, 0.2);*/
         margin-top: 0px;
     }
 }
-    /*************************************/
+    /* Estilo del scroll del modal mensaje*/
 
-#VerContenedor::-webkit-scrollbar-track {
+.VerContenedor::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
     border-radius: 10px;
     background-color: #F5F5F5;
 }
 
-#VerContenedor::-webkit-scrollbar {
+.VerContenedor::-webkit-scrollbar {
     width: 10px;
     background-color: #F5F5F5;
 }
 
-#VerContenedor::-webkit-scrollbar-thumb {
+.VerContenedor::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
     background-color: #555;
-}
-       
+}  
 
-/********************************/
-
-
-#modalHistorialMensaje1::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    border-radius: 10px;
-    background-color: #F5F5F5;
-}
-
-#modalHistorialMensaje1::-webkit-scrollbar {
-    width: 10px;
-    background-color: #F5F5F5;
-}
-
-#modalHistorialMensaje1::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-    background-color: #555;
-}
    
