@@ -312,7 +312,8 @@ namespace DataLayer
         public List<Usuario> getUsuariosRespuesta(Mensaje obj)
         {
             var objCommand = GetSqlCommand("ps_ver_usuario_respuestas");
-            InputParameterAdd.Guid(objCommand, "id_mensaje", obj.id_mensaje);  
+            InputParameterAdd.Guid(objCommand, "id_mensaje", obj.id_mensaje);
+            //InputParameterAdd.Int(objCommand, "bandeja", obj.bandeja);
             List<Usuario> list = new List<Usuario>();
             DataTable dataTable = Execute(objCommand);
             foreach (DataRow row in dataTable.Rows)

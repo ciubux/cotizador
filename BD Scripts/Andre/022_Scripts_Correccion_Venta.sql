@@ -1,3 +1,5 @@
+
+/************** ALTER ps_lista_venta - ajuste de busqueda de ventas *****************************************/
 ALTER procedure  [dbo].[ps_lista_venta] 
 (
 @idCiudad uniqueidentifier,
@@ -91,3 +93,40 @@ else
 	AND (ma.id_sede_origen = @idCiudad 	OR (ma.id_sede_origen = (Select id_ciudad FROM USUARIO where id_usuario = @idUsuario)))
 	AND (ma.numero_documento = @numeroGuia OR pe.numero = @numeroPedido or CONVERT(INT,CPE_CABECERA_BE.CORRELATIVO)=@numeroFactura)	
 	end
+
+/************************ alter ps_ver_usuario_respuestas  - ajuste de busqueda *****************/
+alter procedure ps_ver_usuario_respuestas 
+(
+@id_mensaje uniqueidentifier 
+
+)
+as begin
+
+declare @id_usuario uniqueidentifier
+set  @id_usuario =(select id_usuario_creacion from mensaje where id_mensaje=@id_mensaje) 
+
+select distinct mensaje.fecha_creacion,usuario.id_usuario,USUARIO.nombre from mensaje 
+inner join usuario on mensaje.id_usuario_creacion = usuario.id_usuario 
+where (MENSAJE.id_mensaje=@id_mensaje or id_hilo_mensaje=@id_mensaje) 
+order by mensaje.fecha_creacion asc
+end  
+
+/********************************* ALTER  ps_alerta_mensaje_usuario - añede fecha en el modal de alerta de mensaje************************************************/
+
+		ALTER procedure [dbo].[ps_alerta_mensaje_usuario]
+(@id_usuario uniqueidentifier)
+as begin 
+select mensaje.id_mensaje,titulo,mensaje,importancia,mensaje.fecha_creacion,USUARIO.nombre,mensaje.fecha_vencimiento,mensaje.es_respuesta,id_hilo_mensaje,fecha_inicio,mensaje.fecha_creacion from mensaje
+left join MENSAJE_USUARIO on mensaje.id_mensaje=MENSAJE_USUARIO.id_mensaje
+left join mensaje_roles on   mensaje_roles.id_mensaje=mensaje.id_mensaje
+left join  ROL_USUARIO on ROL_USUARIO.id_rol=mensaje_roles.id_rol
+inner join USUARIO on mensaje.id_usuario_creacion=usuario.id_usuario
+where Mensaje.id_mensaje not in (select id_mensaje from MENSAJE_LEIDO where id_usuario=@id_usuario)  
+and (ROL_USUARIO.id_usuario=@id_usuario or MENSAJE_USUARIO.id_usuario=@id_usuario) and mensaje.estado=1
+and fecha_inicio <= convert(date,dbo.getlocaldate())  and (fecha_vencimiento >= convert(date,dbo.getlocaldate()) or fecha_vencimiento is null)
+
+order by  mensaje.fecha_creacion desc
+end
+
+
+

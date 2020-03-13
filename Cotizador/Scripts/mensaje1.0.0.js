@@ -346,7 +346,11 @@
                             }
                             var imagenAdvertencia = list[i].importancia == "Alta" ? '<img src = "/images/advertencia.svg" style="vertical-align: middle; margin-bottom:5px;  margin-right:10px;" width = "20px" height = "20px">' +
                                 '<svg width="1px" height="1px" xmlns="https://www.w3.org/2000/svg"></svg>' : "";
-
+                            var date = new Date(list[i].fechaCreacionMensaje);
+                            hora = (date.getHours() < 10 ? '0' : '') + date.getHours();
+                            minuto = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+                            segundo = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
+                            horaImprimible = hora + ":" + minuto + ":" + segundo;
                             var ItemRow =
                                 '<div id="Mensaje' + numeroModal + '" class="modal fade ModalMensajeAlerta ModalMensaje" tabindex="-1" role="dialog">' +
                                 '<div class="modal-dialog" id="MensajeDialog' + numeroModal + '">' +
@@ -359,7 +363,7 @@
                                 '</div>' +
                                 '<div class="modal-body">' +
 
-                                '<h5> <b>DE: </b>' + list[i].usuario_creacion + ' - <b> FECHA: </b>' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) + '</h5>' +
+                                '<h5> <b>DE: </b>' + list[i].usuario_creacion + ' - <b> FECHA: </b>' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) +' '+ horaImprimible +'</h5>' +
 
                                 '<h4 style="display: inline-block;">' + imagenAdvertencia + '<u>' + list[i].titulo + '</u></h4>' +
                                 '<p style="margin-bottom: 0.11in"><font size="3"><span lang="es-PE">' + list[i].mensaje + '</span></font></p>' +
@@ -703,7 +707,7 @@
                 
                
                 for (var i = 0; i < list.length; i++) {
-                    var btnEditar = $("#mensaje_bandeja_enviados").prop('checked') ? '<button type = "button" style = "margin-right:13px;" class="' + list[i].id_mensaje + ' btnEditarMensaje btn btn-primary" > Editar</button >' : '';
+                   
                     var ItemRow = '<tr data-expanded="true">' +
 
                         '<td>  ' + list[i].id_mensaje + '  </td>' +
@@ -714,7 +718,7 @@
                         '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) + '  </td>' +
                         '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaVencimientoMensaje)) + '  </td>' +
                         '<td>' +
-                        btnEditar+
+                        '<button type="button" style="margin-right:13px;" class="' + list[i].id_mensaje + ' btnEditarMensaje btn btn-primary" > Editar</button >'+                        
                         '<button type="button" class="' + list[i].id_mensaje + ' btnVerMensaje btn btn-success">Ver</button>' +
 
                         '</td>' +
@@ -749,18 +753,18 @@
 
 
                 for (var i = 0; i < list.length; i++) {
-                    var btnEditar = $("#mensaje_bandeja_enviados").prop('checked') ? '<button type = "button" style = "margin-right:13px;" class="' + list[i].id_mensaje + ' btnEditarMensaje btn btn-primary" > Editar</button >' : '';
+                    //var btnEditar = $("#mensaje_bandeja_enviados").prop('checked') ? '<button type = "button" style = "margin-right:13px;" class="' + list[i].id_mensaje + ' btnEditarMensaje btn btn-primary" >Editar</button >' : '';
                     var ItemRow = '<tr data-expanded="true">' +
 
                         '<td>  ' + list[i].id_mensaje + '  </td>' +
                         '<td>  ' + list[i].titulo + '  </td>' +
                         //'<td>  ' + list[i].mensaje + '  </td>' +
                         '<td>  ' + list[i].usuario_creacion + '  </td>' +
-                        '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) + '  </td>' +
+                        //'<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) + '  </td>' +
                         '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) + '  </td>' +
-                        '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaVencimientoMensaje)) + '  </td>' +
+                        //'<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaVencimientoMensaje)) + '  </td>' +
                         '<td>' +
-                        btnEditar +
+                       // btnEditar +
                         '<button type="button" class="' + list[i].id_mensaje + ' btnVerMensaje btn btn-success">Ver</button>' +
 
                         '</td>' +
@@ -787,26 +791,39 @@
                 idMensaje: idMensaje
             },
             success: function (resultado) {
+               
+               
+                $('[id^=VerContenedor]').remove();               
                 $('#UsuariosRespuesta').empty();
-                $('[id^=VerContenedor]').remove(); 
                 $('#UsuariosRespuesta').append('<option value=" ">Selecciona un Usuario</option>');
+                $('#UsuariosRespuesta').prop("disabled", false);
                 for (var i = 0; i < resultado.length; i++) {
-                    var listaUsuario = '<option value="' + resultado[i].idUsuario + '">' + resultado[i].nombre + '</option>';
+                    var a =  i==0 ? 'id="EliminarUsuario"':'';
+                    var listaUsuario = '<option '+ a +'value="' + resultado[i].idUsuario + '">' + resultado[i].nombre + '</option>';
                     $('#UsuariosRespuesta').append(listaUsuario);
                 }
                 $('#respuestasUsuarios').empty();
                 $('[id^=respuestasUser]').remove();
                 $('#Prueba2').remove();
                 $('#modalListado').modal('show');
+               
                 
-                if ($('#mensaje_bandeja_recibidos').prop('checked') == true && $('#UsuariosRespuesta option').length == 2 ) {
-                    $("#UsuariosRespuesta").prop("selectedIndex", 1).change();  
+                if ($('#mensaje_bandeja_recibidos').prop('checked') == true) {
+
+                    $('#UsuariosRespuesta>option[id="EliminarUsuario"]').prop('selected', true).change();              
                     $('#UsuariosRespuesta').prop("disabled", true);
+                }   
+                
+                if ($('#mensaje_bandeja_enviados').prop('checked') == true) {
+                    $('#EliminarUsuario').remove();                    
                 }
-                if ($('#mensaje_bandeja_recibidos').prop('checked') == true && $('#UsuariosRespuesta option').length > 2) {
-                    $("#UsuariosRespuesta").prop("selectedIndex", 2).change();
+                /*
+                if ($('#mensaje_bandeja_enviados').prop('checked') == true && $('#UsuariosRespuesta option').length == 1) {
+                    $('#UsuariosRespuesta').empty();
+                    $('#UsuariosRespuesta').append('<option value="0">Sin Respuestas</option>');
                     $('#UsuariosRespuesta').prop("disabled", true);
-                }
+                }  
+                */
             }
         });
     });

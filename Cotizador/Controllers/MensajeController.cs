@@ -36,7 +36,7 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoMensaje;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            if (!usuario.modificaMensaje || !usuario.enviaMensaje)
+            if (!usuario.modificaMensaje && usuario.enviaMensaje)
             {
                 return RedirectToAction("Lista", "Mensaje");
             }
@@ -506,6 +506,8 @@ namespace Cotizador.Controllers
             Mensaje obj = new Mensaje();
             MensajeBL mensajebl = new MensajeBL();
             obj.id_mensaje = Guid.Parse(Request["idMensaje"].ToString());
+            //Mensaje mensaje = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE_BUSQUEDA];
+            //obj.bandeja = mensaje.bandeja;
             list = mensajebl.getUsuariosRespuesta(obj);
             return JsonConvert.SerializeObject(list);
         }
