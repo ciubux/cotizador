@@ -106,6 +106,16 @@
     }
 
     ActulizarMensaje();
+    /*
+    setInterval(function ()
+    {       
+        $('.ModalMensajeAlerta').modal('hide');          
+        $('div').removeClass('modal-backdrop fade in');
+        $('.ModalMensajeAlerta').remove(); 
+        ActulizarMensaje();
+    }, 5000);
+    */
+
     function validacionMensaje() {
         if ($("input:checkbox:checked").length == 0 && $("#idUsuarioBusquedaMensaje").val().length == 0) {
             $.alert({
@@ -776,7 +786,14 @@
             }
         });
     });
+    function eliminarDuplicadosUsuario(arrayIn) {
 
+        var arrayOut = new Array();
+        var unicos = arrayIn.filter(function (e) {
+            return arrayOut[e.idUsuario] ? false : (arrayOut[e.idUsuario] = true);
+        });
+        return unicos;
+    }
     $('body').on('click', "button.btnVerMensaje", function () {
 
         var arrrayClass = event.target.getAttribute("class").split(" ");
@@ -791,8 +808,7 @@
                 idMensaje: idMensaje
             },
             success: function (resultado) {
-               
-               
+                resultado=eliminarDuplicadosUsuario(resultado); 
                 $('[id^=VerContenedor]').remove();               
                 $('#UsuariosRespuesta').empty();
                 $('#UsuariosRespuesta').append('<option value=" ">Selecciona un Usuario</option>');
@@ -864,7 +880,7 @@
                     for (var i = 0; i < list.length; i++) {
                         
                         var color2 = i % 2 == 0 ? 'style="background-color: #D6F4FF; border-style: solid; border-width: 2px; border-radius: 8px; border-color: #009FDA; padding-top: 0px; padding-bottom: 0px;padding-left: 10px;padding-right: 10px; "'
-                            : 'style="padding-top: 0px; padding-bottom: 0px;padding-left: 10px;padding-right: 10px; background-color: #E0FFD6; border-style: solid; border-width: 2px; border-radius: 8px; border-color: #33D200;"' ;
+                            : 'style="padding-top: 0px; padding-bottom: 0px;padding-left: 10px;padding-right: 10px; background-color: #E0FFD6; border-style: solid; border-width: 2px; border-radius: 8px; border-color: #33D200;"';
 
                         var date = new Date(list[i].fechaCreacionMensaje);
                         hora = (date.getHours() < 10 ? '0' : '') + date.getHours();
@@ -872,19 +888,24 @@
                         segundo = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
                         horaImprimible = hora + ":" + minuto + ":" + segundo;
                         var salto = list.length - 1 == i ? '' : '<br id="saltoEmilinar">';
+                        var espacio = i % 2 == 0 ?
+                            '' :
+                            '<div class="col-lg-5"></div>';
                         var a =
-                            '<div id = "respuestasUser" ' + color2 + ' >' +
+                            '<div class="row">'+
+                            espacio+
+                            '<div class=col-lg-7><div id = "respuestasUser" ' + color2 + ' >' +
                             '<b><P STYLE="margin-bottom: 0.11in;font-size:11px;"><SPAN LANG="es-PE">' + list[i].user.nombre + '</SPAN></b><FONT SIZE=3><SPAN LANG="es-PE"> </SPAN></FONT> <FONT SIZE=2 > <SPAN LANG="es-PE">' +
                             '</SPAN></FONT> <FONT COLOR="#808080"><SPAN LANG="es-PE">'
                             + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) + ' ' + horaImprimible + '</SPAN></FONT></FONT > <FONT COLOR="#808080"><FONT SIZE=2 STYLE="font-size: 9pt"><SPAN LANG="es-PE">' +
                             '</SPAN></FONT></P>' +
                             '<P STYLE="margin-bottom: 0.11in"><FONT SIZE=3><SPAN LANG="es-PE">' + list[i].mensaje + '' + '</SPAN></FONT></P>' +
-                            '</div>' + salto;
+                            '</div></div>' + espacio +'</div>' + salto;
 
                         $('#VerContenedor').append(a);
                         if (i > 3)
                         {                                                  
-                            $('#VerContenedor').attr('style','height:400px; overflow:auto;');
+                            $('#VerContenedor').attr('style','height:400px; overflow:auto;overflow-x: hidden;');
                         }
                     }
                 }

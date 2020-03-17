@@ -93,7 +93,7 @@ else
 	AND (ma.id_sede_origen = @idCiudad 	OR (ma.id_sede_origen = (Select id_ciudad FROM USUARIO where id_usuario = @idUsuario)))
 	AND (ma.numero_documento = @numeroGuia OR pe.numero = @numeroPedido or CONVERT(INT,CPE_CABECERA_BE.CORRELATIVO)=@numeroFactura)	
 	end
-
+	
 /************************ alter ps_ver_usuario_respuestas  - ajuste de busqueda *****************/
 alter procedure ps_ver_usuario_respuestas 
 (
