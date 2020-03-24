@@ -80,3 +80,12 @@
         }
     });
 });
+
+
+
+$("body").on('mouseenter', ".tooltip-motivo-restriccion", function () {
+    $(this).removeClass('tooltip-motivo-restriccion');
+    $(this).addClass('tooltip-label');
+});
+
+

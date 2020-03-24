@@ -82,6 +82,10 @@ namespace Model
             Todos = 0,
             [Display(Name = "Registrada")]
             Registrada = 1,
+            [Display(Name = "Ingreso Compra Sin Facturar")]
+            RegistradaCompraSinFacturar = 5,
+            [Display(Name = "Devolución Venta Sin Nota de Crédito")]
+            RegistradaVentaSinNC = 6,
             [Display(Name = "Registrada (con Nota de Crédito)")]
             RegistradaNotaCredito = 2,
             [Display(Name = "Registrada (con Factura Compra)")]

@@ -96,3 +96,7 @@ Transaction count after EXECUTE indicates a mismatching number of BEGIN and COMM
 2019-09-13 11:28:16.1873|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
 2019-10-17 09:27:23.3045|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Cannot insert the value NULL into column 'observacion', table 'cmp20190624.dbo.CLIENTE_HISTORIAL_REASIGNACION'; column does not allow nulls. INSERT fails.
 The statement has been terminated.
+2020-02-17 16:24:50.6924|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Cotización ya se encuentra creada
+2020-02-25 08:19:45.1672|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2020-03-11 07:34:47.6929|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Producto ya se encuentra en la lista.
+2020-03-11 07:34:47.8371|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Producto ya se encuentra en la lista.

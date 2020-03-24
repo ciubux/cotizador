@@ -498,13 +498,13 @@ namespace cotizadorPDF
                     }
                 }
 
-
-
-
-
-
                 y = y + sepLine;
-            
+
+                sectionObervaciones.Canvas.DrawString("* Entrega sujeta a confirmación de disponibilidad luego de recibido el pedido u orden de compra.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                y = y + sepLine;
+
+                sectionObervaciones.Canvas.DrawString(" No se garantiza stock debido a coyuntura excepcional de alta demanda.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                y = y + sepLine;
 
                 foreach (string line in lines)
                 {

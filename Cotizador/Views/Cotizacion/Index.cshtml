@@ -71,7 +71,7 @@
                     <label for="fechaDesde" class="control-label col-xs-4" ¨>Última Edición Desde:</label>
                     <div class="col-xs-8">
                         <input type="hidden" id="fechaDesdetmp" value="@ViewBag.fechaDesde" />
-                        <input class="form-control" type="text" id="fechaDesde" name="fechaDesde">
+                        <input class="form-control" type="text" id="fechaDesde" name="fechaDesde" autocomplete="off">
                     </div>
                 </div>
             </div>
@@ -81,7 +81,7 @@
                     <label for="fechaHasta" class="control-label col-xs-4">Última Edición Hasta:</label>
                     <div class="col-xs-8">
                         <input type="hidden" id="fechaHastatmp" value="@ViewBag.fechaHasta" />
-                        <input class="form-control" type="text" id="fechaHasta" name="fechaHasta">
+                        <input class="form-control" type="text" id="fechaHasta" name="fechaHasta" autocomplete="off">
                     </div>
                 </div>
             </div>
@@ -731,7 +731,7 @@
 </div>
 
 <span id="spnProductoDescontinuado" style="display: none;">
-    <label class="lblAlertaProductoDescontinuado" style=""><img src="~/images/icon_warning_18.png" /> PRODUCTO DESCONTINUADO</label>
+    @Html.Partial("../Producto/_LabelRestringido")
 </span>
 
 @section Scripts {

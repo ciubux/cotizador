@@ -107,6 +107,7 @@ namespace Model
         public bool apruebaCotizaciones { get { return apruebaCotizacionesLima || apruebaCotizacionesProvincias; } }
         public bool apruebaCotizacionesLima { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_COTIZACIONES_LIMA)).FirstOrDefault() != null; } }
         public bool apruebaCotizacionesProvincias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_COTIZACIONES_PROVINCIAS)).FirstOrDefault() != null; } }
+        public bool apruebaCotizacionesVentaRestringida { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_COTIZACIONES_VENTA_RESTRINGIDA)).FirstOrDefault() != null; } }
         public bool creaCotizaciones { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_COTIZACIONES_LIMA)).FirstOrDefault() != null; } }
         public bool visualizaCotizaciones { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_COTIZACIONES)).FirstOrDefault() != null; } }
         public bool eliminaCotizacionesAceptadas { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ELIMINA_COTIZACIONES_ACEPTADAS)).FirstOrDefault() != null; } }
@@ -125,6 +126,7 @@ namespace Model
         public bool apruebaPedidosAlmacen { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_PEDIDOS_ALMACEN)).FirstOrDefault() != null; } }
         public bool apruebaPedidosLima { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_PEDIDOS_LIMA)).FirstOrDefault() != null; } }
         public bool apruebaPedidosProvincias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_PEDIDOS_PROVINCIAS)).FirstOrDefault() != null; } }
+        public bool apruebaPedidosVentaRestringida { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_PEDIDOS_VENTA_RESTRINGIDA)).FirstOrDefault() != null; } }
         public bool visualizaPedidosLima { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_PEDIDOS_LIMA)).FirstOrDefault() != null; } }
         public bool visualizaPedidosProvincias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_PEDIDOS_PROVINCIAS)).FirstOrDefault() != null; } }
         public bool visualizaPedidos { get { return visualizaPedidosLima || visualizaPedidosProvincias; } }

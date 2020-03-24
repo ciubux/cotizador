@@ -17,7 +17,32 @@ namespace Model
 
         public int cantidadPorAtender { get; set; }
 
+
+        public int cantidadPorAtenderPermitida
+        {
+            get
+            {
+                int valor = cantidadPendienteAtencionPermitida - cantidadPorAtender;
+                if (valor < 0) cantidadPorAtender = cantidadPendienteAtencionPermitida;
+                
+                return cantidadPorAtender;
+            }
+        }
+
+        public int cantidadPendienteAtencionPermitida
+        {
+            get {
+                int valor = cantidadPermitida - (cantidad - cantidadPendienteAtencion);
+                if (valor < 0) valor = 0;
+                return valor;
+            }
+        }
+
         public int cantidadPendienteAtencion { get; set; }
+
+        public int cantidadPermitida { get; set; }
+
+        public string observacionRestriccion { get; set; }
 
         public int cantidadSolicitada { get { return cantidad; } }
 

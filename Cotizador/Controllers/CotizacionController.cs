@@ -206,7 +206,7 @@ namespace Cotizador.Controllers
             cotizacionTmp.considerarCantidades = Cotizacion.OpcionesConsiderarCantidades.Observaciones;
             Usuario usuario = (Usuario)this.Session["usuario"];
             cotizacionTmp.usuario = usuario;
-            cotizacionTmp.observaciones = Constantes.OBSERVACION;
+            cotizacionTmp.observaciones = Constantes.OBSERVACION_COTIZACION_C;
             cotizacionTmp.incluidoIGV = false;
             cotizacionTmp.aplicaSedes = false;
             cotizacionTmp.seguimientoCotizacion = new SeguimientoCotizacion();
@@ -936,6 +936,7 @@ namespace Cotizador.Controllers
                 "\"proveedor\":\"" + producto.proveedor + "\"," +
                 "\"familia\":\"" + producto.familia + "\"," +
                 "\"descontinuado\":" + producto.descontinuado + "," +
+                "\"motivoRestriccion\":\"" + producto.motivoRestriccion + "\"," +
                 "\"precioUnitarioSinIGV\":\"" + producto.precioSinIgv + "\"," +
              //   "\"precioUnitarioAlternativoSinIGV\":\"" + producto.precioAlternativoSinIgv + "\"," +
                 "\"precioLista\":\"" + producto.precioLista + "\"," +
@@ -1098,6 +1099,7 @@ namespace Cotizador.Controllers
                 idProducto = detalle.producto.idProducto,
                 codigoProducto = detalle.producto.sku,
                 descontinuado = detalle.producto.descontinuado,
+                motivoRestriccion = detalle.producto.motivoRestriccion,
                 subTotalItem = detalle.subTotal.ToString(),
                 nombreProducto = nombreProducto,
                 unidad = detalle.unidad,

@@ -6,11 +6,12 @@
 }
 
 .tipso_bubble {
-    border: 1px solid #428bca; /*agregado*/
+    /*border: 1px solid #428bca; /*agregado*/
+    border: 1px solid #000000; /*agregado*/
     position: absolute;
-    text-align: center;    
+    text-align: center;
     z-index: 9999;
-    border-radius: 8px; /*cambio por 6px*/    
+    border-radius: 8px; /*cambio por 6px*/
 }
 
 .tipso_style {
@@ -20,6 +21,7 @@
 
 .tipso_title {
     border-radius: 6px 6px 0 0;
+    font-weight: bold;
 }
 
 .tipso_content {
@@ -84,7 +86,8 @@
     height: 20px;
     background: white;
     transform: rotate(45deg);
-    box-shadow: inset -1px -1px #428bca;   
+    /*box-shadow: inset -1px -1px #428bca;*/
+    box-shadow: inset -1px -1px #000000;
 }
 
 

@@ -95,6 +95,8 @@ namespace Model
         public static String VAR_SESSION_PRODUCTO_VER = "productoVer";
 
         public static String VAR_SESSION_PRODUCTO_SEARCH_PARAM = "productoSearchParamn_";
+        public static String VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM = "pedidoSearchProductoParamn_";
+
 
         public static String VAR_SESSION_ORIGEN = "origen";
         public static String VAR_SESSION_ORIGEN_BUSQUEDA = "origenBusqueda";
@@ -293,8 +295,11 @@ namespace Model
         public static int DIAS_MAX_VIGENCIA_PRECIOS_PEDIDO = 365;
         //public static 
         public static String OBSERVACION = "* Condiciones de pago: al contado.\n" +
-                                       "* Entrega en almacén del cliente, 48 horas luego de la recepción del pedido o la orden de compra.\n" +
-                                       "* (para productos no stockeables o primeras compras, consultar plazo).\n";
+                                       "* Entrega sujeta a confirmación de disponibilidad luego de recibido el pedido u orden de compra.\n No se garantiza stock debido a coyuntura excepcional de alta demanda.\n" +
+                                       "* Para productos no stockeables o primeras compras, consultar plazo.\n";
+
+        public static String OBSERVACION_COTIZACION_C = "* Condiciones de pago: al contado.\n" +
+                                       "* Para productos no stockeables o primeras compras, consultar plazo.\n";
         public static int DESCARGAR_XML = 1;
 
 
@@ -326,8 +331,10 @@ namespace Model
         public const String ADMINISTRA_PERMISOS = "P001";
         public const String APRUEBA_COTIZACIONES_LIMA = "P002";
         public const String APRUEBA_COTIZACIONES_PROVINCIAS = "P003";
+        public const String APRUEBA_COTIZACIONES_VENTA_RESTRINGIDA = "P219";
         public const String APRUEBA_PEDIDOS_LIMA = "P004";
         public const String APRUEBA_PEDIDOS_PROVINCIAS = "P005";
+        public const String APRUEBA_PEDIDOS_VENTA_RESTRINGIDA = "P319";
         public const String CREA_GUIAS = "P006";
         public const String ADMINISTRA_GUIAS_LIMA = "P007";
         public const String ADMINISTRA_GUIAS_PROVINCIAS = "P008";

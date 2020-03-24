@@ -395,7 +395,7 @@
                                 <span class="input-group-text" id="basic-addon1">Desde:</span>
                             </div>
                             <input type="hidden" id="fechaEntregaDesdetmp" value="@ViewBag.fechaEntregaDesde" />
-                            <input class="form-control" type="text" id="pedido_fechaEntregaDesde" name="pedido_fechaEntregaDesde">
+                            <input class="form-control" type="text" id="pedido_fechaEntregaDesde" name="pedido_fechaEntregaDesde" autocomplete="off">
                         </div>
                         <label for="fechaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
                         <div class="input-group col-xs-6 col-lg-8">
@@ -404,7 +404,7 @@
                                 <span class="input-group-text" id="basic-addon1">Hasta:</span>
                             </div>
                             <input type="hidden" id="fechaEntregaHastatmp" value="@ViewBag.fechaEntregaHasta" />
-                            <input class="form-control" type="text" id="pedido_fechaEntregaHasta" name="pedido_fechaEntregaHasta">
+                            <input class="form-control" type="text" id="pedido_fechaEntregaHasta" name="pedido_fechaEntregaHasta" autocomplete="off">
 
                         </div>
                     </div>
@@ -420,15 +420,15 @@
                             <div class="input-group-addon" style="width:70px">
                                 <span class="input-group-text" id="basic-addon1">1er Turno:</span>
                             </div>
-                            <input class="form-control" type="time" id="pedido_horaEntregaDesde" name="pedido_horaEntregaDesde" value="@pedido.horaEntregaDesde">
-                            <input class="form-control" type="time" id="pedido_horaEntregaHasta" name="pedido_horaEntregaHasta" value="@pedido.horaEntregaHasta">
+                            <input class="form-control" type="time" id="pedido_horaEntregaDesde" name="pedido_horaEntregaDesde" value="@pedido.horaEntregaDesde" autocomplete="off">
+                            <input class="form-control" type="time" id="pedido_horaEntregaHasta" name="pedido_horaEntregaHasta" value="@pedido.horaEntregaHasta" autocomplete="off">
                         </div>
                         <div class="input-group col-xs-4 col-lg-4">
                             <div class="input-group-addon" style="width:70px">
                                 <span class="input-group-text" id="basic-addon1">2do Turno:</span>
                             </div>
-                            <input class="form-control" type="time" id="pedido_horaEntregaAdicionalDesde" name="pedido_horaEntregaAdicionalDesde" value="@pedido.horaEntregaAdicionalDesde">
-                            <input class="form-control" type="time" id="pedido_horaEntregaAdicionalHasta" name="pedido_horaEntregaAdicionalHasta" value="@pedido.horaEntregaAdicionalHasta">
+                            <input class="form-control" type="time" id="pedido_horaEntregaAdicionalDesde" name="pedido_horaEntregaAdicionalDesde" value="@pedido.horaEntregaAdicionalDesde" autocomplete="off">
+                            <input class="form-control" type="time" id="pedido_horaEntregaAdicionalHasta" name="pedido_horaEntregaAdicionalHasta" value="@pedido.horaEntregaAdicionalHasta" autocomplete="off">
                         </div>
                     </div>
                 </div>
@@ -499,7 +499,7 @@
                         <div class="input-group col-xs-8 col-lg-8">
 
                             <input type="hidden" id="fechaSolicitudTmp" value="@ViewBag.fechaSolicitud" />
-                            <input class="form-control" type="text" id="fechaSolicitud" name="fechaSolicitud">
+                            <input class="form-control" type="text" id="fechaSolicitud" name="fechaSolicitud" autocomplete="off">
                         </div>
                     </div>
                 </div>
@@ -695,7 +695,26 @@
                         <td>  @pedidoDetalle.producto.idProducto  </td>
                         <td>  @pedidoDetalle.esPrecioAlternativo  </td>
                         <td>  @pedidoDetalle.producto.proveedor  </td>
-                        <td>  @pedidoDetalle.producto.sku  </td>
+                        <td>
+                            @pedidoDetalle.producto.sku
+                            @if (pedidoDetalle.producto.descontinuado == 1)
+                            {
+                                <br />
+                                if (pedidoDetalle.producto.motivoRestriccion != null && !pedidoDetalle.producto.motivoRestriccion.Trim().IsEmpty())
+                                {
+                                    string descontinuadoLabel = Html.Partial("../Producto/_LabelRestringido").ToString();
+                                    descontinuadoLabel = descontinuadoLabel.Replace("_DATA_TIPSO_", pedidoDetalle.producto.motivoRestriccion);
+                                    descontinuadoLabel = descontinuadoLabel.Replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+
+                                    @Html.Raw(descontinuadoLabel)
+                                }
+                                else
+                                {
+                                    @Html.Partial("../Producto/_LabelRestringido")
+                                }
+                            }
+                        </td>
+
                         <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
                         <td>
                             @pedidoDetalle.producto.skuProveedor - @pedidoDetalle.producto.descripcion
@@ -980,10 +999,23 @@
                             <div class="form-group">
                                 <label for="producto" class="control-label col-xs-3">Producto:</label>
                                 <div class="col-xs-9">
+                                    <span id="spnProductoDescontinuado" style="display: none;">
+                                        @Html.Partial("../Producto/_LabelRestringido")
+                                    </span>
                                     <select class="form-control" id="producto" name="producto">
                                         <option value=""></option>
                                     </select>
-                                    <!--  <label><input type="checkbox" id="considerarDescontinuados" />Considerar Descontinuados</label>-->
+                                    <label class="radio-label" style="margin-top: 5px;">
+                                        @if (ViewBag.busquedaProductosIncluyeDescontinuados == 1)
+                                        {
+                                            <input checked type="checkbox" class="chkPedidoSerchProductCheckParam" paramName="incluyeDescontinuados" checkValue="1" unCheckValue="0" value="1">
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" class="chkPedidoSerchProductCheckParam" paramName="incluyeDescontinuados" checkValue="1" unCheckValue="0" value="1">
+                                        }
+                                        Incluir productos de venta restringida
+                                    </label>
                                 </div>
                             </div>
 

@@ -3,6 +3,7 @@ using Framework.DAL.Settings.Implementations;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using Model;
 using System.Linq;
 
@@ -903,7 +904,9 @@ namespace DataLayer
                 pedidoDetalle.cantidadPendienteAtencion = Converter.GetInt(row, "cantidadPendienteAtencion");
                 pedidoDetalle.cantidadPorAtender = Converter.GetInt(row, "cantidadPendienteAtencion");
 
-            
+                pedidoDetalle.cantidadPermitida = Converter.GetInt(row, "cantidad_permitida");
+                pedidoDetalle.observacionRestriccion = Converter.GetString(row, "comentario_retencion");
+
                 pedidoDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
 
                 pedidoDetalle.flete = Converter.GetDecimal(row, "flete");
@@ -938,6 +941,8 @@ namespace DataLayer
                 pedidoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
                 pedidoDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
                 pedidoDetalle.producto.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo_producto");
+                pedidoDetalle.producto.ventaRestringida = (Producto.TipoVentaRestringida) Converter.GetInt(row, "descontinuado");
+                pedidoDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
 
                 pedidoDetalle.producto.image = Converter.GetBytes(row, "imagen");
 
@@ -1275,6 +1280,8 @@ namespace DataLayer
                 pedidoDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 pedidoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
                 pedidoDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
+                pedidoDetalle.producto.ventaRestringida = (Producto.TipoVentaRestringida) Converter.GetInt(row, "descontinuado");
+                pedidoDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
 
                 pedidoDetalle.producto.image = Converter.GetBytes(row, "imagen");
 
@@ -1780,6 +1787,38 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             
 
             return pedido;
+        }
+
+
+        public bool UpdateDetallesRestriccion(Guid idPedido, List<Guid> idDetalles, List<int> cantidades, List<String> comentarios, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pu_restriccion_cantidad_pedido");
+            InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+            tvp.Columns.Add(new DataColumn("CANTIDAD", typeof(int)));
+            tvp.Columns.Add(new DataColumn("COMENTARIO", typeof(String)));
+
+            for (int i = 0; i < idDetalles.Count; i++)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = idDetalles[i];
+                rowObj["CANTIDAD"] = cantidades[i];
+                rowObj["COMENTARIO"] = comentarios[i];
+
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@restricciones", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.DetalleCantidadList";
+
+
+            ExecuteNonQuery(objCommand);
+
+            return true;
         }
     }
 }

@@ -691,6 +691,16 @@ jQuery(function ($) {
 
                 if (producto.descontinuado == 1) {
                     $("#spnProductoDescontinuado").show();
+
+                    if (producto.motivoRestriccion != null) {
+                        producto.motivoRestriccion = producto.motivoRestriccion.trim();
+
+                        $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").removeClass("tooltip-label");
+                        if (producto.motivoRestriccion != "") {
+                            $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").addClass("tooltip-motivo-restriccion");
+                            $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado .tooltip-label-text").html(producto.motivoRestriccion);
+                        }
+                    }
                 } else {
                     $("#spnProductoDescontinuado").hide();
                 }
@@ -934,10 +944,16 @@ jQuery(function ($) {
         }
         else {
             idCliente = $("#idCliente").val();
-            if (idCliente.trim() == "") {
-                alert("Debe seleccionar un cliente.");
-                $('#idCliente').trigger('chosen:activate');
-                return false;
+            idGrupoCliente = $("#idGrupoCliente").val();
+            
+            if (idGrupoCliente > 0) {
+                actionUrl = "GetPreciosRegistradosGrupoCliente";
+            } else {
+                if (idCliente.trim() == "") {
+                    alert("Debe seleccionar un cliente.");
+                    $('#idCliente').trigger('chosen:activate');
+                    return false;
+                }
             }
         }
 
@@ -1078,6 +1094,15 @@ jQuery(function ($) {
                 var descontinuadoLabel = "";
                 if (detalle.descontinuado == 1) {
                     descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html(); 
+
+                    if (detalle.motivoRestriccion != null) {
+                        detalle.motivoRestriccion = detalle.motivoRestriccion.trim();
+                        descontinuadoLabel = descontinuadoLabel.replace("_DATA_TIPSO_", detalle.motivoRestriccion);
+
+                        if (detalle.motivoRestriccion != "") {
+                            descontinuadoLabel = descontinuadoLabel.replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+                        }
+                    }
                 }
 
                 $("#tableDetalleCotizacion tbody").append('<tr data-expanded="false">' +
@@ -1997,6 +2022,7 @@ jQuery(function ($) {
 
                 var d = '';
                 var lista = cotizacion.cotizacionDetalleList;
+                var tieneProductoRestringido = false;
                 for (var i = 0; i < cotizacion.cotizacionDetalleList.length; i++) {
 
                     var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
@@ -2010,7 +2036,17 @@ jQuery(function ($) {
 
                     var descontinuadoLabel = "";
                     if (lista[i].producto.descontinuado == 1) {
+                        tieneProductoRestringido = true;
                         descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
+
+                        if (lista[i].producto.motivoRestriccion != null) {
+                            lista[i].producto.motivoRestriccion = lista[i].producto.motivoRestriccion.trim();
+                            descontinuadoLabel = descontinuadoLabel.replace("_DATA_TIPSO_", lista[i].producto.motivoRestriccion);
+
+                            if (lista[i].producto.motivoRestriccion != "") {
+                                descontinuadoLabel = descontinuadoLabel.replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+                            }
+                        }
                     }
 
                     d += '<tr>' +
@@ -2101,10 +2137,12 @@ jQuery(function ($) {
                 if (cotizacion.cliente_idCliente == GUID_EMPTY) {
                     if (
                         (cotizacion.seguimientoCotizacion_estado == ESTADO_PENDIENTE_APROBACION ||
-                            cotizacion.seguimientoCotizacion_estado == ESTADO_DENEGADA) &&
-                        (
-                            usuario.apruebaCotizacionesGrupales &&
+                            cotizacion.seguimientoCotizacion_estado == ESTADO_DENEGADA)
+                        &&
+                        (usuario.apruebaCotizacionesGrupales &&
                             usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
+                        &&
+                        (!tieneProductoRestringido || (tieneProductoRestringido && usuario.apruebaCotizacionesVentaRestringida))
                     ) {
                         $("#btnAprobarCotizacion").show();
                     }
@@ -2113,33 +2151,29 @@ jQuery(function ($) {
                     }
 
                     if (
-
-
-                        (cotizacion.seguimientoCotizacion_estado == ESTADO_PENDIENTE_APROBACION) &&
-                        (
-                            usuario.apruebaCotizacionesGrupales &&
+                        (cotizacion.seguimientoCotizacion_estado == ESTADO_PENDIENTE_APROBACION)
+                        &&
+                        (usuario.apruebaCotizacionesGrupales &&
                             usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
                     ) {
-
-
                         $("#btnDenegarCotizacion").show();
                     }
                     else {
                         $("#btnDenegarCotizacion").hide();
                     }
 
+
                 }
                 else {
                     if (
                         (cotizacion.seguimientoCotizacion_estado == ESTADO_PENDIENTE_APROBACION ||
-                            cotizacion.seguimientoCotizacion_estado == ESTADO_DENEGADA) &&
-                        (
-                            usuario.apruebaCotizaciones &&
+                            cotizacion.seguimientoCotizacion_estado == ESTADO_DENEGADA)
+                        &&
+                        (usuario.apruebaCotizaciones &&
                             usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
+                        &&
+                        (!tieneProductoRestringido || (tieneProductoRestringido && usuario.apruebaCotizacionesVentaRestringida))
                     ) {
-
-
-
                         $("#btnAprobarCotizacion").show();
                     }
                     else {
@@ -2147,9 +2181,9 @@ jQuery(function ($) {
                     }
 
                     if (
-                        (cotizacion.seguimientoCotizacion_estado == ESTADO_PENDIENTE_APROBACION) &&
-                        (
-                            usuario.apruebaCotizaciones &&
+                        (cotizacion.seguimientoCotizacion_estado == ESTADO_PENDIENTE_APROBACION)
+                        &&
+                        (usuario.apruebaCotizaciones &&
                             usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
                     ) {
 

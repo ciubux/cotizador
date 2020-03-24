@@ -135,6 +135,7 @@ namespace Cotizador.Controllers
             producto.unidadProveedor = String.Empty;
             producto.unidad_alternativa = String.Empty;
             producto.unidadEstandarInternacional = String.Empty;
+            producto.motivoRestriccion = String.Empty;
             FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
             MemoryStream storeStream = new MemoryStream();
             storeStream.SetLength(inStream.Length);
@@ -956,11 +957,24 @@ namespace Cotizador.Controllers
                         pos = posicionInicial + 31;
                         try
                         {
-                            productoStaging.descontinuado = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper().Equals("SI") ? 1 : 0;
+                            //productoStaging.descontinuado = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper().Equals("SI") ? 1 : 0;
+                            string tipoVentaRestringida = sheet.GetRow(row).GetCell(pos).ToString();
+                            productoStaging.ventaRestringida = (Producto.TipoVentaRestringida) Enum.Parse(typeof(Producto.TipoVentaRestringida), tipoVentaRestringida);
+
                         }
                         catch (Exception e)
                         {
-                            productoStaging.descontinuado = 0;
+                            productoStaging.ventaRestringida = Producto.TipoVentaRestringida.SinRestriccion;
+                        }
+
+                        pos = posicionInicial + 32;
+                        try
+                        {
+                            productoStaging.motivoRestriccion = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.motivoRestriccion = "";
                         }
 
                         //UtilesHelper.setValorCelda(sheet, 1, "AC", Producto.nombreAtributo("tipoProducto"), titleCellStyle);
@@ -1260,6 +1274,16 @@ namespace Cotizador.Controllers
 
             ProductoSession.tipoProductoVista = valor;
         }
+
+        public void ChangeVentaRestringida()
+        {
+            int valor = Int32.Parse(this.Request.Params["ventaRestringida"]);
+            if (valor > -1)
+            {
+                ProductoSession.ventaRestringida = (Producto.TipoVentaRestringida)valor;
+            }
+        }
+
 
         public ActionResult CancelarCreacionProducto()
         {

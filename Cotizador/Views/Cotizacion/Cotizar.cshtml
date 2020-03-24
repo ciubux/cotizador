@@ -200,11 +200,11 @@ else
 
                         @if ((int)cotizacion.tipoCotizacion == 1 || (int)cotizacion.tipoCotizacion == 2)
 {
-                            <input class="form-control" disabled type="text" id="fechaInicioVigenciaPrecios" name="fechaInicioVigenciaPrecios">
+                            <input class="form-control" disabled type="text" id="fechaInicioVigenciaPrecios" name="fechaInicioVigenciaPrecios" autocomplete="off">
 }
 else
 {
-                            <input class="form-control" type="text" id="fechaInicioVigenciaPrecios" name="fechaInicioVigenciaPrecios">
+                            <input class="form-control" type="text" id="fechaInicioVigenciaPrecios" name="fechaInicioVigenciaPrecios" autocomplete="off">
 }
 
                     </div>
@@ -220,11 +220,11 @@ else
 
                         @if ((int)cotizacion.tipoCotizacion == 2)
 {
-                            <input class="form-control" disabled type="text" id="fechaFinVigenciaPrecios" name="fechaFinVigenciaPrecios">
+                            <input class="form-control" disabled type="text" id="fechaFinVigenciaPrecios" name="fechaFinVigenciaPrecios" autocomplete="off">
 }
 else
 {
-                            <input class="form-control" type="text" id="fechaFinVigenciaPrecios" name="fechaFinVigenciaPrecios">
+                            <input class="form-control" type="text" id="fechaFinVigenciaPrecios" name="fechaFinVigenciaPrecios" autocomplete="off">
 }
 
                     </div>
@@ -550,8 +550,20 @@ else
                             @if (cotizacionDetalle.producto.descontinuado == 1)
                             {
                                 <br />
-                                <label class="lblAlertaProductoDescontinuado" style=""><img src="~/images/icon_warning_18.png" /> PRODUCTO DESCONTINUADO</label>
+                                if (cotizacionDetalle.producto.motivoRestriccion != null && !cotizacionDetalle.producto.motivoRestriccion.Trim().IsEmpty())
+                                {
+                                    string descontinuadoLabel = Html.Partial("../Producto/_LabelRestringido").ToString();
+                                    descontinuadoLabel = descontinuadoLabel.Replace("_DATA_TIPSO_", cotizacionDetalle.producto.motivoRestriccion);
+                                    descontinuadoLabel = descontinuadoLabel.Replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+
+                                    @Html.Raw(descontinuadoLabel)
+                                }
+                                else
+                                {
+                                    @Html.Partial("../Producto/_LabelRestringido")
+                                }
                             }
+
                         </td>
                         <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
                         @if (cotizacion.mostrarCodigoProveedor && (int)cotizacion.considerarCantidades == 2)
@@ -800,7 +812,7 @@ else
                                 <label for="producto" class="control-label col-xs-3">Producto:</label>
                                 <div class="col-xs-9">
                                     <span id="spnProductoDescontinuado" style="display: none;">
-                                        <label class="lblAlertaProductoDescontinuado" style=""><img src="~/images/icon_warning_18.png" /> PRODUCTO DESCONTINUADO</label>
+                                        @Html.Partial("../Producto/_LabelRestringido")
                                     </span>
                                     <select class="form-control" id="producto" name="producto">
                                         <option value=""></option>
@@ -814,9 +826,8 @@ else
                                         {
                                             <input type="checkbox" class="chkProductSerchCheckParam" paramName="incluyeDescontinuados" checkValue="1" unCheckValue="0" value="1">
                                         }
-                                        Incluir productos descontinuados
+                                        Incluir productos de venta restringida
                                     </label>
-                                    <!--  <label><input type="checkbox" id="considerarDescontinuados" />Considerar Descontinuados</label>-->
                                 </div>
                             </div>
 
@@ -1371,7 +1382,7 @@ else
 </div>
 
 
-@Html.Partial("_ModalImportarDetallesExcel");
+@Html.Partial("_ModalImportarDetallesExcel")
 
 
 <div class="modal fade" id="modalComentarioAprobacion" tabindex="-1">

@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "101";
+    TempData["ScriptVersion"] = "491";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -430,7 +430,6 @@
                                     Sistema
                                     <span class="caret"></span>
                                 </a>
-
                                 <ul class="dropdown-menu" role="menu">
                                     @if (usuario.administraPermisos)
                                     {
@@ -490,11 +489,6 @@
                                     {
                                         <li id="linkMantenimientoParametro" class="@linkMantenimientoParametro">@Html.ActionLink("Parametro - Búsqueda", "Lista", "Parametro")</li>
                                     }
-
-                                    @*@if (usuario.modificaUsuario)
-        {
-          <li id="linkCRUsuario" class="@linkMantenimientoUsuario">@Html.ActionLink("Usuario - Crear/Modificar ", "Editar", "Usuario")</li>
-        }*@
 
 
                                     @if (usuario.administraPermisos)

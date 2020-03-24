@@ -486,7 +486,13 @@ namespace Cotizador.Controllers
                 ViewBag.pedido = pedido;
                 ViewBag.VARIACION_PRECIO_ITEM_PEDIDO = Constantes.VARIACION_PRECIO_ITEM_PEDIDO;
 
-                ViewBag.fechaPrecios = DateTime.Now.AddDays(-Constantes.DIAS_MAX_BUSQUEDA_PRECIOS).ToString(Constantes.formatoFecha);  
+                ViewBag.fechaPrecios = DateTime.Now.AddDays(-Constantes.DIAS_MAX_BUSQUEDA_PRECIOS).ToString(Constantes.formatoFecha);
+
+                ViewBag.busquedaProductosIncluyeDescontinuados = 0;
+                if (this.Session[Constantes.VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM + "incluyeDescontinuados"] != null)
+                {
+                    ViewBag.busquedaProductosIncluyeDescontinuados = int.Parse(this.Session[Constantes.VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM + "incluyeDescontinuados"].ToString());
+                }
 
                 ViewBag.pagina = (int)Constantes.paginas.MantenimientoPedido;
                 return View();
@@ -778,8 +784,15 @@ namespace Cotizador.Controllers
             {
                 String texto_busqueda = this.Request.Params["data[q]"];
                 ProductoBL bl = new ProductoBL();
+
+                int incluyeDescontinuados = 0;
+                if (this.Session[Constantes.VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM + "incluyeDescontinuados"] != null)
+                {
+                    incluyeDescontinuados = int.Parse(this.Session[Constantes.VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM + "incluyeDescontinuados"].ToString());
+                }
+
                 Pedido pedido = this.PedidoSession;
-                String resultado = bl.getProductosBusqueda(texto_busqueda, false, this.Session["proveedor"] != null ? (String)this.Session["proveedor"] : "Todos", this.Session["familia"] != null ? (String)this.Session["familia"] : "Todas", pedido.tipoPedido);
+                String resultado = bl.getProductosBusqueda(texto_busqueda, false, this.Session["proveedor"] != null ? (String)this.Session["proveedor"] : "Todos", this.Session["familia"] != null ? (String)this.Session["familia"] : "Todas", pedido.tipoPedido, incluyeDescontinuados);
                 return resultado;
             }
             catch (Exception e)
@@ -787,6 +800,13 @@ namespace Cotizador.Controllers
                 logger.Error(e,agregarUsuarioAlMensaje(e.Message));
                 throw e;
             }
+        }
+
+        public void SetSearchProductParam()
+        {
+            String parametro = this.Request.Params["parametro"];
+            String valor = this.Request.Params["valor"];
+            this.Session[Constantes.VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM + parametro] = valor;
         }
 
 
@@ -929,13 +949,15 @@ namespace Cotizador.Controllers
                     "\"proveedor\":\"" + producto.proveedor + "\"," +
                     "\"familia\":\"" + producto.familia + "\"," +
                     "\"precioUnitarioSinIGV\":\"" + producto.precioSinIgv + "\"," +
-             //       "\"precioUnitarioAlternativoSinIGV\":\"" + producto.precioAlternativoSinIgv + "\"," +
+                    //       "\"precioUnitarioAlternativoSinIGV\":\"" + producto.precioAlternativoSinIgv + "\"," +
                     "\"precioLista\":\"" + producto.precioLista + "\"," +
                     "\"costoSinIGV\":\"" + producto.costoSinIgv + "\"," +
-             //       "\"costoAlternativoSinIGV\":\"" + producto.costoAlternativoSinIgv + "\"," +
+                    //       "\"costoAlternativoSinIGV\":\"" + producto.costoAlternativoSinIgv + "\"," +
                     "\"fleteDetalle\":\"" + fleteDetalle + "\"," +
                     "\"precioUnitario\":\"" + precioUnitario + "\"," +
                     "\"porcentajeDescuento\":\"" + porcentajeDescuento + "\"," +
+                    "\"descontinuado\":\"" + producto.descontinuado.ToString() + "\"," +
+                    "\"motivoRestriccion\":\"" + producto.motivoRestriccion + "\"," +
                     "\"precioListaList\":" + jsonPrecioLista + "," +
                     "\"productoPresentacionList\":" + jsonProductoPresentacion + "," +
                     "\"costoLista\":\"" + producto.costoLista + "\"" +
@@ -1078,6 +1100,8 @@ namespace Cotizador.Controllers
                     subTotal = pedido.montoSubTotal.ToString(),
                     margen = detalle.margen,
                     precioUnitario = detalle.precioUnitario,
+                    descontinuado = detalle.producto.descontinuado,
+                    motivoRestriccion = detalle.producto.motivoRestriccion,
                     observacion = detalle.observacion,
                     total = pedido.montoTotal.ToString(),
                     precioUnitarioRegistrado = precioUnitarioRegistrado
@@ -1710,6 +1734,19 @@ namespace Cotizador.Controllers
             SeguimientoPedido.estadosSeguimientoPedido estadosSeguimientoPedido = (SeguimientoPedido.estadosSeguimientoPedido)Int32.Parse(Request["estado"].ToString());
             String observacion = Request["observacion"].ToString();
             updateEstadoSeguimientoPedido(idPedido, estadosSeguimientoPedido, observacion);
+
+            if (estadosSeguimientoPedido == SeguimientoPedido.estadosSeguimientoPedido.Ingresado)
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+                PedidoBL pedidoBL = new PedidoBL();
+
+                List<Guid> idDetalles = (List<Guid>)this.Session["pedidoDRIds"];
+                List<int> cantidades = (List<int>)this.Session["pedidoDRCantidades"];
+                List<String> comentarios = (List<String>)this.Session["pedidoDRComentarios"];
+
+                pedidoBL.UpdateDetallesRestriccion(idPedido, idDetalles, cantidades, comentarios, usuario.idUsuario);
+            }
         }
 
         public void updateEstadoPedidoCrediticio()
@@ -1924,8 +1961,11 @@ namespace Cotizador.Controllers
 
             }
 
-          
-            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"pedido\":" + jsonPedido + "}";
+            this.Session["pedidoDRIds"] = new List<Guid>();
+            this.Session["pedidoDRCantidades"] = new List<int>();
+            this.Session["pedidoDRComentarios"] = new List<String>();
+
+            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"pedido\":" + jsonPedido + ", \"usuario\":" + jsonUsuario + "}";
             return json;
         }
 
@@ -2343,6 +2383,24 @@ namespace Cotizador.Controllers
             return View();
         }
 
+        public void UpdateDetallesRestriccion()
+        {
+            Guid idPedido = Guid.Parse(Request["idPedido"].ToString());
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (usuario.apruebaPedidos)
+            {
+                PedidoBL pedidoBL = new PedidoBL();
+
+                List<Guid> idDetalles = (List<Guid>)this.Session["pedidoDRIds"];
+                List<int> cantidades = (List<int>)this.Session["pedidoDRCantidades"];
+                List<String> comentarios = (List<String>)this.Session["pedidoDRComentarios"];
+
+                pedidoBL.UpdateDetallesRestriccion(idPedido, idDetalles, cantidades, comentarios, usuario.idUsuario);
+            }
+        }
+
         public String GetHistorial()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -2402,6 +2460,35 @@ namespace Cotizador.Controllers
             Pedido pedido = this.PedidoSession;
             pedido.mostrarCosto = Boolean.Parse(this.Request.Params["mostrarCosto"]);
             this.PedidoSession = pedido;
+        }
+
+
+        public void SetDetalleRestriccion()
+        {
+            List<Guid> idDetalles = (List<Guid>)this.Session["pedidoDRIds"];
+            List<int> cantidades = (List<int>)this.Session["pedidoDRCantidades"];
+            List<String> comentarios = (List<String>)this.Session["pedidoDRComentarios"];
+
+            Guid idDetallePedido = Guid.Parse(Request["idDetalle"].ToString());
+            int cantidad = int.Parse(Request["cantidad"].ToString());
+            String comentario = Request["comentario"].ToString();
+
+            int idx = idDetalles.IndexOf(idDetallePedido);
+
+            if (idx >= 0)
+            {
+                cantidades[idx] = cantidad;
+                comentarios[idx] = comentario;
+            } else
+            {
+                idDetalles.Add(idDetallePedido);
+                cantidades.Add(cantidad);
+                comentarios.Add(comentario);
+            }
+
+            this.Session["pedidoDRIds"] = idDetalles;
+            this.Session["pedidoDRCantidades"] = cantidades;
+            this.Session["pedidoDRComentarios"] = comentarios;
         }
     }
 }

@@ -305,15 +305,20 @@
         <div class="row">
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    @Html.LabelFor(c => producto.descontinuado, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                    @Html.LabelFor(c => producto.ventaRestringida, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
                     <div class="col-xs-6 col-sm-6 col-lg-8">
+                        @Html.DropDownList(
+                            "ventaRestringida",
+                            EnumHelper.GetSelectList(typeof(Model.Producto.TipoVentaRestringida), producto.ventaRestringida),
+                            new { @class = "form-control" }
+                        )
                         @if (producto.descontinuado == 1)
                         {
-                            <input checked type="checkbox" id="producto_descontinuado" name="producto_descontinuado" />
+                            <textarea id="motivoRestriccion" placeholder="Motivo de restricción" style="width: 100%; padding: 0px 3px; margin-top: 5px;">@producto.motivoRestriccion</textarea>
                         }
                         else
                         {
-                            <input type="checkbox" id="producto_descontinuado" name="producto_descontinuado" />
+                            <textarea id="motivoRestriccion" placeholder="Motivo de restricción" style="width: 100%; padding: 0px 3px; margin-top: 5px; display: none;">@producto.motivoRestriccion</textarea>
                         }
                     </div>
                 </div>

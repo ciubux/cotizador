@@ -122,6 +122,7 @@ namespace Model
             }
         }
 
+
         public String numeroCotizacionString
         {
             get { return this.codigo == 0 ? "" : this.codigo.ToString().PadLeft(Constantes.LONGITUD_NUMERO, Constantes.PAD); }

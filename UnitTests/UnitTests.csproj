@@ -60,7 +60,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CotizacionTest.cs" />
     <Compile Include="GrupoCliente.cs" />
     <Compile Include="ITest.cs" />
     <Compile Include="ClienteTest.cs" />

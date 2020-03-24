@@ -913,6 +913,7 @@ namespace Cotizador.Controllers
                 {
                     documentoDetalle.cantidadPendienteAtencion = documentoDetalle.cantidadSolicitada;
                     documentoDetalle.cantidadPorAtender = documentoDetalle.cantidadSolicitada;
+                    documentoDetalle.cantidadPermitida = documentoDetalle.cantidadPorAtender;
                 }
 
 
@@ -1266,7 +1267,7 @@ namespace Cotizador.Controllers
             {
                 foreach (DocumentoDetalle documentoDetalle in guiaRemision.pedido.documentoDetalle)
                 {
-                    documentoDetalle.cantidadPorAtender = documentoDetalle.cantidadPendienteAtencion;
+                    documentoDetalle.cantidadPorAtender = documentoDetalle.cantidadPendienteAtencionPermitida;
                 }
 
             }

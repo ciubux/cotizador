@@ -97,7 +97,6 @@ namespace BusinessLayer
                 {
                     PrecioClienteProducto precioClienteProducto = cotizacionDetalle.producto.precioClienteProducto;
 
-
                     int evaluarDescuento = 0;
                     //¿Tiene precio registrado para facturación? y eliente es el mismo?
                     if (precioClienteProducto.idPrecioClienteProducto != Guid.Empty)// && precioClienteProducto.cliente.idCliente == cotizacion.cliente.idCliente)
@@ -150,6 +149,8 @@ namespace BusinessLayer
                         evaluarDescuento = 3;
                     }
 
+                    
+
                     if (evaluarDescuento > 0)
                     {
                         if (cotizacionDetalle.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION || cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial)
@@ -178,10 +179,14 @@ namespace BusinessLayer
                             cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
                         }
                         
-                    }               
+                    }
                 }
 
-
+                if (cotizacionDetalle.producto.descontinuado == 1 && !cotizacion.usuario.apruebaCotizacionesVentaRestringida)
+                {
+                    cotizacion.seguimientoCotizacion.observacion = "El producto " + cotizacionDetalle.producto.sku + " es de venta restringida.";
+                    cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
+                }
             }
            
             if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada)
@@ -304,7 +309,6 @@ namespace BusinessLayer
 
                 foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
                 {
-
                     cotizacionDetalle.validar = validar;
 
                     if (cotizacionDetalle.producto.image == null)
@@ -333,31 +337,25 @@ namespace BusinessLayer
 
 
                     if (cotizacion.incluidoIGV)
-                        {
-                            //Se agrega el IGV al precioLista
-                            decimal precioSinIgv = cotizacionDetalle.producto.precioSinIgv;
-                            decimal precioLista = precioSinIgv + (precioSinIgv * cotizacion.igv);
-                            cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioLista));
-                            //Se agrega el IGV al costoLista
-                            decimal costoSinIgv = cotizacionDetalle.producto.costoSinIgv;
-                            decimal costoLista = costoSinIgv + (costoSinIgv * cotizacion.igv);
-                            cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costoLista));
-                        }
-                        else
-                        {
-                            cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioSinIgv));
-                            cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.costoSinIgv));
-                        }
-
-                
-                    
+                    {
+                        //Se agrega el IGV al precioLista
+                        decimal precioSinIgv = cotizacionDetalle.producto.precioSinIgv;
+                        decimal precioLista = precioSinIgv + (precioSinIgv * cotizacion.igv);
+                        cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioLista));
+                        //Se agrega el IGV al costoLista
+                        decimal costoSinIgv = cotizacionDetalle.producto.costoSinIgv;
+                        decimal costoLista = costoSinIgv + (costoSinIgv * cotizacion.igv);
+                        cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, costoLista));
+                    }
+                    else
+                    {
+                        cotizacionDetalle.producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioSinIgv));
+                        cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.costoSinIgv));
+                    }
                 }
-
-
             }
             return cotizacion;
         }
-
 
 
 

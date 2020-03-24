@@ -222,6 +222,16 @@ textarea {
     #modalVerHistorialReasignaciones .modal-dialog {
         width: 900px;
     }
+
+
+    #modalAprobacion .modal-dialog {
+        width: 800px;
+    }
+
+
+    #modalDetallesRestriccion .modal-dialog {
+        width: 800px;
+    }
 }
 
 
@@ -729,12 +739,67 @@ $darkred: darken($red, 0.2);*/
 }
 
 
+/* Etiqueta DANGER */
+.lblAlertaDanger {
+    background-color: #d51c1c;
+    border-radius: 3px;
+    color: #ffffff;
+    font-size: 10px;
+    text-align: center;
+    padding: 2px 3px 1px 3px;
+    font-weight: bold;
+}
+
+.lblAlertaDanger img {
+    margin-top: -2px;
+    margin-left: -3px;
+}
+
+
+.tooltip-label-danger-text {
+    visibility: hidden;
+    width: 150px;
+    background-color: #fff;
+    color: #111;
+    border: 1px solid #d51c1c;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    left: 110%;
+}
+
+.lblAlertaDanger .tooltip-label-danger-text {
+    margin-top: 5px;
+}
+
+.tooltip-label .tooltip-label-danger-text::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent #d51c1c transparent transparent;
+}
+
+.tooltip-label:hover .tooltip-label-danger-text {
+    visibility: visible;
+}
+
+
+
+
 /* Etiqueta descontinuado */
 .lblAlertaProductoDescontinuado {
     background-color: #f0ad4e;
     border-radius: 3px;
     color: #111111;
     font-size: 10px;
+    text-align: center;
     padding: 2px 3px 1px 3px;
     font-weight: bold;
 }
@@ -853,3 +918,89 @@ $darkred: darken($red, 0.2);*/
 }  
 
    
+.warning-tooltip + .tooltip > .tooltip-inner {
+    background-color: #fff;
+    color: #111;
+    border: 1px solid #f0ad4e
+}
+
+.warning-tooltip + .tooltip.bottom .tooltip-arrow,
+.warning-tooltip + .tooltip.bottom .tooltip-arrow {
+    border-bottom-color: #f0ad4e !important;
+}
+
+.warning-tooltip + .tooltip.top .tooltip-arrow,
+.warning-tooltip + .tooltip.top .tooltip-arrow {
+    border-top-color: #f0ad4e !important;
+}
+
+.warning-tooltip + .tooltip.left .tooltip-arrow,
+.warning-tooltip + .tooltip.left .tooltip-arrow {
+    border-left-color: #f0ad4e !important;
+}
+
+.warning-tooltip + .tooltip.right .tooltip-arrow,
+.warning-tooltip + .tooltip.right .tooltip-arrow {
+    border-right-color: #f0ad4e !important;
+}
+
+.tooltip-label {
+    display: inline-block;
+    position: relative;
+}
+
+.tooltip-label-text {
+    visibility: hidden;
+    width: 150px;
+    background-color: #fff;
+    color: #111;
+    border: 1px solid #f0ad4e;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    left: 110%;
+}
+
+.lblAlertaProductoDescontinuado  .tooltip-label-text {
+    margin-top: 5px;
+}
+
+.tooltip-label .tooltip-label-text::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent #f0ad4e transparent transparent;
+}
+
+.tooltip-label:hover .tooltip-label-text {
+    visibility: visible;
+}
+
+
+.inset-shadow-red {
+    position: relative;
+}
+
+.inset-shadow-red:before, .inset-shadow-red:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    -webkit-box-shadow: inset 3px 3px 10px rgba(242, 38, 19, 0.5), inset -3px -3px 10px rgba(242, 38, 19, 0.5);
+    -moz-box-shadow: inset 3px 3px 10px rgba(242, 38, 19, 0.5), inset -3px -3px 10px rgba(242, 38, 19, 0.5);
+    box-shadow: inset 3px 3px 10px rgba(242, 38, 19, 0.5), inset -3px -3px 10px rgba(242, 38, 19, 0.5);
+    top: 0;
+    bottom: 0;
+    left: 0px;
+    right: 0px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+
