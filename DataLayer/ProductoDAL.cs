@@ -447,7 +447,8 @@ namespace DataLayer
                 cotizacionDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 cotizacionDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
                 cotizacionDetalle.producto.image = Converter.GetBytes(row, "imagen");
-
+                cotizacionDetalle.producto.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");
+                cotizacionDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
 
                 cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
                 cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
@@ -544,7 +545,8 @@ namespace DataLayer
                 cotizacionDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 cotizacionDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
                 cotizacionDetalle.producto.image = Converter.GetBytes(row, "imagen");
-                
+                cotizacionDetalle.producto.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");
+                cotizacionDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
 
                 cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
                 cotizacionDetalle.producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia_sin_igv");
@@ -772,7 +774,8 @@ namespace DataLayer
                 cotizacionDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 cotizacionDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
                 cotizacionDetalle.producto.image = Converter.GetBytes(row, "imagen");
-
+                cotizacionDetalle.producto.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");
+                cotizacionDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
 
                 cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
                 cotizacionDetalle.producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia_sin_igv");

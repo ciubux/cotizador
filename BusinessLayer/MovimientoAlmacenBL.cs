@@ -59,10 +59,17 @@ namespace BusinessLayer
                 Boolean existeCantidadPendienteAtencion = false;
                 foreach (DocumentoDetalle documentoDetalle in guiaRemision.pedido.documentoDetalle)
                 {
+                    if (documentoDetalle.cantidadPendienteAtencionPermitida < documentoDetalle.cantidadPorAtender)
+                    {
+                        documentoDetalle.cantidadPorAtender = documentoDetalle.cantidadPendienteAtencionPermitida;
+                    }
+
+
                     if (documentoDetalle.cantidadPendienteAtencion != documentoDetalle.cantidadPorAtender)
-                    { 
+                    {
+                        guiaRemision.atencionParcial = true;
+                        guiaRemision.ultimaAtencionParcial = false;
                         existeCantidadPendienteAtencion = true;
-                        break;
                     }
 
                 }

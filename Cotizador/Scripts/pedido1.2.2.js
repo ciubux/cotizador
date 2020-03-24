@@ -2800,6 +2800,9 @@ jQuery(function ($) {
      
     });
 
+    var viendoPedidoRestringido = false;
+    var pedidoItemsRestringidos = [];
+
 
     function showPedido(idPedido) {
         $.ajax({
@@ -2820,7 +2823,8 @@ jQuery(function ($) {
                 var pedido = resultado.pedido;
                 var usuario = resultado.usuario;
                 var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
-
+                viendoPedidoRestringido = false;
+                pedidoItemsRestringidos = [];
                 //  var usuario = resultado.usuario;
 
                 $("#verIdPedido").val(pedido.idPedido);
@@ -2977,6 +2981,7 @@ jQuery(function ($) {
                 var d = '';
                 var lista = pedido.pedidoDetalleList;
                 var tieneProductoRestringido = false;
+                var tienePendienteAtencion = false;
                 for (var i = 0; i < lista.length; i++) {
 
                     var imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Aprobado"> <img class="table-product-img"  src="/images/semaforo_verde_small.png"  srcset="semaforo_verde_min.png 2x"/></a>';
@@ -2991,9 +2996,7 @@ jQuery(function ($) {
                     var descontinuadoLabel = "";
                     if (lista[i].producto.descontinuado == 1) {
                         tieneProductoRestringido = true;
-                        descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
-
-
+                        
                         if (lista[i].producto.motivoRestriccion != null) {
                             lista[i].producto.motivoRestriccion = lista[i].producto.motivoRestriccion.trim();
 
@@ -3003,6 +3006,37 @@ jQuery(function ($) {
                                 $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado .tooltip-label-text").html(lista[i].producto.motivoRestriccion);
                             }
                         }
+
+                        descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
+                    }
+
+                    itemPedido = {
+                        idPedidoDetalle: lista[i].idPedidoDetalle, sku: lista[i].producto.sku, producto: lista[i].producto.descripcion, unidad: lista[i].unidad,
+                        cantidad: lista[i].cantidad, cantidadPendienteAtencion: lista[i].cantidadPendienteAtencion,
+                        cantidadPermitida: lista[i].cantidadPermitida, observacionRestriccion: lista[i].observacionRestriccion
+                    };
+
+                    var restringidoLabel = "";
+                    if (lista[i].cantidadPermitida < lista[i].cantidad) {
+                        if (lista[i].observacionRestriccion != null) {
+                            lista[i].observacionRestriccion = lista[i].observacionRestriccion.trim();
+
+                            
+                            $("#spnDetalleRestringido .lblAlertaDanger .cantidadPermitidaAtender").html(lista[i].cantidadPermitida);
+                            $("#spnDetalleRestringido .lblAlertaDanger ").removeClass("tooltip-motivo-restriccion");
+                            if (lista[i].observacionRestriccion != "") {
+                                $("#spnDetalleRestringido .lblAlertaDanger ").addClass("tooltip-motivo-restriccion");
+                                $("#spnDetalleRestringido .lblAlertaDanger .tooltip-label-danger-text").html(lista[i].observacionRestriccion);
+                            }
+                        }
+
+                        restringidoLabel = "<br/>" + $("#spnDetalleRestringido").html();
+                    }
+
+                    pedidoItemsRestringidos.push(itemPedido);
+
+                    if (lista[i].cantidadPendienteAtencion > 0) {
+                        tienePendienteAtencion = true;
                     }
 
                     d += '<tr>' +
@@ -3019,7 +3053,7 @@ jQuery(function ($) {
                         '<td>' + lista[i].flete.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].precioUnitario.toFixed(cantidadCuatroDecimales) + '</td>' +
                         //       '<td>' + lista[i].precioUnitarioVenta.toFixed(cantidadCuatroDecimales) + '</td>' +
-                        '<td>' + lista[i].cantidad + '</td>' +
+                        '<td>' + lista[i].cantidad + restringidoLabel + '</td>' +
                         '<td>' + lista[i].cantidadPendienteAtencion + '</td>' +
                         '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + observacion + '</td>' +
@@ -3121,7 +3155,11 @@ jQuery(function ($) {
 
                 }
 
-
+                if (tienePendienteAtencion && usuario.apruebaPedidos) {
+                    $("#btnRestringirAtencionPedido").show();
+                } else {
+                    $("#btnRestringirAtencionPedido").hide();
+                }
 
                 //  
                 // sleep
@@ -3187,6 +3225,7 @@ jQuery(function ($) {
                     $("#btnAprobarIngresoPedido").hide();
                 }
 
+                viendoPedidoRestringido = tieneProductoRestringido;
 
                 //DENEGAR PEDIDO
                 if (pedido.seguimientoPedido_estado == ESTADO_PENDIENTE_APROBACION) {
@@ -3546,7 +3585,88 @@ jQuery(function ($) {
 
   
 
+    function mostrarItemsRestringidos() {
+        $(".tableProductosAprobarPedido tbody").empty();
+        if (viendoPedidoRestringido) {
+            $(".divProductosAprobarPedido").show();
 
+            fLen = pedidoItemsRestringidos.length;
+
+            text = "";
+            for (i = 0; i < fLen; i++) {
+                var cantidadRestringir = parseInt(pedidoItemsRestringidos[i].cantidad) - parseInt(pedidoItemsRestringidos[i].cantidadPermitida);
+                var cantidadAtendida = parseInt(pedidoItemsRestringidos[i].cantidad) - parseInt(pedidoItemsRestringidos[i].cantidadPendienteAtencion);
+                text += '<tr idPedidoDetalle="' + pedidoItemsRestringidos[i].idPedidoDetalle + '">';
+                text += '<td>' + pedidoItemsRestringidos[i].sku + ' ' + pedidoItemsRestringidos[i].producto + '</td>';
+                text += '<td>' + pedidoItemsRestringidos[i].unidad + '</td>';
+                text += '<td class="celdaItemCantidad">' + pedidoItemsRestringidos[i].cantidad + '</td>';
+                text += '<td>' + 
+                    '<input class="form-control inputItemPermitir" type="number" min="' + cantidadAtendida + '" max="' + pedidoItemsRestringidos[i].cantidad + '" step="1" value="' + pedidoItemsRestringidos[i].cantidadPermitida + '">' +
+                        '</td>';
+                text += '<td class="celdaItemRestringir">' + cantidadRestringir + '</td>';
+                text += '<td class=""><input type="text" class="inputItemObervacionRestriccion" value="' + pedidoItemsRestringidos[i].observacionRestriccion + '"></td>';
+                text += '</tr>';
+            }
+
+            $(".tableProductosAprobarPedido tbody").html(text);
+
+            FooTable.init('.tableProductosAprobarPedido');
+        } else {
+            $(".divProductosAprobarPedido").hide();
+        }
+    }
+
+
+    $('.divProductosAprobarPedido').on('change', 'tr td .inputItemPermitir', function (e) {
+        var permitir = parseInt($(this).val());
+        var cantidad = parseInt($(this).closest('tr').find('td.celdaItemCantidad').html());
+        var atendida = parseInt($(this).attr('min'));
+        
+        if (permitir > cantidad) {
+            permitir = cantidad;
+            $(this).val(cantidad);
+        }
+
+        if (permitir < atendida) {
+            permitir = atendida;
+            $(this).val(atendida);
+        }
+
+        var restringir = cantidad - permitir;
+
+
+        $(this).closest('tr').find('td.celdaItemRestringir').html(restringir);
+
+
+        var idDetalle = $(this).closest('tr').attr('idPedidoDetalle');
+        var comentario = $(this).closest('tr').find('td .inputItemObervacionRestriccion').val();
+
+        ActualizarDetalleRestriccion(idDetalle, permitir, comentario);
+    });
+
+
+    $('.divProductosAprobarPedido').on('change', 'tr td .inputItemObervacionRestriccion', function (e) {
+        var idDetalle = $(this).closest('tr').attr('idPedidoDetalle');
+        var permitir = $(this).closest('tr').find('td .inputItemPermitir').val();
+        var comentario = $(this).val();
+
+        ActualizarDetalleRestriccion(idDetalle, permitir, comentario);
+    });
+
+
+    function ActualizarDetalleRestriccion(idDetalle, cantidad, comentario) {
+        $.ajax({
+            url: "/Pedido/SetDetalleRestriccion",
+            type: 'POST',
+            data: {
+                idDetalle: idDetalle,
+                cantidad: cantidad,
+                comentario: comentario
+            },
+            success: function () {
+            }
+        });
+    }
 
 
     function limpiarComentario()
@@ -3576,7 +3696,14 @@ jQuery(function ($) {
         $("#labelNuevoEstado").html(ESTADO_INGRESADO_STR);
         $("#estadoId").val(ESTADO_INGRESADO);
         limpiarComentario();
+        mostrarItemsRestringidos();
     });
+
+    
+    $("#btnRestringirAtencionPedido").click(function () {
+        mostrarItemsRestringidos();
+    });
+
 
     $("#btnEliminarPedido").click(function () {
         $("#modalAprobacionTitle").html(TITULO_ELIMINAR);
@@ -3619,7 +3746,18 @@ jQuery(function ($) {
 
         if ($("#labelNuevoEstadoCrediticio").html() == ESTADO_BLOQUEADO_STR) {
             if (comentarioEstado.trim() == "") {
-                alert("Cuando Bloquea un pedido debe ingresar un Comentario.");
+                $.alert({
+                    title: 'Advertencia',
+                    content: "Cuando Bloquea un pedido debe ingresar un Comentario.",
+                    type: 'orange',
+                    buttons: {
+
+                        OK: function () {
+
+                        }
+                    }
+                });
+
                 return false;
             }
         }
@@ -3635,11 +3773,32 @@ jQuery(function ($) {
             },
             type: 'POST',
             error: function () {
-                alert("Ocurrió un problema al intentar cambiar el estado del pedido.")
+                $.alert({
+                    title: 'Error',
+                    content: "Ocurrió un problema al intentar cambiar el estado del pedido.",
+                    type: 'red',
+                    buttons: {
+
+                        OK: function () {
+
+                        }
+                    }
+                });
+                
                 $("#btnCancelarCambioEstadoCrediticio").click();
             },
             success: function () {
-                alert("El estado crediticio del pedido número: " + codigo + " se cambió correctamente.");
+                $.alert({
+                    title: 'Registro Correcto',
+                    content: "El estado crediticio del pedido número: " + codigo + " se cambió correctamente.",
+                    type: 'green',
+                    buttons: {
+
+                        OK: function () {
+
+                        }
+                    }
+                });
                 location.reload();
             }
         });
@@ -3655,7 +3814,17 @@ jQuery(function ($) {
             || $("#modalAprobacionTitle").html() == TITULO_CANCELAR_PROGRAMACION)
         {
             if (comentarioEstado.trim() == "") {
-                alert("Debe ingresar un Comentario.");
+                $.alert({
+                    title: 'Advertencia',
+                    content: "Debe ingresar un Comentario.",
+                    type: 'orange',
+                    buttons: {
+
+                        OK: function () {
+
+                        }
+                    }
+                });
                 return false;
             }
         }
@@ -3671,11 +3840,72 @@ jQuery(function ($) {
             },
             type: 'POST',
             error: function () {
-                alert("Ocurrió un problema al intentar cambiar el estado del pedido.")
+                $.alert({
+                    title: 'Error',
+                    content: "Ocurrió un problema al intentar cambiar el estado del pedido.",
+                    type: 'red',
+                    buttons: {
+
+                        OK: function () {
+
+                        }
+                    }
+                });
                 $("#btnCancelarCambioEstado").click();
             },
             success: function () {
-                alert("El estado del pedido número: " + codigo + " se cambió correctamente.");
+                $.alert({
+                    title: 'Registro Correcto',
+                    content: "El estado del pedido número: " + codigo + " se cambió correctamente.",
+                    type: 'green',
+                    buttons: {
+
+                        OK: function () {
+
+                        }
+                    }
+                });
+                location.reload();
+            }
+        });
+    });
+
+
+    $("#btnAceptarDetallesRestriccion").click(function () {
+        var codigo = $("#verNumero").html();
+        var idPedido = $("#idPedido").val(); 
+        $.ajax({
+            url: "/Pedido/UpdateDetallesRestriccion",
+            data: {
+                idPedido: idPedido
+            },
+            type: 'POST',
+            error: function () {
+                $.alert({
+                    title: 'Error',
+                    content: "Ocurrió un problema al actualizar la restricción de atención del pedido.",
+                    type: 'red',
+                    buttons: {
+
+                        OK: function () {
+
+                        }
+                    }
+                });
+                $("#btnCancelarDetallesRestriccion").click();
+            },
+            success: function () {
+                $.alert({
+                    title: 'Registro Correcto',
+                    content: "El pedido número: " + codigo + " registró la restricción de la atención correctamente.",
+                    type: 'green',
+                    buttons: {
+
+                        OK: function () {
+
+                        }
+                    }
+                });
                 location.reload();
             }
         });
@@ -3683,6 +3913,9 @@ jQuery(function ($) {
 
 
 
+    $("#btnCancelarCambioEstado").click(function () {
+        $("#divProductosAprobarPedido").hide()
+    });
 
     
     var ft = null;

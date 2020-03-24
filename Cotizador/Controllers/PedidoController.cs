@@ -1734,6 +1734,19 @@ namespace Cotizador.Controllers
             SeguimientoPedido.estadosSeguimientoPedido estadosSeguimientoPedido = (SeguimientoPedido.estadosSeguimientoPedido)Int32.Parse(Request["estado"].ToString());
             String observacion = Request["observacion"].ToString();
             updateEstadoSeguimientoPedido(idPedido, estadosSeguimientoPedido, observacion);
+
+            if (estadosSeguimientoPedido == SeguimientoPedido.estadosSeguimientoPedido.Ingresado)
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+                PedidoBL pedidoBL = new PedidoBL();
+
+                List<Guid> idDetalles = (List<Guid>)this.Session["pedidoDRIds"];
+                List<int> cantidades = (List<int>)this.Session["pedidoDRCantidades"];
+                List<String> comentarios = (List<String>)this.Session["pedidoDRComentarios"];
+
+                pedidoBL.UpdateDetallesRestriccion(idPedido, idDetalles, cantidades, comentarios, usuario.idUsuario);
+            }
         }
 
         public void updateEstadoPedidoCrediticio()
@@ -1948,8 +1961,11 @@ namespace Cotizador.Controllers
 
             }
 
-          
-            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"pedido\":" + jsonPedido + ", \"pedido\":" + jsonPedido + ", \"usuario\":" + jsonUsuario + "}";
+            this.Session["pedidoDRIds"] = new List<Guid>();
+            this.Session["pedidoDRCantidades"] = new List<int>();
+            this.Session["pedidoDRComentarios"] = new List<String>();
+
+            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"pedido\":" + jsonPedido + ", \"usuario\":" + jsonUsuario + "}";
             return json;
         }
 
@@ -2367,6 +2383,24 @@ namespace Cotizador.Controllers
             return View();
         }
 
+        public void UpdateDetallesRestriccion()
+        {
+            Guid idPedido = Guid.Parse(Request["idPedido"].ToString());
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (usuario.apruebaPedidos)
+            {
+                PedidoBL pedidoBL = new PedidoBL();
+
+                List<Guid> idDetalles = (List<Guid>)this.Session["pedidoDRIds"];
+                List<int> cantidades = (List<int>)this.Session["pedidoDRCantidades"];
+                List<String> comentarios = (List<String>)this.Session["pedidoDRComentarios"];
+
+                pedidoBL.UpdateDetallesRestriccion(idPedido, idDetalles, cantidades, comentarios, usuario.idUsuario);
+            }
+        }
+
         public String GetHistorial()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -2426,6 +2460,35 @@ namespace Cotizador.Controllers
             Pedido pedido = this.PedidoSession;
             pedido.mostrarCosto = Boolean.Parse(this.Request.Params["mostrarCosto"]);
             this.PedidoSession = pedido;
+        }
+
+
+        public void SetDetalleRestriccion()
+        {
+            List<Guid> idDetalles = (List<Guid>)this.Session["pedidoDRIds"];
+            List<int> cantidades = (List<int>)this.Session["pedidoDRCantidades"];
+            List<String> comentarios = (List<String>)this.Session["pedidoDRComentarios"];
+
+            Guid idDetallePedido = Guid.Parse(Request["idDetalle"].ToString());
+            int cantidad = int.Parse(Request["cantidad"].ToString());
+            String comentario = Request["comentario"].ToString();
+
+            int idx = idDetalles.IndexOf(idDetallePedido);
+
+            if (idx >= 0)
+            {
+                cantidades[idx] = cantidad;
+                comentarios[idx] = comentario;
+            } else
+            {
+                idDetalles.Add(idDetallePedido);
+                cantidades.Add(cantidad);
+                comentarios.Add(comentario);
+            }
+
+            this.Session["pedidoDRIds"] = idDetalles;
+            this.Session["pedidoDRCantidades"] = cantidades;
+            this.Session["pedidoDRComentarios"] = comentarios;
         }
     }
 }

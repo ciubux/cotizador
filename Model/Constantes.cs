@@ -295,8 +295,11 @@ namespace Model
         public static int DIAS_MAX_VIGENCIA_PRECIOS_PEDIDO = 365;
         //public static 
         public static String OBSERVACION = "* Condiciones de pago: al contado.\n" +
-                                       "* Entrega en almacén del cliente, 48 horas luego de la recepción del pedido o la orden de compra.\n" +
-                                       "* (para productos no stockeables o primeras compras, consultar plazo).\n";
+                                       "* Entrega sujeta a confirmación de disponibilidad luego de recibido el pedido u orden de compra.\n No se garantiza stock debido a coyuntura excepcional de alta demanda.\n" +
+                                       "* Para productos no stockeables o primeras compras, consultar plazo.\n";
+
+        public static String OBSERVACION_COTIZACION_C = "* Condiciones de pago: al contado.\n" +
+                                       "* Para productos no stockeables o primeras compras, consultar plazo.\n";
         public static int DESCARGAR_XML = 1;
 
 

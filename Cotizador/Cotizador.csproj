@@ -635,6 +635,7 @@
     <Content Include="Views\Parametro\Lista.cshtml" />
     <Content Include="Views\Mensaje\Listabk.cshtml" />
     <Content Include="Views\Producto\_LabelRestringido.cshtml" />
+    <Content Include="Views\Pedido\_LabelDetalleRestringido.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

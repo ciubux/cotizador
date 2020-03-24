@@ -222,6 +222,16 @@ textarea {
     #modalVerHistorialReasignaciones .modal-dialog {
         width: 900px;
     }
+
+
+    #modalAprobacion .modal-dialog {
+        width: 800px;
+    }
+
+
+    #modalDetallesRestriccion .modal-dialog {
+        width: 800px;
+    }
 }
 
 
@@ -727,6 +737,60 @@ $darkred: darken($red, 0.2);*/
 .navbar-nav > li > a {
     padding: 10px 12px !important;
 }
+
+
+/* Etiqueta DANGER */
+.lblAlertaDanger {
+    background-color: #d51c1c;
+    border-radius: 3px;
+    color: #ffffff;
+    font-size: 10px;
+    text-align: center;
+    padding: 2px 3px 1px 3px;
+    font-weight: bold;
+}
+
+.lblAlertaDanger img {
+    margin-top: -2px;
+    margin-left: -3px;
+}
+
+
+.tooltip-label-danger-text {
+    visibility: hidden;
+    width: 150px;
+    background-color: #fff;
+    color: #111;
+    border: 1px solid #d51c1c;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    left: 110%;
+}
+
+.lblAlertaDanger .tooltip-label-danger-text {
+    margin-top: 5px;
+}
+
+.tooltip-label .tooltip-label-danger-text::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent #d51c1c transparent transparent;
+}
+
+.tooltip-label:hover .tooltip-label-danger-text {
+    visibility: visible;
+}
+
+
 
 
 /* Etiqueta descontinuado */

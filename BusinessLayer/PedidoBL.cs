@@ -781,5 +781,13 @@ namespace BusinessLayer
 
             return pedidoList;
         }
+
+        public bool UpdateDetallesRestriccion(Guid idPedido, List<Guid> idDetalles, List<int> cantidades, List<String> comentarios, Guid idUsuario)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                return dal.UpdateDetallesRestriccion(idPedido, idDetalles, cantidades, comentarios, idUsuario);
+            }
+        }
     }
 }

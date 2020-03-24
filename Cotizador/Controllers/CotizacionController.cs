@@ -206,7 +206,7 @@ namespace Cotizador.Controllers
             cotizacionTmp.considerarCantidades = Cotizacion.OpcionesConsiderarCantidades.Observaciones;
             Usuario usuario = (Usuario)this.Session["usuario"];
             cotizacionTmp.usuario = usuario;
-            cotizacionTmp.observaciones = Constantes.OBSERVACION;
+            cotizacionTmp.observaciones = Constantes.OBSERVACION_COTIZACION_C;
             cotizacionTmp.incluidoIGV = false;
             cotizacionTmp.aplicaSedes = false;
             cotizacionTmp.seguimientoCotizacion = new SeguimientoCotizacion();
