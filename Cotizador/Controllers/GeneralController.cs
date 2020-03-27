@@ -58,7 +58,10 @@ namespace Cotizador.Controllers
 
         public String GetConstantes()
         {
-            return "{ \"IGV\":\"" + Constantes.IGV + "\", \"SIMBOLO_SOL\":\"" + Constantes.SIMBOLO_SOL + "\", \"MILISEGUNDOS_AUTOGUARDADO\":\"" + Constantes.MILISEGUNDOS_AUTOGUARDADO + "\", \"VARIACION_PRECIO_ITEM_PEDIDO\":\"" + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + "\", \"DESCARGAR_XML\":\"" + Constantes.DESCARGAR_XML + "\", \"DIAS_MAX_COTIZACION_TRANSITORIA\":\"" + Constantes.DIAS_MAX_COTIZACION_TRANSITORIA + "\" }";
+            return "{ \"IGV\":\"" + Constantes.IGV + "\", \"SIMBOLO_SOL\":\"" + Constantes.SIMBOLO_SOL + "\", \"MILISEGUNDOS_AUTOGUARDADO\":\"" 
+                   + Constantes.MILISEGUNDOS_AUTOGUARDADO + "\", \"VARIACION_PRECIO_ITEM_PEDIDO\":\"" + Constantes.VARIACION_PRECIO_ITEM_PEDIDO 
+                   + "\", \"DESCARGAR_XML\":\"" + Constantes.DESCARGAR_XML + "\", \"ID_SEDE_TODOS\":\"" + Constantes.ID_SEDE_TODOS
+                   + "\", \"DIAS_MAX_COTIZACION_TRANSITORIA\":\"" + Constantes.DIAS_MAX_COTIZACION_TRANSITORIA + "\" }";
         }
 
 

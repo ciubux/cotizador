@@ -1188,6 +1188,7 @@ namespace Cotizador.Controllers
             }
             CiudadBL ciudadBL = new CiudadBL();
             Ciudad ciudadOrigen = ciudadBL.getCiudad(idCiudad);
+            ciudadOrigen.idCiudad = idCiudad;
             guiaRemision.transportista = new Transportista();
             TransportistaBL transportistaBL = new TransportistaBL();
             ciudadOrigen.transportistaList = transportistaBL.getTransportistas(idCiudad);

@@ -6,6 +6,7 @@ jQuery(function ($) {
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
     var TITLE_EXITO = 'Operación Realizada';
     var TITLE_MENSAJE_BUSQUEDA = "Ingresar datos solicitados";
+    var ID_SEDE_TODOS = "78343C04-DA94-4249-B0CE-474DAB6dAD3F";
 
     var motivoTraslado = "";
 
@@ -20,6 +21,11 @@ jQuery(function ($) {
             if ($("#idMovimientoAlmacen").val() != "") {
                 showMovimientoAlmacen($("#idMovimientoAlmacen").val());
             }
+
+            if ($('#idCiudad option').length > 3) {
+                $('#idCiudad').append('<option value = "' + ID_SEDE_TODOS + '" >TODOS</option>');
+            }
+
             cargarChosenCliente();
         }
         else if ($("#pagina").val() == 19) {
@@ -83,6 +89,7 @@ jQuery(function ($) {
                 IGV = constantes.IGV;
                 SIMBOLO_SOL = constantes.SIMBOLO_SOL;
                 MILISEGUNDOS_AUTOGUARDADO = constantes.MILISEGUNDOS_AUTOGUARDADO;
+                ID_SEDE_TODOS = constantes.ID_SEDE_TODOS;
             }
         });
     }

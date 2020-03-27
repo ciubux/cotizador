@@ -33,6 +33,7 @@ namespace Model
         public static String URL_VER_PEDIDO = "http://cotizadormp.azurewebsites.net/Pedido?idPedido=";
 
 
+        public static String ID_SEDE_TODOS = "78343C04-DA94-4249-B0CE-474DAB6dAD3F";
 
         public static String LABEL_DIRECCION_ENTREGA_VACIO = "Seleccione Dirección de Entrega";
 
