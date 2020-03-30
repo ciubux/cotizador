@@ -234,7 +234,7 @@ namespace Cotizador.Controllers
         public ActionResult ExportarCPEs()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (!usuario.exportarVentasContabilidad)
+            if (!usuario.administraPermisos)
             {
                 return RedirectToAction("Login", "Account");
             }
