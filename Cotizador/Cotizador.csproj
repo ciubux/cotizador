@@ -291,6 +291,7 @@
     <Compile Include="ExcelExport\OrigenSearch.cs" />
     <Compile Include="ExcelExport\ProductoSearch.cs" />
     <Compile Include="ExcelExport\PedidoSearch.cs" />
+    <Compile Include="ExcelExport\VentasContabilidadExcel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -636,6 +637,7 @@
     <Content Include="Views\Mensaje\List.cshtml" />
     <Content Include="Views\Producto\_LabelRestringido.cshtml" />
     <Content Include="Views\Pedido\_LabelDetalleRestringido.cshtml" />
+    <Content Include="Views\DocumentoVenta\ExportarVentasContabilidad.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
@@ -648,6 +650,7 @@
     <Folder Include="Views\Mail\" />
     <Folder Include="Views\Parent\" />
     <Folder Include="Views\Ubigeo\" />
+    <Folder Include="Views\VentasContabilidad\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

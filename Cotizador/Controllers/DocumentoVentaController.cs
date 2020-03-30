@@ -9,6 +9,12 @@ using System.Web;
 using System.Web.Mvc;
 using System.IO;
 using System.IO.Compression;
+//
+using Cotizador.ExcelExport;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using Cotizador.ExcelExport;
+using NPOI.HSSF.Model;
 
 namespace Cotizador.Controllers
 {
@@ -228,12 +234,55 @@ namespace Cotizador.Controllers
         public ActionResult ExportarCPEs()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (!usuario.administraPermisos)
+            if (!usuario.exportarVentasContabilidad)
             {
                 return RedirectToAction("Login", "Account");
             }
             return View();
         }
+
+        public ActionResult ExportarVentasContabilidad()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (!usuario.exportarVentasContabilidad)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            return View();
+        }
+
+        
+        public ActionResult exportarVentasContabilidadReporte()
+        {
+            String[] fechai = this.Request.Params["fechaInicio"].Split('/');            
+            DateTime fechaInicio = new DateTime(Int32.Parse(fechai[2]), Int32.Parse(fechai[1]), Int32.Parse(fechai[0]), 0, 0, 0);
+            string mes = "";                        
+            switch (Int32.Parse(fechai[1]))
+            {
+                case 1: mes = "ENERO"; break;
+                case 2: mes = "FEBRERO"; break;
+                case 3: mes = "MARZO"; break;
+                case 4: mes = "ABRIL"; break;
+                case 5: mes = "MAYO"; break;
+                case 6: mes = "JUNIO"; break;
+                case 7: mes = "JULIO"; break;
+                case 8: mes = "AGOSTO"; break;
+                case 9: mes = "SEPTIEMBRE"; break;
+                case 10: mes = "OCTUBRE"; break;
+                case 11: mes = "NOVIEMBRE"; break;
+                case 12: mes = "DICIEMBRE"; break;
+            }
+             
+        String[] fechaf = this.Request.Params["fechaFin"].Split('/');
+            DateTime fechaFin = new DateTime(Int32.Parse(fechaf[2]), Int32.Parse(fechaf[1]), Int32.Parse(fechaf[0]), 23, 59, 59);
+            
+            DocumentoVentaBL bl = new DocumentoVentaBL();
+            List<List<CPE_CABECERA_BE>> ListExcel = bl.getVentasContabilidadReporte(fechaInicio, fechaFin,mes);
+            VentasContabilidadExcel excel = new VentasContabilidadExcel();
+            return excel.generateExcel(ListExcel, mes);
+        }
+
+
 
         [HttpPost]
         public ActionResult exportStarsoftCPE()

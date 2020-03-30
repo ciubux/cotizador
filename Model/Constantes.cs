@@ -421,8 +421,8 @@ namespace Model
 
 
         public const String MODIFICA_PARAMETRO = "P890";
-       
 
+        public const String EXPORTAR_VENTAS_CONTABILIDAD = "P590";
         public const String VISUALIZA_VENTAS = "P730";
 
 

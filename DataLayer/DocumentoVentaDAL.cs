@@ -875,5 +875,135 @@ namespace DataLayer
 
             return cpes;
         }
+
+        public List<List<CPE_CABECERA_BE>> getVentasContabilidadReporte(DateTime fechaInicio, DateTime fechaFin,string mes)
+        {
+
+            var objCommand = GetSqlCommand("ps_reporte_contabilidad");
+            InputParameterAdd.Varchar(objCommand, "inicio_mes", fechaInicio.ToString("yyyy-MM-dd"));
+            InputParameterAdd.Varchar(objCommand, "final_mes", fechaFin.ToString("yyyy-MM-dd"));
+            InputParameterAdd.Varchar(objCommand, "year", fechaInicio.ToString("yyyy"));
+            InputParameterAdd.Varchar(objCommand, "mounth", mes);
+
+            DataSet dataSet = ExecuteDataSet(objCommand);
+            DataTable DataTable1 = dataSet.Tables[0];
+            DataTable DataTable2 = dataSet.Tables[1];
+            DataTable DataTable3 = dataSet.Tables[2];
+            DataTable DataTable4 = dataSet.Tables[3];
+            DataTable DataTable5 = dataSet.Tables[4];
+
+            List<CPE_CABECERA_BE> ListDocumentoVenta = new List<CPE_CABECERA_BE>();
+            foreach (DataRow row in DataTable1.Rows)
+            {
+                CPE_CABECERA_BE dv = new CPE_CABECERA_BE();
+                dv.SERIE = Converter.GetString(row, "CPE");
+                dv.FEC_EMI = Converter.GetString(row, "FECHA_EMISION_CPE");
+                dv.MNT_TOT_GRV = Converter.GetString(row, "SUB_TOTAL_GRABADA");
+                dv.MNT_TOT_INF = Converter.GetString(row, "SUB_TOTAL_INAFECTA");
+                dv.MNT_TOT_EXR = Converter.GetString(row, "SUB_TOTAL_EXONERADA");
+                dv.MNT_TOT_GRT = Converter.GetString(row, "SUB_TOTAL_GRATUITA");                
+                dv.MNT_TOT_TRB_IGV = Converter.GetString(row, "IGV_CPE");
+                dv.MNT_TOT = Converter.GetString(row, "TOTAL_CPE"); 
+                ListDocumentoVenta.Add(dv);
+            }
+
+            List<CPE_CABECERA_BE> ListDocumentoVenta2 = new List<CPE_CABECERA_BE>();
+            foreach (DataRow row in DataTable2.Rows)
+            {
+                CPE_CABECERA_BE dv1 = new CPE_CABECERA_BE();
+                dv1.CORRELATIVO = Converter.GetString(row, "GUIA");
+                dv1.FEC_EMI = Converter.GetString(row, "FECHA_EMISION_GUIA");
+                dv1.SERIE = Converter.GetString(row, "CPE");
+                dv1.FEC_VCTO = Converter.GetString(row, "FECHA_EMISION_CPE");
+                dv1.MNT_TOT_ANTCP = Converter.GetString(row, "SUB_TOTAL_CPE");
+                dv1.MNT_TOT_TRB_IGV = Converter.GetString(row, "IGV_CPE");
+                dv1.MNT_TOT = Converter.GetString(row, "TOTAL_CPE");
+                dv1.COD_TIP_OPE = Converter.GetString(row, "TIPO_TRANSACCION");
+                dv1.COD_OPC = Converter.GetString(row, "MOTIVO_TRANSACCION");
+                dv1.DES_REF_CLT = Converter.GetString(row, "FECHA_TRANSACCION");
+                dv1.MNT_REF = Converter.GetString(row, "SUB_TOTAL_VENTA");
+                dv1.DIR_DES_ENT = Converter.GetString(row, "CLIENTE");
+                dv1.NRO_DOC_EMI = Converter.GetString(row, "DOCUMENTO");
+                dv1.COD_GPO = Converter.GetString(row, "CODIGO");
+                dv1.ID_EXT_RZN = Converter.GetString(row, "GUIA_EXTORNADA");
+                dv1.MNT_TOT_EXP = Converter.GetString(row, "FECHA_EMISION_GUIA_EXTORNADA");
+                ListDocumentoVenta2.Add(dv1);
+            }
+            List<CPE_CABECERA_BE> ListDocumentoVenta3 = new List<CPE_CABECERA_BE>();
+            foreach (DataRow row in DataTable3.Rows)
+            {
+                CPE_CABECERA_BE dv1 = new CPE_CABECERA_BE();
+                dv1.CORRELATIVO = Converter.GetString(row, "GUIA");
+                dv1.FEC_EMI = Converter.GetString(row, "FECHA_EMISION_GUIA");
+                dv1.SERIE = Converter.GetString(row, "CPE");
+                dv1.FEC_VCTO = Converter.GetString(row, "FECHA_EMISION_CPE");
+                dv1.MNT_TOT_ANTCP = Converter.GetString(row, "SUB_TOTAL_CPE");
+                dv1.MNT_TOT_TRB_IGV = Converter.GetString(row, "IGV_CPE");
+                dv1.MNT_TOT = Converter.GetString(row, "TOTAL_CPE");
+                dv1.COD_TIP_OPE = Converter.GetString(row, "TIPO_TRANSACCION");
+                dv1.COD_OPC = Converter.GetString(row, "MOTIVO_TRANSACCION");
+                dv1.DES_REF_CLT = Converter.GetString(row, "FECHA_TRANSACCION");
+                dv1.MNT_REF = Converter.GetString(row, "SUB_TOTAL_VENTA");
+                dv1.DIR_DES_ENT = Converter.GetString(row, "CLIENTE");
+                dv1.NRO_DOC_EMI = Converter.GetString(row, "DOCUMENTO");
+                dv1.COD_GPO = Converter.GetString(row, "CODIGO");
+                dv1.ID_EXT_RZN = Converter.GetString(row, "GUIA_EXTORNADA");
+                dv1.MNT_TOT_EXP = Converter.GetString(row, "FECHA_EMISION_GUIA_EXTORNADA");
+                ListDocumentoVenta3.Add(dv1);
+            }
+            List<CPE_CABECERA_BE> ListDocumentoVenta4 = new List<CPE_CABECERA_BE>();
+            foreach (DataRow row in DataTable4.Rows)
+            {
+                CPE_CABECERA_BE dv1 = new CPE_CABECERA_BE();
+                dv1.CORRELATIVO = Converter.GetString(row, "GUIA");
+                dv1.FEC_EMI = Converter.GetString(row, "FECHA_EMISION_GUIA");
+                dv1.SERIE = Converter.GetString(row, "CPE");
+                dv1.FEC_VCTO = Converter.GetString(row, "FECHA_EMISION_CPE");
+                dv1.MNT_TOT_ANTCP = Converter.GetString(row, "SUB_TOTAL_CPE");
+                dv1.MNT_TOT_TRB_IGV = Converter.GetString(row, "IGV_CPE");
+                dv1.MNT_TOT = Converter.GetString(row, "TOTAL_CPE");
+                dv1.COD_TIP_OPE = Converter.GetString(row, "TIPO_TRANSACCION");
+                dv1.COD_OPC = Converter.GetString(row, "MOTIVO_TRANSACCION");
+                dv1.DES_REF_CLT = Converter.GetString(row, "FECHA_TRANSACCION");
+                dv1.MNT_REF = Converter.GetString(row, "SUB_TOTAL_VENTA");
+                dv1.DIR_DES_ENT = Converter.GetString(row, "CLIENTE");
+                dv1.NRO_DOC_EMI = Converter.GetString(row, "DOCUMENTO");
+                dv1.COD_GPO = Converter.GetString(row, "CODIGO");
+                dv1.ID_EXT_RZN = Converter.GetString(row, "GUIA_EXTORNADA");
+                dv1.MNT_TOT_EXP = Converter.GetString(row, "FECHA_EMISION_GUIA_EXTORNADA");
+                ListDocumentoVenta4.Add(dv1);
+            }
+
+            List<CPE_CABECERA_BE> ListDocumentoVenta5 = new List<CPE_CABECERA_BE>();
+            foreach (DataRow row in DataTable5.Rows)
+            {                
+                CPE_CABECERA_BE dv1 = new CPE_CABECERA_BE();
+                dv1.CORRELATIVO = Converter.GetString(row, "GUIA");
+                dv1.FEC_EMI = Converter.GetString(row, "FECHA_EMISION_GUIA");
+                dv1.SERIE = Converter.GetString(row, "CPE");
+                dv1.FEC_VCTO = Converter.GetString(row, "FECHA_EMISION_CPE");
+                dv1.MNT_TOT_ANTCP = Converter.GetString(row, "SUB_TOTAL_CPE");
+                dv1.MNT_TOT_TRB_IGV = Converter.GetString(row, "IGV_CPE");
+                dv1.MNT_TOT = Converter.GetString(row, "TOTAL_CPE");
+                dv1.COD_TIP_OPE = Converter.GetString(row, "TIPO_TRANSACCION");
+                dv1.COD_OPC = Converter.GetString(row, "MOTIVO_TRANSACCION");
+                dv1.DES_REF_CLT = Converter.GetString(row, "FECHA_TRANSACCION");
+                dv1.MNT_REF = Converter.GetString(row, "SUB_TOTAL_VENTA");
+                dv1.DIR_DES_ENT = Converter.GetString(row, "CLIENTE");
+                dv1.NRO_DOC_EMI = Converter.GetString(row, "DOCUMENTO");
+                dv1.COD_GPO = Converter.GetString(row, "CODIGO");
+                dv1.ID_EXT_RZN = Converter.GetString(row, "GUIA_EXTORNADA");
+                dv1.MNT_TOT_EXP = Converter.GetString(row, "FECHA_EMISION_GUIA_EXTORNADA");
+                ListDocumentoVenta5.Add(dv1);
+            }
+            List <List<CPE_CABECERA_BE>> List= new List<List<CPE_CABECERA_BE>>();
+            List.Add(ListDocumentoVenta);
+            List.Add(ListDocumentoVenta2);
+            List.Add(ListDocumentoVenta3);
+            List.Add(ListDocumentoVenta4);
+            List.Add(ListDocumentoVenta5);
+
+            return List;
+        }
     }
 }

@@ -711,5 +711,13 @@ namespace BusinessLayer
                 return dal.getExportStarsoft(fechaInicio, fechaFin);
             }
         }
+
+        public List<List<CPE_CABECERA_BE>> getVentasContabilidadReporte(DateTime fechaInicio, DateTime fechaFin,string mes)
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                return dal.getVentasContabilidadReporte(fechaInicio, fechaFin, mes);
+            }
+        }
     }
 }

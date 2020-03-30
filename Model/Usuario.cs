@@ -225,7 +225,10 @@ namespace Model
 
         /*Parametro*/
         public bool modificaParametro { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_PARAMETRO)).FirstOrDefault() != null; } }
-        
+
+        /*Exporta Ventas Contabilidad*/
+        public bool exportarVentasContabilidad { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.EXPORTAR_VENTAS_CONTABILIDAD)).FirstOrDefault() != null; } }
+
         /*Notificacion de Documento de Venta*/
         public bool visualizaDocumentoVentaNotificacion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_DOCUMENTOVENTANOTIFICACION)).FirstOrDefault() != null; } }
 

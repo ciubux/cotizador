@@ -1,5 +1,7 @@
 ﻿@{
-    ViewBag.Title = "ExportarCPEs";
+                /**/
+
+                ViewBag.Title = "Exportar Ventas Contabilidad";
 
 }
 
@@ -29,13 +31,13 @@
                     </div>
                 </div>
             </form>
-            
+
 
             <br />
-            
+
             <div class="row">
                 <div class="col-sm-6 col-md-4 col-lg-3">
-                    <button id="btnExportStarsoft" type="button" class="btn btn-primary">Archivos Starsoft</button>
+                    <button id="btnExportarVentasContabilidad" type="button" class="btn btn-primary">Generar Reporte</button>
                 </div>
             </div>
         </div>
@@ -44,12 +46,22 @@
 
 <script>
 
-
     document.addEventListener('DOMContentLoaded', function () {
         /**
             * ######################## INICIO CONTROLES DE FECHAS
             */
-
+        $('.date-picker').datepicker( {
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: false,
+            dateFormat: 'mm-yy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            onClose: function(dateText, inst) { 
+                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+            }
+            });
+        /*
         $.datepicker.regional['es'] = {
             closeText: 'Cerrar',
             prevText: '< Ant',
@@ -67,22 +79,20 @@
             showMonthAfterYear: false,
             yearSuffix: ''
         };
+        
         $.datepicker.setDefaults($.datepicker.regional['es']);
-
+            */
         var fecha = $("#fechaIniciotmp").val();
         $("#fechaInicio").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fecha);
 
         var fecha = $("#fechaFintmp").val();
         $("#fechaFin").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fecha);
 
-        $("#btnExportStarsoft").click(function () {
-            $('#frmDates').attr("action", '/DocumentoVenta/exportarVentasContabilidad');
+        $("#btnExportarVentasContabilidad").click(function () {
+            $('#frmDates').attr("action", '/DocumentoVenta/exportarVentasContabilidadReporte');
             $('#frmDates').submit();
         });
 
-    }, false);    
+    }, false);
 </script>
 
-@section Scripts {
-    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/producto")
-}

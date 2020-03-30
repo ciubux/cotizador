@@ -112,7 +112,7 @@
                         var linkCrearMensaje = "";
                         var linkBusquedaMensaje = "";
                         var linkBandejaMensaje = "";
-
+                        var linkExportarVentasContabilidad = "";
                         var linkMantenimientoParametro = "";
                         var linkBusquedaParametro = "";
 
@@ -307,7 +307,7 @@
                             </li>
                         }
 
-                        if (usuario.creaDocumentosVenta || usuario.administraDocumentosVenta || usuario.visualizaDocumentosVenta || usuario.creaDocumentosCompra)
+                        if (usuario.creaDocumentosVenta || usuario.administraDocumentosVenta || usuario.visualizaDocumentosVenta || usuario.creaDocumentosCompra || usuario.exportarVentasContabilidad)
                         {
 
                             <li class="@linkDocumentosVenta">
@@ -333,9 +333,9 @@
                                     }
 
                                     @*@if (usuario.visualizaDocumentoVentaNotificacion)
-                                        {
-                                            <li id="linkBusquedaDocumentoVentaNotificacion" class="@linkBusquedaDocumentoVentaNotificacion">@Html.ActionLink("Documentos de Venta - Notificaciones pendientes", "ValidarNotificacionAnulacion", "DocumentoVenta")</li>
-                                        }*@
+        {
+            <li id="linkBusquedaDocumentoVentaNotificacion" class="@linkBusquedaDocumentoVentaNotificacion">@Html.ActionLink("Documentos de Venta - Notificaciones pendientes", "ValidarNotificacionAnulacion", "DocumentoVenta")</li>
+        }*@
 
 
                                     @if (usuario.administraPermisos)
@@ -345,6 +345,11 @@
                                     @if (usuario.visualizaVentas)
                                     {
                                         <li id="linkBusquedaVentas" class="@linkBusquedaVentas">@Html.ActionLink("Venta - Búsqueda", "Lista", "Venta")</li>
+                                    }
+
+                                    @if (usuario.exportarVentasContabilidad)
+                                    {
+                                        <li id="linkExportarVentasContabilidad" class="@linkExportarVentasContabilidad">@Html.ActionLink("Exportar Ventas Contabilidad", "ExportarVentasContabilidad", "DocumentoVenta")</li>
                                     }
                                 </ul>
                             </li>
