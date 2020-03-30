@@ -130,24 +130,24 @@ namespace Cotizador.ExcelExport
                             row.CreateCell(c);
                         }
                     }
-            UtilesHelper.setValorCelda(shMontosVenta, 1, "A", "", Principal2CellStyle);
-            UtilesHelper.setValorCelda(shMontosVenta, 1, "B", "SUB TOTAL GRABADA", Principal2CellStyle);
-            UtilesHelper.setValorCelda(shMontosVenta, 1, "C", "SUB TOTAL INAFECTA", Principal2CellStyle);
-            UtilesHelper.setValorCelda(shMontosVenta, 1, "D", "SUB TOTAL EXONERADA", Principal2CellStyle);
-            UtilesHelper.setValorCelda(shMontosVenta, 1, "E", "SUB TOTAL GRATUITA", Principal2CellStyle);
+            UtilesHelper.setValorCelda(shMontosVenta, 1, "A", "", titleDataCellStyle);
+            UtilesHelper.setValorCelda(shMontosVenta, 1, "B", "SUB TOTAL GRABADA", titleDataCellStyle);
+            UtilesHelper.setValorCelda(shMontosVenta, 1, "C", "SUB TOTAL INAFECTA", titleDataCellStyle);
+            UtilesHelper.setValorCelda(shMontosVenta, 1, "D", "SUB TOTAL EXONERADA", titleDataCellStyle);
+            UtilesHelper.setValorCelda(shMontosVenta, 1, "E", "SUB TOTAL GRATUITA", titleDataCellStyle);
             
-            UtilesHelper.setValorCelda(shMontosVenta, 2, "A", "COMPROBANTES DE PAGO ELECTRONICOS EMITIDOS EN "+mes+" ");
+            UtilesHelper.setValorCelda(shMontosVenta, 2, "A", "COMPROBANTES DE PAGO ELECTRONICOS EMITIDOS EN "+mes+" ", PrincipalCellStyle);
             UtilesHelper.setValorCelda(shMontosVenta, 3, "A", "VENTAS DE " + mes + " FACTURADAS EN " + MesSiguiente(mes)+".");
             UtilesHelper.setValorCelda(shMontosVenta, 4, "A", "VENTAS DE " + mes + " AUN NO FACTURADAS");
             UtilesHelper.setValorCelda(shMontosVenta, 5, "A", "VENTAS ANTERIORES A " + mes + " Y FACTURADAS EN " + mes + "");
             UtilesHelper.setValorCelda(shMontosVenta, 6, "A", "VENTAS EXTORNADAS EN " + mes + "");
 
 
-            UtilesHelper.setColumnWidth(shMontosVenta, "A", 10000);
+            UtilesHelper.setColumnWidth(shMontosVenta, "A", 16200);
             UtilesHelper.setColumnWidth(shMontosVenta, "B", 6000);
             UtilesHelper.setColumnWidth(shMontosVenta, "C", 6000);
-            UtilesHelper.setColumnWidth(shMontosVenta, "D", 6000);
-            UtilesHelper.setColumnWidth(shMontosVenta, "E", 6000);
+            UtilesHelper.setColumnWidth(shMontosVenta, "D", 7000);
+            UtilesHelper.setColumnWidth(shMontosVenta, "E", 7000);
           
             // 5 rows, 8 columns
             for (int r = 0; r < sheet1.Count; r++)
