@@ -288,7 +288,7 @@ namespace Model
         public static Decimal IGV = 0.18M;
         public static Decimal PORCENTAJE_MAX_APROBACION = 3.00M;
         public static String SIMBOLO_SOL = "S/";
-        public static int PLAZO_OFERTA_DIAS = 15;
+        public static int PLAZO_OFERTA_DIAS = 2;
         public static int DEBUG = 1;
         public static int DIAS_MAX_BUSQUEDA_PRECIOS = 730;
         public static int MILISEGUNDOS_AUTOGUARDADO = 5000;
