@@ -222,6 +222,8 @@ namespace Model
 
         public bool enviaMensaje { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ENVIA_MENSAJE)).FirstOrDefault() != null; } }
 
+        /*Dashboard*/
+        public bool modificaVistaDashboard { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_VISTA_DASHBOARD)).FirstOrDefault() != null; } }
 
         /*Parametro*/
         public bool modificaParametro { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_PARAMETRO)).FirstOrDefault() != null; } }

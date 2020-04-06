@@ -116,6 +116,9 @@
                         var linkMantenimientoParametro = "";
                         var linkBusquedaParametro = "";
 
+                         var linkBusquedaVistaDashboard = "";
+                         var linkMantenimientoVistaDashboard = "";
+
                         var linkCrearFacturaConsolidada = "";
 
                         var linkBusquedaNotasIngreso = "";
@@ -428,7 +431,7 @@
                             </li>
                         }
 
-                        if (usuario.visualizaRoles || usuario.modificaRol || usuario.administraPermisos || usuario.visualizaVendedor || usuario.modificaVendedor || usuario.visualizaMensaje || usuario.modificaMensaje || usuario.enviaMensaje)
+                        if (usuario.visualizaRoles || usuario.modificaRol || usuario.administraPermisos || usuario.visualizaVendedor || usuario.modificaVendedor || usuario.visualizaMensaje || usuario.modificaMensaje || usuario.enviaMensaje||usuario.modificaVistaDashboard )
                         {
                             <li class="@linkMaestros">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
@@ -485,14 +488,20 @@
                                     }
 
                                     @*if (usuario.modificaMensaje)
-                                    {
-                                        <li id="linkCrearMensaje" class="@linkCrearMensaje">@Html.ActionLink("Mensaje - Crear/Modificar", "Editar", "Mensaje")</li>
-                                    }
+        {
+            <li id="linkCrearMensaje" class="@linkCrearMensaje">@Html.ActionLink("Mensaje - Crear/Modificar", "Editar", "Mensaje")</li>
+        }
                                     *@
 
                                     @if (usuario.modificaParametro)
                                     {
                                         <li id="linkMantenimientoParametro" class="@linkMantenimientoParametro">@Html.ActionLink("Parametro - Búsqueda", "Lista", "Parametro")</li>
+                                    }                                    
+                                        <li id="linkBusquedaVistaDashboard" class="@linkBusquedaVistaDashboard">@Html.ActionLink("Dashboard - Búsqueda", "Lista", "VistaDashboard")</li>
+                                  
+                                    @if (usuario.modificaVistaDashboard)
+                                    {
+                                        <li id="linkMantenimientoVistaDashboard" class="@linkMantenimientoVistaDashboard">@Html.ActionLink("Dashboard - Crear/Modificar", "Editar", "VistaDashboard")</li>
                                     }
 
 

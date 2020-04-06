@@ -73,6 +73,7 @@
     <Compile Include="DocumentoCompraBL.cs" />
     <Compile Include="MovimientoAlmacenBL.cs" />
     <Compile Include="LogCampoBL.cs" />
+    <Compile Include="TipoVistaDashboardBL.cs" />
     <Compile Include="UtilesHelper.cs" />
     <Compile Include="CompraBL.cs" />
     <Compile Include="VendedorBL.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="ClienteBL.cs" />
     <Compile Include="CiudadBL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VistaDashboardBL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataLayer\DataLayer.csproj">

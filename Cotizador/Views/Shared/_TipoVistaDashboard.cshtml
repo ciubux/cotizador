@@ -1,0 +1,9 @@
+﻿@model Cotizador.Models.TipoVistaDashboardViewModels 
+@Html.DropDownList(
+    Model.TipoVistaDashboardSelectId,
+    Model.TiposVistaDashboard, "Seleccione el tipo",
+    new
+    {
+        id = Model.TipoVistaDashboardSelectId,
+        @class = "form-control"
+    })

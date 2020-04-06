@@ -123,6 +123,9 @@ namespace Model
         public static String VAR_SESSION_PARAMETRO_LISTA = "parametroList";
         public static String VAR_SESSION_PARAMETRO_VER = "parametroVer";
 
+        public static String VAR_SESSION_VISTA_DASHBOARD_BUSQUEDA = "vistaDashboardBusqueda";
+        public static String VAR_SESSION_VISTA_DASHBOARD = "vistaDashboard";
+        public static String VAR_SESSION_VISTA_DASHBOARD_VER = "vistaDashboardVer";
 
         public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA = "notificacionDocumentoVenta";
         public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA_BUSQUEDA = "notificacionDocumentoVentaBusqueda";
@@ -418,7 +421,7 @@ namespace Model
         public const String MODIFICA_MENSAJE = "P831";
         public const String LISTA_MENSAJE = "P830";
         public const String ENVIA_MENSAJE = "P832";
-
+        public const String MODIFICA_VISTA_DASHBOARD = "P880";
 
         public const String MODIFICA_PARAMETRO = "P890";
 
@@ -558,6 +561,12 @@ namespace Model
             BusquedaMensaje = 48,
             [Display(Name = "MANTENIMIENTO MENSAJES")]
             MantenimientoMensaje = 49,
+
+            /*DASHBOARD*/
+            [Display(Name = "BUSQUEDA VISTADASHBOARD")]
+            BusquedaVistaDashboard = 48,
+            [Display(Name = "MANTENIMIENTO VISTADASHBOARD")]
+            MantenimientoVistaDashboard = 49,
 
             /*PARAMETRO*/
             [Display(Name = "MANTENIMIENTO PARAMETRO")]

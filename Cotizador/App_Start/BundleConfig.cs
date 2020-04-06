@@ -93,6 +93,9 @@ namespace Cotizador
             bundles.Add(new ScriptBundle("~/bundles/parametro").Include(
               "~/Scripts/parametro1.0.0.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/vistaDashboard").Include(
+              "~/Scripts/vistaDashboard1.0.0.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/documentoVenta").Include(
                  "~/Scripts/documentoVenta1.0.0.js"));
 

@@ -1,0 +1,102 @@
+﻿
+@{
+    ViewBag.Title = "Vista Dashboard - Crear/Modificar";
+    Model.VistaDashboard vistaDashboard = ViewBag.VistaDashboard;
+    List<SelectListItem>TipovistaDashboardOpciones = ViewBag.TipovistaDashboardOpciones;
+
+}
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" value="@ViewBag.debug" />
+
+    <div class="container">
+
+        <input type="hidden" id="idVistaDashboard" name="idVistaDashboard" value="@vistaDashboard.idVistaDashboard" />
+
+
+
+        
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-sm-12 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => vistaDashboard.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-6">
+                            @Html.TextBoxFor(c => vistaDashboard.codigo, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => vistaDashboard.idTipoVistaDashboard, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
+                            @Html.Action("GetTiposVistaDashboard", "VistaDashboard",
+                           new
+                           {
+                               TipoVistaDashboardSelectId = "idTipoVistaDashboard",
+                               selectedValue = vistaDashboard.idTipoVistaDashboard
+                           })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => vistaDashboard.nombre, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-6">
+                            @Html.TextBoxFor(c => vistaDashboard.nombre, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => vistaDashboard.descripcion, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
+                            @Html.TextBoxFor(c => vistaDashboard.descripcion, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-12 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => vistaDashboard.bloquesAncho, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-4">
+                            @Html.TextBoxFor(c => vistaDashboard.bloquesAncho, htmlAttributes: new { @class = "form-control",@type="number" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => vistaDashboard.altoPx, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-4">
+                            @Html.TextBoxFor(c => vistaDashboard.altoPx, htmlAttributes: new { @class = "form-control",@type="number" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="pull-right">
+                    <button type="button" id="btnCancelarVistaDashboard" class="btnCancelarVistaDashboard btn btn-danger"> Cancelar</button>
+                    <button class=" btn btn-primary" id="btnCrearVistaDashboard">Finalizar Creación</button>
+                </div>
+
+            </div>
+
+   
+</div>
+        
+</div>
+    </div>
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/vistaDashboard")
+}

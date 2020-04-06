@@ -232,6 +232,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
+    <Compile Include="Controllers\VistaDashboardController.cs" />
     <Compile Include="Controllers\DocumentoCompraController.cs" />
     <Compile Include="Controllers\DomicilioLegalController.cs" />
     <Compile Include="Controllers\GrupoClienteController.cs" />
@@ -323,6 +324,7 @@
     <Compile Include="Models\RubroViewModels.cs" />
     <Compile Include="Models\SubDistribuidorViewModels.cs" />
     <Compile Include="Models\OrigenViewModels.cs" />
+    <Compile Include="Models\TipoVistaDashboardViewModels.cs" />
     <Compile Include="Models\VendedorViewModels.cs" />
     <Compile Include="Models\CiudadViewModels.cs" />
     <Compile Include="Models\DepartamentoViewModels.cs" />
@@ -428,6 +430,7 @@
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\zasmp - Web Deploy.pubxml" />
     <Content Include="Scripts\account1.0.0.js" />
+    <Content Include="Scripts\vistaDashboard1.0.0.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chosen\chosen.ajaxaddition.jquery.js" />
     <Content Include="Scripts\chosen\chosen.jquery.min.js" />
@@ -638,6 +641,9 @@
     <Content Include="Views\Producto\_LabelRestringido.cshtml" />
     <Content Include="Views\Pedido\_LabelDetalleRestringido.cshtml" />
     <Content Include="Views\DocumentoVenta\ExportarVentasContabilidad.cshtml" />
+    <Content Include="Views\VistaDashboard\Lista.cshtml" />
+    <Content Include="Views\VistaDashboard\Editar.cshtml" />
+    <Content Include="Views\Shared\_TipoVistaDashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
@@ -649,6 +655,7 @@
     <Folder Include="Views\Login\" />
     <Folder Include="Views\Mail\" />
     <Folder Include="Views\Parent\" />
+    <Folder Include="Views\TipoVistaDashboardViewModels\" />
     <Folder Include="Views\Ubigeo\" />
     <Folder Include="Views\VentasContabilidad\" />
   </ItemGroup>
