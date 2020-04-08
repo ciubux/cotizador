@@ -255,8 +255,8 @@ G:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.SqlServer.dll
 G:\Repo\freelos\cotizador\Model\bin\Debug\System.Web.Mvc.dll
 G:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.xml
 G:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.SqlServer.xml
+G:\Repo\freelos\cotizador\Model\obj\Debug\Model.csprojAssemblyReference.cache
 G:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
 G:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.CopyComplete
 G:\Repo\freelos\cotizador\Model\obj\Debug\Model.dll
 G:\Repo\freelos\cotizador\Model\obj\Debug\Model.pdb
-G:\Repo\freelos\cotizador\Model\obj\Debug\Model.csprojAssemblyReference.cache

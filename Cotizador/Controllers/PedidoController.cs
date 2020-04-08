@@ -2193,8 +2193,8 @@ namespace Cotizador.Controllers
         [HttpPost]
         public ActionResult Load(HttpPostedFileBase file)
         {
-            try
-            {
+            /*try
+            {*/
                 PedidoBL pedidoBL = new PedidoBL();
                 //Se obtiene el número de Grupo
                 Int64 numeroGrupo =  pedidoBL.GetSiguienteNumeroGrupoPedido();
@@ -2269,8 +2269,8 @@ namespace Cotizador.Controllers
                 //Se considera la ultimafila más uno porque estamos trabajando con las posiciones físicas.
                 for (row = 16; row <= ultimaFila + 1; row++)
                 {
-                    try
-                    {
+                   /* try
+                    {*/
                         //Se identifica el clasePedido de fila
                         String tipoCabecera = UtilesHelper.getValorCelda(sheet, row, "D");
                         if (tipoCabecera.Equals("C"))
@@ -2337,7 +2337,7 @@ namespace Cotizador.Controllers
                                 addProductoCargaMasiva(ultimoPedido, skuMP, unidadAlternativa, cantidad, precioNeto);
                             }
                         }                
-                    }
+                    /*}
                     catch (Exception ex)
                     {
 
@@ -2346,7 +2346,7 @@ namespace Cotizador.Controllers
                         LogBL logBL = new LogBL();
                         logBL.insertLog(log);
                         throw ex;
-                    }
+                    }*/
                 }
 
                 String numerosPedido = String.Empty;
@@ -2369,7 +2369,7 @@ namespace Cotizador.Controllers
 
                 ViewBag.numerosPedido = numerosPedido.Substring(0, numerosPedido.Length - 1);
                 ViewBag.numeroGrupo = numeroGrupo;
-            }
+            /*}
             catch (Exception ex)
             {
                 Usuario usuario = (Usuario)this.Session["usuario"];
@@ -2378,8 +2378,7 @@ namespace Cotizador.Controllers
                 logBL.insertLog(log);
                 throw ex;
                 //return View("CargaIncorrecta");
-            }
-
+            }*/
             return View();
         }
 

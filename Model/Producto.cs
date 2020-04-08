@@ -354,6 +354,8 @@ namespace Model
         [Display(Name = "Venta Restringida:")]
         public TipoVentaRestringida ventaRestringida { get; set; }
 
+        [Display(Name = "Venta Restringida:")]
+        public int tipoVentaRestringidaBusqueda { get; set; }
         private int _descontinuado;
         [Display(Name = "Venta Restringida:")]
         public int descontinuado {
