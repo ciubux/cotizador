@@ -200,8 +200,9 @@ namespace Cotizador.Controllers
             VistaDashboardBL bL = new VistaDashboardBL();
             VistaDashboard obj = (VistaDashboard)this.Session[Constantes.VAR_SESSION_VISTA_DASHBOARD];
             Usuario user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            obj = bL.insertVistaDashboard(obj,user.idUsuario);           
-            String resultado = JsonConvert.SerializeObject(obj);
+            obj = bL.insertVistaDashboard(obj,user.idUsuario);
+            this.Session[Constantes.VAR_SESSION_VISTA_DASHBOARD] = null;
+            String resultado = JsonConvert.SerializeObject(obj);           
             return resultado;
         }
 

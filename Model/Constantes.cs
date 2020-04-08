@@ -126,6 +126,7 @@ namespace Model
         public static String VAR_SESSION_VISTA_DASHBOARD_BUSQUEDA = "vistaDashboardBusqueda";
         public static String VAR_SESSION_VISTA_DASHBOARD = "vistaDashboard";
         public static String VAR_SESSION_VISTA_DASHBOARD_VER = "vistaDashboardVer";
+        public static String VAR_SESSION_VISTA_DASHBOARD_LISTA = "vistaDashboardList";
 
         public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA = "notificacionDocumentoVenta";
         public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA_BUSQUEDA = "notificacionDocumentoVentaBusqueda";

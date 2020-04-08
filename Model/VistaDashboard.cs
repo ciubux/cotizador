@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Model
 {
     public class VistaDashboard
-    {
+    {        
         public int idVistaDashboard { get; set; }
 
         [Display(Name = "Tipo:")]
@@ -26,8 +26,8 @@ namespace Model
         public int altoPx { get; set; }
         [Display(Name = "Estado:")]
         public int estado { get; set; }
-
+       
         public TipoVistaDashboard tipoVistaDashboard{ get; set; }
 
-}
+    }
 }

@@ -481,26 +481,101 @@ namespace Cotizador.Controllers
         public String ListUsuarios(int? idRol)
         {
             RolBL bl = new RolBL();
-            Rol rol = new Rol(); 
-            rol = bl.getRol(idRol.Value);     
+            Rol rol = new Rol();
+            rol = bl.getRol(idRol.Value);
             rol.usuarios = bl.getUsuarios(rol.idRol);
             return JsonConvert.SerializeObject(rol.usuarios);
-           
+
         }
-        
+
         [HttpPost]
         public String ListUsuariosRoles(List<int> ListRol)
-        {           
+        {
             RolBL bl = new RolBL();
             List<Usuario> and = new List<Usuario>();
-            for (var i=0; i< ListRol.Count;i++)
-            {                         
+            for (var i = 0; i < ListRol.Count; i++)
+            {
                 and.AddRange(bl.getUsuarios(ListRol[i]));
             }
             //rol.usuarios = bl.getUsuarios(ListRol);
             return JsonConvert.SerializeObject(and);
         }
-        
 
+
+        public ActionResult VistaDashboard(int idRol)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (!usuario.modificaRol)
+            {
+                return RedirectToAction("List", "Rol");
+            }
+            VistaDashboardBL vistadashboardbl = new VistaDashboardBL();
+
+            List<VistaDashboard> newvistasdashboard = new List<VistaDashboard>();
+            VistaDashboard newobj = new VistaDashboard();
+
+            newvistasdashboard = vistadashboardbl.getVistasDashboard(newobj);
+
+            this.Session[Constantes.VAR_SESSION_VISTA_DASHBOARD_LISTA] = newvistasdashboard;
+
+            Rol rolVistaDashboard = new Rol();
+            RolBL bl = new RolBL();
+            rolVistaDashboard = bl.getRol(idRol);
+
+            rolVistaDashboard.VistasDashboard = vistadashboardbl.getVistasDashboardByRol(idRol);
+            this.Session[Constantes.VAR_SESSION_VISTA_DASHBOARD_VER] = rolVistaDashboard;
+
+            ViewBag.vistasDashboard = newvistasdashboard;
+            ViewBag.rolVistaDashboard = rolVistaDashboard;
+
+
+            return View();
+
+        }
+
+        public void ChangeVistaDashboard()
+        {
+            Rol obj = (Rol)this.Session[Constantes.VAR_SESSION_VISTA_DASHBOARD_VER];
+            int valor = Int32.Parse(this.Request.Params["valor"]);
+            int rol_select = Int32.Parse(this.Request.Params["rol"].ToString().Replace("vistaDashboard_", ""));
+            List<VistaDashboard> listaRoles = (List<VistaDashboard>)this.Session[Constantes.VAR_SESSION_VISTA_DASHBOARD_LISTA];
+            if (valor == 0)
+            {
+                //Remove
+                foreach (VistaDashboard rol in obj.VistasDashboard)
+                {
+                    if (rol_select == rol.idVistaDashboard)
+                    {
+                        obj.VistasDashboard.Remove(rol);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                //ADD
+                foreach (VistaDashboard rol in listaRoles)
+                {
+                    if (rol_select == rol.idVistaDashboard)
+                    {
+                        obj.VistasDashboard.Add(rol);
+                        break;
+                    }
+                }
+            }
+            this.Session[Constantes.VAR_SESSION_VISTA_DASHBOARD_VER] = obj;
+
+        }
+
+        public String updateRolVistaDashboard()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Rol obj = (Rol)this.Session[Constantes.VAR_SESSION_VISTA_DASHBOARD_VER];
+            Guid idUsuario = usuario.idUsuario;            
+            VistaDashboardBL vdbl = new VistaDashboardBL();
+            obj = vdbl.updateRolVistaDashboard(obj,idUsuario);
+            return JsonConvert.SerializeObject(obj);
+        }
     }
 }

@@ -12,6 +12,7 @@ namespace Model
         {
             this.permisos = new List<Permiso>();
             this.usuarios = new List<Usuario>();
+            this.VistasDashboard = new List<VistaDashboard>();
         }
 
         public int idRol { get; set; }
@@ -34,5 +35,12 @@ namespace Model
         {
             return this.permisos.Where(item => item.idPermiso.Equals(idPermiso)).FirstOrDefault() != null;
         }
+
+        public List<VistaDashboard> VistasDashboard { get; set; }
+        public bool TieneVistaDashboard(int idVistaDashboard)
+        {
+            return this.VistasDashboard.Where(item => item.idVistaDashboard.Equals(idVistaDashboard)).FirstOrDefault() != null;
+        }
+
     }
 }

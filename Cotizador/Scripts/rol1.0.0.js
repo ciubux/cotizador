@@ -587,6 +587,7 @@ jQuery(function ($) {
                         '<td>' +
                         '<button type="button" class="' + list[i].idRol + ' btnEditarRol btn btn-primary ">Editar</button>' +
                         '&nbsp;&nbsp;&nbsp;<button type="button" idRol="' + list[i].idRol + '" class="btnVerUsuariosRol btn btn-secundary">Usuarios</button>' +
+                        '&nbsp;&nbsp;&nbsp;<button type="button" class="btnVistas btn btn-success">Vista Dashboard</button>'+
                         '</td>' +
                         '</tr>';
                     
@@ -650,6 +651,56 @@ jQuery(function ($) {
     });
 
 
+
+    $('body').on('click', "button.btnVistas", function () {
+        var idRol = $(this).closest('td').find('.btnVerUsuariosRol').attr('idRol');  
+        window.location = '/Rol/VistaDashboard?idRol=' + idRol; 
+    });
+
+
+    $(".VistaDashboardEditar").change(function () {
+        var valor = 0;
+        if ($(this).prop("checked")) {
+            valor = 1;
+        }
+        changeInputVistaDashboard($(this).attr("id"), valor);
+    });
+
+    function changeInputVistaDashboard(rol, valor) {
+        $.ajax({
+            url: "/Rol/ChangeVistaDashboard",
+            type: 'POST',
+            data: {
+                rol: rol,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
+
+    $('body').on('click', "button#btnCancelarVistaDashboard", function () {
+        window.location = '/Rol/List';
+    });
+
+    $('body').on('click', "button#btnFinalizarEdicionVistaDashboard", function () {
+        $.ajax({
+            url: "/Rol/updateRolVistaDashboard",
+            success: function (response)
+            {
+                $.alert({
+                    title: TITLE_EXITO,
+                    content: 'Se registraron los cambios correctamente.',
+                    type: 'green',
+                    buttons: {
+                        OK: function () {
+                            window.location = '/Rol/List';
+                        }
+                    }
+                });                
+            }
+        });
+    });
 
 });
 

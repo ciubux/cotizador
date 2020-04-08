@@ -32,6 +32,7 @@ namespace DataLayer
             foreach (DataRow row in dataTable.Rows)
             {
                 VistaDashboard dashboard = new VistaDashboard();
+                dashboard.tipoVistaDashboard= new TipoVistaDashboard();
                 dashboard.idVistaDashboard = Converter.GetInt(row, "id_vista_dashboard");
                 dashboard.idTipoVistaDashboard = Converter.GetInt(row, "id_tipo_vista_dashboard");
                 dashboard.codigo = Converter.GetString(row, "codigo");
@@ -40,6 +41,9 @@ namespace DataLayer
                 dashboard.bloquesAncho = Converter.GetInt(row, "bloques_ancho");
                 dashboard.altoPx = Converter.GetInt(row, "alto_px");
                 dashboard.estado = Converter.GetInt(row, "estado");
+
+                dashboard.tipoVistaDashboard.idTipoVistaDashboard = Converter.GetInt(row, "id_tipo_vista_dashboard");
+                dashboard.tipoVistaDashboard.nombre = Converter.GetString(row, "nombreTipo");
                 lista.Add(dashboard);
             }
             return lista;
@@ -97,6 +101,51 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "id_usuario", idUsuario);
             ExecuteNonQuery(objCommand);
             return vistaDasboard;
+        }
+
+        public List<VistaDashboard> getVistasDashboardByRol(int idRol)
+        {
+            var objCommand = GetSqlCommand("ps_rol_vista_dashboard");
+            InputParameterAdd.Int(objCommand, "id_rol", idRol);           
+            DataTable dataTable = Execute(objCommand);
+
+            List<VistaDashboard>  VistasDashboard = new List<VistaDashboard>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                VistaDashboard dashboard = new VistaDashboard();                
+                dashboard.idVistaDashboard = Converter.GetInt(row, "id_vista_dashboard");                 
+                dashboard.codigo = Converter.GetString(row, "codigo");
+                dashboard.nombre = Converter.GetString(row, "nombre");
+                dashboard.estado = Converter.GetInt(row, "estado"); 
+                VistasDashboard.Add(dashboard);
+            }
+            return VistasDashboard;
+
+        }
+
+        public Rol updateRolVistaDashboard(Rol obj,Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pu_rol_vista_dashboard");
+            InputParameterAdd.Int(objCommand, "id_rol", obj.idRol);           
+            InputParameterAdd.Guid(objCommand, "id_usuario", idUsuario);
+            
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(int)));
+
+            foreach (VistaDashboard item in obj.VistasDashboard)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = item.idVistaDashboard;
+                tvp.Rows.Add(rowObj);
+            }
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@vistas_dashboard", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.IntegerList";
+            ExecuteNonQuery(objCommand);
+
+            return obj;          
+
         }
     }
 }

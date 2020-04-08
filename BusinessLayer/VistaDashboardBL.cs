@@ -41,5 +41,21 @@ namespace BusinessLayer
                 return dal.insertVistaDashboard(obj, idUsuario);
             }
         }
+
+        public List<VistaDashboard> getVistasDashboardByRol(int idRol)
+        {
+            using (var dal = new VistaDashboardDAL())
+            {
+                return dal.getVistasDashboardByRol(idRol);
+            }
+        }
+
+        public Rol updateRolVistaDashboard(Rol obj,Guid idUsuario)
+        {
+            using (var dal = new VistaDashboardDAL())
+            {
+                return dal.updateRolVistaDashboard(obj, idUsuario);
+            }
+        }
     }
 }

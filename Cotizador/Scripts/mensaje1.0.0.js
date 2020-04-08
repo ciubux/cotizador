@@ -285,7 +285,7 @@
         });
     });
 
-    $(".chk-rol").change(function () {
+    $(".chk-rol.MensajeEditar").change(function () {
         var valor = 0;
         if ($(this).prop("checked")) {
             valor = 1;

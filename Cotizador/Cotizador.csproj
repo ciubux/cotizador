@@ -644,6 +644,7 @@
     <Content Include="Views\VistaDashboard\Lista.cshtml" />
     <Content Include="Views\VistaDashboard\Editar.cshtml" />
     <Content Include="Views\Shared\_TipoVistaDashboard.cshtml" />
+    <Content Include="Views\Rol\VistaDashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
