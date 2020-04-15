@@ -87,7 +87,7 @@ namespace Cotizador.Controllers
         public String ActualizarEstadoDocumentosElectronicos()
         {
             UsuarioBL usuarioBL = new UsuarioBL();
-            Usuario usuario = usuarioBL.getUsuarioLogin("automatico", "123");
+            Usuario usuario = usuarioBL.getUsuarioLogin("automatico", "123",null);
 
             DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
             documentoVentaBL.ActualizarEstadoDocumentosElectronicos(usuario);

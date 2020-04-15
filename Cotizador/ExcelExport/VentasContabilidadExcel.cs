@@ -81,12 +81,13 @@ namespace Cotizador.ExcelExport
             HSSFCellStyle defaulCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
 
             // create sheet
+            
             shMontosVenta = (HSSFSheet)wb.CreateSheet("Resumen Montos Ventas");
             shCpes = (HSSFSheet)wb.CreateSheet("CPEs");
-            shVentasMesFacturadas = (HSSFSheet)wb.CreateSheet("Vts " + mes + ". Facturadas " + MesSiguiente(mes) + ".");
-            shVentaNoFacturadaMes = (HSSFSheet)wb.CreateSheet("Vts " + mes + " aun no facturada");
-            shVentasAntFacturadasMes = (HSSFSheet)wb.CreateSheet("Vtas ant facturadas " + mes + "");
-            shVentasExtornadasMes = (HSSFSheet)wb.CreateSheet("Ventas Extornadas en " + mes + "");
+            shVentasMesFacturadas = (HSSFSheet)wb.CreateSheet("Vts " + mes.Substring(0, 3) + " Facturadas " + MesSiguiente(mes).Substring(0, 3) + "");
+            shVentaNoFacturadaMes = (HSSFSheet)wb.CreateSheet("Vts " + mes.Substring(0, 3) + " aun no facturada");
+            shVentasAntFacturadasMes = (HSSFSheet)wb.CreateSheet("Vtas ant facturadas " + mes.Substring(0, 3) + "");
+            shVentasExtornadasMes = (HSSFSheet)wb.CreateSheet("Ventas Extornadas en " + mes.Substring(0, 3) + "");
 
 
             HSSFFont titleFont = (HSSFFont)wb.CreateFont();
@@ -445,10 +446,10 @@ namespace Cotizador.ExcelExport
             }           
 
             UtilesHelper.setFormulaCelda(shMontosVenta, 2, "B", "SUM('CPEs'!C2:C"+ sheet1.Count.ToString() + ")", PrincipalCellStyle);
-            UtilesHelper.setFormulaCelda(shMontosVenta, 3, "B", "SUM('Vts " + mes + ". Facturadas " + MesSiguiente(mes) + ".'!K2:K"+ sheet2.Count.ToString() + ")");
-            UtilesHelper.setFormulaCelda(shMontosVenta, 4, "B", "SUM('Vts " + mes + " aun no facturada'!K2:K"+ sheet3.Count.ToString() + ")");
-            UtilesHelper.setFormulaCelda(shMontosVenta, 5, "B", "-SUM('Vtas ant facturadas " + mes + "'!K2:K"+ sheet4.Count.ToString() + ")");
-            UtilesHelper.setFormulaCelda(shMontosVenta, 6, "B", "-SUM('Ventas Extornadas en " + mes + "'!K2:K"+ sheet5.Count.ToString() + ")");
+            UtilesHelper.setFormulaCelda(shMontosVenta, 3, "B", "SUM('Vts " + mes.Substring(0, 3) + " Facturadas " + MesSiguiente(mes).Substring(0, 3) + "'!K2:K"+ sheet2.Count.ToString() + ")");
+            UtilesHelper.setFormulaCelda(shMontosVenta, 4, "B", "SUM('Vts " + mes.Substring(0, 3) + " aun no facturada'!K2:K"+ sheet3.Count.ToString() + ")");
+            UtilesHelper.setFormulaCelda(shMontosVenta, 5, "B", "-SUM('Vtas ant facturadas " + mes.Substring(0, 3) + "'!K2:K"+ sheet4.Count.ToString() + ")");
+            UtilesHelper.setFormulaCelda(shMontosVenta, 6, "B", "-SUM('Ventas Extornadas en " + mes.Substring(0, 3) + "'!K2:K"+ sheet5.Count.ToString() + ")");
             UtilesHelper.setFormulaCelda(shMontosVenta, 7, "B", "SUM(B2:B6)");
             
             UtilesHelper.setFormulaCelda(shMontosVenta, 2, "C", "SUM(CPEs!D2:D" + sheet1.Count.ToString() + ")", PrincipalCellStyle);            

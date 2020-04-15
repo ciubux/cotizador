@@ -79,7 +79,7 @@ namespace Model
 
         public bool esVendedor { get; set; }
 
-
+        public string ipAddress { get; set; }
         /// <summary>
         /// PERMISOS
         /// </summary>

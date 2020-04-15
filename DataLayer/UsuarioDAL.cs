@@ -160,6 +160,7 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_usuario");
             InputParameterAdd.Varchar(objCommand, "email", usuario.email);
             InputParameterAdd.Varchar(objCommand, "password", usuario.password);
+            InputParameterAdd.Varchar(objCommand, "ip_login", usuario.ipAddress);
             DataSet dataSet = ExecuteDataSet(objCommand);
 
             DataTable dataTableUsuario = dataSet.Tables[0];
