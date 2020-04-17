@@ -1344,6 +1344,10 @@ jQuery(function ($) {
         window.location.href = $(this).attr("actionLink");
     });
 
+    $("#btnExportExcelMienbros").click(function () {
+        window.location.href = $(this).attr("actionLink");
+    });
+
     var idClienteView = "";
 
     $("#btnExportCanasta").click(function () {
@@ -1449,10 +1453,12 @@ jQuery(function ($) {
                 if (list.length > 0) {
                     $("#msgBusquedaSinResultados").hide();
                     $("#divExportButton").show();
+                    $("#ExportarMienbros").show();
                 }
                 else {
                     $("#msgBusquedaSinResultados").show();
                     $("#divExportButton").hide();
+                    $("#ExportarMienbros").hide();
                 }
 
             }

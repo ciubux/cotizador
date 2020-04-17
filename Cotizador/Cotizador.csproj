@@ -281,6 +281,7 @@
     <Compile Include="ExcelExport\CotizacionDetalleFormatoExcel.cs" />
     <Compile Include="ExcelExport\DocumentoCompraSearch.cs" />
     <Compile Include="ExcelExport\FacturaSearch.cs" />
+    <Compile Include="ExcelExport\GrupoClienteSearch.cs" />
     <Compile Include="ExcelExport\NotaIngresoSearch.cs" />
     <Compile Include="ExcelExport\GuiaRemisionSearch.cs" />
     <Compile Include="ExcelExport\CotizacionSearch.cs" />

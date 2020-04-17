@@ -195,5 +195,15 @@ namespace BusinessLayer
                 return dal.limpiaCanastaCliente(idGrupoCliente, aplicaMiembros);
             }
         }
+
+
+        public List<GrupoCliente> getGruposMienbrosExportar(GrupoCliente grupoCliente)
+        {
+            using (var grupoDAL = new GrupoClienteDAL())
+            {
+                return grupoDAL.getGruposMienbrosExportar(grupoCliente);
+            }
+        }
+
     }
 }

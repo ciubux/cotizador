@@ -787,5 +787,25 @@ namespace Cotizador.Controllers
 
             return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
         }
+
+        [HttpGet]
+        public ActionResult ExportLastSearchExcel()
+        {
+            List<GrupoCliente> list = (List<GrupoCliente>)this.Session[Constantes.VAR_SESSION_GRUPO_CLIENTE_LISTA];
+
+            GrupoClienteSearch excel = new GrupoClienteSearch();
+           return excel.generateExcel(list);
+        }
+
+        [HttpGet]
+        public ActionResult ExportarMienbros()
+        {
+            GrupoCliente grupoCliente = (GrupoCliente)this.Session[Constantes.VAR_SESSION_GRUPO_CLIENTE_BUSQUEDA];
+            List<GrupoCliente> list = new List<GrupoCliente>();
+            GrupoClienteBL bl = new GrupoClienteBL();
+            list = bl.getGruposMienbrosExportar(grupoCliente);            
+            GrupoClienteSearch excel = new GrupoClienteSearch();
+            return excel.mienbrosGruposExcel(list);
+        }
     }
 }

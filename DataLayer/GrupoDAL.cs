@@ -246,5 +246,33 @@ namespace DataLayer
             return grupoCliente;
 
         }
+
+
+        public List<GrupoCliente> getGruposMienbrosExportar(GrupoCliente objSearch)
+        {
+            var objCommand = GetSqlCommand("ps_grupos_mienbros_exportar");
+            InputParameterAdd.VarcharEmpty(objCommand, "codigo", objSearch.codigo);
+            InputParameterAdd.Guid(objCommand, "idCiudad", objSearch.ciudad.idCiudad);
+            InputParameterAdd.VarcharEmpty(objCommand, "grupo", objSearch.nombre);           
+            InputParameterAdd.Int(objCommand, "estado", objSearch.Estado);
+            DataTable dataTable = Execute(objCommand);
+            List<GrupoCliente> grupoClienteList = new List<GrupoCliente>();            
+            foreach (DataRow row in dataTable.Rows)
+            {
+                GrupoCliente grupoCliente = new GrupoCliente();
+                grupoCliente.miembros= new List<Cliente>();
+                grupoCliente.codigo = Converter.GetString(row, "codigo");
+                grupoCliente.nombre = Converter.GetString(row, "grupo");
+                Cliente obj = new Cliente();
+                obj.codigo = Converter.GetString(row, "codigo_cliente");
+                obj.razonSocialSunat = Converter.GetString(row, "razon_social");
+
+                grupoCliente.miembros.Add(obj);
+
+                grupoClienteList.Add(grupoCliente);                
+            }
+
+            return grupoClienteList;
+        }
     }
 }
