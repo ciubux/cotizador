@@ -255,6 +255,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCiudad", objSearch.ciudad.idCiudad);
             InputParameterAdd.VarcharEmpty(objCommand, "grupo", objSearch.nombre);           
             InputParameterAdd.Int(objCommand, "estado", objSearch.Estado);
+            InputParameterAdd.Int(objCommand, "sinPlazoCreditoAprobado", objSearch.sinPlazoCreditoAprobado ? 1 : 0);
             DataTable dataTable = Execute(objCommand);
             List<GrupoCliente> grupoClienteList = new List<GrupoCliente>();            
             foreach (DataRow row in dataTable.Rows)

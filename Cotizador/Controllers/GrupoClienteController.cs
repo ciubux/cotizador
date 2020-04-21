@@ -75,7 +75,7 @@ namespace Cotizador.Controllers
             grupoCliente.idGrupoCliente = 0;
             grupoCliente.ciudad = new Ciudad();
             grupoCliente.codigo = String.Empty;
-            grupoCliente.nombre = String.Empty;
+            grupoCliente.nombre = String.Empty;            
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             grupoCliente.IdUsuarioRegistro = usuario.idUsuario;
             grupoCliente.usuario = usuario;
@@ -90,6 +90,7 @@ namespace Cotizador.Controllers
             grupoCliente.ciudad = new Ciudad();
             grupoCliente.codigo = String.Empty;
             grupoCliente.nombre = String.Empty;
+            grupoCliente.sinPlazoCreditoAprobado = false;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             grupoCliente.IdUsuarioRegistro = usuario.idUsuario;
             grupoCliente.usuario = usuario;
@@ -443,6 +444,13 @@ namespace Cotizador.Controllers
             GrupoCliente grupoCliente = this.GrupoClienteSession;
             PropertyInfo propertyInfo = grupoCliente.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(grupoCliente, Decimal.Parse(this.Request.Params["valor"]));
+            this.GrupoClienteSession = grupoCliente;
+        }
+
+        public void ChangeSinPlazoCreditoAprobado()
+        {
+            GrupoCliente grupoCliente = this.GrupoClienteSession;
+            grupoCliente.sinPlazoCreditoAprobado = Int32.Parse(this.Request.Params["sinPlazoCreditoAprobado"]) ==1 ? true:false;          
             this.GrupoClienteSession = grupoCliente;
         }
 
