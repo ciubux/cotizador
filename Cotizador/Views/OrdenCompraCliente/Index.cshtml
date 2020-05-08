@@ -1,0 +1,707 @@
+﻿@{
+    /**/
+
+    ViewBag.Title = "Búsqueda Órdenes de Compra";
+    Model.OrdenCompraCliente occ = ViewBag.occ;
+    List<Model.OrdenCompraCliente> lista = ViewBag.lista;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="idOrdenCompraCliente" value="@occ.idOrdenCompraCliente" />
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+
+    <form class="form-horizontal">
+
+        <div class="row">
+            <!--NÚMERO PEDIDO-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => occ.numeroOrdenCompraCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+
+                    <div class="col-xs-8">
+                        @if (occ.numeroOrdenCompraCliente > 0)
+                        {
+                            @Html.TextBoxFor(p => occ.numeroOrdenCompraCliente, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(p => occ.numeroOrdenCompraCliente, htmlAttributes: new { @class = "form-control", type = "number", min = "0", Value = "" })
+                        }
+                        <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Si ingresa el número los otros criterios no serán considerados en la búsqueda.</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <!--Cliente-->
+                <div class="form-group">
+                    <label for="idCliente" class="control-label col-xs-4">Cliente:</label>
+
+                    <div class="col-xs-8">
+                        <select class="form-control input-sm" id="idCliente" name="idCliente" required>
+                            @if (@occ.clienteSunat != null && @occ.clienteSunat.idClienteSunat > 0)
+                            {
+                                <option selected value="@occ.clienteSunat.idClienteSunat">@occ.clienteSunat</option>
+                            }
+                            else
+                            {
+                                <option value=""></option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+           
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => occ.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(p => occ.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => occ.sku, htmlAttributes: new { @class = "control-label col-xs-4" })
+
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(p => occ.sku, htmlAttributes: new { @class = "form-control" })
+                        <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Puede ingresar el SKU del producto que se encuentra en el detalle de la Orden de Compra.</span>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        
+
+        <div class="row">
+
+            <!--FECHA CREACIÓN-->
+            <div class="col-sm-6 col-lg-4">
+                <label for="pedido_fechaCreacionDesde" class="control-label col-xs-6 col-lg-4">Fecha de Creación:</label>
+                <div class="input-group col-xs-6 col-lg-8">
+                    <div class="input-group-addon" style="width:70px">
+                        <span class="input-group-text" id="basic-addon1">Desde:</span>
+                    </div>
+                    <input type="hidden" id="fechaCreacionDesdetmp" value="@ViewBag.fechaCreacionDesde" />
+                    <input class="form-control" type="text" id="occ_fechaCreacionDesde" name="occ_fechaCreacionDesde" autocomplete="off">
+                </div>
+                <label for="fechaSolicitudHasta" class="control-label col-xs-6 col-lg-4"></label>
+                <div class="input-group col-xs-6 col-lg-8">
+
+                    <div class="input-group-addon" style="width:70px">
+                        <span class="input-group-text" id="basic-addon1">Hasta:</span>
+                    </div>
+                    <input type="hidden" id="fechaCreacionHastatmp" value="@ViewBag.fechaCreacionHasta" />
+                    <input class="form-control" type="text" id="occ_fechaCreacionHasta" name="occ_fechaCreacionHasta" autocomplete="off">
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="row" style="margin-top: 10px">
+            <div class="col-sm-6 col-lg-4">
+                <!--USUARIO-->
+                <div class="form-group">
+                    <label for="usuario" class="control-label col-xs-4">Creado Por:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("usuariosOCCList", "Usuario")
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
+            <button id="btnLimpiarBusquedaOrdenCompraClientes" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
+            <button id="btnBusquedaOrdenCompraClientes" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
+        </div>
+
+        <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px; display: none;">
+            @*<button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchExcel", "Pedido")">Exportar</button>*@
+        </div>
+
+        <table id="tableOrdenCompraClientes" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
+               data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+               data-editing-allow-add="false"
+               data-editing-allow-delete="false"
+               data-editing-allow-edit="false"
+               data-sorting="true"
+               data-show-toggle="false"
+               data-editing-hide-text="Finalizar edición"
+               data-editing-add-text="Descartar cambios">
+            <thead>
+                <tr>
+                    <th data-name="idOCC" data-visible="false"></th>
+                    <th data-name="numero" data-visible="true">N°</th>
+                    <th data-name="numeroReferenciaCliente" data-visible="true">O/C N°</th>
+                    <th data-name="ruc" data-visible="true" data-sortable="false" data-breakpoints="xs">RUC Cliente</th>
+                    <th data-name="razonSocial" data-visible="true" data-sortable="true">Razón Social</th>
+                    <th data-name="usuario" data-visible="true">Creado por</th>
+                    <th data-name="fechaRegistro" data-sortable="true" data-breakpoints="xs">Fecha Registro</th>
+                    <th data-name="total" data-sortable="true" data-breakpoints="xs">Total (Incl. IGV)</th>
+                    <th data-name="observaciones" data-sortable="true" data-breakpoints="xs">Obs. Uso Interno</th>
+
+                    <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+
+        @if (lista.Count == 0)
+        {
+            <div id="msgBusquedaSinResultados" style="display:none;" class="col-lg-12">
+                <p class="pagination-centered" style=" font-size: medium" align="center">
+                    La búsqueda no obtuvo resultados.
+                </p>
+            </div>
+        }
+
+
+
+
+    </form>
+</div>
+
+
+<div class="modal fade" id="modalVerPedido" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerPedido"><b>Información de Pedido Venta</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <input type="hidden" id="verIdPedido" />
+                    <input type="hidden" id="verIdCliente" />
+                    <input type="hidden" id="verFechaEntregaExtendida" />
+                    <!--NUMEROS PEDIDO-->
+                    <div class="row">
+                        <!--NÚMERO PEDIDO-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => occ.numeroOrdenCompraCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verNumeroOrdenCompraCliente"></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!--NUMERO COTIZACION-->
+                        @*<div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => occ.cotizacion.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCotizacionCodigo"></p>
+                                </div>
+                            </div>
+                        </div>*@
+
+
+
+                    </div>
+
+                    <!--DATOS DEL CLIENTE-->
+                    <div class="row">
+                        <!--CLIENTE-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => occ.clienteSunat, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verClienteSunat"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row" id="divReferenciaCliente">
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => occ.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verNumeroReferenciaCliente"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!--DATOS DE LA CREACIÓN-->
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => occ.usuarioCreacion, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verUsuarioCreacion"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => occ.fechaHoraRegistro, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verFechaHoraRegistro"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <fieldset>
+                        <legend id="divpedido_direccionEntrega">Datos de Solicitud:</legend>
+
+                        <div class="row">
+                            <!--CONTACTO PEDIDO-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => occ.contactoOrdenCompraCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verContactoPedido"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--TELEFONO CORREO CONTACTO PEDIDO-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => occ.telefonoCorreoContactoOrdenCompraCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verTelefonoCorreoContactoPedido"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--FECHA HORA SOLICITUD-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => occ.fechaHoraSolicitud, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verFechaHoraSolicitud"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </fieldset>
+
+
+                    <table id="tableDetallePedido" class="table" data-editing="false"
+                           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                           data-editing-allow-add="false"
+                           data-editing-allow-delete="false"
+                           data-editing-allow-edit="false"
+                           data-sorting="true"
+                           data-show-toggle="false"
+                           data-editing-hide-text="Finalizar edición"
+                           data-editing-add-text="Descartar cambios">
+                        <thead>
+                            <tr>
+                                <th data-name="indicadorAprobacion" data-sortable="false"></th>
+                                <th data-name="proveedor" data-sortable="false">Prov.</th>
+                                <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
+                                <th data-name="producto" data-sortable="false">Producto / Descripción</th>
+                                <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
+                                <th data-name="imagen" data-sortable="false" data-breakpoints="xs sm">Imagen</th>
+                                <th data-name="precioLista" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
+                                <th data-name="porcentajeDescuentoMostrar" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                                
+                                <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
+                                if (occ.usuario.visualizaMargen)
+                                {
+                                    <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                                }
+                                else
+                                {
+                                    <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                                }
+
+                                <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
+                                <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
+                                
+                                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
+                                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant. Pend. Entrega.</th>
+                                <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
+                                <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Observaciones</th>
+                                <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+
+                    <div class="row" style="margin-right: 10px">
+                        <div class="col-sm-6 col-lg-9">
+                            <div class="form-group">
+                                @Html.LabelFor(p => occ.observaciones, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="verObservaciones">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-3" id="montosTotalesDiv">
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">Subtotal: S/ </span>
+                                    <span class="totales" id="verMontoSubTotal"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">IGV 18%: S/ </span>
+                                    <span class="totales" id="verMontoIGV"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">TOTAL: S/ </span>
+                                    <span class="totales" id="verMontoTotal"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row" style="margin-right: 10px">
+                        <div class="col-sm-6 col-lg-9">
+                            <div class="form-group">
+                                <label for="verNombreArchivos" class="control-label col-xs-2">Archivos Adjuntos:</label>
+                                <div class="col-xs-10">
+                                    <ul id="verNombreArchivos"><li>as</li></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <div class="pull-left">
+               
+                </div>
+
+
+
+                <div class="pull-right">
+                    <button type="button" id="btnCancelarVerPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    @if (occ.usuario.tomaPedidos || occ.usuario.apruebaPedidos)
+                    {
+                        <button type="button" id="btnEditarPedido" class="btn btn-primary ">Editar</button>
+                    }
+                    
+
+
+                    @if (occ.usuario.visualizaGuias && occ.usuario.visualizaDocumentosVenta
+                        || (occ.usuario.creaDocumentosVenta && occ.usuario.creaDocumentosVenta)
+                        )
+                    {
+                        <button type="button" id="btnVerAtenciones" class="btn btn-primary" data-toggle='modal' data-target='#modalVerGuiasRemision'>Ver Guías Remisión</button>
+                        <button type="button" id="btnVerIngresos" class="btn btn-primary" data-toggle='modal' data-target='#modalVerNotasIngreso'>Ver Notas Ingreso</button>
+                    }
+                    @if (occ.usuario.tomaPedidos || occ.usuario.apruebaPedidos)
+                    {
+                        <button type="button" id="btnEliminarPedido" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Eliminar</button>
+                    }
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--MODAL MOSTRAR PRECIOS-->
+<div class="modal fade" id="modalMostrarPrecios" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalMostrarPreciosTitle"><b>Precios Registrados en Facturación </b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-2"></label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="verProducto"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-4">Código:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCodigoProducto"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-12 text-center" style="text-align: center;">Unidad Proveedor</label>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center" id="verUnidadProveedor"></p>
+                                </div>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center"><b>Precio: </b> S/ <span id="verPrecioProveedor"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-12" style="text-align: center;">Unidad MP</label>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center" id="verUnidadMP"></p>
+                                </div>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center"><b>Precio: </b> S/ <span id="verPrecioMP"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-12 text-center" style="text-align: center;">Unidad Alternativa</label>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center" id="verUnidadAlternativa"></p>
+                                </div>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center"><b>Precio: </b> S/ <span id="verPrecioAlternativa"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table id="tableMostrarPrecios" class="table" data-editing="false"
+                           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                           data-editing-allow-add="true"
+                           data-editing-allow-delete="true"
+                           data-editing-allow-edit="false"
+                           data-sorting="true"
+                           data-show-toggle="false"
+                           data-editing-hide-text="Finalizar Edición Detalle"
+                           data-editing-add-text="Descartar Cambios Detalle">
+                        <thead>
+                            <tr>
+                                <th data-name="idProducto" data-visible="true">Número Cotización</th>
+                                <th data-name="idProducto" data-visible="true">Fecha Inicio Vigencia</th>
+                                <th data-name="idProducto" data-visible="true">Fecha Fin Vigencia</th>
+                                <th data-name="idProducto" data-visible="true">Unidad</th>
+                                <th data-name="idProducto" data-visible="true">Precio Neto</th>
+                                <th data-name="idProducto" data-visible="true">Flete</th>
+                                <th data-name="idProducto" data-visible="true">Precio Unitario</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="modalVerGuiasRemision" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerGuiasRemisionTitle"><b>Guías de Remisión</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal" id="formVerGuiasRemision"></form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarVerGuiasRemision" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="plantillaVerGuiasRemision" style="display:none;">
+    <div class="row">
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verSerieNumeroGuia" class="control-label col-xs-4"></label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verSerieNumeroGuia">#serieNumero</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verFechaGuia" class="control-label col-xs-4">Fecha Emisión Guía Remisión:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verFechaGuia">#fechaEmisionGuia</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verSerieNumeroGuia" class="control-label col-xs-4">Número Factura:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verSerieNumeroGuia">#serieNumeroFactura</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verFechaGuia" class="control-label col-xs-4">Fecha Emisión Factura:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verFechaGuia">#fechaEmisionFactura</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <table id="tableDetalleGuia" class="table" data-editing="false">
+        <thead>
+            <tr>
+                <th data-name="sku" data-sortable="false">Código</th>
+                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm" style="width: 70px">Cantidad</th>
+                <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
+                <th data-name="producto" data-sortable="false">Producto</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+</div>
+
+
+
+
+<div class="modal fade" id="modalVerNotasIngreso" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerNotasIngresoTitle"><b>Notas de Ingreso</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="formVerNotasIngreso"></form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarVerNotasIngreso" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<div id="plantillaVerNotaIngreso" style="display:none;">
+    <div class="row">
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verSerieNumeroNotaIngreso" class="control-label col-xs-4">Número Nota Ingreso:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verSerieNumeroNotaIngreso">#serieNumero</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verFechaNotaIngreso" class="control-label col-xs-4">Fecha Emisión Nota Ingreso:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verFechaNotaIngreso">#fechaEmisionNotaIngreso</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <table id="tableDetalleNotaIngreso" class="table" data-editing="false">
+        <thead>
+            <tr>
+                <th data-name="sku" data-sortable="false">Código</th>
+                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm" style="width: 70px">Cantidad</th>
+                <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
+                <th data-name="producto" data-sortable="false">Producto</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+
+<span id="spnProductoDescontinuado" style="display: none;">
+    @Html.Partial("../Producto/_LabelRestringido")
+</span>
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/ordenCompraCliente")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/Scripts/App/ubigeo.js")
+}
+
