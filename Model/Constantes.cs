@@ -62,6 +62,12 @@ namespace Model
         public static String VAR_SESSION_COTIZACION_VER = "cotizacionVer";
         public static String VAR_SESSION_COTIZACION_GRUPAL = "cotizacionGrupal";
 
+        public static String VAR_SESSION_ORDEN_COMPRA_CLIENTE = "ordenCompraCliente";
+        public static String VAR_SESSION_ORDEN_COMPRA_CLIENTE_BUSQUEDA = "ordenCompraClienteBusqueda";
+        public static String VAR_SESSION_ORDEN_COMPRA_CLIENTE_APROBACION = "ordenCompraClienteAprobacion";
+        public static String VAR_SESSION_ORDEN_COMPRA_CLIENTE_LISTA = "ordenCompraClienteList";
+        public static String VAR_SESSION_ORDEN_COMPRA_CLIENTE_VER = "ordenCompraClienteVer";
+
         public static String VAR_SESSION_PEDIDO = "pedido";
         public static String VAR_SESSION_PEDIDO_BUSQUEDA = "pedidoBusqueda";
         public static String VAR_SESSION_PEDIDO_APROBACION = "pedidoAprobacion";
@@ -432,6 +438,8 @@ namespace Model
         public const String MODIFICA_RUBRO = "P750";
         public const String VISUALIZA_RUBROS = "P751";
 
+        public const String CAMBIA_CLIENTE_FACTURA = "P581";
+        
 
         public const String BUSCA_NOTAS_INGRESO_TODAS_SEDES = "P320";
         public const String VALIDA_RESPONSABLES_COMERCIALES_ASIGNADOS = "P780";
@@ -445,6 +453,11 @@ namespace Model
             BusquedaCotizaciones = 0,
             [Display(Name = "MANTENIMIENTO COTIZACION")]
             MantenimientoCotizacion = 1,
+            /*ORDEN COMPRA CLIENTE*/
+            [Display(Name = "BUSQUEDA ORDEN COMPRA CLIENTE")]
+            BusquedaOrdenCompraClientes = 250,
+            [Display(Name = "MANTENIMIENTO ORDEN COMPRA CLIENTE")]
+            MantenimientoOrdenCompraCliente = 251,
             /*PEDIDO VENTA*/
             [Display(Name = "BUSQUEDA PEDIDO")]
             BusquedaPedidos = 2,

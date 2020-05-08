@@ -241,6 +241,7 @@
     <Compile Include="Controllers\NotaDebitoController.cs" />
     <Compile Include="Controllers\NotaIngresoController.cs" />
     <Compile Include="Controllers\ParametroController.cs" />
+    <Compile Include="Controllers\OrdenCompraClienteController.cs" />
     <Compile Include="Controllers\RolController.cs" />
     <Compile Include="Controllers\RubroController.cs" />
     <Compile Include="Controllers\ValidacionController.cs" />
@@ -303,6 +304,7 @@
     <Compile Include="Models\DTOsSearch\ParserDTOsSearch.cs" />
     <Compile Include="Models\DTOsSearch\PedidoAlmacenDTO.cs" />
     <Compile Include="Models\DTOsSearch\PedidoCompraDTO.cs" />
+    <Compile Include="Models\DTOsSearch\OrdenCompraClienteDTO.cs" />
     <Compile Include="Models\DTOsSearch\PedidoDTO.cs" />
     <Compile Include="Models\DTOsShow\ClienteDTOshow.cs" />
     <Compile Include="Models\DTOsShow\CotizacionDTOshow.cs" />
@@ -438,6 +440,7 @@
     <Content Include="Scripts\AlertaValidacion1.0.0.js" />
     <Content Include="Scripts\parametro1.0.0.js" />
     <Content Include="Scripts\logcampo1.0.0.js" />
+    <Content Include="Scripts\ordenCompraCliente.js" />
     <Content Include="Scripts\pedidoLoad.js" />
     <Content Include="Scripts\rubro1.0.0.js" />
     <Content Include="Scripts\usuario1.0.0.js" />
@@ -636,6 +639,9 @@
     <Content Include="Views\Mensaje\List.cshtml" />
     <Content Include="Views\Producto\_LabelRestringido.cshtml" />
     <Content Include="Views\Pedido\_LabelDetalleRestringido.cshtml" />
+    <Content Include="Views\OrdenCompraCliente\Index.cshtml" />
+    <Content Include="Views\OrdenCompraCliente\Editar.cshtml" />
+    <Content Include="Views\Usuario\_SelectUsuarioOCC.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

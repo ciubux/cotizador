@@ -175,6 +175,37 @@ namespace Model
         [Display(Name = "Precio Lima:")]
         public Decimal precioSinIgv { get; set; }
 
+        public Decimal precioProveedor {
+            get {
+                return (precioSinIgv * equivalenciaProveedor);
+            }
+        }
+
+        public Decimal precioProvinciaProveedor
+        {
+            get
+            {
+                return (precioProvinciaSinIgv * equivalenciaProveedor);
+            }
+        }
+
+
+        public Decimal precioAlternativo
+        {
+            get
+            {
+                return equivalenciaAlternativa == 0 ? 0 : (precioSinIgv / equivalenciaAlternativa);
+            }
+        }
+
+        public Decimal precioProvinciaAlternativo
+        {
+            get
+            {
+                return equivalenciaAlternativa == 0 ? 0 : (precioProvinciaSinIgv / equivalenciaAlternativa);
+            }
+        }
+
 
         [Display(Name = "Precio Provincias:")]
         public Decimal precioProvinciaSinIgv { get; set; }
@@ -507,7 +538,7 @@ namespace Model
                     case "equivalencia_unidad_proveedor_unidad_conteo": lc = instanciarLogCambio(campo); lc.valor = this.equivalenciaUnidadProveedorUnidadConteo.ToString(); break;
                     case "unidad_conteo": lc = instanciarLogCambio(campo); lc.valor = this.unidadConteo; break;
                     case "unidad_proveedor_internacional": lc = instanciarLogCambio(campo); lc.valor = this.unidadProveedorInternacional; break;
-                    case "codigo_sunat": lc = instanciarLogCambio(campo); lc.valor = this.codigoSunat; break;
+                    case "codigo_sunat": lc = instanciarLogCambio(campo); lc.valor = this.codigoSunat == null ? "" : this.codigoSunat; break;
                     case "exonerado_igv": lc = instanciarLogCambio(campo); lc.valor = this.exoneradoIgv.ToString(); break;
                     case "estado": lc = instanciarLogCambio(campo); lc.valor = this.Estado.ToString(); break;
                     case "descontinuado": lc = instanciarLogCambio(campo); lc.valor = ((int) this.ventaRestringida).ToString(); break;

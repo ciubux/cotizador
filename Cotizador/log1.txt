@@ -100,3 +100,10 @@ The statement has been terminated.
 2020-02-25 08:19:45.1672|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
 2020-03-11 07:34:47.6929|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Producto ya se encuentra en la lista.
 2020-03-11 07:34:47.8371|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Producto ya se encuentra en la lista.
+2020-05-03 22:27:26.2511|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / No se puede convertir un objeto de tipo 'Model.Pedido' al tipo 'Model.OrdenCompraCliente'.
+2020-05-04 00:43:48.8705|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Guid debe contener 32 dígitos con 4 guiones (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).
+2020-05-04 01:05:03.5435|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Guid debe contener 32 dígitos con 4 guiones (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).
+2020-05-04 02:38:00.1121|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Error getting value from 'tipoDocumentoIdentidadToString' on 'Model.Cliente'.
+2020-05-04 02:48:54.1659|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Error getting value from 'tipoDocumentoIdentidadToString' on 'Model.Cliente'.
+2020-05-04 02:54:49.4699|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Error getting value from 'tipoDocumentoIdentidadToString' on 'Model.Cliente'.
+2020-05-04 02:59:16.6576|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Error getting value from 'tipoDocumentoIdentidadToString' on 'Model.Cliente'.

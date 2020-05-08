@@ -58,6 +58,16 @@ namespace Cotizador.Controllers
             String[] hora = this.Request.Params["horaEmision"].Split(':');
             documentoVenta.serie = this.Request.Params["serie"];
             documentoVenta.cliente = venta.pedido.cliente;
+
+            bool cambioCliente = false;
+            if (this.Session["s_cambioclientefactura_cambio"] != null)
+            {
+                cambioCliente = (bool)this.Session["s_cambioclientefactura_cambio"];
+            }
+
+
+            
+
             documentoVenta.venta = venta;
 
 
@@ -95,6 +105,20 @@ namespace Cotizador.Controllers
 
 
             documentoVenta = documentoVentaBL.InsertarDocumentoVenta(documentoVenta);
+
+            if (cambioCliente && usuario.cambiaClienteFactura)
+            {
+                Cliente clienteNuevo = (Cliente)this.Session["s_cambioclientefactura_cliente"];
+                String domicilioLegalNuevo = this.Session["s_cambioclientefactura_domicilioLegal"].ToString();
+                String emailNuevo = this.Session["s_cambioclientefactura_correoEnvio"].ToString();
+                String sustento = this.Session["s_cambioclientefactura_sustento"].ToString();
+                documentoVentaBL.CambiarClienteFactura(documentoVenta,clienteNuevo, domicilioLegalNuevo, emailNuevo, sustento);
+
+                documentoVenta.cPE_CABECERA_BE.NOM_RCT = clienteNuevo.razonSocialSunat;
+                documentoVenta.cPE_CABECERA_BE.NRO_DOC_RCT = clienteNuevo.ruc;
+                documentoVenta.cPE_CABECERA_BE.DIR_DES_RCT = domicilioLegalNuevo;
+                documentoVenta.cPE_CABECERA_BE.CORREO_ENVIO = emailNuevo;
+            }
 
 
             return JsonConvert.SerializeObject(documentoVenta);

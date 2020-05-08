@@ -166,6 +166,28 @@ namespace Cotizador.Models.DTOsSearch
             return notaingresoDTOList;
         }
 
+        public static List<OrdenCompraClienteDTO> OrdenCompraClienteToOrdenCompraClienteVentaDTO(List<OrdenCompraCliente> lista)
+        {
+            List<OrdenCompraClienteDTO> occList = new List<OrdenCompraClienteDTO>();
+            foreach (OrdenCompraCliente item in lista)
+            {
+
+                OrdenCompraClienteDTO occDTO = new OrdenCompraClienteDTO();
+
+                occDTO.idOrdenCompraCliente = item.idOrdenCompraCliente;
+                occDTO.numeroOrdenCompraCliente = item.numeroOrdenCompraCliente;
+                occDTO.cliente_ruc = item.clienteSunat.ruc;
+                occDTO.cliente_razonSocial = item.clienteSunat.razonSocial;
+                occDTO.numeroReferenciaCliente = item.numeroReferenciaCliente;
+                occDTO.usuario_nombre = item.usuario.nombre;
+                occDTO.fechaHoraRegistro = item.fechaHoraRegistro;
+                occDTO.montoTotal = item.montoTotal;
+                occDTO.observaciones = item.observaciones;
+                occList.Add(occDTO);
+            }
+            return occList;
+        }
+
         public static List<PedidoAlmacenDTO> PedidoAlmacenToPedidoAlmecenDTO(List<Pedido> pedidoList)
         {
             List<PedidoAlmacenDTO> pedidoalmacenDTOList = new List<PedidoAlmacenDTO>();

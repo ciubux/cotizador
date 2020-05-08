@@ -57,7 +57,7 @@ namespace Cotizador.Controllers
                 jsonSeries = JsonConvert.SerializeObject(serieDocumentoElectronicoList);
 
             }
-
+            this.Session["s_cambioclientefactura_cambio"] = false;
             String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + "}";
             return json;
         }
@@ -164,6 +164,8 @@ namespace Cotizador.Controllers
                 jsonSeries = JsonConvert.SerializeObject(serieDocumentoElectronicoList);
 
             }
+
+            this.Session["s_cambioclientefactura_cambio"] = false;
 
             String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + "}";
             return json;

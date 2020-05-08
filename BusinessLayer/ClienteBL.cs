@@ -24,7 +24,7 @@ namespace BusinessLayer
             RUC = RUC.Replace(" ", "");*/
             using (IwsSunatPadronClient client = new IwsSunatPadronClient())
             {
-                ClienteSunat clienteSunat = client.BuscarClienteSunat(cliente.ruc);
+                Model.ServiceSunatPadron.ClienteSunat clienteSunat = client.BuscarClienteSunat(cliente.ruc);
 
                 List<string> direccion = new List<string>();
 
@@ -174,6 +174,28 @@ namespace BusinessLayer
             }
             return nombreComercial;
         }
+
+        public String getClientesSunatBusqueda(String textoBusqueda)
+        {
+            using (var clienteDAL = new ClienteDAL())
+            {
+                List<Model.ClienteSunat> clienteList = clienteDAL.getClientesSunatBusqueda(textoBusqueda);
+                String resultado = "{\"q\":\"" + textoBusqueda + "\",\"results\":[";
+                Boolean existeCliente = false;
+                foreach (Model.ClienteSunat cliente in clienteList)
+                {
+                    resultado += "{\"id\":\"" + cliente.idClienteSunat + "\",\"text\":\"" + cliente.ToString() + "\"},";
+                    existeCliente = true;
+                }
+                if (existeCliente)
+                    resultado = resultado.Substring(0, resultado.Length - 1) + "]}";
+                else
+                    resultado = resultado.Substring(0, resultado.Length) + "]}";
+                return resultado;
+            }
+        }
+
+
         public String getCLientesBusqueda(String textoBusqueda, Guid idCiudad)
         {
             using (var clienteDAL = new ClienteDAL())
@@ -239,6 +261,16 @@ namespace BusinessLayer
             using (var clienteDAL = new ClienteDAL())
             {
                 return clienteDAL.getClientesBusqueda(textoBusqueda, idCiudad);
+            }
+        }
+
+        public Model.ClienteSunat getClienteSunat(int idClienteSunat)
+        {
+            using (var clienteDAL = new ClienteDAL())
+            {
+                Model.ClienteSunat clie = clienteDAL.getClienteSunat(idClienteSunat);
+
+                return clie;
             }
         }
 

@@ -161,7 +161,7 @@ namespace Model
         public bool creaNotasCredito { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_NOTAS_CREDITO)).FirstOrDefault() != null; } }
         public bool creaNotasDebito { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_NOTAS_DEBITO)).FirstOrDefault() != null; } }
         public bool realizaRefacturacion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REALIZA_REFACTURACION)).FirstOrDefault() != null; } }
-
+        public bool cambiaClienteFactura { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CAMBIA_CLIENTE_FACTURA)).FirstOrDefault() != null; } }
 
         /*Grupo Clientes*/
         public bool modificaGrupoClientes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_GRUPO_CLIENTES)).FirstOrDefault() != null; } }

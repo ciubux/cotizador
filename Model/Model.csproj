@@ -72,6 +72,8 @@
     <Compile Include="GrupoClienteAdjunto.cs" />
     <Compile Include="IDocumentoPago.cs" />
     <Compile Include="Mensaje.cs" />
+    <Compile Include="OrdenCompraCliente.cs" />
+    <Compile Include="OrdenCompraClienteDetalle.cs" />
     <Compile Include="Rol.cs" />
     <Compile Include="Origen.cs" />
     <Compile Include="CategoriaPermiso.cs" />

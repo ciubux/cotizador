@@ -1003,4 +1003,6 @@ $darkred: darken($red, 0.2);*/
     border-radius: 3px;
 }
 
-
+#clienteFacturaIdCliente_chosen {
+    width: 100% !important;
+}

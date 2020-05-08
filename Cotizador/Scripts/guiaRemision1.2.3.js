@@ -27,13 +27,16 @@ jQuery(function ($) {
             }
 
             cargarChosenCliente();
+            cargarChosenClienteFactura();
         }
         else if ($("#pagina").val() == 19) {
             $("#btnBusquedaGuiasFacturaConsolidada").click();
             cargarChosenClienteConsolidacion();
+            cargarChosenClienteFactura();
         }
         else {
             cargarChosenCliente();
+            cargarChosenClienteFactura();
         }
 
     });
@@ -141,7 +144,29 @@ jQuery(function ($) {
                 loadingImg: "Content/chosen/images/loading.gif"
             }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
     }
-    
+
+
+    function cargarChosenClienteFactura() {
+        $("#clienteFacturaIdCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
+            if ($("#clienteFacturaIdCiudad").val() == "" || $("#clienteFacturaIdCiudad").val() == null) {
+                alert("Debe seleccionar la sede MP previamente.");
+                $("#clienteFacturaIdCliente").trigger('chosen:close');
+                $("#clienteFacturaIdCiudad").focus();
+                return false;
+            }
+        });
+
+        $("#clienteFacturaIdCliente").ajaxChosen({
+            dataType: "json",
+            type: "GET",
+            minTermLength: 5,
+            afterTypeDelay: 300,
+            cache: false,
+            url: "/GuiaRemision/SearchClientesFactura"
+        }, {
+                loadingImg: "Content/chosen/images/loading.gif"
+            }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
+    }
 
 
     /**
@@ -172,6 +197,42 @@ jQuery(function ($) {
      * ################################ INICIO CONTROLES DE CLIENTE
      */
 
+
+    $("#clienteFacturaIdCliente").change(function () {
+        //  $("#contacto").val("");
+        var idCliente = $(this).val();
+
+        $.ajax({
+            url: "/GuiaRemision/GetClienteFactura",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCliente: idCliente
+            },
+            success: function (cliente) {
+
+                var optionsDomicilioLegal = '<option value="">Seleccione</option>';
+                var optionsCorreoEnvioFactura = '<option value="">Seleccione</option>';
+
+                $("#clienteFacturaRuc").val(cliente.ruc);
+                $("#clienteFacturaCodigo").val(cliente.codigo);
+                $("#clienteFacturaNombre").val(cliente.razonSocialSunat);
+                
+                var i = 0;
+                for (i = 0; i < cliente.domicilioLegalList.length; i++) {
+                    optionsDomicilioLegal = optionsDomicilioLegal + '<option value="' + cliente.domicilioLegalList[i].direccion + '">' + cliente.domicilioLegalList[i].direccion + '</option>';
+                }
+
+                for (i = 0; i < cliente.correoEnvioFacturaList.length; i++) {
+                    optionsCorreoEnvioFactura = optionsCorreoEnvioFactura + '<option value="' + cliente.correoEnvioFacturaList[i] + '">' + cliente.correoEnvioFacturaList[i] + '</option>';
+                }
+
+                $("#clienteFacturaDomicilioLegal").html(optionsDomicilioLegal);
+                $("#clienteFacturaCorreoEnvioFactura").html(optionsCorreoEnvioFactura);
+            }
+        });
+
+    });
 
 
     $("#idCliente").change(function () {
@@ -871,9 +932,27 @@ jQuery(function ($) {
 
                     // var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined'? '' : lista[i].observacion;
 
+                    var descontinuadoLabel = "";
+                    if (lista[i].producto.descontinuado == 1) {
+                        tieneProductoRestringido = true;
+
+                        if (lista[i].producto.motivoRestriccion != null) {
+                            lista[i].producto.motivoRestriccion = lista[i].producto.motivoRestriccion.trim();
+
+                            $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").removeClass("tooltip-motivo-restriccion");
+                            if (lista[i].producto.motivoRestriccion != "") {
+                                $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").addClass("tooltip-motivo-restriccion");
+                                $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado .tooltip-label-text").html(lista[i].producto.motivoRestriccion);
+                            }
+                        }
+
+                        descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
+                    }
+
+
                     d += '<tr>' +
                         '<td>' + lista[i].producto.idProducto + '</td>' +
-                        '<td>' + lista[i].producto.sku + '</td>' +
+                        '<td>' + lista[i].producto.sku + descontinuadoLabel + '</td>' +
                         '<td class="' + lista[i].producto.idProducto + ' detcantidad" style="text-align:right">' + lista[i].cantidad + '</td>' +
                         '<td class="' + lista[i].producto.idProducto + ' detcantidadSaldo">' + lista[i].cantidad + '</td>' +
                         '<td>' + lista[i].unidad + '</td>' +
@@ -993,10 +1072,97 @@ jQuery(function ($) {
         
     });
 
+    var editandoClienteFactura = false;
+    $("#btnCambiarClienteFactura").click(function () {
+        activarCambioClienteFactura();
+        
+    });
 
 
+    $("#btnCancelarCambioClienteFactura").click(function () {
+        desactivarCambioClienteFactura();
+    });
+
+    $("#btnGuardarCambioClienteFactura").click(function () {
+        var valido = true;
+
+        //Validar
+        if ($("#clienteFacturaCodigo").val() == "") {
+            $.alert({
+                //icon: 'fa fa-warning',
+                title: 'Validación',
+                content: "Seleccione un cliente",
+                type: 'yellow',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            valido = false;
+        }
+
+        if ($("#clienteFacturaDomicilioLegal").val() == "") {
+            $.alert({
+                //icon: 'fa fa-warning',
+                title: 'Validación',
+                content: "Seleccione un domicilio legal",
+                type: 'yellow',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+
+            valido = false;
+        }
+
+        if ($("#clienteFacturaCorreoEnvioFactura").val() == "") {
+            $.alert({
+                //icon: 'fa fa-warning',
+                title: 'Validación',
+                content: "Seleccione un correo para envío de factura",
+                type: 'yellow',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+
+            valido = false;
+        }
+
+        if (valido) {
+            $.ajax({
+                url: "/GuiaRemision/CambioClienteFactura",
+                type: 'POST',
+                data: {
+                },
+                error: function (detalle) {
+                    alert('Ocurrió une error.');
+                },
+                success: function () {
+                    $("#verRazonSocialSunat").html($("#clienteFacturaNombre").val());
+                    $("#verRUC").html($("#clienteFacturaRuc").val());
+                    $("#verDireccionDomicilioLegalSunat").html($("#clienteFacturaDomicilioLegal").val());
+                    $("#verCorreoEnvioFactura").html($("#clienteFacturaCorreoEnvioFactura").val());
+                    $("#verCodigo").html($("#clienteFacturaCodigo").val());
+                }
+            });
+            
+
+            desactivarCambioClienteFactura();
+        }
+    });
 
 
+    function activarCambioClienteFactura() {
+        $("#divVerClienteFactura").hide();
+        $("#divCambiarClienteFactura").show();
+        editandoClienteFactura = true;
+    }
+
+    function desactivarCambioClienteFactura() {
+        $("#divCambiarClienteFactura").hide();
+        $("#divVerClienteFactura").show();
+        editandoClienteFactura = false;
+    }
 
     $("#btnFacturarGuiaRemision").click(function () {
 
@@ -1148,11 +1314,28 @@ jQuery(function ($) {
         var lista = pedido.pedidoDetalleList;
         for (var i = 0; i < lista.length; i++) {
 
+            var descontinuadoLabel = "";
+            if (lista[i].producto.descontinuado == 1) {
+                tieneProductoRestringido = true;
+
+                if (lista[i].producto.motivoRestriccion != null) {
+                    lista[i].producto.motivoRestriccion = lista[i].producto.motivoRestriccion.trim();
+
+                    $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").removeClass("tooltip-motivo-restriccion");
+                    if (lista[i].producto.motivoRestriccion != "") {
+                        $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").addClass("tooltip-motivo-restriccion");
+                        $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado .tooltip-label-text").html(lista[i].producto.motivoRestriccion);
+                    }
+                }
+
+                descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
+            }
+
             var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
 
             d += '<tr>' +
                 '<td>' + lista[i].producto.proveedor + '</td>' +
-                '<td>' + lista[i].producto.sku + '</td>' +
+                '<td>' + lista[i].producto.sku + descontinuadoLabel + '</td>' +
                 '<td>' + lista[i].producto.descripcion + '</td>' +
                 '<td>' + lista[i].unidad + '</td>' +
                 '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + lista[i].producto.image + '"> </td>' +
@@ -1237,6 +1420,14 @@ jQuery(function ($) {
 
                 $("#verProducto").html(producto.nombre);
                 $("#verCodigoProducto").html(producto.sku);
+
+                $("#verUnidadProveedor").html(producto.unidadProveedor);
+                $("#verUnidadMP").html(producto.unidad);
+                $("#verUnidadAlternativa").html(producto.unidadAlternativa);
+
+                $("#verPrecioProveedor").html(producto.precioProveedor);
+                $("#verPrecioMP").html(producto.precio);
+                $("#verPrecioAlternativa").html(producto.precioAlternativa);
 
                 var precioListaList = producto.precioLista;
 
@@ -1973,6 +2164,81 @@ jQuery(function ($) {
         });
     });
 
+    $("#clienteFacturaIdCiudad").change(function () {
+        var idCiudad = $("#clienteFacturaIdCiudad").val();
+
+        $.ajax({
+            url: "/GuiaRemision/ChangeIdCiudadFactura",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCiudad: idCiudad
+            },
+            error: function (detalle) {
+                alert('Ocurrió une error.');
+                location.reload();
+            },
+            success: function (ciudad) {
+
+            }
+        });
+    });
+
+
+    $("#clienteFacturaDomicilioLegal").change(function () {
+        var valor = $("#clienteFacturaDomicilioLegal").val();
+
+        $.ajax({
+            url: "/GuiaRemision/ChangeDomicilioLegalFactura",
+            type: 'POST',
+            data: {
+                valor: valor
+            },
+            error: function (detalle) {
+                alert('Ocurrió un error.');
+            },
+            success: function () {
+
+            }
+        });
+    });
+
+
+    $("#clienteFacturaSustento").change(function () {
+        var valor = $("#clienteFacturaSustento").val();
+
+        $.ajax({
+            url: "/GuiaRemision/ChangeSustentoCambioCliente",
+            type: 'POST',
+            data: {
+                valor: valor
+            },
+            error: function (detalle) {
+                alert('Ocurrió un error.');
+            },
+            success: function () {
+
+            }
+        });
+    });
+
+    $("#clienteFacturaCorreoEnvioFactura").change(function () {
+        var valor = $("#clienteFacturaCorreoEnvioFactura").val();
+
+        $.ajax({
+            url: "/GuiaRemision/ChangeCorreoEnvioFactura",
+            type: 'POST',
+            data: {
+                valor: valor
+            },
+            error: function (detalle) {
+                alert('Ocurrió un error.');
+            },
+            success: function () {
+
+            }
+        });
+    });
 
     function ConfirmDialogAtencionParcial(message) {
         $('<div></div>').appendTo('body')

@@ -12,6 +12,15 @@ namespace BusinessLayer
 {
     public class DocumentoVentaBL
     {
+        public DocumentoVenta CambiarClienteFactura(DocumentoVenta documentoVenta, Cliente clienteNuevo, String domicilioLegal, String emailFactura, String sustento)
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                dal.CambiarClienteFactura(documentoVenta, clienteNuevo, domicilioLegal, emailFactura, sustento);
+
+                return documentoVenta;
+            }
+        }
 
         public DocumentoVenta InsertarDocumentoVenta(DocumentoVenta documentoVenta)
         {

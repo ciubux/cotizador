@@ -1560,6 +1560,13 @@ jQuery(function ($) {
                 $("#verProducto").html(producto.nombre);
                 $("#verCodigoProducto").html(producto.sku);
                 
+                $("#verUnidadProveedor").html(producto.unidadProveedor);
+                $("#verUnidadMP").html(producto.unidad);
+                $("#verUnidadAlternativa").html(producto.unidadAlternativa);
+
+                $("#verPrecioProveedor").html(producto.precioProveedor);
+                $("#verPrecioMP").html(producto.precio);
+                $("#verPrecioAlternativa").html(producto.precioAlternativa);
 
                 var precioListaList = producto.precioLista;
 
@@ -3587,7 +3594,7 @@ jQuery(function ($) {
 
     function mostrarItemsRestringidos() {
         $(".tableProductosAprobarPedido tbody").empty();
-        if (viendoPedidoRestringido) {
+        /*if (viendoPedidoRestringido) {*/
             $(".divProductosAprobarPedido").show();
 
             fLen = pedidoItemsRestringidos.length;
@@ -3611,9 +3618,9 @@ jQuery(function ($) {
             $(".tableProductosAprobarPedido tbody").html(text);
 
             FooTable.init('.tableProductosAprobarPedido');
-        } else {
+       /* } else {
             $(".divProductosAprobarPedido").hide();
-        }
+        }*/
     }
 
 
