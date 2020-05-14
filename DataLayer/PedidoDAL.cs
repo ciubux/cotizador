@@ -199,11 +199,19 @@ namespace DataLayer
                 pedidoDetalle.idPedido = pedido.idPedido;
                 this.InsertPedidoDetalle(pedidoDetalle, pedido.usuario);
             }
-
+            /*
             foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
             {
                 pedidoAdjunto.idPedido = pedido.idPedido;
                 this.InsertPedidoAdjunto(pedidoAdjunto);
+            }
+            */
+
+            foreach (ArchivoAdjunto adjunto in pedido.listArchivoAjunto)
+            {
+                adjunto.idRegistro = pedido.idPedido;
+                ArchivoDAL arcAdjDAL = new ArchivoDAL();
+                arcAdjDAL.InsertArchivoGenerico(adjunto,pedido.usuario.idUsuario);
             }
             this.Commit();
         }
@@ -382,12 +390,13 @@ namespace DataLayer
                 //pedidoDetalle.usuario = pedido.usuario;
                 this.InsertPedidoDetalle(pedidoDetalle, pedido.usuario);
             }
-
+            /*
             foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
             {
                 pedidoAdjunto.idPedido = pedido.idPedido;
                 this.InsertPedidoAdjunto(pedidoAdjunto);
             }
+            */
             this.Commit();
         }           
     
@@ -411,17 +420,16 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "numeroRequerimiento", pedido.numeroRequerimiento);
 
             ExecuteNonQuery(objCommand);
-
-            foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
+            
+            foreach (ArchivoAdjunto adjunto in pedido.listArchivoAjunto)
             {
-                pedidoAdjunto.usuario = pedido.usuario;
-                pedidoAdjunto.idPedido = pedido.idPedido;
-                pedidoAdjunto.idCliente = pedido.cliente.idCliente;
-                InsertPedidoAdjunto(pedidoAdjunto);
+                adjunto.idRegistro = pedido.idPedido;
+                ArchivoDAL arcAdjDAL = new ArchivoDAL();
+                arcAdjDAL.InsertArchivoGenerico(adjunto,pedido.usuario.idUsuario);
             }
             this.Commit();
         }
-
+        /*
         public void InsertPedidoAdjunto(PedidoAdjunto pedidoAdjunto)
         {
             var objCommand = GetSqlCommand("pi_pedidoAdjunto");
@@ -437,7 +445,7 @@ namespace DataLayer
 
             pedidoAdjunto.idArchivoAdjunto = (Guid)objCommand.Parameters["@newId"].Value;
         }
-
+        */
         public void InsertPedidoDetalle(PedidoDetalle pedidoDetalle, Usuario usuario)
         {
             var objCommand = GetSqlCommand("pi_pedidoDetalle");
@@ -1075,6 +1083,7 @@ namespace DataLayer
             /*mad.id_movimiento_almacen_detalle, mad.cantidad, 
             mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
 
+            /*
             pedido.pedidoAdjuntoList = new List<PedidoAdjunto>();
             //Detalle de la cotizacion
             foreach (DataRow row in pedidoAdjuntoDataTable.Rows)
@@ -1085,6 +1094,10 @@ namespace DataLayer
                 pedidoAdjunto.nombre = Converter.GetString(row, "nombre");
                 pedido.pedidoAdjuntoList.Add(pedidoAdjunto);
             }
+            */
+            pedido.listArchivoAjunto = new List<ArchivoAdjunto>();
+            ArchivoDAL arcAdjDAL = new ArchivoDAL();
+            pedido.listArchivoAjunto= arcAdjDAL.getListArchivoAdjuntoByIdRegistro(pedido.idPedido);
 
             pedido.pedidoGrupoList = new List<PedidoGrupo>();
 

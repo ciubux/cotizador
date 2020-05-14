@@ -228,6 +228,9 @@ namespace Model
         /*Parametro*/
         public bool modificaParametro { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_PARAMETRO)).FirstOrDefault() != null; } }
 
+        /*Archivos*/
+        public bool verArchivos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VER_ARCHIVO)).FirstOrDefault() != null; } }
+
         /*Exporta Ventas Contabilidad*/
         public bool exportarVentasContabilidad { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.EXPORTAR_VENTAS_CONTABILIDAD)).FirstOrDefault() != null; } }
 

@@ -43,6 +43,7 @@ namespace DataLayer
                 obj.email = Converter.GetString(row, "email");
                 obj.estado = Converter.GetInt(row, "estado");
                 obj.ciudad.nombre = Converter.GetString(row, "nombre");
+                obj.maxdesapro = Converter.GetDecimal(row, "maximo_porcentaje_descuento_aprobacion");
                 lista.Add(obj);
             }
             return lista;

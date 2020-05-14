@@ -1003,4 +1003,7 @@ $darkred: darken($red, 0.2);*/
     border-radius: 3px;
 }
 
+.botonDownload:before {
+    background-image: url(/images/download.png);
+}
 

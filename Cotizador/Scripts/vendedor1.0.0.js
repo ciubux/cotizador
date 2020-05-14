@@ -68,6 +68,7 @@
                         '<td>  ' + act + '  </td>' +
                         '<td>  ' + list[i].email + '  </td>' +
                         '<td>  ' + list[i].ciudad.nombre + '  </td>' +
+                        '<td>  ' + list[i].maxdesapro + '  </td>' +
                         '<td>' +
                         '<button type="button" class="' + list[i].idVendedor + ' btnEditarVendedor btn btn-primary ">Editar</button>' +
                         '</td>' +

@@ -15,8 +15,7 @@ namespace Model
         public DateTime FechaEdicion { get; set; }
         public Guid IdUsuarioEdicion { get; set; }
         public Usuario UsuarioRegistro { get; set; }
-        public Usuario usuario { get; set; }
-
+        public Usuario usuario { get; set; }       
         public DateTime fechaInicioVigencia { get; set; }
         public bool CargaMasiva { get; set; }
 
@@ -60,5 +59,7 @@ namespace Model
         {
             get { return FechaRegistro.ToString("yyyyMMdd").Equals(DateTime.Now.ToString("yyyyMMdd")); }
         }
+
+        public List<ArchivoAdjunto> listArchivoAjunto { get; set; }
     }
 }

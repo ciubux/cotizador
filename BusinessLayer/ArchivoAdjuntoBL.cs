@@ -22,5 +22,22 @@ namespace BusinessLayer
             return archivoAdjunto;
         }
 
+        public List<ArchivoAdjunto> getListArchivoAdjunto(ArchivoAdjunto archivoAdjunto)
+        {
+            using (var dal = new ArchivoDAL())
+            {
+                return dal.getListArchivoAdjunto(archivoAdjunto);
+            }            
+        }
+
+        public List<ArchivoAdjunto> getListArchivoAdjuntoByIdRegistro(ArchivoAdjunto archivoAdjunto)
+        {
+            using (var dal = new ArchivoDAL())
+            {
+                return dal.getListArchivoAdjunto(archivoAdjunto);
+            }
+        }
+        
+
     }
 }

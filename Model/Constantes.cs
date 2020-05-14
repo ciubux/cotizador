@@ -128,6 +128,12 @@ namespace Model
         public static String VAR_SESSION_VISTA_DASHBOARD_VER = "vistaDashboardVer";
         public static String VAR_SESSION_VISTA_DASHBOARD_LISTA = "vistaDashboardList";
 
+        public static String VAR_SESSION_ARCHIVO_ADJUNTO = "archivoAdjunto";
+        public static String VAR_SESSION_ARCHIVO_ADJUNTO_BUSQUEDA = "archivoAdjuntoBusqueda";
+
+        public static String VAR_SESSION_ARCHIVO_ADJUNTO_EDIT = "archivoAdjuntoEdit";
+        //public static String VAR_SESSION_ARCHIVO_ADJUNTO_BUSQUEDA = "archivoAdjuntoBusqueda";
+
         public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA = "notificacionDocumentoVenta";
         public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA_BUSQUEDA = "notificacionDocumentoVentaBusqueda";
         public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA_LISTA = "notificacionDocumentoVentaList";
@@ -425,6 +431,7 @@ namespace Model
         public const String MODIFICA_VISTA_DASHBOARD = "P880";
 
         public const String MODIFICA_PARAMETRO = "P890";
+        public const String VER_ARCHIVO = "P870";
 
         public const String EXPORTAR_VENTAS_CONTABILIDAD = "P590";
         public const String VISUALIZA_VENTAS = "P730";
@@ -565,14 +572,18 @@ namespace Model
 
             /*DASHBOARD*/
             [Display(Name = "BUSQUEDA VISTADASHBOARD")]
-            BusquedaVistaDashboard = 48,
+            BusquedaVistaDashboard = 53,
             [Display(Name = "MANTENIMIENTO VISTADASHBOARD")]
-            MantenimientoVistaDashboard = 49,
+            MantenimientoVistaDashboard = 54,
 
             /*PARAMETRO*/
             [Display(Name = "MANTENIMIENTO PARAMETRO")]
             MantenimientoParametro = 51,
             BusquedaParametro = 52,
+
+            /*ARCHIVOADJUNTO*/            
+            [Display(Name = "BUSQUEDA ARCHIVOADJUNTO")]
+            BusquedaArchivoAdjunto = 55,
 
             /*LISTA DE VENTAS*/
             [Display(Name = "BUSQUEDA VENTAS")]

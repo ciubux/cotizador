@@ -119,6 +119,8 @@
                          var linkBusquedaVistaDashboard = "";
                          var linkMantenimientoVistaDashboard = "";
 
+                         var linkVerArchivosAdjuntos = "";
+
                         var linkCrearFacturaConsolidada = "";
 
                         var linkBusquedaNotasIngreso = "";
@@ -431,7 +433,7 @@
                             </li>
                         }
 
-                        if (usuario.visualizaRoles || usuario.modificaRol || usuario.administraPermisos || usuario.visualizaVendedor || usuario.modificaVendedor || usuario.visualizaMensaje || usuario.modificaMensaje || usuario.enviaMensaje||usuario.modificaVistaDashboard )
+                        if (usuario.visualizaRoles || usuario.modificaRol || usuario.administraPermisos || usuario.visualizaVendedor || usuario.modificaVendedor || usuario.visualizaMensaje || usuario.modificaMensaje || usuario.enviaMensaje||usuario.modificaVistaDashboard || usuario.verArchivos)
                         {
                             <li class="@linkMaestros">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
@@ -496,14 +498,18 @@
                                     @if (usuario.modificaParametro)
                                     {
                                         <li id="linkMantenimientoParametro" class="@linkMantenimientoParametro">@Html.ActionLink("Parametro - Búsqueda", "Lista", "Parametro")</li>
-                                    }                                    
-                                        <li id="linkBusquedaVistaDashboard" class="@linkBusquedaVistaDashboard">@Html.ActionLink("Dashboard - Búsqueda", "Lista", "VistaDashboard")</li>
-                                  
+                                    }
+                                    <li id="linkBusquedaVistaDashboard" class="@linkBusquedaVistaDashboard">@Html.ActionLink("Dashboard - Búsqueda", "Lista", "VistaDashboard")</li>
+
                                     @if (usuario.modificaVistaDashboard)
                                     {
                                         <li id="linkMantenimientoVistaDashboard" class="@linkMantenimientoVistaDashboard">@Html.ActionLink("Dashboard - Crear/Modificar", "Editar", "VistaDashboard")</li>
                                     }
 
+                                    @if (usuario.verArchivos)
+                                    {
+                                        <li id="linkVerArchivosAdjuntos" class="@linkVerArchivosAdjuntos">@Html.ActionLink("Ver Archivos Adjuntos", "index", "ArchivoAdjunto")</li>
+                                    }
 
                                     @if (usuario.administraPermisos)
                                     {

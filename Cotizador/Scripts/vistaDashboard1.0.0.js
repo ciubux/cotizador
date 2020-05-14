@@ -1,6 +1,6 @@
 ﻿jQuery(function ($) {
     var pagina = 28;
-    var VISTA_DASHBOARD_CANCELAR_EDICION = '¿Está seguro de cancelar la edición del mensaje; no se guardarán los cambios?';
+    var VISTA_DASHBOARD_CANCELAR_EDICION = '¿Está seguro de cancelar la edición de la Vista Dashboard; no se guardarán los cambios?';
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
     var TITLE_EXITO = 'Operación Realizada';
 

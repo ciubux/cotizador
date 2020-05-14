@@ -275,7 +275,7 @@
         });
     });
 
-    $("#btnLimpiarBusqueda").click(function () {
+    $("#btnLimpiarMensaje").click(function () {
         $.ajax({
             url: "/Mensaje/Limpiar",
             type: 'POST',
@@ -379,6 +379,16 @@
                                 '<p style="margin-bottom: 0.11in"><font size="3"><span lang="es-PE">' + list[i].mensaje + '</span></font></p>' +
 
                                 '<textarea class="form-control" id ="respuesta' + numeroModal + '" rows="4" style="display:none" placeholder="Respuesta..."> </textarea>' +
+                                                              
+
+                                '<div class="row form-group" style="display:none" id="addUsuarios' + numeroModal +'"> ' +
+                                '<label class="col-form-label col-md-3">Agregar destinatario(s):</label>' +
+                                '<div class="col-md-9">' +
+                                '<select multiple class="form-control form-control" id="idUsuarioBusquedaRespuestaMensajeModal" name="UsuarioMensajeRapido" required>' +
+                                '</select>' +
+                                '</div>' +
+                                '</div>'+
+                            
 
                                 '<div class="btn-group" style="float:right">' +
                                 '<button  type="button"  class="btn btn-success Responder" id="' + numeroModal + '"">Responder</button>' +
@@ -465,6 +475,7 @@
         var num = $(this).attr('id');
         $('#respuesta' + num + '').show();
         $('.botonesRespuesta' + num + '').show();
+        $('#addUsuarios' + num + '').show();       
         $('.Responder').hide();
         $('#respuesta' + num + '').after('<br id="saltoLinea">');
         $('#respuesta' + num + '').focus();
@@ -475,6 +486,7 @@
         var txtRespuesta = $('#respuesta' + num + '').val();
         var arrayClass = $(this).attr('class').split(" ");
         var idMensaje = arrayClass[3];
+        var idUsuarios = $("#idUsuarioBusquedaRespuestaMensajeModal").val();
 
         if (txtRespuesta.trim() === "") {
             $(this).closest('.modal-content').find('button.Leido').click();
@@ -484,6 +496,7 @@
                 url: "/Mensaje/MensajeVistoRespuesta",
                 type: 'POST',
                 data: {
+                    idUsuarios: idUsuarios,
                     idMensaje: idMensaje,
                     respuesta: txtRespuesta
                 },
@@ -518,6 +531,7 @@
         $('#respuesta' + num + '').hide();
         $('.botonesRespuesta' + num + '').hide();
         //$('#botonesRespuesta' + num + '').hide();
+        $('#addUsuarios' + num + '').hide(); 
         $('#respuesta' + num + '').val("");
         $('.Responder').show();
         $('#saltoLinea').remove();
@@ -1119,22 +1133,6 @@
             }, { placeholder_text_single: "Buscar Usuario", no_results_text: "No se encontró Usuario" });
     }
 
-    $("#idUsuarioBusquedaMensaje").change(function () {
-
-        var idUsuario = $("#idUsuarioBusquedaMensaje").val();
-
-        $.ajax({
-            url: "/Mensaje/ChangeUsuarioMensaje",
-            type: 'POST',
-            data: {
-                idUsuario: idUsuario
-            },
-            success: function () {
-            }
-        });
-
-    });
-
     setTimeout(function () {
         $('body').on('click', '#MensajeRapidoMenu', function (event) {
             event.preventDefault();
@@ -1162,6 +1160,20 @@
         $("#MensajeRapido").modal("hide");
     });
 
+
+    $('body').on('shown.bs.modal', '.ModalMensajeAlerta', function () {       
+        $('#idUsuarioBusquedaRespuestaMensajeModal', this).chosen('destroy').chosen({ placeholder_text: "Buscar Usuario", no_results_text: "No se encontró Usuario", allow_single_deselect: true, width: '100%' }).on('chosen:showing_dropdown');        
+        $('#idUsuarioBusquedaRespuestaMensajeModal', this).ajaxChosen({
+            dataType: "json",
+            type: "GET",
+            minTermLength: 3,
+            afterTypeDelay: 300,
+            cache: false,
+            url: "/Usuario/SearchUsuarios"
+        }, {
+                loadingImg: "Content/chosen/images/loading.gif"
+            }, { placeholder_text_single: "Buscar Usuario", no_results_text: "No se encontró Usuario" });
+    });
 
     $('body').on('shown.bs.modal', '#MensajeRapido', function () {       
         cargarTooltipLista();        
@@ -1403,13 +1415,34 @@
             $.alert({
                 title: "Fecha Vencimiento Inválida",
                 type: 'orange',
-                content: 'Debe ingresar una fecha posterior o igual a la de inicio.',
+                content: 'Debe ingresar una fecha posterior a la de inicio.',
                 buttons: {
                     OK: function () { $('#mensajeFechaVencimientoMensajeModal').focus(); }
                 }
             });
             return false;
         }
+
+        function rangoDias(start,end)
+        {            
+            var days = (end-start) / (1000 * 60 * 60 * 24);
+            return days;
+
+        }       
+
+        if (rangoDias($("#mensajeFechaInicioMensajeModal").datepicker("getDate"), $("#mensajeFechaVencimientoMensajeModal").datepicker("getDate"))<4)
+        {
+            $.alert({
+                title: "Rango de Fecha Inválida",
+                type: 'orange',
+                content: 'Debe ingresar una fecha con un rango minimo de 4 dias a la de inicio.',
+                buttons: {
+                    OK: function () { $('#mensajeFechaVencimientoMensajeModal').focus(); }
+                }
+            });
+            return false;
+        }
+
 
         return true;
 

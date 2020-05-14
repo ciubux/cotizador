@@ -1541,7 +1541,7 @@ namespace Cotizador.Controllers
         }
 
         #region carga de imagenes
-
+        /*
         public void ChangeFiles(List<HttpPostedFileBase> files)
         {
            
@@ -1578,8 +1578,8 @@ namespace Cotizador.Controllers
             }
 
         }
-
-
+        */
+        /*
         public String DescartarArchivos()
         {
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
@@ -1626,7 +1626,7 @@ namespace Cotizador.Controllers
             }
             
         }
-
+        */
         #endregion
 
 
@@ -1951,6 +1951,7 @@ namespace Cotizador.Controllers
 
             string jsonPedido = JsonConvert.SerializeObject(ParserDTOsShow.PedidoVentaToPedidoVentaDTO(pedido));
 
+            string jsonArchivoAdjunto = JsonConvert.SerializeObject(pedido.listArchivoAjunto);
             Ciudad ciudad = usuario.sedesMPPedidos.Where(s => s.idCiudad == pedido.ciudad.idCiudad).FirstOrDefault();
           
             string jsonSeries = "[]";
@@ -1965,7 +1966,7 @@ namespace Cotizador.Controllers
             this.Session["pedidoDRCantidades"] = new List<int>();
             this.Session["pedidoDRComentarios"] = new List<String>();
 
-            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"pedido\":" + jsonPedido + ", \"usuario\":" + jsonUsuario + "}";
+            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"pedido\":" + jsonPedido + ", \"usuario\":" + jsonUsuario + ", \"archivoAdjunto\":" + jsonArchivoAdjunto + "}";
             return json;
         }
 

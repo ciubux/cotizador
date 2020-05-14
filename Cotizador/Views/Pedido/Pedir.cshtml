@@ -75,9 +75,9 @@
                     @Html.LabelFor(p => pedido.tipoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         @Html.DropDownList("pedido_tipoPedido",
-                                                    EnumHelper.GetSelectList(typeof(Model.Pedido.tiposPedido), pedido.tipoPedido),
-                                                    new { @class = "form-control" }
-                                                    )
+                                 EnumHelper.GetSelectList(typeof(Model.Pedido.tiposPedido), pedido.tipoPedido),
+                                 new { @class = "form-control" }
+                                 )
                     </div>
                 </div>
             </div>
@@ -91,11 +91,11 @@
                     @Html.LabelFor(p => pedido.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
                     <div class="col-xs-8">
                         @Html.Action("GetCiudades", "Ciudad",
-                                                                new
-                                                                {
-                                                                    ciudadSelectId = "idCiudad",
-                                                                    selectedValue = pedido.ciudad.idCiudad
-                                                                })
+                                             new
+                                             {
+                                                 ciudadSelectId = "idCiudad",
+                                                 selectedValue = pedido.ciudad.idCiudad
+                                             })
                     </div>
                 </div>
             </div>
@@ -147,11 +147,11 @@
                     @Html.LabelFor(p => pedido.ciudadASolicitar, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudadASolicitar" })
                     <div class="col-xs-8">
                         @Html.Action("GetCiudadesASolicitar", "Ciudad",
-                                                                new
-                                                                {
-                                                                    ciudadSelectId = "idCiudadASolicitar",
-                                                                    selectedValue = pedido.ciudadASolicitar.idCiudad
-                                                                })
+                                             new
+                                             {
+                                                 ciudadSelectId = "idCiudadASolicitar",
+                                                 selectedValue = pedido.ciudadASolicitar.idCiudad
+                                             })
                     </div>
                 </div>
             </div>
@@ -170,9 +170,9 @@
                         @Html.LabelFor(p => pedido.direccionEntrega.descripcion, htmlAttributes: new { @class = "control-label  col-xs-4 col-lg-2" })
                         <div class="col-xs-8 col-lg-9">
                             @Html.DropDownList("pedido_direccionEntrega",
-                                                                      new SelectList(pedido.cliente.direccionEntregaList as IEnumerable<Model.DireccionEntrega>, "idDireccionEntrega", "direccionConSede", pedido.direccionEntrega.idDireccionEntrega, null),
-                                                                      "Seleccione Dirección de Entrega",
-                                                                      new { @class = "form-control" })
+                                               new SelectList(pedido.cliente.direccionEntregaList as IEnumerable<Model.DireccionEntrega>, "idDireccionEntrega", "direccionConSede", pedido.direccionEntrega.idDireccionEntrega, null),
+                                               "Seleccione Dirección de Entrega",
+                                               new { @class = "form-control" })
                         </div>
                         <div class="col-xs-2 col-lg-1">
                             @if (pedido.cliente.habilitadoModificarDireccionEntrega || pedido.usuario.modificaDireccionEntrega)
@@ -287,29 +287,29 @@
                             @if (pedido.cliente.habilitadoModificarDireccionEntrega || pedido.usuario.modificaDireccionEntrega)
                             {
                                 @Html.Action("GetDepartamentos", "Ubigeo",
-                                                                                       new
-                                                                                       {
-                                                                                           departamentoSelectId = "ActualDepartamento",
-                                                                                           provinciaSelectId = "ActualProvincia",
-                                                                                           distritoSelectId = "ActualDistrito",
-                                                                                           provinciaDivId = "dvProvincias",
-                                                                                           distritoDivId = "dvDistritos",
-                                                                                           selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 2)
-                                                                                       })
+                                                                new
+                                                                {
+                                                                    departamentoSelectId = "ActualDepartamento",
+                                                                    provinciaSelectId = "ActualProvincia",
+                                                                    distritoSelectId = "ActualDistrito",
+                                                                    provinciaDivId = "dvProvincias",
+                                                                    distritoDivId = "dvDistritos",
+                                                                    selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 2)
+                                                                })
                             }
                             else
                             {
-                                 @Html.Action("GetDepartamentos", "Ubigeo",
-                                                                              new
-                                                                              {
-                                                                                  departamentoSelectId = "ActualDepartamento",
-                                                                                  provinciaSelectId = "ActualProvincia",
-                                                                                  distritoSelectId = "ActualDistrito",
-                                                                                  provinciaDivId = "dvProvincias",
-                                                                                  distritoDivId = "dvDistritos",
-                                                                                  selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 2),
-                                                                                  disabled = true
-                                                                              })
+                                @Html.Action("GetDepartamentos", "Ubigeo",
+                                                      new
+                                                      {
+                                                          departamentoSelectId = "ActualDepartamento",
+                                                          provinciaSelectId = "ActualProvincia",
+                                                          distritoSelectId = "ActualDistrito",
+                                                          provinciaDivId = "dvProvincias",
+                                                          distritoDivId = "dvDistritos",
+                                                          selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 2),
+                                                          disabled = true
+                                                      })
                             }
 
                         </div>
@@ -324,29 +324,29 @@
                             @if (pedido.cliente.habilitadoModificarDireccionEntrega || pedido.usuario.modificaDireccionEntrega)
                             {
                                 @Html.Action("GetProvinciasPorDepartamento", "Ubigeo",
-                                                new
-                                                {
-                                                    departamentoSelectId = "ActualDepartamento",
-                                                    provinciaSelectId = "ActualProvincia",
-                                                    distritoSelectId = "ActualDistrito",
-                                                    distritoDivId = "dvDistritos",
-                                                    codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
-                                                    selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 4)
-                                                })
+                         new
+                         {
+                             departamentoSelectId = "ActualDepartamento",
+                             provinciaSelectId = "ActualProvincia",
+                             distritoSelectId = "ActualDistrito",
+                             distritoDivId = "dvDistritos",
+                             codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
+                             selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 4)
+                         })
                             }
                             else
                             {
-                                 @Html.Action("GetProvinciasPorDepartamento", "Ubigeo",
-                                                new
-                                                {
-                                                    departamentoSelectId = "ActualDepartamento",
-                                                    provinciaSelectId = "ActualProvincia",
-                                                    distritoSelectId = "ActualDistrito",
-                                                    distritoDivId = "dvDistritos",
-                                                    codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
-                                                    selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 4),
-                                                    disabled = true
-                                                })
+                                @Html.Action("GetProvinciasPorDepartamento", "Ubigeo",
+                        new
+                        {
+                            departamentoSelectId = "ActualDepartamento",
+                            provinciaSelectId = "ActualProvincia",
+                            distritoSelectId = "ActualDistrito",
+                            distritoDivId = "dvDistritos",
+                            codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
+                            selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 4),
+                            disabled = true
+                        })
                             }
                         </div>
                     </div>
@@ -359,23 +359,23 @@
                             @if (pedido.cliente.habilitadoModificarDireccionEntrega || pedido.usuario.modificaDireccionEntrega)
                             {
                                 @Html.Action("GetDistritosPorProvincia", "Ubigeo", new
-                               {
-                                   distritoSelectId = "ActualDistrito",
-                                   codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
-                                   codigoProvincia = pedido.ubigeoEntrega.Id.Substring(0, 4),
-                                   selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 6)
-                               })
+                           {
+                               distritoSelectId = "ActualDistrito",
+                               codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
+                               codigoProvincia = pedido.ubigeoEntrega.Id.Substring(0, 4),
+                               selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 6)
+                           })
                             }
                             else
                             {
-                                 @Html.Action("GetDistritosPorProvincia", "Ubigeo", new
-                            {
-                                distritoSelectId = "ActualDistrito",
-                                codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
-                                codigoProvincia = pedido.ubigeoEntrega.Id.Substring(0, 4),
-                                selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 6),
-                                disabled = true
-                            })
+                                @Html.Action("GetDistritosPorProvincia", "Ubigeo", new
+                           {
+                               distritoSelectId = "ActualDistrito",
+                               codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
+                               codigoProvincia = pedido.ubigeoEntrega.Id.Substring(0, 4),
+                               selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 6),
+                               disabled = true
+                           })
                             }
 
 
@@ -447,9 +447,9 @@
                         <div class="col-xs-8 col-lg-9">
                             @Html.DropDownList("pedido_solicitante",
 
-                                                             new SelectList(pedido.cliente.solicitanteList as IEnumerable<Model.Solicitante>, "idSolicitante", "nombre", pedido.solicitante.idSolicitante, null),
-                                                             "Seleccione Solicitante",
-                                                             new { @class = "form-control" })
+                                      new SelectList(pedido.cliente.solicitanteList as IEnumerable<Model.Solicitante>, "idSolicitante", "nombre", pedido.solicitante.idSolicitante, null),
+                                      "Seleccione Solicitante",
+                                      new { @class = "form-control" })
                         </div>
                         <div class="col-xs-2 col-lg-1">
                             <button id="btnAgregarSolicitante" type="button" class="btn btn-primary bouton-image-add addBouton" data-toggle="modal" data-target="#modalAgregarSolicitante"></button>
@@ -875,12 +875,7 @@
             <div class="col-sm-6 col-lg-9">
                 <div class="form-group">
                     <label for="archivoAdjunto" class="control-label col-xs-2">Adjuntos:</label>
-                    <div class="col-xs-3">
-                        <div class="upload-btn-wrapper">
-                            <button class="btn btn-primary">Adjuntar Archivo(s)</button>
-                            <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
-                        </div>
-                    </div>
+                    @{Html.RenderPartial("/Views/ArchivoAdjunto/descargarArchivo.cshtml");}
                 </div>
             </div>
         </div>
@@ -1707,4 +1702,6 @@
 @section Scripts {
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/pedido")
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/Scripts/App/ubigeo.js")
+
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/archivoAdjunto")
 }

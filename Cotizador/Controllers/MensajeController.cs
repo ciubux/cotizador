@@ -301,8 +301,8 @@ namespace Cotizador.Controllers
 
 
         public void ChangeUsuarioMensaje(Guid[] idUsuario)
-        {
-            Mensaje obj = (Mensaje)this.MensajeSession;
+        {            
+            Mensaje obj = (Mensaje)this.MensajeSession;            
             obj.listUsuario = new List<Usuario>();
             if (idUsuario != null)
             {
@@ -470,7 +470,7 @@ namespace Cotizador.Controllers
             return PartialView(mensaje);
         }
 
-        public void MensajeVistoRespuesta()
+        public void MensajeVistoRespuesta(Guid[] idUsuarios)
         {
             Mensaje obj = new Mensaje();
             MensajeBL mensajebl = new MensajeBL();
@@ -479,9 +479,22 @@ namespace Cotizador.Controllers
             obj = mensajebl.getMensajeById(obj.id_mensaje);
             obj.user = new Usuario();
             obj.mensaje = Request["respuesta"];
+
+            obj.listUsuario = new List<Usuario>();
+            idUsuarios = idUsuarios == null ? new Guid[0] : idUsuarios;
+            foreach (var item in idUsuarios)
+            {
+                if (usuario.idUsuario != item)
+                {
+                    Usuario user = new Usuario();
+                    user.idUsuario = item;
+                    obj.listUsuario.Add(user);
+                }
+            }            
             obj.fechaVencimientoMensaje = null;
             obj.user.idUsuario = usuario.idUsuario;
             mensajebl.MensajeVistoRespuesta(obj);
+
         }
                
         public String verHiloMensaje()
