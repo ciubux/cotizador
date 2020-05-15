@@ -587,7 +587,7 @@ jQuery(function ($) {
                         '<td>' +
                         '<button type="button" class="' + list[i].idRol + ' btnEditarRol btn btn-primary ">Editar</button>' +
                         '&nbsp;&nbsp;&nbsp;<button type="button" idRol="' + list[i].idRol + '" class="btnVerUsuariosRol btn btn-secundary">Usuarios</button>' +
-                        '&nbsp;&nbsp;&nbsp;<button type="button" class="btnVistas btn btn-success">Vista Dashboard</button>'+
+                        /*'&nbsp;&nbsp;&nbsp;<button type="button" class="btnVistas btn btn-success">Vista Dashboard</button>'+*/
                         '</td>' +
                         '</tr>';
                     

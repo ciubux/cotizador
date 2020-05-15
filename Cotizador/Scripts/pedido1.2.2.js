@@ -2397,7 +2397,7 @@ jQuery(function ($) {
 
     /*CARGA Y DESCARGA DE ARCHIVOS*/
 
-    /*
+
     $('input[name=filePedidos]').change(function (e) {
         //$('#nombreArchivos').val(e.currentTarget.files);
         var numFiles = e.currentTarget.files.length;
@@ -2425,8 +2425,8 @@ jQuery(function ($) {
 
         }
     });
-    */
-    /*
+
+
     $('input:file[multiple]').change(   function (e) {
         
         cargarArchivosAdjuntos(e.currentTarget.files);
@@ -2480,8 +2480,7 @@ jQuery(function ($) {
             }
         });
     });
-    */
-    /*
+
     $(document).on('click', "a.descargar", function () {
 
         //var arrrayClass = event.target.getAttribute("class").split(" ");
@@ -2504,7 +2503,7 @@ jQuery(function ($) {
             }
         });
     });
-    */
+
 
 
 
@@ -2537,11 +2536,10 @@ jQuery(function ($) {
                 mostrarMensajeErrorProceso(detalle.responseText);
             },
             success: function (resultado) {
-                $('body').loadingModal('hide');
+                $('body').loadingModal('hide')
                 $("#pedido_numeroPedido").val(resultado.numeroPedido);
                 $("#idPedido").val(resultado.idPedido);
 
-                loadArchivoAdjunto(resultado.numeroPedido,FormData($('#formularioConArchivos')[0]));
                 if (resultado.estado == ESTADO_INGRESADO) {
                     $.alert({
                         title: TITLE_EXITO,
@@ -2980,14 +2978,13 @@ jQuery(function ($) {
                       $("#verMontoTotalVenta").html(Number(pedido.venta.total).toFixed(cantidadDecimales));
       */
                 //  nombreArchivos
-               
-                /* 
-                $("#nombreArchivos>li").remove().end();
+
+                $("#nombreArchivos > li").remove().end();
 
 
                 for (var i = 0; i < pedido.pedidoAdjuntoList.length; i++) {
                     var liHTML = '<a href="javascript:mostrar();" class="descargar">' + pedido.pedidoAdjuntoList[i].nombre + '</a>';
-                    $('<li/>').html(liHTML).appendTo($('#nombreArchivos'));
+                    $('<li />').html(liHTML).appendTo($('#nombreArchivos'));
                 }
 
 
@@ -2999,10 +2996,8 @@ jQuery(function ($) {
                     //$('<li />').html(liHTML).appendTo($('#nombreArchivos'));
                     $('#verNombreArchivos').append($('<li />').html(liHTML));
                 }
-                */
-                
-                //archivosEncontrados(resultado.archivoAdjunto);
-               
+
+
                 $("#tableDetallePedido > tbody").empty();
 
                 FooTable.init('#tableDetallePedido');
