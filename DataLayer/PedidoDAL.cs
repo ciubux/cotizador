@@ -199,19 +199,11 @@ namespace DataLayer
                 pedidoDetalle.idPedido = pedido.idPedido;
                 this.InsertPedidoDetalle(pedidoDetalle, pedido.usuario);
             }
-            /*
+
             foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
             {
                 pedidoAdjunto.idPedido = pedido.idPedido;
                 this.InsertPedidoAdjunto(pedidoAdjunto);
-            }
-            */
-
-            foreach (ArchivoAdjunto adjunto in pedido.listArchivoAjunto)
-            {
-                adjunto.idRegistro = pedido.idPedido;
-                ArchivoDAL arcAdjDAL = new ArchivoDAL();
-                arcAdjDAL.InsertArchivoGenerico(adjunto,pedido.usuario.idUsuario);
             }
             this.Commit();
         }
@@ -390,13 +382,12 @@ namespace DataLayer
                 //pedidoDetalle.usuario = pedido.usuario;
                 this.InsertPedidoDetalle(pedidoDetalle, pedido.usuario);
             }
-            /*
+
             foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
             {
                 pedidoAdjunto.idPedido = pedido.idPedido;
                 this.InsertPedidoAdjunto(pedidoAdjunto);
             }
-            */
             this.Commit();
         }           
     
@@ -420,16 +411,17 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "numeroRequerimiento", pedido.numeroRequerimiento);
 
             ExecuteNonQuery(objCommand);
-            
-            foreach (ArchivoAdjunto adjunto in pedido.listArchivoAjunto)
+
+            foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
             {
-                adjunto.idRegistro = pedido.idPedido;
-                ArchivoDAL arcAdjDAL = new ArchivoDAL();
-                arcAdjDAL.InsertArchivoGenerico(adjunto,pedido.usuario.idUsuario);
+                pedidoAdjunto.usuario = pedido.usuario;
+                pedidoAdjunto.idPedido = pedido.idPedido;
+                pedidoAdjunto.idCliente = pedido.cliente.idCliente;
+                InsertPedidoAdjunto(pedidoAdjunto);
             }
             this.Commit();
         }
-        /*
+
         public void InsertPedidoAdjunto(PedidoAdjunto pedidoAdjunto)
         {
             var objCommand = GetSqlCommand("pi_pedidoAdjunto");
@@ -445,7 +437,7 @@ namespace DataLayer
 
             pedidoAdjunto.idArchivoAdjunto = (Guid)objCommand.Parameters["@newId"].Value;
         }
-        */
+
         public void InsertPedidoDetalle(PedidoDetalle pedidoDetalle, Usuario usuario)
         {
             var objCommand = GetSqlCommand("pi_pedidoDetalle");
@@ -631,6 +623,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente);
             InputParameterAdd.Bit(objCommand, "buscaSedesGrupoCliente", pedido.buscarSedesGrupoCliente);
             InputParameterAdd.Int(objCommand, "idGrupoCliente", pedido.idGrupoCliente);
+            InputParameterAdd.Int(objCommand, "truncado", pedido.truncado);
 
             switch (pedido.clasePedido)
             {
@@ -668,6 +661,7 @@ namespace DataLayer
                 pedido.horaEntregaAdicionalHasta = Converter.GetString(row, "hora_entrega_adicional_hasta");
                 pedido.fechaEntregaExtendida = Converter.GetDateTimeNullable(row, "fecha_entrega_extendida");
                 pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
+                pedido.truncado = Converter.GetInt(row, "truncado");
 
                 pedido.FechaRegistro = Converter.GetDateTime(row, "fecha_registro");
                 //pedido.FechaRegistro = pedido.FechaRegistro.AddHours(-5);
@@ -758,7 +752,7 @@ namespace DataLayer
                 pedido.horaEntregaAdicionalHasta = Converter.GetString(row, "hora_entrega_adicional_hasta");
 
                 pedido.fechaEntregaExtendida = Converter.GetDateTimeNullable(row, "fecha_entrega_extendida");
-                
+                pedido.truncado = Converter.GetInt(row, "truncado");
 
                 pedido.incluidoIGV = Converter.GetBool(row, "incluido_igv");
                 pedido.montoIGV = Converter.GetDecimal(row, "igv");
@@ -876,6 +870,7 @@ namespace DataLayer
                 pedido.ciudad.sede = Converter.GetString(row, "codigo_sede");
 
                 pedido.usuario = new Usuario();
+                pedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_creacion");
                 pedido.usuario.nombre = Converter.GetString(row, "nombre_usuario");
                 pedido.usuario.cargo = Converter.GetString(row, "cargo");
                 pedido.usuario.contacto = Converter.GetString(row, "contacto_usuario");
@@ -1083,7 +1078,6 @@ namespace DataLayer
             /*mad.id_movimiento_almacen_detalle, mad.cantidad, 
             mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
 
-            /*
             pedido.pedidoAdjuntoList = new List<PedidoAdjunto>();
             //Detalle de la cotizacion
             foreach (DataRow row in pedidoAdjuntoDataTable.Rows)
@@ -1094,10 +1088,6 @@ namespace DataLayer
                 pedidoAdjunto.nombre = Converter.GetString(row, "nombre");
                 pedido.pedidoAdjuntoList.Add(pedidoAdjunto);
             }
-            */
-            pedido.listArchivoAjunto = new List<ArchivoAdjunto>();
-            ArchivoDAL arcAdjDAL = new ArchivoDAL();
-            pedido.listArchivoAjunto= arcAdjDAL.getListArchivoAdjuntoByIdRegistro(pedido.idPedido);
 
             pedido.pedidoGrupoList = new List<PedidoGrupo>();
 
@@ -1480,8 +1470,19 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             ExecuteNonQuery(objCommand);
         }
 
-        #endregion        
-         
+        public Pedido UpdateTruncado(Pedido pedido)
+        {
+            var objCommand = GetSqlCommand("pu_pedidotruncar");
+            InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
+            InputParameterAdd.Int(objCommand, "truncado", pedido.truncado);
+            InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
+            ExecuteNonQuery(objCommand);
+
+            return pedido;
+        }
+
+        #endregion
+
 
         public List<Guid> SelectPedidosSinAtencion()
         {
