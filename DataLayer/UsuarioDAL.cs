@@ -157,7 +157,7 @@ namespace DataLayer
 
         public Usuario getUsuarioLogin(Usuario usuario)
         {
-            var objCommand = GetSqlCommand("ps_usuario");
+            var objCommand = GetSqlCommand("ps_usuario_b");
             InputParameterAdd.Varchar(objCommand, "email", usuario.email);
             InputParameterAdd.Varchar(objCommand, "password", usuario.password);
             InputParameterAdd.Varchar(objCommand, "ip_login", usuario.ipAddress);
