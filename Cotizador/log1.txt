@@ -100,6 +100,7 @@ The statement has been terminated.
 2020-02-25 08:19:45.1672|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
 2020-03-11 07:34:47.6929|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Producto ya se encuentra en la lista.
 2020-03-11 07:34:47.8371|ERROR|Cotizador.Controllers.ParentController|l.abad@mpinstitucional.com / Producto ya se encuentra en la lista.
+<<<<<<< HEAD
 2020-04-30 01:11:51.6891|ERROR|Cotizador.Controllers.ParentController|admin2@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
 2020-04-30 01:11:54.2327|ERROR|Cotizador.Controllers.ParentController|admin2@mpinstitucional.com / Invalid object name 'RUBRO'.
 2020-04-30 01:12:13.6415|ERROR|Cotizador.Controllers.ParentController|admin2@mpinstitucional.com / Invalid object name 'RUBRO'.
@@ -112,3 +113,12 @@ The statement has been terminated.
 2020-05-01 11:28:43.8005|ERROR|Cotizador.Controllers.ParentController|admin2@mpinstitucional.com / Invalid object name 'RUBRO'.
 2020-05-04 19:22:04.4293|ERROR|Cotizador.Controllers.ParentController|admin2@mpinstitucional.com / Invalid object name 'RUBRO'.
 2020-05-05 14:05:49.5451|ERROR|Cotizador.Controllers.ParentController|a.caballero@mpinstitucional.com / Invalid object name 'RUBRO'.
+=======
+2020-05-03 22:27:26.2511|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / No se puede convertir un objeto de tipo 'Model.Pedido' al tipo 'Model.OrdenCompraCliente'.
+2020-05-04 00:43:48.8705|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Guid debe contener 32 dígitos con 4 guiones (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).
+2020-05-04 01:05:03.5435|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Guid debe contener 32 dígitos con 4 guiones (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).
+2020-05-04 02:38:00.1121|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Error getting value from 'tipoDocumentoIdentidadToString' on 'Model.Cliente'.
+2020-05-04 02:48:54.1659|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Error getting value from 'tipoDocumentoIdentidadToString' on 'Model.Cliente'.
+2020-05-04 02:54:49.4699|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Error getting value from 'tipoDocumentoIdentidadToString' on 'Model.Cliente'.
+2020-05-04 02:59:16.6576|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Error getting value from 'tipoDocumentoIdentidadToString' on 'Model.Cliente'.
+>>>>>>> dev/yrving

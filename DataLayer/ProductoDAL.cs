@@ -981,8 +981,8 @@ namespace DataLayer
             InputParameterAdd.VarcharEmpty(objCommand, "skuProveedor", producto.skuProveedor);
             InputParameterAdd.VarcharEmpty(objCommand, "descripcion", producto.descripcion);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
-            InputParameterAdd.Int(objCommand, "descontinuado", (int) producto.ventaRestringida);
             InputParameterAdd.Int(objCommand, "tipo", producto.tipoProductoVista);
+            InputParameterAdd.Int(objCommand, "tipoVentaRestingida", producto.tipoVentaRestringidaBusqueda);
             InputParameterAdd.Varchar(objCommand, "familia", producto.familia);
             InputParameterAdd.Varchar(objCommand, "proveedor", producto.proveedor);
             DataTable dataTable = Execute(objCommand);

@@ -44,7 +44,7 @@ namespace Cotizador.Models.DTOsSearch
         public String grupoCliente_nombre { get; set; }
         
 
-
+        public int truncado { get; set; }
 
     }
 }

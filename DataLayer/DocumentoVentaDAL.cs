@@ -95,7 +95,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "serie", documentoVenta.serie);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", null);
             InputParameterAdd.Guid(objCommand, "idDocumentoVentaReferencia", Guid.Empty);
-            InputParameterAdd.Varchar(objCommand, "observaciones", documentoVenta.observaciones);
+            InputParameterAdd.VarcharEmpty(objCommand, "observaciones", documentoVenta.observaciones);
             InputParameterAdd.Varchar(objCommand, "codigoCliente", documentoVenta.cliente.codigo);
             OutputParameterAdd.UniqueIdentifier(objCommand, "idDocumentoVenta");
             OutputParameterAdd.UniqueIdentifier(objCommand, "idVentaSalida");
@@ -219,6 +219,19 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
 
+        public void CambiarClienteFactura(DocumentoVenta documentoVenta, Cliente nuevoCliente, String domicilioLegal, String emailEnvio, String sustento)
+        {
+            var objCommand = GetSqlCommand("pu_cambiarClienteDocumentoVenta");
+            InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
+            InputParameterAdd.Varchar(objCommand, "NOM_RCT", nuevoCliente.razonSocialSunat);
+            InputParameterAdd.Varchar(objCommand, "NRO_DOC_RCT", nuevoCliente.ruc);
+            InputParameterAdd.Varchar(objCommand, "DIR_DES_RCT", domicilioLegal);
+            InputParameterAdd.Guid(objCommand, "idCliente", nuevoCliente.idCliente);
+            InputParameterAdd.Varchar(objCommand, "CORREO_ENVIO", emailEnvio);
+            InputParameterAdd.Varchar(objCommand, "sustentoCambio", sustento);
+            InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
+            ExecuteNonQuery(objCommand);
+        }
 
         public void UpdateRespuestaDocumentoVenta(DocumentoVenta documentoVenta)
         {

@@ -1,0 +1,1073 @@
+﻿@{
+    ViewBag.Title = "Crear/Modificar Pedido Venta";
+    Model.OrdenCompraCliente occ = ViewBag.occ;
+    Model.Solicitante solicitante = ViewBag.solicitante;
+    // Model.occ.OpcionesConsiderarCantidades opcionesConsiderarCantidades;
+    // @model Enum;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="idPedido" />
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" value="@ViewBag.debug" />
+
+
+    <form class="form-horizontal" enctype="multipart/form-data" id="formularioConArchivos" method="post">
+        <input type="hidden" id="considerarCantidades" name="considerarCantidades" value="2" />
+
+        <div class="row">
+            <!--NÚMERO PEDIDO-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => occ.numeroOrdenCompraCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @if (occ.numeroOrdenCompraCliente != 0)
+                        {
+                            @Html.TextBoxFor(p => occ.numeroOrdenCompraCliente, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(p => occ.numeroOrdenCompraCliente, htmlAttributes: new { @class = "form-control", @disabled = "disabled", Value = "" })
+                        }
+                    </div>
+                </div>
+            </div>
+           
+            <!--NÚMERO COTIZACION-->
+            @*<div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => occ.cotizacion.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @if (occ.cotizacion.codigo != 0)
+                        {
+                            @Html.TextBoxFor(p => occ.cotizacion.codigo, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(p => occ.cotizacion.codigo, htmlAttributes: new { @class = "form-control", @disabled = "disabled", Value = "" })
+                        }
+                    </div>
+                </div>
+            </div>*@
+
+
+        </div>
+
+
+        <div class="row">
+            <!--CLIENTE-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label for="idCliente" class="control-label col-xs-4">Cliente:</label>
+
+                    <div class="col-xs-8">
+                        <select class="form-control input-sm" id="idCliente" name="idCliente" required>
+                            @if (@occ.clienteSunat != null && @occ.clienteSunat.idClienteSunat > 0)
+                            {
+                                <option selected value="@occ.clienteSunat.idClienteSunat">@occ.clienteSunat</option>
+                            }
+                            else
+                            {
+                                <option value=""></option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!--NUMERO REFERENCIA -->
+            <div class="col-sm-6 col-lg-4" id="divReferenciaCliente">
+                <div class="form-group">
+                    @Html.LabelFor(p => occ.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(p => occ.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <fieldset>
+            <legend>Datos de la Solicitud:</legend>
+
+            <div class="row mostrarDatosParaGuia">
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(p => occ.solicitante, htmlAttributes: new { @class = "control-label  col-xs-4 col-lg-2" })
+                        <div class="col-xs-8 col-lg-9">
+                            @Html.DropDownList("occ_solicitante",
+
+                                                             new SelectList(occ.clienteSunat.solicitanteList as IEnumerable<Model.Solicitante>, "idSolicitante", "nombre", occ.solicitante.idSolicitante, null),
+                                                             "Seleccione Solicitante",
+                                                             new { @class = "form-control" })
+                        </div>
+                        <div class="col-xs-2 col-lg-1">
+                            <button id="btnAgregarSolicitante" type="button" class="btn btn-primary bouton-image-add addBouton" data-toggle="modal" data-target="#modalAgregarSolicitante"></button>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <div class="row mostrarDatosParaGuia">
+                <div class="col-sm-6 col-lg-8">
+                    <div class="form-group">
+                        <label for="occ_solicitante_nombre" class="control-label col-xs-2">Datos de Solicitante:</label>
+                        <div class="input-group col-xs-6">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon1">Nombre:</span>
+                            </div>
+                            @Html.TextBoxFor(p => occ.solicitante.nombre, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                        <div class="input-group col-xs-4">
+                            <div class="input-group-addon">
+                                <span class="input-group-text" id="basic-addon1">Teléfono:</span>
+                            </div>
+                            @Html.TextBoxFor(p => occ.solicitante.telefono, htmlAttributes: new { @class = "form-control" })
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="input-group col-xs-12">
+                        <div class="input-group-addon">
+                            <span class="input-group-text" id="basic-addon1">E-mail:</span>
+                        </div>
+                        @Html.TextBoxFor(p => occ.solicitante.correo, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Correo del Cliente a donde se le notificará sobre la atención de cada Pedido.</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <!--FECHA SOLICITUD -->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="fechaSolicitud" class="control-label col-xs-6 col-lg-4">Fecha de Solicitud:</label>
+                        <div class="input-group col-xs-8 col-lg-8">
+
+                            <input type="hidden" id="fechaSolicitudTmp" value="@ViewBag.fechaSolicitud" />
+                            <input class="form-control" type="text" id="fechaSolicitud" name="fechaSolicitud" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!--HORA SOLICITUD -->
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="fechaEntrega" class="control-label col-xs-6 col-lg-4">Hora de Solicitud:</label>
+                        <!-- <div class="input-group col-xs-6 col-lg-8">
+                            <div class="input-group-addon" style="width:70px">
+                                <span class="input-group-text" id="basic-addon1">Hora:</span>
+                            </div>
+
+                        </div>-->
+                        <div class="input-group col-xs-8 col-lg-8">
+                            <input class="form-control" type="time" id="horaSolicitud" name="horaSolicitud" value="@ViewBag.horaSolicitud">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div class="row">
+
+
+
+                <div class="col-sm-6 col-lg-4">
+                    <!--IGV-->
+                    <div class="form-group">
+                        <label for="igv" class="control-label col-xs-4">¿Precios unitarios incluyen IGV?:</label>
+                        <div class="col-xs-8">
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    @if (occ.incluidoIGV)
+                                    {
+                                        <input class="radio-input" disabled checked type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" disabled type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
+                                    }
+
+                                </label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    @if (!occ.incluidoIGV)
+                                    {
+                                        <input class="radio-input" disabled checked type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" disabled type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
+                                    }
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--FLETE-->
+                <div class="col-sm-6 col-lg-4" id="divReferenciaCliente">
+                    <div class="form-group">
+                        @Html.LabelFor(p => occ.otrosCargos, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
+                            @Html.TextBoxFor(p => occ.otrosCargos, htmlAttributes: new { @class = "form-control", type = "number", step = ".1" })
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </fieldset>
+
+
+        <div class="row" style="margin-bottom:10px; margin-right:0px; margin-left:10px">
+
+            <div class="pull-left">
+                <button id="btnAgregarProductosDesdePreciosRegistrados" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBuscarPreciosRegistrados">Importar Detalle Desde Precios Registrados en Facturación</button>
+                &nbsp;
+                <button id="btnAgregarCanasta" type="button" class="btn btn-primary">Importar Productos Cotizados</button>
+            </div>
+
+            <div class="pull-right">
+                <button id="btnOpenAgregarProducto" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
+            </div>
+
+        </div>
+        @if (occ.usuario.visualizaCostos)
+        {
+            <div class="row" style="margin-bottom:10px; margin-right:0px; margin-left:10px">
+
+                <div class="pull-left">
+                    <label for="mostrarCosto" class="control-label ">Mostrar Costo:</label>
+                    @if (occ.mostrarCosto)
+                    {
+                        <input checked type="checkbox" id="mostrarCosto" name="mostrarCosto" />
+                    }
+                    else
+                    {
+                        <input type="checkbox" id="mostrarCosto" name="mostrarCosto" />
+                    }
+
+                </div>
+            </div>
+        }
+
+        <table id="tableDetalleOrdenCompraCliente" class="table" data-editing="true"
+               data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+               data-editing-allow-add="true"
+               data-editing-allow-delete="true"
+               data-editing-allow-edit="false"
+               data-sorting="true"
+               data-show-toggle="false"
+               data-editing-hide-text="Finalizar Edición Detalle"
+               data-editing-add-text="Descartar Cambios Detalle">
+            <thead>
+                <tr>
+                    <th data-name="idProducto" data-visible="false"></th>
+
+                    @if (ViewBag.debug == 1)
+                    {
+                        <th data-name="esPrecioAlternativo" data-visible="true">EsPrecioAlternativo</th>
+                    }
+                    else
+                    {
+                        <th data-name="esPrecioAlternativo" data-visible="false">EsPrecioAlternativo</th>
+                    }
+                    <th data-name="proveedor" data-sortable="false">Prov.</th>
+                    <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
+                    <th data-name="producto" data-sortable="false">Producto / Descripción</th>
+                    <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
+                    <th data-name="imagen" data-sortable="false" data-breakpoints="xs sm">Imagen</th>
+                    <!--<th data-name="valorUnitario" data-sortable="true" data-breakpoints="xs sm">Costo Unitario</th>-->
+                    <th data-name="precioLista" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
+
+                    @if (ViewBag.debug == 1)
+                    {
+                        <th data-name="porcentajeDescuento" data-visible="true" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                    }
+                    else
+                    {
+                        <th data-name="porcentajeDescuento" data-visible="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                    }
+
+                    <th data-name="porcentajeDescuentoMostrar" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                    <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
+
+                    @if (occ.mostrarCosto)
+                    {
+                        <th data-name="costo" data-sortable="false" data-visible="true">Costo</th>
+                    }
+                    else
+                    {
+                        <th data-name="costo" data-visible="false">Costo</th>
+                    }
+
+                    @if (occ.usuario.visualizaMargen)
+                    {
+                        <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                    }
+                    else
+                    {
+                        <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                    }
+
+                    <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
+                    <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
+                    <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Reg. Fact.</th>
+                    <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
+                    <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
+                    <th data-name="observaciones" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Observaciones</th>
+                    <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
+
+
+                    <th class="ordenar" data-sortable="false" data-visible="false"></th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @{int contador = 0;}
+                @foreach (Model.OrdenCompraClienteDetalle detalle in occ.detalleList)
+                {
+                    contador++;
+                    <tr data-expanded="true">
+                        <td>  @detalle.producto.idProducto  </td>
+                        <td>  @detalle.esPrecioAlternativo  </td>
+                        <td>  @detalle.producto.proveedor  </td>
+                        <td>
+                            @detalle.producto.sku
+                            @if (detalle.producto.descontinuado == 1)
+                            {
+                                <br />
+                                if (detalle.producto.motivoRestriccion != null && !detalle.producto.motivoRestriccion.Trim().IsEmpty())
+                                {
+                                    string descontinuadoLabel = Html.Partial("../Producto/_LabelRestringido").ToString();
+                                    descontinuadoLabel = descontinuadoLabel.Replace("_DATA_TIPSO_", detalle.producto.motivoRestriccion);
+                                    descontinuadoLabel = descontinuadoLabel.Replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+
+                                    @Html.Raw(descontinuadoLabel)
+                                }
+                                else
+                                {
+                                    @Html.Partial("../Producto/_LabelRestringido")
+                                }
+                            }
+                        </td>
+
+                        <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
+                        <td>
+                            @detalle.producto.skuProveedor - @detalle.producto.descripcion
+                            <br />
+                            <span class="@detalle.producto.idProducto detproductoObservacion" style="color: darkred"> @detalle.observacion</span>
+                        </td>
+
+
+
+
+                        <td>  @detalle.unidad  </td>
+                        <td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(detalle.producto.image)"></td>
+                        <td class="@detalle.producto.idProducto detprecioLista" style="text-align:right">@detalle.precioLista</td>
+
+
+                        <td class="@detalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@detalle.porcentajeDescuento %</td>
+                        <td class="@detalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@detalle.porcentajeDescuentoMostrar %</td>
+                        <td class="@detalle.producto.idProducto detprecio" style="text-align:right">@detalle.precioNeto</td>
+                        <td class="@detalle.producto.idProducto detcostoLista">@detalle.costoLista  </td>
+                        <td class="@detalle.producto.idProducto detmargen" style="width:70px; text-align:right">@detalle.margen %</td>
+
+
+                        <td class="@detalle.producto.idProducto detflete" style="text-align:right">@detalle.flete</td>
+
+                        @if (detalle.producto.precioClienteProducto.precioUnitario == 0)
+                        {
+                            if (detalle.precioUnitario >= detalle.producto.precioLista - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
+                      && detalle.precioUnitario <= detalle.producto.precioLista + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
+                            {
+                                <td class="@detalle.producto.idProducto detprecioUnitario" style="text-align:right">@detalle.precioUnitario </td>
+
+                            }
+                            else
+                            {
+                                <td class="@detalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@detalle.precioUnitario </td>
+                            }
+
+                        }
+                        else
+                        {
+                            if (detalle.precioUnitario >= detalle.producto.precioClienteProducto.precioUnitario - ViewBag.VARIACION_PRECIO_ITEM_PEDIDO
+                            && detalle.precioUnitario <= detalle.producto.precioClienteProducto.precioUnitario + ViewBag.VARIACION_PRECIO_ITEM_PEDIDO)
+                            {
+                                <td class="@detalle.producto.idProducto detprecioUnitario" style="text-align:right">@detalle.precioUnitario </td>
+
+                            }
+                            else
+                            {
+                                <td class="@detalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@detalle.precioUnitario </td>
+                            }
+                        }
+                        <td class="@detalle.producto.idProducto detprecioUnitarioRegistrado" style="text-align:right">@detalle.producto.precioClienteProducto.precioUnitario </td>
+
+                        <td class="@detalle.producto.idProducto detcantidad" style="text-align:right">@detalle.cantidad</td>
+                        <td class="@detalle.producto.idProducto detsubtotal" style="text-align:right">@detalle.subTotal</td>
+                        <td class="@detalle.producto.idProducto detobservacion" style="text-align:left">@detalle.observacion</td>
+                        <td class="@detalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@detalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
+
+                        <td class="@detalle.producto.idProducto detordenamiento"></td>
+
+
+
+
+
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    @Html.LabelFor(p => occ.observaciones, htmlAttributes: new { @class = "control-label col-xs-2" })
+                    <div class="col-xs-8">
+                        @Html.TextAreaFor(p => occ.observaciones, htmlAttributes: new { @class = "form-control", rows = "6", cols = "300", style = "min-width: 100%" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+
+
+                <div class="form-group">
+                    <div class="pull-right">
+                        <span class="totales">Subtotal: S/ </span>
+                        <span class="totales" id="montoSubTotal">@occ.montoSubTotal</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="pull-right">
+                        <span class="totales">IGV 18%: S/ </span>
+                        <span class="totales" id="montoIGV">@occ.montoIGV</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="pull-right">
+                        <input type="hidden" id="total" value="@occ.montoTotal" />
+                        <span class="totales">TOTAL: S/ </span>
+                        <span class="totales" id="montoTotal">@occ.montoTotal</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    <label for="archivoAdjunto" class="control-label col-xs-2">Adjuntos:</label>
+                    <div class="col-xs-3">
+                        <div class="upload-btn-wrapper">
+                            <button class="btn btn-primary">Adjuntar Archivo(s)</button>
+                            <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    <label for="archivoAdjunto" class="control-label col-xs-2"></label>
+                    <div class="col-xs-8">
+                        <ul id="nombreArchivos">
+                            @foreach (Model.ArchivoAdjunto pedidoAdjunto in occ.AdjuntoList)
+                            {
+                                <li>
+                                    <a href="javascript:mostrar();" class="descargar">@pedidoAdjunto.nombre</a>
+                                    <a href="javascript:mostrar();"><img src="~/images/icon-close.png" id="@pedidoAdjunto.nombre" class="btnDeleteArchivo" /></a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="row">
+            <div class="pull-left">
+                <button id="btnContinuarEditandoLuego" type="button" class="btn btn-primary">Guardar</button>
+            </div>
+
+
+            <div class="pull-right">
+                <button type="button" id="btnCancelarPedido" class="btn btn-danger">Cancelar</button>
+                @if (occ.numeroOrdenCompraCliente > 0)
+                {
+                    <button id="btnFinalizarEdicionOrdenCompraCliente" type="button" class="btn btn-success">Finalizar Edición</button>
+                }
+                else
+                {
+                    <button id="btnFinalizarCreacionOrdenCompraCliente" type="button" class="btn btn-success">Finalizar Creación</button>
+                }
+            </div>
+        </div>
+
+
+    </form>
+</div>
+
+
+
+<!-- MODAL AGREGAR PRODUCTO -->
+<div class="modal fade" id="modalAgregarProducto" tabindex="-1">
+    <!-- <div class="modal fade" id="modalAgregarProducto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+       -->
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!--CABECERA-->
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalAgregarProductoTitle"><b>Agregar Producto</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+            <!--CUERPO-->
+            <div class="modal-body">
+
+                @if (ViewBag.debug == 1)
+                {
+                    <span>precioUnitarioSinIGV</span> <input class="form-control" type="text" id="precioUnitarioSinIGV" value="0" />
+                    <span>precioUnitarioAlternativoSinIGV</span><input class="form-control" type="text" id="precioUnitarioAlternativoSinIGV" value="0" />
+                    <span>costoSinIGV</span><input class="form-control" type="text" id="costoSinIGV" value="0" />
+                    <span>costoAlternativoSinIGV</span><input class="form-control" type="text" id="costoAlternativoSinIGV" value="0" />
+                    <span>esPrecioAlternativo</span><input class="form-control" type="text" id="esPrecioAlternativo" value="0" />
+                }
+                else
+                {
+                    <input type="hidden" id="precioUnitarioSinIGV" value="0" />
+                    <input type="hidden" id="precioUnitarioAlternativoSinIGV" value="0" />
+                    <input type="hidden" id="costoSinIGV" value="0" />
+                    <input type="hidden" id="costoAlternativoSinIGV" value="0" />
+                    <input type="hidden" id="esPrecioAlternativo" value="0" />
+                }
+
+
+
+                <form class="form-horizontal">
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-6">
+
+
+                            <!--Familia-->
+                            <div class="form-group">
+                                <label for="familia" class="control-label col-xs-3">Familia:</label>
+                                <div class="col-xs-9">
+                                    @Html.Action("list", "Familia")
+                                </div>
+                            </div>
+
+
+                            <!--Proveedor-->
+                            <div class="form-group">
+                                <label for="proveedor" class="control-label col-xs-3">Proveedor:</label>
+                                <div class="col-xs-9">
+                                    @Html.Action("list", "Proveedor")
+                                </div>
+                            </div>
+
+
+
+                            <!--PRODUCTO-->
+                            <div class="form-group">
+                                <label for="producto" class="control-label col-xs-3">Producto:</label>
+                                <div class="col-xs-9">
+                                    <span id="spnProductoDescontinuado" style="display: none;">
+                                        @Html.Partial("../Producto/_LabelRestringido")
+                                    </span>
+                                    <select class="form-control" id="producto" name="producto">
+                                        <option value=""></option>
+                                    </select>
+                                    <label class="radio-label" style="margin-top: 5px;">
+                                        @if (ViewBag.busquedaProductosIncluyeDescontinuados == 1)
+                                        {
+                                            <input checked type="checkbox" class="chkPedidoSerchProductCheckParam" paramName="incluyeDescontinuados" checkValue="1" unCheckValue="0" value="1">
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" class="chkPedidoSerchProductCheckParam" paramName="incluyeDescontinuados" checkValue="1" unCheckValue="0" value="1">
+                                        }
+                                        Incluir productos de venta restringida
+                                    </label>
+                                </div>
+                            </div>
+
+
+
+                            <!--PRESENTACIÓN-->
+                            <div class="form-group">
+                                <label for="unidad" class="control-label col-xs-3">Presentación:</label>
+                                <div class="col-xs-9">
+                                    <select class="form-control" id="unidad" name="unidad"></select>
+                                </div>
+                            </div>
+
+                            <!--PRECIO LISTA-->
+                            <div class="form-group">
+                                <label for="precioLista" class="control-label col-xs-3">Precio Lista:</label>
+                                <div class="col-xs-9">
+
+                                    <input class="form-control" type="text" value="" id="precioLista" name="precioLista" disabled>
+                                    <!--  <span style="margin-right: 20px; color: red; font-weight: normal " class="has-error" id="mensajeFlete"></span>
+                                    -->
+                                </div>
+                            </div>
+
+
+                            <!--DESCUENTO-->
+
+                            <div class="form-group">
+                                <label for="porcentajeDescuento" class="control-label col-xs-3">Dscto % al P. Lista:</label>
+                                <div class="col-xs-4">
+                                    <input class="form-control" type="number" step=".1" value="" id="porcentajeDescuento" name="porcentajeDescuento">
+                                </div>
+                                <div class="col-xs-2">
+                                    <button id="btnCalcularDescuento" type="button" class="btn btn-primary bouton-image monBouton" data-toggle="modal" data-target="#modalCalculadora"></button>
+                                </div>
+                                <div class="col-xs-2">
+                                    <button id="btnMostrarPrecios" type="button" class="btn btn-primary bouton-image botonPrecios" data-toggle="modal" data-target="#modalMostrarPrecios"></button>
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+
+
+                        <!--IMAGEN-->
+                        <div class="col-sm-6 col-lg-6 ">
+                            <div class="form-group modal-add-image" style="height:180px">
+                                <img id="imgProducto" src="images/NoDisponible.gif">
+                            </div>
+
+                            <div class="form-group" id="observacionProductoDiv">
+                                <label for="observacionProducto" class="control-label col-xs-3">Observaciones:</label>
+                                <div class="col-xs-9">
+                                    <textarea rows="5" cols="35" id="observacionProducto" name="observacionProducto"> </textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+                    <div class="row">
+
+
+
+
+                        @if (occ.mostrarCosto)
+                        {
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="form-group" id="costodiv">
+                                    <label for="costo" class="control-label col-xs-3">Costo:</label>
+                                    <div class="col-xs-9">
+                                        <input class="form-control" type="number" id="costoLista" disabled name="costoLista">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else if (ViewBag.debug == 1)
+                        {
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="form-group" id="costodiv">
+                                    <label for="costo" class="control-label col-xs-3">Costo:</label>
+                                    <div class="col-xs-9">
+                                        <input class="form-control" type="number" id="costoLista" disabled name="costoLista">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <input class="form-control" type="hidden" id="costoLista" disabled name="costoLista">
+                        }
+
+                    </div>
+
+
+
+                    <div class="row">
+
+
+
+
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="form-group">
+                                <label for="precio" class="control-label col-xs-3">Precio Neto:</label>
+                                <div class="col-xs-4">
+                                    <input class="form-control" type="hidden" id="precioRegistrado" name="precioRegistrado">
+                                    <input class="form-control" type="number" step=".1" value="" disabled id="precio" name="precio">
+                                </div>
+
+
+                                @if (occ.usuario.visualizaMargen)
+                                {
+                                    <label for="margen" class="control-label col-xs-2">Mg %:</label>
+                                    <div class="col-xs-3">
+
+                                        <input class="form-control" type="number" disabled value="" min="1" step="1" id="margen" name="margen">
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-xs-5">
+                                        <input type="hidden" id="margen" name="margen">
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                        <!--CANTIDAD-->
+                        <div class="col-sm-6 col-lg-6" id="cantidadiv">
+                            <div class="form-group">
+                                <label for="cantidad" class="control-label col-xs-3">Cantidad:</label>
+                                <div class="col-xs-9">
+                                    <input class="form-control" type="number" value="" min="1" step="1" id="cantidad" name="cantidad">
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="form-group">
+                                <label for="precio" class="control-label col-xs-3">Flete:</label>
+                                <div class="col-xs-3">
+                                    <input class="form-control" type="number" step=".1" value="" id="fleteDetalle" name="fleteDetalle">
+                                </div>
+                                <label for="precioUnitario" class="control-label col-xs-2">Precio Unit:</label>
+                                <div class="col-xs-4">
+                                    <input class="form-control" type="number" disabled value="" min="1" step="1" id="precioUnitario" name="precioUnitario">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="form-group" id="subtotaldiv">
+                                <label for="subtotal" class="control-label col-xs-3">Sub total:</label>
+                                <div class="col-xs-9">
+                                    <input class="form-control" type="text" value="" id="subtotal" name="subtotal" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </form>
+
+                <div class="row pull-right">
+                    <span style="margin-right: 20px; color: red; font-weight: bold " class="has-error" id="resultadoAgregarProducto"></span>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCancelAddProduct" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnAddProduct" class="btn btn-primary">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- MODAL CALCULAR MONTO -->
+<div class="modal fade" id="modalCalculadora" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalCalculadoraTitle"><b>Calcular Descuento</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+                    <input type="hidden" id="idProducto" value="" />
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-6">
+                            <!--NUEVO PRECIO-->
+                            <div class="form-group">
+                                <label for="nuevoPrecio" class="control-label col-xs-4">Nuevo Precio:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="number" step=".1" value="" id="nuevoPrecio" name="nuevoPrecio">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-6">
+
+                            <!--NUEVO PRECIO-->
+                            <div class="form-group">
+                                <label for="nuevoDescuento" class="control-label col-xs-4">Dscto % al P. Lista:</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="number" step=".1" value="" disabled id="nuevoDescuento" name="nuevoDescuento">
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </form>
+            </div>
+            <!--
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Input Placeholder..." />
+                        <span class="input-group-btn"><button class="btn btn-default" type="button">Action</button></span>
+                    </div>
+                </div>
+            </div>-->
+            <div class="modal-footer">
+                <button type="button" id="btnCancelCalculadora" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnSaveDescuento" class="btn btn-primary">Guardar Descuento</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--MODAL MOSTRAR PRECIOS-->
+<div class="modal fade" id="modalMostrarPrecios" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalMostrarPreciosTitle"><b>Precios Registrados en Facturación</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-2">Producto:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="verProducto"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-4">Código:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCodigoProducto"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-12 text-center" style="text-align: center;">Unidad Proveedor</label>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center" id="verUnidadProveedor"></p>
+                                </div>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center"><b>Precio: </b> S/ <span id="verPrecioProveedor"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-12" style="text-align: center;">Unidad MP</label>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center" id="verUnidadMP"></p>
+                                </div>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center"><b>Precio: </b> S/ <span id="verPrecioMP"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-12 text-center" style="text-align: center;">Unidad Alternativa</label>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center" id="verUnidadAlternativa"></p>
+                                </div>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center"><b>Precio: </b> S/ <span id="verPrecioAlternativa"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table id="tableMostrarPrecios" class="table" data-editing="false"
+                           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                           data-editing-allow-add="true"
+                           data-editing-allow-delete="true"
+                           data-editing-allow-edit="false"
+                           data-sorting="true"
+                           data-show-toggle="false"
+                           data-editing-hide-text="Finalizar Edición Detalle"
+                           data-editing-add-text="Descartar Cambios Detalle">
+                        <thead>
+                            <tr>
+                                <th data-name="idProducto" data-visible="true">Número Cotización</th>
+                                <th data-name="idProducto" data-visible="true">Fecha Inicio Vigencia</th>
+                                <th data-name="idProducto" data-visible="true">Fecha Fin Vigencia</th>
+                                <th data-name="idProducto" data-visible="true">Unidad</th>
+                                <th data-name="idProducto" data-visible="true">Precio Neto</th>
+                                <th data-name="idProducto" data-visible="true">Flete</th>
+                                <th data-name="idProducto" data-visible="true">Precio Unitario</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- MODAL AGREGAR DIRECCION -->
+<div class="modal fade" id="modalAgregarSolicitante" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalAgregarSolicitanteTitle"><b>Nuevo Solicitante</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-12">
+                            <!--Nombre-->
+                            <div class="form-group">
+                                @Html.LabelFor(d => solicitante.nombre, htmlAttributes: new { @class = "control-label  col-xs-2" })
+                                <div class="col-xs-10">
+                                    @Html.TextBoxFor(d => solicitante.nombre, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-6">
+                            <!--CONTACTO-->
+                            <div class="form-group">
+                                @Html.LabelFor(d => solicitante.telefono, htmlAttributes: new { @class = "control-label  col-xs-4" })
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(d => solicitante.telefono, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-12">
+                            <!--TELEFONO-->
+                            <div class="form-group">
+                                @Html.LabelFor(d => solicitante.correo, htmlAttributes: new { @class = "control-label  col-xs-2" })
+                                <div class="col-xs-10">
+                                    @Html.TextBoxFor(d => solicitante.correo, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelSolicitante" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnSaveSolicitante" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/ordenCompraCliente")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/Scripts/App/ubigeo.js")
+}

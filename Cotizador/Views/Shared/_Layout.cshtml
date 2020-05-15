@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "491";
+    TempData["ScriptVersion"] = "530";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -490,16 +490,17 @@
                                     }
 
                                     @*if (usuario.modificaMensaje)
-        {
-            <li id="linkCrearMensaje" class="@linkCrearMensaje">@Html.ActionLink("Mensaje - Crear/Modificar", "Editar", "Mensaje")</li>
-        }
+                                        {
+                                            <li id="linkCrearMensaje" class="@linkCrearMensaje">@Html.ActionLink("Mensaje - Crear/Modificar", "Editar", "Mensaje")</li>
+                                        }
                                     *@
 
                                     @if (usuario.modificaParametro)
                                     {
                                         <li id="linkMantenimientoParametro" class="@linkMantenimientoParametro">@Html.ActionLink("Parametro - Búsqueda", "Lista", "Parametro")</li>
                                     }
-                                    <li id="linkBusquedaVistaDashboard" class="@linkBusquedaVistaDashboard">@Html.ActionLink("Dashboard - Búsqueda", "Lista", "VistaDashboard")</li>
+
+                                    @*<li id="linkBusquedaVistaDashboard" class="@linkBusquedaVistaDashboard">@Html.ActionLink("Dashboard - Búsqueda", "Lista", "VistaDashboard")</li>*@
 
                                     @if (usuario.modificaVistaDashboard)
                                     {
@@ -554,7 +555,7 @@
     @RenderSection("scripts", required: false)
     @Scripts.Render("~/bundles/loadingModal")
     @Scripts.Render("~/bundles/confirm")
-    @Scripts.Render("~/bundles/utiles")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/utiles")
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/account")
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/mensaje")
 </body>

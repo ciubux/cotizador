@@ -275,6 +275,15 @@ namespace BusinessLayer
             }
         }
 
+        public Pedido TruncarPedido(Pedido pedido)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                pedido.truncado = 1;
+                return dal.UpdateTruncado(pedido);
+            }
+        }
+
         public void ProgramarPedido(Pedido pedido, Usuario usuario)
         {
             using (var dal = new PedidoDAL())

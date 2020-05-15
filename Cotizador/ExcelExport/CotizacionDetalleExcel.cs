@@ -456,7 +456,8 @@ namespace Cotizador.ExcelExport
 
                 UtilesHelper.setRowHeight(sheet, i, 540);
                 UtilesHelper.setValorCelda(sheet, i, "L", "Subtotal", totalsLabelCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "M", (double)obj.montoSubTotal, totalsCellStyle);
+                UtilesHelper.setFormulaCelda(sheet, i, "M", "SUM(M" + filaInicioDatos.ToString() + ":M" + (i-1).ToString() + ")", twoDecCellStyle);
+                //UtilesHelper.setValorCelda(sheet, i, "M", (double)obj.montoSubTotal, totalsCellStyle);
                 i++;
 
                 UtilesHelper.setRowHeight(sheet, i, 540);

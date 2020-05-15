@@ -50,6 +50,24 @@ namespace Model
         [Display(Name = "E-mail Envío Factura:")]
         public String correoEnvioFactura { get; set; }
 
+        public List<String> correoEnvioFacturaList { get {
+                List<String> lista = new List<String>();
+                if (this.correoEnvioFactura != null && !this.correoEnvioFactura.Trim().Equals(""))
+                {
+                    lista.Add(this.correoEnvioFactura.Trim());
+                }
+
+                foreach (DireccionEntrega dir in this.direccionEntregaList)
+                {
+                    if(dir.emailRecepcionFacturas != null &&!dir.emailRecepcionFacturas.Trim().Equals(""))
+                    {
+                        lista.Add(dir.emailRecepcionFacturas.Trim());
+                    }
+                }
+
+                return lista;
+            }
+        }
 
         public Ubigeo ubigeo { get; set; }
 
