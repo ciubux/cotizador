@@ -66,6 +66,7 @@ namespace Cotizador.Controllers
                 pedidoTmp.fechaProgramacionHasta = null;// new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
 
                 pedidoTmp.buscarSedesGrupoCliente = false;
+                pedidoTmp.truncado = -1;
 
                 pedidoTmp.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 pedidoTmp.ciudad = new Ciudad();
@@ -1137,6 +1138,14 @@ namespace Cotizador.Controllers
             this.PedidoSession = pedido;
         }
 
+        public void ChangeInputInt()
+        {
+            Pedido pedido = this.PedidoSession;
+            PropertyInfo propertyInfo = pedido.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(pedido, Int32.Parse(this.Request.Params["valor"]));
+            this.PedidoSession = pedido;
+        }
+
         public void ChangeUbigeoEntrega()
         {
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
@@ -1946,7 +1955,11 @@ namespace Cotizador.Controllers
             pedido.idPedido = Guid.Parse(Request["idPedido"].ToString());
             pedido = pedidoBL.GetPedido(pedido,usuario);
             this.Session[Constantes.VAR_SESSION_PEDIDO_VER] = pedido;
-            
+
+            ClienteBL clienteBl = new ClienteBL();
+            Cliente cliente = clienteBl.getCliente(pedido.cliente.idCliente);
+            cliente.usuario = usuario;
+
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
 
             string jsonPedido = JsonConvert.SerializeObject(ParserDTOsShow.PedidoVentaToPedidoVentaDTO(pedido));
@@ -1965,7 +1978,7 @@ namespace Cotizador.Controllers
             this.Session["pedidoDRCantidades"] = new List<int>();
             this.Session["pedidoDRComentarios"] = new List<String>();
 
-            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"pedido\":" + jsonPedido + ", \"usuario\":" + jsonUsuario + "}";
+            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"pedido\":" + jsonPedido + ", \"usuario\":" + jsonUsuario + ", \"isOwner\":" + (cliente.isOwner || pedido.usuario.idUsuario == usuario.idUsuario ? "1" : "0") + "}";
             return json;
         }
 
@@ -2029,6 +2042,20 @@ namespace Cotizador.Controllers
 
             PedidoBL pedidoBL = new PedidoBL();
             pedidoBL.UpdateStockConfirmado(pedido);
+        }
+
+        public void TruncarPedido()
+        {
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] != null)
+            {
+                Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
+                pedido.idPedido = Guid.Parse(this.Request.Params["idPedido"]);
+                pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+                PedidoBL pedidoBL = new PedidoBL();
+                pedidoBL.TruncarPedido(pedido);
+
+            }
         }
 
 

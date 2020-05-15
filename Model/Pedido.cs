@@ -21,6 +21,7 @@ namespace Model
             this.solicitante = new Solicitante();
             this.pedidoAdjuntoList = new List<PedidoAdjunto>();
             this.ciudadASolicitar = new Ciudad();
+            this.truncado = 0;
 
             this.idGrupoCliente = 0;
         }
@@ -37,13 +38,13 @@ namespace Model
             this.solicitante = new Solicitante();
             this.pedidoAdjuntoList = new List<PedidoAdjunto>();
             this.ciudadASolicitar = new Ciudad();
-
+            this.truncado = 0;
             this.idGrupoCliente = 0;
         }
 
 
-
-
+        [Display(Name = "Truncado:")]
+        public int truncado { get; set; }
         public Guid idPedido { get; set; }
         [Display(Name = "Número Pedido:")]
         public Int64 numeroPedido { get; set; }

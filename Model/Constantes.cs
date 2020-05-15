@@ -390,6 +390,7 @@ namespace Model
         public const String MODIFICA_PRODUCTO = "P051";
         public const String APRUEBA_PEDIDOS_COMPRA = "P052";
         public const String APRUEBA_PEDIDOS_ALMACEN = "P053";
+        public const String TRUNCA_PEDIDOS = "P340";
         public const String CREA_COTIZACIONES_GRUPO_CLIENTE = "P054";
         public const String CREA_COTIZACIONES_GRUPALES = "P055";
         public const String APRUEBA_COTIZACIONES_GRUPALES = "P056";

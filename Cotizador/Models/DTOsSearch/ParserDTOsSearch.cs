@@ -273,6 +273,7 @@ namespace Cotizador.Models.DTOsSearch
                 pedidoDTO.seguimientoPedido_estadoString = pedidoTmp.seguimientoPedido.estadoString;
                 pedidoDTO.seguimientoCrediticioPedido_estadoString = pedidoTmp.seguimientoCrediticioPedido.estadoString;
                 pedidoDTO.grupoCliente_nombre = pedidoTmp.cliente.grupoCliente.nombre;
+                pedidoDTO.truncado = pedidoTmp.truncado;
                 pedidoDTOList.Add(pedidoDTO);
             }
             return pedidoDTOList;

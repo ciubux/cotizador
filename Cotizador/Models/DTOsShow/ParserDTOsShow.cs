@@ -330,6 +330,7 @@ namespace Cotizador.Models.DTOsShow
 
             PedidoDTOshow pedidoDTOshow = new PedidoDTOshow();
             pedidoDTOshow.idPedido = pedido.idPedido;
+            pedidoDTOshow.truncado = pedido.truncado;
             pedidoDTOshow.fechaEntregaDesde = pedido.fechaEntregaDesde;
             pedidoDTOshow.fechaEntregaHasta = pedido.fechaEntregaHasta;
             pedidoDTOshow.numeroPedidoString = pedido.numeroPedidoString;

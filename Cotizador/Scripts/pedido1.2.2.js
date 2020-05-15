@@ -1024,8 +1024,19 @@ jQuery(function ($) {
 
 
 
+    
 
-
+    function changeInputInt(propiedad, valor) {
+        $.ajax({
+            url: "/Pedido/ChangeInputInt",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
 
     function changeInputString(propiedad, valor) {
         $.ajax({
@@ -1530,6 +1541,7 @@ jQuery(function ($) {
 
         var idCliente = "";
         var sessionPedido = "pedido"
+
         if ($("#pagina").val() == PAGINA_BUSQUEDA_PEDIDOS_VENTA) {
             idCliente = $("#verIdCliente").val();
             sessionPedido = "pedidoVer";
@@ -2829,6 +2841,7 @@ jQuery(function ($) {
                 //var cotizacion = $.parseJSON(respuesta);
                 var pedido = resultado.pedido;
                 var usuario = resultado.usuario;
+                var isOwner = resultado.isOwner;
                 var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
                 viendoPedidoRestringido = false;
                 pedidoItemsRestringidos = [];
@@ -2865,13 +2878,20 @@ jQuery(function ($) {
 
                 $("#idPedido").val(pedido.idPedido);
 
-                $("#verNumero").html(pedido.numeroPedidoString);
+                var numeroPedido = pedido.numeroPedidoString;
+
                 if (pedido.numeroGrupoPedidoString == "") {
-                    $("#verNumero").html(pedido.numeroPedidoString);
+                    numeroPedido = pedido.numeroPedidoString;
                 }
                 else {
-                    $("#verNumero").html(pedido.numeroPedidoString + " (" + pedido.numeroGrupoPedidoString + ")");
+                    numeroPedido = pedido.numeroPedidoString + " (" + pedido.numeroGrupoPedidoString + ")";
                 }
+
+                if (pedido.truncado == 1) {
+                    numeroPedido = numeroPedido + '<br/><span style="color:red; font-weight: bold;">TRUNCADO</span>'; 
+                }
+
+                $("#verNumero").html(numeroPedido);
 
                 if (pedido.cotizacion_tipoCotizacion == 0) {
                     $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString);
@@ -3287,6 +3307,10 @@ jQuery(function ($) {
                     $("#btnProgramarPedido").hide();
                 }
 
+                //Truncar Pedido
+                $("#btnTruncarPedido").hide();
+
+
                 //ATENDER PEDIDO
                 $("#btnAtenderPedidoVenta").hide();
                 $("#btnIngresarPedidoVenta").hide();
@@ -3296,7 +3320,7 @@ jQuery(function ($) {
 
                 if ((pedido.seguimientoPedido_estado == ESTADO_INGRESADO ||
                     pedido.seguimientoPedido_estado == ESTADO_PROGRAMADO ||
-                    pedido.seguimientoPedido_estado == ESTADO_ATENDIDO_PARCIALMENTE
+                    pedido.seguimientoPedido_estado == ESTADO_ATENDIDO_PARCIALMENTE 
                 ) &&
                     pedido.seguimientoCrediticioPedido_estado == ESTADO_LIBERADO
                 ) {
@@ -3306,10 +3330,13 @@ jQuery(function ($) {
                         || pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
                         //|| pedido.tipoPedido == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
                     ) {
-                        $("#btnAtenderPedidoVenta").show();
-
-
-
+                        
+                        if (pedido.truncado != 1) {
+                            if (isOwner == 1 || usuario.truncaPedidos) {
+                                $("#btnTruncarPedido").show();
+                            }
+                            $("#btnAtenderPedidoVenta").show();
+                        }
                     }
                     else {
                         $("#btnIngresarPedidoVenta").show();
@@ -3736,6 +3763,67 @@ jQuery(function ($) {
     });
 
 
+    $("#btnTruncarPedido").click(function () {
+        $.confirm({
+            title: 'Confirmación',
+            content: '¿Está seguro que desea truncar el pedido?',
+            type: 'orange',
+            buttons: {
+                confirm: {
+                    text: 'Sí',
+                    btnClass: 'btn-red',
+                    action: function () {
+                        var idPedido = $("#verIdPedido").val();
+
+                        $.ajax({
+                            url: "/Pedido/TruncarPedido",
+                            data: {
+                                idPedido: idPedido,
+                            },
+                            type: 'POST',
+                            error: function (detalle) {
+                                $.alert({
+                                    title: 'ERROR',
+                                    content: "Ocurrió un error al intentar truncar el pedido.",
+                                    type: 'red',
+                                    buttons: {
+
+                                        OK: function () {
+                                        }
+                                    }
+                                });
+                            },
+                            success: function () {
+                                $.alert({
+                                    title: 'REGISTRO EXITOSO',
+                                    content: "Se truncó el pedido correctamente.",
+                                    type: 'green',
+                                    buttons: {
+
+                                        OK: function () {
+                                            location.reload();
+                                        }
+                                    }
+                                });
+                            }
+                        });
+
+                        
+                        
+                    }
+                },
+                cancel: {
+                    text: 'No',
+                    //btnClass: 'btn-blue',
+                    //                        keys: ['enter', 'shift'],
+                    action: function () {
+                        
+                    }
+                }
+            },
+
+        });
+    });
 
 
 
@@ -3968,7 +4056,11 @@ jQuery(function ($) {
     });
 
 
+    $("#truncado").change(function () {
+        changeInputInt("truncado", $("#truncado").val())
+    });
 
+    
     
 
     //Mantener en Session cambio de Seleccion de Mostrar Proveedor
@@ -4651,6 +4743,14 @@ jQuery(function ($) {
                         stockConfirmadoLectura = '<input disabled type="checkbox"></input>'
                     }
 
+                    var truncado = '';
+
+
+                    if (pedidoList[i].truncado == 1) {
+                        truncado = '<br/><span style="color:red; font-weight: bold;">TRUNCADO</span>'
+                    }
+                    
+
                   /*  var codigoCliente = pedidoList[i].cliente.codigo;
                     if (codigoCliente == null || codigoCliente == 'null') {
                         codigoCliente = '';
@@ -4691,7 +4791,7 @@ jQuery(function ($) {
                         '<td>  ' + pedidoList[i].rangoHoraEntrega + '</td>' + //horarioEntrega
                         '<td>  ' + pedidoList[i].montoTotal + '  </td>' +
                         '<td>  ' + pedidoList[i].ubigeoEntrega_distrito + '  </td>' +
-                        '<td>  ' + pedidoList[i].seguimientoPedido_estadoString+'</td>' +
+                        '<td>  ' + pedidoList[i].seguimientoPedido_estadoString + truncado +'</td>' +
                       //  '<td>  ' + pedidoList[i].seguimientoPedido.usuario.nombre+'  </td>' +
                       //  '<td>  ' + observacion+'  </td>' +
                         '<td>  ' + pedidoList[i].seguimientoCrediticioPedido_estadoString + '</td>' +
