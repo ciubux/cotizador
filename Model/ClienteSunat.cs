@@ -7,21 +7,23 @@ using System.Web;
 
 namespace Model
 {
-    public class ClienteSunast : Auditoria
+    public class ClienteSunat : Auditoria
     {
         public const string NOMBRE_TABLA = "CLIENTE_SUNAT";
 
-        public ClienteSunast()
+        public ClienteSunat()
         {
             //Cada vez que se instancia un cliente se instancia con al menos una dirección de entrega
             this.direccionEntregaList = new List<DireccionEntrega>();
             this.clientes = new List<Cliente>();
+            this.solicitanteList = new List<Solicitante>();
 
-         
         }
 
+        public int idClienteSunat { get; set; }
         public Guid idCliente { get; set; }
 
+        public List<Solicitante> solicitanteList { get; set; }
         public List<Cliente> clientes { get; set; }
         public List<DireccionEntrega> direccionEntregaList  { get; set; }
 
@@ -35,6 +37,10 @@ namespace Model
         public ClienteConfiguracion configuraciones { get; set; }
 
 
+        public override string ToString()
+        {
+                return "R. Social: " + this.razonSocial + " - RUC: " + this.ruc;
+        }
     }
 
 }

@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Anotations\Columna.cs" />
     <Compile Include="MensajeDAL.cs" />
+    <Compile Include="OrdenCompraClienteDAL.cs" />
     <Compile Include="RolDAL.cs" />
     <Compile Include="ParametroDAL.cs" />
     <Compile Include="DALConverter\UbigeoConvertTo.cs" />

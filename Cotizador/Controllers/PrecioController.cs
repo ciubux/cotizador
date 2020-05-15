@@ -50,9 +50,16 @@ namespace Cotizador.Controllers
                 }
             }
 
+            ProductoBL productoBL = new ProductoBL();
+            Producto producto = productoBL.getProductoById(idProducto);
+
             String jsonPrecioLista = JsonConvert.SerializeObject(precioClienteProductoList);
 
-            String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto + "\", \"precioLista\": " + jsonPrecioLista + "}";
+            String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto +
+                "\", \"unidad\":\"" + producto.unidad + "\", \"precio\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioSinIgv) +
+                "\", \"unidadAlternativa\":\"" + producto.unidad_alternativa + "\", \"precioAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioAlternativo) +
+                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor) + 
+                "\", \"precioLista\": " + jsonPrecioLista + "}";
 
             return json;
         }
@@ -74,7 +81,11 @@ namespace Cotizador.Controllers
 
             String jsonPrecioLista = JsonConvert.SerializeObject(precioGrupoClienteProductoList);
 
-            String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto + "\", \"precioLista\": " + jsonPrecioLista + "}";
+            String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto +
+                "\", \"unidad\":\"" + producto.unidad + "\", \"precio\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioSinIgv) +
+                "\", \"unidadAlternativa\":\"" + producto.unidad_alternativa + "\", \"precioAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioAlternativo) +
+                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor) +
+                "\", \"precioLista\": " + jsonPrecioLista + "}";
 
             return json;
         }
@@ -109,7 +120,14 @@ namespace Cotizador.Controllers
 
             String jsonPrecioLista = JsonConvert.SerializeObject(precioClienteProductoList);
 
-            String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto + "\", \"precioLista\": " + jsonPrecioLista + "}";
+            String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto +
+                "\", \"unidad\":\"" + producto.unidad + "\", \"precio\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioSinIgv) +
+                "\", \"unidadAlternativa\":\"" + producto.unidad_alternativa + "\", \"precioAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioAlternativo) +
+                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor) +
+                "\", \"precioLista\": " + jsonPrecioLista + "}";
+
+            
+
 
             return json;
         }
@@ -139,9 +157,16 @@ namespace Cotizador.Controllers
                 }
             }
 
+            ProductoBL productoBL = new ProductoBL();
+            Producto producto = productoBL.getProductoById(idProducto);
+
             String jsonPrecioLista = JsonConvert.SerializeObject(precioClienteProductoList);
 
-            String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto + "\", \"precioLista\": " + jsonPrecioLista + "}";
+            String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto +
+                "\", \"unidad\":\"" + producto.unidad + "\", \"precio\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioSinIgv) +
+                "\", \"unidadAlternativa\":\"" + producto.unidad_alternativa + "\", \"precioAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioAlternativo) +
+                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor) + 
+                "\", \"precioLista\": " + jsonPrecioLista + "}";
 
             return json;
         }
@@ -172,9 +197,16 @@ namespace Cotizador.Controllers
                 }
             }
 
+            ProductoBL productoBL = new ProductoBL();
+            Producto producto = productoBL.getProductoById(idProducto);
+
             String jsonPrecioLista = JsonConvert.SerializeObject(precioClienteProductoList);
 
-            String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto + "\", \"precioLista\": " + jsonPrecioLista + "}";
+            String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto +
+                "\", \"unidad\":\"" + producto.unidad + "\", \"precio\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioSinIgv) +
+                "\", \"unidadAlternativa\":\"" + producto.unidad_alternativa + "\", \"precioAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioAlternativo) +
+                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor) + 
+                "\", \"precioLista\": " + jsonPrecioLista + "}";
 
             return json;
         }

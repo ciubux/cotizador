@@ -911,8 +911,7 @@ jQuery(function ($) {
 
 
 
-    function validacionDatosCliente()
-    {
+    function validacionDatosCliente() {
         if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
             $.alert({
                 title: "No selecionó Ciudad",
@@ -930,13 +929,13 @@ jQuery(function ($) {
         var tipoDocumentoIdentidad = $("#tipoDocumentoIdentidad").val();
         var ruc = $("#cliente_ruc").val();
 
-        if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_DNI)
-        {
+        if (tipoDocumentoIdentidad == CONS_TIPO_DOC_CLIENTE_DNI) {
             if (ruc.length != 8) {
                 $.alert({
                     title: "DNI Inválido", type: 'orange',
                     content: 'El número de DNI debe tener 8 dígitos.',
-                    buttons: { OK: function () { $('#cliente_ruc').focus(); }
+                    buttons: {
+                        OK: function () { $('#cliente_ruc').focus(); }
                     }
                 });
             }
@@ -1041,6 +1040,18 @@ jQuery(function ($) {
                 return false;
             }
         }
+
+        /*if (!$('#cliente_CanalLima').prop('checked') && !$('#cliente_CanalProvincias').prop('checked') && !$('#cliente_CanalPCP').prop('checked') && !$('#cliente_CanalMultireginal').prop('checked')) {
+            $.alert({
+                title: "Canal no seleccionado",
+                type: 'orange',
+                content: 'Debe asignar por lo menos 1 canal al cliente.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            return false;
+        }*/
 
       /*  if ($("#idResponsableComercial").val().trim() == 0) {
             $.alert({
@@ -2149,7 +2160,7 @@ jQuery(function ($) {
         var textCiudad = $("#idCiudad option:selected").text();
 
         if ($("#pagina").val() == PAGINA_MantenimientoCliente) {            
-
+            /*
             if (textCiudad.trim().toUpperCase() == 'LIMA') {
                 $('#cliente_CanalLima').prop('checked', true);
                 $('#cliente_CanalProvincias').prop('checked', false);
@@ -2163,6 +2174,7 @@ jQuery(function ($) {
                 changeInputBoolean('perteneceCanalLima', 0);
                 changeInputBoolean('perteneceCanalProvincias', 1);
             }
+            */
         }
 
         $("#spn_vercliente_mp_registracotizaciones").html($("#idCiudad option:selected").text());

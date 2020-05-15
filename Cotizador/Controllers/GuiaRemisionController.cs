@@ -56,6 +56,34 @@ namespace Cotizador.Controllers
             return clienteBL.getCLientesBusqueda(data, guiaRemision.ciudadOrigen.idCiudad);
         }
 
+        public String SearchClientesFactura()
+        {
+            String data = this.Request.Params["data[q]"];
+            ClienteBL clienteBL = new ClienteBL();
+            Ciudad ciudad = (Ciudad)this.Session["s_cambioclientefactura_ciudad"];
+            return clienteBL.getCLientesBusqueda(data, ciudad.idCiudad);
+        }
+
+
+        public String GetClienteFactura()
+        {
+            Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
+            ClienteBL clienteBl = new ClienteBL();
+            Cliente cliente = clienteBl.getCliente(idCliente);
+            DomicilioLegalBL domlegBl = new DomicilioLegalBL();
+            cliente.domicilioLegalList = domlegBl.getDomiciliosLegalesPorCliente(cliente);
+
+            DireccionEntregaBL dirEntBl = new DireccionEntregaBL();
+            cliente.direccionEntregaList = dirEntBl.getDireccionesEntrega(cliente.idCliente);
+
+            this.Session["s_cambioclientefactura_cliente"] = cliente;
+            
+            String resultado = JsonConvert.SerializeObject(cliente);
+
+            return resultado;
+        }
+
+
         public String GetCliente()
         {
             GuiaRemision guiaRemision = this.GuiaRemisionSession;
@@ -175,6 +203,13 @@ namespace Cotizador.Controllers
 
                  ViewBag.mostrarGuia = mostrarGuia;*/
             ViewBag.idMovimientoAlmacen = idMovimientoAlmacen;
+
+            this.Session["s_cambioclientefactura_cambio"] = false;
+            this.Session["s_cambioclientefactura_ciudad"] = null;
+            this.Session["s_cambioclientefactura_cliente"] = null;
+            this.Session["s_cambioclientefactura_domicilioLegal"] = null;
+            this.Session["s_cambioclientefactura_correoEnvio"] = null;
+            this.Session["s_cambioclientefactura_sustento"] = null;
 
             return View();
         }
@@ -313,6 +348,13 @@ namespace Cotizador.Controllers
             {
                 existeCliente = 1;
             }
+
+            this.Session["s_cambioclientefactura_cambio"] = false;
+            this.Session["s_cambioclientefactura_ciudad"] = null;
+            this.Session["s_cambioclientefactura_cliente"] = null;
+            this.Session["s_cambioclientefactura_domicilioLegal"] = null;
+            this.Session["s_cambioclientefactura_correoEnvio"] = null;
+            this.Session["s_cambioclientefactura_sustento"] = null;
 
             Pedido pedido = new Pedido();
 
@@ -1092,6 +1134,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
             //string jsonGuiaRemision = JsonConvert.SerializeObject(guiaRemision);
+            this.Session["s_cambioclientefactura_cambio"] = false;
             string jsonGuiaRemision = JsonConvert.SerializeObject(ParserDTOsShow.GuiaRemisionToGuiaRemisionDTO(guiaRemision));
             String json = "{\"usuario\":" + jsonUsuario + ", \"guiaRemision\":" + jsonGuiaRemision + "}";
             return json;
@@ -1126,8 +1169,16 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(guiaRemision);
         }
 
+        public void CambioClienteFactura()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (usuario.cambiaClienteFactura)
+            {
+                this.Session["s_cambioclientefactura_cambio"] = true;
+            }
+        }
 
-
+        
         #endregion
 
 
@@ -1188,12 +1239,60 @@ namespace Cotizador.Controllers
             }
             CiudadBL ciudadBL = new CiudadBL();
             Ciudad ciudadOrigen = ciudadBL.getCiudad(idCiudad);
+            ciudadOrigen.idCiudad = idCiudad;
             guiaRemision.transportista = new Transportista();
             TransportistaBL transportistaBL = new TransportistaBL();
             ciudadOrigen.transportistaList = transportistaBL.getTransportistas(idCiudad);
             guiaRemision.ciudadOrigen = ciudadOrigen;
             this.GuiaRemisionSession = guiaRemision;
             return JsonConvert.SerializeObject(guiaRemision.ciudadOrigen);
+        }
+
+        public String ChangeIdCiudadFactura()
+        {
+            Guid idCiudad = Guid.Empty;
+            if (this.Request.Params["idCiudad"] != null && !this.Request.Params["idCiudad"].Equals(""))
+            {
+                idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
+            }
+            CiudadBL ciudadBL = new CiudadBL();
+            Ciudad ciudadOrigen = ciudadBL.getCiudad(idCiudad);
+            ciudadOrigen.idCiudad = idCiudad;
+            this.Session["s_cambioclientefactura_ciudad"] =  ciudadOrigen;
+            return JsonConvert.SerializeObject(ciudadOrigen);
+        }
+
+        public void ChangeDomicilioLegalFactura()
+        {
+            String domicilioLegal = "";
+            if (this.Request.Params["valor"] != null && !this.Request.Params["valor"].Equals(""))
+            {
+                domicilioLegal = this.Request.Params["valor"].ToString();
+            }
+
+            this.Session["s_cambioclientefactura_domicilioLegal"] = domicilioLegal;
+        }
+
+        public void ChangeSustentoCambioCliente()
+        {
+            String sustento = "";
+            if (this.Request.Params["valor"] != null && !this.Request.Params["valor"].Equals(""))
+            {
+                sustento = this.Request.Params["valor"].ToString();
+            }
+
+            this.Session["s_cambioclientefactura_sustento"] = sustento;
+        }
+        
+        public void ChangeCorreoEnvioFactura()
+        {
+            String correoEnvio = "";
+            if (this.Request.Params["valor"] != null && !this.Request.Params["valor"].Equals(""))
+            {
+                correoEnvio = this.Request.Params["valor"].ToString();
+            }
+
+            this.Session["s_cambioclientefactura_correoEnvio"] = correoEnvio;
         }
 
         public void ChangeInputString()

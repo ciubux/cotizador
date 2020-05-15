@@ -33,6 +33,7 @@ namespace Model
         public static String URL_VER_PEDIDO = "http://cotizadormp.azurewebsites.net/Pedido?idPedido=";
 
 
+        public static String ID_SEDE_TODOS = "78343C04-DA94-4249-B0CE-474DAB6dAD3F";
 
         public static String LABEL_DIRECCION_ENTREGA_VACIO = "Seleccione Dirección de Entrega";
 
@@ -60,6 +61,12 @@ namespace Model
         public static String VAR_SESSION_COTIZACION_LISTA = "cotizacionList";
         public static String VAR_SESSION_COTIZACION_VER = "cotizacionVer";
         public static String VAR_SESSION_COTIZACION_GRUPAL = "cotizacionGrupal";
+
+        public static String VAR_SESSION_ORDEN_COMPRA_CLIENTE = "ordenCompraCliente";
+        public static String VAR_SESSION_ORDEN_COMPRA_CLIENTE_BUSQUEDA = "ordenCompraClienteBusqueda";
+        public static String VAR_SESSION_ORDEN_COMPRA_CLIENTE_APROBACION = "ordenCompraClienteAprobacion";
+        public static String VAR_SESSION_ORDEN_COMPRA_CLIENTE_LISTA = "ordenCompraClienteList";
+        public static String VAR_SESSION_ORDEN_COMPRA_CLIENTE_VER = "ordenCompraClienteVer";
 
         public static String VAR_SESSION_PEDIDO = "pedido";
         public static String VAR_SESSION_PEDIDO_BUSQUEDA = "pedidoBusqueda";
@@ -297,7 +304,7 @@ namespace Model
         public static Decimal IGV = 0.18M;
         public static Decimal PORCENTAJE_MAX_APROBACION = 3.00M;
         public static String SIMBOLO_SOL = "S/";
-        public static int PLAZO_OFERTA_DIAS = 15;
+        public static int PLAZO_OFERTA_DIAS = 2;
         public static int DEBUG = 1;
         public static int DIAS_MAX_BUSQUEDA_PRECIOS = 730;
         public static int MILISEGUNDOS_AUTOGUARDADO = 5000;
@@ -393,6 +400,7 @@ namespace Model
         public const String MODIFICA_PRODUCTO = "P051";
         public const String APRUEBA_PEDIDOS_COMPRA = "P052";
         public const String APRUEBA_PEDIDOS_ALMACEN = "P053";
+        public const String TRUNCA_PEDIDOS = "P340";
         public const String CREA_COTIZACIONES_GRUPO_CLIENTE = "P054";
         public const String CREA_COTIZACIONES_GRUPALES = "P055";
         public const String APRUEBA_COTIZACIONES_GRUPALES = "P056";
@@ -442,6 +450,8 @@ namespace Model
         public const String MODIFICA_RUBRO = "P750";
         public const String VISUALIZA_RUBROS = "P751";
 
+        public const String CAMBIA_CLIENTE_FACTURA = "P581";
+        
 
         public const String BUSCA_NOTAS_INGRESO_TODAS_SEDES = "P320";
         public const String VALIDA_RESPONSABLES_COMERCIALES_ASIGNADOS = "P780";
@@ -455,6 +465,11 @@ namespace Model
             BusquedaCotizaciones = 0,
             [Display(Name = "MANTENIMIENTO COTIZACION")]
             MantenimientoCotizacion = 1,
+            /*ORDEN COMPRA CLIENTE*/
+            [Display(Name = "BUSQUEDA ORDEN COMPRA CLIENTE")]
+            BusquedaOrdenCompraClientes = 250,
+            [Display(Name = "MANTENIMIENTO ORDEN COMPRA CLIENTE")]
+            MantenimientoOrdenCompraCliente = 251,
             /*PEDIDO VENTA*/
             [Display(Name = "BUSQUEDA PEDIDO")]
             BusquedaPedidos = 2,

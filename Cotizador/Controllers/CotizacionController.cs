@@ -1164,6 +1164,13 @@ namespace Cotizador.Controllers
                     throw new System.Exception("Cotización ya se encuentra creada");
                 }
 
+                if (Constantes.PLAZO_OFERTA_DIAS < 7)
+                {
+                    cotizacion.validezOfertaEnDias = Constantes.PLAZO_OFERTA_DIAS;
+                    cotizacion.mostrarValidezOfertaEnDias = 1;
+                    cotizacion.fechaLimiteValidezOferta = DateTime.Now.AddDays(Constantes.PLAZO_OFERTA_DIAS);
+                }
+
                 bl.InsertCotizacion(cotizacion);
                 long codigo = cotizacion.codigo;
                 int estado = (int)cotizacion.seguimientoCotizacion.estado;
@@ -1217,6 +1224,13 @@ namespace Cotizador.Controllers
             cotizacion.aplicaSedes = aplicaSedes && !cotizacion.cliente.sedePrincipal ? false : aplicaSedes;
             cotizacion.usuario = usuario;
             CotizacionBL bl = new CotizacionBL();
+
+            if (Constantes.PLAZO_OFERTA_DIAS < 7)
+            {
+                cotizacion.validezOfertaEnDias = Constantes.PLAZO_OFERTA_DIAS;
+                cotizacion.mostrarValidezOfertaEnDias = 1;
+                cotizacion.fechaLimiteValidezOferta = DateTime.Now.AddDays(Constantes.PLAZO_OFERTA_DIAS);
+            }
 
             Cotizacion cotizacionAprobada = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_APROBADA];
             bl.UpdateCotizacion(cotizacion, cotizacionAprobada);

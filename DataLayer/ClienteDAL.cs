@@ -104,6 +104,75 @@ namespace DataLayer
             return list;
         }
 
+
+        public ClienteSunat getClienteSunat(int idClienteSunat)
+        {
+            var objCommand = GetSqlCommand("ps_cliente_sunat");
+            InputParameterAdd.Int(objCommand, "idClienteSunat", idClienteSunat);
+            DataSet dataSet = ExecuteDataSet(objCommand);
+            DataTable dataTableClienteSunat = dataSet.Tables[0];
+            DataTable dataTableClientes = dataSet.Tables[1];
+
+
+            DataTable dataTable = Execute(objCommand);
+            ClienteSunat clienteSunat = new ClienteSunat();
+
+            foreach (DataRow row in dataTableClienteSunat.Rows)
+            {
+                clienteSunat = new ClienteSunat
+                {
+                    idClienteSunat = Converter.GetInt(row, "id_cliente_sunat"),
+                    razonSocial = Converter.GetString(row, "razon_social"),
+                    nombreComercial = Converter.GetString(row, "nombre_comercial"),
+                    ruc = Converter.GetString(row, "ruc")
+                };
+            }
+
+
+            List<Cliente> list = new List<Cliente>();
+
+            foreach (DataRow row in dataTableClientes.Rows)
+            {
+                Cliente ClienteResultado = new Cliente();
+                ClienteResultado.idCliente = Converter.GetGuid(row, "id_cliente");
+                ClienteResultado.codigo = Converter.GetString(row, "codigo");
+                ClienteResultado.ciudad = new Ciudad();
+                ClienteResultado.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                ClienteResultado.ciudad.nombre = Converter.GetString(row, "ciudad_nombre");
+
+                ClienteResultado.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento");
+                ClienteResultado.ruc = Converter.GetString(row, "ruc");
+
+                list.Add(ClienteResultado);
+            }
+
+            clienteSunat.clientes = list;
+            return clienteSunat;
+        }
+
+        public List<ClienteSunat> getClientesSunatBusqueda(String textoBusqueda)
+        {
+            var objCommand = GetSqlCommand("ps_busqueda_clientes_sunat");
+            InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
+
+            DataTable dataTable = Execute(objCommand);
+            List<ClienteSunat> clienteList = new List<ClienteSunat>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                ClienteSunat cliente = new ClienteSunat
+                {
+                    idClienteSunat = Converter.GetInt(row, "id_cliente_sunat"),
+                    razonSocial = Converter.GetString(row, "razon_social"),
+                    ruc = Converter.GetString(row, "ruc")
+                };
+                clienteList.Add(cliente);
+            }
+            return clienteList;
+        }
+
+
+
         public List<Cliente> getClientesBusqueda(String textoBusqueda, Guid idCiudad)
         {
             var objCommand = GetSqlCommand("ps_getclientes_search");

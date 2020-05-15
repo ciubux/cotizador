@@ -411,6 +411,10 @@ jQuery(function ($) {
         ChangeTipoProducto($("#tipoProducto").val());
     });
 
+    $("#tipoVentaRestringidaBusqueda").change(function () {
+        changeInputInt("tipoVentaRestringidaBusqueda", $("#tipoVentaRestringidaBusqueda").val());
+    });
+
     $("#producto_exoneradoIgv").change(function () {
         var valor = 1;
         if (!$('#producto_exoneradoIgv').prop('checked')) {

@@ -972,6 +972,14 @@ jQuery(function ($) {
                 $("#verProducto").html(producto.nombre);
                 $("#verCodigoProducto").html(producto.sku);
 
+                $("#verUnidadProveedor").html(producto.unidadProveedor);
+                $("#verUnidadMP").html(producto.unidad);
+                $("#verUnidadAlternativa").html(producto.unidadAlternativa);
+
+                $("#verPrecioProveedor").html(producto.precioProveedor);
+                $("#verPrecioMP").html(producto.precio);
+                $("#verPrecioAlternativa").html(producto.precioAlternativa);
+
                 var precioListaList = producto.precioLista;
 
                 // var producto = $.parseJSON(respuesta);
@@ -995,6 +1003,7 @@ jQuery(function ($) {
                     var numeroCotizacion = precioListaList[i].numeroCotizacion;
                     if (numeroCotizacion == null)
                         numeroCotizacion = "No Identificado";
+
 
                     $("#tableMostrarPrecios").append('<tr data-expanded="true">' +
 
@@ -2222,8 +2231,8 @@ jQuery(function ($) {
                 /*PDF*/
                 if (
                     (cotizacion.seguimientoCotizacion_estado == ESTADO_APROBADA ||
-                        cotizacion.seguimientoCotizacion_estado == ESTADO_ACEPTADA ||
-                        cotizacion.seguimientoCotizacion_estado == ESTADO_RECHAZADA
+                        cotizacion.seguimientoCotizacion_estado == ESTADO_ACEPTADA /* ||
+                        cotizacion.seguimientoCotizacion_estado == ESTADO_RECHAZADA*/
                     )
                 ) {
 

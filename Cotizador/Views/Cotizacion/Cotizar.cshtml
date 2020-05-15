@@ -159,7 +159,7 @@ else
 
 
                     <div class="col-xs-4">
-                        <select class="form-control " id="mostrarValidezOfertaEnDias" name="mostrarValidezOfertaEnDias">
+                        <select class="form-control " id="mostrarValidezOfertaEnDias" readonly disabled="disabled" name="mostrarValidezOfertaEnDias">
                             <option value="0">Días</option>
                             @if (cotizacion.mostrarValidezOfertaEnDias == 1)
 {
@@ -172,12 +172,12 @@ else
                         </select>
                     </div>
                     <div class="col-xs-4">
-                        <input type="hidden" id="fechaLimiteValidezOfertaTmp" value="@cotizacion.fechaLimiteValidezOferta" />
+                        <input type="hidden" id="fechaLimiteValidezOfertaTmp" value='@cotizacion.fechaLimiteValidezOferta.ToString("dd/MM/yyyy")' />
                         <div id="fechaVigenciadiv">
-                            <input class="form-control" type="text" id="fechaLimiteValidezOferta" name="fechaLimiteValidezOferta">
+                            <input class="form-control" readonly disabled="disabled" type="text" id="fechaLimiteValidezOferta" name="fechaLimiteValidezOferta">
                         </div>
                         <div id="diasVigenciadiv">
-                            <input class="form-control" type="number" min="1" step="1" id="validezOfertaEnDias" value="@cotizacion.validezOfertaEnDias" name="fechaLimiteValidezOferta">
+                            <input class="form-control" readonly disabled="disabled" type="number" min="1" step="1" id="validezOfertaEnDias" value="@cotizacion.validezOfertaEnDias" name="fechaLimiteValidezOferta">
                         </div>
 
                     </div>
@@ -236,7 +236,6 @@ else
             </div>
         </div>
 
-        <!--
 
         <div class="row">
 
@@ -251,11 +250,11 @@ else
                             <label class="radio-label">
                                 @if (cotizacion.incluidoIGV)
 {
-                                <input class="radio-input" disabled checked type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
+                                <input class="radio-input"  checked type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
 }
 else
 {
-                            <input class="radio-input" disabled type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
+                            <input class="radio-input"  type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
 }
 
                             </label>
@@ -264,11 +263,11 @@ else
                             <label class="radio-label">
                                 @if (!cotizacion.incluidoIGV)
 {
-                                <input class="radio-input" disabled checked type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
+                                <input class="radio-input"  checked type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
 }
 else
 {
-                            <input class="radio-input" disabled type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
+                            <input class="radio-input"  type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
 }
                             </label>
                         </div>
@@ -281,7 +280,7 @@ else
 
 
 
-        </div>-->
+        </div>
 
         <div class="row">
 
@@ -1131,6 +1130,42 @@ else
                             </div>
                         </div>
 
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-12 text-center" style="text-align: center;">Unidad Proveedor</label>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center" id="verUnidadProveedor"></p>
+                                </div>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center"><b>Precio: </b> S/ <span id="verPrecioProveedor"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-12" style="text-align: center;">Unidad MP</label>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center" id="verUnidadMP"></p>
+                                </div>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center"><b>Precio: </b> S/ <span id="verPrecioMP"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-12 text-center" style="text-align: center;">Unidad Alternativa</label>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center" id="verUnidadAlternativa"></p>
+                                </div>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center"><b>Precio: </b> S/ <span id="verPrecioAlternativa"></span></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <table id="tableMostrarPrecios" class="table" data-editing="false"

@@ -24,10 +24,20 @@ namespace Cotizador.Controllers
 
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaProductos;
 
+            
             if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
             {
                 return RedirectToAction("Login", "Account");
             }
+            else
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                if (!usuario.visualizaProductos)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+            }
+
 
             if (this.Session[Constantes.VAR_SESSION_PRODUCTO_BUSQUEDA] == null)
             {
@@ -166,6 +176,7 @@ namespace Cotizador.Controllers
             producto.proveedor = "Todos";
             producto.Estado = 1;
             producto.tipoProductoVista = 0;
+            producto.tipoVentaRestringidaBusqueda = -1;
             producto.descontinuado = -1;
 
             this.Session["familia"] = "Todas";

@@ -244,61 +244,6 @@ jQuery(function ($) {
 
 
 
-    
-
-    $(window).on("paste", function (e) {
-
-        $.each(e.originalEvent.clipboardData.items, function () {
-            this.getAsString(function (str) {
-                //alert(str);
-                var lineas = str.split("\t");
-
-                if (lineas.length <= 1)
-                    return false;
-
-                //      if (lineas[1] == $("#grupoCliente_ruc").val()) {
-                //      $("#ncRUC").val(lineas[1]);
-
-                //       $("#grupoCliente_razonSocialSunat").val(lineas[0]);
-                //$("#ncRUC").val(lineas[1]);
-                var direccionDomicilioLegalSunat = lineas[0] + " " + lineas[1] + " - " + lineas[2] + " - " + lineas[3];
-
-
-
-                $('body').loadingModal({
-                    text: 'Recuperando Ubicación Geográfica...'
-                });
-                $.ajax({
-                    url: "/GrupoCliente/ChangeDireccionDomicilioLegalSunat",
-                    type: 'POST',
-                    dataType: 'JSON',
-                    data: {
-                        direccionDomicilioLegalSunat: direccionDomicilioLegalSunat
-                    },
-                    erro: function () {
-                        $('body').loadingModal('hide')
-                    },
-
-                    success: function (resultado) {
-                        $('body').loadingModal('hide')
-                        $("#grupoCliente_direccionDomicilioLegalSunat").val(resultado.direccionDomicilioLegalSunat);
-                        $("#grupoCliente_ubigeo_Departamento").val(resultado.ubigeo.Departamento);
-                        $("#grupoCliente_ubigeo_Provincia").val(resultado.ubigeo.Provincia);
-                        $("#grupoCliente_ubigeo_Distrito").val(resultado.ubigeo.Distrito);
-                    }
-                });
-
-                changeInputString("estadoContribuyente", $("#grupoCliente_estadoContribuyente").val())
-                changeInputString("condicionContribuyente", $("#grupoCliente_condicionContribuyente").val())
-                /*   }
-                   else {
-                       alert("El RUC que acaba de pegar no coincide con el RUC del cliente.");
-                   }*/
-            });
-        });
-
-
-    });
 
 
     function validacionDatosGrupoCliente() {

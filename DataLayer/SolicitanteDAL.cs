@@ -38,5 +38,28 @@ namespace DataLayer
             }
             return lista;
         }
+
+        public List<Solicitante> getSolicitantesClienteSunat(int idClienteSunat)
+        {
+            var objCommand = GetSqlCommand("ps_solicitantes_cliente_sunat");
+            InputParameterAdd.Int(objCommand, "idClienteSunat", idClienteSunat);
+
+            DataTable dataTable = Execute(objCommand);
+            List<Solicitante> lista = new List<Solicitante>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Solicitante obj = new Solicitante
+                {
+                    idSolicitante = Converter.GetGuid(row, "id_solicitante"),
+                    nombre = Converter.GetString(row, "nombre"),
+                    telefono = Converter.GetString(row, "telefono"),
+                    correo = Converter.GetString(row, "correo")
+                };
+                lista.Add(obj);
+            }
+            return lista;
+        }
+        
     }
 }

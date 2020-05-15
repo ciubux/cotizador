@@ -68,6 +68,7 @@ namespace Cotizador.Models.DTOshow
         public String numeroRequerimiento { get; set; }
         public int cotizacion_tipoCotizacion { get; set; }
 
+        public int truncado { get; set; }
         public String grupoCliente_nombre { get; set; }
 
     }

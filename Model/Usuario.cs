@@ -127,6 +127,8 @@ namespace Model
         public bool apruebaPedidosLima { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_PEDIDOS_LIMA)).FirstOrDefault() != null; } }
         public bool apruebaPedidosProvincias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_PEDIDOS_PROVINCIAS)).FirstOrDefault() != null; } }
         public bool apruebaPedidosVentaRestringida { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_PEDIDOS_VENTA_RESTRINGIDA)).FirstOrDefault() != null; } }
+
+        public bool truncaPedidos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.TRUNCA_PEDIDOS)).FirstOrDefault() != null; } }
         public bool visualizaPedidosLima { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_PEDIDOS_LIMA)).FirstOrDefault() != null; } }
         public bool visualizaPedidosProvincias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_PEDIDOS_PROVINCIAS)).FirstOrDefault() != null; } }
         public bool visualizaPedidos { get { return visualizaPedidosLima || visualizaPedidosProvincias; } }
@@ -161,7 +163,7 @@ namespace Model
         public bool creaNotasCredito { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_NOTAS_CREDITO)).FirstOrDefault() != null; } }
         public bool creaNotasDebito { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_NOTAS_DEBITO)).FirstOrDefault() != null; } }
         public bool realizaRefacturacion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REALIZA_REFACTURACION)).FirstOrDefault() != null; } }
-
+        public bool cambiaClienteFactura { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CAMBIA_CLIENTE_FACTURA)).FirstOrDefault() != null; } }
 
         /*Grupo Clientes*/
         public bool modificaGrupoClientes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_GRUPO_CLIENTES)).FirstOrDefault() != null; } }

@@ -631,6 +631,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente);
             InputParameterAdd.Bit(objCommand, "buscaSedesGrupoCliente", pedido.buscarSedesGrupoCliente);
             InputParameterAdd.Int(objCommand, "idGrupoCliente", pedido.idGrupoCliente);
+            InputParameterAdd.Int(objCommand, "truncado", pedido.truncado);
 
             switch (pedido.clasePedido)
             {
@@ -668,6 +669,7 @@ namespace DataLayer
                 pedido.horaEntregaAdicionalHasta = Converter.GetString(row, "hora_entrega_adicional_hasta");
                 pedido.fechaEntregaExtendida = Converter.GetDateTimeNullable(row, "fecha_entrega_extendida");
                 pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
+                pedido.truncado = Converter.GetInt(row, "truncado");
 
                 pedido.FechaRegistro = Converter.GetDateTime(row, "fecha_registro");
                 //pedido.FechaRegistro = pedido.FechaRegistro.AddHours(-5);
@@ -758,7 +760,7 @@ namespace DataLayer
                 pedido.horaEntregaAdicionalHasta = Converter.GetString(row, "hora_entrega_adicional_hasta");
 
                 pedido.fechaEntregaExtendida = Converter.GetDateTimeNullable(row, "fecha_entrega_extendida");
-                
+                pedido.truncado = Converter.GetInt(row, "truncado");
 
                 pedido.incluidoIGV = Converter.GetBool(row, "incluido_igv");
                 pedido.montoIGV = Converter.GetDecimal(row, "igv");
@@ -876,6 +878,7 @@ namespace DataLayer
                 pedido.ciudad.sede = Converter.GetString(row, "codigo_sede");
 
                 pedido.usuario = new Usuario();
+                pedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_creacion");
                 pedido.usuario.nombre = Converter.GetString(row, "nombre_usuario");
                 pedido.usuario.cargo = Converter.GetString(row, "cargo");
                 pedido.usuario.contacto = Converter.GetString(row, "contacto_usuario");
@@ -1480,8 +1483,19 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             ExecuteNonQuery(objCommand);
         }
 
-        #endregion        
-         
+        public Pedido UpdateTruncado(Pedido pedido)
+        {
+            var objCommand = GetSqlCommand("pu_pedidotruncar");
+            InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
+            InputParameterAdd.Int(objCommand, "truncado", pedido.truncado);
+            InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
+            ExecuteNonQuery(objCommand);
+
+            return pedido;
+        }
+
+        #endregion
+
 
         public List<Guid> SelectPedidosSinAtencion()
         {
