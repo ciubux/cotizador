@@ -1497,6 +1497,19 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
                     }
                 }
 
+                var descontinuadoLabel = "";
+                if (detalle.descontinuado == 1) {
+                    descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
+
+                    if (detalle.motivoRestriccion != null) {
+                        detalle.motivoRestriccion = detalle.motivoRestriccion.trim();
+                        descontinuadoLabel = descontinuadoLabel.replace("_DATA_TIPSO_", detalle.motivoRestriccion);
+
+                        if (detalle.motivoRestriccion != "") {
+                            descontinuadoLabel = descontinuadoLabel.replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+                        }
+                    }
+                }
 
                 $('#tableDetallePedido tbody tr.footable-empty').remove();
                 $("#tableDetallePedido tbody").append('<tr data-expanded="true">' +
@@ -1504,7 +1517,7 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
                     '<td>' + esPrecioAlternativo + '</td>' +
 
                     '<td>' + proveedor + '</td>' +
-                    '<td>' + detalle.codigoProducto + '</td>' +
+                    '<td>' + detalle.codigoProducto + descontinuadoLabel +  '</td>' +
                     '<td>' + detalle.nombreProducto + observacionesEnDescripcion + '</td>' +
                     '<td>' + detalle.unidad + '</td>' +
                     '<td class="column-img"><img class="table-product-img" src="' + $("#imgProducto").attr("src") + '"></td>' +
@@ -2529,9 +2542,10 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
                 //var cotizacion = $.parseJSON(respuesta);
                 $('body').loadingModal('hide');
                 var pedido = resultado.pedido;
+               
                 var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
 
-              //  var usuario = resultado.usuario;
+                var usuario = resultado.usuario;
 
 
                 $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
@@ -2638,15 +2652,33 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
                 $("#formVerGuiasRemision").html("");
                 $("#formVerNotasIngreso").html("");
 
+                var tieneProductoRestringido = false;
                 var d = '';
                 var lista = pedido.pedidoDetalleList;
                 for (var i = 0; i < lista.length; i++) {
 
                     var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined'? '' : lista[i].observacion;
 
+                    var descontinuadoLabel = "";
+                    if (lista[i].producto.descontinuado == 1) {
+                        tieneProductoRestringido = true;
+
+                        if (lista[i].producto.motivoRestriccion != null) {
+                            lista[i].producto.motivoRestriccion = lista[i].producto.motivoRestriccion.trim();
+
+                            $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").removeClass("tooltip-motivo-restriccion");
+                            if (lista[i].producto.motivoRestriccion != "") {
+                                $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").addClass("tooltip-motivo-restriccion");
+                                $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado .tooltip-label-text").html(lista[i].producto.motivoRestriccion);
+                            }
+                        }
+
+                        descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
+                    }
+
                     d += '<tr>' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
-                        '<td>' + lista[i].producto.sku + '</td>' +
+                        '<td>' + lista[i].producto.sku + descontinuadoLabel + '</td>' +
                         '<td>' + lista[i].producto.descripcion + '</td>' +
                         '<td>' + lista[i].unidad + '</td>' +
                         '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + lista[i].producto.image + '"> </td>' +
@@ -2814,6 +2846,8 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
                 if (
                     (pedido.seguimientoPedido.estado == ESTADO_PENDIENTE_APROBACION ||
                         pedido.seguimientoPedido.estado == ESTADO_DENEGADO)
+                    &&
+                    (!tieneProductoRestringido || (tieneProductoRestringido && usuario.apruebaPedidosVentaRestringida))
                 ) {
 
                     $("#btnAprobarIngresoPedido").show();

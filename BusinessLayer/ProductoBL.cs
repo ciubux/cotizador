@@ -105,8 +105,8 @@ namespace BusinessLayer
                 }
 
                 //Se aplica formato al costo de Lista y al precio Lista a dos decimales
-                producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.costoLista));
-                producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.precioLista));
+                producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, producto.costoLista));
+                producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, producto.precioLista));
                 //Se aplica formato al precioUnitario obtenido desde precioRegistrados
                 if (producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
                 {

@@ -698,6 +698,8 @@ namespace Cotizador.Controllers
                 unidad = detalle.unidad,
                 igv = pedido.montoIGV.ToString(),
                 subTotal = pedido.montoSubTotal.ToString(),
+                descontinuado = detalle.producto.descontinuado,
+                motivoRestriccion = detalle.producto.motivoRestriccion,
                 margen = detalle.margen,
                 precioUnitario = detalle.precioUnitario,
                 observacion = detalle.observacion,
@@ -1478,7 +1480,7 @@ namespace Cotizador.Controllers
             }
 
           
-            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"pedido\":" + jsonPedido + "}";
+            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"usuario\":" + jsonUsuario + ", \"pedido\":" + jsonPedido + "}";
             return json;
         }
 
