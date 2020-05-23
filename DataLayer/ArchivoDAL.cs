@@ -55,10 +55,10 @@ namespace DataLayer
             return lista;
         }
 
-        public List<ArchivoAdjunto> getListArchivoAdjuntoByIdRegistro(Guid id_registro)
+        public List<ArchivoAdjunto> getListArchivoAdjuntoByIdRegistro(Guid idRegistro)
         {
             var objCommand = GetSqlCommand("ps_adjuntos_id_registro");           
-            InputParameterAdd.Guid(objCommand, "id_registro", id_registro);
+            InputParameterAdd.Guid(objCommand, "id_registro", idRegistro);
             DataTable dataTable = Execute(objCommand);
             List<ArchivoAdjunto> lista = new List<ArchivoAdjunto>();
             foreach (DataRow row in dataTable.Rows)
@@ -67,12 +67,13 @@ namespace DataLayer
                 obj.idArchivoAdjunto = Converter.GetGuid(row, "id_archivo_adjunto");
                 obj.adjunto = Converter.GetBytes(row, "adjunto");
                 obj.nombre = Converter.GetString(row, "nombre");
+                obj.idCliente = Converter.GetGuid(row, "id_cliente");
                 lista.Add(obj);
             }
             return lista;
         }
 
-        public void InsertArchivoGenerico(ArchivoAdjunto obj,Guid idUsuario)
+        public void InsertArchivoGenerico(ArchivoAdjunto obj)
         {           
             var objCommand = GetSqlCommand("pi_archivo_adjunto");
             InputParameterAdd.Guid(objCommand, "id_registro", obj.idRegistro);
@@ -82,9 +83,10 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "nombre", obj.nombre);
             InputParameterAdd.VarBinary(objCommand, "adjunto", obj.adjunto);
             InputParameterAdd.Int(objCommand, "estado", obj.estado);
-            InputParameterAdd.Guid(objCommand, "id_usuario", idUsuario);
+            InputParameterAdd.Guid(objCommand, "id_usuario", obj.usuario.idUsuario);           
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             ExecuteNonQuery(objCommand);
+            if (obj.idArchivoAdjunto == Guid.Empty)
             obj.idArchivoAdjunto = (Guid)objCommand.Parameters["@newId"].Value;
 
         }

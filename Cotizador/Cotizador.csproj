@@ -653,16 +653,16 @@
     <Content Include="Views\Shared\_TipoVistaDashboard.cshtml" />
     <Content Include="Views\Rol\VistaDashboard.cshtml" />
     <Content Include="Views\ArchivoAdjunto\index.cshtml" />
-    <Content Include="Views\ArchivoAdjunto\subirArchivo.cshtml" />
-    <Content Include="Views\ArchivoAdjunto\descargarArchivo.cshtml" />
     <Content Include="Views\OrdenCompraCliente\Index.cshtml" />
     <Content Include="Views\OrdenCompraCliente\Editar.cshtml" />
     <Content Include="Views\Usuario\_SelectUsuarioOCC.cshtml" />
+    <Content Include="Views\ArchivoAdjunto\_LoadFiles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
     <Folder Include="pdf\" />
     <Folder Include="Scripts\App_LocalResources\" />
+    <Folder Include="Views\ArchivoAdjuntoViewModels\" />
     <Folder Include="Views\Ciudad\" />
     <Folder Include="Views\DireccionEntrega\" />
     <Folder Include="Views\General\" />

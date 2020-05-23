@@ -3,13 +3,7 @@
     var ARCHIVO_ADJUNTO_CANCELAR_EDICION = '¿Está seguro de cancelar la edición del mensaje; no se guardarán los cambios?';
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
     var TITLE_EXITO = 'Operación Realizada';
-
-
-    $('body').ready(function () {
-
-    });
-
-
+    
     $("#btnLimpiarBusquedaArchivosAdjuntos").click(function () {
         $.ajax({
             url: "/ArchivoAdjunto/Limpiar",
@@ -106,10 +100,8 @@
 
         $.ajax({
             url: "/ArchivoAdjunto/DescargarArchivo",
-            type: 'POST',
-            //  enctype: 'multipart/form-data',
-            dataType: 'JSON',
-            //  contentType: 'multipart/form-data',
+            type: 'POST',            
+            dataType: 'JSON',           
             data: { idArchivo: idArchivo },
             error: function (detalle) {
                 alert(detalle);
@@ -120,85 +112,72 @@
             }
         });
     });
-
-    function loadArchivoAdjunto(idRegistro, archivos) {
-        var b = idRegistro;
-
-        var a = archivos;
-        $.ajax({
-            url: "/ArchivoAdjunto/subidaArchivo",
-            type: 'POST',
-            data: { idRegistro: idRegistro },
-            error: function (detalle) {
-                alert(detalle);
-            },
-            success: function (success) {
-
-            }
-        });
-
-    }
-
-    $('body').on('change', "#uploadfiles", function (e) {      
-        CargarArchivos(e.currentTarget.files);
-        var data = new FormData($('#FormWithArchivos')[0]);
-                
-        $.ajax({
-            url: "/ArchivoAdjunto/ChangeFiles",
-            type: 'POST',
-            enctype: 'multipart/form-data',
-            contentType: false,
-            processData: false,
-            data: data,
-            error: function (detalle) { },
-            success: function (resultado) { }
-        });
-    });
-
+      
     $('body').on('click', ".btnDeleteArchivo", function () {
-        var nombreArchivo = event.target.id;
-        //eliminarListaArchivos(idArchivo);
-
-        $("#uploadfiles").val("");
+        var idArchivo = $(this).closest('li').find('a').eq(0).attr('idArchivoAdjunto');           
+      
         $("#nombreArchivos > li").remove().end();
         $.ajax({
             url: "/ArchivoAdjunto/DescartarArchivos",
             type: 'POST',
             dataType: 'JSON',
-            data: { nombreArchivo: nombreArchivo },
+            data: { idArchivo: idArchivo },
             error: function (detalle) { },
             success: function (files) {
                 
                 $("#nombreArchivos > li").remove().end();
 
                 for (var i = 0; i < files.length; i++) {
-                    if (files[i].estado == 1)
-                    {
+                    
                         var liHTML = '<a href="javascript:mostrar();" class="btnDescargarArchivoAdjunto" idArchivoAdjunto="' + files[i].idArchivoAdjunto + '">' + files[i].nombre + '</a>' +
                             '<a href="javascript:mostrar();"><img src="/images/icon-close.png"  id="' + files[i].nombre + '" class="btnDeleteArchivo" /></a>';
 
                         $('#nombreArchivos').append($('<li />').html(liHTML));
-                        //      .appendTo($('#nombreArchivos'));
+                       
 
-                    }
+                    
                 }
             }
         });
-
-
-
-
-
     });
+
 });
 
+$('#fileUpload').change(function (e) {   
+    if (CargarArchivos(e.currentTarget.files) == 0)
+        return;
+       
+        $.ajax({
+            url: "/ArchivoAdjunto/ChangeFiles",
+            type: "POST",
+            data: function () {
+                var data = new FormData();
+                data.append("name", jQuery("#fileUpload").val());
+                data.append("file", jQuery("#fileUpload").get(0).files[0]);
+                return data;
+            }(),
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $('#nombreArchivos li:last').find('a').eq(0).attr("idArchivoAdjunto", response);
+            },
+            error: function (jqXHR, textStatus, errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+     });
+        
+
+
+
+    
 
 function archivosEncontrados(files) {
 
     $("#nombreArchivos>li").remove().end();
 
     for (var i = 0; i < files.length; i++) {
-        var liHTML = '<a href = "javascript:mostrar();" class="btnDescargarArchivoAdjunto" idArchivoAdjunto="' + files[i].idArchivoAdjunto + '"> ' + files[i].nombre + '</a > ' +
+        var liHTML = '<a href = "javascript:mostrar();" class="btnDescargarArchivoAdjunto" idArchivoAdjunto="' + files[i].idArchivoAdjunto + '">' + files[i].nombre + '</a > ' +
             '<a href="javascript:mostrar();"><img src="/images/icon-close.png"  id="' + files[i].nombre + '" class="btnDeleteArchivo" /></a>';
         $('<li/>').html(liHTML).appendTo($('#nombreArchivos'));
     }
@@ -210,77 +189,36 @@ function archivosEncontrados(files) {
         var liHTML = '<a href="javascript:mostrar();" class="btnDescargarArchivoAdjunto" idArchivoAdjunto="' + files[i].idArchivoAdjunto + '">' + files[i].nombre + '</a>';
         //$('<li />').html(liHTML).appendTo($('#nombreArchivos'));
         $('#verNombreArchivos').append($('<li />').html(liHTML));
-    }
-
-    var pathname = window.location.pathname;
-    pathname=pathname.split('/');
-    for (var i = 0; i < files.length; i++) {
-        files[i].origen = pathname[1];
-        files[i].metaData = pathname[3];
-        files[i].metaData = files[i].metadata == undefined ? 'Index' : files[i].metadata;
-    }
-    $.ajax({
-        type: "POST",
-        url: '/ArchivoAdjunto/FilesGuardarSession',
-        contentType: "application/json; charset=utf-8",
-        data: JSON.stringify(files),
-        dataType: "json",
-        success: function () { },
-        error: function () { }
-    });
-}
-
-   
-
-/*
-function obsAdjuntoarchivosEncontrados() {
-
-    $("#nombreArchivos>li").remove().end();
-
-    for (var i = 0; i < archivosfinal.length; i++) {
-        var liHTML = '<a href = "javascript:mostrar();" class="btnDescargarArchivoAdjunto" idArchivoAdjunto="' + archivosfinal[i].idArchivoAdjunto + '"> ' + archivosfinal[i].nombre + '</a > ' +
-            '<a href="javascript:mostrar();"><img src="/images/icon-close.png"  id="' + archivosfinal[i].nombre + '" class="btnDeleteArchivo" /></a>';
-        $('<li/>').html(liHTML).appendTo($('#nombreArchivos'));
-    }
-}
-*/
-
-function eliminarListaArchivos(idArchivo)
-{
-    archivosfinal = $.grep(archivosfinal, function (e) {
-        return e.idArchivoAdjunto != idArchivo;
-    });
-    obsAdjuntoarchivosEncontrados();
+    }    
 }
 
 
-function CargarArchivos(files) {
-    //$('#nombreArchivos').val(e.currentTarget.files);
+function CargarArchivos(files) {    
     var numFiles = files.length;
-    var nombreArchivos = "";
+    var fileFound = 1;
     for (i = 0; i < numFiles; i++) {
-        var fileFound = 0;
-        $("#nombreArchivos > li").each(function (index) {
 
-            if ($(this).find("a.btnDescargarArchivoAdjunto")[0].text == files[i].name) {
-                alert('El archivo "' + files[i].name + '" ya se encuentra agregado.');
-                fileFound = 1;
+
+        $("#nombreArchivos > li").each(function () {
+            if ($(this).find("a.btnDescargarArchivoAdjunto")[0].text == files[0].name) {
+                fileFound = 0;                
             }
         });
-
+    }
         if (fileFound == 0) {
-
-            var liHTML = '<a href="javascript:mostrar();" class="btnDescargarArchivoAdjunto" idArchivoAdjunto="' + files[i].idArchivoAdjunto + '">' + files[i].name + '</a>' +
-                '<a href="javascript:mostrar();"><img src="/images/icon-close.png"  id="' + files[i].name + '" class="btnDeleteArchivo" /></a>';
-
-            $('#nombreArchivos').append($('<li />').html(liHTML));
-
-
-            ///  $('<li />').text(e.currentTarget.files[i].name).appendTo($('#nombreArchivos'));
+            alert('El archivo "' + files[0].name + '" ya se encuentra agregado.');  
         }
 
+        if (fileFound == 1) {
+            var liHTML = '<a href="javascript:mostrar();" class="btnDescargarArchivoAdjunto" idArchivoAdjunto="' + files[0].idArchivoAdjunto + '">' + files[0].name + '</a>' +
+                '<a href="javascript:mostrar();"><img src="/images/icon-close.png"  id="' + files[0].name + '" class="btnDeleteArchivo" /></a>';
+
+            $('#nombreArchivos').append($('<li />').html(liHTML));
+            
+        }
+        return fileFound;
     }
-}
+
 
 
 

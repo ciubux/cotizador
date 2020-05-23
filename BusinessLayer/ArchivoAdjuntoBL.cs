@@ -30,14 +30,20 @@ namespace BusinessLayer
             }            
         }
 
-        public List<ArchivoAdjunto> getListArchivoAdjuntoByIdRegistro(ArchivoAdjunto archivoAdjunto)
+        public List<ArchivoAdjunto> getListArchivoAdjuntoByIdRegistro(Guid idRegistro)
         {
             using (var dal = new ArchivoDAL())
             {
-                return dal.getListArchivoAdjunto(archivoAdjunto);
+                return dal.getListArchivoAdjuntoByIdRegistro(idRegistro);
             }
         }
-        
+        public void InsertArchivoGenerico(ArchivoAdjunto obj)
+        {
+            using (var dal = new ArchivoDAL())
+            {
+                dal.InsertArchivoGenerico(obj);
+            }
+        }
 
     }
 }
