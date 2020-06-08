@@ -235,7 +235,7 @@ namespace DataLayer
             }
             return obj;
         }
-        public Mensaje MensajeVistoRespuesta(Mensaje obj)
+        public void MensajeVistoRespuesta(Mensaje obj)
         {            
             var objCommand = GetSqlCommand("pi_mensaje_visto_repuesta");
             InputParameterAdd.Guid(objCommand, "id_mensaje", obj.id_mensaje);
@@ -255,10 +255,7 @@ namespace DataLayer
             SqlParameter tvparam = objCommand.Parameters.AddWithValue("@usuarios", tvp);
             tvparam.SqlDbType = SqlDbType.Structured;
             tvparam.TypeName = "dbo.UniqueIdentifierList";
-
-
-            ExecuteNonQuery(objCommand);
-            return obj;
+            ExecuteNonQuery(objCommand);          
         }
 
 
@@ -326,7 +323,8 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("ps_ver_usuario_respuestas");
             InputParameterAdd.Guid(objCommand, "id_mensaje", obj.id_mensaje);
-            //InputParameterAdd.Int(objCommand, "bandeja", obj.bandeja);
+            InputParameterAdd.Int(objCommand, "bandeja", obj.bandeja);
+            InputParameterAdd.Guid(objCommand, "id_usuario", obj.user.idUsuario);
             List<Usuario> list = new List<Usuario>();
             DataTable dataTable = Execute(objCommand);
             foreach (DataRow row in dataTable.Rows)

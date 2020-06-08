@@ -303,24 +303,11 @@
             success: function () { }
         });
     }
-
-
+    
     $(".navbar-header").on("click", "a.btnModal", function () {
-        $('#Mensaje1').modal('show');
+        $('.ModalMensajeAlerta').first().modal('show');    
     });
-
-
-    function eliminateDuplicates(arrayIn) {
-
-        var arrayOut = {};
-        var unicos = arrayIn.filter(function (e) {
-            return arrayOut[e.id_mensaje] ? false : (arrayOut[e.id_mensaje_hilo.id_mensaje] = true);
-        });
-        return unicos;
-    }
-
-    //var idUsuario;
-
+    
     function ActulizarMensaje() {
 
         var idUsuario = $('#usuario_idUsuario').val();
@@ -335,10 +322,9 @@
                     idUsuario: idUsuario
                 },
                 success: function (list) {
-
-                    list = eliminateDuplicates(list);
-                    if (list.length != 0) {
-
+                                       
+                    if (list.length != 0) {                        
+                        $('.btnModal').remove();
                         $("#imagenMP").before('<a data-notifications="' + list.length + '" class="btnModal" href="javascript:void()"></a>');
 
                         var verAutomaticamente = false;
@@ -348,11 +334,9 @@
                             if (list[i].importancia == 'Alta') {
                                 verAutomaticamente = true;
                             }
-                            var BtnLabel = list.length === 1 ? "Marcar como leído" : "Marcar como leído y mostrar siguiente";
+
                             var numeroModal = i + 1;
-                            if (list.length - 1 === i) {
-                                BtnLabel = "Marcar como leído";
-                            }
+                            
                             var imagenAdvertencia = list[i].importancia == "Alta" ? '<img src = "/images/advertencia.svg" style="vertical-align: middle; margin-bottom:5px;  margin-right:10px;" width = "20px" height = "20px">' +
                                 '<svg width="1px" height="1px" xmlns="https://www.w3.org/2000/svg"></svg>' : "";
                             var date = new Date(list[i].fechaCreacionMensaje);
@@ -360,6 +344,7 @@
                             minuto = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
                             segundo = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
                             horaImprimible = hora + ":" + minuto + ":" + segundo;
+
                             var ItemRow =
                                 '<div id="Mensaje' + numeroModal + '" class="modal fade ModalMensajeAlerta ModalMensaje" tabindex="-1" role="dialog">' +
                                 '<div class="modal-dialog" id="MensajeDialog' + numeroModal + '">' +
@@ -367,7 +352,7 @@
                                 '<div class="modal-header">' +
 
                                 '<div class="btn-group" style="float:right">' +
-                                '<button  type="button"  class="Leido btn btn-primary ' + list[i].id_mensaje + ' ">' + BtnLabel + '</button>' +
+                                '<button  type="button"  class="Leido btn btn-primary ' + list[i].id_mensaje + ' "></button>' +
                                 '</div><br><br>' +
                                 '</div>' +
                                 '<div class="modal-body">' +
@@ -377,13 +362,13 @@
                                 '<h4 style="display: inline-block;">' + imagenAdvertencia + '<u>' + list[i].titulo + '</u></h4>' +
                                 '<p style="margin-bottom: 0.11in"><font size="3"><span lang="es-PE">' + list[i].mensaje + '</span></font></p>' +
 
-                                '<textarea class="form-control" id ="respuesta' + numeroModal + '" rows="4" style="display:none" placeholder="Respuesta..."> </textarea>' +
+                                '<textarea class="form-control" id ="respuesta' + numeroModal + '" rows="4" style="display:none" placeholder="Respuesta..."></textarea>' +
 
 
                                 '<div class="row form-group" style="display:none" id="addUsuarios' + numeroModal + '"> ' +
                                 '<label class="col-form-label col-md-3">Agregar destinatario(s):</label>' +
                                 '<div class="col-md-9">' +
-                                '<select multiple class="form-control form-control" id="idUsuarioBusquedaRespuestaMensajeModal" name="UsuarioMensajeRapido" required>' +
+                                '<select multiple class="form-control form-control" id="idUsuarioBusquedaRespuestaMensajeModal' + numeroModal +'" name="UsuarioMensajeRapido" required>' +
                                 '</select>' +
                                 '</div>' +
                                 '</div>' +
@@ -408,14 +393,29 @@
                                 '</div>' +
                                 '</div>';
 
-                            if (esVisible == false) {
-                                $("body").append(ItemRow);
-                            }
-                        }
+                            var divs = $('.Leido');
+                            var igual = false;
+                            divs.each(function (index, element) {
+                                var div = $(element).attr('class').split(" ");
+                                if (div[3] == list[i].id_mensaje)
+                                    return igual = true;
+                            });  
 
-                        if (verAutomaticamente && esVisible === false) {
+                            if (igual == false) {
+                                $("body").append(ItemRow); 
+                            }   
+                            
+                        }
+                        if ($('[id="Mensaje1"]').toArray().length == 2) {
+                            location.reload();
+                        }
+                        
+                        $('.Leido:not(:last)').html('Marcar como leído y mostrar siguiente');
+                        $('.Leido:last').html('Marcar como leído');
+
+                        if (verAutomaticamente && esVisible == false) {
                             setTimeout(function () {
-                                $('#Mensaje1').modal('show');
+                                $('.ModalMensajeAlerta').first().modal('show');
                             }, 2000);
                         }
                     } else {
@@ -426,7 +426,8 @@
 
 
         }
-    }
+    }    
+    
     $('body').on('show.bs.modal', '.ModalMensajeAlerta', function () {
         var arrayClass = $(this).find('.Leido').attr('class').split(" ");
         var idMensaje = arrayClass[3];
@@ -479,65 +480,87 @@
         $('#respuesta' + num + '').after('<br id="saltoLinea">');
         $('#respuesta' + num + '').focus();
     });
+        
+        $('body').on("click", "button.EnviarRespuesta", function () {
+            var num = $(this).prev('button').attr('id');
+            var txtRespuesta = $('#respuesta' + num + '').val();
+            var arrayClass = $(this).attr('class').split(" ");
+            var idMensaje = arrayClass[3];
+            var idUsuarios = $('#idUsuarioBusquedaRespuestaMensajeModal'+num+'').val();
 
-    $('body').on("click", "button.EnviarRespuesta", function () {
-        var num = $(this).prev('button').attr('id');
-        var txtRespuesta = $('#respuesta' + num + '').val();
-        var arrayClass = $(this).attr('class').split(" ");
-        var idMensaje = arrayClass[3];
-        var idUsuarios = $("#idUsuarioBusquedaRespuestaMensajeModal").val();
+            if (txtRespuesta.trim() === "") {
+                $(this).closest('.modal-content').find('button.Leido').click();
+            }
+            else {
+                
+                $.ajax({
+                    url: "/Mensaje/msnVistoRespuesta",
+                    type: 'POST',                    
+                    data: {
+                        idUsuarios: idUsuarios,
+                        idMensaje: idMensaje,
+                        respuesta: txtRespuesta
+                    },
+                    success: function () {                       
+                        $.alert({
+                            title: TITLE_EXITO,
+                            content: 'Mensaje enviado.',
+                            type: 'green',
+                            buttons: {
+                                OK: function () {
+                                    let dialog = $('.' + idMensaje + '').closest('.modal');
+                                    var btnFinal = dialog.find('.Leido').html();
+                                    if (btnFinal == "Marcar como leído") {
+                                        dialog.modal('hide');
+                                        location.reload();
+                                    }
+                                    else {
+                                        dialog.modal('hide');
+                                        dialog.next().modal('show');
+                                    }
+                                    $('.' + idMensaje + '').closest('#MensajeDialog').find('#modalRespuesta' + num + '').empty();
+                                    $('#idUsuarioBusquedaRespuestaMensajeModal'+num+'').val('').trigger('chosen:updated');
+                                    $('#respuesta' + num + '').empty;                                    
+                                    $('#respuesta' + num + '').hide();
+                                    $('.botonesRespuesta' + num + '').hide();
+                                    $('#respuesta' + num + '').val("");
+                                    $('.Responder').show();
+                                    $('#Mensaje' + num + '').attr('class', '');
+                                    ActulizarMensaje();
+                                }
+                            }
+                        });
+                    }, error(error) {
+                        $.alert({
+                            title: 'Error',
+                            content: 'Se generó un error al intentar enviar la respuesta. | ' + error+'',
+                            type: 'red',
+                            buttons: {
+                                OK: function () {
 
-        if (txtRespuesta.trim() === "") {
-            $(this).closest('.modal-content').find('button.Leido').click();
-        }
-        else {
-            $.ajax({
-                url: "/Mensaje/MensajeVistoRespuesta",
-                type: 'POST',
-                data: {
-                    idUsuarios: idUsuarios,
-                    idMensaje: idMensaje,
-                    respuesta: txtRespuesta
-                },
-                success: function () {
-                    let dialog = $('.' + idMensaje + '').closest('.modal');
-                    var btnFinal = dialog.find('.Leido').html();
-                    if (btnFinal == "Marcar como leído") {
-                        dialog.modal('hide');
-                        location.reload();
-                    }
-                    else {
-                        dialog.modal('hide');
-                        dialog.next().modal('show');
-                    }
-                    $('.' + idMensaje + '').closest('#MensajeDialog').find('#modalRespuesta' + num + '').empty();
 
-                    $('#respuesta' + num + '').empty;
-                    var num = $(this).attr('id');
-                    $('#respuesta' + num + '').hide();
-                    $('.botonesRespuesta' + num + '').hide();
-                    $('#respuesta' + num + '').val("");
-                    $('.Responder').show();
-                    ActulizarMensaje();
-                }
-            });
-        }
-
-    });
+                                }
+                            }
+                        });
+                        }
+                });
+            }
+        });
+    
 
     $('body').on("click", "button.cerrarRespuesta", function () {
         var num = $(this).attr('id');
         $('#respuesta' + num + '').hide();
-        $('.botonesRespuesta' + num + '').hide();
-        //$('#botonesRespuesta' + num + '').hide();
+        $('.botonesRespuesta' + num + '').hide();           
         $('#addUsuarios' + num + '').hide();
-        $('#respuesta' + num + '').val("");
+        $('#respuesta' + num + '').val(""); 
+        $('#idUsuarioBusquedaRespuestaMensajeModal'+num+'').val('').trigger('chosen:updated');
         $('.Responder').show();
         $('#saltoLinea').remove();
     });
 
     $('body').on("click", "button.Leido", function () {
-        var num = $(this).closest('.modal-header').find(".Responder").attr('id');
+        var num = $(this).closest('.modal-content').find("button.Responder").attr('id');
         var arrrayClass = $(this).attr('class').split(" ");
         var idMensaje = arrrayClass[3];
 
@@ -559,9 +582,11 @@
                     dialog.modal('hide');
                     dialog.next().modal('show');
                 }
-                //$('.Responder').show();
+                $('.Responder').show();
+                $('#idUsuarioBusquedaRespuestaMensajeModal'+num+'').val('').trigger('chosen:updated');
                 $('.' + idMensaje + '').closest('#MensajeDialog').find('#modalRespuesta' + num + '').empty();
-                ActulizarMensaje();
+                $('#Mensaje' + num + '').attr('class','');
+                ActulizarMensaje();                
             }
         });
     });
@@ -827,8 +852,8 @@
                 $('#UsuariosRespuesta').append('<option value=" ">Selecciona un Usuario</option>');
                 $('#UsuariosRespuesta').prop("disabled", false);
                 for (var i = 0; i < resultado.length; i++) {
-                    var a = i == 0 ? 'id="EliminarUsuario"' : '';
-                    var listaUsuario = '<option ' + a + 'value="' + resultado[i].idUsuario + '">' + resultado[i].nombre + '</option>';
+                    //var a = i == 0 ? 'id="EliminarUsuario"' : '';
+                    var listaUsuario = '<option value="' + resultado[i].idUsuario + '">' + resultado[i].nombre + '</option>';
                     $('#UsuariosRespuesta').append(listaUsuario);
                 }
                 $('#respuestasUsuarios').empty();
@@ -839,20 +864,13 @@
 
                 if ($('#mensaje_bandeja_recibidos').prop('checked') == true) {
 
-                    $('#UsuariosRespuesta>option[id="EliminarUsuario"]').prop('selected', true).change();
+                    $('#UsuariosRespuesta>option').eq(1).prop('selected', true).change();
                     $('#UsuariosRespuesta').prop("disabled", true);
                 }
 
                 if ($('#mensaje_bandeja_enviados').prop('checked') == true) {
-                    $('#EliminarUsuario').remove();
-                }
-                /*
-                if ($('#mensaje_bandeja_enviados').prop('checked') == true && $('#UsuariosRespuesta option').length == 1) {
-                    $('#UsuariosRespuesta').empty();
-                    $('#UsuariosRespuesta').append('<option value="0">Sin Respuestas</option>');
-                    $('#UsuariosRespuesta').prop("disabled", true);
-                }  
-                */
+                    //$('#EliminarUsuario').remove();
+                }                
             }
         });
     });
@@ -1166,8 +1184,8 @@
 
 
     $('body').on('shown.bs.modal', '.ModalMensajeAlerta', function () {
-        $('#idUsuarioBusquedaRespuestaMensajeModal', this).chosen('destroy').chosen({ placeholder_text: "Buscar Usuario", no_results_text: "No se encontró Usuario", allow_single_deselect: true, width: '100%' }).on('chosen:showing_dropdown');
-        $('#idUsuarioBusquedaRespuestaMensajeModal', this).ajaxChosen({
+        $('select[id^=idUsuarioBusquedaRespuestaMensajeModal]', this).chosen('destroy').chosen({ placeholder_text: "Buscar Usuario", no_results_text: "No se encontró Usuario", allow_single_deselect: true, width: '100%' }).on('chosen:showing_dropdown');
+        $('select[id^=idUsuarioBusquedaRespuestaMensajeModal]', this).ajaxChosen({
             dataType: "json",
             type: "GET",
             minTermLength: 3,
@@ -1331,11 +1349,11 @@
         $.ajax({
             url: "/Mensaje/Create",
             type: 'POST',
-            error: function () {
+            error: function (error) {
 
                 $.alert({
                     title: 'Error',
-                    content: 'Se generó un error al intentar crear el mensaje.',
+                    content: 'Se generó un error al intentar enviar el mensaje. | '+error+'',
                     type: 'red',
                     buttons: {
                         OK: function () {
@@ -1374,7 +1392,7 @@
             return false;
         }
 
-        if ($("#tituloModal").val() === "" || $("#tituloModal").val() === null) {
+        if ($("#tituloModal").val().trim() == "" || $("#tituloModal").val() == null) {
             $.alert({
                 title: "Titulo Inválido",
                 type: 'orange',
@@ -1386,7 +1404,7 @@
             return false;
         }
 
-        if ($("#txtMensajeModal").val() == "" || $("#txtMensajeModal").val() == null) {
+        if ($("#txtMensajeModal").val().trim() == "" || $("#txtMensajeModal").val() == null) {
             $.alert({
                 title: "Mensaje Inválido",
                 type: 'orange',
