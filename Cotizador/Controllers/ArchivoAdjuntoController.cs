@@ -8,7 +8,6 @@ using Model;
 using Newtonsoft.Json;
 using Cotizador.Models;
 using System.Reflection;
-
 using System.IO;
 
 
@@ -88,7 +87,7 @@ namespace Cotizador.Controllers
 
         /*****************************************************************************/
 
-        public ActionResult cargarArchivo(string origen, Guid idRegistro)
+        public PartialViewResult cargarArchivo(string origen, Guid idRegistro)
         {
             Usuario user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             ArchivoAdjunto obj = new ArchivoAdjunto();
@@ -97,53 +96,57 @@ namespace Cotizador.Controllers
             obj.origen = origen;
             obj.idRegistro = idRegistro;
             ArchivoAdjuntoBL arcBL = new ArchivoAdjuntoBL();
-            List<ArchivoAdjunto> ArchivoAdjuntoList = arcBL.getListArchivoAdjuntoByIdRegistro(obj.idRegistro);
-            
-            var model = ArchivoAdjuntoList;
-            this.Session[Constantes.VAR_SESSION_ARCHIVO_ADJUNTO_EDIT] = ArchivoAdjuntoList;
-            this.Session[Constantes.VAR_SESSION_ARCHIVO_ADJUNTO] = obj;
+            List<ArchivoAdjunto> ArchivoAdjuntoList = arcBL.getListArchivoAdjuntoByIdRegistro(idRegistro); 
+            var model = ArchivoAdjuntoList;            
+            this.Session["ARCHIVO_ADJUNTO_EDIT_" + origen] = model;
+            this.Session["ARCHIVO_ADJUNTO_" + origen] = obj;
+            this.Session["ARCHIVO_ADJUNTO_CAMBIADOS_" + origen] = new List<ArchivoAdjunto>();
+            ViewBag.origen = origen;            
             return PartialView("_LoadFiles", model);
         }
 
 
         [HttpPost]
-        public String ChangeFiles(HttpPostedFileBase file)
-        {            
-            List<ArchivoAdjunto> objs = (List<ArchivoAdjunto>)this.Session[Constantes.VAR_SESSION_ARCHIVO_ADJUNTO_EDIT];           
+        public String ChangeFiles(HttpPostedFileBase file, String origen)
+        {           
+            ArchivoAdjunto arAd = (ArchivoAdjunto)this.Session["ARCHIVO_ADJUNTO_" + origen];
+            List<ArchivoAdjunto> objs = (List<ArchivoAdjunto>)this.Session["ARCHIVO_ADJUNTO_EDIT_" + origen];
+            List<ArchivoAdjunto> listCambioArchivo = (List<ArchivoAdjunto>)this.Session["ARCHIVO_ADJUNTO_CAMBIADOS_" + origen];
             ArchivoAdjuntoBL arcBL = new ArchivoAdjuntoBL();
-            ArchivoAdjunto arAd = (ArchivoAdjunto)this.Session[Constantes.VAR_SESSION_ARCHIVO_ADJUNTO];
+            
             ArchivoAdjunto obj = new ArchivoAdjunto();
             if (file != null && file.ContentLength > 0)
-                {                    
-                    using (Stream inputStream = file.InputStream)
+            {
+                using (Stream inputStream = file.InputStream)
+                {
+                    MemoryStream memoryStream = inputStream as MemoryStream;
+                    if (memoryStream == null)
                     {
-                        MemoryStream memoryStream = inputStream as MemoryStream;
-                        if (memoryStream == null)
-                        {
-                            memoryStream = new MemoryStream();
-                            inputStream.CopyTo(memoryStream);
-                        }                   
-                    obj.usuario= arAd.usuario;
+                        memoryStream = new MemoryStream();
+                        inputStream.CopyTo(memoryStream);
+                    }
+                    obj.usuario = arAd.usuario;
                     obj.origen = arAd.origen;
                     obj.idRegistro = arAd.idRegistro;
                     obj.estado = 1;
                     obj.nombre = file.FileName;
                     obj.adjunto = memoryStream.ToArray();
-                    objs.Add(obj);
-                    }
-                    arcBL.InsertArchivoGenerico(obj);                    
-                }      
-            this.Session[Constantes.VAR_SESSION_ARCHIVO_ADJUNTO_EDIT] = objs;
+                    obj = arcBL.InsertArchivoGenerico(obj);
+                }
+                objs.Add(obj);
+                listCambioArchivo.Add(obj);
+            }            
+            this.Session["ARCHIVO_ADJUNTO_EDIT_" + origen] = objs;
+            this.Session["ARCHIVO_ADJUNTO_CAMBIADOS_" + origen] = listCambioArchivo;
             return obj.idArchivoAdjunto.ToString();
         }
 
-        public String DescartarArchivos()
+        public String DescartarArchivos(String origen)
         {
-            List<ArchivoAdjunto> arcAdj = (List<ArchivoAdjunto>)this.Session[Constantes.VAR_SESSION_ARCHIVO_ADJUNTO_EDIT];
-            ArchivoAdjunto obj = (ArchivoAdjunto)this.Session[Constantes.VAR_SESSION_ARCHIVO_ADJUNTO];
-            Guid idArcAdj = Guid.Parse(Request["idArchivo"].ToString());
-            ArchivoAdjunto arAd = new ArchivoAdjunto();
-            arAd = (ArchivoAdjunto)this.Session[Constantes.VAR_SESSION_ARCHIVO_ADJUNTO];
+            ArchivoAdjunto arAd = (ArchivoAdjunto)this.Session["ARCHIVO_ADJUNTO_" + origen];
+            List<ArchivoAdjunto> arcAdj = (List<ArchivoAdjunto>)this.Session["ARCHIVO_ADJUNTO_EDIT_" + origen];
+            List<ArchivoAdjunto> listCambioArchivo = (List<ArchivoAdjunto>)this.Session["ARCHIVO_ADJUNTO_CAMBIADOS_" + origen];
+            Guid idArcAdj = Guid.Parse(Request["idArchivo"].ToString());           
             List<ArchivoAdjunto> listArchivos = new List<ArchivoAdjunto>(arcAdj);
             foreach (ArchivoAdjunto archivoAdjunto in arcAdj)
             {                
@@ -157,11 +160,12 @@ namespace Cotizador.Controllers
                     ArchivoAdjuntoBL arcBL = new ArchivoAdjuntoBL();
                     arcBL.InsertArchivoGenerico(archivoAdjunto);
                     listArchivos.Remove(archivoAdjunto);
+                    listCambioArchivo.Add(archivoAdjunto);
+                    this.Session["ARCHIVO_ADJUNTO_CAMBIADOS_" + origen] = listCambioArchivo;
                 }               
-            }
-            this.Session[Constantes.VAR_SESSION_ARCHIVO_ADJUNTO_EDIT] = listArchivos;           
+            }            
+            this.Session["ARCHIVO_ADJUNTO_EDIT_" + origen] = listArchivos;           
             return JsonConvert.SerializeObject(listArchivos);
-        }       
-
-}
+        }        
+    }
 }

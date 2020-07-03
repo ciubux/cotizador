@@ -56,5 +56,14 @@ namespace Model
         public String metaData { get; set; }
 
         public Guid idCliente { get; set; }
+
+        public enum ArchivoAdjuntoOrigen
+        {
+            PRODUCTO=1,
+            FACTURA=2,
+            PEDIDO=3,
+            GUIA_REMISION=4
+        }
+        
     }
 }

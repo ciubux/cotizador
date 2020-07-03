@@ -136,10 +136,7 @@ namespace Model
         public static String VAR_SESSION_VISTA_DASHBOARD_LISTA = "vistaDashboardList";
 
         public static String VAR_SESSION_ARCHIVO_ADJUNTO = "archivoAdjunto";
-        public static String VAR_SESSION_ARCHIVO_ADJUNTO_BUSQUEDA = "archivoAdjuntoBusqueda";
-
-        public static String VAR_SESSION_ARCHIVO_ADJUNTO_EDIT = "archivoAdjuntoEdit";
-        //public static String VAR_SESSION_ARCHIVO_ADJUNTO_BUSQUEDA = "archivoAdjuntoBusqueda";
+        public static String VAR_SESSION_ARCHIVO_ADJUNTO_BUSQUEDA = "archivoAdjuntoBusqueda";              
 
         public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA = "notificacionDocumentoVenta";
         public static String VAR_SESSION_NOTIFICACIONDOCUMENTOVENTA_BUSQUEDA = "notificacionDocumentoVentaBusqueda";

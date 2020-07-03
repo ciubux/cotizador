@@ -64,8 +64,7 @@ namespace DataLayer
             foreach (DataRow row in dataTable.Rows)
             {
                 ArchivoAdjunto obj = new ArchivoAdjunto();
-                obj.idArchivoAdjunto = Converter.GetGuid(row, "id_archivo_adjunto");
-                obj.adjunto = Converter.GetBytes(row, "adjunto");
+                obj.idArchivoAdjunto = Converter.GetGuid(row, "id_archivo_adjunto");                
                 obj.nombre = Converter.GetString(row, "nombre");
                 obj.idCliente = Converter.GetGuid(row, "id_cliente");
                 lista.Add(obj);
@@ -73,7 +72,7 @@ namespace DataLayer
             return lista;
         }
 
-        public void InsertArchivoGenerico(ArchivoAdjunto obj)
+        public ArchivoAdjunto InsertArchivoGenerico(ArchivoAdjunto obj)
         {           
             var objCommand = GetSqlCommand("pi_archivo_adjunto");
             InputParameterAdd.Guid(objCommand, "id_registro", obj.idRegistro);
@@ -88,10 +87,32 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
             if (obj.idArchivoAdjunto == Guid.Empty)
             obj.idArchivoAdjunto = (Guid)objCommand.Parameters["@newId"].Value;
-
+            obj.adjunto = null;
+            return obj;
         }
-       
-        
+
+
+        public void updateArchivoAdjunto(List<ArchivoAdjunto> listArchivosAdjuntos,Guid idRegistro)
+        {
+            var objCommand = GetSqlCommand("pu_asociar_archivo_adjunto");
+            InputParameterAdd.Guid(objCommand, "id_registro", idRegistro);
+                        
+            DataTable tmpuser = new DataTable();
+            tmpuser.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            foreach (ArchivoAdjunto item in listArchivosAdjuntos)
+            {
+                DataRow rowObj = tmpuser.NewRow();
+                rowObj["ID"] = item.idArchivoAdjunto;
+                tmpuser.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam2 = objCommand.Parameters.AddWithValue("@archivos", tmpuser);
+            tvparam2.SqlDbType = SqlDbType.Structured;
+            tvparam2.TypeName = "dbo.UniqueIdentifierList";
+
+            ExecuteNonQuery(objCommand);
+        }
         
     }
 }

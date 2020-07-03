@@ -1,17 +1,16 @@
 ﻿@model List<Model.ArchivoAdjunto>
 
-
 <div class="row">
     <div class="col-sm-6 col-lg-8">
         <div class="form-group">
             <label for="archivoAdjunto" class="control-label col-xs-2">Adjuntos:</label>
             <div class="col-xs-10">
-                <div class="upload-btn-wrapper">
-
+                <div class="upload-btn-wrapper">                   
+                    <input type="hidden" id="origenArchivoAdjunto" value="@ViewBag.origen">
                     <label for="fileUpload" class="btn btn-primary">Adjuntar Archivo(s)</label>
                     <input type="file" id="fileUpload" style="display:none;" />
 
-                   
+
                     <script type="text/javascript">
 
                         window.onload = function ()
@@ -38,4 +37,3 @@
         </div>
     </div>
 </div>
-  
