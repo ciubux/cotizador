@@ -1285,7 +1285,8 @@ namespace DataLayer
                 pedidoDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
                 pedidoDetalle.producto.ventaRestringida = (Producto.TipoVentaRestringida) Converter.GetInt(row, "descontinuado");
                 pedidoDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
-
+                pedidoDetalle.producto.cantidadMaximaPedidoRestringido = Converter.GetInt(row, "cantidad_maxima_pedido_restringido");
+                
                 pedidoDetalle.producto.image = Converter.GetBytes(row, "imagen");
 
                 pedidoDetalle.porcentajeDescuento = Converter.GetDecimal(row, "porcentaje_descuento");

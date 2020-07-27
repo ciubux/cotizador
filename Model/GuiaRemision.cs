@@ -41,7 +41,15 @@ namespace Model
 
         public Boolean ultimaAtencionParcial { get; set; }
 
+        public Boolean esGuiaDiferida { get {
+                if (serieDocumento != null && serieDocumento.Substring(0,1).Equals("D"))
+                {
+                    return true;
+                }
 
+                return false;
+            }
+        }
 
         [Display(Name = "Placa Vehículo:")]
         public String placaVehiculo { get; set; }

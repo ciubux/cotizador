@@ -444,11 +444,16 @@ jQuery(function ($) {
 
 
     function verificarSiExisteCliente() {
+        var clienteLite = $("#esClienteLite").val();
 
         if ($("#idCliente").length && $("#idCliente").val().trim() != GUID_EMPTY) {
             $("#idCiudad").attr("disabled", "disabled");
-            $("#tipoDocumentoIdentidad").attr("disabled", "disabled");
-            $("#cliente_ruc").attr("disabled", "disabled");
+            if (clienteLite == "0") {
+                $("#tipoDocumentoIdentidad").attr("disabled", "disabled");
+                $("#cliente_ruc").attr("disabled", "disabled");
+                $("#idResponsableComercial").removeAttr("disabled");
+            }
+            
             $("#btnFinalizarEdicionCliente").html('Finalizar Edición');            
         }
         else { 
@@ -568,9 +573,14 @@ jQuery(function ($) {
         $("#cliente_razonSocial").val("");
         $("#cliente_nombreComercial").val("");
         $("#cliente_domicilioLegal").val("");
-        $("#cliente_contacto1").val("");
-        $("#cliente_telefonoContacto1").val("");
-        $("#cliente_emailContacto1").val("");
+
+        var clienteLite = $("#esClienteLite").val();
+        if (clienteLite == "0") {
+            $("#cliente_contacto1").val("");
+            $("#cliente_telefonoContacto1").val("");
+            $("#cliente_emailContacto1").val("");
+        }
+
         $("#cliente_correoEnvioFactura").val("");
         $("#cliente_razonSocialSunat").val("");
         $("#cliente_nombreComercialSunat").val("");

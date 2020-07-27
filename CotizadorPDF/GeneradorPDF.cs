@@ -79,10 +79,13 @@ namespace cotizadorPDF
 
                 if (cot.cliente.idCliente != Guid.Empty)
                 {
-                    page.Canvas.DrawString(cot.cliente.razonSocial, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Blue), 0, y);
-                    y = y + sepLine;
-                    page.Canvas.DrawString("RUC: " + cot.cliente.ruc, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Blue), 0, y);
-                    y = y + sepLine + 2;
+                    if (!cot.cliente.esClienteLite)
+                    {
+                        page.Canvas.DrawString(cot.cliente.razonSocial, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Blue), 0, y);
+                        y = y + sepLine;
+                        page.Canvas.DrawString("RUC: " + cot.cliente.ruc, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Blue), 0, y);
+                        y = y + sepLine + 2;
+                    }
                 }
                 else
                 {
@@ -157,7 +160,10 @@ namespace cotizadorPDF
                     String producto = det.producto.descripcion;
                     if (cot.mostrarCodigoProveedor)
                     {
-                        producto = det.producto.skuProveedor + "-" + producto;
+                        if (det.producto.skuProveedor.IndexOf("!") < 0)
+                        {
+                            producto = "[" + det.producto.skuProveedor + "] " + producto;
+                        }
                     }
 
 

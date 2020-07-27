@@ -862,6 +862,7 @@ namespace Cotizador.Controllers
 
         public string GetIPAddress()
         {
+            /*
             IPHostEntry Host = default(IPHostEntry);
             string Hostname = null;
             Hostname = System.Environment.MachineName;
@@ -875,6 +876,8 @@ namespace Cotizador.Controllers
                 }
             }
             return ip;
+            */
+            return Request.UserHostAddress;
         }
     }
 }

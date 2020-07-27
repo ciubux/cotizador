@@ -232,6 +232,10 @@ textarea {
     #modalDetallesRestriccion .modal-dialog {
         width: 800px;
     }
+
+    #modalCargarProductos .modal-dialog {
+        width: 700px;
+    }
 }
 
 
@@ -380,6 +384,12 @@ input.label-input {
 .addBouton:before {
     background-image: url(/images/Add-Male-User-icon.png);
 }
+
+
+.callCenterBouton:before {
+    background-image: url(/images/call_center_woman_16.png);
+}
+
 
 .botonClose:before {
     background-image: url(/images/icon-close.png);
@@ -1008,5 +1018,9 @@ $darkred: darken($red, 0.2);*/
 }
 
 #clienteFacturaIdCliente_chosen {
+    width: 100% !important;
+}
+
+#nclIdRubro_chosen {
     width: 100% !important;
 }

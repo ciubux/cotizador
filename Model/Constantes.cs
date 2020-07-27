@@ -86,7 +86,9 @@ namespace Model
 
         public static String VAR_SESSION_CLIENTE = "cliente";
         public static String VAR_SESSION_CLIENTE_BUSQUEDA = "clienteBusqueda";
+        public static String VAR_SESSION_CLIENTE_LITE_BUSQUEDA = "clienteLiteBusqueda";
         public static String VAR_SESSION_CLIENTE_LISTA = "clienteList";
+        public static String VAR_SESSION_CLIENTE_LITE_LISTA = "clienteLiteList";
         public static String VAR_SESSION_CLIENTE_VER = "clienteVer";
 
 
@@ -315,8 +317,7 @@ namespace Model
                                        "* Entrega sujeta a confirmación de disponibilidad luego de recibido el pedido u orden de compra.\n No se garantiza stock debido a coyuntura excepcional de alta demanda.\n" +
                                        "* Para productos no stockeables o primeras compras, consultar plazo.\n";
 
-        public static String OBSERVACION_COTIZACION_C = "* Condiciones de pago: al contado.\n" +
-                                       "* Para productos no stockeables o primeras compras, consultar plazo.\n";
+        public static String OBSERVACION_COTIZACION_D =  "* Para productos no stockeables o primeras compras, consultar plazo.\n";
         public static int DESCARGAR_XML = 1;
 
 
@@ -353,6 +354,7 @@ namespace Model
         public const String APRUEBA_PEDIDOS_PROVINCIAS = "P005";
         public const String APRUEBA_PEDIDOS_VENTA_RESTRINGIDA = "P319";
         public const String CREA_GUIAS = "P006";
+        public const String CREA_GUIAS_DIFERIDAS = "P415";
         public const String ADMINISTRA_GUIAS_LIMA = "P007";
         public const String ADMINISTRA_GUIAS_PROVINCIAS = "P008";
         public const String CREA_DOCUMENTOS_VENTA = "P009";
@@ -627,6 +629,9 @@ namespace Model
 
             [Display(Name = "MANTENIMIENTO PERMISO")]
             MantenimientoPermisos = 106,
+
+            [Display(Name = "BUSQUEDA CLIENTE LITE")]
+            BusquedaClientesLite = 710,
 
             [Display(Name = "BUSQUEDA RUBRO")]
             BusquedaRubros = 750,

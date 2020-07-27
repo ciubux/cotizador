@@ -66,7 +66,7 @@ namespace Cotizador.Controllers
                 pedidoTmp.fechaProgramacionHasta = null;// new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
 
                 pedidoTmp.buscarSedesGrupoCliente = false;
-                pedidoTmp.truncado = -1;
+                pedidoTmp.truncado = 0;
 
                 pedidoTmp.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 pedidoTmp.ciudad = new Ciudad();
@@ -2169,7 +2169,8 @@ namespace Cotizador.Controllers
             pedido.numeroPedido = 0;
             pedido.numeroGrupoPedido = numeroGrupo;
             pedido.cotizacion = new Cotizacion();
-            pedido.observaciones = observaciones;
+            pedido.observaciones = "";
+            pedido.observacionesGuiaRemision = observaciones;
           //  pedido.ubigeoEntrega = new Ubigeo();
            // pedido.ubigeoEntrega.Id = ubigeo;
 

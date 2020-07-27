@@ -1061,9 +1061,21 @@ namespace Cotizador.Controllers
             pedido.numeroReferenciaCliente = this.Request.Params["numeroReferenciaCliente"];
             pedido.observaciones = this.Request.Params["observaciones"];
             pedido.observacionesFactura = this.Request.Params["observacionesFactura"];
+            pedido.observacionesGuiaRemision = this.Request.Params["observacionesGuiaRemision"];
 
 
-
+            if (pedido.usuario.modificaPedidoFechaEntregaExtendida)
+            {
+                if (this.Request.Params["fechaEntregaExtendida"] == null || this.Request.Params["fechaEntregaExtendida"].Equals(""))
+                {
+                    pedido.fechaEntregaExtendida = null;
+                }
+                else
+                {
+                    String[] entregaExtendida = this.Request.Params["fechaEntregaExtendida"].Split('/');
+                    pedido.fechaEntregaExtendida = new DateTime(Int32.Parse(entregaExtendida[2]), Int32.Parse(entregaExtendida[1]), Int32.Parse(entregaExtendida[0]), 23, 59, 59);
+                }
+            }
 
             pedidoBL.ActualizarPedido(pedido);
             long numeroPedido = pedido.numeroPedido;

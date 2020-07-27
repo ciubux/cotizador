@@ -14,7 +14,7 @@ namespace BusinessLayer
         // Gets the first character of a string.
 
         public static List<String> columnas = new List<string>{ "A", "B","C", "D", "E",
-        "F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG","AH"};
+        "F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG","AH","AI","AJ","AK","AL","AM","AN","AO"};
 
         public static String getValorCelda(ISheet sheet, int fila, string columna)
         {

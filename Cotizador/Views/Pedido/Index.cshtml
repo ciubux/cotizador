@@ -214,7 +214,7 @@
                         }
                     </div>
 
-                    <div class="form-group">
+                    @*<div class="form-group">
                         @Html.LabelFor(p => pedido.truncado, htmlAttributes: new { @class = "control-label col-xs-4" })
 
                         <div class="col-xs-8">
@@ -225,7 +225,7 @@
                             </select>
                         </div>
 
-                    </div>
+                    </div>*@
                 </div>
             </div>
         }
@@ -311,9 +311,21 @@
                     <label for="estado" class="control-label col-xs-4">Estado Atención:</label>
                     <div class="col-xs-8">
                         @Html.DropDownList("estado",
-                                                                             EnumHelper.GetSelectList(typeof(Model.SeguimientoPedido.estadosSeguimientoPedido), pedido.seguimientoPedido.estado),
-                                                                             new { @class = "form-control" }
-                                                                             )
+                            EnumHelper.GetSelectList(typeof(Model.SeguimientoPedido.estadosSeguimientoPedido), pedido.seguimientoPedido.estado),
+                            new { @class = "form-control" }
+                            )
+
+                        <label class="radio-label" style="margin-left: 15px;margin-top: 5px;">
+                            @if (pedido.truncado == 1)
+                            {
+                                <input checked type="checkbox" name="pedido_buscarTruncados" id="pedido_buscarTruncados" value="1">
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="pedido_buscarTruncados" id="pedido_buscarTruncados" value="1">
+                            }
+                            Incluir truncados
+                        </label>
                     </div>
                 </div>
             </div>

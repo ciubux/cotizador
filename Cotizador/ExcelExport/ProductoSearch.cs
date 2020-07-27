@@ -183,7 +183,7 @@ namespace Cotizador.ExcelExport
 
                 /*Cabecera, Sub total*/
                 int rTotal = (list.Count) + 1;
-                int cTotal = 34 + 2;
+                int cTotal = 36 + 2;
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
@@ -204,6 +204,11 @@ namespace Cotizador.ExcelExport
                 markdv.EmptyCellAllowed = true;
                 markdv.CreateErrorBox("Valor Incorrecto", "Por favor seleccione un tipo de la lista");
                 sheet.AddValidationData(markdv);
+
+                setDataValidationSINO(sheet, 1 + list.Count, 26);
+                setDataValidationSINO(sheet, 1 + list.Count, 27);
+                setDataValidationSINO(sheet, 1 + list.Count, 30);
+                setDataValidationSINO(sheet, 1 + list.Count, 35);
 
                 i = 2;
 
@@ -248,10 +253,11 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "AE", obj.Estado == 1 ? "SI" : "NO");
                     UtilesHelper.setValorCelda(sheet, i, "AF", Enum.GetName(typeof(Producto.TipoVentaRestringida), obj.ventaRestringida));
 
-                    
-
-
                     UtilesHelper.setValorCelda(sheet, i, "AG", obj.motivoRestriccion == null || obj.motivoRestriccion.Trim().Equals("") ? "" : obj.motivoRestriccion);
+
+                    UtilesHelper.setValorCelda(sheet, i, "AH", obj.cantidadMaximaPedidoRestringido);
+                    UtilesHelper.setValorCelda(sheet, i, "AI", obj.descripcionLarga);
+                    UtilesHelper.setValorCelda(sheet, i, "AJ", obj.agregarDescripcionCotizacion == 1 ? "SI" : "NO");
                     i++;
                 }
 
@@ -295,6 +301,9 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, 1, "AE", "Activo", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "AF", "Venta Restringida", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "AG", "Motivo Venta Restringida", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "AH", "Cantidad Máxima Para No Restringir Pedido", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "AI", "Descripción Larga", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "AJ", "Agregar Descrición Larga a Cotización", titleCellStyle);
 
                 MemoryStream ms = new MemoryStream();
                 using (MemoryStream tempStream = new MemoryStream())
@@ -311,6 +320,17 @@ namespace Cotizador.ExcelExport
                     return result;
                 }
             }
+        }
+
+        private void setDataValidationSINO(HSSFSheet sheet, int rowLimit, int column)
+        {
+            string[] options = { "SI", "NO" };
+            var markConstraintA = DVConstraint.CreateExplicitListConstraint(options);
+            var markColumnA = new CellRangeAddressList(1, 1 + rowLimit, column, column);
+            var markdvA = new HSSFDataValidation(markColumnA, markConstraintA);
+            markdvA.EmptyCellAllowed = true;
+            markdvA.CreateErrorBox("Valor Incorrecto", "Por favor seleccione un tipo de la lista");
+            sheet.AddValidationData(markdvA);
         }
     }
 }

@@ -152,8 +152,21 @@ namespace Cotizador.Controllers
 
             /*Se selecciona la primera serie de la lista*/
             transaccionExtorno.documentoVenta.serieDocumentoElectronico = serieDocumentoElectronicoList[0];
-            transaccionExtorno.documentoVenta.serie = Constantes.PREFIJO_NOTA_CREDITO_FACTURA + transaccionExtorno.documentoVenta.serieDocumentoElectronico.serie.Substring(1);
-            transaccionExtorno.documentoVenta.numero = transaccionExtorno.documentoVenta.serieDocumentoElectronico.siguienteNumeroNotaCredito.ToString();
+
+            ClienteBL clienteBl = new ClienteBL();
+            Cliente cliente = clienteBl.getCliente(transaccionExtorno.cliente.idCliente);
+
+
+            if (cliente.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC)
+            {
+                transaccionExtorno.documentoVenta.serie = Constantes.PREFIJO_NOTA_CREDITO_FACTURA + transaccionExtorno.documentoVenta.serieDocumentoElectronico.serie.Substring(1);
+                transaccionExtorno.documentoVenta.numero = transaccionExtorno.documentoVenta.serieDocumentoElectronico.siguienteNumeroNotaCredito.ToString();
+            }
+            else
+            {
+                transaccionExtorno.documentoVenta.serie = Constantes.PREFIJO_NOTA_CREDITO_BOLETA + transaccionExtorno.documentoVenta.serieDocumentoElectronico.serie.Substring(1);
+                transaccionExtorno.documentoVenta.numero = transaccionExtorno.documentoVenta.serieDocumentoElectronico.siguienteNumeroNotaCreditoBoleta.ToString();
+            }
 
 
             if (transaccionExtorno.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
@@ -218,9 +231,23 @@ namespace Cotizador.Controllers
 
             Transaccion transaccionExtorno = (Transaccion)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
             String serie = this.Request.Params["serie"];
+            ClienteBL clienteBl = new ClienteBL();
+            Cliente cliente = clienteBl.getCliente(transaccionExtorno.cliente.idCliente);
+
             transaccionExtorno.documentoVenta.serieDocumentoElectronico = transaccionExtorno.cliente.ciudad.serieDocumentoElectronicoList.Where(t => t.serie == serie).FirstOrDefault();
-            transaccionExtorno.documentoVenta.serie = Constantes.PREFIJO_NOTA_CREDITO_FACTURA + transaccionExtorno.documentoVenta.serieDocumentoElectronico.serie.Substring(1);
-            transaccionExtorno.documentoVenta.numero = transaccionExtorno.documentoVenta.serieDocumentoElectronico.siguienteNumeroNotaCredito.ToString();
+
+            if (cliente.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC)
+            {
+                transaccionExtorno.documentoVenta.serie = Constantes.PREFIJO_NOTA_CREDITO_FACTURA + transaccionExtorno.documentoVenta.serieDocumentoElectronico.serie.Substring(1);
+                transaccionExtorno.documentoVenta.numero = transaccionExtorno.documentoVenta.serieDocumentoElectronico.siguienteNumeroNotaCredito.ToString();
+            }
+            else
+            {
+                transaccionExtorno.documentoVenta.serie = Constantes.PREFIJO_NOTA_CREDITO_BOLETA + transaccionExtorno.documentoVenta.serieDocumentoElectronico.serie.Substring(1);
+                transaccionExtorno.documentoVenta.numero = transaccionExtorno.documentoVenta.serieDocumentoElectronico.siguienteNumeroNotaCreditoBoleta.ToString();
+            }
+
+            
             this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = transaccionExtorno;
         }
 

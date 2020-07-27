@@ -206,7 +206,7 @@ namespace Cotizador.Controllers
             cotizacionTmp.considerarCantidades = Cotizacion.OpcionesConsiderarCantidades.Observaciones;
             Usuario usuario = (Usuario)this.Session["usuario"];
             cotizacionTmp.usuario = usuario;
-            cotizacionTmp.observaciones = Constantes.OBSERVACION_COTIZACION_C;
+            cotizacionTmp.observaciones = Constantes.OBSERVACION_COTIZACION_D;
             cotizacionTmp.incluidoIGV = false;
             cotizacionTmp.aplicaSedes = false;
             cotizacionTmp.seguimientoCotizacion = new SeguimientoCotizacion();
@@ -927,6 +927,8 @@ namespace Cotizador.Controllers
             String jsonPrecioLista = JsonConvert.SerializeObject(producto.precioListaList);
             String jsonProductoPresentacion = JsonConvert.SerializeObject(producto.ProductoPresentacionList);
 
+            String observaciones = producto.agregarDescripcionCotizacion == 1 ? producto.descripcionLarga : "";
+
             String resultado = "{" +
                 "\"id\":\"" + producto.idProducto + "\"," +
                 "\"nombre\":\"" + producto.descripcion + "\"," +
@@ -934,6 +936,7 @@ namespace Cotizador.Controllers
                 "\"unidad\":\"" + producto.unidad + "\"," +
                 "\"unidad_alternativa\":\"" + producto.unidad_alternativa + "\"," +
                 "\"proveedor\":\"" + producto.proveedor + "\"," +
+                "\"observaciones\":\"" + observaciones + "\"," +
                 "\"familia\":\"" + producto.familia + "\"," +
                 "\"descontinuado\":" + producto.descontinuado + "," +
                 "\"motivoRestriccion\":\"" + producto.motivoRestriccion + "\"," +
@@ -1142,8 +1145,52 @@ namespace Cotizador.Controllers
             return detalles.AsEnumerable().Sum(o => o.subTotal).ToString();
         }
 
-        
 
+        public String CreateClienteLite()
+        {
+            Cotizacion cotizacion = this.CotizacionSession;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            Cliente cli = new Cliente();
+
+
+            cli.razonSocial = Request["cliente"].ToString();
+            cli.nombreComercial = Request["cliente"].ToString();
+            cli.origen = new Origen();
+            string idOrigen = Request["idOrigen"].ToString();
+            cli.origen.idOrigen = idOrigen == "" ? 0 : int.Parse(idOrigen);
+            cli.rubro = new Rubro();
+            string idRubro = Request["idRubro"].ToString();
+            cli.rubro.idRubro = idRubro == "" ? 0 : int.Parse(idRubro);
+
+            cli.contacto1 = Request["nombreContacto"].ToString();
+            cli.telefonoContacto1 = Request["telefonoContacto"].ToString();
+            cli.emailContacto1 = Request["emailContacto"].ToString();
+            cli.observaciones = Request["observaciones"].ToString();
+            cli.CargaMasiva = false;
+            cli.configuraciones = new Model.CONFIGCLASSES.ClienteConfiguracion();
+            cli.configuraciones.agregarNombreSedeObservacionFactura = false;
+            cli.ciudad = cotizacion.ciudad;
+            cli.IdUsuarioRegistro = usuario.idUsuario;
+            cli.usuario = usuario;
+
+            
+
+
+            ClienteBL cliBl = new ClienteBL();
+            cliBl.insertClienteLite(cli);
+            
+            var v = new
+            {
+                success = true
+            };
+
+            cotizacion.cliente = cli;
+            this.CotizacionSession = cotizacion;
+
+            String resultado = JsonConvert.SerializeObject(v);
+            return resultado;
+        }
 
         public String Create()
         {

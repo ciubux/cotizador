@@ -37,6 +37,7 @@ namespace Model
             this.horaFinSegundoTurnoEntrega = "";
             this.CargaMasiva = false;
             this.clienteAdjuntoList = new List<ClienteAdjunto>();
+            this.esClienteLite = false;
 
             this.chrAsesor = new ClienteReasignacionHistorico();
             this.chrAsesor.fechaInicioVigencia = DateTime.Now;
@@ -72,6 +73,9 @@ namespace Model
         //  public Boolean sinPlazoCredito { get; set; }
 
         public Boolean sinMontoCreditoAprobado { get; set; }
+
+        public Boolean esClienteLite { get; set; }
+        public int  clienteLiteValue { get { return esClienteLite ? 1 : 0; } }
 
         public Boolean sinPlazoCreditoAprobado { get; set; }
         [Display(Name = "Grupo Cliente:")]

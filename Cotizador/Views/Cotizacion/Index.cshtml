@@ -256,6 +256,7 @@
                 <form class="form-horizontal">
                     <input type="hidden" id="verIdCotizacion" value="" />
                     <input type="hidden" id="verIdCliente" value="" />
+                    <input type="hidden" id="verClienteLite" value="" />
                     <input type="hidden" id="verIdGrupoCliente" value="" />
                     <input type="hidden" id="idProducto" value="" />
                     <div class="row">
@@ -531,14 +532,15 @@
                     @if (cotizacion.usuario.apruebaCotizaciones || cotizacion.usuario.apruebaCotizacionesGrupales)
                     {
                         <button type="button" id="btnDenegarCotizacion" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Denegar</button>
-                    }              
+                    }
 
 
 
                     @if (cotizacion.usuario.creaCotizaciones || cotizacion.usuario.apruebaCotizaciones)
                     {
-                        <button type="button" id="btnAceptarCotizacion" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Cliente Aceptó</button>
+                        <button type="button" id="btnAceptarCotizacion" class="btn btn-success">Cliente Aceptó</button>
                     }
+
                     @if (cotizacion.usuario.creaCotizaciones || cotizacion.usuario.apruebaCotizaciones)
                     {
                         <button type="button" id="btnRechazarCotizacion" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Cliente Rechazó</button>

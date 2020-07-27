@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "534";
+    TempData["ScriptVersion"] = "564";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -77,6 +77,7 @@
                                 var linkMantenimientoNotaDebito = "";*/
 
                         var linkMaestros = "";
+                        var linkBusquedaClienteLite = "";
                         var linkBusquedaCliente = "";
                         var linkMantenimientoCliente = "";
                         var linkBusquedaGrupoCliente = "";
@@ -116,10 +117,10 @@
                         var linkMantenimientoParametro = "";
                         var linkBusquedaParametro = "";
 
-                         var linkBusquedaVistaDashboard = "";
-                         var linkMantenimientoVistaDashboard = "";
+                        var linkBusquedaVistaDashboard = "";
+                        var linkMantenimientoVistaDashboard = "";
 
-                         var linkVerArchivosAdjuntos = "";
+                        var linkVerArchivosAdjuntos = "";
 
                         var linkCrearFacturaConsolidada = "";
 
@@ -206,6 +207,8 @@
                             case 102: linkMantenimientoRol = "ative"; linkMaestros = "active"; break;
                             case 103: linkBusquedaUsuario = "ative"; linkMaestros = "active"; break;
                             case 104: linkMantenimientoUsuario = "ative"; linkMaestros = "active"; break;
+
+                            case 710: linkBusquedaClienteLite = "ative"; linkMaestros = "active"; break;
                         }
 
                         if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
@@ -232,7 +235,9 @@
                             </li>
                         }
 
-                        if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
+                        if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos || usuario.tomaPedidosCompra 
+                             || usuario.creaDocumentosVenta || usuario.tomaPedidosAlmacen || usuario.apruebaPedidosCompra 
+                             || usuario.apruebaPedidosAlmacen)
                         {
 
                             <li class="@linkPedidos">
@@ -312,7 +317,7 @@
                             </li>
                         }
 
-                        if (usuario.creaDocumentosVenta || usuario.administraDocumentosVenta || usuario.visualizaDocumentosVenta || usuario.creaDocumentosCompra || usuario.exportarVentasContabilidad)
+                        if (usuario.creaDocumentosVenta || usuario.administraDocumentosVenta || usuario.visualizaDocumentosVenta || usuario.creaDocumentosCompra || usuario.visualizaVentas || usuario.exportarVentasContabilidad)
                         {
 
                             <li class="@linkDocumentosVenta">
@@ -343,7 +348,7 @@
         }*@
 
 
-                                    @if (usuario.administraPermisos)
+                                    @if (usuario.exportarVentasContabilidad)
                                     {
                                         <li id="linkExportarCPEs" class="@linkExportarCPEs">@Html.ActionLink("Exportar CPEs Venta", "ExportarCPEs", "DocumentoVenta")</li>
                                     }
@@ -360,8 +365,11 @@
                             </li>
                         }
 
-                        if (usuario.modificaMaestroClientes || usuario.modificaMaestroProductos || usuario.modificaGrupoClientes
-                            || usuario.visualizaGrupoClientes)
+                        if (usuario.modificaMaestroClientes || usuario.modificaMaestroProductos || usuario.modificaGrupoClientes || usuario.visualizaClientes
+                            || usuario.visualizaGrupoClientes || usuario.visualizaProductos || usuario.realizaCargaMasivaProductos || usuario.esVendedor
+                            || usuario.modificaOrigen || usuario.visualizaOrigenes || usuario.modificaSubDistribuidor || usuario.visualizaSubDistribuidores
+                            || usuario.modificaRubro || usuario.visualizaRubros
+                            )
                         {
                             <li class="@linkMaestros">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
@@ -376,6 +384,11 @@
                                     @if (usuario.modificaMaestroClientes)
                                     {
                                         <li id="linkMantenimientoCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Crear/Modificar", "Editar", "Cliente")</li>
+                                    }
+
+                                    @if (usuario.modificaMaestroClientes || usuario.visualizaClientes)
+                                    {
+                                        <li id="linkBusquedaClienteLite" class="@linkBusquedaClienteLite">@Html.ActionLink("Cliente Potencial - Búsqueda", "List", "ClienteLite")</li>
                                     }
 
                                     @if (usuario.modificaGrupoClientes || usuario.visualizaGrupoClientes || usuario.esVendedor)

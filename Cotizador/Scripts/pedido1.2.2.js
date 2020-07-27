@@ -4060,6 +4060,13 @@ jQuery(function ($) {
         changeInputInt("truncado", $("#truncado").val())
     });
 
+    $("#pedido_buscarTruncados").change(function () {
+        var valor = $("#pedido_buscarTruncados:checked").val();
+
+        if (valor == 1) { valor = -1; }
+        else { valor = 0; }
+        changeInputInt("truncado", valor);
+    });
     
     
 
@@ -4938,6 +4945,14 @@ jQuery(function ($) {
 
     $("#estado").change(function () {
         var estado = $("#estado").val();
+        if (estado == ESTADO_ATENDIDO_PARCIALMENTE || estado == ESTADO_FACTURADO || estado == ESTADO_FACTURADO || estado == ESTADO_INGRESADO) {
+            $("#pedido_buscarTruncados").prop("checked", true);
+            changeInputInt("truncado", -1);
+        } else {
+            $("#pedido_buscarTruncados").prop("checked", false);
+            changeInputInt("truncado", 0);
+        }
+
         $.ajax({
             url: "/Pedido/changeEstado",
             type: 'POST',

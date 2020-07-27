@@ -23,6 +23,7 @@ namespace Model
             this.ciudadASolicitar = new Ciudad();
             this.truncado = 0;
 
+
             this.idGrupoCliente = 0;
         }
 
@@ -54,6 +55,7 @@ namespace Model
         public int idGrupoCliente { get; set; }
 
         public bool buscarSedesGrupoCliente { get; set; }
+
 
 
         public Cotizacion cotizacion { get; set; }

@@ -41,7 +41,7 @@ namespace Cotizador.Models.DTOshow
         public bool ingresado { get; set; }
         public List<Model.DocumentoDetalle> documentoDetalle { get; set; }
         
-       
+       public bool esGuiaDiferida { get; set; }
 
     }
 }

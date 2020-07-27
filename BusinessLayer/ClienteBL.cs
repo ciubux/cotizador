@@ -285,6 +285,38 @@ namespace BusinessLayer
                     clie.sedeList = clienteDAL.getSedes(clie.ruc);
                 }
 
+                if (clie.esClienteLite && clie.tipoDocumento == null)
+                {
+                    clie.sedePrincipal = false;
+                    clie.tipoLiberacionCrediticia = Persona.TipoLiberacionCrediticia.requiere;
+                    clie.negociacionMultiregional = false;
+                    clie.observacionHorarioEntrega = "";
+                    clie.tipoPagoFactura = DocumentoVenta.TipoPago.Contado;
+                    clie.plazoCreditoSolicitado = DocumentoVenta.TipoPago.Contado;
+                    clie.FechaRegistro = DateTime.Now;
+                    clie.horaInicioPrimerTurnoEntrega = "09:00:00";
+                    clie.horaFinPrimerTurnoEntrega = "18:00:00";
+                    clie.horaInicioSegundoTurnoEntrega = "";
+                    clie.horaFinSegundoTurnoEntrega = "";
+
+                    clie.direccionEntregaList = new List<DireccionEntrega>();
+                    clie.solicitanteList = new List<Solicitante>();
+                    clie.sedeList = new List<Cliente>();
+
+                    clie.ubigeo = new Ubigeo();
+                    clie.responsableComercial = new Vendedor();
+                    clie.asistenteServicioCliente = new Vendedor();
+                    clie.responsabelPortafolio = new Vendedor();
+                    clie.supervisorComercial = new Vendedor();
+                    clie.origen = new Origen();
+                    clie.subDistribuidor = new SubDistribuidor();
+                    clie.subDistribuidor.idSubDistribuidor = 0;
+
+
+                    clie.CargaMasiva = false;
+                    clie.clienteAdjuntoList = new List<ClienteAdjunto>();
+                }
+
                 return clie;
             }
         }
@@ -395,6 +427,14 @@ namespace BusinessLayer
             }
         }
 
+        public List<Cliente> getClientesLite(Cliente cliente)
+        {
+            using (var clienteDAL = new ClienteDAL())
+            {
+                return clienteDAL.SelectClientesLite(cliente);
+            }
+        }
+
         public Guid getClienteId(String ruc, String codigoSedeMP)
         {
             using (var clienteDAL = new ClienteDAL())
@@ -475,6 +515,17 @@ namespace BusinessLayer
             }
         }
 
+        public Cliente insertClienteLite(Cliente cliente)
+        {
+            using (var clienteDAL = new ClienteDAL())
+            { 
+                cliente = clienteDAL.insertClienteLite(cliente);
+                cliente.esClienteLite = true;
+                return cliente;
+            }
+        }
+
+
         public Cliente updateClienteSunat(Cliente cliente)
         {
             using (var clienteDAL = new ClienteDAL())
@@ -511,7 +562,7 @@ namespace BusinessLayer
 
                 cliente = clienteDAL.updateClienteSunat(cliente);
                 
-                if (cliente.responsableComercial.idVendedor != clientePrev.responsableComercial.idVendedor)
+                if (cliente.responsableComercial.idVendedor != clientePrev.responsableComercial.idVendedor && clientePrev.responsableComercial.idVendedor != 0)
                 {
                     cliente.chrAsesor.idCliente = cliente.idCliente;
                     cliente.chrAsesor.usuario = cliente.usuario;
@@ -562,7 +613,7 @@ namespace BusinessLayer
                     mensajeDal.insertMensaje(notificacion);
                 }
 
-                if (cliente.supervisorComercial.idVendedor != clientePrev.supervisorComercial.idVendedor)
+                if (cliente.supervisorComercial.idVendedor != clientePrev.supervisorComercial.idVendedor && clientePrev.supervisorComercial.idVendedor != 0)
                 {
                     cliente.chrSupervisor.idCliente = cliente.idCliente;
                     cliente.chrSupervisor.usuario = cliente.usuario;
@@ -571,7 +622,7 @@ namespace BusinessLayer
                     clienteDAL.insertClienteReasignacionHistorico(cliente.chrSupervisor);
                 }
 
-                if (cliente.asistenteServicioCliente.idVendedor != clientePrev.asistenteServicioCliente.idVendedor)
+                if (cliente.asistenteServicioCliente.idVendedor != clientePrev.asistenteServicioCliente.idVendedor && clientePrev.asistenteServicioCliente.idVendedor != 0)
                 {
                     cliente.chrAsistente.idCliente = cliente.idCliente;
                     cliente.chrAsistente.usuario = cliente.usuario;

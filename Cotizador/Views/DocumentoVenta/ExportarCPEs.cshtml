@@ -76,7 +76,7 @@
         $("#fechaFin").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fecha);
 
         $("#btnExportStarsoft").click(function () {
-            $('#frmDates').attr("action", '/DocumentoVenta/exportarVentasContabilidad');
+            $('#frmDates').attr("action", '/DocumentoVenta/exportStarsoftCPE');
             $('#frmDates').submit();
         });
 

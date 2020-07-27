@@ -473,6 +473,47 @@ jQuery(function ($) {
 
 
 
+    $("#btnDescargarCDR").click(function () {
+
+        var idDocumentoVenta = $("#idDocumentoVenta").val();
+        var serieNumero = $("#vpSERIE_CORRELATIVO").html();
+
+
+
+        $.ajax({
+            url: "/Factura/descargarArchivoDocumentoVenta",
+            data: {
+                idDocumentoVenta: idDocumentoVenta
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) {
+                alert("Ocurrió un problema al descargar los archivos CDR de la factura " + serieNumero + ".");
+            },
+            success: function (documentos) {
+
+
+                //   var filePDF = base64ToArrayBuffer(documentos.pdf);
+                //    saveByteArray(serieNumero + ".pdf", filePDF);
+
+                //  if (DESCARGAR_XML == 1) {
+                var fileCDR = base64ToArrayBuffer(documentos.cdr);
+                saveByteArray('R-' + documentos.nombreArchivo + ".xml", fileCDR);
+                //     }
+
+
+
+                //Se descarga el PDF y luego se limpia el formulario
+                //        window.open('/General/DownLoadFile?fileName=' + fileName);
+                // window.location = '/Cotizacion/CancelarCreacionCotizacion';
+            }
+        });
+
+
+
+    });
+
+
 
 
 

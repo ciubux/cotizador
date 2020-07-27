@@ -84,6 +84,7 @@ namespace Cotizador.Models.DTOsShow
             cotizacionDTOshow.cliente_codigoRazonSocial = cotizacion.cliente.codigoRazonSocial;
             cotizacionDTOshow.tipoCotizacion = (int)cotizacion.tipoCotizacion;
             cotizacionDTOshow.contacto = cotizacion.contacto;
+            cotizacionDTOshow.cliente_esClienteLite = cotizacion.cliente.esClienteLite;
             cotizacionDTOshow.grupo_idGrupoCliente = cotizacion.grupo.idGrupoCliente;
             return cotizacionDTOshow;
         }
@@ -165,6 +166,7 @@ namespace Cotizador.Models.DTOsShow
             guiaRemisionDTOshow.motivoTraslado = guiaRemision.motivoTraslado;
             guiaRemisionDTOshow.ingresado = guiaRemision.ingresado;
             guiaRemisionDTOshow.documentoDetalle = guiaRemision.documentoDetalle;
+            guiaRemisionDTOshow.esGuiaDiferida = guiaRemision.esGuiaDiferida;
             return guiaRemisionDTOshow;
         }
 

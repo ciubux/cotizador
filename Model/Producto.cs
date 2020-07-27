@@ -18,17 +18,20 @@ namespace Model
             this.ProductoPresentacionList = new List<ProductoPresentacion>();
             this.CargaMasiva = false;
             this.ventaRestringida = TipoVentaRestringida.SinRestriccion;
+            this.cantidadMaximaPedidoRestringido = 0;
         }
 
 
         public Guid idProducto { get; set; }
-        
+
         [Display(Name = "SKU MP:")]
         public String sku { get; set; }
         [Display(Name = "SKU Prov.:")]
         public String skuProveedor { get; set; }
         [Display(Name = "Descripción:")]
         public String descripcion { get; set; }
+        [Display(Name = "Descripción Larga:")]
+        public String descripcionLarga { get; set; }
         public Byte[] image { get; set; }
         [Display(Name = "Proveedor:")]
         public String proveedor { get; set; }
@@ -77,7 +80,7 @@ namespace Model
 
         [Display(Name = "Unidad Alternativa SUNAT:")]
         public String unidadAlternativaInternacional { get; set; }
-        
+
         [Display(Name = "Unidad de Venta:")]
         ///<summary>
         ///Unidad estándar de venta
@@ -124,7 +127,7 @@ namespace Model
 
         [Display(Name = "Equivalencia Und. Prov.:")]
         public int equivalenciaProveedor { get; set; }
-        
+
         [Display(Name = "Equivalencia Und. Alt. Und. Conteo:")]
         ///<summary>
         ///Equivalencia unidad alternativa unidad conteo
@@ -286,7 +289,7 @@ namespace Model
 
         [Display(Name = "Tipo Cambio:")]
         public Decimal tipoCambio { get; set; }
-        
+
         [Display(Name = "Tipo:")]
         public TipoProducto tipoProducto { get; set; }
         public enum TipoProducto
@@ -358,7 +361,7 @@ namespace Model
                 validador = this.usuario;
             }
 
-            switch(this.ventaRestringida)
+            switch (this.ventaRestringida)
             {
                 case TipoVentaRestringida.SinRestriccion: return true; break;
                 case TipoVentaRestringida.Descontinuado: if (validador.apruebaPedidosVentaRestringida) { return true; } break;
@@ -366,7 +369,7 @@ namespace Model
                 case TipoVentaRestringida.StockLimitado: if (validador.apruebaPedidosVentaRestringida) { return true; } break;
 
             }
-            
+
             return false;
         }
 
@@ -402,6 +405,12 @@ namespace Model
                 _descontinuado = value;
             }
         }
+
+        [Display(Name = "Agregar descripción larga en detalle de cotización:")]
+        public int agregarDescripcionCotizacion { get; set; }
+
+        [Display(Name = "Cantidad máxima para no restringir pedido:")]
+        public int cantidadMaximaPedidoRestringido { get; set; }
 
         [Display(Name = "Motivo Restricción:")]
         public String motivoRestriccion {
@@ -456,7 +465,11 @@ namespace Model
 
                     case "descontinuado": cp.nombre = Producto.nombreAtributo("descontinuado"); break;
                     case "motivo_restriccion": cp.nombre = Producto.nombreAtributo("motivoRestriccion"); break;
+                    case "cantidad_maxima_pedido_restringido": cp.nombre = Producto.nombreAtributo("cantidadMaximaPedidoRestringido"); break;
 
+                    case "descripcion_larga": cp.nombre = Producto.nombreAtributo("descripcionLarga"); break;
+                    case "agregar_descripcion_cotizacion": cp.nombre = Producto.nombreAtributo("agregarDescripcionCotizacion"); break;
+                        
                     default: cp.nombre = "[NOT_FOUND]"; break;
 
                         /* TO DO: Evaluar si se usan
@@ -543,6 +556,10 @@ namespace Model
                     case "estado": lc = instanciarLogCambio(campo); lc.valor = this.Estado.ToString(); break;
                     case "descontinuado": lc = instanciarLogCambio(campo); lc.valor = ((int) this.ventaRestringida).ToString(); break;
                     case "motivo_restriccion": lc = instanciarLogCambio(campo); lc.valor = this.motivoRestriccion; break;
+                    case "cantidad_maxima_pedido_restringido": lc = instanciarLogCambio(campo); lc.valor = this.cantidadMaximaPedidoRestringido.ToString(); break;
+
+                    case "descripcion_larga": lc = instanciarLogCambio(campo); lc.valor = this.descripcionLarga.ToString(); break;
+                    case "agregar_descripcion_cotizacion": lc = instanciarLogCambio(campo); lc.valor = this.agregarDescripcionCotizacion.ToString(); break;
                 }
 
                 if (soloRegistro && !campo.registra)
@@ -720,6 +737,21 @@ namespace Model
                         else
                         {
                             this.descripcion = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "descripcion_larga":
+                        if (this.descripcionLarga == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.descripcionLarga = cambio.valor;
                             lista.Add(cambio);
                         }
                         break;
@@ -1066,6 +1098,36 @@ namespace Model
                         else
                         {
                             this.motivoRestriccion = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "cantidad_maxima_pedido_restringido":
+                        if (this.cantidadMaximaPedidoRestringido == int.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.cantidadMaximaPedidoRestringido = int.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "agregar_descripcion_cotizacion":
+                        if (this.agregarDescripcionCotizacion == int.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.agregarDescripcionCotizacion = int.Parse(cambio.valor);
                             lista.Add(cambio);
                         }
                         break;

@@ -270,6 +270,8 @@ namespace DataLayer
                 cotizacion.cliente.razonSocial = Converter.GetString(row, "razon_social");
                 cotizacion.cliente.ruc = Converter.GetString(row, "ruc");
                 cotizacion.cliente.sedePrincipal = Converter.GetBool(row, "sede_principal");
+                cotizacion.cliente.esClienteLite = Converter.GetInt(row, "cliente_lite") == 1 ? true : false;
+
                 cotizacion.cliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
                 cotizacion.cliente.tipoPagoFactura =  (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
                 if (cotizacion.cliente.sedePrincipal) {
@@ -331,6 +333,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.sku = Converter.GetString(row, "sku");
                 cotizacionDetalle.producto.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");
                 cotizacionDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
+                cotizacionDetalle.producto.cantidadMaximaPedidoRestringido = Converter.GetInt(row, "cantidad_maxima_pedido_restringido");
                 cotizacionDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 cotizacionDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
                 cotizacionDetalle.producto.proveedor = Converter.GetString(row, "proveedor");

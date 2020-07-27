@@ -61,5 +61,23 @@ namespace Model
         }
 
         public List<ArchivoAdjunto> listArchivoAjunto { get; set; }
+
+        [Display(Name = "Creado Desde:")]
+        public DateTime? fechaRegistroDesde { get; set; }
+
+        public string FechaRegistroDesdeFormatoFecha
+        {
+            get { return fechaRegistroDesde == null ? "" : fechaRegistroDesde.Value.ToString(Constantes.formatoFecha); }
+        }
+
+        
+
+        [Display(Name = "Creado Hasta:")]
+        public DateTime? fechaRegistroHasta { get; set; }
+
+        public string FechaRegistroHastaFormatoFecha
+        {
+            get { return fechaRegistroHasta == null ? "" : fechaRegistroHasta.Value.ToString(Constantes.formatoFecha); }
+        }
     }
 }

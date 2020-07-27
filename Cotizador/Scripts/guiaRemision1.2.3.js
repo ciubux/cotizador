@@ -797,7 +797,7 @@ jQuery(function ($) {
                 $("#ver_guiaRemision_estadoDescripcion").html(guiaRemision.estadoDescripcion);
 
                 $("#btnRefacturar").hide();
-
+                $("#btnGenerarGuiaAtencion").hide();
 
                 /*Si la guía de remisión se encuentra ANULADA no se puede extornar, ni imprimir, ni facturar*/
                 if (guiaRemision.estaAnulado == 1) {
@@ -810,14 +810,23 @@ jQuery(function ($) {
                 }
                 else {
                     $("#ver_guiaRemision_estadoDescripcion").attr("style", "color:black")
-                    $("#btnImprimirGuiaRemision").show();
+                    if (!guiaRemision.esGuiaDiferida) {
+                        $("#btnImprimirGuiaRemision").show();
+                    } else {
+                        $("#btnImprimirGuiaRemision").hide();
+                        $("#btnFacturarGuiaRemision").show();
+                        $("#btnGenerarGuiaAtencion").show();
+                    }
 
                     $("#guiaRemision_tipoExtorno").val(guiaRemision.tipoExtorno);
                     /*Si se encuentra NO EXTORNADA*/
                     if (guiaRemision.tipoExtorno == MOV_TIPO_EXTORNO_SIN_EXTORNO) {
                         $("#btnAnularGuiaRemision").show();
-                        $("#btnExtornar").show();
 
+                        if (!guiaRemision.esGuiaDiferida) {
+                            $("#btnExtornar").show();
+                        }
+                        
                         $("#divTipoExtorno").hide();
                         $("#btnVerNotasIngresoExtornantes").hide();
 
@@ -861,6 +870,8 @@ jQuery(function ($) {
                         $("#btnAnularGuiaRemision").hide();
                         $("#btnFacturarGuiaRemision").hide();
                         $("#btnRefacturar").show();
+                    } else {
+                        $("#btnFacturarGuiaRemision").show();
                     }
 
                     /* if (    guiaRemision.motivoTraslado == MOTIVO_TRASLADO_SALIDA_DEVOLUCION_COMPRA.charCodeAt(0)
@@ -979,7 +990,47 @@ jQuery(function ($) {
         if (confirm(MENSAJE_CANCELAR_EDICION)) {
             window.location = '/GuiaRemision/CancelarCreacionGuiaRemision';
         }
-    })
+    });
+
+    $("#btnGenerarGuiaAtencion").click(function () {
+        if (confirm("¿Esta seguro que desea generar la guía de atención?")) {
+            var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
+            $.ajax({
+                url: "/GuiaRemision/AtenderGuiaDiferida",
+                data: {
+                    idMovimientoAlmacen: idMovimientoAlmacen
+                },
+                type: 'POST',
+                dataType: 'JSON',
+                error: function (detalle) {
+                    mostrarMensajeErrorProceso();
+                },
+                success: function (res) {
+                    if (res.success) {
+                        $.alert({
+                            title: 'Operación Exitosa',
+                            content: "Se generó la guía " + res.serieNumeroGuia,
+                            type: 'green',
+                            buttons: {
+                                OK: function () { location.reload(); }
+                            }
+                        });
+                    } else {
+                        $.alert({
+                            title: 'ERROR',
+                            content: "Ocurrió un error al generar la guía",
+                            type: 'red',
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    });
+
+    
 
 
 
@@ -1182,8 +1233,49 @@ jQuery(function ($) {
             }
         });
 
-    })
+    });
 
+    $("#btnCambiarASerieDiferida").click(function () {
+        $.ajax({
+            url: "/GuiaRemision/CambiarASerieDiferida",
+            data: {
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) {
+                mostrarMensajeErrorProceso("Ocurrió un error");
+            },
+            success: function (resultado) {
+                if (resultado.success == 1) {
+                    $("#guiaRemision_serieNumeroGuia").val(resultado.serieNumeroString);
+                    $("#btnCambiarASerieDiferida").hide();
+                    $("#btnCambiarASerieNormal").show();
+                } 
+            }
+        });
+
+    });
+
+    $("#btnCambiarASerieNormal").click(function () {
+
+        var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
+        $.ajax({
+            url: "/GuiaRemision/CambiarASerieNormal",
+            data: {
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) {
+                mostrarMensajeErrorProceso("Ocurrió un error");
+            },
+            success: function (resultado) {
+                $("#guiaRemision_serieNumeroGuia").val(resultado.serieNumeroString);
+                $("#btnCambiarASerieDiferida").show();
+                $("#btnCambiarASerieNormal").hide();
+            }
+        });
+
+    });
 
     function mostrarModalFacturar(resultado) {
         //var cotizacion = $.parseJSON(respuesta);

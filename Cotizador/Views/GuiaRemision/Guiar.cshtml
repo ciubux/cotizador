@@ -83,6 +83,20 @@
                     @Html.LabelFor(p => guiaRemision.numeroDocumento, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         @Html.TextBoxFor(g => guiaRemision.serieNumeroGuia, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                        <br />
+                        @if (guiaRemision.usuario.creaGuiasDiferidas)
+                        {
+                            if (guiaRemision.esGuiaDiferida)
+                            {
+                                <button id="btnCambiarASerieDiferida" type="button" class="btn btn-warning" style="display: none;">Atención Diferida</button>
+                                <button id="btnCambiarASerieNormal" type="button" class="btn btn-info">Atención Normal</button>
+                            }
+                            else
+                            {
+                                <button id="btnCambiarASerieDiferida" type="button" class="btn btn-warning" >Atención Diferida</button>
+                                <button id="btnCambiarASerieNormal" type="button" class="btn btn-info" style="display: none;">Atención Normal</button>
+                            }
+                        }
                     </div>
                 </div>
             </div>

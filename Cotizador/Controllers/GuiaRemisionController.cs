@@ -982,10 +982,55 @@ namespace Cotizador.Controllers
                 logBL.insertLog(log);
             }
         }
+
+        public String CambiarASerieDiferida()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            String response = "{\"success\": 0}";
+
+            if (usuario.creaGuiasDiferidas)
+            {
+                SerieDocumentoBL serieBL = new SerieDocumentoBL();
+                GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
+                SerieDocumentoElectronico serie = serieBL.getSerieDocumentoDiferido(guiaRemision.ciudadOrigen.idCiudad);
+
+                if (serie.sedeMP != null)
+                {
+                    guiaRemision.serieDocumento = serie.serie;
+                    guiaRemision.numeroDocumento = serie.siguienteNumeroGuiaRemision;
+                    this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
+
+                    response = "{\"success\": 1,  \"serie\":\"" + serie.serie + "\", \"numero\":\"" + serie.siguienteNumeroGuiaRemision.ToString() + "\", \"serieNumeroString\":\"" + guiaRemision.serieNumeroGuia + "\"}";
+                }
+            }
+
+            return response;
+        }
+
+        public String CambiarASerieNormal()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            String response = "{}";
+
+            if (usuario.creaGuiasDiferidas)
+            {
+                GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
+                guiaRemision.serieDocumento = guiaRemision.ciudadOrigen.serieGuiaRemision;
+                guiaRemision.numeroDocumento = guiaRemision.ciudadOrigen.siguienteNumeroGuiaRemision;
+                this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
+
+                response = "{ \"serie\":\"" + guiaRemision.serieDocumento + "\", \"numero\":\"" + guiaRemision.numeroDocumento.ToString() + "\", \"serieNumeroString\":\"" + guiaRemision.serieNumeroGuia + "\"}";
+            }
+
+            return response;
+        }
+
         public ActionResult Guiar()
         {
 
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoGuiaRemision;
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
             {
@@ -993,7 +1038,6 @@ namespace Cotizador.Controllers
             }
             else
             {
-                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 if (!usuario.creaGuias)
                 {
                     return RedirectToAction("Login", "Account");
@@ -1011,14 +1055,17 @@ namespace Cotizador.Controllers
                     //instanciarGuiaRemision();
                 }
                 GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
+                guiaRemision.usuario = usuario;
 
                 ViewBag.fechaTrasladotmp = guiaRemision.fechaTraslado.ToString(Constantes.formatoFecha);
                 ViewBag.fechaEmisiontmp = guiaRemision.fechaEmision.ToString(Constantes.formatoFecha);
+                
                 ViewBag.guiaRemision = guiaRemision;
+
+                this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
             }
             catch (Exception ex)
             {
-                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
                 LogBL logBL = new LogBL();
                 logBL.insertLog(log);
@@ -1070,6 +1117,31 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+        public String AtenderGuiaDiferida()
+        {
+            
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            String resultado = "{}";
+            if (usuario.creaGuias)
+            {
+                Guid idGuiaDiferida = Guid.Parse(Request["idMovimientoAlmacen"].ToString());
+
+                String error = String.Empty;
+                MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
+                GuiaRemision guiaRemision = movimientoAlmacenBL.InsertMovimientoAlmacenSalidaDesdeGuiaDiferida(idGuiaDiferida, usuario.idUsuario);
+
+                if (guiaRemision.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
+                {
+                    resultado = "{\"success\":true, \"serieNumeroGuia\":\"" + guiaRemision.serieNumeroGuia + "\"}";
+                } else
+                {
+                    resultado = "{\"success\":false}";
+                }
+            }
+
+
+            return resultado;
+        }
         public String CreateTransportistaTemporal()
         {
             GuiaRemision guiaRemision = this.GuiaRemisionSession;

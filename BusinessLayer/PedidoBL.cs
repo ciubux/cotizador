@@ -189,8 +189,11 @@ namespace BusinessLayer
 
                     if (pedidoDetalle.producto.descontinuado == 1 && !pedido.usuario.apruebaPedidosVentaRestringida)
                     {
-                        pedido.seguimientoPedido.observacion = "El producto " + pedidoDetalle.producto.sku + " es de venta restringida.";
-                        pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                        if (pedidoDetalle.producto.cantidadMaximaPedidoRestringido < (pedidoDetalle.cantidad / (pedidoDetalle.ProductoPresentacion == null ? 1 : (pedidoDetalle.ProductoPresentacion.Equivalencia > 0 ? pedidoDetalle.ProductoPresentacion.Equivalencia : 1) )))
+                        {
+                            pedido.seguimientoPedido.observacion = "El producto " + pedidoDetalle.producto.sku + " es de venta restringida.";
+                            pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                        }
                     }
                 }
             }

@@ -59,6 +59,11 @@
     {
         solicitarCHRForm = "0";
     }
+
+    if (cliente.esClienteLite && cliente.tipoDocumento == null)
+    {
+        cliente.ruc = "";
+    }
 }
 
 <div class="page-header">
@@ -68,6 +73,7 @@
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
     <input type="hidden" value="@ViewBag.debug" />
     <input type="hidden" id="fechaRegistro" value='@cliente.FechaRegistro.ToString("dd/MM/yyyy")' />
+    <input type="hidden" id="esClienteLite" value='@cliente.clienteLiteValue.ToString()' />
 
     <form class="form-horizontal" enctype="multipart/form-data" id="formularioConArchivos" method="post">
         <input type="hidden" id="considerarCantidades" name="considerarCantidades" value="2" />

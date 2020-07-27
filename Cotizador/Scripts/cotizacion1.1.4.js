@@ -181,13 +181,15 @@ jQuery(function ($) {
         }
     }
 
-    $("#btnAgregarCliente").click(function () {
+  
+
+    function abrirEditorCliente() {
         window.open(
             "/Cliente/Editar?idCliente=" + GUID_EMPTY,
             "Creación de Cliente",
             "resizable,scrollbars,status"
         );
-    });
+    }
 
     /**
      * ######################## INICIO CONTROLES DE FECHAS
@@ -487,6 +489,46 @@ jQuery(function ($) {
         }
     });
 
+    $("#btnAgregarCliente").click(function () {
+        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
+            alert("Debe seleccionar la sede MP previamente.");
+            $("#idCiudad").focus();
+            $('#btnCancelCliente').click();
+            return false;
+        }
+
+
+        $.confirm({
+            title: 'REGISTRO NUEVO CLIENTE',
+            content: 'Seleccione tipo de registro de cliente que desea realizar:',
+            type: 'orange',
+            buttons: {
+                aplica: {
+                    text: 'DATOS COMPLETOS',
+                    btnClass: 'btn-success',
+                    action: function () {
+                        abrirEditorCliente();
+                    }
+                },
+                noAplica: {
+                    text: 'DATOS BÁSICOS (Cliente potencial)',
+                    btnClass: 'btn-warning',
+                    action: function () {
+                        $('#modalAgregarClienteLite').modal('show')
+                    }
+                },
+                cancelar: {
+                    text: 'CANCELAR',
+                    btnClass: '',
+                    action: function () {
+
+                    }
+                }
+            }
+        });
+    });
+
+
     $('#modalAgregarCliente').on('shown.bs.modal', function () {
 
         if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
@@ -497,6 +539,70 @@ jQuery(function ($) {
         }
 
 
+    });
+
+    $('#modalAgregarClienteLite').on('shown.bs.modal', function () {
+
+        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
+            alert("Debe seleccionar la sede MP previamente.");
+            $("#idCiudad").focus();
+            $('#btnCancelClienteLite').click();
+            return false;
+        }
+
+
+    });
+
+    $("#btnSaveClienteLite").click(function () {
+        var cliente = $("#nclCliente").val().trim();
+        var idOrigen = $("#nclIdOrigen").val().trim();
+        var idRubro = $("#nclIdRubro").val().trim();
+        var nombre = $("#nclContacto1").val().trim();
+        var telefono = $("#nclTelefonoContacto1").val().trim();
+        var email = $("#nclEmailContacto1").val().trim();
+        var observaciones = $("#ncObservaciones").val().trim();
+        
+        if (nombre == "") {
+            $.alert({
+                title: "Error de validación",
+                type: 'orange',
+                content: 'Debe digitar un nombre.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            return false;
+        }
+
+        if (telefono == "") {
+            $.alert({
+                title: "Error de validación",
+                type: 'orange',
+                content: 'Debe digitar un número de teléfono.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            return false;
+        }
+
+
+        $.ajax({
+            url: '/Cotizacion/CreateClienteLite',
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                cliente: cliente,
+                idOrigen: idOrigen,
+                idRubro: idRubro,
+                nombreContacto: nombre,
+                telefonoContacto: telefono,
+                emailContacto: email,
+                observaciones: observaciones
+            }
+        });
+
+        window.location = '/Cotizacion/Cotizar';
     });
 
     /**
@@ -683,7 +789,7 @@ jQuery(function ($) {
                 $("#unidad").html(options);
                 $("#proveedor").val(producto.proveedor);
                 $("#familia").val(producto.familia);
-                $('#observacionProducto').val("");
+                
                 $('#fleteDetalle').val(producto.fleteDetalle);
                 $("#porcentajeDescuento").val(Number(producto.porcentajeDescuento).toFixed(4));
                 $("#cantidad").val(1);
@@ -749,11 +855,15 @@ jQuery(function ($) {
                 activarBtnAddProduct();
                 //Se calcula el subtotal del producto
                 calcularSubtotalProducto();
+
+                $('#modalAgregarProducto #observacionProducto').val(producto.observaciones);
             }
         });
     });
 
-
+    $("#btnAgregarLiteCliente").click(function () {
+        
+    });
 
     ///////////////////CAMPO PRESENTACIÓN
     $("#unidad").change(function () {
@@ -1958,6 +2068,13 @@ jQuery(function ($) {
                 $("#verCondicionesPago").html(cotizacion.textoCondicionesPago);
                 $("#verIdCotizacion").val(cotizacion.idCotizacion);
                 $("#verIdCliente").val(cotizacion.cliente_idCliente);
+
+                if (cotizacion.cliente_esClienteLite) {
+                    $("#verClienteLite").val("1");
+                } else {
+                    $("#verClienteLite").val("0");
+                }
+
                 $("#verIdGrupoCliente").val(cotizacion.grupo_idGrupoCliente);
                 $("#verNumero").html(cotizacion.codigo);
                 $("#verCiudad").html(cotizacion.ciudad_nombre);
@@ -2088,7 +2205,6 @@ jQuery(function ($) {
                 $("#tableDetalleCotizacion").append(d);
 
 
-
                 /*EDITAR COTIZACIÓN*/
                 if (
                     cotizacion.seguimientoCotizacion_estado == ESTADO_PENDIENTE_APROBACION ||
@@ -2208,8 +2324,7 @@ jQuery(function ($) {
                     cotizacion.seguimientoCotizacion_estado == ESTADO_APROBADA ||
                     cotizacion.seguimientoCotizacion_estado == ESTADO_RECHAZADA
                 ) {
-
-                    $("#btnAceptarCotizacion").show();
+                    $("#btnAceptarCotizacion").show(); 
                 }
                 else {
                     $("#btnAceptarCotizacion").hide();
@@ -2643,10 +2758,37 @@ jQuery(function ($) {
 
 
     $("#btnAceptarCotizacion").click(function () {
+        var clienteLite = $("#verClienteLite").val();
 
-        $("#labelNuevoEstado").html(ESTADO_ACEPTADA_STR);
-        $("#estadoId").val(ESTADO_ACEPTADA);
-        limpiarComentario();
+        if (clienteLite == "1") {
+            $.confirm({
+                title: 'COMPLETAR REGISTRO CLIENTE',
+                content: 'Debe completar los datos del cliente antes de aceptar la cotización:',
+                type: 'orange',
+                buttons: {
+                    aplica: {
+                        text: 'COMPLETAR REGISTRO',
+                        btnClass: 'btn-success',
+                        action: function () {
+                            var idCliente = $("#verIdCliente").val();
+                            window.location = "/Cliente/Editar?idCliente=" + idCliente;
+                        }
+                    },
+                    cancelar: {
+                        text: 'CANCELAR',
+                        btnClass: '',
+                        action: function () {
+
+                        }
+                    }
+                }
+            });
+        } else {
+            $('#modalAprobacion').modal('show')
+            $("#labelNuevoEstado").html(ESTADO_ACEPTADA_STR);
+            $("#estadoId").val(ESTADO_ACEPTADA);
+            limpiarComentario();
+        }
     });
 
     $("#btnEliminarCotizacion").click(function () {

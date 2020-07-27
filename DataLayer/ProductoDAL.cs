@@ -126,6 +126,8 @@ namespace DataLayer
             {
                 producto.idProducto = Converter.GetGuid(row, "id_producto");
                 producto.descripcion = Converter.GetString(row, "descripcion");
+                producto.descripcionLarga = Converter.GetString(row, "descripcion_larga");
+
                 producto.sku = Converter.GetString(row, "sku");
 
                 if (row["imagen"] != DBNull.Value)
@@ -158,9 +160,11 @@ namespace DataLayer
                 producto.precioClienteProducto = new PrecioClienteProducto();
                 producto.precioClienteProducto.idPrecioClienteProducto = Guid.Empty;
                 producto.tipoProducto = (Producto.TipoProducto) Converter.GetInt(row, "tipo_producto");
+                producto.agregarDescripcionCotizacion = Converter.GetInt(row, "agregar_descripcion_cotizacion");
 
                 producto.ventaRestringida = (Producto.TipoVentaRestringida) Converter.GetInt(row, "descontinuado");
                 producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
+                producto.cantidadMaximaPedidoRestringido = Converter.GetInt(row, "cantidad_maxima_pedido_restringido");
                 producto.exoneradoIgv = Converter.GetInt(row, "exonerado_igv") == 1 ? true : false;
                 producto.inafecto = Converter.GetInt(row, "inafecto") == 1 ? true : false;
 
@@ -985,6 +989,10 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "tipoVentaRestingida", producto.tipoVentaRestringidaBusqueda);
             InputParameterAdd.Varchar(objCommand, "familia", producto.familia);
             InputParameterAdd.Varchar(objCommand, "proveedor", producto.proveedor);
+            InputParameterAdd.DateTime(objCommand, "fechaCreacionDesde", producto.fechaRegistroDesde == null ? producto.fechaRegistroDesde : new DateTime(producto.fechaRegistroDesde.Value.Year, producto.fechaRegistroDesde.Value.Month, producto.fechaRegistroDesde.Value.Day, 0, 0, 0));
+            InputParameterAdd.DateTime(objCommand, "fechaCreacionHasta", producto.fechaRegistroHasta == null ? producto.fechaRegistroHasta : new DateTime(producto.fechaRegistroHasta.Value.Year, producto.fechaRegistroHasta.Value.Month, producto.fechaRegistroHasta.Value.Day, 23, 59, 59));
+
+
             DataTable dataTable = Execute(objCommand);
             
 
@@ -1011,6 +1019,11 @@ namespace DataLayer
                 item.equivalenciaUnidadAlternativaUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_alternativa_unidad_conteo");
                 item.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_estandar_unidad_conteo");
                 item.equivalenciaUnidadProveedorUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_proveedor_unidad_conteo");
+
+                item.descripcionLarga = Converter.GetString(row, "descripcion_larga");
+                item.agregarDescripcionCotizacion = Converter.GetInt(row, "agregar_descripcion_cotizacion");
+                item.cantidadMaximaPedidoRestringido = Converter.GetInt(row, "cantidad_maxima_pedido_restringido");
+
                 item.codigoSunat = Converter.GetString(row, "codigo_sunat");
                 item.exoneradoIgv = Converter.GetInt(row, "exonerado_igv") == 1 ? true : false;
                 item.inafecto = Converter.GetInt(row, "inafecto") == 1 ? true : false;
@@ -1054,6 +1067,7 @@ namespace DataLayer
                 item.sku = Converter.GetString(row, "sku");
                 item.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 item.descripcion = Converter.GetString(row, "descripcion");
+                item.descripcionLarga = Converter.GetString(row, "descripcion_larga");
                 item.familia = Converter.GetString(row, "familia");
                 item.proveedor = Converter.GetString(row, "proveedor");
                 item.unidad = Converter.GetString(row, "unidad");
@@ -1074,6 +1088,7 @@ namespace DataLayer
                 item.unidadAlternativaInternacional = Converter.GetString(row, "unidad_alternativa_internacional");
 
                 item.Estado = Converter.GetInt(row, "estado");
+                item.agregarDescripcionCotizacion = Converter.GetInt(row, "agregar_descripcion_cotizacion");
                 item.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo");
                 item.tipoProductoVista = (int)item.tipoProducto;
                 //,usuario_creacion
@@ -1098,6 +1113,7 @@ namespace DataLayer
                 item.image = Converter.GetBytes(row, "imagen");
                 item.ventaRestringida = (Producto.TipoVentaRestringida) Converter.GetInt(row, "descontinuado");
                 item.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
+                item.cantidadMaximaPedidoRestringido = Converter.GetInt(row, "cantidad_maxima_pedido_restringido");
             }
 
             return item;
@@ -1110,7 +1126,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", producto.IdUsuarioRegistro);
             InputParameterAdd.Varchar(objCommand, "sku", producto.sku);
             InputParameterAdd.Binary(objCommand, "imagen", producto.image);
-            InputParameterAdd.Varchar(objCommand, "descripcion", producto.descripcion);
+            InputParameterAdd.Varchar(objCommand, "descripcion", producto.descripcion.Replace("\"", "''"));
             InputParameterAdd.Varchar(objCommand, "skuProveedor", producto.skuProveedor);
             InputParameterAdd.Varchar(objCommand, "familia", producto.familia);
             InputParameterAdd.Varchar(objCommand, "proveedor", producto.proveedor);
@@ -1131,6 +1147,11 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "costo", producto.costoSinIgv);
             InputParameterAdd.DateTime(objCommand, "fechaInicioVigencia", DateTime.Now);
             InputParameterAdd.Int(objCommand, "esCargaMasiva", producto.CargaMasiva ? 1 : 0);
+
+            if (producto.descripcionLarga == null) producto.descripcionLarga = "";
+            InputParameterAdd.Varchar(objCommand, "descripcionLarga", producto.descripcionLarga.Replace("\"", "''"));
+            InputParameterAdd.Int(objCommand, "agregarDescripcionCotizacion", producto.agregarDescripcionCotizacion);
+            InputParameterAdd.Int(objCommand, "cantidadMaximaPedidoRestringido", producto.cantidadMaximaPedidoRestringido);
 
             InputParameterAdd.Varchar(objCommand, "monedaCompra", producto.monedaProveedor);
             InputParameterAdd.Varchar(objCommand, "monedaVenta", producto.monedaMP);
@@ -1197,7 +1218,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", producto.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "sku", producto.sku);
             InputParameterAdd.Binary(objCommand, "imagen", producto.image);
-            InputParameterAdd.Varchar(objCommand, "descripcion", producto.descripcion);
+            InputParameterAdd.Varchar(objCommand, "descripcion", producto.descripcion.Replace("\"", "''"));
             InputParameterAdd.Varchar(objCommand, "skuProveedor", producto.skuProveedor);
             InputParameterAdd.Varchar(objCommand, "familia", producto.familia);
             InputParameterAdd.Varchar(objCommand, "proveedor", producto.proveedor);
@@ -1209,6 +1230,12 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "equivalenciaProveedor", producto.equivalenciaProveedor);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
             InputParameterAdd.Int(objCommand, "descontinuado", (int) producto.ventaRestringida);
+
+            if (producto.descripcionLarga == null) producto.descripcionLarga = "";
+            InputParameterAdd.Varchar(objCommand, "descripcionLarga", producto.descripcionLarga.Replace("\"", "''"));
+            InputParameterAdd.Int(objCommand, "agregarDescripcionCotizacion", producto.agregarDescripcionCotizacion);
+            InputParameterAdd.Int(objCommand, "cantidadMaximaPedidoRestringido", producto.cantidadMaximaPedidoRestringido);
+
             if (producto.motivoRestriccion == null)
             {
                 producto.motivoRestriccion = "";

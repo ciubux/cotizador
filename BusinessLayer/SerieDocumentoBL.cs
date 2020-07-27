@@ -15,5 +15,13 @@ namespace BusinessLayer
                 return dal.selectSeriesDocumento(idSede);
             }
         }
+
+        public SerieDocumentoElectronico getSerieDocumentoDiferido(Guid idSede)
+        {
+            using (var dal = new SerieDocumentoDAL())
+            {
+                return dal.selectSerieDocumentoDiferido(idSede);
+            }
+        }
     }
 }

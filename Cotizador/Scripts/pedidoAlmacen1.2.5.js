@@ -626,7 +626,7 @@ jQuery(function ($) {
     var documentoVenta_fechaVencimiento = $("#documentoVenta_fechaVencimientotmp").val();
     $("#documentoVenta_fechaVencimiento").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", documentoVenta_fechaVencimiento);
 
-
+    $("#pedido_fechaEntregaExtendida").datepicker({ dateFormat: "dd/mm/yy", minDate: 0 });
     /**
      * FIN DE CONTROLES DE FECHAS
      */
@@ -2599,7 +2599,7 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
                 $("#verTelefonoCorreoContactoPedido").html(pedido.telefonoCorreoContactoPedido);
 
                
-
+                $("#verFechaEntregaExtendida").val(pedido.fechaEntregaExtendidaString);
 
                 $("#verFechaHoraSolicitud").html(pedido.fechaHoraSolicitud);
 
@@ -3161,7 +3161,8 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
         var observaciones = $("#pedido_observaciones").val();
         var observacionesGuiaRemision = $("#pedido_observacionesGuiaRemision").val();
         var observacionesFactura = $("#pedido_observacionesFactura").val();
-        
+
+        var fechaEntregaExtendida = $("#pedido_fechaEntregaExtendida").val();
 
 
         $.ajax({
@@ -3176,7 +3177,8 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
                 numeroReferenciaAdicional: numeroReferenciaAdicional,
                 observaciones: observaciones,
                 observacionesGuiaRemision: observacionesGuiaRemision,
-                observacionesFactura: observacionesFactura
+                observacionesFactura: observacionesFactura,
+                fechaEntregaExtendida: fechaEntregaExtendida
             },
             dataType: 'JSON',
             error: function (detalle) {
@@ -3217,10 +3219,11 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
         $("#pedido_numeroReferenciaCliente2").val($("#verNumeroReferenciaCliente").html());
         $("#pedido_numeroReferenciaAdicional").val($("#verNumeroReferenciaAdicional").html());
 
+        $("#pedido_fechaEntregaExtendida").val($("#verFechaEntregaExtendida").val());
+
         $("#pedido_observacionesFactura").val($("#verObservacionesFactura").html());
         $("#pedido_observacionesGuiaRemision").val($("#verObservacionesGuiaRemision").html());
         $("#pedido_observaciones").val($("#verObservaciones").html());
-        
     });
 
 

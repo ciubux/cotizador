@@ -59,6 +59,8 @@ namespace DataLayer
                 serieDocumentoElectronico.siguienteNumeroNotaDebito = Converter.GetInt(row, "siguiente_numero_nota_debito");
                 serieDocumentoElectronico.siguienteNumeroGuiaRemision = Converter.GetInt(row, "siguiente_numero_guia_remision");
                 serieDocumentoElectronico.siguienteNumeroNotaIngreso = Converter.GetInt(row, "siguiente_numero_nota_ingreso");
+                serieDocumentoElectronico.siguienteNumeroNotaCreditoBoleta = Converter.GetInt(row, "siguiente_numero_nota_credito_boleta");
+                serieDocumentoElectronico.siguienteNumeroNotaDebitoBoleta = Converter.GetInt(row, "siguiente_numero_nota_debito_boleta");
                 serieDocumentoElectronicoList.Add(serieDocumentoElectronico);
             }
 

@@ -97,7 +97,7 @@ namespace Cotizador.Controllers
             else
             {
                 usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                if (!usuario.modificaMaestroClientes && !usuario.modificaMaestroProductos)
+                if (!usuario.modificaMaestroProductos)
                 {
                     return RedirectToAction("Login", "Account");
                 }
@@ -178,6 +178,8 @@ namespace Cotizador.Controllers
             producto.tipoProductoVista = 0;
             producto.tipoVentaRestringidaBusqueda = -1;
             producto.descontinuado = -1;
+            producto.fechaRegistroDesde = null;
+            producto.fechaRegistroHasta = null;
 
             this.Session["familia"] = "Todas";
             this.Session["proveedor"] = "Todos";
@@ -729,7 +731,7 @@ namespace Cotizador.Controllers
                         }
                         else
                         {
-                            productoStaging.descripcion = sheet.GetRow(row).GetCell(pos).ToString();
+                            productoStaging.descripcion = sheet.GetRow(row).GetCell(pos).ToString().Replace("\"", "''");
                         }
 
                         pos = posicionInicial + 5;
@@ -988,6 +990,36 @@ namespace Cotizador.Controllers
                             productoStaging.motivoRestriccion = "";
                         }
 
+                        pos = posicionInicial + 33;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.cantidadMaximaPedidoRestringido = 0;
+                        }
+                        else
+                        {
+                            productoStaging.cantidadMaximaPedidoRestringido = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
+                        }
+
+                        pos = posicionInicial + 34;
+                        try
+                        {
+                            productoStaging.descripcionLarga = sheet.GetRow(row).GetCell(pos).ToString().Trim().Replace("\"", "''");
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.descripcionLarga = "";
+                        }
+
+                        pos = posicionInicial + 35;
+                        try
+                        {
+                            productoStaging.agregarDescripcionCotizacion = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper().Equals("SI") ? 1 : 0;
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.agregarDescripcionCotizacion = 0;
+                        }
+
                         //UtilesHelper.setValorCelda(sheet, 1, "AC", Producto.nombreAtributo("tipoProducto"), titleCellStyle);
 
 
@@ -1085,6 +1117,7 @@ namespace Cotizador.Controllers
                                     if (isNew)
                                     {
                                         //Registrar
+                                        productoStaging.CargaMasiva = false;
                                         productoBL.insertProducto(productoStaging);
                                     }
                                     else
@@ -1260,6 +1293,21 @@ namespace Cotizador.Controllers
             this.ProductoSession = producto;
         }
 
+        public void ChangeFechaRegistroDesde()
+        {
+            Producto obj = (Producto)this.ProductoSession;
+            String[] ftmp = this.Request.Params["fechaDesde"].Split('/');
+            obj.fechaRegistroDesde = new DateTime(Int32.Parse(ftmp[2]), Int32.Parse(ftmp[1]), Int32.Parse(ftmp[0]));
+            this.ProductoSession = obj;
+        }
+
+        public void ChangeFechaRegistroHasta()
+        {
+            Producto obj = (Producto)this.ProductoSession;
+            String[] ftmp = this.Request.Params["fechaHasta"].Split('/');
+            obj.fechaRegistroHasta = new DateTime(Int32.Parse(ftmp[2]), Int32.Parse(ftmp[1]), Int32.Parse(ftmp[0]));
+            this.ProductoSession = obj;
+        }
         public void ChangeImage()
         {
             Producto producto = (Producto)this.ProductoSession;

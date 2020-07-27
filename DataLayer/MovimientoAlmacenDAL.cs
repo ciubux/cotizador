@@ -303,7 +303,8 @@ namespace DataLayer
                 {
                     InputParameterAdd.Int(objCommand, "motivoExtorno", (int)GuiaRemision.MotivosExtornoNotaIngreso.DevolucionItem);
                 }
-                else {
+                else
+                {
                     InputParameterAdd.Int(objCommand, "motivoExtorno", (int)GuiaRemision.MotivosExtornoNotaIngreso.DevolucionTotal);
                 }
                 InputParameterAdd.Varchar(objCommand, "sustentoExtorno", guiaRemision.sustentoExtorno);
@@ -328,7 +329,7 @@ namespace DataLayer
             guiaRemision.idMovimientoAlmacen = (Guid)objCommand.Parameters["@idMovimientoAlmacen"].Value;
             guiaRemision.numero = (Int64)objCommand.Parameters["@numeroMovimientoAlmacen"].Value;
             int siguienteNumeroGuiaRemision = (int)objCommand.Parameters["@siguienteNumeroGuiaRemision"].Value;
-            
+
 
             guiaRemision.venta = new Venta();
             guiaRemision.venta.idVenta = (Guid)objCommand.Parameters["@idVenta"].Value;
@@ -339,8 +340,8 @@ namespace DataLayer
             guiaRemision.guiaRemisionValidacion.tipoErrorValidacion = (GuiaRemisionValidacion.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
             guiaRemision.guiaRemisionValidacion.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
 
-            if(guiaRemision.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
-            {                
+            if (guiaRemision.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
+            {
 
                 if (guiaRemision.numeroDocumento != siguienteNumeroGuiaRemision)
                 {
@@ -357,6 +358,39 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
 
             this.Commit();
+
+        }
+
+        public GuiaRemision InsertMovimientoAlmacenSalidaDesdeGuiaDiferida(Guid idGuiaDiferida, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pi_movimientoAlmacenSalidaDesdeGuiaDiferida");
+            InputParameterAdd.Guid(objCommand, "idGuiaDiferida", idGuiaDiferida);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idMovimientoAlmacen");
+            OutputParameterAdd.Int(objCommand, "siguienteNumeroGuiaRemision");
+            OutputParameterAdd.Int(objCommand, "tipoError");
+            OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
+            ExecuteNonQuery(objCommand);
+
+            GuiaRemision guia = new GuiaRemision();
+            guia.idMovimientoAlmacen = (Guid)objCommand.Parameters["@idMovimientoAlmacen"].Value;
+
+            guia = this.SelectGuiaRemision(guia);
+
+            guia.guiaRemisionValidacion = new GuiaRemisionValidacion();
+            
+            guia.guiaRemisionValidacion.tipoErrorValidacion = (GuiaRemisionValidacion.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
+            guia.guiaRemisionValidacion.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
+
+            if(guia.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
+            {                
+
+            }
+
+
+            return guia;
 
         }
 

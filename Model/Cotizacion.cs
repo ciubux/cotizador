@@ -20,11 +20,11 @@ namespace Model
 
         public enum TiposCotizacion
         {
-            [Display(Name = "Normal")]
+            [Display(Name = "Permanente")]
             Normal = 0,
-            [Display(Name = "Transitoria (No registra Precios)")]
+            [Display(Name = "Puntual (De 1 solo uso)")]
             Transitoria = 1,
-            [Display(Name = "Trivial (No registra Precios)")]
+            [Display(Name = "Trivial (Sin variación de precios)")]
             Trivial = 2
         };
 

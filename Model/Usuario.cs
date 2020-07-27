@@ -143,6 +143,7 @@ namespace Model
 
         /*PERMISOS GUIA REMISION*/
         public bool creaGuias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_GUIAS)).FirstOrDefault() != null; } }
+        public bool creaGuiasDiferidas { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_GUIAS_DIFERIDAS)).FirstOrDefault() != null; } }
         public bool administraGuias { get { return administraGuiasLima || administraGuiasProvincias; } }
         public bool administraGuiasLima { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_GUIAS_LIMA)).FirstOrDefault() != null; } }
         public bool administraGuiasProvincias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_GUIAS_PROVINCIAS)).FirstOrDefault() != null; } }

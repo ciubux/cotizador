@@ -13,7 +13,7 @@ namespace Model
         public String serie { get; set; }
 
 
-        public int serieFormatInt { get { return int.Parse(serie); } }
+        public int serieFormatInt { get { return !serie.Substring(0,1).Equals("D") ? int.Parse(serie) : 0; } }
 
         [Display(Name = "Número:")]
         public int siguienteNumeroBoleta { get; set; }
@@ -32,6 +32,11 @@ namespace Model
 
         [Display(Name = "Número:")]
         public int siguienteNumeroNotaIngreso { get; set; }
+
+        [Display(Name = "Número:")]
+        public int siguienteNumeroNotaCreditoBoleta { get; set; }
+        [Display(Name = "Número:")]
+        public int siguienteNumeroNotaDebitoBoleta { get; set; }
         public Ciudad sedeMP { get; set; }
         public bool esPrincipal { get; set; }        
     }

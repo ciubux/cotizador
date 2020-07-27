@@ -92,6 +92,14 @@ namespace BusinessLayer
             }
         }
 
+        public GuiaRemision InsertMovimientoAlmacenSalidaDesdeGuiaDiferida(Guid idGuiaDiferida, Guid idUsuario)
+        {
+            using (var dal = new MovimientoALmacenDAL())
+            {
+                return dal.InsertMovimientoAlmacenSalidaDesdeGuiaDiferida(idGuiaDiferida, idUsuario);
+            }
+        }
+
         public void InsertMovimientoAlmacenEntrada(NotaIngreso notaIngreso)
         {
             using (var dal = new MovimientoALmacenDAL())

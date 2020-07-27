@@ -33,6 +33,12 @@ jQuery(function ($) {
 
     $("#fechaInicioVigenciaTC").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fecha);
 
+    var fechaCreacionDesde = $("#fechaCreacionDesdetmp").val();
+    $("#producto_fechaCreacionDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaCreacionDesde);
+
+    var fechaCreacionHasta = $("#fechaCreacionHastatmp").val();
+    $("#producto_fechaCreacionHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaCreacionHasta);
+
     $(document).ready(function () {
 
         $("#btnBusqueda").click();
@@ -276,6 +282,43 @@ jQuery(function ($) {
             }
         });
     }
+
+    $("#producto_fechaCreacionDesde").change(function () {
+        var fechaDesde = $("#producto_fechaCreacionDesde").val();
+        var fechaHasta = $("#producto_fechaCreacionHasta").val();
+
+        //Si fecha de entrega hasta es superior a fecha de entrega desde o la fecha de entrega hasta es vacío
+        //se reemplaza el valor por la fecha de entrega desde
+        if (convertirFechaNumero(fechaHasta) < convertirFechaNumero(fechaDesde)
+            || fechaHasta.trim() == "") {
+            $("#producto_fechaCreacionHasta").val(fechaDesde);
+            $("#producto_fechaCreacionHasta").change();
+        }
+
+        $.ajax({
+            url: "/Producto/ChangeFechaRegistroDesde",
+            type: 'POST',
+            data: {
+                fechaDesde: fechaDesde
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#producto_fechaCreacionHasta").change(function () {
+        var fechaHasta = $("#producto_fechaCreacionHasta").val();
+        $.ajax({
+            url: "/Producto/ChangeFechaRegistroHasta",
+            type: 'POST',
+            data: {
+                fechaHasta: fechaHasta
+            },
+            success: function () {
+            }
+        });
+    });
+
 
     function changeInputInt(propiedad, valor) {
         $.ajax({

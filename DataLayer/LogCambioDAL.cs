@@ -65,19 +65,21 @@ namespace DataLayer
 
             DataTable tvp = new DataTable();
             tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+            tvp.Columns.Add(new DataColumn("ID_REGISTRO", typeof(Guid)));
             tvp.Columns.Add(new DataColumn("REPITE_DATO", typeof(int)));
             
             foreach (LogCambio item in logs)
             {
                 DataRow rowObj = tvp.NewRow();
                 rowObj["ID"] = item.idCambio;
+                rowObj["ID_REGISTRO"] = item.idRegistro;
                 rowObj["REPITE_DATO"] = item.repiteDato ? 1 : 0;
                 tvp.Rows.Add(rowObj);
             }
 
             SqlParameter tvparam = objCommand.Parameters.AddWithValue("@cambios", tvp);
             tvparam.SqlDbType = SqlDbType.Structured;
-            tvparam.TypeName = "dbo.LogAplicarList";
+            tvparam.TypeName = "dbo.LogAplicarProgramadoList";
 
 
             ExecuteNonQuery(objCommand);
