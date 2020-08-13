@@ -20,7 +20,7 @@ namespace Cotizador.Controllers
 {
     public class PedidoController : ParentController
     {
-       
+
         private Pedido PedidoSession {
             get {
 
@@ -85,9 +85,9 @@ namespace Cotizador.Controllers
                 pedidoTmp.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Todos;
 
                 pedidoTmp.pedidoDetalleList = new List<PedidoDetalle>();
-           
+
                 pedidoTmp.usuarioBusqueda = new Usuario { idUsuario = Guid.Empty };
-            
+
                 this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedidoTmp;
                 this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] = new List<Pedido>();
             }
@@ -183,7 +183,7 @@ namespace Cotizador.Controllers
 
                 ViewBag.fechaCreacionDesde = pedidoSearch.fechaCreacionDesde.ToString(Constantes.formatoFecha);
                 ViewBag.fechaCreacionHasta = pedidoSearch.fechaCreacionHasta.ToString(Constantes.formatoFecha);
-         
+
                 if (pedidoSearch.fechaEntregaDesde != null)
                     ViewBag.fechaEntregaDesde = pedidoSearch.fechaEntregaDesde.Value.ToString(Constantes.formatoFecha);
                 else
@@ -213,7 +213,7 @@ namespace Cotizador.Controllers
                     this.Session[Constantes.VAR_SESSION_PEDIDO_LISTA] = new List<Pedido>();
                 }
 
-        
+
                 int existeCliente = 0;
                 //  if (cotizacion.cliente.idCliente != Guid.Empty || cotizacion.grupo.idGrupo != Guid.Empty)
                 if (pedidoSearch.cliente.idCliente != Guid.Empty)
@@ -357,7 +357,7 @@ namespace Cotizador.Controllers
                 throw e;
             }
         }
-        
+
 
         public ActionResult CargarPedidos()
         {
@@ -471,18 +471,18 @@ namespace Cotizador.Controllers
                 {
                     existeCliente = 1;
                 }
-                    
+
                 ViewBag.existeCliente = existeCliente;
                 ViewBag.idClienteGrupo = pedido.cliente.idCliente;
                 ViewBag.clienteGrupo = pedido.cliente.ToString();
-                
+
                 ViewBag.fechaSolicitud = pedido.fechaSolicitud.ToString(Constantes.formatoFecha);
                 ViewBag.horaSolicitud = pedido.fechaSolicitud.ToString(Constantes.formatoHora);
 
-                ViewBag.fechaEntregaDesde = pedido.fechaEntregaDesde ==null?"": pedido.fechaEntregaDesde.Value.ToString(Constantes.formatoFecha);
-                ViewBag.fechaEntregaHasta = pedido.fechaEntregaHasta == null?"": pedido.fechaEntregaHasta.Value.ToString(Constantes.formatoFecha);
+                ViewBag.fechaEntregaDesde = pedido.fechaEntregaDesde == null ? "" : pedido.fechaEntregaDesde.Value.ToString(Constantes.formatoFecha);
+                ViewBag.fechaEntregaHasta = pedido.fechaEntregaHasta == null ? "" : pedido.fechaEntregaHasta.Value.ToString(Constantes.formatoFecha);
 
-       
+
 
                 ViewBag.pedido = pedido;
                 ViewBag.VARIACION_PRECIO_ITEM_PEDIDO = Constantes.VARIACION_PRECIO_ITEM_PEDIDO;
@@ -509,132 +509,240 @@ namespace Cotizador.Controllers
         {
             //try
             //{
-                if (this.Session[Constantes.VAR_SESSION_PEDIDO] == null)
+            if (this.Session[Constantes.VAR_SESSION_PEDIDO] == null)
+            {
+
+                instanciarPedido();
+            }
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+
+            Cotizacion cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_VER];
+            pedido.cotizacion = new Cotizacion();
+            pedido.cotizacion.idCotizacion = cotizacion.idCotizacion;
+            pedido.cotizacion.codigo = cotizacion.codigo;
+            pedido.ciudad = cotizacion.ciudad;
+            pedido.cliente = cotizacion.cliente;
+            pedido.esPagoContado = cotizacion.esPagoContado;
+
+
+            if (cotizacion.cliente.horaInicioPrimerTurnoEntrega != null && !cotizacion.cliente.horaInicioPrimerTurnoEntrega.Equals("00:00:00"))
+            {
+                pedido.horaEntregaDesde = cotizacion.cliente.horaInicioPrimerTurnoEntregaFormat;
+            }
+            if (cotizacion.cliente.horaFinPrimerTurnoEntrega != null && !cotizacion.cliente.horaFinPrimerTurnoEntrega.Equals("00:00:00"))
+            {
+                pedido.horaEntregaHasta = cotizacion.cliente.horaFinPrimerTurnoEntregaFormat;
+            }
+
+            if (cotizacion.cliente.horaInicioSegundoTurnoEntrega != null && !cotizacion.cliente.horaInicioSegundoTurnoEntrega.Equals("00:00:00"))
+            {
+                pedido.horaEntregaAdicionalDesde = cotizacion.cliente.horaInicioSegundoTurnoEntregaFormat;
+            }
+            if (cotizacion.cliente.horaFinSegundoTurnoEntrega != null && !cotizacion.cliente.horaFinSegundoTurnoEntrega.Equals("00:00:00"))
+            {
+                pedido.horaEntregaAdicionalHasta = cotizacion.cliente.horaFinSegundoTurnoEntregaFormat;
+            }
+
+
+            SolicitanteBL solicitanteBL = new SolicitanteBL();
+            pedido.cliente.solicitanteList = solicitanteBL.getSolicitantes(cotizacion.cliente.idCliente);
+
+            DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
+            pedido.cliente.direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(cotizacion.cliente.idCliente);
+            pedido.direccionEntrega = new DireccionEntrega();
+
+            pedido.observaciones = String.Empty;
+
+            pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            pedido.seguimientoPedido = new SeguimientoPedido();
+
+            pedido.pedidoDetalleList = new List<PedidoDetalle>();
+            foreach (DocumentoDetalle documentoDetalle in cotizacion.documentoDetalle)
+            {
+                PedidoDetalle pedidoDetalle = new PedidoDetalle(pedido.usuario.visualizaCostos, pedido.usuario.visualizaMargen);
+                pedidoDetalle.cantidad = documentoDetalle.cantidad;
+                if (documentoDetalle.cantidad == 0)
+                    pedidoDetalle.cantidad = 1;
+
+                //pedidoDetalle.costoAnterior = documentoDetalle.costoAnterior;
+                pedidoDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
+                pedidoDetalle.flete = documentoDetalle.flete;
+                pedidoDetalle.observacion = documentoDetalle.observacion;
+
+
+
+                // pedidoDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;
+
+
+                pedidoDetalle.producto = documentoDetalle.producto;
+
+
+
+
+                if (cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Transitoria)
                 {
-
-                    instanciarPedido();
-                }
-                Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
-
-                Cotizacion cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_VER];
-                pedido.cotizacion = new Cotizacion();
-                pedido.cotizacion.idCotizacion = cotizacion.idCotizacion;
-                pedido.cotizacion.codigo = cotizacion.codigo;
-                pedido.ciudad = cotizacion.ciudad;
-                pedido.cliente = cotizacion.cliente;
-                pedido.esPagoContado = cotizacion.esPagoContado;
-
-
-                if (cotizacion.cliente.horaInicioPrimerTurnoEntrega != null && !cotizacion.cliente.horaInicioPrimerTurnoEntrega.Equals("00:00:00"))
-                {
-                    pedido.horaEntregaDesde = cotizacion.cliente.horaInicioPrimerTurnoEntregaFormat;
-                }
-                if (cotizacion.cliente.horaFinPrimerTurnoEntrega != null && !cotizacion.cliente.horaFinPrimerTurnoEntrega.Equals("00:00:00"))
-                {
-                    pedido.horaEntregaHasta = cotizacion.cliente.horaFinPrimerTurnoEntregaFormat;
-                }
-
-                if (cotizacion.cliente.horaInicioSegundoTurnoEntrega != null && !cotizacion.cliente.horaInicioSegundoTurnoEntrega.Equals("00:00:00"))
-                {
-                    pedido.horaEntregaAdicionalDesde = cotizacion.cliente.horaInicioSegundoTurnoEntregaFormat;
-                }
-                if (cotizacion.cliente.horaFinSegundoTurnoEntrega != null && !cotizacion.cliente.horaFinSegundoTurnoEntrega.Equals("00:00:00"))
-                {
-                    pedido.horaEntregaAdicionalHasta = cotizacion.cliente.horaFinSegundoTurnoEntregaFormat;
-                }
-
-
-                SolicitanteBL solicitanteBL = new SolicitanteBL();
-                pedido.cliente.solicitanteList = solicitanteBL.getSolicitantes(cotizacion.cliente.idCliente);
-
-                DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
-                pedido.cliente.direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(cotizacion.cliente.idCliente);
-                pedido.direccionEntrega = new DireccionEntrega();
-
-                pedido.observaciones = String.Empty;
-
-                pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                pedido.seguimientoPedido = new SeguimientoPedido();
-
-                pedido.pedidoDetalleList = new List<PedidoDetalle>();
-                foreach (DocumentoDetalle documentoDetalle in  cotizacion.documentoDetalle)
-                {
-                    PedidoDetalle pedidoDetalle = new PedidoDetalle(pedido.usuario.visualizaCostos, pedido.usuario.visualizaMargen);
-                    pedidoDetalle.cantidad = documentoDetalle.cantidad;
-                    if (documentoDetalle.cantidad == 0)
-                        pedidoDetalle.cantidad = 1;
-
-                    //pedidoDetalle.costoAnterior = documentoDetalle.costoAnterior;
-                    pedidoDetalle.esPrecioAlternativo = documentoDetalle.esPrecioAlternativo;
-                    pedidoDetalle.flete = documentoDetalle.flete;
-                    pedidoDetalle.observacion = documentoDetalle.observacion;
-
-
-          
-                   // pedidoDetalle.porcentajeDescuento = documentoDetalle.porcentajeDescuento;
-                
-
-                    pedidoDetalle.producto = documentoDetalle.producto;
-                    
-                    
-
-
-                    if (cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Transitoria)
+                    if (pedidoDetalle.producto.precioClienteProducto == null)
                     {
-                        if (pedidoDetalle.producto.precioClienteProducto == null)
-                        {
-                            pedidoDetalle.producto.precioClienteProducto = new PrecioClienteProducto();
-                        }
-                        //Se le asigna un id temporal solo para que no se rechaza el precio en la validación
-                        pedidoDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Guid.NewGuid();
-                        pedidoDetalle.producto.precioClienteProducto.fechaInicioVigencia = cotizacion.fechaInicioVigenciaPrecios;
-                        pedidoDetalle.producto.precioClienteProducto.fechaFinVigencia = cotizacion.fechaFinVigenciaPrecios.HasValue ? cotizacion.fechaFinVigenciaPrecios.Value : cotizacion.fechaInicioVigenciaPrecios.HasValue ? cotizacion.fechaInicioVigenciaPrecios.Value.AddDays(Constantes.DIAS_MAX_COTIZACION_TRANSITORIA) : DateTime.Now.AddDays(10);
-                        //pedidoDetalle.producto.precioClienteProducto.cliente.idCliente = cotizacion.cliente.idCliente;
-                        pedidoDetalle.producto.precioClienteProducto.precioUnitario = documentoDetalle.precioUnitario;
-                        pedidoDetalle.producto.precioClienteProducto.precioNeto = documentoDetalle.precioNeto;
-                        pedidoDetalle.producto.precioClienteProducto.esUnidadAlternativa = documentoDetalle.esPrecioAlternativo;
-                      
+                        pedidoDetalle.producto.precioClienteProducto = new PrecioClienteProducto();
                     }
-                    else if (cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial)
-                    {
-                        //Se le asigna un id temporal solo para que no se rechaza el precio en la validación
-                        pedidoDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Guid.NewGuid();
-                        //pedidoDetalle.producto.precioClienteProducto.fechaInicioVigencia = cotizacion.fechaInicioVigenciaPrecios;
-                        //pedidoDetalle.producto.precioClienteProducto.fechaFinVigencia = cotizacion.fechaFinVigenciaPrecios.HasValue ? cotizacion.fechaFinVigenciaPrecios.Value : cotizacion.fechaInicioVigenciaPrecios.Value.AddDays(Constantes.DIAS_MAX_COTIZACION_TRANSITORIA);
-                        //pedidoDetalle.producto.precioClienteProducto.cliente.idCliente = cotizacion.cliente.idCliente;
-                        pedidoDetalle.producto.precioClienteProducto.precioUnitario = documentoDetalle.precioUnitario;
-                        pedidoDetalle.producto.precioClienteProducto.precioNeto = documentoDetalle.precioNeto;
-                        pedidoDetalle.producto.precioClienteProducto.esUnidadAlternativa = documentoDetalle.esPrecioAlternativo;
-                    }
-                    else
-                    {
-                        if(pedidoDetalle.producto.precioClienteProducto.esUnidadAlternativa)
-                        {
-                            pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.precioClienteProducto.equivalencia;
-                        }
+                    //Se le asigna un id temporal solo para que no se rechaza el precio en la validación
+                    pedidoDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Guid.NewGuid();
+                    pedidoDetalle.producto.precioClienteProducto.fechaInicioVigencia = cotizacion.fechaInicioVigenciaPrecios;
+                    pedidoDetalle.producto.precioClienteProducto.fechaFinVigencia = cotizacion.fechaFinVigenciaPrecios.HasValue ? cotizacion.fechaFinVigenciaPrecios.Value : cotizacion.fechaInicioVigenciaPrecios.HasValue ? cotizacion.fechaInicioVigenciaPrecios.Value.AddDays(Constantes.DIAS_MAX_COTIZACION_TRANSITORIA) : DateTime.Now.AddDays(10);
+                    //pedidoDetalle.producto.precioClienteProducto.cliente.idCliente = cotizacion.cliente.idCliente;
+                    pedidoDetalle.producto.precioClienteProducto.precioUnitario = documentoDetalle.precioUnitario;
+                    pedidoDetalle.producto.precioClienteProducto.precioNeto = documentoDetalle.precioNeto;
+                    pedidoDetalle.producto.precioClienteProducto.esUnidadAlternativa = documentoDetalle.esPrecioAlternativo;
 
-
+                }
+                else if (cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial)
+                {
+                    //Se le asigna un id temporal solo para que no se rechaza el precio en la validación
+                    pedidoDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Guid.NewGuid();
+                    //pedidoDetalle.producto.precioClienteProducto.fechaInicioVigencia = cotizacion.fechaInicioVigenciaPrecios;
+                    //pedidoDetalle.producto.precioClienteProducto.fechaFinVigencia = cotizacion.fechaFinVigenciaPrecios.HasValue ? cotizacion.fechaFinVigenciaPrecios.Value : cotizacion.fechaInicioVigenciaPrecios.Value.AddDays(Constantes.DIAS_MAX_COTIZACION_TRANSITORIA);
+                    //pedidoDetalle.producto.precioClienteProducto.cliente.idCliente = cotizacion.cliente.idCliente;
+                    pedidoDetalle.producto.precioClienteProducto.precioUnitario = documentoDetalle.precioUnitario;
+                    pedidoDetalle.producto.precioClienteProducto.precioNeto = documentoDetalle.precioNeto;
+                    pedidoDetalle.producto.precioClienteProducto.esUnidadAlternativa = documentoDetalle.esPrecioAlternativo;
+                }
+                else
+                {
+                    if (pedidoDetalle.producto.precioClienteProducto.esUnidadAlternativa)
+                    {
+                        pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.precioClienteProducto.equivalencia;
                     }
 
-                    if (documentoDetalle.esPrecioAlternativo)
+
+                }
+
+                if (documentoDetalle.esPrecioAlternativo)
+                {
+                    pedidoDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.ProductoPresentacion.Equivalencia;
+                    pedidoDetalle.ProductoPresentacion = documentoDetalle.ProductoPresentacion;
+                }
+                else
+                {
+                    pedidoDetalle.precioNeto = documentoDetalle.precioNeto;
+                }
+                pedidoDetalle.unidad = documentoDetalle.unidad;
+
+                pedidoDetalle.porcentajeDescuento = 100 - (pedidoDetalle.precioNeto * 100 / pedidoDetalle.precioLista);
+
+                pedido.pedidoDetalleList.Add(pedidoDetalle);
+            }
+            pedido.fechaPrecios = pedido.fechaSolicitud.AddDays(Constantes.DIAS_MAX_BUSQUEDA_PRECIOS * -1);
+            PedidoBL pedidoBL = new PedidoBL();
+            pedidoBL.calcularMontosTotales(pedido);
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+            //}
+            //catch (Exception e)
+            //{
+            //    logger.Error(e, agregarUsuarioAlMensaje(e.Message));
+            //    throw e;
+            //}
+
+        }
+
+        public void iniciarEdicionPedidoDesdeOC ()
+        {
+            //try
+            //{
+
+            ClienteBL clienteBl = new ClienteBL();
+
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE_PEDIDO_GENERAR];
+
+
+            pedido.cliente = clienteBl.getCliente(pedido.cliente.idCliente);
+
+            pedido.ciudad = pedido.cliente.ciudad;
+            pedido.idPedido = Guid.Empty;
+            pedido.numeroPedido = 0;
+            pedido.numeroGrupoPedido = null;
+            pedido.cotizacion = new Cotizacion();
+            pedido.ubigeoEntrega = new Ubigeo();
+            pedido.ubigeoEntrega.Id = "000000";
+            pedido.esPagoContado = false;
+
+            pedido.tipoPedido = Pedido.tiposPedido.Venta;
+            pedido.ciudadASolicitar = new Ciudad();
+
+            pedido.direccionEntrega = new DireccionEntrega();
+            pedido.solicitante = new Solicitante();
+            pedido.fechaSolicitud = DateTime.Now;
+            pedido.fechaEntregaDesde = null;
+            pedido.fechaEntregaHasta = null;
+            pedido.horaEntregaDesde = "09:00";
+            pedido.horaEntregaHasta = "18:00";
+            pedido.contactoPedido = String.Empty;
+            pedido.telefonoContactoPedido = String.Empty;
+            pedido.incluidoIGV = false;
+            //  pedido.tasaIGV = Constantes.IGV;
+            //pedido.flete = 0;
+            // pedido.mostrarCodigoProveedor = true;
+            pedido.observaciones = String.Empty;
+
+            pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            pedido.seguimientoPedido = new SeguimientoPedido();
+            pedido.seguimientoCrediticioPedido = new SeguimientoCrediticioPedido();
+            pedido.pedidoAdjuntoList = new List<PedidoAdjunto>();
+            pedido.fechaPrecios = pedido.fechaSolicitud.AddDays(Constantes.DIAS_MAX_BUSQUEDA_PRECIOS * -1);
+
+
+            if (pedido.cliente.horaInicioPrimerTurnoEntrega != null && !pedido.cliente.horaInicioPrimerTurnoEntrega.Equals("00:00:00"))
+            {
+                pedido.horaEntregaDesde = pedido.cliente.horaInicioPrimerTurnoEntregaFormat;
+            } 
+            if (pedido.cliente.horaFinPrimerTurnoEntrega != null && !pedido.cliente.horaFinPrimerTurnoEntrega.Equals("00:00:00"))
+            {
+                pedido.horaEntregaHasta = pedido.cliente.horaFinPrimerTurnoEntregaFormat;
+            } 
+
+            if (pedido.cliente.horaInicioSegundoTurnoEntrega != null && !pedido.cliente.horaInicioSegundoTurnoEntrega.Equals("00:00:00"))
+            {
+                pedido.horaEntregaAdicionalDesde = pedido.cliente.horaInicioSegundoTurnoEntregaFormat;
+            }
+            if (pedido.cliente.horaFinSegundoTurnoEntrega != null && !pedido.cliente.horaFinSegundoTurnoEntrega.Equals("00:00:00"))
+            {
+                pedido.horaEntregaAdicionalHasta = pedido.cliente.horaFinSegundoTurnoEntregaFormat;
+            }
+
+
+            SolicitanteBL solicitanteBL = new SolicitanteBL();
+            pedido.cliente.solicitanteList = solicitanteBL.getSolicitantes(pedido.cliente.idCliente);
+
+            DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
+            pedido.cliente.direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(pedido.cliente.idCliente);
+            pedido.direccionEntrega = new DireccionEntrega();
+
+            pedido.observaciones = String.Empty;
+
+            pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            pedido.seguimientoPedido = new SeguimientoPedido();
+
+            List<PedidoDetalle> detalles = new List<PedidoDetalle>();
+
+            foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
+            {
+                if (pedidoDetalle.cantidad > 0)
+                {
+                    if (pedidoDetalle.producto.precioClienteProducto.esUnidadAlternativa)
                     {
-                        pedidoDetalle.precioNeto = documentoDetalle.precioNeto * documentoDetalle.ProductoPresentacion.Equivalencia;
-                        pedidoDetalle.ProductoPresentacion = documentoDetalle.ProductoPresentacion;
+                        pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.precioClienteProducto.equivalencia;
                     }
-                    else
-                    {
-                        pedidoDetalle.precioNeto = documentoDetalle.precioNeto;
-                    }
-                    pedidoDetalle.unidad = documentoDetalle.unidad;
 
                     pedidoDetalle.porcentajeDescuento = 100 - (pedidoDetalle.precioNeto * 100 / pedidoDetalle.precioLista);
 
-                    pedido.pedidoDetalleList.Add(pedidoDetalle);
+                    detalles.Add(pedidoDetalle);
                 }
-                pedido.fechaPrecios = pedido.fechaSolicitud.AddDays(Constantes.DIAS_MAX_BUSQUEDA_PRECIOS * -1);
-                PedidoBL pedidoBL = new PedidoBL();
-                pedidoBL.calcularMontosTotales(pedido);
-                this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+            }
+
+            pedido.pedidoDetalleList = detalles;
+            PedidoBL pedidoBL = new PedidoBL();
+            pedidoBL.calcularMontosTotales(pedido);
+            this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
+
             //}
             //catch (Exception e)
             //{
@@ -1096,6 +1204,7 @@ namespace Cotizador.Controllers
                     idProducto = detalle.producto.idProducto,
                     codigoProducto = detalle.producto.sku,
                     nombreProducto = nombreProducto,
+                    descripcionLarga = detalle.producto.descripcionLarga,
                     unidad = detalle.unidad,
                     igv = pedido.montoIGV.ToString(),
                     subTotal = pedido.montoSubTotal.ToString(),

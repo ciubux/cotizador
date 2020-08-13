@@ -22,7 +22,7 @@ namespace Model
         {
             [Display(Name = "Permanente")]
             Normal = 0,
-            [Display(Name = "Puntual (De 1 solo uso)")]
+            [Display(Name = "Puntual")]
             Transitoria = 1,
             [Display(Name = "Trivial (Sin variación de precios)")]
             Trivial = 2

@@ -46,9 +46,10 @@ namespace Model
         [Display(Name = "Cliente:")]
         public Cliente cliente { get; set; }
 
+        [Display(Name = "Cliente:")]
         public ClienteSunat clienteSunat { get; set; }
 
-        [Display(Name = "Orden de Compra N°:")]
+        [Display(Name = "Orden de Compra Cliente:")]
         public String numeroReferenciaCliente { get; set; }
 
 
@@ -497,6 +498,7 @@ namespace Model
 
         #endregion
 
+        public List<Ciudad> sedesClienteSunat { get; set; }
 
         /**
          * Utilizado para búsqueda

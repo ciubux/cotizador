@@ -835,6 +835,7 @@ namespace DataLayer
                 documentoDetalle.producto.sku = Converter.GetString(row, "sku");
                 documentoDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 documentoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
+                documentoDetalle.producto.descripcionLarga = Converter.GetString(row, "descripcion_larga");
                 documentoDetalle.producto.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");
                 documentoDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
                 guiaRemision.documentoDetalle.Add(documentoDetalle);

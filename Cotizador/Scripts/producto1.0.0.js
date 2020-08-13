@@ -558,6 +558,8 @@ jQuery(function ($) {
                 $("#verFamilia").html(producto.familia);
                 $("#verProveedor").html(producto.proveedor);
                 $("#verDescripcion").html(producto.descripcion);
+                $("#verDescripcionLarga").html(producto.descripcionLarga);
+                
                 $("#verUnidad").html(producto.unidad);
                 $("#verUnidadProveedor").html(producto.unidadProveedor);
                 $("#verUnidadAlternativa").html(producto.unidad_alternativa);

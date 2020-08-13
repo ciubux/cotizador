@@ -1446,23 +1446,33 @@ namespace Cotizador.Controllers
             
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
 
-            string jsonOrdenCompraCliente = "";// JsonConvert.SerializeObject(ParserDTOsShow.OrdenCompraClienteVentaToOrdenCompraClienteVentaDTO(occ));
+            string jsonOrdenCompraCliente = JsonConvert.SerializeObject(occ);
 
-            Ciudad ciudad = usuario.sedesMPPedidos.Where(s => s.idCiudad == occ.ciudad.idCiudad).FirstOrDefault();
-          
-            string jsonSeries = "[]";
-            if (ciudad != null)
+            Pedido pedidoGenerar = new Pedido(Pedido.ClasesPedido.Venta);
+
+            pedidoGenerar.ordenCompracliente = occ;
+            pedidoGenerar.pedidoDetalleList = new List<PedidoDetalle>();
+            pedidoGenerar.numeroReferenciaCliente = occ.numeroReferenciaCliente;
+            foreach (OrdenCompraClienteDetalle det in occ.detalleList)
             {
-                var serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList.OrderByDescending(x => x.esPrincipal).ToList();
-                jsonSeries = JsonConvert.SerializeObject(serieDocumentoElectronicoList);
+                DocumentoDetalle docdet = det;
+                PedidoDetalle pedDet =  JsonConvert.DeserializeObject<PedidoDetalle>(JsonConvert.SerializeObject(docdet));
 
+                pedDet.cantidad = 0;
+
+                pedDet.precioNeto = det.precioNeto;
+                pedDet.precioUnitarioVenta = det.precioUnitarioVenta;
+                pedDet.precioUnitarioOriginal = det.precioUnitarioOriginal;
+                pedDet.visualizaCostos = det.visualizaCostos;
+                pedDet.visualizaMargen = det.visualizaMargen;
+
+                pedidoGenerar.pedidoDetalleList.Add(pedDet);
             }
 
-            this.Session["occDRIds"] = new List<Guid>();
-            this.Session["occDRCantidades"] = new List<int>();
-            this.Session["occDRComentarios"] = new List<String>();
+            this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE_PEDIDO_GENERAR] = pedidoGenerar;
 
-            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"occ\":" + jsonOrdenCompraCliente + ", \"usuario\":" + jsonUsuario + "}";
+
+            String json = "{\"occ\":" + jsonOrdenCompraCliente + ", \"usuario\":" + jsonUsuario + "}";
             return json;
         }
 
@@ -1517,42 +1527,45 @@ namespace Cotizador.Controllers
 
 
 
+        public void SetDetalleGenerarPedido()
+        {
+            Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
+            int cantidad = int.Parse(Request["cantidad"].ToString());
+            String comentario = Request["comentario"].ToString();
 
+            Pedido pedidoGenerar = (Pedido) this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE_PEDIDO_GENERAR];
+
+            foreach (PedidoDetalle det in pedidoGenerar.pedidoDetalleList)
+            {
+                if (det.producto.idProducto == idProducto)
+                {
+                    det.cantidad = cantidad;
+                    det.observacion = comentario;
+                }
+            }
+
+            this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE_PEDIDO_GENERAR] = pedidoGenerar;
+        }
+
+        public void ChangeIdSedePedidoGenerar()
+        {
+            Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
+
+            Pedido pedidoGenerar = (Pedido)this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE_PEDIDO_GENERAR];
+
+            Cliente cliente = new Cliente();
+            cliente.idCliente = idCliente;
+
+            pedidoGenerar.cliente = cliente;
+
+            this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE_PEDIDO_GENERAR] = pedidoGenerar;
+        }
 
         public void changeMostrarCosto()
         {
             OrdenCompraCliente occ = this.OrdenCompraClienteSession;
             occ.mostrarCosto = Boolean.Parse(this.Request.Params["mostrarCosto"]);
             this.OrdenCompraClienteSession = occ;
-        }
-
-
-        public void SetDetalleRestriccion()
-        {
-            List<Guid> idDetalles = (List<Guid>)this.Session["occDRIds"];
-            List<int> cantidades = (List<int>)this.Session["occDRCantidades"];
-            List<String> comentarios = (List<String>)this.Session["occDRComentarios"];
-
-            Guid idDetalleOrdenCompraCliente = Guid.Parse(Request["idDetalle"].ToString());
-            int cantidad = int.Parse(Request["cantidad"].ToString());
-            String comentario = Request["comentario"].ToString();
-
-            int idx = idDetalles.IndexOf(idDetalleOrdenCompraCliente);
-
-            if (idx >= 0)
-            {
-                cantidades[idx] = cantidad;
-                comentarios[idx] = comentario;
-            } else
-            {
-                idDetalles.Add(idDetalleOrdenCompraCliente);
-                cantidades.Add(cantidad);
-                comentarios.Add(comentario);
-            }
-
-            this.Session["occDRIds"] = idDetalles;
-            this.Session["occDRCantidades"] = cantidades;
-            this.Session["occDRComentarios"] = comentarios;
         }
     }
 }

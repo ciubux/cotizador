@@ -129,7 +129,14 @@
                 <div class="form-group">
                     @Html.LabelFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
-                        @Html.TextBoxFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control" })
+                        @if (pedido.ordenCompracliente != null && pedido.ordenCompracliente.idOrdenCompraCliente != Guid.Empty)
+                        {
+                            @Html.TextBoxFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(p => pedido.numeroReferenciaCliente, htmlAttributes: new { @class = "form-control" })
+                        }
                     </div>
                 </div>
 
@@ -718,6 +725,14 @@
                         <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
                         <td>
                             @pedidoDetalle.producto.skuProveedor - @pedidoDetalle.producto.descripcion
+                            @if (pedidoDetalle.producto.descripcionLarga != null && !pedidoDetalle.producto.descripcionLarga.Trim().IsEmpty())
+                            {
+                                string descripcionLargaInfo = Html.Partial("../Producto/_LabelDescripcionLarga").ToString();
+                                descripcionLargaInfo = descripcionLargaInfo.Replace("_DATA_TIPSO_", pedidoDetalle.producto.descripcionLarga);
+                                descripcionLargaInfo = descripcionLargaInfo.Replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+
+                                @Html.Raw(descripcionLargaInfo)
+                            }
                             <br />
                             <span class="@pedidoDetalle.producto.idProducto detproductoObservacion" style="color: darkred"> @pedidoDetalle.observacion</span>
                         </td>
@@ -1739,6 +1754,9 @@
     </div>
 </div>
 
+<span id="spnDescripcionLargaInfo" style="display: none;">
+    @Html.Partial("../Producto/_LabelDescripcionLarga")
+</span>
 
 @section Scripts {
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/pedido")

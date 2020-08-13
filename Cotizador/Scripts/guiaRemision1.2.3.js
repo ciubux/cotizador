@@ -960,6 +960,19 @@ jQuery(function ($) {
                         descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
                     }
 
+                    var descripcionLargaLabel = "";
+                    if (lista[i].producto.descripcionLarga != null && lista[i].producto.descripcionLarga.trim() != "") {
+                        
+                        lista[i].producto.descripcionLarga = lista[i].producto.descripcionLarga.trim();
+
+                        $("#spnDescripcionLargaInfo .lblInfoDescripcionLarga ").removeClass("tooltip-motivo-restriccion");
+                        
+                        $("#spnDescripcionLargaInfo .lblInfoDescripcionLarga ").addClass("tooltip-motivo-restriccion");
+                        $("#spnDescripcionLargaInfo .lblInfoDescripcionLarga .tooltip-label-text").html(lista[i].producto.descripcionLarga);
+                        
+                        descripcionLargaLabel = "&nbsp;" + $("#spnDescripcionLargaInfo").html();
+                    }
+
 
                     d += '<tr>' +
                         '<td>' + lista[i].producto.idProducto + '</td>' +
@@ -967,7 +980,7 @@ jQuery(function ($) {
                         '<td class="' + lista[i].producto.idProducto + ' detcantidad" style="text-align:right">' + lista[i].cantidad + '</td>' +
                         '<td class="' + lista[i].producto.idProducto + ' detcantidadSaldo">' + lista[i].cantidad + '</td>' +
                         '<td>' + lista[i].unidad + '</td>' +
-                        '<td>' + lista[i].producto.descripcion + '</td>' +
+                        '<td>' + lista[i].producto.descripcion + descripcionLargaLabel + '</td>' +
                         '</tr>';
 
                 }

@@ -67,6 +67,8 @@ namespace Model
         public static String VAR_SESSION_ORDEN_COMPRA_CLIENTE_APROBACION = "ordenCompraClienteAprobacion";
         public static String VAR_SESSION_ORDEN_COMPRA_CLIENTE_LISTA = "ordenCompraClienteList";
         public static String VAR_SESSION_ORDEN_COMPRA_CLIENTE_VER = "ordenCompraClienteVer";
+        public static String VAR_SESSION_ORDEN_COMPRA_CLIENTE_PEDIDO_GENERAR = "ordenCompraClientePedidoGenerar";
+
 
         public static String VAR_SESSION_PEDIDO = "pedido";
         public static String VAR_SESSION_PEDIDO_BUSQUEDA = "pedidoBusqueda";

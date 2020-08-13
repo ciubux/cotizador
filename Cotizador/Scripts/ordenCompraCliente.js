@@ -2515,10 +2515,9 @@ jQuery(function ($) {
     $(document).on('click', "button.btnVerOrdenCompraCliente", function () {
 
         $('body').loadingModal({
-            text: 'Abriendo OrdenCompraCliente...'
+            text: 'Abriendo Orden de Compra...'
         });
         $('body').loadingModal('show');
-        activarBotonesVer();
         var arrrayClass = event.target.getAttribute("class").split(" ");
         var idOrdenCompraCliente = arrrayClass[0];
         var numeroOrdenCompraCliente = arrrayClass[1];
@@ -2547,7 +2546,7 @@ jQuery(function ($) {
             success: function (resultado) {
                 $('body').loadingModal('hide');
                 //var cotizacion = $.parseJSON(respuesta);
-                var ordenCompraCliente = resultado.ordenCompraCliente;
+                var ordenCompraCliente = resultado.occ;
                 var usuario = resultado.usuario;
                 var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
                 viendoOrdenCompraClienteRestringido = false;
@@ -2556,107 +2555,31 @@ jQuery(function ($) {
 
                 $("#verIdOrdenCompraCliente").val(ordenCompraCliente.idOrdenCompraCliente);
 
-                $('#occ_numeroGrupo')
-                    .find('option')
-                    .remove()
-                    .end()
-                    ;
-
-                $('#occ_numeroGrupo').append($('<option>', {
-                    value: 0,
-                    text: "Seleccione Número Grupo"
-                }));
-
-                for (var m = 0; m < ordenCompraCliente.ordenCompraClienteGrupoList.length; m++) {
-                    $('#occ_numeroGrupo').append($('<option>', {
-                        value: ordenCompraCliente.ordenCompraClienteGrupoList[m].numero,
-                        text: ordenCompraCliente.ordenCompraClienteGrupoList[m].numeroToString + " Solicitado: " + ordenCompraCliente.ordenCompraClienteGrupoList[m].fechaSolicitudToString
-                    }));
-                }
-
-                $('#occ_numeroGrupo').val(ordenCompraCliente.numeroGrupoOrdenCompraCliente);
-
-
-
-                $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(ordenCompraCliente.fechaEntregaDesde.substr(0, 10)));
-                $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(ordenCompraCliente.fechaEntregaHasta.substr(0, 10)));
-                $("#fechaProgramaciontmp").val(invertirFormatoFecha(ordenCompraCliente.fechaEntregaDesde.substr(0, 10)));
-                //Important
 
                 $("#idOrdenCompraCliente").val(ordenCompraCliente.idOrdenCompraCliente);
 
-                $("#verNumero").html(ordenCompraCliente.numeroOrdenCompraClienteString);
-                if (ordenCompraCliente.numeroGrupoOrdenCompraClienteString == "") {
-                    $("#verNumero").html(ordenCompraCliente.numeroOrdenCompraClienteString);
-                }
-                else {
-                    $("#verNumero").html(ordenCompraCliente.numeroOrdenCompraClienteString + " (" + ordenCompraCliente.numeroGrupoOrdenCompraClienteString + ")");
-                }
-
-                if (ordenCompraCliente.cotizacion_tipoCotizacion == 0) {
-                    $("#verCotizacionCodigo").html(ordenCompraCliente.cotizacion_numeroCotizacionString);
-                }
-                else if (ordenCompraCliente.cotizacion_tipoCotizacion == 1) {
-                    $("#verCotizacionCodigo").html(ordenCompraCliente.cotizacion_numeroCotizacionString + " (Transitoria)");
-                }
-                else if (ordenCompraCliente.cotizacion_tipoCotizacion == 2) {
-                    $("#verCotizacionCodigo").html(ordenCompraCliente.cotizacion_numeroCotizacionString + " (Trivial)");
-                }
+                $("#verNumeroOrdenCompraCliente").html(ordenCompraCliente.numeroOrdenCompraClienteString);
 
 
-
-                $("#verTipoOrdenCompraCliente").html(ordenCompraCliente.tiposOrdenCompraClienteString);
-
-                $("#verResponsableComercial").html(ordenCompraCliente.cliente_responsableComercial_codigoDescripcion + " " + ordenCompraCliente.cliente_responsableComercial_usuario_email);
-                $("#verSupervisorComercial").html(ordenCompraCliente.cliente_supervisorComercial_codigoDescripcion + " " + ordenCompraCliente.cliente_supervisorComercial_usuario_email);
-                $("#verAsistenteServicioCliente").html(ordenCompraCliente.cliente_asistenteServicioCliente_codigoDescripcion + " " + ordenCompraCliente.cliente_asistenteServicioCliente_usuario_email);
-
-                /*if (ordenCompraCliente.tipoOrdenCompraCliente == TIPO_OCC_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)) {
-                    $("#divReferenciaCliente").hide();
-                    $("#divCiudadSolicitante").show();
-                    $("#verCiudadSolicitante").html(ordenCompraCliente.cliente.ciudad.nombre);
-                }
-                else {*/
-                $("#divReferenciaCliente").show();
-                $("#divCiudadSolicitante").hide();
-                //}
-
-                $("#verCondicionesPago").html(ordenCompraCliente.textoCondicionesPago);
-
-                $("#verFechaHorarioEntrega").html(ordenCompraCliente.fechaHorarioEntrega);
-
-                $("#verCiudad").html(ordenCompraCliente.ciudad_nombre);
-                $("#verIdCliente").val(ordenCompraCliente.cliente_idCliente);
-                $("#verCliente").html(ordenCompraCliente.cliente_codigoRazonSocial);
-
-
-                $("#verGrupoCliente").html(ordenCompraCliente.grupoCliente_nombre == null ? "" : ordenCompraCliente.grupoCliente_nombre);
-                
+                $("#verClienteSunat").html(ordenCompraCliente.clienteSunat.razonSocial);
 
                 $("#verNumeroReferenciaCliente").html(ordenCompraCliente.numeroReferenciaCliente);
-                $("#verNumeroReferenciaAdicional").html(ordenCompraCliente.numeroReferenciaAdicional);
-                $("#verNumeroRequerimiento").html(ordenCompraCliente.numeroRequerimiento);
-                
+
                 $("#verFechaEntregaExtendida").val(ordenCompraCliente.fechaEntregaExtendidaString);
 
-                $("#verDireccionEntrega").html(ordenCompraCliente.direccionEntrega_descripcion);
+
                 $("#verTelefonoContactoEntrega").html(ordenCompraCliente.direccionEntrega_telefono);
                 $("#verContactoEntrega").html(ordenCompraCliente.direccionEntrega_contacto);
 
-                $("#verUsuarioCreacion").html(ordenCompraCliente.usuario_nombre);
+                $("#verUsuarioCreacion").html(ordenCompraCliente.usuario.nombre);
                 $("#verFechaHoraRegistro").html(ordenCompraCliente.fechaHoraRegistro);
-
-                $("#verUbigeoEntrega").html(ordenCompraCliente.ubigeoEntrega.ToString);
 
                 $("#verContactoOrdenCompraCliente").html(ordenCompraCliente.contactoOrdenCompraCliente);
                 $("#verTelefonoCorreoContactoOrdenCompraCliente").html(ordenCompraCliente.telefonoCorreoContactoOrdenCompraCliente);
 
 
-
-
                 $("#verFechaHoraSolicitud").html(ordenCompraCliente.fechaHoraSolicitud);
 
-                $("#verEstado").html(ordenCompraCliente.seguimientoOrdenCompraCliente_estadoString);
                 $("#verModificadoPor").html(ordenCompraCliente.seguimientoOrdenCompraCliente_usuario_nombre);
                 $("#verObservacionEstado").html(ordenCompraCliente.seguimientoOrdenCompraCliente_observacion);
 
@@ -2666,12 +2589,9 @@ jQuery(function ($) {
 
 
                 $("#verObservaciones").html(ordenCompraCliente.observaciones);
-                $("#verObservacionesFactura").html(ordenCompraCliente.observacionesFactura);
-                $("#verObservacionesGuiaRemision").html(ordenCompraCliente.observacionesGuiaRemision);
                 $("#verMontoSubTotal").html(Number(ordenCompraCliente.montoSubTotal).toFixed(cantidadDecimales));
                 $("#verMontoIGV").html(Number(ordenCompraCliente.montoIGV).toFixed(cantidadDecimales));
                 $("#verMontoTotal").html(Number(ordenCompraCliente.montoTotal).toFixed(cantidadDecimales));
-                $("#documentoVenta_observaciones").val(ordenCompraCliente.observacionesFactura);
 
                 /*      $("#verMontoSubTotalVenta").html(Number(ordenCompraCliente.venta.subTotal).toFixed(cantidadDecimales));
                       $("#verMontoIGVVenta").html(Number(ordenCompraCliente.venta.igv).toFixed(cantidadDecimales));
@@ -2679,23 +2599,22 @@ jQuery(function ($) {
       */
                 //  nombreArchivos
 
-                $("#nombreArchivos > li").remove().end();
+
+                //$("#nombreArchivos > li").remove().end();
+
+                //for (var i = 0; i < ordenCompraCliente.ordenCompraClienteAdjuntoList.length; i++) {
+                //    var liHTML = '<a href="javascript:mostrar();" class="descargar">' + ordenCompraCliente.ordenCompraClienteAdjuntoList[i].nombre + '</a>';
+                //    $('<li />').html(liHTML).appendTo($('#nombreArchivos'));
+                //}
+
+                //$("#verNombreArchivos > li").remove().end();
 
 
-                for (var i = 0; i < ordenCompraCliente.ordenCompraClienteAdjuntoList.length; i++) {
-                    var liHTML = '<a href="javascript:mostrar();" class="descargar">' + ordenCompraCliente.ordenCompraClienteAdjuntoList[i].nombre + '</a>';
-                    $('<li />').html(liHTML).appendTo($('#nombreArchivos'));
-                }
-
-
-                $("#verNombreArchivos > li").remove().end();
-
-
-                for (var i = 0; i < ordenCompraCliente.ordenCompraClienteAdjuntoList.length; i++) {
-                    var liHTML = '<a href="javascript:mostrar();" class="descargar">' + ordenCompraCliente.ordenCompraClienteAdjuntoList[i].nombre + '</a>';
-                    //$('<li />').html(liHTML).appendTo($('#nombreArchivos'));
-                    $('#verNombreArchivos').append($('<li />').html(liHTML));
-                }
+                //for (var i = 0; i < ordenCompraCliente.ordenCompraClienteAdjuntoList.length; i++) {
+                //    var liHTML = '<a href="javascript:mostrar();" class="descargar">' + ordenCompraCliente.ordenCompraClienteAdjuntoList[i].nombre + '</a>';
+                //    //$('<li />').html(liHTML).appendTo($('#nombreArchivos'));
+                //    $('#verNombreArchivos').append($('<li />').html(liHTML));
+                //}
 
 
                 $("#tableDetalleOrdenCompraCliente > tbody").empty();
@@ -2706,7 +2625,7 @@ jQuery(function ($) {
                 $("#formVerNotasIngreso").html("");
 
                 var d = '';
-                var lista = ordenCompraCliente.ordenCompraClienteDetalleList;
+                var lista = ordenCompraCliente.detalleList;
                 var tieneProductoRestringido = false;
                 var tienePendienteAtencion = false;
                 for (var i = 0; i < lista.length; i++) {
@@ -2723,7 +2642,7 @@ jQuery(function ($) {
                     var descontinuadoLabel = "";
                     if (lista[i].producto.descontinuado == 1) {
                         tieneProductoRestringido = true;
-                        
+
                         if (lista[i].producto.motivoRestriccion != null) {
                             lista[i].producto.motivoRestriccion = lista[i].producto.motivoRestriccion.trim();
 
@@ -2739,26 +2658,10 @@ jQuery(function ($) {
 
                     itemOrdenCompraCliente = {
                         idOrdenCompraClienteDetalle: lista[i].idOrdenCompraClienteDetalle, sku: lista[i].producto.sku, producto: lista[i].producto.descripcion, unidad: lista[i].unidad,
-                        cantidad: lista[i].cantidad, cantidadPendienteAtencion: lista[i].cantidadPendienteAtencion,
+                        idProducto: lista[i].producto.idProducto, cantidad: lista[i].cantidad, cantidadPendienteAtencion: lista[i].cantidadPendienteAtencion,
                         cantidadPermitida: lista[i].cantidadPermitida, observacionRestriccion: lista[i].observacionRestriccion
                     };
 
-                    var restringidoLabel = "";
-                    if (lista[i].cantidadPermitida < lista[i].cantidad) {
-                        if (lista[i].observacionRestriccion != null) {
-                            lista[i].observacionRestriccion = lista[i].observacionRestriccion.trim();
-
-                            
-                            $("#spnDetalleRestringido .lblAlertaDanger .cantidadPermitidaAtender").html(lista[i].cantidadPermitida);
-                            $("#spnDetalleRestringido .lblAlertaDanger ").removeClass("tooltip-motivo-restriccion");
-                            if (lista[i].observacionRestriccion != "") {
-                                $("#spnDetalleRestringido .lblAlertaDanger ").addClass("tooltip-motivo-restriccion");
-                                $("#spnDetalleRestringido .lblAlertaDanger .tooltip-label-danger-text").html(lista[i].observacionRestriccion);
-                            }
-                        }
-
-                        restringidoLabel = "<br/>" + $("#spnDetalleRestringido").html();
-                    }
 
                     ordenCompraClienteItemsRestringidos.push(itemOrdenCompraCliente);
 
@@ -2780,7 +2683,7 @@ jQuery(function ($) {
                         '<td>' + lista[i].flete.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].precioUnitario.toFixed(cantidadCuatroDecimales) + '</td>' +
                         //       '<td>' + lista[i].precioUnitarioVenta.toFixed(cantidadCuatroDecimales) + '</td>' +
-                        '<td>' + lista[i].cantidad + restringidoLabel + '</td>' +
+                        '<td>' + lista[i].cantidad + '</td>' +
                         '<td>' + lista[i].cantidadPendienteAtencion + '</td>' +
                         '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + observacion + '</td>' +
@@ -2788,318 +2691,123 @@ jQuery(function ($) {
                         '</tr>';
                 }
 
-
-
+                var sedes = ordenCompraCliente.sedesClienteSunat;
+                var sedesText = '<option value="">Seleccione una Sede</option>';
+                for (var k = 0; k < sedes.length; k++) {
+                    sedesText = sedesText + '<option value="' + sedes[k].idClienteRelacionado + '">' + sedes[k].nombre + '</option>';
+                }
+                $("#occ_generar_pedido_ciudad").html(sedesText);
 
                 $("#verRazonSocialSunat").html(ordenCompraCliente.cliente_razonSocialSunat);
                 $("#verRUC").html(ordenCompraCliente.cliente_ruc);
                 $("#verDireccionDomicilioLegalSunat").html(ordenCompraCliente.cliente_direccionDomicilioLegalSunat);
                 $("#verCodigo").html(ordenCompraCliente.cliente_codigo);
 
-                $("#documentoVenta_observaciones").val(ordenCompraCliente.observacionesFactura);
-                $("#verCorreoEnvioFactura").html(ordenCompraCliente.cliente_correoEnvioFactura);
 
 
 
-                if (ordenCompraCliente.tipoOrdenCompraCliente == TIPO_OCC_VENTA_VENTA.charCodeAt(0)
-                    //|| ordenCompraCliente.tipoOrdenCompraCliente == TIPO_OCC_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
-                    || ordenCompraCliente.tipoOrdenCompraCliente == TIPO_OCC_VENTA_COMODATO_ENTREGADO.charCodeAt(0)
-                    || ordenCompraCliente.tipoOrdenCompraCliente == TIPO_OCC_VENTA_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
-                    //|| ordenCompraCliente.tipoOrdenCompraCliente == TIPO_OCC_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
-                ) {
+               
+                //var guiaRemisionList = ordenCompraCliente.guiaRemisionList;
+                //for (var j = 0; j < guiaRemisionList.length; j++) {
+                //    $("#tableDetalleGuia > tbody").empty();
+                //    var plantilla = $("#plantillaVerGuiasRemision").html();
+                //    var dGuia = '';
+                //    var documentoDetalleList = guiaRemisionList[j].documentoDetalle;
+                //    for (var k = 0; k < documentoDetalleList.length; k++) {
 
-                    var guiaRemisionList = ordenCompraCliente.guiaRemisionList;
-                    for (var j = 0; j < guiaRemisionList.length; j++) {
-                        $("#tableDetalleGuia > tbody").empty();
-                        var plantilla = $("#plantillaVerGuiasRemision").html();
-                        var dGuia = '';
-                        var documentoDetalleList = guiaRemisionList[j].documentoDetalle;
-                        for (var k = 0; k < documentoDetalleList.length; k++) {
+                //        dGuia += '<tr>' +
+                //            '<td>' + documentoDetalleList[k].producto.sku + '</td>' +
+                //            '<td>' + documentoDetalleList[k].cantidad + '</td>' +
+                //            '<td>' + documentoDetalleList[k].unidad + '</td>' +
+                //            '<td>' + documentoDetalleList[k].producto.descripcion + '</td>' +
+                //            '</tr>';
+                //    }
 
-                            dGuia += '<tr>' +
-                                '<td>' + documentoDetalleList[k].producto.sku + '</td>' +
-                                '<td>' + documentoDetalleList[k].cantidad + '</td>' +
-                                '<td>' + documentoDetalleList[k].unidad + '</td>' +
-                                '<td>' + documentoDetalleList[k].producto.descripcion + '</td>' +
-                                '</tr>';
-                        }
+                //    $("#tableDetalleGuia").append(dGuia);
 
-                        $("#tableDetalleGuia").append(dGuia);
+                //    plantilla = $("#plantillaVerGuiasRemision").html();
 
-                        plantilla = $("#plantillaVerGuiasRemision").html();
+                //    plantilla = plantilla.replace("#serieNumero", guiaRemisionList[j].serieNumeroGuia);
+                //    plantilla = plantilla.replace("#fechaEmisionGuia", invertirFormatoFecha(guiaRemisionList[j].fechaEmision.substr(0, 10)));
 
-                        plantilla = plantilla.replace("#serieNumero", guiaRemisionList[j].serieNumeroGuia);
-                        plantilla = plantilla.replace("#fechaEmisionGuia", invertirFormatoFecha(guiaRemisionList[j].fechaEmision.substr(0, 10)));
-
-                        plantilla = plantilla.replace("#serieNumeroFactura", guiaRemisionList[j].documentoVenta.serieNumero);
-                        if (guiaRemisionList[j].documentoVenta.fechaEmision != null) {
-                            plantilla = plantilla.replace("#fechaEmisionFactura", invertirFormatoFecha(guiaRemisionList[j].documentoVenta.fechaEmision.substr(0, 10)));
-                        }
-                        else
-                            plantilla = plantilla.replace("#fechaEmisionFactura", "");
+                //    plantilla = plantilla.replace("#serieNumeroFactura", guiaRemisionList[j].documentoVenta.serieNumero);
+                //    if (guiaRemisionList[j].documentoVenta.fechaEmision != null) {
+                //        plantilla = plantilla.replace("#fechaEmisionFactura", invertirFormatoFecha(guiaRemisionList[j].documentoVenta.fechaEmision.substr(0, 10)));
+                //    }
+                //    else
+                //        plantilla = plantilla.replace("#fechaEmisionFactura", "");
 
 
-                        plantilla = plantilla.replace("tableDetalleGuia", "tableDetalleGuia" + j);
+                //    plantilla = plantilla.replace("tableDetalleGuia", "tableDetalleGuia" + j);
 
-                        $("#formVerGuiasRemision").append(plantilla);
+                //    $("#formVerGuiasRemision").append(plantilla);
 
-                        /*   var tmp = $("#formVerGuiasRemision").html();
-                           tmp = tmp+"asas";*/
-                    }
+                //    /*   var tmp = $("#formVerGuiasRemision").html();
+                //        tmp = tmp+"asas";*/
+                //}
 
-                }
-                else {
-                    var notaIngresoList = ordenCompraCliente.guiaRemisionList;
-                    for (var j = 0; j < notaIngresoList.length; j++) {
-                        $("#tableDetalleNotaIngreso > tbody").empty();
-                        var plantilla = $("#plantillaVerNotaIngreso").html();
-                        var dGuia = '';
-                        var documentoDetalleList = notaIngresoList[j].documentoDetalle;
-                        for (var k = 0; k < documentoDetalleList.length; k++) {
 
-                            dGuia += '<tr>' +
-                                '<td>' + documentoDetalleList[k].producto.sku + '</td>' +
-                                '<td>' + documentoDetalleList[k].cantidad + '</td>' +
-                                '<td>' + documentoDetalleList[k].unidad + '</td>' +
-                                '<td>' + documentoDetalleList[k].producto.descripcion + '</td>' +
-                                '</tr>';
-                        }
+               
+                    //var notaIngresoList = ordenCompraCliente.guiaRemisionList;
+                    //for (var j = 0; j < notaIngresoList.length; j++) {
+                    //    $("#tableDetalleNotaIngreso > tbody").empty();
+                    //    var plantilla = $("#plantillaVerNotaIngreso").html();
+                    //    var dGuia = '';
+                    //    var documentoDetalleList = notaIngresoList[j].documentoDetalle;
+                    //    for (var k = 0; k < documentoDetalleList.length; k++) {
 
-                        $("#tableDetalleNotaIngreso").append(dGuia);
+                    //        dGuia += '<tr>' +
+                    //            '<td>' + documentoDetalleList[k].producto.sku + '</td>' +
+                    //            '<td>' + documentoDetalleList[k].cantidad + '</td>' +
+                    //            '<td>' + documentoDetalleList[k].unidad + '</td>' +
+                    //            '<td>' + documentoDetalleList[k].producto.descripcion + '</td>' +
+                    //            '</tr>';
+                    //    }
 
-                        plantilla = $("#plantillaVerNotaIngreso").html();
+                    //    $("#tableDetalleNotaIngreso").append(dGuia);
 
-                        plantilla = plantilla.replace("#serieNumero", notaIngresoList[j].serieNumeroGuia);
-                        plantilla = plantilla.replace("#fechaEmisionNotaIngreso", invertirFormatoFecha(notaIngresoList[j].fechaEmision.substr(0, 10)));
+                    //    plantilla = $("#plantillaVerNotaIngreso").html();
 
-                        plantilla = plantilla.replace("tableDetalleNotaIngreso", "tableDetalleNotaIngreso" + j);
+                    //    plantilla = plantilla.replace("#serieNumero", notaIngresoList[j].serieNumeroGuia);
+                    //    plantilla = plantilla.replace("#fechaEmisionNotaIngreso", invertirFormatoFecha(notaIngresoList[j].fechaEmision.substr(0, 10)));
 
-                        $("#formVerNotasIngreso").append(plantilla);
+                    //    plantilla = plantilla.replace("tableDetalleNotaIngreso", "tableDetalleNotaIngreso" + j);
 
-                        /*   var tmp = $("#formVerGuiasRemision").html();
-                           tmp = tmp+"asas";*/
-                    }
+                    //    $("#formVerNotasIngreso").append(plantilla);
 
-                }
-
-                if (tienePendienteAtencion && usuario.apruebaOrdenCompraClientes) {
-                    $("#btnRestringirAtencionOrdenCompraCliente").show();
-                } else {
-                    $("#btnRestringirAtencionOrdenCompraCliente").hide();
-                }
+                    //    /*   var tmp = $("#formVerGuiasRemision").html();
+                    //       tmp = tmp+"asas";*/
+                    //}
+            
 
                 //  
                 // sleep
                 $("#tableDetalleOrdenCompraCliente").append(d);
 
-                if (ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_PROGRAMADO
-                    && ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_ATENDIDO
-                    && ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_FACTURADO
-                    && ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_FACTURADO_PARCIALMENTE
-                    && ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_ATENDIDO_PARCIALMENTE) {
-                    $("#btnEditarOrdenCompraCliente").show();
-                    if (ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_EN_EDICION) {
-                        $("#btnEditarOrdenCompraCliente").html("Continuar Editando");
-                    }
-                    else {
-                        $("#btnEditarOrdenCompraCliente").html("Editar");
-                    }
-                    $("#btnEditarOrdenCompraCliente").show();
-                }
-                else {
-                    $("#btnEditarOrdenCompraCliente").hide();
-                }
-
-                //ACTUALIZAR OCC
-                if (ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_EN_EDICION
-                    && ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_DENEGADO
-                    && ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_ELIMINADO) {
-                    $("#btnActualizarOrdenCompraCliente").show();
-                }
-                else {
-                    $("#btnActualizarOrdenCompraCliente").hide();
-                }
 
 
-                /**/
-                if (ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_ATENDIDO) {
-                    $("#occ_observacionesGuiaRemision").attr("disabled", "disabled");
-                }
-                else {
-                    $("#occ_observacionesGuiaRemision").removeAttr("disabled");
-                }
-
-                if (ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_FACTURADO) {
-                    $("#occ_observacionesFactura").attr("disabled", "disabled");
-                }
-                else {
-                    $("#occ_observacionesFactura").removeAttr("disabled");
-                }
-
-
+                
 
 
                 //APROBAR OCC
-                if ((ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_PENDIENTE_APROBACION ||
-                    ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_DENEGADO)
-                    &&
-                    (!tieneProductoRestringido || (tieneProductoRestringido && usuario.apruebaOrdenCompraClientesVentaRestringida))
-                ) {
+                //if ((ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_PENDIENTE_APROBACION ||
+                //    ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_DENEGADO)
+                //    &&
+                //    (!tieneProductoRestringido || (tieneProductoRestringido && usuario.apruebaOrdenCompraClientesVentaRestringida))
+                //) {
 
-                    $("#btnAprobarIngresoOrdenCompraCliente").show();
-                }
-                else {
-                    $("#btnAprobarIngresoOrdenCompraCliente").hide();
-                }
+                //    $("#btnAprobarIngresoOrdenCompraCliente").show();
+                //}
+                //else {
+                //    $("#btnAprobarIngresoOrdenCompraCliente").hide();
+                //}
 
                 viendoOrdenCompraClienteRestringido = tieneProductoRestringido;
 
-                //DENEGAR OCC
-                if (ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_PENDIENTE_APROBACION) {
+                //ATENDER 
+                
+               
 
-                    $("#btnDenegarIngresoOrdenCompraCliente").show();
-                }
-                else {
-                    $("#btnDenegarIngresoOrdenCompraCliente").hide();
-                }
-
-                //LIBERAR OCC
-                if (
-                    ordenCompraCliente.seguimientoCrediticioOrdenCompraCliente_estado == ESTADO_PENDIENTE_LIBERACION ||
-                    ordenCompraCliente.seguimientoCrediticioOrdenCompraCliente_estado == ESTADO_BLOQUEADO
-                ) {
-
-                    $("#btnLiberarOrdenCompraCliente").show();
-                }
-                else {
-                    $("#btnLiberarOrdenCompraCliente").hide();
-                }
-
-                //BLOQUEAR OCC
-                if (
-                    (ordenCompraCliente.seguimientoCrediticioOrdenCompraCliente_estado == ESTADO_PENDIENTE_LIBERACION ||
-                        ordenCompraCliente.seguimientoCrediticioOrdenCompraCliente_estado == ESTADO_LIBERADO)
-                    && ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_ELIMINADO
-                    && ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_EN_EDICION
-                    && ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_DENEGADO
-                    && ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_ATENDIDO
-                    && ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_ATENDIDO_PARCIALMENTE
-                    && ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_FACTURADO
-                    && ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_FACTURADO_PARCIALMENTE
-
-                ) {
-
-                    $("#btnBloquearOrdenCompraCliente").show();
-                }
-                else {
-                    $("#btnBloquearOrdenCompraCliente").hide();
-                }
-
-
-                //PROGRAMAR OCC
-                if (ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_INGRESADO
-                    || ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_ATENDIDO_PARCIALMENTE
-                ) {
-
-                    $("#btnProgramarOrdenCompraCliente").show();
-                }
-                else {
-                    $("#btnProgramarOrdenCompraCliente").hide();
-                }
-
-                //ATENDER OCC
-                $("#btnAtenderOrdenCompraClienteVenta").hide();
-                $("#btnIngresarOrdenCompraClienteVenta").hide();
-                $("#btnVerAtenciones").hide();
-                $("#btnVerIngresos").hide();
-
-
-                if ((ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_INGRESADO ||
-                    ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_PROGRAMADO ||
-                    ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_ATENDIDO_PARCIALMENTE
-                ) &&
-                    ordenCompraCliente.seguimientoCrediticioOrdenCompraCliente_estado == ESTADO_LIBERADO
-                ) {
-                    if (ordenCompraCliente.tipoOrdenCompraCliente == TIPO_OCC_VENTA_VENTA.charCodeAt(0)
-                        //|| ordenCompraCliente.tipoOrdenCompraCliente == TIPO_OCC_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
-                        || ordenCompraCliente.tipoOrdenCompraCliente == TIPO_OCC_VENTA_COMODATO_ENTREGADO.charCodeAt(0)
-                        || ordenCompraCliente.tipoOrdenCompraCliente == TIPO_OCC_VENTA_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
-                        //|| ordenCompraCliente.tipoOrdenCompraCliente == TIPO_OCC_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
-                    ) {
-                        $("#btnAtenderOrdenCompraClienteVenta").show();
-
-
-
-                    }
-                    else {
-                        $("#btnIngresarOrdenCompraClienteVenta").show();
-
-
-                    }
-                }
-
-                if (ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_RECIBIDO
-                    || ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_RECIBIDO_PARCIALMENTE
-                ) {
-                    $("#btnVerIngresos").show();
-                }
-                else {
-                    $("#btnVerIngresos").hide();
-                }
-
-                if (ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_ATENDIDO
-                    || ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_ATENDIDO_PARCIALMENTE
-                    || ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_FACTURADO
-                    || ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_FACTURADO_PARCIALMENTE
-                ) {
-                    $("#btnVerAtenciones").show();
-                }
-                else {
-                    $("#btnVerAtenciones").hide();
-                }
-
-                //CANCELAR PROGRAMACION
-                if (ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_PROGRAMADO) {
-                    $("#btnCancelarProgramacionOrdenCompraCliente").show();
-                }
-                else {
-                    $("#btnCancelarProgramacionOrdenCompraCliente").hide();
-                }
-
-
-                //PROGRAMAR OCC
-                if ((ordenCompraCliente.seguimientoOrdenCompraCliente_estado == ESTADO_ATENDIDO)
-                    && (ordenCompraCliente.documentoVenta_numero == "" || ordenCompraCliente.documentoVenta_numero == null)
-                ) {
-                    $("#btnEditarVenta").show();
-                    // $("#btnFacturarOrdenCompraCliente").show();
-                }
-                else {
-                    $("#btnEditarVenta").hide();
-                    // $("#btnFacturarOrdenCompraCliente").hide();
-                }
-
-
-
-
-
-
-
-
-                if (ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_ATENDIDO
-                    && ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_ATENDIDO_PARCIALMENTE
-                    && ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_ELIMINADO
-                    && ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_FACTURADO
-                    && ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_FACTURADO_PARCIALMENTE
-                    && ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_RECIBIDO
-                    && ordenCompraCliente.seguimientoOrdenCompraCliente_estado != ESTADO_RECIBIDO_PARCIALMENTE
-                ) {
-
-                    $("#btnEliminarOrdenCompraCliente").show();
-                }
-                else {
-                    $("#btnEliminarOrdenCompraCliente").hide();
-                }
                 $("#modalVerOrdenCompraCliente").modal('show');
 
                 //  window.location = '/OrdenCompraCliente/Index';
@@ -3310,83 +3018,79 @@ jQuery(function ($) {
     });
 
 
-  
 
-    function mostrarItemsRestringidos() {
-        $(".tableProductosAprobarOrdenCompraCliente tbody").empty();
+    function mostrarItemsGenerarPedido() {
+        $(".tableProductosGenerarPedido tbody").empty();
         /*if (viendoOrdenCompraClienteRestringido) {*/
-            $(".divProductosAprobarOrdenCompraCliente").show();
+        $(".divProductosGenerarPedido").show();
+        fLen = ordenCompraClienteItemsRestringidos.length;
 
-            fLen = ordenCompraClienteItemsRestringidos.length;
+        text = "";
+        for (i = 0; i < fLen; i++) {
+            var cantidadRestringir = parseInt(ordenCompraClienteItemsRestringidos[i].cantidad) - parseInt(ordenCompraClienteItemsRestringidos[i].cantidadPermitida);
+            var cantidadAtendida = parseInt(ordenCompraClienteItemsRestringidos[i].cantidad) - parseInt(ordenCompraClienteItemsRestringidos[i].cantidadPendienteAtencion);
+            text += '<tr idOrdenCompraClienteDetalle="' + ordenCompraClienteItemsRestringidos[i].idProducto + '">';
+            text += '<td>' + ordenCompraClienteItemsRestringidos[i].sku + ' ' + ordenCompraClienteItemsRestringidos[i].producto + '</td>';
+            text += '<td>' + ordenCompraClienteItemsRestringidos[i].unidad + '</td>';
+            text += '<td class="celdaItemCantidad">' + ordenCompraClienteItemsRestringidos[i].cantidad + '</td>';
+            text += '<td class="celdaItemCantidadRestante">' + ordenCompraClienteItemsRestringidos[i].cantidad + '</td>';
+            text += '<td>' + 
+                '<input class="form-control inputItemAtender" type="number" min="0" max="' + ordenCompraClienteItemsRestringidos[i].cantidad + '" step="1" value="0">' +
+                    '</td>';
+            text += '<td class=""><input type="text" class="inputItemObervacionDetalle form-control" value=""></td>';
+            text += '</tr>';
+        }
 
-            text = "";
-            for (i = 0; i < fLen; i++) {
-                var cantidadRestringir = parseInt(ordenCompraClienteItemsRestringidos[i].cantidad) - parseInt(ordenCompraClienteItemsRestringidos[i].cantidadPermitida);
-                var cantidadAtendida = parseInt(ordenCompraClienteItemsRestringidos[i].cantidad) - parseInt(ordenCompraClienteItemsRestringidos[i].cantidadPendienteAtencion);
-                text += '<tr idOrdenCompraClienteDetalle="' + ordenCompraClienteItemsRestringidos[i].idOrdenCompraClienteDetalle + '">';
-                text += '<td>' + ordenCompraClienteItemsRestringidos[i].sku + ' ' + ordenCompraClienteItemsRestringidos[i].producto + '</td>';
-                text += '<td>' + ordenCompraClienteItemsRestringidos[i].unidad + '</td>';
-                text += '<td class="celdaItemCantidad">' + ordenCompraClienteItemsRestringidos[i].cantidad + '</td>';
-                text += '<td>' + 
-                    '<input class="form-control inputItemPermitir" type="number" min="' + cantidadAtendida + '" max="' + ordenCompraClienteItemsRestringidos[i].cantidad + '" step="1" value="' + ordenCompraClienteItemsRestringidos[i].cantidadPermitida + '">' +
-                        '</td>';
-                text += '<td class="celdaItemRestringir">' + cantidadRestringir + '</td>';
-                text += '<td class=""><input type="text" class="inputItemObervacionRestriccion" value="' + ordenCompraClienteItemsRestringidos[i].observacionRestriccion + '"></td>';
-                text += '</tr>';
-            }
+        $(".tableProductosGenerarPedido tbody").html(text);
 
-            $(".tableProductosAprobarOrdenCompraCliente tbody").html(text);
-
-            FooTable.init('.tableProductosAprobarOrdenCompraCliente');
+        FooTable.init('.tableProductosGenerarPedido');
        /* } else {
             $(".divProductosAprobarOrdenCompraCliente").hide();
         }*/
     }
 
 
-    $('.divProductosAprobarOrdenCompraCliente').on('change', 'tr td .inputItemPermitir', function (e) {
-        var permitir = parseInt($(this).val());
-        var cantidad = parseInt($(this).closest('tr').find('td.celdaItemCantidad').html());
-        var atendida = parseInt($(this).attr('min'));
+    $('.divProductosGenerarPedido').on('change', 'tr td .inputItemAtender', function (e) {
+        var cantidadAtender = parseInt($(this).val());
+        var cantidad = parseInt($(this).closest('tr').find('td.celdaItemCantidadRestante').html());
         
-        if (permitir > cantidad) {
-            permitir = cantidad;
-            $(this).val(cantidad);
+        if (cantidadAtender > cantidad) {
+            cantidadAtender = cantidad;
+            $(this).val(cantidadAtender);
         }
 
-        if (permitir < atendida) {
-            permitir = atendida;
-            $(this).val(atendida);
+        if (cantidadAtender < 0) {
+            cantidadAtender = 0;
+            $(this).val(cantidadAtender);
         }
-
-        var restringir = cantidad - permitir;
-
-
-        $(this).closest('tr').find('td.celdaItemRestringir').html(restringir);
-
 
         var idDetalle = $(this).closest('tr').attr('idOrdenCompraClienteDetalle');
-        var comentario = $(this).closest('tr').find('td .inputItemObervacionRestriccion').val();
+        var comentario = $(this).closest('tr').find('td .inputItemObervacionDetalle').val();
 
-        ActualizarDetalleRestriccion(idDetalle, permitir, comentario);
+        ActualizarDetalleGenerarPedido(idDetalle, cantidadAtender, comentario);
     });
 
 
-    $('.divProductosAprobarOrdenCompraCliente').on('change', 'tr td .inputItemObervacionRestriccion', function (e) {
+    $('.divProductosGenerarPedido').on('change', 'tr td .inputItemObervacionDetalle', function (e) {
         var idDetalle = $(this).closest('tr').attr('idOrdenCompraClienteDetalle');
-        var permitir = $(this).closest('tr').find('td .inputItemPermitir').val();
+        var cantidadAtender = $(this).closest('tr').find('td .inputItemAtender').val();
         var comentario = $(this).val();
 
-        ActualizarDetalleRestriccion(idDetalle, permitir, comentario);
+        ActualizarDetalleGenerarPedido(idDetalle, cantidadAtender, comentario);
     });
 
+    $('.divProductosGenerarPedido').on('change', '#occ_generar_pedido_ciudad', function (e) {
+        var idClienteSede = $(this).val();
 
-    function ActualizarDetalleRestriccion(idDetalle, cantidad, comentario) {
+        ActualizarIdClienteGenerarPedido(idClienteSede);
+    });
+
+    function ActualizarDetalleGenerarPedido(idDetalle, cantidad, comentario) {
         $.ajax({
-            url: "/OrdenCompraCliente/SetDetalleRestriccion",
+            url: "/OrdenCompraCliente/SetDetalleGenerarPedido",
             type: 'POST',
             data: {
-                idDetalle: idDetalle,
+                idProducto: idDetalle,
                 cantidad: cantidad,
                 comentario: comentario
             },
@@ -3394,6 +3098,73 @@ jQuery(function ($) {
             }
         });
     }
+
+    function ActualizarIdClienteGenerarPedido(idCliente) {
+        $.ajax({
+            url: "/OrdenCompraCliente/ChangeIdSedePedidoGenerar",
+            type: 'POST',
+            data: {
+                idCliente: idCliente
+            },
+            success: function () {
+            }
+        });
+    }
+
+
+    $("#btnRegistrarPedido").click(function () {
+
+        var idClienteSede = $('#occ_generar_pedido_ciudad').val();
+
+        if (idClienteSede == "") {
+            $.alert({
+                title: 'Advertencia',
+                content: "Seleccione una sede",
+                type: 'orange',
+                buttons: { 
+                    OK: function () {
+
+                    }
+                }
+            });
+
+            return false;
+        }
+
+        //Se identifica si existe pedido en curso, la consulta es sincrona
+        $.ajax({
+            url: "/Pedido/ConsultarSiExistePedido",
+            type: 'POST',
+            async: false,
+            dataType: 'JSON',
+            success: function (resultado) {
+                if (resultado.existe == "false") {
+
+                    $.ajax({
+                        url: "/Pedido/iniciarEdicionPedidoDesdeOC",
+                        type: 'POST',
+                        error: function (detalle) { alert("Ocurrió un problema al iniciar la edición del pedido."); },
+                        success: function (fileName) {
+                            window.location = '/Pedido/Pedir';
+                        }
+                    });
+
+                }
+                else {
+                    if (resultado.numero == 0) {
+                        alert('Ya está creando un nuevo pedido; para continuar por favor diríjase a la página "Crear/Modificar Pedido" y luego haga clic en el botón Cancelar, Finalizar Creación o Guardar (si elige Guardar indique No cuando se le consulte si desea continuar editanto ahora).');
+                    }
+                    else {
+                        if (resultado.numero == $("#verNumero").html())
+                            alert('Ya se encuentra editando el pedido número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Cotización".');
+                        else
+                            alert('Ya está editando el pedido número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Pedido" y luego haga clic en el botón Cancelar, Finalizar Edición o Guardar (si elige Guardar indique No cuando se le consulte si desea continuar editanto ahora).');
+                    }
+                }
+            }
+        });
+
+    });
 
 
     function limpiarComentario()
@@ -3427,8 +3198,8 @@ jQuery(function ($) {
     });
 
     
-    $("#btnRestringirAtencionOrdenCompraCliente").click(function () {
-        mostrarItemsRestringidos();
+    $("#btnGenerarPedido").click(function () {
+        mostrarItemsGenerarPedido();
     });
 
 

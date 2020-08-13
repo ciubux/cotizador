@@ -256,6 +256,11 @@ namespace BusinessLayer
                     }
                 }
 
+                if (pedido.ordenCompracliente != null && pedido.ordenCompracliente.idOrdenCompraCliente != Guid.Empty)
+                {
+                    pedido.numeroReferenciaCliente = pedido.ordenCompracliente.numeroReferenciaCliente;
+                }
+
                 validarPedidoVenta(pedido);
                 dal.InsertPedido(pedido);
             }
@@ -265,6 +270,11 @@ namespace BusinessLayer
         {
             using (var dal = new PedidoDAL())
             {
+                if (pedido.ordenCompracliente != null && pedido.ordenCompracliente.idOrdenCompraCliente != Guid.Empty)
+                {
+                    pedido.numeroReferenciaCliente = pedido.ordenCompracliente.numeroReferenciaCliente;
+                }
+
                 validarPedidoVenta(pedido);
                 dal.UpdatePedido(pedido);
             }

@@ -1744,6 +1744,15 @@ jQuery(function ($) {
                     }
                 }
 
+                var descripcionLargaLabel = "";
+                if (detalle.descripcionLarga != null && detalle.descripcionLarga != '') {
+                    descripcionLargaLabel = "<br/>" + $("#spnDescripcionLargaInfo").html();
+
+                    detalle.descripcionLarga = detalle.descripcionLarga.trim();
+                    descripcionLargaLabel = descripcionLargaLabel.replace("_DATA_TIPSO_", detalle.descripcionLarga);
+                    descripcionLargaLabel = descripcionLargaLabel.replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+                }
+
 
                 $('#tableDetallePedido tbody tr.footable-empty').remove();
                 $("#tableDetallePedido tbody").append('<tr data-expanded="true">' +
@@ -1754,7 +1763,7 @@ jQuery(function ($) {
                     '<td>' + detalle.codigoProducto + descontinuadoLabel + '</td>' +
                      
 
-                    '<td>' + detalle.nombreProducto + observacionesEnDescripcion + '</td>' +
+                    '<td>' + detalle.nombreProducto + descripcionLargaLabel + observacionesEnDescripcion + '</td>' +
                     '<td>' + detalle.unidad + '</td>' +
                     '<td class="column-img"><img class="table-product-img" src="' + $("#imgProducto").attr("src") + '"></td>' +
                     '<td class="' + detalle.idProducto + ' detprecioLista" style="text-align:right">' + precioLista + '</td>' +
@@ -2810,7 +2819,7 @@ jQuery(function ($) {
             text: 'Abriendo Pedido...'
         });
         $('body').loadingModal('show');
-        activarBotonesVer();
+
         var arrrayClass = event.target.getAttribute("class").split(" ");
         var idPedido = arrrayClass[0];
         var numeroPedido = arrrayClass[1];
@@ -3060,6 +3069,19 @@ jQuery(function ($) {
                         restringidoLabel = "<br/>" + $("#spnDetalleRestringido").html();
                     }
 
+                    var descripcionLargaLabel = "";
+                    if (lista[i].producto.descripcionLarga != null && lista[i].producto.descripcionLarga.trim() != "") {
+
+                        lista[i].producto.descripcionLarga = lista[i].producto.descripcionLarga.trim();
+
+                        $("#spnDescripcionLargaInfo .lblInfoDescripcionLarga ").removeClass("tooltip-motivo-restriccion");
+
+                        $("#spnDescripcionLargaInfo .lblInfoDescripcionLarga ").addClass("tooltip-motivo-restriccion");
+                        $("#spnDescripcionLargaInfo .lblInfoDescripcionLarga .tooltip-label-text").html(lista[i].producto.descripcionLarga);
+
+                        descripcionLargaLabel = "&nbsp;" + $("#spnDescripcionLargaInfo").html();
+                    }
+
                     pedidoItemsRestringidos.push(itemPedido);
 
                     if (lista[i].cantidadPendienteAtencion > 0) {
@@ -3070,7 +3092,7 @@ jQuery(function ($) {
                         '<td>' + imgIndicadorAprobacion + '</td>' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
                         '<td>' + lista[i].producto.sku + descontinuadoLabel + '</td>' +
-                        '<td>' + lista[i].producto.descripcion + '</td>' +
+                        '<td>' + lista[i].producto.descripcion + descripcionLargaLabel + '</td>' +
                         '<td>' + lista[i].unidad + '</td>' +
                         '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + lista[i].producto.image + '"> </td>' +
                         '<td>' + lista[i].precioLista.toFixed(cantidadDecimales) + '</td>' +

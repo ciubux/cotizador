@@ -516,29 +516,22 @@ namespace DataLayer
 
         public OrdenCompraCliente SelectOrdenCompraCliente(OrdenCompraCliente occ, Usuario usuario)
         {
-            var objCommand = GetSqlCommand("ps_occ");
+            var objCommand = GetSqlCommand("ps_ordenCompraCliente");
             InputParameterAdd.Guid(objCommand, "idOrdenCompraCliente", occ.idOrdenCompraCliente);
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable occDataTable = dataSet.Tables[0];
             DataTable occDetalleDataTable = dataSet.Tables[1];
-            DataTable direccionEntregaDataTable = dataSet.Tables[2];
-            DataTable movimientoAlmacenDataTable = dataSet.Tables[3];
-            DataTable occAdjuntoDataTable = dataSet.Tables[4];
-            DataTable solicitanteDataTable = dataSet.Tables[5];
-            DataTable occGrupoDataTable = dataSet.Tables[6];
+            DataTable occSedesDataTable = dataSet.Tables[2];
+
+            //DataTable movimientoAlmacenDataTable = dataSet.Tables[2];
+            //DataTable solicitanteDataTable = dataSet.Tables[3];
 
             //   DataTable dataTable = Execute(objCommand);
             //Datos de la cotizacion
             foreach (DataRow row in occDataTable.Rows)
             {
-                occ.numeroOrdenCompraCliente = Converter.GetLong(row, "numero");
+                occ.numeroOrdenCompraCliente = Converter.GetLong(row, "numero_occ");
                 occ.fechaSolicitud = Converter.GetDateTime(row, "fecha_solicitud");
-                occ.fechaEntregaDesde = Converter.GetDateTime(row, "fecha_entrega_desde");
-                occ.fechaEntregaHasta = Converter.GetDateTime(row, "fecha_entrega_hasta");
-                occ.horaEntregaDesde = Converter.GetString(row, "hora_entrega_desde");
-                occ.horaEntregaHasta = Converter.GetString(row, "hora_entrega_hasta");
-                occ.horaEntregaAdicionalDesde = Converter.GetString(row, "hora_entrega_adicional_desde");
-                occ.horaEntregaAdicionalHasta = Converter.GetString(row, "hora_entrega_adicional_hasta");
 
                 occ.fechaEntregaExtendida = Converter.GetDateTimeNullable(row, "fecha_entrega_extendida");
 
@@ -563,9 +556,9 @@ namespace DataLayer
 
                 occ.esPagoContado = Converter.GetBool(row, "es_pago_contado");
 
-                occ.contactoOrdenCompraCliente = Converter.GetString(row, "contacto_occ");
-                occ.telefonoContactoOrdenCompraCliente = Converter.GetString(row, "telefono_contacto_occ");
-                occ.correoContactoOrdenCompraCliente = Converter.GetString(row, "correo_contacto_occ");
+                occ.contactoOrdenCompraCliente = Converter.GetString(row, "contacto_pedido");
+                occ.telefonoContactoOrdenCompraCliente = Converter.GetString(row, "telefono_contacto_pedido");
+                occ.correoContactoOrdenCompraCliente = Converter.GetString(row, "correo_contacto_pedido");
 
                 occ.numeroRequerimiento = Converter.GetString(row, "numero_requerimiento");
 
@@ -577,14 +570,7 @@ namespace DataLayer
                 occ.observacionesFactura = Converter.GetString(row, "observaciones_factura");
                 occ.observacionesGuiaRemision = Converter.GetString(row, "observaciones_guia_remision");
 
-                occ.claseOrdenCompraCliente = (OrdenCompraCliente.ClasesOrdenCompraCliente)Char.Parse(Converter.GetString(row, "tipo"));
-                if (occ.claseOrdenCompraCliente == OrdenCompraCliente.ClasesOrdenCompraCliente.Venta)
-                    occ.tipoOrdenCompraCliente = (OrdenCompraCliente.tiposOrdenCompraCliente)Char.Parse(Converter.GetString(row, "tipo_occ"));
-                else if (occ.claseOrdenCompraCliente == OrdenCompraCliente.ClasesOrdenCompraCliente.Compra)
-                    occ.tipoOrdenCompraClienteCompra = (OrdenCompraCliente.tiposOrdenCompraClienteCompra)Char.Parse(Converter.GetString(row, "tipo_occ"));
-                else
-                    occ.tipoOrdenCompraClienteAlmacen = (OrdenCompraCliente.tiposOrdenCompraClienteAlmacen)Char.Parse(Converter.GetString(row, "tipo_occ"));
-
+               
                 occ.otrosCargos = Converter.GetDecimal(row, "otros_cargos");
 
                 occ.FechaRegistro = Converter.GetDateTime(row, "fecha_registro");
@@ -609,52 +595,12 @@ namespace DataLayer
                 occ.cotizacion.codigo = Converter.GetLong(row, "cotizacion_codigo");
                 occ.cotizacion.tipoCotizacion = (Cotizacion.TiposCotizacion)Converter.GetInt(row, "tipo_cotizacion");
 
-                occ.cliente = new Cliente();
-                occ.cliente.codigo = Converter.GetString(row, "codigo");
-                occ.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
-                occ.cliente.razonSocial = Converter.GetString(row, "razon_social");
-                occ.cliente.ruc = Converter.GetString(row, "ruc");
-                occ.cliente.ciudad = new Ciudad();
-                occ.cliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad_cliente");
-                occ.cliente.ciudad.nombre = Converter.GetString(row, "nombre_ciudad_cliente");
-                occ.cliente.razonSocialSunat = Converter.GetString(row, "razon_social_sunat");
-                occ.cliente.direccionDomicilioLegalSunat = Converter.GetString(row, "direccion_domicilio_legal_sunat");
-                occ.cliente.correoEnvioFactura = Converter.GetString(row, "correo_envio_factura");
-                occ.cliente.plazoCredito = Converter.GetString(row, "plazo_credito");
-                occ.cliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
-                occ.cliente.tipoPagoFactura = (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
-                occ.cliente.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
+                occ.clienteSunat = new ClienteSunat();
+                occ.clienteSunat.idClienteSunat = Converter.GetInt(row, "id_cliente_sunat");
+                occ.clienteSunat.razonSocial = Converter.GetString(row, "razon_social");
+                occ.clienteSunat.ruc = Converter.GetString(row, "ruc");
 
-                /*Vendedores*/
-                occ.cliente.responsableComercial = new Vendedor();
-                occ.cliente.responsableComercial.codigo = Converter.GetString(row, "responsable_comercial_codigo");
-                occ.cliente.responsableComercial.descripcion = Converter.GetString(row, "responsable_comercial_descripcion");
-                occ.cliente.responsableComercial.usuario = new Usuario();
-                occ.cliente.responsableComercial.usuario.email = Converter.GetString(row, "responsable_comercial_email");
-
-                occ.cliente.supervisorComercial = new Vendedor();
-                occ.cliente.supervisorComercial.codigo = Converter.GetString(row, "supervisor_comercial_codigo");
-                occ.cliente.supervisorComercial.descripcion = Converter.GetString(row, "supervisor_comercial_descripcion");
-                occ.cliente.supervisorComercial.usuario = new Usuario();
-                occ.cliente.supervisorComercial.usuario.email = Converter.GetString(row, "supervisor_comercial_email");
-
-                occ.cliente.asistenteServicioCliente = new Vendedor();
-                occ.cliente.asistenteServicioCliente.codigo = Converter.GetString(row, "asistente_servicio_cliente_codigo");
-                occ.cliente.asistenteServicioCliente.descripcion = Converter.GetString(row, "asistente_servicio_cliente_descripcion");
-                occ.cliente.asistenteServicioCliente.usuario = new Usuario();
-                occ.cliente.asistenteServicioCliente.usuario.email = Converter.GetString(row, "asistente_servicio_cliente_email");
-
-                occ.cliente.grupoCliente = new GrupoCliente();
-                occ.cliente.grupoCliente.nombre = Converter.GetString(row, "grupo_nombre");
-
-                occ.ciudad = new Ciudad();
-                occ.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
-                occ.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
-                occ.ciudad.direccionPuntoLlegada = Converter.GetString(row, "direccion_establecimiento");
-                occ.ciudad.esProvincia = Converter.GetBool(row, "es_provincia");
-                occ.ciudad.sede = Converter.GetString(row, "codigo_sede");
-
-                occ.usuario = new Usuario();
+                occ.usuario = new Usuario(); 
                 occ.usuario.nombre = Converter.GetString(row, "nombre_usuario");
                 occ.usuario.cargo = Converter.GetString(row, "cargo");
                 occ.usuario.contacto = Converter.GetString(row, "contacto_usuario");
@@ -671,7 +617,7 @@ namespace DataLayer
 
                 occDetalle.producto = new Producto();
 
-                occDetalle.idOrdenCompraClienteDetalle = Converter.GetGuid(row, "id_occ_detalle");
+                occDetalle.idOrdenCompraClienteDetalle = Converter.GetGuid(row, "id_orden_compra_cliente_detalle");
                 occDetalle.cantidad = Converter.GetInt(row, "cantidad");
                 occDetalle.cantidadPendienteAtencion = Converter.GetInt(row, "cantidadPendienteAtencion");
                 occDetalle.cantidadPorAtender = Converter.GetInt(row, "cantidadPendienteAtencion");
@@ -757,39 +703,37 @@ namespace DataLayer
                 occ.detalleList.Add(occDetalle);
             }
 
+            occ.sedesClienteSunat = new List<Ciudad>();
+            //Detalle de la cotizacion
+            foreach (DataRow row in occSedesDataTable.Rows)
+            {
+                Ciudad occSede = new Ciudad();
+
+                occSede.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                occSede.nombre = Converter.GetString(row, "nombre");
+                occSede.idClienteRelacionado = Converter.GetGuid(row, "id_cliente");
+
+                occ.sedesClienteSunat.Add(occSede);
+            }
+
             List<DireccionEntrega> direccionEntregaList = new List<DireccionEntrega>();
 
-            foreach (DataRow row in direccionEntregaDataTable.Rows)
-            {
-                DireccionEntrega obj = new DireccionEntrega
-                {
-                    idDireccionEntrega = Converter.GetGuid(row, "id_direccion_entrega"),
-                    descripcion = Converter.GetString(row, "descripcion"),
-                    contacto = Converter.GetString(row, "contacto"),
-                    telefono = Converter.GetString(row, "telefono"),
-                    ubigeo = new Ubigeo { Id = Converter.GetString(row, "ubigeo") }
-                };
-                direccionEntregaList.Add(obj);
-            }
-
-            occ.cliente.direccionEntregaList = direccionEntregaList;
-
-
+            
             List<Solicitante> solicitanteList = new List<Solicitante>();
 
-            foreach (DataRow row in solicitanteDataTable.Rows)
-            {
-                Solicitante obj = new Solicitante
-                {
-                    idSolicitante = Converter.GetGuid(row, "id_solicitante"),
-                    nombre = Converter.GetString(row, "nombre"),
-                    telefono = Converter.GetString(row, "telefono"),
-                    correo = Converter.GetString(row, "correo")
-                };
-                solicitanteList.Add(obj);
-            }
+            //foreach (DataRow row in solicitanteDataTable.Rows)
+            //{
+            //    Solicitante obj = new Solicitante
+            //    {
+            //        idSolicitante = Converter.GetGuid(row, "id_solicitante"),
+            //        nombre = Converter.GetString(row, "nombre"),
+            //        telefono = Converter.GetString(row, "telefono"),
+            //        correo = Converter.GetString(row, "correo")
+            //    };
+            //    solicitanteList.Add(obj);
+            //}
 
-            occ.cliente.solicitanteList = solicitanteList;
+            //occ.cliente.solicitanteList = solicitanteList;
 
 
             occ.guiaRemisionList = new List<GuiaRemision>();
@@ -797,59 +741,44 @@ namespace DataLayer
             GuiaRemision movimientoAlmacen = new GuiaRemision();
             movimientoAlmacen.idMovimientoAlmacen = Guid.Empty;
 
-            foreach (DataRow row in movimientoAlmacenDataTable.Rows)
-            {
-                Guid idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
-                if (movimientoAlmacen.idMovimientoAlmacen != idMovimientoAlmacen)
-                {
-                    //Si no coincide con el anterior se crea un nuevo movimiento Almacen
-                    movimientoAlmacen = new GuiaRemision();
-                    movimientoAlmacen.idMovimientoAlmacen = idMovimientoAlmacen;
-                    movimientoAlmacen.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
-                    movimientoAlmacen.fechaTraslado = Converter.GetDateTime(row, "fecha_traslado");
-                    movimientoAlmacen.numeroDocumento = Converter.GetInt(row, "numero_documento");
-                    movimientoAlmacen.serieDocumento = Converter.GetString(row, "serie_documento");
-                    movimientoAlmacen.documentoDetalle = new List<DocumentoDetalle>();
+            //foreach (DataRow row in movimientoAlmacenDataTable.Rows)
+            //{
+            //    Guid idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
+            //    if (movimientoAlmacen.idMovimientoAlmacen != idMovimientoAlmacen)
+            //    {
+            //        //Si no coincide con el anterior se crea un nuevo movimiento Almacen
+            //        movimientoAlmacen = new GuiaRemision();
+            //        movimientoAlmacen.idMovimientoAlmacen = idMovimientoAlmacen;
+            //        movimientoAlmacen.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
+            //        movimientoAlmacen.fechaTraslado = Converter.GetDateTime(row, "fecha_traslado");
+            //        movimientoAlmacen.numeroDocumento = Converter.GetInt(row, "numero_documento");
+            //        movimientoAlmacen.serieDocumento = Converter.GetString(row, "serie_documento");
+            //        movimientoAlmacen.documentoDetalle = new List<DocumentoDetalle>();
 
-                    movimientoAlmacen.documentoVenta = new DocumentoVenta();
-                    movimientoAlmacen.documentoVenta.idDocumentoVenta = Converter.GetGuid(row, "id_documento_venta");
-                    movimientoAlmacen.documentoVenta.serie = Converter.GetString(row, "SERIE");
-                    movimientoAlmacen.documentoVenta.numero = Converter.GetString(row, "CORRELATIVO");
-
-
-                    movimientoAlmacen.documentoVenta.fechaEmision = Converter.GetDateTimeNullable(row, "fecha_emision_factura");
-
-                    occ.guiaRemisionList.Add(movimientoAlmacen);
-                }
-
-                DocumentoDetalle documentoDetalle = new DocumentoDetalle();
-                documentoDetalle.idDocumentoDetalle = Converter.GetGuid(row, "id_movimiento_almacen_detalle");
-                documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
-                documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
-                documentoDetalle.producto = new Producto();
-                documentoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
-                documentoDetalle.producto.sku = Converter.GetString(row, "sku");
-                documentoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
-                documentoDetalle.unidad = Converter.GetString(row, "unidad");
-                documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
-
-                movimientoAlmacen.documentoDetalle.Add(documentoDetalle);
-            }
+            //        movimientoAlmacen.documentoVenta = new DocumentoVenta();
+            //        movimientoAlmacen.documentoVenta.idDocumentoVenta = Converter.GetGuid(row, "id_documento_venta");
+            //        movimientoAlmacen.documentoVenta.serie = Converter.GetString(row, "SERIE");
+            //        movimientoAlmacen.documentoVenta.numero = Converter.GetString(row, "CORRELATIVO");
 
 
-            /*mad.id_movimiento_almacen_detalle, mad.cantidad, 
-            mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
+            //        movimientoAlmacen.documentoVenta.fechaEmision = Converter.GetDateTimeNullable(row, "fecha_emision_factura");
 
-            occ.AdjuntoList = new List<ArchivoAdjunto>();
-            //Detalle de la cotizacion
-            foreach (DataRow row in occAdjuntoDataTable.Rows)
-            {
-                ArchivoAdjunto occAdjunto = new ArchivoAdjunto();
-                occAdjunto.idArchivoAdjunto = Converter.GetGuid(row, "id_archivo_adjunto");
-                occAdjunto.adjunto = Converter.GetBytes(row, "adjunto");
-                occAdjunto.nombre = Converter.GetString(row, "nombre");
-                occ.AdjuntoList.Add(occAdjunto);
-            }
+            //        occ.guiaRemisionList.Add(movimientoAlmacen);
+            //    }
+
+            //    DocumentoDetalle documentoDetalle = new DocumentoDetalle();
+            //    documentoDetalle.idDocumentoDetalle = Converter.GetGuid(row, "id_movimiento_almacen_detalle");
+            //    documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+            //    documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+            //    documentoDetalle.producto = new Producto();
+            //    documentoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
+            //    documentoDetalle.producto.sku = Converter.GetString(row, "sku");
+            //    documentoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
+            //    documentoDetalle.unidad = Converter.GetString(row, "unidad");
+            //    documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+
+            //    movimientoAlmacen.documentoDetalle.Add(documentoDetalle);
+            //}
 
             return occ;
         }

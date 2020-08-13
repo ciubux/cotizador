@@ -749,6 +749,7 @@ jQuery(function ($) {
         //$('#producto').trigger('chosen:activate');
     })
 
+    var agregarDescripcionLargaCotizacion = 0;
 
     /////////////CAMPO PRODUCTO 
     $("#producto").change(function () {
@@ -794,7 +795,7 @@ jQuery(function ($) {
                 $("#porcentajeDescuento").val(Number(producto.porcentajeDescuento).toFixed(4));
                 $("#cantidad").val(1);
 
-
+                agregarDescripcionLargaCotizacion = producto.agregarDescripcionCotizacion;
                 if (producto.descontinuado == 1) {
                     $("#spnProductoDescontinuado").show();
 
@@ -1148,10 +1149,28 @@ jQuery(function ($) {
         });
     });
 
-
+2
     $("#btnAddProduct").click(function () {
         //Se desactiva el boton mientras se agrega el producto
         desactivarBtnAddProduct();
+
+        if (agregarDescripcionLargaCotizacion == 1) {
+            var considerarCantidades = $('#considerarCantidades').val();
+
+            if (considerarCantidades == 1) {
+                $.alert({
+                    title: "Observaciones obligatorias",
+                    type: 'orange',
+                    content: 'Debe cambiar la visualización de "Solo cantidades" a "Cantidades y Observaciones" para agregar este producto a la cotización.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+
+                return false;
+            }
+        }
+
         var cantidad = parseInt($("#cantidad").val());
         var porcentajeDescuento = parseFloat($("#porcentajeDescuento").val());
         var precio = $("#precio").val();
@@ -2094,14 +2113,17 @@ jQuery(function ($) {
                 }     
 
                 if (cotizacion.tipoCotizacion == 0) {
+                    $("#esNormal").show();
                     $("#esTransitoria").hide();
                     $("#esTrivial").hide();
                 }
                 else if (cotizacion.tipoCotizacion == 1) {
+                    $("#esNormal").hide();
                     $("#esTransitoria").show();
                     $("#esTrivial").hide();
                 }
                 else if (cotizacion.tipoCotizacion == 2) {
+                    $("#esNormal").hide();
                     $("#esTransitoria").hide();
                     $("#esTrivial").show();
                 }

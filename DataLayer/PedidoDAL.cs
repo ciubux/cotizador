@@ -32,6 +32,11 @@ namespace DataLayer
             else
                 InputParameterAdd.Guid(objCommand, "idCotizacion", pedido.cotizacion.idCotizacion); //puede ser null
 
+            if (pedido.ordenCompracliente == null || pedido.ordenCompracliente.idOrdenCompraCliente == Guid.Empty)
+                InputParameterAdd.Guid(objCommand, "idOrdenCompraCliente", null); //puede ser null
+            else
+                InputParameterAdd.Guid(objCommand, "idOrdenCompraCliente", pedido.ordenCompracliente.idOrdenCompraCliente); //puede ser null
+
             InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
@@ -824,6 +829,15 @@ namespace DataLayer
                 pedido.cotizacion.codigo = Converter.GetLong(row, "cotizacion_codigo");
                 pedido.cotizacion.tipoCotizacion = (Cotizacion.TiposCotizacion)Converter.GetInt(row, "tipo_cotizacion");
 
+                Guid idOrdenCompracliente = Converter.GetGuid(row, "id_orden_compra_cliente");
+                if (idOrdenCompracliente != null && idOrdenCompracliente != Guid.Empty)
+                {
+                    pedido.ordenCompracliente = new OrdenCompraCliente();
+                    pedido.ordenCompracliente.idOrdenCompraCliente = idOrdenCompracliente;
+                    pedido.ordenCompracliente.numeroReferenciaCliente = pedido.numeroReferenciaCliente;
+                }
+
+
                 pedido.cliente = new Cliente();
                 pedido.cliente.codigo = Converter.GetString(row, "codigo");
                 pedido.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
@@ -942,6 +956,7 @@ namespace DataLayer
                 pedidoDetalle.producto.sku = Converter.GetString(row, "sku");
                 pedidoDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 pedidoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
+                pedidoDetalle.producto.descripcionLarga = Converter.GetString(row, "descripcion_larga");
                 pedidoDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
                 pedidoDetalle.producto.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo_producto");
                 pedidoDetalle.producto.ventaRestringida = (Producto.TipoVentaRestringida) Converter.GetInt(row, "descontinuado");
@@ -1142,6 +1157,14 @@ namespace DataLayer
                 pedido.direccionEntrega.codigoCliente = Converter.GetString(row, "direccion_entrega_codigo_cliente");
                 pedido.direccionEntrega.codigoMP = Converter.GetString(row, "direccion_entrega_codigo_mp");
                 pedido.direccionEntrega.nombre = Converter.GetString(row, "direccion_entrega_nombre");
+
+                Guid idOrdenCompracliente = Converter.GetGuid(row, "id_orden_compra_cliente");
+                if (idOrdenCompracliente != null && idOrdenCompracliente != Guid.Empty)
+                {
+                    pedido.ordenCompracliente = new OrdenCompraCliente();
+                    pedido.ordenCompracliente.idOrdenCompraCliente = idOrdenCompracliente;
+                    pedido.ordenCompracliente.numeroReferenciaCliente = pedido.numeroReferenciaCliente;
+                }
 
                 pedido.solicitante = new Solicitante();
                 pedido.solicitante.idSolicitante = Converter.GetGuid(row, "id_solicitante");

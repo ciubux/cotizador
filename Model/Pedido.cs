@@ -57,6 +57,7 @@ namespace Model
         public bool buscarSedesGrupoCliente { get; set; }
 
 
+        public OrdenCompraCliente ordenCompracliente { get; set; }
 
         public Cotizacion cotizacion { get; set; }
         [Display(Name = "Sede MP:")]

@@ -2356,6 +2356,10 @@
     @Html.Partial("../Pedido/_LabelDetalleRestringido")
 </span>
 
+<span id="spnDescripcionLargaInfo" style="display: none;">
+    @Html.Partial("../Producto/_LabelDescripcionLarga")
+</span>
+
 @section Scripts {
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/pedido")
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/Scripts/App/ubigeo.js")

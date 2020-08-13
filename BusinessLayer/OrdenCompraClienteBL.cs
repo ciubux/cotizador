@@ -43,13 +43,7 @@ namespace BusinessLayer
             }
         }
 
-        public void ProgramarOrdenCompraCliente(OrdenCompraCliente occ, Usuario usuario)
-        {
-            using (var dal = new OrdenCompraClienteDAL())
-            {
-                dal.ProgramarOrdenCompraCliente(occ, usuario);
-            }
-        }
+        
 
         public List<OrdenCompraCliente> GetOrdenCompraClientes(OrdenCompraCliente occ)
         {

@@ -940,6 +940,8 @@ namespace Cotizador.Controllers
                 "\"familia\":\"" + producto.familia + "\"," +
                 "\"descontinuado\":" + producto.descontinuado + "," +
                 "\"motivoRestriccion\":\"" + producto.motivoRestriccion + "\"," +
+                "\"agregarDescripcionCotizacion\":\"" + producto.agregarDescripcionCotizacion + "\"," +
+                "\"descripcionLarga\":\"" + producto.descripcionLarga + "\"," +
                 "\"precioUnitarioSinIGV\":\"" + producto.precioSinIgv + "\"," +
              //   "\"precioUnitarioAlternativoSinIGV\":\"" + producto.precioAlternativoSinIgv + "\"," +
                 "\"precioLista\":\"" + producto.precioLista + "\"," +

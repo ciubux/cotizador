@@ -133,6 +133,10 @@ textarea {
         width: 1200px;
     }
 
+    #modalVerOrdenCompraCliente .modal-dialog {
+        width: 1200px;
+    }
+
     #modalVerGuiaRemision .modal-dialog {
         width: 1200px;
     }
@@ -228,6 +232,9 @@ textarea {
         width: 800px;
     }
 
+    #modalGenerarPedido .modal-dialog {
+        width: 800px;
+    }
 
     #modalDetallesRestriccion .modal-dialog {
         width: 800px;
@@ -819,6 +826,16 @@ $darkred: darken($red, 0.2);*/
     margin-left: -3px;
 }
 
+.lblInfoDescripcionLarga {
+    border-radius: 3px;
+    text-align: center;
+    padding: 2px 3px 1px 3px;
+}
+
+.lblInfoDescripcionLarga img {
+    margin-top: -2px;
+    margin-left: -3px;
+}
 
 /* Efecto Parpadeo */
 
@@ -993,6 +1010,14 @@ $darkred: darken($red, 0.2);*/
     visibility: visible;
 }
 
+.tooltip-label-text-info {
+    border: 1px solid #489de3 !important;
+    padding: 5px 5px !important;
+}
+
+.tooltip-label .tooltip-label-text::after {
+    border-color: transparent #489de3 transparent transparent !important;
+}
 
 .inset-shadow-red {
     position: relative;

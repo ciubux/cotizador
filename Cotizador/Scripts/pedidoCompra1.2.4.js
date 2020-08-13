@@ -2760,9 +2760,13 @@ jQuery(function ($) {
                 ) {
 
                     $("#btnAprobarIngresoPedido").show();
+                    $("#btnExcelCompra").hide();
+                    $("#btnCvsCompra").hide();
                 }
                 else {
                     $("#btnAprobarIngresoPedido").hide();
+                    $("#btnExcelCompra").show();
+                    $("#btnCvsCompra").show();
                 }
 
 

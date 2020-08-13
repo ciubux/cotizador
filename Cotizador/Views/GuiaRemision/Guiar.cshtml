@@ -620,7 +620,17 @@
                             <td class="@documentoDetalle.producto.idProducto detcantidadSaldo" style="text-align:right">@documentoDetalle.cantidadPendienteAtencionPermitida</td>
                             <td class="@documentoDetalle.producto.idProducto detcantidad" style="text-align:right">@documentoDetalle.cantidadPorAtenderPermitida</td>
                             <td>  @documentoDetalle.unidad</td>
-                            <td>  @documentoDetalle.producto.descripcion  </td>
+                            <td>
+                                @documentoDetalle.producto.descripcion
+                                @if (documentoDetalle.producto.descripcionLarga != null && !documentoDetalle.producto.descripcionLarga.Trim().IsEmpty())
+                                {
+                                    string descripcionLargaInfo = Html.Partial("../Producto/_LabelDescripcionLarga").ToString();
+                                    descripcionLargaInfo = descripcionLargaInfo.Replace("_DATA_TIPSO_", documentoDetalle.producto.descripcionLarga);
+                                    descripcionLargaInfo = descripcionLargaInfo.Replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+
+                                    @Html.Raw(descripcionLargaInfo)
+                                }
+                            </td>
                         </tr>
                     }
                 }
