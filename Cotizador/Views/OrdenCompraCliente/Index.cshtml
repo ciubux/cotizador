@@ -90,7 +90,7 @@
 
             <!--FECHA CREACIÓN-->
             <div class="col-sm-6 col-lg-4">
-                <label for="pedido_fechaCreacionDesde" class="control-label col-xs-6 col-lg-4">Fecha de Creación:</label>
+                <label for="pedido_fechaCreacionDesde" class="control-label col-xs-6 col-lg-4">Fecha de Registro:</label>
                 <div class="input-group col-xs-6 col-lg-8">
                     <div class="input-group-addon" style="width:70px">
                         <span class="input-group-text" id="basic-addon1">Desde:</span>
@@ -119,7 +119,7 @@
             <div class="col-sm-6 col-lg-4">
                 <!--USUARIO-->
                 <div class="form-group">
-                    <label for="usuario" class="control-label col-xs-4">Creado Por:</label>
+                    <label for="usuario" class="control-label col-xs-4">Registrado Por:</label>
                     <div class="col-xs-8">
                         @Html.Action("usuariosOCCList", "Usuario")
                     </div>
@@ -151,11 +151,11 @@
             <thead>
                 <tr>
                     <th data-name="idOCC" data-visible="false"></th>
-                    <th data-name="numero" data-visible="true">N°</th>
+                    <th data-name="numero" data-visible="true">Registro N°</th>
                     <th data-name="numeroReferenciaCliente" data-visible="true">O/C N°</th>
                     <th data-name="ruc" data-visible="true" data-sortable="false" data-breakpoints="xs">RUC Cliente</th>
                     <th data-name="razonSocial" data-visible="true" data-sortable="true">Razón Social</th>
-                    <th data-name="usuario" data-visible="true">Creado por</th>
+                    <th data-name="usuario" data-visible="true">Registrado por</th>
                     <th data-name="fechaRegistro" data-sortable="true" data-breakpoints="xs">Fecha Registro</th>
                     <th data-name="total" data-sortable="true" data-breakpoints="xs">Total (Incl. IGV)</th>
                     <th data-name="observaciones" data-sortable="true" data-breakpoints="xs">Obs. Uso Interno</th>

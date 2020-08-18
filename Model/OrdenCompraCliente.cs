@@ -28,7 +28,7 @@ namespace Model
 
 
         public Guid idOrdenCompraCliente { get; set; }
-        [Display(Name = "Número Orden Compra:")]
+        [Display(Name = "Registro N°")]
         public Int64 numeroOrdenCompraCliente { get; set; }
 
         public int idGrupoCliente { get; set; }
@@ -49,7 +49,7 @@ namespace Model
         [Display(Name = "Cliente:")]
         public ClienteSunat clienteSunat { get; set; }
 
-        [Display(Name = "Orden de Compra Cliente:")]
+        [Display(Name = "O/C N°:")]
         public String numeroReferenciaCliente { get; set; }
 
 
