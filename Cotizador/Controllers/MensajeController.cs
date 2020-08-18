@@ -470,15 +470,18 @@ namespace Cotizador.Controllers
             return PartialView(mensaje);
         }
 
-        public void MensajeVistoRespuesta(Guid[] idUsuarios)
+        [HttpPost]       
+        public void msnVistoRespuesta(Guid[] idUsuarios,Guid idMensaje, String respuesta)
         {
             Mensaje obj = new Mensaje();
             MensajeBL mensajebl = new MensajeBL();
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            obj.id_mensaje = Guid.Parse(Request["idMensaje"].ToString());
+            obj.id_mensaje = idMensaje;
+            //obj.id_mensaje = Guid.Parse(Request["idMensaje"].ToString());
             obj = mensajebl.getMensajeById(obj.id_mensaje);
             obj.user = new Usuario();
-            obj.mensaje = Request["respuesta"];
+            obj.mensaje = respuesta;
+            //obj.mensaje = Request["respuesta"];
 
             obj.listUsuario = new List<Usuario>();
             idUsuarios = idUsuarios == null ? new Guid[0] : idUsuarios;
@@ -519,9 +522,11 @@ namespace Cotizador.Controllers
             Mensaje obj = new Mensaje();
             MensajeBL mensajebl = new MensajeBL();
             obj.id_mensaje = Guid.Parse(Request["idMensaje"].ToString());
-            //Mensaje mensaje = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE_BUSQUEDA];
-            //obj.bandeja = mensaje.bandeja;
-            list = mensajebl.getUsuariosRespuesta(obj);
+            Mensaje mensaje = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE_BUSQUEDA];
+            obj.bandeja = mensaje.bandeja;
+            obj.user = new Usuario();
+            obj.user.idUsuario = mensaje.user.idUsuario;
+            list = mensajebl.getUsuariosRespuesta(obj); 
             return JsonConvert.SerializeObject(list);
         }
 

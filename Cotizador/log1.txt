@@ -122,3 +122,4 @@ The statement has been terminated.
 2020-05-04 02:54:49.4699|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Error getting value from 'tipoDocumentoIdentidadToString' on 'Model.Cliente'.
 2020-05-04 02:59:16.6576|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Error getting value from 'tipoDocumentoIdentidadToString' on 'Model.Cliente'.
 >>>>>>> dev/yrving
+2020-06-03 14:33:21.6337|ERROR|Cotizador.Controllers.ParentController|jalvarez@ripley.com.pe / Invalid object name 'RUBRO'.

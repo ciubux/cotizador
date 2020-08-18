@@ -594,6 +594,12 @@ namespace Cotizador.Controllers
                 this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE] = null;
                 UsuarioBL usuarioBL = new UsuarioBL();
                 Usuario usuario = (Usuario)this.Session["usuario"];
+
+                HttpSessionStateBase sessionParams = this.Session;
+                var arcBL = new ArchivoAdjuntoBL();
+                arcBL.limpiarAsociarAchivoRegistro(sessionParams, ArchivoAdjunto.ArchivoAdjuntoOrigen.OC_OCCLIENTE);
+
+
                 return RedirectToAction("Index", "OrdenCompraCliente");
             }
             catch (Exception e)
@@ -1326,7 +1332,11 @@ namespace Cotizador.Controllers
             long numeroOrdenCompraCliente = occ.numeroOrdenCompraCliente;
             String numeroOrdenCompraClienteString = occ.numeroOrdenCompraClienteString;
             Guid idOrdenCompraCliente = occ.idOrdenCompraCliente;
-            
+
+            HttpSessionStateBase sessionParams = this.Session;
+            var arcBL = new ArchivoAdjuntoBL();
+            arcBL.asociarAchivoRegistro(sessionParams, occ.idOrdenCompraCliente, ArchivoAdjunto.ArchivoAdjuntoOrigen.OC_OCCLIENTE);
+
             // occ = null;
             this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE] = null;// occ;// null;
 

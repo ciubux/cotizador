@@ -267,8 +267,7 @@
             success: function () {
                 var a = $('#mensaje_bandeja_enviados').prop('checked');
                 location.reload();
-                if (a==true)
-                {
+                if (a == true) {
                     $('#mensaje_bandeja_enviados').click();
                 }
             }
@@ -304,24 +303,11 @@
             success: function () { }
         });
     }
-
-
+    
     $(".navbar-header").on("click", "a.btnModal", function () {
-        $('#Mensaje1').modal('show');
+        $('.ModalMensajeAlerta').first().modal('show');    
     });
-
-
-    function eliminateDuplicates(arrayIn) {
-
-        var arrayOut = {};
-        var unicos = arrayIn.filter(function (e) {
-            return arrayOut[e.id_mensaje] ? false : (arrayOut[e.id_mensaje_hilo.id_mensaje] = true);
-        });
-        return unicos;
-    }
-
-    //var idUsuario;
-
+    
     function ActulizarMensaje() {
 
         var idUsuario = $('#usuario_idUsuario').val();
@@ -336,10 +322,9 @@
                     idUsuario: idUsuario
                 },
                 success: function (list) {
-
-                    list = eliminateDuplicates(list);
-                    if (list.length != 0) {
-
+                                       
+                    if (list.length != 0) {                        
+                        $('.btnModal').remove();
                         $("#imagenMP").before('<a data-notifications="' + list.length + '" class="btnModal" href="javascript:void()"></a>');
 
                         var verAutomaticamente = false;
@@ -349,11 +334,9 @@
                             if (list[i].importancia == 'Alta') {
                                 verAutomaticamente = true;
                             }
-                            var BtnLabel = list.length === 1 ? "Marcar como leído" : "Marcar como leído y mostrar siguiente";
+
                             var numeroModal = i + 1;
-                            if (list.length - 1 === i) {
-                                BtnLabel = "Marcar como leído";
-                            }
+                            
                             var imagenAdvertencia = list[i].importancia == "Alta" ? '<img src = "/images/advertencia.svg" style="vertical-align: middle; margin-bottom:5px;  margin-right:10px;" width = "20px" height = "20px">' +
                                 '<svg width="1px" height="1px" xmlns="https://www.w3.org/2000/svg"></svg>' : "";
                             var date = new Date(list[i].fechaCreacionMensaje);
@@ -361,6 +344,7 @@
                             minuto = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
                             segundo = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
                             horaImprimible = hora + ":" + minuto + ":" + segundo;
+
                             var ItemRow =
                                 '<div id="Mensaje' + numeroModal + '" class="modal fade ModalMensajeAlerta ModalMensaje" tabindex="-1" role="dialog">' +
                                 '<div class="modal-dialog" id="MensajeDialog' + numeroModal + '">' +
@@ -368,27 +352,27 @@
                                 '<div class="modal-header">' +
 
                                 '<div class="btn-group" style="float:right">' +
-                                '<button  type="button"  class="Leido btn btn-primary ' + list[i].id_mensaje + ' ">' + BtnLabel + '</button>' +
+                                '<button  type="button"  class="Leido btn btn-primary ' + list[i].id_mensaje + ' "></button>' +
                                 '</div><br><br>' +
                                 '</div>' +
                                 '<div class="modal-body">' +
 
-                                '<h5> <b>DE: </b>' + list[i].usuario_creacion + ' - <b> FECHA: </b>' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) +' '+ horaImprimible +'</h5>' +
+                                '<h5> <b>DE: </b>' + list[i].usuario_creacion + ' - <b> FECHA: </b>' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) + ' ' + horaImprimible + '</h5>' +
 
                                 '<h4 style="display: inline-block;">' + imagenAdvertencia + '<u>' + list[i].titulo + '</u></h4>' +
                                 '<p style="margin-bottom: 0.11in"><font size="3"><span lang="es-PE">' + list[i].mensaje + '</span></font></p>' +
 
-                                '<textarea class="form-control" id ="respuesta' + numeroModal + '" rows="4" style="display:none" placeholder="Respuesta..."> </textarea>' +
-                                                              
+                                '<textarea class="form-control" id ="respuesta' + numeroModal + '" rows="4" style="display:none" placeholder="Respuesta..."></textarea>' +
 
-                                '<div class="row form-group" style="display:none" id="addUsuarios' + numeroModal +'"> ' +
+
+                                '<div class="row form-group" style="display:none" id="addUsuarios' + numeroModal + '"> ' +
                                 '<label class="col-form-label col-md-3">Agregar destinatario(s):</label>' +
                                 '<div class="col-md-9">' +
-                                '<select multiple class="form-control form-control" id="idUsuarioBusquedaRespuestaMensajeModal" name="UsuarioMensajeRapido" required>' +
+                                '<select multiple class="form-control form-control" id="idUsuarioBusquedaRespuestaMensajeModal' + numeroModal +'" name="UsuarioMensajeRapido" required>' +
                                 '</select>' +
                                 '</div>' +
-                                '</div>'+
-                            
+                                '</div>' +
+
 
                                 '<div class="btn-group" style="float:right">' +
                                 '<button  type="button"  class="btn btn-success Responder" id="' + numeroModal + '"">Responder</button>' +
@@ -409,14 +393,29 @@
                                 '</div>' +
                                 '</div>';
 
-                            if (esVisible == false) {
-                                $("body").append(ItemRow);
-                            }
-                        }
+                            var divs = $('.Leido');
+                            var igual = false;
+                            divs.each(function (index, element) {
+                                var div = $(element).attr('class').split(" ");
+                                if (div[3] == list[i].id_mensaje)
+                                    return igual = true;
+                            });  
 
-                        if (verAutomaticamente && esVisible === false) {
+                            if (igual == false) {
+                                $("body").append(ItemRow); 
+                            }   
+                            
+                        }
+                        if ($('[id="Mensaje1"]').toArray().length == 2) {
+                            location.reload();
+                        }
+                        
+                        $('.Leido:not(:last)').html('Marcar como leído y mostrar siguiente');
+                        $('.Leido:last').html('Marcar como leído');
+
+                        if (verAutomaticamente && esVisible == false) {
                             setTimeout(function () {
-                                $('#Mensaje1').modal('show');
+                                $('.ModalMensajeAlerta').first().modal('show');
                             }, 2000);
                         }
                     } else {
@@ -427,7 +426,8 @@
 
 
         }
-    }
+    }    
+    
     $('body').on('show.bs.modal', '.ModalMensajeAlerta', function () {
         var arrayClass = $(this).find('.Leido').attr('class').split(" ");
         var idMensaje = arrayClass[3];
@@ -475,70 +475,92 @@
         var num = $(this).attr('id');
         $('#respuesta' + num + '').show();
         $('.botonesRespuesta' + num + '').show();
-        $('#addUsuarios' + num + '').show();       
+        $('#addUsuarios' + num + '').show();
         $('.Responder').hide();
         $('#respuesta' + num + '').after('<br id="saltoLinea">');
         $('#respuesta' + num + '').focus();
     });
+        
+        $('body').on("click", "button.EnviarRespuesta", function () {
+            var num = $(this).prev('button').attr('id');
+            var txtRespuesta = $('#respuesta' + num + '').val();
+            var arrayClass = $(this).attr('class').split(" ");
+            var idMensaje = arrayClass[3];
+            var idUsuarios = $('#idUsuarioBusquedaRespuestaMensajeModal'+num+'').val();
 
-    $('body').on("click", "button.EnviarRespuesta", function () {
-        var num = $(this).prev('button').attr('id');
-        var txtRespuesta = $('#respuesta' + num + '').val();
-        var arrayClass = $(this).attr('class').split(" ");
-        var idMensaje = arrayClass[3];
-        var idUsuarios = $("#idUsuarioBusquedaRespuestaMensajeModal").val();
+            if (txtRespuesta.trim() === "") {
+                $(this).closest('.modal-content').find('button.Leido').click();
+            }
+            else {
+                
+                $.ajax({
+                    url: "/Mensaje/msnVistoRespuesta",
+                    type: 'POST',                    
+                    data: {
+                        idUsuarios: idUsuarios,
+                        idMensaje: idMensaje,
+                        respuesta: txtRespuesta
+                    },
+                    success: function () {                       
+                        $.alert({
+                            title: TITLE_EXITO,
+                            content: 'Mensaje enviado.',
+                            type: 'green',
+                            buttons: {
+                                OK: function () {
+                                    let dialog = $('.' + idMensaje + '').closest('.modal');
+                                    var btnFinal = dialog.find('.Leido').html();
+                                    if (btnFinal == "Marcar como leído") {
+                                        dialog.modal('hide');
+                                        location.reload();
+                                    }
+                                    else {
+                                        dialog.modal('hide');
+                                        dialog.next().modal('show');
+                                    }
+                                    $('.' + idMensaje + '').closest('#MensajeDialog').find('#modalRespuesta' + num + '').empty();
+                                    $('#idUsuarioBusquedaRespuestaMensajeModal'+num+'').val('').trigger('chosen:updated');
+                                    $('#respuesta' + num + '').empty;                                    
+                                    $('#respuesta' + num + '').hide();
+                                    $('.botonesRespuesta' + num + '').hide();
+                                    $('#respuesta' + num + '').val("");
+                                    $('.Responder').show();
+                                    $('#Mensaje' + num + '').attr('class', '');
+                                    ActulizarMensaje();
+                                }
+                            }
+                        });
+                    }, error(error) {
+                        $.alert({
+                            title: 'Error',
+                            content: 'Se generó un error al intentar enviar la respuesta. | ' + error+'',
+                            type: 'red',
+                            buttons: {
+                                OK: function () {
 
-        if (txtRespuesta.trim() === "") {
-            $(this).closest('.modal-content').find('button.Leido').click();
-        }
-        else {
-            $.ajax({
-                url: "/Mensaje/MensajeVistoRespuesta",
-                type: 'POST',
-                data: {
-                    idUsuarios: idUsuarios,
-                    idMensaje: idMensaje,
-                    respuesta: txtRespuesta
-                },
-                success: function () {
-                    let dialog = $('.' + idMensaje + '').closest('.modal');
-                    var btnFinal = dialog.find('.Leido').html();
-                    if (btnFinal == "Marcar como leído") {
-                        dialog.modal('hide');
-                        location.reload();
-                    }
-                    else {
-                        dialog.modal('hide');
-                        dialog.next().modal('show');
-                    }
-                    $('.' + idMensaje + '').closest('#MensajeDialog').find('#modalRespuesta' + num + '').empty();
 
-                    $('#respuesta' + num + '').empty;
-                    var num = $(this).attr('id');
-                    $('#respuesta' + num + '').hide();
-                    $('.botonesRespuesta' + num + '').hide();
-                    $('#respuesta' + num + '').val("");
-                    $('.Responder').show();
-                    ActulizarMensaje();
-                }
-            });
-        }
-
-    });
+                                }
+                            }
+                        });
+                        }
+                });
+            }
+        });
+    
 
     $('body').on("click", "button.cerrarRespuesta", function () {
         var num = $(this).attr('id');
         $('#respuesta' + num + '').hide();
-        $('.botonesRespuesta' + num + '').hide();
-        //$('#botonesRespuesta' + num + '').hide();
-        $('#addUsuarios' + num + '').hide(); 
-        $('#respuesta' + num + '').val("");
+        $('.botonesRespuesta' + num + '').hide();           
+        $('#addUsuarios' + num + '').hide();
+        $('#respuesta' + num + '').val(""); 
+        $('#idUsuarioBusquedaRespuestaMensajeModal'+num+'').val('').trigger('chosen:updated');
         $('.Responder').show();
         $('#saltoLinea').remove();
     });
 
     $('body').on("click", "button.Leido", function () {
-        var num = $(this).closest('.modal-header').find(".Responder").attr('id');
+        var num = $(this).closest('.modal-content').find("button.Responder").attr('id');
         var arrrayClass = $(this).attr('class').split(" ");
         var idMensaje = arrrayClass[3];
 
@@ -560,9 +582,11 @@
                     dialog.modal('hide');
                     dialog.next().modal('show');
                 }
-                //$('.Responder').show();
+                $('.Responder').show();
+                $('#idUsuarioBusquedaRespuestaMensajeModal'+num+'').val('').trigger('chosen:updated');
                 $('.' + idMensaje + '').closest('#MensajeDialog').find('#modalRespuesta' + num + '').empty();
-                ActulizarMensaje();
+                $('#Mensaje' + num + '').attr('class','');
+                ActulizarMensaje();                
             }
         });
     });
@@ -728,10 +752,10 @@
                         "enabled": true
                     }
                 });
-                
-               
+
+
                 for (var i = 0; i < list.length; i++) {
-                   
+
                     var ItemRow = '<tr data-expanded="true">' +
 
                         '<td>  ' + list[i].id_mensaje + '  </td>' +
@@ -742,7 +766,7 @@
                         '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) + '  </td>' +
                         '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaVencimientoMensaje)) + '  </td>' +
                         '<td>' +
-                        '<button type="button" style="margin-right:13px;" class="' + list[i].id_mensaje + ' btnEditarMensaje btn btn-primary" > Editar</button >'+                        
+                        '<button type="button" style="margin-right:13px;" class="' + list[i].id_mensaje + ' btnEditarMensaje btn btn-primary" > Editar</button >' +
                         '<button type="button" class="' + list[i].id_mensaje + ' btnVerMensaje btn btn-success">Ver</button>' +
 
                         '</td>' +
@@ -788,7 +812,7 @@
                         '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaInicioMensaje)) + '  </td>' +
                         //'<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaVencimientoMensaje)) + '  </td>' +
                         '<td>' +
-                       // btnEditar +
+                        // btnEditar +
                         '<button type="button" class="' + list[i].id_mensaje + ' btnVerMensaje btn btn-success">Ver</button>' +
 
                         '</td>' +
@@ -822,38 +846,31 @@
                 idMensaje: idMensaje
             },
             success: function (resultado) {
-                resultado=eliminarDuplicadosUsuario(resultado); 
-                $('[id^=VerContenedor]').remove();               
+                resultado = eliminarDuplicadosUsuario(resultado);
+                $('[id^=VerContenedor]').remove();
                 $('#UsuariosRespuesta').empty();
                 $('#UsuariosRespuesta').append('<option value=" ">Selecciona un Usuario</option>');
                 $('#UsuariosRespuesta').prop("disabled", false);
                 for (var i = 0; i < resultado.length; i++) {
-                    var a =  i==0 ? 'id="EliminarUsuario"':'';
-                    var listaUsuario = '<option '+ a +'value="' + resultado[i].idUsuario + '">' + resultado[i].nombre + '</option>';
+                    //var a = i == 0 ? 'id="EliminarUsuario"' : '';
+                    var listaUsuario = '<option value="' + resultado[i].idUsuario + '">' + resultado[i].nombre + '</option>';
                     $('#UsuariosRespuesta').append(listaUsuario);
                 }
                 $('#respuestasUsuarios').empty();
                 $('[id^=respuestasUser]').remove();
                 $('#Prueba2').remove();
                 $('#modalListado').modal('show');
-               
-                
+
+
                 if ($('#mensaje_bandeja_recibidos').prop('checked') == true) {
 
-                    $('#UsuariosRespuesta>option[id="EliminarUsuario"]').prop('selected', true).change();              
+                    $('#UsuariosRespuesta>option').eq(1).prop('selected', true).change();
                     $('#UsuariosRespuesta').prop("disabled", true);
-                }   
-                
-                if ($('#mensaje_bandeja_enviados').prop('checked') == true) {
-                    $('#EliminarUsuario').remove();                    
                 }
-                /*
-                if ($('#mensaje_bandeja_enviados').prop('checked') == true && $('#UsuariosRespuesta option').length == 1) {
-                    $('#UsuariosRespuesta').empty();
-                    $('#UsuariosRespuesta').append('<option value="0">Sin Respuestas</option>');
-                    $('#UsuariosRespuesta').prop("disabled", true);
-                }  
-                */
+
+                if ($('#mensaje_bandeja_enviados').prop('checked') == true) {
+                    //$('#EliminarUsuario').remove();
+                }                
             }
         });
     });
@@ -889,11 +906,17 @@
                     var titulo = '<h4 id="Prueba2" class="float-left">' + imagenAdvertencia + '<u>' + list[list.length - 1].titulo + '</u></h4>';
 
                     $('#Prueba').after(titulo);
-                    $('[id^=VerContenedor]').remove();                    
+                    $('[id^=VerContenedor]').remove();
                     $('#Prueba2').after('<div id="VerContenedor" class="VerContenedor">');
+
+                    var arrayOut = new Array();
+                    var unicos = list.filter(function (e) {
+                        return arrayOut[e.user.nombre] ? false : (arrayOut[e.user.nombre] = true);
+                    });
+
                     for (var i = 0; i < list.length; i++) {
-                        
-                        var color2 = i % 2 == 0 ? 'style="background-color: #D6F4FF; border-style: solid; border-width: 2px; border-radius: 8px; border-color: #009FDA; padding-top: 0px; padding-bottom: 0px;padding-left: 10px;padding-right: 10px; "'
+
+                        var color2 = unicos[0].user.nombre == list[i].user.nombre ? 'style="background-color: #D6F4FF; border-style: solid; border-width: 2px; border-radius: 8px; border-color: #009FDA; padding-top: 0px; padding-bottom: 0px;padding-left: 10px;padding-right: 10px; "'
                             : 'style="padding-top: 0px; padding-bottom: 0px;padding-left: 10px;padding-right: 10px; background-color: #E0FFD6; border-style: solid; border-width: 2px; border-radius: 8px; border-color: #33D200;"';
 
                         var date = new Date(list[i].fechaCreacionMensaje);
@@ -902,24 +925,23 @@
                         segundo = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
                         horaImprimible = hora + ":" + minuto + ":" + segundo;
                         var salto = list.length - 1 == i ? '' : '<br id="saltoEmilinar">';
-                        var espacio = i % 2 == 0 ?
+                        var espacio = unicos[0].user.nombre == list[i].user.nombre ?
                             '' :
                             '<div class="col-lg-5"></div>';
                         var a =
-                            '<div class="row">'+
-                            espacio+
+                            '<div class="row">' +
+                            espacio +
                             '<div class=col-lg-7><div id = "respuestasUser" ' + color2 + ' >' +
                             '<b><P STYLE="margin-bottom: 0.11in;font-size:11px;"><SPAN LANG="es-PE">' + list[i].user.nombre + '</SPAN></b><FONT SIZE=3><SPAN LANG="es-PE"> </SPAN></FONT> <FONT SIZE=2 > <SPAN LANG="es-PE">' +
                             '</SPAN></FONT> <FONT COLOR="#808080"><SPAN LANG="es-PE">'
                             + $.datepicker.formatDate('dd/mm/yy', new Date(list[i].fechaCreacionMensaje)) + ' ' + horaImprimible + '</SPAN></FONT></FONT > <FONT COLOR="#808080"><FONT SIZE=2 STYLE="font-size: 9pt"><SPAN LANG="es-PE">' +
                             '</SPAN></FONT></P>' +
                             '<P STYLE="margin-bottom: 0.11in"><FONT SIZE=3><SPAN LANG="es-PE">' + list[i].mensaje + '' + '</SPAN></FONT></P>' +
-                            '</div></div>' + espacio +'</div>' + salto;
+                            '</div></div>' + espacio + '</div>' + salto;
 
                         $('#VerContenedor').append(a);
-                        if (i > 3)
-                        {                                                  
-                            $('#VerContenedor').attr('style','height:400px; overflow:auto;overflow-x: hidden;');
+                        if (i > 3) {
+                            $('#VerContenedor').attr('style', 'height:400px; overflow:auto;overflow-x: hidden;');
                         }
                     }
                 }
@@ -1055,7 +1077,7 @@
     $("#mensaje_bandeja_recibidos").click(function () {
         var valCheck = 0;
         changeInputInt("bandeja", valCheck);
-        location.reload();        
+        location.reload();
     });
 
 
@@ -1161,9 +1183,9 @@
     });
 
 
-    $('body').on('shown.bs.modal', '.ModalMensajeAlerta', function () {       
-        $('#idUsuarioBusquedaRespuestaMensajeModal', this).chosen('destroy').chosen({ placeholder_text: "Buscar Usuario", no_results_text: "No se encontró Usuario", allow_single_deselect: true, width: '100%' }).on('chosen:showing_dropdown');        
-        $('#idUsuarioBusquedaRespuestaMensajeModal', this).ajaxChosen({
+    $('body').on('shown.bs.modal', '.ModalMensajeAlerta', function () {
+        $('select[id^=idUsuarioBusquedaRespuestaMensajeModal]', this).chosen('destroy').chosen({ placeholder_text: "Buscar Usuario", no_results_text: "No se encontró Usuario", allow_single_deselect: true, width: '100%' }).on('chosen:showing_dropdown');
+        $('select[id^=idUsuarioBusquedaRespuestaMensajeModal]', this).ajaxChosen({
             dataType: "json",
             type: "GET",
             minTermLength: 3,
@@ -1175,8 +1197,8 @@
             }, { placeholder_text_single: "Buscar Usuario", no_results_text: "No se encontró Usuario" });
     });
 
-    $('body').on('shown.bs.modal', '#MensajeRapido', function () {       
-        cargarTooltipLista();        
+    $('body').on('shown.bs.modal', '#MensajeRapido', function () {
+        cargarTooltipLista();
         $('#idUsuarioBusquedaMensajeModal', this).chosen('destroy').chosen({ placeholder_text: "Buscar Usuario", no_results_text: "No se encontró Usuario", allow_single_deselect: true }).on('chosen:showing_dropdown');
         $('#mensajeFechaInicioMensajeModal').datepicker().datepicker("setDate", new Date());
         $('#mensajeFechaVencimientoMensajeModal').datepicker().datepicker("setDate", '+7');
@@ -1259,62 +1281,62 @@
         });
         return unicos;
     }
-    
+
     function ConteoUsuario() {
         var numUsuarios = $("#idUsuarioBusquedaMensajeModal").val();
         var listRol = new Array();
 
         var idRoles = $('.RolMensajeModal:checkbox:checked');
         if (idRoles.length != 0) {
-            for (i = 0; i < idRoles.length; i++) {                
+            for (i = 0; i < idRoles.length; i++) {
                 listRol.push($(idRoles[i]).val());
             }
-        } else { listRol = 0;}          
-         AjaxNumeroUsuarios(listRol, numUsuarios);
+        } else { listRol = 0; }
+        AjaxNumeroUsuarios(listRol, numUsuarios);
     }
-    function AjaxNumeroUsuarios(listRol,numUsuarios) {
-            $.ajax({
-                url: "/Rol/ListUsuariosRoles",
-                type: 'POST',
-                async: false,
-                dataType: 'JSON',
-                data:
-                {
-                    ListRol: listRol
-                },
-                success: function (list) {
+    function AjaxNumeroUsuarios(listRol, numUsuarios) {
+        $.ajax({
+            url: "/Rol/ListUsuariosRoles",
+            type: 'POST',
+            async: false,
+            dataType: 'JSON',
+            data:
+            {
+                ListRol: listRol
+            },
+            success: function (list) {
 
-                    for (i = 0; i < list.length; i++) {
-                        numUsuarios.push(list[i].idUsuario);
-                    }
-                        numUsuarios = eliminateDuplicados(numUsuarios);
-                        numerofinal = numUsuarios.length;
+                for (i = 0; i < list.length; i++) {
+                    numUsuarios.push(list[i].idUsuario);
+                }
+                numUsuarios = eliminateDuplicados(numUsuarios);
+                numerofinal = numUsuarios.length;
 
-                        $('#etiquetaUsuariosModalNumero').remove();
+                $('#etiquetaUsuariosModalNumero').remove();
 
-                        var etiqueta = '<div class="row form-group" id="etiquetaUsuariosModalNumero"> <label class="col-form-label col-md-3"></label> <div class="col-md-9"> <h5 class="text-danger"><b>Este mensaje se enviará a <span id="numerosa" style="position:absolute; font-size: 1em;" class="labelModificado label-danger">' + numerofinal + '</span><span class="labelModificado label-danger" id="numerosaShadow" style="font-size: 1em;">' + numerofinal + '</span> usuario(s)</b></h5></div></div>';
-                        etiqueta = numerofinal == 0 ? $('#etiquetaUsuariosModalNumero').remove() : etiqueta;
-                        $('#etiquetaRolesModal').before(etiqueta);
+                var etiqueta = '<div class="row form-group" id="etiquetaUsuariosModalNumero"> <label class="col-form-label col-md-3"></label> <div class="col-md-9"> <h5 class="text-danger"><b>Este mensaje se enviará a <span id="numerosa" style="position:absolute; font-size: 1em;" class="labelModificado label-danger">' + numerofinal + '</span><span class="labelModificado label-danger" id="numerosaShadow" style="font-size: 1em;">' + numerofinal + '</span> usuario(s)</b></h5></div></div>';
+                etiqueta = numerofinal == 0 ? $('#etiquetaUsuariosModalNumero').remove() : etiqueta;
+                $('#etiquetaRolesModal').before(etiqueta);
 
 
-                        var element = document.getElementById("numerosa");
-                        var elementShadow = document.getElementById("numerosaShadow");
-                        if (element != null && elementShadow != null) {
-                            element.innerHTML = numerofinal;
-                            elementShadow.innerHTML = numerofinal;
+                var element = document.getElementById("numerosa");
+                var elementShadow = document.getElementById("numerosaShadow");
+                if (element != null && elementShadow != null) {
+                    element.innerHTML = numerofinal;
+                    elementShadow.innerHTML = numerofinal;
+                    element.classList.remove("parpadea");
+
+                    setTimeout(function () {
+                        element.classList.add("parpadea");
+                        setTimeout(function () {
                             element.classList.remove("parpadea");
+                        }, 300);
+                    }, 100);
+                }
+            }
+        });
+    }
 
-                            setTimeout(function () {
-                                element.classList.add("parpadea");
-                                setTimeout(function () {
-                                    element.classList.remove("parpadea");
-                                }, 300);
-                            }, 100);
-                        }
-                    }
-            });
-        }  
-    
     $(document).on('click', "#btnEnviarMensajeModal", function () {
         crearMensajeModal();
     });
@@ -1327,11 +1349,11 @@
         $.ajax({
             url: "/Mensaje/Create",
             type: 'POST',
-            error: function () {
+            error: function (error) {
 
                 $.alert({
                     title: 'Error',
-                    content: 'Se generó un error al intentar crear el mensaje.',
+                    content: 'Se generó un error al intentar enviar el mensaje. | '+error+'',
                     type: 'red',
                     buttons: {
                         OK: function () {
@@ -1370,7 +1392,7 @@
             return false;
         }
 
-        if ($("#tituloModal").val() === "" || $("#tituloModal").val() === null) {
+        if ($("#tituloModal").val().trim() == "" || $("#tituloModal").val() == null) {
             $.alert({
                 title: "Titulo Inválido",
                 type: 'orange',
@@ -1382,7 +1404,7 @@
             return false;
         }
 
-        if ($("#txtMensajeModal").val() == "" || $("#txtMensajeModal").val() == null) {
+        if ($("#txtMensajeModal").val().trim() == "" || $("#txtMensajeModal").val() == null) {
             $.alert({
                 title: "Mensaje Inválido",
                 type: 'orange',
@@ -1423,15 +1445,13 @@
             return false;
         }
 
-        function rangoDias(start,end)
-        {            
-            var days = (end-start) / (1000 * 60 * 60 * 24);
+        function rangoDias(start, end) {
+            var days = (end - start) / (1000 * 60 * 60 * 24);
             return days;
 
-        }       
+        }
 
-        if (rangoDias($("#mensajeFechaInicioMensajeModal").datepicker("getDate"), $("#mensajeFechaVencimientoMensajeModal").datepicker("getDate"))<4)
-        {
+        if (rangoDias($("#mensajeFechaInicioMensajeModal").datepicker("getDate"), $("#mensajeFechaVencimientoMensajeModal").datepicker("getDate")) < 4) {
             $.alert({
                 title: "Rango de Fecha Inválida",
                 type: 'orange',

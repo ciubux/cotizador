@@ -235,18 +235,15 @@ namespace DataLayer
             }
             return obj;
         }
-        public Mensaje MensajeVistoRespuesta(Mensaje obj)
-        {
-            int reenvio;
+        public void MensajeVistoRespuesta(Mensaje obj)
+        {            
             var objCommand = GetSqlCommand("pi_mensaje_visto_repuesta");
             InputParameterAdd.Guid(objCommand, "id_mensaje", obj.id_mensaje);
             InputParameterAdd.Guid(objCommand, "id_usuario", obj.user.idUsuario);
             InputParameterAdd.Varchar(objCommand, "respuesta", obj.mensaje);
             InputParameterAdd.Varchar(objCommand, "titulo", obj.titulo);
             InputParameterAdd.Varchar(objCommand, "importancia", obj.importancia);
-            InputParameterAdd.Int(objCommand, "reenvio", reenvio=obj.listUsuario.Count>0 ?  1 : 0 );
-
-
+            
             DataTable tvp = new DataTable();
             tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
             foreach (Usuario item in obj.listUsuario)
@@ -258,10 +255,7 @@ namespace DataLayer
             SqlParameter tvparam = objCommand.Parameters.AddWithValue("@usuarios", tvp);
             tvparam.SqlDbType = SqlDbType.Structured;
             tvparam.TypeName = "dbo.UniqueIdentifierList";
-
-
-            ExecuteNonQuery(objCommand);
-            return obj;
+            ExecuteNonQuery(objCommand);          
         }
 
 
@@ -329,7 +323,8 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("ps_ver_usuario_respuestas");
             InputParameterAdd.Guid(objCommand, "id_mensaje", obj.id_mensaje);
-            //InputParameterAdd.Int(objCommand, "bandeja", obj.bandeja);
+            InputParameterAdd.Int(objCommand, "bandeja", obj.bandeja);
+            InputParameterAdd.Guid(objCommand, "id_usuario", obj.user.idUsuario);
             List<Usuario> list = new List<Usuario>();
             DataTable dataTable = Execute(objCommand);
             foreach (DataRow row in dataTable.Rows)

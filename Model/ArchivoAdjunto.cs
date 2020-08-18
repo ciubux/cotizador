@@ -28,7 +28,9 @@ namespace Model
             [Display(Name = "Guia de Remisión")]
             GuiaRemision = 3,
             [Display(Name = "Nota de Ingreso")]
-            NotaIngreso= 4
+            NotaIngreso= 4,
+            [Display(Name = "Orden Compra - O/C Cliente")]
+            OrdenCompraOCCliente = 5
         }
 
 
@@ -45,7 +47,9 @@ namespace Model
             [Display(Name = "Guia de Remisión")]
             GuiaRemision = origenes.GuiaRemision,
             [Display(Name = "Nota de Ingreso")]
-            NotaIngreso = origenes.NotaIngreso
+            NotaIngreso = origenes.NotaIngreso,
+            [Display(Name = "Orden Compra - O/C Cliente")]
+            OrdenCompraOCCliente = origenes.OrdenCompraOCCliente
 
         }
 
@@ -56,5 +60,15 @@ namespace Model
         public String metaData { get; set; }
 
         public Guid idCliente { get; set; }
+
+        public enum ArchivoAdjuntoOrigen
+        {
+            PRODUCTO=1,
+            FACTURA=2,
+            PEDIDO=3,
+            GUIA_REMISION=4,
+            OC_OCCLIENTE = 5
+        }
+        
     }
 }
