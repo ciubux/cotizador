@@ -667,6 +667,7 @@
     <Content Include="Views\ClienteLite\List.cshtml" />
     <Content Include="Views\Producto\_LabelDescripcionLarga.cshtml" />
     <Content Include="Views\ArchivoAdjunto\_LoadFiles.cshtml" />
+    <Content Include="Views\ArchivoAdjunto\_ViewFiles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

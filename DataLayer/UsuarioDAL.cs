@@ -285,7 +285,7 @@ namespace DataLayer
                     case "DIAS_MAX_BUSQUEDA_PRECIOS":
                         Constantes.DIAS_MAX_BUSQUEDA_PRECIOS = int.Parse(valorParametro); break;
                     case "OBSERVACION":
-                        Constantes.OBSERVACION = valorParametro; break;
+                        Constantes.OBSERVACION_E = valorParametro; break;
                     case "MILISEGUNDOS_AUTOGUARDADO":
                         Constantes.MILISEGUNDOS_AUTOGUARDADO = int.Parse(valorParametro); break;
                     case "DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION":

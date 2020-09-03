@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "589";
+    TempData["ScriptVersion"] = "604";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -259,14 +259,14 @@
                                         <li id="linkCargaPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Pedido Venta - Carga Masiva", "Load", "Pedido")</li>
                                     }
 
-                                    @if (usuario.tomaPedidosCompra)
+                                    @*@if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
                                     {
-                                        <li id="linkBusquedaPedidosCompra" class="@linkBusquedaPedidosCompra">@Html.ActionLink("Pedido Compra - Búsqueda", "Index", "PedidoCompra")</li>
+                                        <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("O/C Cliente - Búsqueda", "Index", "OrdenCompraCliente")</li>
                                     }
-                                    @if (usuario.tomaPedidosCompra)
+                                    @if (usuario.tomaPedidos)
                                     {
-                                        <li id="linkMantenimientoPedidoCompra" class="@linkMantenimientoPedidoCompra">@Html.ActionLink("Pedido Compra - Crear/Modificar", "Pedir", "PedidoCompra")</li>
-                                    }
+                                        <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("O/C Cliente - Registrar/Modificar", "Editar", "OrdenCompraCliente")</li>
+                                    }*@
 
                                     @if (usuario.creaDocumentosVenta || usuario.tomaPedidosAlmacen)
                                     {
@@ -276,6 +276,16 @@
                                     {
                                         <li id="linkMantenimientoPedidoAlmacen" class="@linkMantenimientoPedidoAlmacen">@Html.ActionLink("Pedido Almacén - Crear/Modificar", "Pedir", "PedidoAlmacen")</li>
                                     }
+
+                                    @if (usuario.tomaPedidosCompra)
+                                    {
+                                        <li id="linkBusquedaPedidosCompra" class="@linkBusquedaPedidosCompra">@Html.ActionLink("Pedido Compra - Búsqueda", "Index", "PedidoCompra")</li>
+                                    }
+                                    @if (usuario.tomaPedidosCompra)
+                                    {
+                                        <li id="linkMantenimientoPedidoCompra" class="@linkMantenimientoPedidoCompra">@Html.ActionLink("Pedido Compra - Crear/Modificar", "Pedir", "PedidoCompra")</li>
+                                    }
+
                                     @if (usuario.apruebaPedidos || usuario.apruebaPedidosCompra || usuario.apruebaPedidosAlmacen)
                                     {
                                         <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Aprobar Pedidos", "AprobarPedidos", "Pedido")</li>

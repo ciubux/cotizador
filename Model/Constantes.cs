@@ -312,11 +312,12 @@ namespace Model
         public static int DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION = 180;
         public static int DIAS_MAX_VIGENCIA_PRECIOS_PEDIDO = 365;
         //public static 
-        public static String OBSERVACION = "* Condiciones de pago: al contado.\n" +
-                                       "* Entrega sujeta a confirmación de disponibilidad luego de recibido el pedido u orden de compra.\n No se garantiza stock debido a coyuntura excepcional de alta demanda.\n" +
+        public static String OBSERVACION_E = "* Condiciones de pago: al contado.\n" +
+                                       "* Entrega sujeta a confirmación de disponibilidad luego de recibido el pedido u orden de compra.\n" +
                                        "* Para productos no stockeables o primeras compras, consultar plazo.\n";
 
         public static String OBSERVACION_COTIZACION_D =  "* Para productos no stockeables o primeras compras, consultar plazo.\n";
+        public static String COTIZACION_OBSERVACIONES_FIJAS = "* Entrega sujeta a confirmación de disponibilidad luego de recibido el pedido u orden de compra.";
         public static int DESCARGAR_XML = 1;
 
 

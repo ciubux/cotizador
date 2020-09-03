@@ -388,18 +388,13 @@
 
                     </div>
 
-
                     <div class="row" style="margin-right: 10px">
                         <div class="col-sm-6 col-lg-9">
-                            <div class="form-group">
-                                <label for="verNombreArchivos" class="control-label col-xs-2">Archivos Adjuntos:</label>
-                                <div class="col-xs-10">
-                                    <ul id="verNombreArchivos"><li>as</li></ul>
-                                </div>
+                            <div class="form-group" id="divVerArchivosOC">
+
                             </div>
                         </div>
                     </div>
-
                 </form>
             </div>
 
@@ -414,7 +409,7 @@
                     <button type="button" id="btnCancelarVerPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     @if (occ.usuario.tomaPedidos || occ.usuario.apruebaPedidos)
                     {
-                        <button type="button" id="btnEditarPedido" class="btn btn-primary ">Editar</button>
+                        <button type="button" id="btnEditarOrdenCompraCliente" class="btn btn-primary ">Editar</button>
                         <button type="button" id="btnGenerarPedido" class="btn btn-primary " data-toggle="modal" data-target="#modalGenerarPedido">Generar Pedido</button>
                     }
 
@@ -477,7 +472,7 @@
                                     <th style="width: 250px;">SKU - Nombre</th>
                                     <th style="width: 120px;">Unidad</th>
                                     <th style="width: 85px;">Cantidad</th>
-                                    <th style="width: 85px;">Faltante</th>
+                                    <th style="width: 85px;">Por Atender</th>
                                     <th style="width: 95px;">Atender</th>
                                     <th>Observacion</th>
                                 </tr>
@@ -753,6 +748,7 @@
 
 
 @section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/archivoAdjunto")
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/ordenCompraCliente")
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/Scripts/App/ubigeo.js")
 }

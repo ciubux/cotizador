@@ -32,7 +32,7 @@ namespace DataLayer
             else
                 InputParameterAdd.Guid(objCommand, "idCotizacion", occ.cotizacion.idCotizacion); //puede ser null
 
-            //InputParameterAdd.Guid(objCommand, "idCiudad", occ.ciudad.idCiudad);
+            InputParameterAdd.Guid(objCommand, "idCiudad", occ.ciudad.idCiudad);
             //InputParameterAdd.Guid(objCommand, "idCliente", occ.cliente.idCliente);
             InputParameterAdd.Int(objCommand, "idClienteSunat", occ.clienteSunat.idClienteSunat);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", occ.numeroReferenciaCliente); //puede ser null
@@ -86,132 +86,28 @@ namespace DataLayer
         public void UpdateOrdenCompraCliente(OrdenCompraCliente occ)
         {
             this.BeginTransaction(IsolationLevel.ReadCommitted);
-            var objCommand = GetSqlCommand("pu_occ");
+            var objCommand = GetSqlCommand("pu_ordenCompraCliente");
 
             InputParameterAdd.Guid(objCommand, "idOrdenCompraCliente", occ.idOrdenCompraCliente); //puede ser null
 
-            if (occ.cotizacion.idCotizacion == Guid.Empty)
-                InputParameterAdd.Guid(objCommand, "idCotizacion", null); //puede ser null
-            else
-                InputParameterAdd.Guid(objCommand, "idCotizacion", occ.cotizacion.idCotizacion); //puede ser null
+            //if (occ.cotizacion.idCotizacion == Guid.Empty)
+            //    InputParameterAdd.Guid(objCommand, "idCotizacion", null); //puede ser null
+            //else
+            //    InputParameterAdd.Guid(objCommand, "idCotizacion", occ.cotizacion.idCotizacion); //puede ser null
 
             InputParameterAdd.Guid(objCommand, "idCiudad", occ.ciudad.idCiudad);
-            InputParameterAdd.Guid(objCommand, "idCliente", occ.cliente.idCliente);
+            InputParameterAdd.Int(objCommand, "idClienteSunat", occ.clienteSunat.idClienteSunat);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", occ.numeroReferenciaCliente); //puede ser null
 
-            if (occ.claseOrdenCompraCliente == OrdenCompraCliente.ClasesOrdenCompraCliente.Venta)
-            {
-                InputParameterAdd.Guid(objCommand, "idDireccionEntrega", occ.direccionEntrega.idDireccionEntrega); //puede ser null
-                InputParameterAdd.Varchar(objCommand, "direccionEntrega", occ.direccionEntrega.descripcion);  //puede ser null
-                InputParameterAdd.Varchar(objCommand, "contactoEntrega", occ.direccionEntrega.contacto); //puede ser null
-                InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", occ.direccionEntrega.telefono); //puede ser null
-                InputParameterAdd.Varchar(objCommand, "codigoCliente", occ.direccionEntrega.codigoCliente); //puede ser null
-                InputParameterAdd.Varchar(objCommand, "codigoMP", occ.direccionEntrega.codigoMP); //puede ser null
-                InputParameterAdd.Varchar(objCommand, "nombre", occ.direccionEntrega.nombre); //puede ser null
-                InputParameterAdd.Varchar(objCommand, "observacionesDireccionEntrega", occ.direccionEntrega.observaciones); //puede ser null
-            }
-            else if (occ.claseOrdenCompraCliente == OrdenCompraCliente.ClasesOrdenCompraCliente.Compra)
-            {
-                InputParameterAdd.Guid(objCommand, "idDireccionEntrega", null); //puede ser null
-                InputParameterAdd.Varchar(objCommand, "direccionEntrega", null);  //puede ser null
-                InputParameterAdd.Varchar(objCommand, "contactoEntrega", null); //puede ser null
-                InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", null); //puede ser null
-                InputParameterAdd.Varchar(objCommand, "codigoCliente", null); //puede ser null
-                InputParameterAdd.Varchar(objCommand, "codigoMP", null); //puede ser null
-                InputParameterAdd.Varchar(objCommand, "nombre", null); //puede ser null
-                InputParameterAdd.Varchar(objCommand, "observacionesDireccionEntrega", null); //puede ser null
-            }
-            else
-            {
-                if (occ.tipoOrdenCompraClienteAlmacen == OrdenCompraCliente.tiposOrdenCompraClienteAlmacen.TrasladoInterno ||
-                    occ.tipoOrdenCompraClienteAlmacen == OrdenCompraCliente.tiposOrdenCompraClienteAlmacen.PrestamoEntregado
-                )
-                {
-                    InputParameterAdd.Guid(objCommand, "idDireccionEntrega", occ.direccionEntrega.idDireccionEntrega); //puede ser null
-                    InputParameterAdd.Varchar(objCommand, "direccionEntrega", occ.direccionEntrega.descripcion);  //puede ser null
-                    InputParameterAdd.Varchar(objCommand, "contactoEntrega", occ.direccionEntrega.contacto); //puede ser null
-                    InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", occ.direccionEntrega.telefono); //puede ser null
-                    InputParameterAdd.Varchar(objCommand, "codigoCliente", occ.direccionEntrega.codigoCliente); //puede ser null
-                    InputParameterAdd.Varchar(objCommand, "codigoMP", occ.direccionEntrega.codigoMP); //puede ser null
-                    InputParameterAdd.Varchar(objCommand, "nombre", occ.direccionEntrega.nombre); //puede ser null
-                    InputParameterAdd.Varchar(objCommand, "observacionesDireccionEntrega", occ.direccionEntrega.observaciones); //puede ser null
-                }
-                else
-                {
-                    InputParameterAdd.Guid(objCommand, "idDireccionEntrega", null); //puede ser null
-                    InputParameterAdd.Varchar(objCommand, "direccionEntrega", null);  //puede ser null
-                    InputParameterAdd.Varchar(objCommand, "contactoEntrega", null); //puede ser null
-                    InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", null); //puede ser null
-                    InputParameterAdd.Varchar(objCommand, "codigoCliente", null); //puede ser null
-                    InputParameterAdd.Varchar(objCommand, "codigoMP", null); //puede ser null
-                    InputParameterAdd.Varchar(objCommand, "nombre", null); //puede ser null
-                    InputParameterAdd.Varchar(objCommand, "observacionesDireccionEntrega", null); //puede ser null
-                }
-            }
 
             InputParameterAdd.DateTime(objCommand, "fechaSolicitud", occ.fechaSolicitud);
-            InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", occ.fechaEntregaDesde.Value);
-            InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", occ.fechaEntregaHasta.Value);
+            
 
-            InputParameterAdd.Bit(objCommand, "esPagoContado", occ.esPagoContado);
+            InputParameterAdd.Guid(objCommand, "idSolicitante", occ.solicitante.idSolicitante);
+            InputParameterAdd.Varchar(objCommand, "contactoOrdenCompraCliente", occ.solicitante.nombre);  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "telefonoContactoOrdenCompraCliente", occ.solicitante.telefono);  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "correoContactoOrdenCompraCliente", occ.solicitante.correo);  //puede ser null
 
-            DateTime dtTmp = DateTime.Now;
-            String[] horaEntregaDesdeArray = occ.horaEntregaDesde.Split(':');
-            DateTime horaEntregaDesde = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaDesdeArray[0]), Int32.Parse(horaEntregaDesdeArray[1]), 0);
-            String[] horaEntregaHastaArray = occ.horaEntregaHasta.Split(':');
-            DateTime horaEntregaHasta = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaHastaArray[0]), Int32.Parse(horaEntregaHastaArray[1]), 0);
-            InputParameterAdd.DateTime(objCommand, "horaEntregaDesde", horaEntregaDesde);
-            InputParameterAdd.DateTime(objCommand, "horaEntregaHasta", horaEntregaHasta);
-
-            if (occ.horaEntregaAdicionalDesde != null && !occ.horaEntregaAdicionalDesde.Equals("")
-                && occ.horaEntregaAdicionalDesde != null && !occ.horaEntregaAdicionalDesde.Equals(""))
-            {
-                String[] horaEntregaAdicionalDesdeArray = occ.horaEntregaAdicionalDesde.Split(':');
-                DateTime horaEntregaAdicionalDesde = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaAdicionalDesdeArray[0]), Int32.Parse(horaEntregaAdicionalDesdeArray[1]), 0);
-                String[] horaEntregaAdicionalHastaArray = occ.horaEntregaAdicionalHasta.Split(':');
-                DateTime horaEntregaAdicionalHasta = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaAdicionalHastaArray[0]), Int32.Parse(horaEntregaAdicionalHastaArray[1]), 0);
-                InputParameterAdd.DateTime(objCommand, "horaEntregaAdicionalDesde", horaEntregaAdicionalDesde);
-                InputParameterAdd.DateTime(objCommand, "horaEntregaAdicionalHasta", horaEntregaAdicionalHasta);
-            } else
-            {
-                InputParameterAdd.DateTime(objCommand, "horaEntregaAdicionalDesde", null);
-                InputParameterAdd.DateTime(objCommand, "horaEntregaAdicionalHasta", null);
-            }
-
-
-            if (occ.claseOrdenCompraCliente == OrdenCompraCliente.ClasesOrdenCompraCliente.Venta)
-            {
-                InputParameterAdd.Guid(objCommand, "idSolicitante", occ.solicitante.idSolicitante);
-                InputParameterAdd.Varchar(objCommand, "contactoOrdenCompraCliente", occ.solicitante.nombre);  //puede ser null
-                InputParameterAdd.Varchar(objCommand, "telefonoContactoOrdenCompraCliente", occ.solicitante.telefono);  //puede ser null
-                InputParameterAdd.Varchar(objCommand, "correoContactoOrdenCompraCliente", occ.solicitante.correo);  //puede ser null
-            }
-            else if (occ.claseOrdenCompraCliente == OrdenCompraCliente.ClasesOrdenCompraCliente.Compra)
-            {
-                InputParameterAdd.Guid(objCommand, "idSolicitante", null);
-                InputParameterAdd.Varchar(objCommand, "contactoOrdenCompraCliente", null);  //puede ser null
-                InputParameterAdd.Varchar(objCommand, "telefonoContactoOrdenCompraCliente", null);  //puede ser null
-                InputParameterAdd.Varchar(objCommand, "correoContactoOrdenCompraCliente", null);  //puede ser null
-            }
-            else
-            {
-                if (occ.tipoOrdenCompraClienteAlmacen == OrdenCompraCliente.tiposOrdenCompraClienteAlmacen.TrasladoInterno ||
-                    occ.tipoOrdenCompraClienteAlmacen == OrdenCompraCliente.tiposOrdenCompraClienteAlmacen.PrestamoEntregado
-                )
-                {
-                    InputParameterAdd.Guid(objCommand, "idSolicitante", occ.solicitante.idSolicitante);
-                    InputParameterAdd.Varchar(objCommand, "contactoOrdenCompraCliente", occ.solicitante.nombre);  //puede ser null
-                    InputParameterAdd.Varchar(objCommand, "telefonoContactoOrdenCompraCliente", occ.solicitante.telefono);  //puede ser null
-                    InputParameterAdd.Varchar(objCommand, "correoContactoOrdenCompraCliente", occ.solicitante.correo);  //puede ser null
-                }
-                else
-                {
-                    InputParameterAdd.Guid(objCommand, "idSolicitante", null);
-                    InputParameterAdd.Varchar(objCommand, "contactoOrdenCompraCliente", null);  //puede ser null
-                    InputParameterAdd.Varchar(objCommand, "telefonoContactoOrdenCompraCliente", null);  //puede ser null
-                    InputParameterAdd.Varchar(objCommand, "correoContactoOrdenCompraCliente", null);  //puede ser null
-                }
-            }
 
             InputParameterAdd.SmallInt(objCommand, "incluidoIGV", (short)(occ.incluidoIGV ? 1 : 0));
             InputParameterAdd.Decimal(objCommand, "tasaIGV", Constantes.IGV);
@@ -219,28 +115,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "total", occ.montoTotal);
             InputParameterAdd.Varchar(objCommand, "observaciones", occ.observaciones);  //puede ser null
             InputParameterAdd.Guid(objCommand, "idUsuario", occ.usuario.idUsuario);
-            if (occ.claseOrdenCompraCliente == OrdenCompraCliente.ClasesOrdenCompraCliente.Venta)
-            {
-                InputParameterAdd.Char(objCommand, "tipoOrdenCompraCliente", ((char)occ.tipoOrdenCompraCliente).ToString());
-                InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", occ.observacionesGuiaRemision);
-                InputParameterAdd.Varchar(objCommand, "observacionesFactura", occ.observacionesFactura);
-            }
-            else if (occ.claseOrdenCompraCliente == OrdenCompraCliente.ClasesOrdenCompraCliente.Compra)
-            {
-                InputParameterAdd.Char(objCommand, "tipoOrdenCompraCliente", ((char)occ.tipoOrdenCompraClienteCompra).ToString());
-                InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", null);
-                InputParameterAdd.Varchar(objCommand, "observacionesFactura", null);
-            }
-            else if (occ.claseOrdenCompraCliente == OrdenCompraCliente.ClasesOrdenCompraCliente.Almacen)
-            {
-                InputParameterAdd.Char(objCommand, "tipoOrdenCompraCliente", ((char)occ.tipoOrdenCompraClienteAlmacen).ToString());
-                InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", occ.observacionesGuiaRemision);
-                InputParameterAdd.Varchar(objCommand, "observacionesFactura", null);
-            }
-            InputParameterAdd.Varchar(objCommand, "ubigeoEntrega", occ.ubigeoEntrega.Id);
-            InputParameterAdd.Decimal(objCommand, "otrosCargos", occ.otrosCargos);
-            InputParameterAdd.Varchar(objCommand, "numeroRequerimiento", occ.numeroRequerimiento);
-            
+
 
             ExecuteNonQuery(objCommand);
 
@@ -251,11 +126,7 @@ namespace DataLayer
                 //occDetalle.usuario = occ.usuario;
                 this.InsertOrdenCompraClienteDetalle(occDetalle, occ.usuario);
             }
-
-            foreach (ArchivoAdjunto occAdjunto in occ.AdjuntoList)
-            {
-                this.InsertOrdenCompraClienteAdjunto(occ.idOrdenCompraCliente, occAdjunto);
-            }
+            
             this.Commit();
         }           
     
@@ -588,7 +459,10 @@ namespace DataLayer
                 occ.ubigeoEntrega.Provincia = Converter.GetString(row, "provincia");
                 occ.ubigeoEntrega.Distrito = Converter.GetString(row, "distrito");
 
-
+                occ.ciudad = new Ciudad();
+                occ.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                occ.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
+                occ.ciudad.idClienteRelacionado = Converter.GetGuid(row, "id_cliente_ciudad");
 
                 occ.cotizacion = new Cotizacion();
                 occ.cotizacion.idCotizacion = Converter.GetGuid(row, "id_cotizacion");

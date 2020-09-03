@@ -13,6 +13,7 @@ namespace Cotizador.Models
         public string CiudadSelectId { get; set; }
         public string SelectedValue { get; set; }
 
+        public bool incluirSeleccione { get; set; }
         public List<Ciudad> Data { get; set; }
 
         public IEnumerable<SelectListItem> Ciudades

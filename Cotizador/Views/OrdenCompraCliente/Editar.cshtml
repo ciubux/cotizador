@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Crear/Modificar Orden de Compra Cliente";
+    ViewBag.Title = "Registrar/Modificar Orden de Compra Cliente";
     Model.OrdenCompraCliente occ = ViewBag.occ;
     Model.Solicitante solicitante = ViewBag.solicitante;
     // Model.occ.OpcionesConsiderarCantidades opcionesConsiderarCantidades;
@@ -36,22 +36,40 @@
                 </div>
             </div>
 
+            <!--CIUDAD-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => occ.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
+                    <div class="col-xs-8">
+                        @Html.Action("GetCiudades", "Ciudad",
+                            new
+                            {
+                                ciudadSelectId = "idCiudad",
+                                selectedValue = occ.ciudad.idCiudad
+                            })
+                        <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">
+                            La selección de la sede de registro no impide que la O/C del cliente sea atendida a traves de pedidos ingresados en otras sedes. La sede seleccionada solo sirve de referencia para la búsqueda de precios registrados y datos de solicitante.
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
             <!--NÚMERO COTIZACION-->
             @*<div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(p => occ.cotizacion.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
-                        <div class="col-xs-8">
-                            @if (occ.cotizacion.codigo != 0)
-                            {
-                                @Html.TextBoxFor(p => occ.cotizacion.codigo, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                            }
-                            else
-                            {
-                                @Html.TextBoxFor(p => occ.cotizacion.codigo, htmlAttributes: new { @class = "form-control", @disabled = "disabled", Value = "" })
-                            }
-                        </div>
-                    </div>
-                </div>*@
+            <div class="form-group">
+                @Html.LabelFor(p => occ.cotizacion.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
+                <div class="col-xs-8">
+                    @if (occ.cotizacion.codigo != 0)
+                    {
+                        @Html.TextBoxFor(p => occ.cotizacion.codigo, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(p => occ.cotizacion.codigo, htmlAttributes: new { @class = "form-control", @disabled = "disabled", Value = "" })
+                    }
+                </div>
+            </div>
+        </div>*@
 
 
         </div>
@@ -91,12 +109,12 @@
         </div>
 
         <fieldset>
-            <legend>Datos de la Solicitud:</legend>
+            <legend>Datos de la O/C:</legend>
 
             <div class="row mostrarDatosParaGuia">
                 <div class="col-sm-6 col-lg-8">
                     <div class="form-group">
-                        @Html.LabelFor(p => occ.solicitante, htmlAttributes: new { @class = "control-label  col-xs-4 col-lg-2" })
+                        <label for="idCliente" class="control-label col-xs-4 col-lg-2">Enviado Por:</label>
                         <div class="col-xs-8 col-lg-9">
                             @Html.DropDownList("occ_solicitante",
 
@@ -117,7 +135,7 @@
             <div class="row mostrarDatosParaGuia">
                 <div class="col-sm-6 col-lg-8">
                     <div class="form-group">
-                        <label for="occ_solicitante_nombre" class="control-label col-xs-2">Datos de Solicitante:</label>
+                        <label for="occ_solicitante_nombre" class="control-label col-xs-2">Datos de Contacto:</label>
                         <div class="input-group col-xs-6">
                             <div class="input-group-addon">
                                 <span class="input-group-text" id="basic-addon1">Nombre:</span>
@@ -148,29 +166,11 @@
                 <!--FECHA SOLICITUD -->
                 <div class="col-sm-6 col-lg-4">
                     <div class="form-group">
-                        <label for="fechaSolicitud" class="control-label col-xs-6 col-lg-4">Fecha de Solicitud:</label>
+                        <label for="fechaSolicitud" class="control-label col-xs-6 col-lg-4">Fecha de Emisión:</label>
                         <div class="input-group col-xs-8 col-lg-8">
 
                             <input type="hidden" id="fechaSolicitudTmp" value="@ViewBag.fechaSolicitud" />
                             <input class="form-control" type="text" id="fechaSolicitud" name="fechaSolicitud" autocomplete="off">
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <!--HORA SOLICITUD -->
-                <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        <label for="fechaEntrega" class="control-label col-xs-6 col-lg-4">Hora de Solicitud:</label>
-                        <!-- <div class="input-group col-xs-6 col-lg-8">
-                            <div class="input-group-addon" style="width:70px">
-                                <span class="input-group-text" id="basic-addon1">Hora:</span>
-                            </div>
-
-                        </div>-->
-                        <div class="input-group col-xs-8 col-lg-8">
-                            <input class="form-control" type="time" id="horaSolicitud" name="horaSolicitud" value="@ViewBag.horaSolicitud">
                         </div>
                     </div>
                 </div>
@@ -236,9 +236,7 @@
         <div class="row" style="margin-bottom:10px; margin-right:0px; margin-left:10px">
 
             <div class="pull-left">
-                <button id="btnAgregarProductosDesdePreciosRegistrados" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBuscarPreciosRegistrados">Importar Detalle Desde Precios Registrados en Facturación</button>
-                &nbsp;
-                <button id="btnAgregarCanasta" type="button" class="btn btn-primary">Importar Productos Cotizados</button>
+                
             </div>
 
             <div class="pull-right">
@@ -494,7 +492,7 @@
 
 
             <div class="pull-right">
-                <button type="button" id="btnCancelarPedido" class="btn btn-danger">Cancelar</button>
+                <button type="button" id="btnCancelarOrdenCompraCliente" class="btn btn-danger">Cancelar</button>
                 @if (occ.numeroOrdenCompraCliente > 0)
                 {
                     <button id="btnFinalizarEdicionOrdenCompraCliente" type="button" class="btn btn-success">Finalizar Edición</button>

@@ -219,5 +219,17 @@ function CargarArchivos(files) {
     }
 
 
-
+function htmlVerArchivosAdjuntos(idRegistro, origen, callback) {
+    $.ajax({
+        url: "/ArchivoAdjunto/verArchivos",
+        type: 'POST',
+        data: { idRegistro: idRegistro, origen: origen },
+        error: function (detalle) {
+            alert(detalle);
+        },
+        success: function (html) {
+            callback(html);
+        }
+    });
+}
 

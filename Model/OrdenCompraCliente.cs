@@ -37,7 +37,7 @@ namespace Model
 
 
         public Cotizacion cotizacion { get; set; }
-        [Display(Name = "Sede MP:")]
+        [Display(Name = "Sede:")]
         public Ciudad ciudad { get; set; }
 
         [Display(Name = "Solicitar A:")]

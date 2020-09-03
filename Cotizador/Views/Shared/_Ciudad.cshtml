@@ -1,9 +1,24 @@
-﻿@model Cotizador.Models.CiudadViewModels 
+﻿@model Cotizador.Models.CiudadViewModels
+
+@if (Model.incluirSeleccione)
+{
 @Html.DropDownList(
-    Model.CiudadSelectId,
-    Model.Ciudades, "Seleccione la sede MP",
-    new
-    {
-        id = Model.CiudadSelectId,
-        @class = "form-control"
-    })
+            Model.CiudadSelectId,
+            Model.Ciudades, "Seleccione la sede",
+            new
+            {
+                id = Model.CiudadSelectId,
+                @class = "form-control"
+            })
+}
+else
+{
+@Html.DropDownList(
+        Model.CiudadSelectId,
+        Model.Ciudades,
+        new
+        {
+            id = Model.CiudadSelectId,
+            @class = "form-control"
+        })
+}

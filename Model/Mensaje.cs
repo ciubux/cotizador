@@ -35,7 +35,37 @@ namespace Model
 
         public DateTime fechaModificacionMensaje { get; set; }
 
+        public String fechaVencimientoMensajeDesdeText { get {
+                return fechaVencimientoMensajeDesde == null ? "" : fechaVencimientoMensajeDesde.Value.ToString();
+            }
+        }
+
+        public String fechaVencimientoMensajeHastaText
+        {
+            get
+            {
+                return fechaVencimientoMensajeHasta == null ? "" : fechaVencimientoMensajeHasta.Value.ToString();
+            }
+        }
+
+        public String fechaCreacionMensajeDesdeText
+        {
+            get
+            {
+                return fechaCreacionMensajeDesde == null ? "" : fechaCreacionMensajeDesde.Value.ToString();
+            }
+        }
+
+        public String fechaCreacionMensajeHastaText
+        {
+            get
+            {
+                return fechaCreacionMensajeHasta == null ? "" : fechaCreacionMensajeHasta.Value.ToString();
+            }
+        }
+
         public String titulo { get; set; }
+
 
         public String mensaje { get; set; }
 

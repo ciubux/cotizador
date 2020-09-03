@@ -252,9 +252,10 @@ jQuery(function ($) {
             success: function (cliente)
             {
                 
-                if ($("#pagina").val() == PAGINA_MANTENIMIENTO_PEDIDO_COMPRA)
+                if ($("#pagina").val() == PAGINA_MANTENIMIENTO_PEDIDO_COMPRA) {
                     $("#idCiudad").attr("disabled", "disabled");
-
+                    window.location.reload();
+                }
                 $("#idCiudad").attr("disabled", "disabled");
 
 
@@ -742,6 +743,23 @@ jQuery(function ($) {
     });
 
 
+    $("#chkEsPagoContado").change(function () {
+        var valor = 1;
+        if (!$('#chkEsPagoContado').prop('checked')) {
+            valor = 0;
+        }
+        $.ajax({
+            url: "/PedidoCompra/ChangeEsPagoContado",
+            type: 'POST',
+            data: {
+                esPagoContado: valor
+            },
+            dataType: 'JSON',
+            success: function (result) {
+                $("#pedido_textoCondicionesPago").val(result.textoCondicionesPago);
+            }
+        });
+    });
 
 
 

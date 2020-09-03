@@ -2676,10 +2676,19 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
                         descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
                     }
 
+                    var descripcionLargaLabel = "";
+                    if (lista[i].producto.descripcionLarga != null && lista[i].producto.descripcionLarga != '') {
+                        descripcionLargaLabel = "<br/>" + $("#spnDescripcionLargaInfo").html();
+
+                        lista[i].producto.descripcionLarga = lista[i].producto.descripcionLarga.trim();
+                        descripcionLargaLabel = descripcionLargaLabel.replace("_DATA_TIPSO_", lista[i].producto.descripcionLarga);
+                        descripcionLargaLabel = descripcionLargaLabel.replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+                    }
+
                     d += '<tr>' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
                         '<td>' + lista[i].producto.sku + descontinuadoLabel + '</td>' +
-                        '<td>' + lista[i].producto.descripcion + '</td>' +
+                        '<td>' + lista[i].producto.descripcion + descripcionLargaLabel + '</td>' +
                         '<td>' + lista[i].unidad + '</td>' +
                         '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + lista[i].producto.image + '"> </td>' +
                         '<td>' + lista[i].precioLista.toFixed(cantidadDecimales) + '</td>' +

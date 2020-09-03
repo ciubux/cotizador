@@ -267,7 +267,7 @@ namespace Cotizador.Controllers
                 ViewBag.Si = Constantes.MENSAJE_SI;
                 ViewBag.No = Constantes.MENSAJE_NO;
                 ViewBag.IGV = Constantes.IGV;
-
+                ViewBag.pagina = (int) Constantes.paginas.MantenimientoPedidoCompra;
 
                 //Si no se está trabajando con una cotización se crea una y se agrega a la sesion
 
@@ -312,7 +312,6 @@ namespace Cotizador.Controllers
                 logBL.insertLog(log);
             }
 
-            ViewBag.pagina = (int)Constantes.paginas.MantenimientoPedido;
             return View();
         }
 
@@ -1299,12 +1298,20 @@ namespace Cotizador.Controllers
 
 
 
+        public String ChangeEsPagoContado()
+        {
+            Pedido pedido = this.PedidoSession;
+            try
+            {
+                pedido.esPagoContado = Int32.Parse(this.Request.Params["esPagoContado"]) == 1;
+            }
+            catch (Exception ex)
+            {
+            }
+            this.PedidoSession = pedido;
 
-
-
-
-
-
+            return "{\"textoCondicionesPago\":\"" + pedido.textoCondicionesPago + "\"}";
+        }
 
 
 

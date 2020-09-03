@@ -66,6 +66,7 @@ namespace Cotizador.Controllers
             cotizacionTmp.usuario = (Usuario)this.Session["usuario"];
             cotizacionTmp.usuarioBusqueda = new Usuario { idUsuario = Guid.Empty };
             cotizacionTmp.aplicaSedes = false;
+            cotizacionTmp.observacionesFijas = "* Entrega sujeta a confirmación de disponibilidad luego de recibido el pedido u orden de compra.";
             this.CotizacionSession = cotizacionTmp;
             this.Session[Constantes.VAR_SESSION_COTIZACION_LISTA] = new List<Cotizacion>();
         }
@@ -247,7 +248,7 @@ namespace Cotizador.Controllers
         public ActionResult Cotizar()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoCotizacion;
-
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             try
             {
                 //Si no hay usuario, se dirige el logueo
@@ -257,7 +258,7 @@ namespace Cotizador.Controllers
                 }
                 else
                 {
-                    Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                    
                     if (!usuario.creaCotizaciones)
                     {
                         return RedirectToAction("Login", "Account");
@@ -307,7 +308,7 @@ namespace Cotizador.Controllers
 
                 //Se agrega el viewbag numero para poder mostrar el campo vacío cuando no se está creando una cotización
                 ViewBag.numero = cotizacion.codigo;
-
+                cotizacion.usuario = usuario;
                 ViewBag.cotizacion = cotizacion;
                 ViewBag.busquedaProductosIncluyeDescontinuados = 0;
                 if (this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"] != null)
@@ -317,7 +318,6 @@ namespace Cotizador.Controllers
             }
             catch (Exception ex)
             {
-                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
                 LogBL logBL = new LogBL();
                 logBL.insertLog(log);

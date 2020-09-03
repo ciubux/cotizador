@@ -130,6 +130,23 @@ namespace Cotizador.Controllers
             return PartialView("_LoadFiles", model);
         }
 
+        public PartialViewResult verArchivos(string origen, Guid idRegistro)
+        {
+            Usuario user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            ArchivoAdjunto obj = new ArchivoAdjunto();
+            obj.usuario = new Usuario();
+            obj.usuario = user;
+            obj.origen = origen;
+            obj.idRegistro = idRegistro;
+            ArchivoAdjuntoBL arcBL = new ArchivoAdjuntoBL();
+            List<ArchivoAdjunto> listaArchivos = arcBL.getListArchivoAdjuntoByIdRegistro(idRegistro);
+
+            var model = listaArchivos;
+
+            ViewBag.origen = origen;
+            return PartialView("_ViewFiles", model);
+        }
+
 
         [HttpPost]
         public String ChangeFiles(HttpPostedFileBase file, String origen)

@@ -912,13 +912,11 @@ jQuery(function ($) {
 
     $(".fechaSolicitud").change(function () {
         var fechaSolicitud = $("#fechaSolicitud").val();
-        var horaSolicitud = $("#horaSolicitud").val();
         $.ajax({
             url: "/OrdenCompraCliente/ChangeFechaSolicitud",
             type: 'POST',
             data: {
-                fechaSolicitud: fechaSolicitud,
-                horaSolicitud: horaSolicitud
+                fechaSolicitud: fechaSolicitud
             },
             success: function () {
             }
@@ -2017,20 +2015,6 @@ jQuery(function ($) {
             return false;
         }
 
-        var horaSolicitud = $("#horaSolicitud").val();
-        if (horaSolicitud == null || horaSolicitud.trim() == "") {
-            $("#horaSolicitud").focus();
-            $.alert({
-                title: TITLE_VALIDACION_OCC,
-                content: 'Debe ingresar la hora de la solicitud.',
-                buttons: {
-                    OK: function () { }
-                }
-            });
-            return false;
-        }
-
-
         
         if ($("#occ_solicitante_nombre").val().trim() == "") {
             $('#occ_solicitante_nombre').focus();
@@ -2784,8 +2768,10 @@ jQuery(function ($) {
                 // sleep
                 $("#tableDetalleOrdenCompraCliente").append(d);
 
-
-
+                $("#divVerArchivosOC").html("");
+                htmlVerArchivosAdjuntos(ordenCompraCliente.idOrdenCompraCliente, 'OC_OCCLIENTE', function (html) {
+                    $("#divVerArchivosOC").html(html);
+                });
                 
 
 
@@ -2816,7 +2802,7 @@ jQuery(function ($) {
     }
 
 
-
+    
 
    
     $("#btnCancelarOrdenCompraCliente").click(function () {
@@ -2865,7 +2851,7 @@ jQuery(function ($) {
 
 
     $("#btnEditarOrdenCompraCliente").click(function () {
-        desactivarBotonesVer();
+        //desactivarBotonesVer();
         //Se identifica si existe cotizacion en curso, la consulta es sincrona
         $.ajax({
             url: "/OrdenCompraCliente/ConsultarSiExisteOrdenCompraCliente",
@@ -2878,22 +2864,21 @@ jQuery(function ($) {
                     $.ajax({
                         url: "/OrdenCompraCliente/iniciarEdicionOrdenCompraCliente",
                         type: 'POST',
-                        error: function (detalle) { alert("Ocurrió un problema al iniciar la edición del ordenCompraCliente."); },
+                        error: function (detalle) { alert("Ocurrió un problema al iniciar la edición de la Orden de Compra."); },
                         success: function (fileName) {
-                            window.location = '/OrdenCompraCliente/Pedir';
+                            window.location = '/OrdenCompraCliente/Editar';
                         }
                     });
 
                 }
                 else {
                     if(resultado.numero == 0) {
-                        alert('Está creando un nuevo ordenCompraCliente; para continuar por favor diríjase a la página "Crear/Modificar OrdenCompraCliente" y luego haga clic en el botón Cancelar, Finalizar Creación o Guardar y Continuar Editando Luego.');
-                    }
-                        else {
+                        alert('Está registrando una nueva Orden de Compra; para continuar por favor diríjase a la página "Crear/Modificar O/C Cliente" y luego haga clic en el botón Cancelar, Finalizar Creación o Guardar y Continuar Editando Luego.');
+                    } else {
                         if(resultado.numero == $("#verNumero").html())
-                                alert('Ya se encuentra editando el ordenCompraCliente número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar OrdenCompraCliente".');
-                            else
-                                alert('Está editando el ordenCompraCliente número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar OrdenCompraCliente" y luego haga clic en el botón Cancelar, Finalizar Edición o Guardar y Continuar Editando Luego.');
+                            alert('Ya se encuentra editando la Orden de Compra número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar O/C Cliente".');
+                        else
+                            alert('Está editando el ordenCompraCliente número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar O/C Cliente" y luego haga clic en el botón Cancelar, Finalizar Edición o Guardar y Continuar Editando Luego.');
                     }
                     activarBotonesVer();
                 }
@@ -4478,6 +4463,7 @@ jQuery(function ($) {
                 location.reload();
             },
             success: function (ciudad) {
+                location.reload();
             }
         });
     });  

@@ -631,6 +631,27 @@ namespace DataLayer
             return clienteList;
         }
 
+        public List<Ciudad> getCiudadesSedes(int idClienteSunat)
+        {
+            var objCommand = GetSqlCommand("ps_clienteCiudadesSedes");
+            InputParameterAdd.Int(objCommand, "idClienteSunat", idClienteSunat);
+            DataTable dataTable = Execute(objCommand);
+
+            List<Ciudad>  sedes = new List<Ciudad>();
+            //Detalle de la cotizacion
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Ciudad sede = new Ciudad();
+
+                sede.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                sede.nombre = Converter.GetString(row, "nombre");
+                sede.idClienteRelacionado = Converter.GetGuid(row, "id_cliente");
+
+                sedes.Add(sede);
+            }
+
+            return sedes;
+        }
 
         public List<Cliente> SelectClientes(Cliente cliente)
         {

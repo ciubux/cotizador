@@ -1199,11 +1199,12 @@ jQuery(function ($) {
                     $("#pvDES_MTVO_NC_ND").html(documentoVenta.cPE_CABECERA_BE.DES_MTVO_NC_ND);
 
                     /*Documento Referencia*/
-
-                    $("#vpREFERENCIA_FECHA_EMISION").html(documentoVenta.cPE_DOC_REF_BEList[0].FEC_DOC_REF);
-                    var numeroReferencia = documentoVenta.cPE_DOC_REF_BEList[0].NUM_SERIE_CPE_REF + "-"
-                        + documentoVenta.cPE_DOC_REF_BEList[0].NUM_CORRE_CPE_REF;
-                    $("#vpREFERENCIA_SERIE_CORRELATIVO").html(numeroReferencia);
+                    if (documentoVenta.cPE_DOC_REF_BEList[0] != undefined) {
+                        $("#vpREFERENCIA_FECHA_EMISION").html(documentoVenta.cPE_DOC_REF_BEList[0].FEC_DOC_REF);
+                        var numeroReferencia = documentoVenta.cPE_DOC_REF_BEList[0].NUM_SERIE_CPE_REF + "-"
+                            + documentoVenta.cPE_DOC_REF_BEList[0].NUM_CORRE_CPE_REF;
+                        $("#vpREFERENCIA_SERIE_CORRELATIVO").html(numeroReferencia);
+                    }
                 }
                 else {
 

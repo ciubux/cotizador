@@ -1,0 +1,28 @@
+﻿@model List<Model.ArchivoAdjunto>
+
+<div class="row">
+    <div class="col-sm-12 col-lg-12">
+        <div class="form-group">
+            <label for="archivoAdjunto" class="control-label col-xs-2">Adjuntos:</label>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-sm-12 col-lg-12">
+        <div class="form-group">
+            <label for="archivoAdjunto" class="control-label col-xs-2"></label>
+            <div class="col-xs-10">
+                <ul id="nombreArchivos">
+                    @foreach(Model.ArchivoAdjunto item in Model) {
+                    <li>
+                        <a href="javascript:mostrar();" class="btnDescargarArchivoAdjunto" idArchivoAdjunto="@item.idArchivoAdjunto"> @item.nombre </a>
+                    </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

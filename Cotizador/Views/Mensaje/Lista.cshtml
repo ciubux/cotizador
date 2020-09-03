@@ -25,7 +25,7 @@
                             <div class="input-group-addon" style="width:70px">
                                 <span class="input-group-text">Desde:</span>
                             </div>
-                            <input class="form-control" type="text" id="mensaje_fechaMensajeEntradaDesde" value="@mensaje.fechaMensajeEntradaDesde" name="fechaCreacionDesde" autocomplete="off">
+                            <input class="form-control" type="text" id="mensaje_fechaMensajeEntradaDesde" value="@mensaje.fechaMensajeEntradaDesde.ToString("dd/MM/yyyy")"name="fechaCreacionDesde" autocomplete="off">
                         </div>
                         <label for="fechaSolicitudHasta" class="control-label col-xs-6 col-lg-4"></label>
                         <div class="input-group col-xs-8 col-lg-8">
@@ -33,7 +33,7 @@
                             <div class="input-group-addon" style="width:70px">
                                 <span class="input-group-text">Hasta:</span>
                             </div>
-                            <input class="form-control" type="text" id="mensaje_fechaMensajeEntradaHasta" value="@mensaje.fechaMensajeEntradaHasta" name="fechaCreacionDesde" autocomplete="off">
+                            <input class="form-control" type="text" id="mensaje_fechaMensajeEntradaHasta" value="@mensaje.fechaMensajeEntradaHasta.ToString("dd/MM/yyyy")" name="fechaCreacionDesde" autocomplete="off">
 
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                             <div class="input-group-addon" style="width:70px">
                                 <span class="input-group-text">Desde:</span>
                             </div>
-                            <input class="form-control" type="text" id="mensaje_fechaCreacionDesde" value="@mensaje.fechaCreacionMensajeDesde" name="fechaCreacionDesde" autocomplete="off">
+                            <input class="form-control" type="text" id="mensaje_fechaCreacionDesde" value="@mensaje.fechaCreacionMensajeDesdeText" name="fechaCreacionDesde" autocomplete="off">
                         </div>
                         <label for="fechaSolicitudHasta" class="control-label col-xs-6 col-lg-4"></label>
                         <div class="input-group col-xs-8 col-lg-8">
@@ -58,7 +58,7 @@
                             <div class="input-group-addon" style="width:70px">
                                 <span class="input-group-text">Hasta:</span>
                             </div>
-                            <input class="form-control" type="text" id="mensaje_fechaCreacionHasta" value="@mensaje.fechaCreacionMensajeHasta" name="fechaCreacionDesde" autocomplete="off">
+                            <input class="form-control" type="text" id="mensaje_fechaCreacionHasta" value="@mensaje.fechaCreacionMensajeHastaText" name="fechaCreacionDesde" autocomplete="off">
 
                         </div>
                     </div>
@@ -73,7 +73,7 @@
                             <div class="input-group-addon" style="width:70px">
                                 <span class="input-group-text">Desde:</span>
                             </div>
-                            <input class="form-control" type="text" id="mensaje_fechaVencimientoDesde" value="@mensaje.fechaVencimientoMensajeDesde" name="fechaCreacionDesde" autocomplete="off">
+                            <input class="form-control" type="text" id="mensaje_fechaVencimientoDesde" value="@mensaje.fechaVencimientoMensajeDesdeText" name="fechaCreacionDesde" autocomplete="off">
                         </div>
                         <label for="fechaSolicitudHasta" class="control-label col-xs-6 col-lg-4"></label>
                         <div class="input-group col-xs-8 col-lg-8">
@@ -81,7 +81,7 @@
                             <div class="input-group-addon" style="width:70px">
                                 <span class="input-group-text">Hasta:</span>
                             </div>
-                            <input class="form-control" type="text" id="mensaje_fechaVencimientoHasta" value="@mensaje.fechaVencimientoMensajeHasta" name="fechaCreacionDesde" autocomplete="off">
+                            <input class="form-control" type="text" id="mensaje_fechaVencimientoHasta" value="@mensaje.fechaVencimientoMensajeHastaText" name="fechaCreacionDesde" autocomplete="off">
 
                         </div>
                     </div>

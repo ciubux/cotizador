@@ -79,12 +79,15 @@ namespace cotizadorPDF
 
                 if (cot.cliente.idCliente != Guid.Empty)
                 {
-                    if (!cot.cliente.esClienteLite)
+                    if (cot.cliente.razonSocial != null && !cot.cliente.razonSocial.Trim().Equals(""))
                     {
                         page.Canvas.DrawString(cot.cliente.razonSocial, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Blue), 0, y);
                         y = y + sepLine;
-                        page.Canvas.DrawString("RUC: " + cot.cliente.ruc, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Blue), 0, y);
-                        y = y + sepLine + 2;
+                        if (!cot.cliente.esClienteLite)
+                        {
+                            page.Canvas.DrawString("RUC: " + cot.cliente.ruc, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Blue), 0, y);
+                            y = y + sepLine + 2;
+                        }
                     }
                 }
                 else
@@ -461,46 +464,47 @@ namespace cotizadorPDF
                 }
 
 
-                //Si se ha registrado fecha inicio vigencia precios
-                if (cot.fechaInicioVigenciaPrecios != null)
+                if (cot.tipoCotizacion == Cotizacion.TiposCotizacion.Normal)
                 {
-
-
-                    //Si la fecha de inicio de vigencia es IGUAL a la fecha de creación NO se indica en la cotización
-                    if (cot.fechaInicioVigenciaPrecios.Value.ToString("dd/MM/yyyy").Equals(cot.fecha.ToString("dd/MM/yyyy")))
+                    //Si se ha registrado fecha inicio vigencia precios
+                    if (cot.fechaInicioVigenciaPrecios != null)
                     {
+                        //Si la fecha de inicio de vigencia es IGUAL a la fecha de creación NO se indica en la cotización
+                        if (cot.fechaInicioVigenciaPrecios.Value.ToString("dd/MM/yyyy").Equals(cot.fecha.ToString("dd/MM/yyyy")))
+                        {
 
+                            //Si se cuenta con fecha de fin de vigencia 
+                            if (cot.fechaFinVigenciaPrecios != null)
+                            {
+                                y = y + sepLine;
+                                sectionObervaciones.Canvas.DrawString("* Vigencia de los precios: hasta " + cot.fechaFinVigenciaPrecios.Value.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                            }
+                            //Si NO se cuenta con fecha fin de vigencia no se muestra nada 
+
+                        }
+                        //Si la fecha de inicio de vigencia es DISTINTA a la fecha de creación se indica en la cotización
+                        else
+                        {
+                            y = y + sepLine;
+                            //Si se cuenta con la fecha fin de vigencia de precios
+                            if (cot.fechaFinVigenciaPrecios != null)
+                            {
+                                sectionObervaciones.Canvas.DrawString("* Vigencia de los precios: desde " + cot.fechaInicioVigenciaPrecios.Value.ToString("dd/MM/yyyy") + " hasta " + cot.fechaFinVigenciaPrecios.Value.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                            }
+                            else //Si no se cuenta con la fecha fin de vigencia de precios
+                            {
+                                sectionObervaciones.Canvas.DrawString("* Validez de los precios: desde " + cot.fechaInicioVigenciaPrecios.Value.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                            }
+                        }
+                    }
+                    else
+                    {
                         //Si se cuenta con fecha de fin de vigencia 
                         if (cot.fechaFinVigenciaPrecios != null)
                         {
                             y = y + sepLine;
                             sectionObervaciones.Canvas.DrawString("* Vigencia de los precios: hasta " + cot.fechaFinVigenciaPrecios.Value.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                         }
-                        //Si NO se cuenta con fecha fin de vigencia no se muestra nada 
-
-                    }
-                    //Si la fecha de inicio de vigencia es DISTINTA a la fecha de creación se indica en la cotización
-                    else
-                    {
-                        y = y + sepLine;
-                        //Si se cuenta con la fecha fin de vigencia de precios
-                        if (cot.fechaFinVigenciaPrecios != null)
-                        {
-                            sectionObervaciones.Canvas.DrawString("* Vigencia de los precios: desde " + cot.fechaInicioVigenciaPrecios.Value.ToString("dd/MM/yyyy") + " hasta " + cot.fechaFinVigenciaPrecios.Value.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
-                        }
-                        else //Si no se cuenta con la fecha fin de vigencia de precios
-                        {
-                            sectionObervaciones.Canvas.DrawString("* Validez de los precios: desde " + cot.fechaInicioVigenciaPrecios.Value.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
-                        }
-                    }
-                }
-                else
-                {
-                    //Si se cuenta con fecha de fin de vigencia 
-                    if (cot.fechaFinVigenciaPrecios != null)
-                    {
-                        y = y + sepLine;
-                        sectionObervaciones.Canvas.DrawString("* Vigencia de los precios: hasta " + cot.fechaFinVigenciaPrecios.Value.ToString("dd/MM/yyyy") + ".", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                     }
                 }
 
@@ -509,8 +513,6 @@ namespace cotizadorPDF
                 sectionObervaciones.Canvas.DrawString("* Entrega sujeta a confirmación de disponibilidad luego de recibido el pedido u orden de compra.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 y = y + sepLine;
 
-                sectionObervaciones.Canvas.DrawString(" No se garantiza stock debido a coyuntura excepcional de alta demanda.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
-                y = y + sepLine;
 
                 foreach (string line in lines)
                 {

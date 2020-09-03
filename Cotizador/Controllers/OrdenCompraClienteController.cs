@@ -494,6 +494,8 @@ namespace Cotizador.Controllers
                 occ.observaciones = String.Empty;
 
                 occ.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                occ.ciudad = occ.usuario.sedeMP;
+                occ.sedesClienteSunat = new List<Ciudad>();
                 occ.detalleList = new List<OrdenCompraClienteDetalle>();
                 occ.AdjuntoList = new List<ArchivoAdjunto>();
                 occ.fechaPrecios = occ.fechaSolicitud.AddDays(Constantes.DIAS_MAX_BUSQUEDA_PRECIOS * -1);
@@ -509,18 +511,24 @@ namespace Cotizador.Controllers
 
         public void iniciarEdicionOrdenCompraCliente()
         {
-            try
-            {
+            //try
+            //{
                 Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 OrdenCompraCliente occVer = (OrdenCompraCliente)this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE_VER];
                 OrdenCompraClienteBL occBL = new OrdenCompraClienteBL();
                 OrdenCompraCliente occ = new OrdenCompraCliente();
+                ClienteBL clienteBl = new ClienteBL();
                 occ.idOrdenCompraCliente = occVer.idOrdenCompraCliente;
                 //    occ.fechaModificacion = cotizacionVer.fechaModificacion;
                 occ.usuario = (Usuario)this.Session["usuario"];
                 //Se cambia el estado de la cotizacion a Edición
                 //Se obtiene los datos de la cotización ya modificada
-                occ = occBL.GetOrdenCompraClienteParaEditar(occ,usuario);
+                occ = occVer;
+                occ.cliente = new Cliente();
+                occ.sedesClienteSunat = clienteBl.getCiudadesCliente(occ.clienteSunat.idClienteSunat);
+                this.evaluarCiudadSedeOCC(occ);
+
+                //occ = occBL.GetOrdenCompraClienteParaEditar(occ,usuario);
                 //Temporal
                 occ.ciudadASolicitar = new Ciudad();
            
@@ -534,12 +542,12 @@ namespace Cotizador.Controllers
                 }*/
 
                 this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE] = occ;
-            }
-            catch (Exception e)
-            {
-                logger.Error(e, agregarUsuarioAlMensaje(e.Message));
-                throw e;
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    logger.Error(e, agregarUsuarioAlMensaje(e.Message));
+            //    throw e;
+            //}
         }
 
         
@@ -636,13 +644,15 @@ namespace Cotizador.Controllers
             try
             {
 
-                OrdenCompraCliente occ = this.OrdenCompraClienteSession; 
+                OrdenCompraCliente occ = this.OrdenCompraClienteSession;
                 int idCliente = int.Parse(Request["idCliente"].ToString());
                 ClienteBL clienteBl = new ClienteBL();
                 occ.clienteSunat = clienteBl.getClienteSunat(idCliente);
+                occ.sedesClienteSunat = clienteBl.getCiudadesCliente(idCliente);
 
-                SolicitanteBL solicitanteBL = new SolicitanteBL();
-                occ.clienteSunat.solicitanteList = solicitanteBL.getSolicitantesClienteSunat(idCliente);
+                
+
+                this.evaluarCiudadSedeOCC(occ);
 
                 this.OrdenCompraClienteSession = occ;
                 String resultado = JsonConvert.SerializeObject(occ.clienteSunat);
@@ -1015,8 +1025,7 @@ namespace Cotizador.Controllers
         {
             OrdenCompraCliente occ = (OrdenCompraCliente)this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE];
             String[] fechaSolicitud = this.Request.Params["fechaSolicitud"].Split('/');
-            String[] horaSolicitud = this.Request.Params["horaSolicitud"].Split(':');
-            occ.fechaSolicitud = new DateTime(Int32.Parse(fechaSolicitud[2]), Int32.Parse(fechaSolicitud[1]), Int32.Parse(fechaSolicitud[0]), Int32.Parse(horaSolicitud[0]), Int32.Parse(horaSolicitud[1]), 0);
+            occ.fechaSolicitud = new DateTime(Int32.Parse(fechaSolicitud[2]), Int32.Parse(fechaSolicitud[1]), Int32.Parse(fechaSolicitud[0]), 0, 0, 0);
             this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE] = occ;
         }
 
@@ -1126,7 +1135,7 @@ namespace Cotizador.Controllers
         public String ChangeIdCiudad()
         {
             OrdenCompraCliente occ = this.OrdenCompraClienteSession;
-            occ.cliente = new Cliente();
+            
             Guid idCiudad = Guid.Empty;
             if (this.Request.Params["idCiudad"] != null && !this.Request.Params["idCiudad"].Equals(""))
             {
@@ -1138,13 +1147,36 @@ namespace Cotizador.Controllers
                 // throw new Exception("No se puede cambiar de ciudad");
                 return "No se puede cambiar de ciudad";
             }
-            else
+            else 
             {
                 CiudadBL ciudadBL = new CiudadBL();
                 Ciudad ciudadNueva = ciudadBL.getCiudad(idCiudad);
                 occ.ciudad = ciudadNueva;
+
+                evaluarCiudadSedeOCC(occ);
+
                 this.OrdenCompraClienteSession = occ;
                 return "{\"idCiudad\": \"" + idCiudad + "\"}";
+            }
+        }
+
+        private void evaluarCiudadSedeOCC(OrdenCompraCliente occ)
+        {
+            SolicitanteBL solicitanteBL = new SolicitanteBL();
+            occ.clienteSunat.solicitanteList = new List<Solicitante>();
+
+            occ.cliente.idCliente = Guid.Empty;
+            foreach (Ciudad sede in occ.sedesClienteSunat)
+            {
+                if (occ.ciudad.idCiudad == sede.idCiudad)
+                {
+                    occ.cliente.idCliente = sede.idClienteRelacionado;
+                }
+            }
+
+            if (occ.cliente.idCliente != Guid.Empty)
+            {
+                occ.clienteSunat.solicitanteList = solicitanteBL.getSolicitantes(occ.cliente.idCliente);
             }
         }
 

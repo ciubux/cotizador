@@ -31,6 +31,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             List<Ciudad> ciudades = usuario.sedesMP;
+            bool verSeleccione = true;
 
             if ((int)(Constantes.paginas.BusquedaCotizaciones) == (int)this.Session[Constantes.VAR_SESSION_PAGINA] ||
                 (int)(Constantes.paginas.MantenimientoCotizacion) == (int)this.Session[Constantes.VAR_SESSION_PAGINA]
@@ -61,6 +62,10 @@ namespace Cotizador.Controllers
                 )
             {
                 ciudades = usuario.sedesMPDocumentosVenta;
+            } else if ((int)(Constantes.paginas.MantenimientoOrdenCompraCliente) == (int)this.Session[Constantes.VAR_SESSION_PAGINA])
+            {
+                verSeleccione = false;
+                ciudades = usuario.sedesMPPedidos;
             }
 
            /* if (ciudades.Count == 1)
@@ -72,6 +77,7 @@ namespace Cotizador.Controllers
             {
                 Data = ciudades,
                 CiudadSelectId = ciudadSelectId,
+                incluirSeleccione = verSeleccione, 
                 SelectedValue = selectedValue
             };
 
@@ -87,6 +93,7 @@ namespace Cotizador.Controllers
             {
                 Data = ciudades,
                 CiudadSelectId = ciudadSelectId,
+                incluirSeleccione = true,
                 SelectedValue = selectedValue
             };
 

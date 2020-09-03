@@ -321,6 +321,14 @@ namespace BusinessLayer
             }
         }
 
+        public List<Ciudad> getCiudadesCliente(int idClienteSunat)
+        {
+            using (var dal = new ClienteDAL())
+            {
+                return dal.getCiudadesSedes(idClienteSunat);
+            }
+        }
+
         public List<Cliente> getClientesByRUC(string ruc)
         {
             using (var clienteDAL = new ClienteDAL())

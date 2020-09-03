@@ -149,6 +149,20 @@ namespace Cotizador.ExcelExport
                 twoDecLastCellStyle.CloneStyleFrom(twoDecCellStyle);
                 twoDecLastCellStyle.BorderBottom = BorderStyle.Thin;
 
+
+                HSSFCellStyle observacionesLabelCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                observacionesLabelCellStyle.WrapText = true;
+                observacionesLabelCellStyle.VerticalAlignment = VerticalAlignment.Center;
+                observacionesLabelCellStyle.Alignment = HorizontalAlignment.Center;
+                HSSFFont observacionesLabelCellStyleFont = (HSSFFont)wb.CreateFont();
+                observacionesLabelCellStyleFont.IsBold = true;
+                observacionesLabelCellStyle.SetFont(observacionesLabelCellStyleFont);
+
+                HSSFCellStyle observacionesTextCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                observacionesTextCellStyle.WrapText = true;
+                observacionesTextCellStyle.VerticalAlignment = VerticalAlignment.Top;
+                observacionesTextCellStyle.Alignment = HorizontalAlignment.Left;
+
                 // create sheet
                 sheet = (HSSFSheet)wb.CreateSheet("OC-" + obj.numeroPedido);
 
@@ -308,6 +322,13 @@ namespace Cotizador.ExcelExport
                     i++;
                 }
 
+                UtilesHelper.combinarCeldas(sheet, i, i, "A", "B");
+                UtilesHelper.setValorCelda(sheet, i, "A", "Observaciones:", observacionesLabelCellStyle);
+
+                UtilesHelper.combinarCeldas(sheet, i + 1, i + 2, "B", "E");
+                UtilesHelper.setValorCelda(sheet, i + 1, "B", obj.observaciones, observacionesTextCellStyle);
+
+
                 UtilesHelper.setValorCelda(sheet, i - 1, "A", UtilesHelper.getValorCelda(sheet, i - 1, "A"), tableDataLastCenterCellStyle);
                 UtilesHelper.setValorCelda(sheet, i - 1, "B", UtilesHelper.getValorCelda(sheet, i - 1, "B"), tableDataLastCenterCellStyle);
                 UtilesHelper.setValorCelda(sheet, i - 1, "C", UtilesHelper.getValorCelda(sheet, i - 1, "C"), tableDataLastCellStyle);
@@ -332,6 +353,10 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i, "G", "TOTAL", totalsTotalLabelCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "H", (double)obj.montoTotal, totalsTotalCellStyle);
                 i++;
+
+
+                UtilesHelper.combinarCeldas(sheet, i, i, "A", "F");
+                UtilesHelper.setValorCelda(sheet, i, "A", "* Condición de Pago: " + obj.textoCondicionesPago);
                 
 
 

@@ -49,6 +49,8 @@ jQuery(function ($) {
         verificiarSiFechaEsModificada();
         verificarSiExisteCliente();
         $("#btnBusquedaCotizaciones").click();
+
+        $('#tipoCotizacion option[value="2"]').remove();
     });
 
     function Alerta(message) {

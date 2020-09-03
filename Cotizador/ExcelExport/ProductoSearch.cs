@@ -302,8 +302,8 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, 1, "AF", "Venta Restringida", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "AG", "Motivo Venta Restringida", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "AH", "Cantidad Máxima Para No Restringir Pedido", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "AI", "Descripción Larga", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "AJ", "Agregar Descrición Larga a Cotización", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "AI", "Descripción Detallada", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "AJ", "Agregar Descrición Detallada a Cotización", titleCellStyle);
 
                 MemoryStream ms = new MemoryStream();
                 using (MemoryStream tempStream = new MemoryStream())

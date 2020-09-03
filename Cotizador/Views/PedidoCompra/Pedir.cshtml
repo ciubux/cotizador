@@ -373,11 +373,11 @@
                     <div class="form-group">
                         <label for="fechaEntrega" class="control-label col-xs-6 col-lg-4">Hora de Solicitud:</label>
                         <!-- <div class="input-group col-xs-6 col-lg-8">
-                            <div class="input-group-addon" style="width:70px">
-                                <span class="input-group-text" id="basic-addon1">Hora:</span>
-                            </div>
+                        <div class="input-group-addon" style="width:70px">
+                            <span class="input-group-text" id="basic-addon1">Hora:</span>
+                        </div>
 
-                        </div>-->
+                    </div>-->
                         <div class="input-group col-xs-8 col-lg-8">
                             <input class="form-control" type="time" id="horaSolicitud" name="horaSolicitud" value="@ViewBag.horaSolicitud">
                         </div>
@@ -445,26 +445,26 @@
 
         <div class="row" style="margin-bottom:10px; margin-right:0px; margin-left:10px">
             <!--
-            <div class="pull-left">
-                @if (pedido.usuario.apruebaPedidos)
+        <div class="pull-left">
+            @if (pedido.usuario.apruebaPedidos)
+            {
+                <label for="mostrarCosto" class="control-label ">Mostrar Costo:</label>
+
+                if (pedido.mostrarCosto)
                 {
-                    <label for="mostrarCosto" class="control-label ">Mostrar Costo:</label>
-
-                    if (pedido.mostrarCosto)
-                    {
-                        <input checked type="checkbox" id="mostrarCosto" name="mostrarCosto" />
-                    }
-                    else
-                    {
-                        <input type="checkbox" id="mostrarCosto" name="mostrarCosto" />
-                    }
+                    <input checked type="checkbox" id="mostrarCosto" name="mostrarCosto" />
                 }
-            </div>
+                else
+                {
+                    <input type="checkbox" id="mostrarCosto" name="mostrarCosto" />
+                }
+            }
+        </div>
 
-            <div class="pull-left">
-                <button id="btnAgregarProductosDesdePreciosRegistrados" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBuscarPreciosRegistrados">Importar Detalle Desde Precios Registrados en Facturación</button>
-            </div>
-            -->
+        <div class="pull-left">
+            <button id="btnAgregarProductosDesdePreciosRegistrados" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBuscarPreciosRegistrados">Importar Detalle Desde Precios Registrados en Facturación</button>
+        </div>
+        -->
 
             <div class="pull-right">
                 <button id="btnOpenAgregarProducto" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
@@ -635,7 +635,7 @@
         <div class="row">
             <div class="col-sm-6 col-lg-9">
                 <div class="form-group">
-                    @Html.LabelFor(p => pedido.observaciones, htmlAttributes: new { @class = "control-label col-xs-2" })
+                    <label class="control-label col-xs-2" for="pedido_observaciones">Observaciones:</label>
                     <div class="col-xs-8">
                         @Html.TextAreaFor(p => pedido.observaciones, htmlAttributes: new { @class = "form-control", rows = "6", cols = "300", style = "min-width: 100%" })
                     </div>
@@ -669,6 +669,25 @@
             </div>
         </div>
 
+        <div class="row mostrarCondicionesPago">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    <label for="condicionesPago" class="control-label col-xs-2">Condición de Pago:</label>
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(p => pedido.textoCondicionesPago, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        @if (pedido.esPagoContado)
+                        {
+                            <input type="checkbox" checked class="form-check-input" id="chkEsPagoContado">
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="form-check-input" id="chkEsPagoContado">
+                        }
+                        <label class="form-check-label" for="chkEsPagoContado">Es pago contado</label>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="row mostrarDatosParaGuia">
             <!--OBSERVACIONES-->
