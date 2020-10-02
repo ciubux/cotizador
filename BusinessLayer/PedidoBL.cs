@@ -799,10 +799,13 @@ namespace BusinessLayer
             List<Pedido> pedidoList = new List<Pedido>();
             using (var dal = new PedidoDAL())
             {
-                List<Guid> pedidoIds = dal.SelectPedidosSinAtencion();
-                foreach (Guid id in pedidoIds)
+                List<Pedido> pedidoIds = dal.SelectPedidosSinAtencion();
+                foreach (Pedido id in pedidoIds)
                 {
-                    Pedido pedido = dal.SelectPedidoEmail(id);
+                    Pedido pedido = dal.SelectPedidoEmail(id.idPedido);
+                    pedido.accion_truncar = id.accion_truncar;
+                    pedido.accion_alertarNoAtendido = id.accion_alertarNoAtendido;
+
                     pedidoList.Add(pedido);
                 }
             }
@@ -815,6 +818,14 @@ namespace BusinessLayer
             using (var dal = new PedidoDAL())
             {
                 return dal.UpdateDetallesRestriccion(idPedido, idDetalles, cantidades, comentarios, idUsuario);
+            }
+        }
+
+        public bool TruncarPedidos(List<Guid> idPedidos)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                return dal.TruncarPedidos(idPedidos);
             }
         }
     }

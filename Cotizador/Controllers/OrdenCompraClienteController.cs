@@ -100,7 +100,7 @@ namespace Cotizador.Controllers
                 else
                 {
                     Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                    if (!usuario.tomaPedidos && !usuario.visualizaPedidos)
+                    if (!usuario.creaOrdenesCompraCliente && !usuario.creaOrdenesCompraCliente)
                     {
                         return RedirectToAction("Login", "Account");
                     }
@@ -256,7 +256,7 @@ namespace Cotizador.Controllers
                 else
                 {
                     Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                    if (!usuario.tomaPedidos)
+                    if (!usuario.creaOrdenesCompraCliente)
                     {
                         return RedirectToAction("Login", "Account");
                     }
@@ -1480,6 +1480,7 @@ namespace Cotizador.Controllers
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             OrdenCompraClienteBL occBL = new OrdenCompraClienteBL();
+            ProductoBL productoBL = new ProductoBL();
 
             OrdenCompraCliente occ = new OrdenCompraCliente();
             occ.idOrdenCompraCliente = Guid.Parse(Request["idOrdenCompraCliente"].ToString());
@@ -1488,7 +1489,6 @@ namespace Cotizador.Controllers
             
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
 
-            string jsonOrdenCompraCliente = JsonConvert.SerializeObject(occ);
 
             Pedido pedidoGenerar = new Pedido(Pedido.ClasesPedido.Venta);
 
@@ -1497,6 +1497,8 @@ namespace Cotizador.Controllers
             pedidoGenerar.numeroReferenciaCliente = occ.numeroReferenciaCliente;
             foreach (OrdenCompraClienteDetalle det in occ.detalleList)
             {
+                det.producto = productoBL.getProducto(det.producto.idProducto, occ.ciudad.esProvincia, occ.incluidoIGV, occ.ciudad.idClienteRelacionado);
+
                 DocumentoDetalle docdet = det;
                 PedidoDetalle pedDet =  JsonConvert.DeserializeObject<PedidoDetalle>(JsonConvert.SerializeObject(docdet));
 
@@ -1509,10 +1511,13 @@ namespace Cotizador.Controllers
                 pedDet.visualizaMargen = det.visualizaMargen;
 
                 pedidoGenerar.pedidoDetalleList.Add(pedDet);
+
+                
             }
 
             this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE_PEDIDO_GENERAR] = pedidoGenerar;
 
+            string jsonOrdenCompraCliente = JsonConvert.SerializeObject(occ);
 
             String json = "{\"occ\":" + jsonOrdenCompraCliente + ", \"usuario\":" + jsonUsuario + "}";
             return json;
@@ -1573,6 +1578,7 @@ namespace Cotizador.Controllers
         {
             Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
             int cantidad = int.Parse(Request["cantidad"].ToString());
+            int idProductoPresentacion = int.Parse(Request["productoPresentacion"].ToString());
             String comentario = Request["comentario"].ToString();
 
             Pedido pedidoGenerar = (Pedido) this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE_PEDIDO_GENERAR];
@@ -1581,6 +1587,26 @@ namespace Cotizador.Controllers
             {
                 if (det.producto.idProducto == idProducto)
                 {
+                    
+                    switch(idProductoPresentacion)
+                    {
+                        case 1: // Alternativa
+                            det.ProductoPresentacion = det.producto.ProductoPresentacionList.Where(o => o.IdProductoPresentacion == idProductoPresentacion).FirstOrDefault();
+                            det.esPrecioAlternativo = true;
+                            det.unidad = det.producto.unidad_alternativa;
+                            break;
+                        case 2: // proveedor
+                            det.ProductoPresentacion = det.producto.ProductoPresentacionList.Where(o => o.IdProductoPresentacion == idProductoPresentacion).FirstOrDefault();
+                            det.esPrecioAlternativo = true;
+                            det.unidad = det.producto.unidadProveedor;
+                            break;
+                        default:
+                            det.esPrecioAlternativo = false;
+                            det.ProductoPresentacion = null;
+                            det.unidad = det.producto.unidad;
+                            break;
+                    }
+
                     det.cantidad = cantidad;
                     det.observacion = comentario;
                 }

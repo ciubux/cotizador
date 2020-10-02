@@ -445,6 +445,7 @@
                         <li><a data-toggle="tab" id="showClientePrecios" href="#cliente_precios">Productos y Precios</a></li>
                         <li><a data-toggle="tab" id="showInformacionComercial" href="#cliente_comercial">Gestion Comercial</a></li>
                         <li><a data-toggle="tab" id="showDireccionesEntrega" href="#cliente_direccionesEntrega">Direcciones Entrega</a></li>
+                        <li><a data-toggle="tab" id="showConfiguraciones" href="#cliente_configuraciones">Configuraciones</a></li>
                     </ul>
 
                     <div class="tab-content">
@@ -486,34 +487,34 @@
                                 </div>
                             </div>
                             <!--
-    <div class="row">
-        <div class="col-sm-6 col-lg-4">
-            <div class="form-group">
-                @Html.LabelFor(c => cliente.ubigeo.Departamento, htmlAttributes: new { @class = "control-label col-xs-4" })
-                <div class="col-xs-8">
-                    @Html.TextBoxFor(c => cliente.ubigeo.Departamento, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => cliente.ubigeo.Departamento, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(c => cliente.ubigeo.Departamento, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => cliente.ubigeo.Provincia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(c => cliente.ubigeo.Provincia, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => cliente.ubigeo.Distrito, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(c => cliente.ubigeo.Distrito, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 col-lg-4">
-            <div class="form-group">
-                @Html.LabelFor(c => cliente.ubigeo.Provincia, htmlAttributes: new { @class = "control-label col-xs-4" })
-                <div class="col-xs-8">
-                    @Html.TextBoxFor(c => cliente.ubigeo.Provincia, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-lg-4">
-            <div class="form-group">
-                @Html.LabelFor(c => cliente.ubigeo.Distrito, htmlAttributes: new { @class = "control-label col-xs-4" })
-                <div class="col-xs-8">
-                    @Html.TextBoxFor(c => cliente.ubigeo.Distrito, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!--ESTADO CONTRIBUYENTE CLIENTE-->
+        <!--ESTADO CONTRIBUYENTE CLIENTE-->
 
                             <div class="row">
                                 <div class="col-sm-6 col-lg-4">
@@ -730,11 +731,11 @@
                                         </div>
                                     </div>
                                     @*<div class="form-group">
-                                            @Html.LabelFor(c => cliente.bloqueado, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
-                                            <div class="col-xs-8 col-sm-8 col-lg-8">
-                                                <p class="form-control-static" id="verBloqueado"></p>
-                                            </div>
-                                        </div>*@
+                        @Html.LabelFor(c => cliente.bloqueado, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                        <div class="col-xs-8 col-sm-8 col-lg-8">
+                            <p class="form-control-static" id="verBloqueado"></p>
+                        </div>
+                    </div>*@
                                 </div>
 
                             </div>
@@ -924,8 +925,8 @@
 
                         <div id="cliente_direccionesEntrega" class="tab-pane fade">
                             <!--    <table id="tableListaDireccionesEntrega" class="table">
-                                 </table>
-                            -->
+             </table>
+        -->
                             <div class="row">
                                 <div class="col-sm-6 col-lg-6">
 
@@ -968,7 +969,31 @@
                                 <tbody></tbody>
                             </table>
                         </div>
-                    </div>
+
+                        <div id="cliente_configuraciones" class="tab-pane fade">
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="col-sm-12 col-lg-12">
+                                    <div class="col-sm-12">
+                                        <div class="onoffswitch">
+                                            <label id="verChkConfigAgregarNombreSedeObservacionFactura_SI" style="color:#40b34f">SI</label>
+                                            <label id="verChkConfigAgregarNombreSedeObservacionFactura_NO" style="color:#d81717">NO</label>
+                                        </div>
+                                        <h5 id="lblChkConfigAgregarNombreSedeObservacionFactura" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Agregar nombre de sede de dirección de entrega a observaciones de factura</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-lg-12">
+                                    <div class="col-sm-12">
+                                        <div class="onoffswitch">
+                                            <label id="verChkConfigFacturacionCompleja_SI" style="color:#40b34f">SI</label>
+                                            <label id="verChkConfigFacturacionCompleja_NO" style="color:#d81717">NO</label>
+                                        </div>
+                                        <h5 id="lblChkConfigFacturacionCompleja" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Facturación compleja</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     <div id="msgBusquedaSinResultados" style="display:none;" class="col-lg-12">
                         <p class="pagination-centered" style=" font-size: medium" align="center">

@@ -334,6 +334,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");
                 cotizacionDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
                 cotizacionDetalle.producto.cantidadMaximaPedidoRestringido = Converter.GetInt(row, "cantidad_maxima_pedido_restringido");
+                cotizacionDetalle.producto.topeDescuento = Converter.GetDecimal(row, "tope_descuento");
                 cotizacionDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 cotizacionDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
                 cotizacionDetalle.producto.proveedor = Converter.GetString(row, "proveedor");

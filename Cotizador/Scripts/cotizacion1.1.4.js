@@ -2173,6 +2173,8 @@ jQuery(function ($) {
                 var d = '';
                 var lista = cotizacion.cotizacionDetalleList;
                 var tieneProductoRestringido = false;
+                var tieneDescuentoMayorATope = false;
+
                 for (var i = 0; i < cotizacion.cotizacionDetalleList.length; i++) {
 
                     var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
@@ -2197,6 +2199,10 @@ jQuery(function ($) {
                                 descontinuadoLabel = descontinuadoLabel.replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
                             }
                         }
+                    }
+
+                    if (lista[i].producto.topeDescuento > 0 && lista[i].producto.topeDescuento < lista[i].porcentajeDescuento) {
+                        tieneDescuentoMayorATope = true;
                     }
 
                     d += '<tr>' +
@@ -2292,6 +2298,8 @@ jQuery(function ($) {
                             usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
                         &&
                         (!tieneProductoRestringido || (tieneProductoRestringido && usuario.apruebaCotizacionesVentaRestringida))
+                        &&
+                        (!tieneDescuentoMayorATope || usuario.maximoPorcentajeDescuentoAprobacion >= 100)
                     ) {
                         $("#btnAprobarCotizacion").show();
                     }
@@ -2322,6 +2330,8 @@ jQuery(function ($) {
                             usuario.maximoPorcentajeDescuentoAprobacion >= cotizacion.maximoPorcentajeDescuentoPermitido)
                         &&
                         (!tieneProductoRestringido || (tieneProductoRestringido && usuario.apruebaCotizacionesVentaRestringida))
+                        &&
+                        (!tieneDescuentoMayorATope || usuario.maximoPorcentajeDescuentoAprobacion >= 100)
                     ) {
                         $("#btnAprobarCotizacion").show();
                     }

@@ -798,6 +798,7 @@ jQuery(function ($) {
 
                 $("#btnRefacturar").hide();
                 $("#btnGenerarGuiaAtencion").hide();
+                $("#btnFacturarGuiaRemision").hide();
 
                 /*Si la guía de remisión se encuentra ANULADA no se puede extornar, ni imprimir, ni facturar*/
                 if (guiaRemision.estaAnulado == 1) {
@@ -805,7 +806,6 @@ jQuery(function ($) {
                     $("#btnAnularGuiaRemision").hide();
                     $("#btnExtornar").hide();
                     $("#btnImprimirGuiaRemision").hide();
-                    $("#btnFacturarGuiaRemision").hide();
                     $("#btnRefacturar").hide();
                 }
                 else {
@@ -835,7 +835,6 @@ jQuery(function ($) {
                     /*Si se encuentra EXTORNADA no se puede Anular, Ni facturar*/
                     else {
                         $("#btnAnularGuiaRemision").hide();
-                        $("#btnFacturarGuiaRemision").hide();
 
                         $("#divTipoExtorno").show();
                         $("#btnVerNotasIngresoExtornantes").show();
@@ -868,9 +867,9 @@ jQuery(function ($) {
                     if (guiaRemision.estaFacturado == 1) {
                         $("#ver_guiaRemision_estadoDescripcion").attr("style", "color:green")
                         $("#btnAnularGuiaRemision").hide();
-                        $("#btnFacturarGuiaRemision").hide();
                         $("#btnRefacturar").show();
                     } else {
+
                         $("#btnFacturarGuiaRemision").show();
                     }
 
@@ -931,6 +930,9 @@ jQuery(function ($) {
                     $("#ver_guiaRemision_atencionParcial").html("Atención Final");
                 }
 
+                if (!usuario.creaFacturaCompleja && guiaRemision.pedido_cliente_configuraciones.facturacionCompleja) {
+                    $("#btnFacturarGuiaRemision").hide();
+                }
 
                 $("#tableDetalleGuia > tbody").empty();
 

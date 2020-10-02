@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Model.CONFIGCLASSES;
 
 namespace Cotizador.Models.DTOshow
 {
@@ -16,6 +17,8 @@ namespace Cotizador.Models.DTOshow
         public String serieNumeroGuia { get; set; }     
         public String pedido_numeroPedidoString { get; set; }
         public String pedido_cliente_razonSocial { get; set; }
+
+        public ClienteConfiguracion pedido_cliente_configuraciones { get; set; }
         public String pedido_numeroReferenciaCliente { get; set; }
         public String motivoTrasladoString { get; set; }
         public bool atencionParcial { get; set; }

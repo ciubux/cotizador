@@ -3340,11 +3340,9 @@ jQuery(function ($) {
                 $("#btnVerIngresos").hide();
 
 
-                if ((pedido.seguimientoPedido_estado == ESTADO_INGRESADO ||
+                if (pedido.seguimientoPedido_estado == ESTADO_INGRESADO ||
                     pedido.seguimientoPedido_estado == ESTADO_PROGRAMADO ||
                     pedido.seguimientoPedido_estado == ESTADO_ATENDIDO_PARCIALMENTE 
-                ) &&
-                    pedido.seguimientoCrediticioPedido_estado == ESTADO_LIBERADO
                 ) {
                     if (pedido.tipoPedido == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
                         //|| pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
@@ -3357,7 +3355,16 @@ jQuery(function ($) {
                             if (isOwner == 1 || usuario.truncaPedidos) {
                                 $("#btnTruncarPedido").show();
                             }
-                            $("#btnAtenderPedidoVenta").show();
+                            if (
+                                pedido.seguimientoCrediticioPedido_estado == ESTADO_PENDIENTE_LIBERACION ||
+                                pedido.seguimientoCrediticioPedido_estado == ESTADO_BLOQUEADO
+                            ) {
+                                $("#btnAtenderPedidoVenta").hide();
+                            }
+                            else {
+                                $("#btnAtenderPedidoVenta").show();
+                            }
+                            
                         }
                     }
                     else {

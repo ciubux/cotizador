@@ -21,6 +21,7 @@ namespace Model
             this.AdjuntoList = new List<ArchivoAdjunto>();
             this.ciudadASolicitar = new Ciudad();
 
+            this.incluidoIGV = false;
             this.idGrupoCliente = 0;
         }
 

@@ -326,9 +326,9 @@ namespace Model
                 }
 
                 if (this.IdUsuarioRegistro == this.usuario.idUsuario
-                    && (this.asistenteServicioCliente == null || this.asistenteServicioCliente.usuario == null)
-                    && (this.responsableComercial == null || this.responsableComercial.usuario == null)
-                    && (this.supervisorComercial == null || this.supervisorComercial.usuario == null))
+                    && (this.asistenteServicioCliente == null || this.asistenteServicioCliente.usuario == null || this.asistenteServicioCliente.usuario.idUsuario == Guid.Empty)
+                    && (this.responsableComercial == null || this.responsableComercial.usuario == null || this.responsableComercial.usuario.idUsuario == Guid.Empty)
+                    && (this.supervisorComercial == null || this.supervisorComercial.usuario == null || this.supervisorComercial.usuario.idUsuario == Guid.Empty))
                 {
                     return true;
                 }

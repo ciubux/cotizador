@@ -140,6 +140,7 @@ namespace Model
         public bool tomaPedidosCompra { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.TOMA_PEDIDOS_COMPRA)).FirstOrDefault() != null; } }
         public bool tomaPedidosAlmacen { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.TOMA_PEDIDOS_ALMACEN)).FirstOrDefault() != null; } }
         public bool modificaPedidoVentaFechaEntregaHasta { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_PEDIDO_VENTA_FECHA_ENTREGA_HASTA)).FirstOrDefault() != null; } }
+        public bool creaOrdenesCompraCliente { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_ORDENES_COMPRA_CLIENTE)).FirstOrDefault() != null; } }
 
         /*PERMISOS GUIA REMISION*/
         public bool creaGuias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_GUIAS)).FirstOrDefault() != null; } }
@@ -165,6 +166,7 @@ namespace Model
         public bool creaNotasDebito { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_NOTAS_DEBITO)).FirstOrDefault() != null; } }
         public bool realizaRefacturacion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REALIZA_REFACTURACION)).FirstOrDefault() != null; } }
         public bool cambiaClienteFactura { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CAMBIA_CLIENTE_FACTURA)).FirstOrDefault() != null; } }
+        public bool creaFacturaCompleja { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_FACTURA_COMPLEJA)).FirstOrDefault() != null; } }
 
         /*Grupo Clientes*/
         public bool modificaGrupoClientes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_GRUPO_CLIENTES)).FirstOrDefault() != null; } }
@@ -189,6 +191,8 @@ namespace Model
         public bool realizaCargaMasivaCliente { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REALIZA_CARGA_MASIVA_CLIENTES)).FirstOrDefault() != null; } }
         public bool visualizaClientes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_CLIENTES)).FirstOrDefault() != null; } }
         public bool modificaCanastaCliente { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_CANASTA_CLIENTE)).FirstOrDefault() != null; } }
+        public bool activaClienteFacturaCompleja { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ACTIVA_CLIENTE_FACTURA_COMPLEJA)).FirstOrDefault() != null; } }
+
 
         /*Productos*/
         public bool visualizaProductos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_PRODUCTOS)).FirstOrDefault() != null; } }

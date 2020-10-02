@@ -93,7 +93,11 @@ namespace BusinessLayer
 
          
 
-                if ((cotizacionDetalle.validar && (!cotizacion.usuario.apruebaCotizaciones || cotizacionDetalle.porcentajeDescuento > cotizacion.usuario.maximoPorcentajeDescuentoAprobacion) ) || cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial)
+                if ((cotizacionDetalle.validar &&
+                        (!cotizacion.usuario.apruebaCotizaciones || 
+                        cotizacionDetalle.porcentajeDescuento > cotizacion.usuario.maximoPorcentajeDescuentoAprobacion || 
+                        !cotizacionDetalle.cumpleTopeDescuentoProducto) ) 
+                    || cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial)
                 {
                     PrecioClienteProducto precioClienteProducto = cotizacionDetalle.producto.precioClienteProducto;
 
@@ -149,11 +153,15 @@ namespace BusinessLayer
                         evaluarDescuento = 3;
                     }
 
+                    if (!cotizacionDetalle.cumpleTopeDescuentoProducto && cotizacion.usuario.maximoPorcentajeDescuentoAprobacion < 100)
+                    {
+                        evaluarDescuento = 6;
+                    }
                     
 
                     if (evaluarDescuento > 0)
                     {
-                        if (cotizacionDetalle.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION || cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial)
+                        if (cotizacionDetalle.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION || cotizacionDetalle.porcentajeDescuento > cotizacionDetalle.producto.topeDescuento || cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial)
                         {
                             //Se evalua de donde proviene para indicar el mensaje exacto
                             switch (evaluarDescuento)
@@ -173,6 +181,9 @@ namespace BusinessLayer
                                 case 5:
                                     cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "El precio unitario es distinto al precio registrado en facturación.\n";
                                     break;
+                                case 6:
+                                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "El producto " + cotizacionDetalle.producto.sku + " tiene un tope de descuento máximo de " + String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.topeDescuento) + " %.\n";
+                                    break;
                             }
                             //cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
                             //La cotización no quedará en estado Pendiente de aprobación, dado que requiere el comentario para que pase a estado Pendiente de Aprobación
@@ -184,7 +195,7 @@ namespace BusinessLayer
 
                 if (cotizacionDetalle.producto.descontinuado == 1 && !cotizacion.usuario.apruebaCotizacionesVentaRestringida)
                 {
-                    cotizacion.seguimientoCotizacion.observacion = "El producto " + cotizacionDetalle.producto.sku + " es de venta restringida.";
+                    cotizacion.seguimientoCotizacion.observacion = "El producto " + cotizacionDetalle.producto.sku + " es de venta restringida.\n";
                     cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
                 }
             }
@@ -328,7 +339,11 @@ namespace BusinessLayer
                     {
                         precioSinIGV = cotizacionDetalle.producto.precioSinIgv / cotizacionDetalle.ProductoPresentacion.Equivalencia;
                     }
-
+                    
+                    if(!cotizacionDetalle.cumpleTopeDescuentoProducto)
+                    {
+                        cotizacionDetalle.validar = true;
+                    }
 
                     if (cotizacionDetalle.porcentajeDescuento == 0 && cotizacionDetalle.precioNeto != precioSinIGV)
                     {

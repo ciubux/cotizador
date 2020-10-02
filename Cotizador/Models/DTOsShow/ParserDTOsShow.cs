@@ -142,6 +142,7 @@ namespace Cotizador.Models.DTOsShow
             guiaRemisionDTOshow.pedido_cliente_razonSocial = guiaRemision.pedido.cliente.razonSocial;
             guiaRemisionDTOshow.pedido_numeroReferenciaCliente = guiaRemision.pedido.numeroReferenciaCliente;
             guiaRemisionDTOshow.pedido_cliente_razonSocial = guiaRemision.pedido.cliente.razonSocial;
+            guiaRemisionDTOshow.pedido_cliente_configuraciones = guiaRemision.pedido.cliente.configuraciones;
             guiaRemisionDTOshow.pedido_numeroReferenciaCliente = guiaRemision.pedido.numeroReferenciaCliente;
             guiaRemisionDTOshow.motivoTrasladoString = guiaRemision.motivoTrasladoString;
             guiaRemisionDTOshow.atencionParcial = guiaRemision.atencionParcial;

@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Email\PedidoTruncado.cs" />
     <Compile Include="MensajeBL.cs" />
     <Compile Include="OrdenCompraClienteBL.cs" />
     <Compile Include="RolBL.cs" />

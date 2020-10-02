@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "604";
+    TempData["ScriptVersion"] = "618";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -259,14 +259,14 @@
                                         <li id="linkCargaPedido" class="@linkMantenimientoPedido">@Html.ActionLink("Pedido Venta - Carga Masiva", "Load", "Pedido")</li>
                                     }
 
-                                    @*@if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos)
+                                    @if (usuario.creaOrdenesCompraCliente || usuario.creaOrdenesCompraCliente || usuario.creaOrdenesCompraCliente)
                                     {
                                         <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("O/C Cliente - Búsqueda", "Index", "OrdenCompraCliente")</li>
                                     }
-                                    @if (usuario.tomaPedidos)
+                                    @if (usuario.creaOrdenesCompraCliente)
                                     {
                                         <li id="linkMantenimientoPedido" class="@linkMantenimientoPedido">@Html.ActionLink("O/C Cliente - Registrar/Modificar", "Editar", "OrdenCompraCliente")</li>
-                                    }*@
+                                    }
 
                                     @if (usuario.creaDocumentosVenta || usuario.tomaPedidosAlmacen)
                                     {
@@ -391,7 +391,7 @@
                                     {
                                         <li id="linkBusquedaCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Búsqueda", "Index", "Cliente")</li>
                                     }
-                                    @if (usuario.modificaMaestroClientes)
+                                    @if (usuario.modificaMaestroClientes || usuario.visualizaClientes)
                                     {
                                         <li id="linkMantenimientoCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Crear/Modificar", "Editar", "Cliente")</li>
                                     }

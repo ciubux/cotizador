@@ -1032,23 +1032,52 @@
             }
 
 
-            <fieldset>
-                <legend>Configuración:</legend>
+        <fieldset>
+            <legend>Configuración:</legend>
 
-                <div class="row">
-                    <div class="col-sm-12 col-lg-6">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <div class="onoffswitch">
-                                    <input type="checkbox" name="onoffswitch" @(cliente.configuraciones.agregarNombreSedeObservacionFactura ? "checked" : "") class="onoffswitch-checkbox" id="chkConfigAgregarNombreSedeObservacionFactura">
-                                    <label class="onoffswitch-label" for="chkConfigAgregarNombreSedeObservacionFactura"></label>
-                                </div>
-                                <h5 id="lblChkConfigAgregarNombreSedeObservacionFactura" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Agregar nombre de sede de dirección de entrega a observaciones de factura</h5>
+            <div class="row">
+                <div class="col-sm-12 col-lg-6">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="onoffswitch" @(cliente.configuraciones.agregarNombreSedeObservacionFactura ? "checked" : "") class="onoffswitch-checkbox" id="chkConfigAgregarNombreSedeObservacionFactura">
+                                <label class="onoffswitch-label" for="chkConfigAgregarNombreSedeObservacionFactura"></label>
                             </div>
+                            <h5 id="lblChkConfigAgregarNombreSedeObservacionFactura" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Agregar nombre de sede de dirección de entrega a observaciones de factura</h5>
                         </div>
                     </div>
                 </div>
-            </fieldset>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-lg-6">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            @if (cliente.usuario.activaClienteFacturaCompleja)
+                            {
+                                <div class="onoffswitch">
+                                    <input type="checkbox" name="onoffswitch" @(cliente.configuraciones.facturacionCompleja ? "checked" : "") class="onoffswitch-checkbox" id="chkConfigFacturacionCompleja">
+                                    <label class="onoffswitch-label" for="chkConfigFacturacionCompleja"></label>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="onoffswitch">
+                                    @if (cliente.configuraciones.facturacionCompleja)
+                                    {
+                                        <label style="color:#40b34f">SI</label>
+                                    }
+                                    else
+                                    {
+                                        <label style="color:#d81717">NO</label>
+                                    }
+                                </div>
+                            }
+                            <h5 id="lblChkConfigFacturacionCompleja" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Facturación compleja</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
         </fieldset>
 
         <div class="row">

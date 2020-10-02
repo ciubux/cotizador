@@ -463,6 +463,7 @@ namespace DataLayer
                 occ.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 occ.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
                 occ.ciudad.idClienteRelacionado = Converter.GetGuid(row, "id_cliente_ciudad");
+                occ.ciudad.esProvincia = Converter.GetInt(row, "es_provincia") == 1 ? true : false;
 
                 occ.cotizacion = new Cotizacion();
                 occ.cotizacion.idCotizacion = Converter.GetGuid(row, "id_cotizacion");

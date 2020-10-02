@@ -2640,6 +2640,31 @@ jQuery(function ($) {
         changeInputBoolean('configuraciones_agregarNombreSedeObservacionFactura', valor)
     }
 
+
+    $("#lblChkConfigFacturacionCompleja").click(function () {
+        if ($("#chkConfigFacturacionCompleja").is(":checked")) {
+            $("#chkConfigFacturacionCompleja").prop("checked", false);
+        } else {
+            $("#chkConfigFacturacionCompleja").prop("checked", true);
+        }
+
+        actualizarValorChkConfigFacturacionCompleja();
+    });
+
+
+    $("#chkConfigFacturacionCompleja").change(function () {
+        actualizarValorChkConfigFacturacionCompleja();
+    });
+
+    function actualizarValorChkConfigFacturacionCompleja() {
+        var valor = 1;
+        if (!$('#chkConfigFacturacionCompleja').prop('checked')) {
+            valor = 0;
+        }
+        changeInputBoolean('configuraciones_facturacionCompleja', valor)
+    }
+
+
     $("#btnBusqueda").click(function () {
         
         if ($("#cliente_textoBusqueda").val().length < 3 &&
@@ -2930,6 +2955,22 @@ jQuery(function ($) {
                 }     
 
 
+                if (cliente.configuraciones.agregarNombreSedeObservacionFactura) {
+                    $("#verChkConfigAgregarNombreSedeObservacionFactura_SI").show();
+                    $("#verChkConfigAgregarNombreSedeObservacionFactura_NO").hide();
+                } else {
+                    $("#verChkConfigAgregarNombreSedeObservacionFactura_SI").hide();
+                    $("#verChkConfigAgregarNombreSedeObservacionFactura_NO").show();
+                }
+
+                if (cliente.configuraciones.facturacionCompleja) {
+                    $("#verChkConfigFacturacionCompleja_SI").show();
+                    $("#verChkConfigFacturacionCompleja_NO").hide();
+                } else {
+                    $("#verChkConfigFacturacionCompleja_SI").hide();
+                    $("#verChkConfigFacturacionCompleja_NO").show();
+                }
+
 
                 var preciosList = result.precios;
                 var margenText = "";
@@ -3116,6 +3157,12 @@ jQuery(function ($) {
                 else {
                     $("#spanVendedoresAsignados").hide();
                     $("#spanVendedoresNoAsignados").show();
+                }
+
+                if (cliente.isOwner || cliente.usuario.modificaMaestroClientes) {
+                    $("#btnEditarCliente").show();
+                } else {
+                    $("#btnEditarCliente").hide();
                 }
                         
                 $("#modalVerCliente").modal('show');

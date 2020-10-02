@@ -22,14 +22,14 @@ namespace Cotizador.Controllers
        
         public void EnviarEmailPedidosSinAtencion()
         {
-            /*
+            
             MailService mail = new MailService();
             try
             {
                 
                 PedidoBL pedidoBL = new PedidoBL();
                 List<Pedido> pedidosNotificar = pedidoBL.EnviarEmailAlertaPedidosNoEnviados();
-
+                List<Guid> idPedidosTruncar = new List<Guid>();
                 
 
                 int count = 0;
@@ -37,65 +37,88 @@ namespace Cotizador.Controllers
                 {
                     if (pedido.cliente != null)
                     {
-                        var urlVerPedido = this.Url.Action("Index", "Pedido", new { idPedido = pedido.idPedido }, this.Request.Url.Scheme);
-                        urlVerPedido = "http://zasmp.azurewebsites.net/Pedido?idPedido=" + pedido.idPedido.ToString();
-                        PedidoSinAtencion emailTemplate = new PedidoSinAtencion();
-                        emailTemplate.urlVerPedido = urlVerPedido;
+                        if (pedido.accion_alertarNoAtendido || pedido.accion_truncar)
+                        {
+                            var urlVerPedido = this.Url.Action("Index", "Pedido", new { idPedido = pedido.idPedido }, this.Request.Url.Scheme);
+                            urlVerPedido = "http://zasmp.azurewebsites.net/Pedido?idPedido=" + pedido.idPedido.ToString();
 
-                        String template = emailTemplate.BuildTemplate(pedido);
-                        List<String> destinatarios = new List<String>();
+                            List<String> destinatarios = new List<String>();
 
-                        Boolean seEnvioCorreo = false;
-                        if (pedido.cliente.asistenteServicioCliente != null && pedido.cliente.asistenteServicioCliente.usuario != null
-                            && pedido.cliente.asistenteServicioCliente.usuario.email != null && !pedido.cliente.asistenteServicioCliente.usuario.email.Equals(String.Empty))
-                        {
-                            destinatarios.Add(pedido.cliente.asistenteServicioCliente.usuario.email);
-                            seEnvioCorreo = true;
-                        }
-                        if (pedido.cliente.responsableComercial != null && pedido.cliente.responsableComercial.usuario != null
-                            && pedido.cliente.responsableComercial.usuario.email != null && !pedido.cliente.responsableComercial.usuario.email.Equals(String.Empty))
-                        {
-                            destinatarios.Add(pedido.cliente.responsableComercial.usuario.email);
-                            seEnvioCorreo = true;
-                        }
-                        if (pedido.cliente.supervisorComercial != null && pedido.cliente.supervisorComercial.usuario != null
-                            && pedido.cliente.supervisorComercial.usuario.email != null && !pedido.cliente.supervisorComercial.usuario.email.Equals(String.Empty))
-                        {
-                            destinatarios.Add(pedido.cliente.supervisorComercial.usuario.email);
-                            seEnvioCorreo = true;
-                        }
-                        if (!pedido.usuario.email.Equals(String.Empty))
-                        {
-                            destinatarios.Add(pedido.usuario.email);
-                            seEnvioCorreo = true;
-                        }
-
-                        if (!seEnvioCorreo)
-                            destinatarios.Add("c.cornejo@mpinstitucional.com");
-
-                        if (destinatarios.Count > 0)
-                        {
-                            String asunto = "El pedido " + pedido.numeroPedidoString;
-                            if (pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.AtendidoParcialmente)
+                            Boolean seEnvioCorreo = false;
+                            if (pedido.cliente.asistenteServicioCliente != null && pedido.cliente.asistenteServicioCliente.usuario != null
+                                && pedido.cliente.asistenteServicioCliente.usuario.email != null && !pedido.cliente.asistenteServicioCliente.usuario.email.Equals(String.Empty))
                             {
-                                asunto = asunto + " ha sido atendido parcialmente";
+                                destinatarios.Add(pedido.cliente.asistenteServicioCliente.usuario.email);
+                                seEnvioCorreo = true;
                             }
-                            else
+                            if (pedido.cliente.responsableComercial != null && pedido.cliente.responsableComercial.usuario != null
+                                && pedido.cliente.responsableComercial.usuario.email != null && !pedido.cliente.responsableComercial.usuario.email.Equals(String.Empty))
                             {
-                                asunto = asunto + " no ha sido atendido";
+                                destinatarios.Add(pedido.cliente.responsableComercial.usuario.email);
+                                seEnvioCorreo = true;
+                            }
+                            if (pedido.cliente.supervisorComercial != null && pedido.cliente.supervisorComercial.usuario != null
+                                && pedido.cliente.supervisorComercial.usuario.email != null && !pedido.cliente.supervisorComercial.usuario.email.Equals(String.Empty))
+                            {
+                                destinatarios.Add(pedido.cliente.supervisorComercial.usuario.email);
+                                seEnvioCorreo = true;
+                            }
+                            if (!pedido.usuario.email.Equals(String.Empty))
+                            {
+                                destinatarios.Add(pedido.usuario.email);
+                                seEnvioCorreo = true;
                             }
 
-                            mail.enviar(destinatarios, asunto, template, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
-                            count++;
+                            if (!seEnvioCorreo)
+                                destinatarios.Add("zas.mp@mpinstitucional.com");
+
+                            if (destinatarios.Count > 0)
+                            {
+                                String asunto = "El pedido " + pedido.numeroPedidoString;
+
+                                String template = "";
+                                if (pedido.accion_truncar)
+                                {
+                                    PedidoTruncado emailTemplate = new PedidoTruncado();
+                                    emailTemplate.urlVerPedido = urlVerPedido;
+                                    template = emailTemplate.BuildTemplate(pedido);
+
+                                    asunto = asunto + " ha sido truncado.";
+
+                                    idPedidosTruncar.Add(pedido.idPedido);
+                                }
+                                if (pedido.accion_alertarNoAtendido)
+                                {
+                                    PedidoSinAtencion emailTemplate = new PedidoSinAtencion();
+                                    emailTemplate.urlVerPedido = urlVerPedido;
+                                    template = emailTemplate.BuildTemplate(pedido);
+
+                                    if (pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.AtendidoParcialmente)
+                                    {
+                                        asunto = asunto + " ha sido atendido parcialmente";
+                                    }
+                                    else
+                                    {
+                                        asunto = asunto + " no ha sido atendido";
+                                    }
+                                }
+
+                                
+
+                                mail.enviar(destinatarios, asunto, template, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
+                                count++;
+                            }
                         }
                     }
                 }
+
+                pedidoBL.TruncarPedidos(idPedidosTruncar);
             }
             catch (Exception ex)
             {
                 mail.enviar(new List<string> { "ti@mpinstitucional.com" }, "ERROR al revisar pedidos pendientes", ex.Message + ex.InnerException, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
             }
-            */
+            
         }
 
         public void AplicarCambiosProgramados()

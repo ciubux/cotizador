@@ -238,19 +238,11 @@ namespace Cotizador.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            else
-            {
-                usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                if (!usuario.modificaMaestroClientes)
-                {
-                    return RedirectToAction("Login", "Account");
-                }
-            }
-
+            usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            
 
             if (this.Session[Constantes.VAR_SESSION_CLIENTE] == null || idCliente == Guid.Empty)
             {
-
                 instanciarCliente();
             }
 
@@ -267,6 +259,14 @@ namespace Cotizador.Controllers
                 GrupoClienteBL grupoClienteBL = new GrupoClienteBL();
                 grupoClienteList = grupoClienteBL.getGruposCliente();
                 this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
+            }
+
+            if (cliente.idCliente != null && cliente.idCliente != Guid.Empty )
+            {
+                if (!usuario.modificaMaestroClientes && !cliente.isOwner)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
             }
 
             ViewBag.esRuc = false;

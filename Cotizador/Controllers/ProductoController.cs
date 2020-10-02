@@ -767,6 +767,26 @@ namespace Cotizador.Controllers
                         pos = posicionInicial + 8;
                         if (sheet.GetRow(row).GetCell(pos) == null)
                         {
+                            productoStaging.unidadPedidoProveedor = null;
+                        }
+                        else
+                        {
+                            productoStaging.unidadPedidoProveedor = sheet.GetRow(row).GetCell(pos).ToString();
+                        }
+
+                        pos = posicionInicial + 9;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.equivalenciaUnidadPedidoProveedor = 0;
+                        }
+                        else
+                        {
+                            productoStaging.equivalenciaUnidadPedidoProveedor = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
+                        }
+
+                        pos = posicionInicial + 10;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
                             productoStaging.unidad_alternativa = null;
                         }
                         else
@@ -774,7 +794,7 @@ namespace Cotizador.Controllers
                             productoStaging.unidad_alternativa = sheet.GetRow(row).GetCell(pos).ToString();
                         }
 
-                        pos = posicionInicial + 9;
+                        pos = posicionInicial + 11;
                         if (sheet.GetRow(row).GetCell(pos) == null)
                         {
                             productoStaging.equivalenciaAlternativa = 0;
@@ -784,7 +804,7 @@ namespace Cotizador.Controllers
                             productoStaging.equivalenciaAlternativa = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
                         }
 
-                        pos = posicionInicial + 10;
+                        pos = posicionInicial + 12;
                         try
                         {
                             productoStaging.monedaProveedor = sheet.GetRow(row).GetCell(pos).ToString().Trim();
@@ -794,7 +814,7 @@ namespace Cotizador.Controllers
                             productoStaging.monedaProveedor = "S";
                         }
 
-                        pos = posicionInicial + 11;
+                        pos = posicionInicial + 13;
                         try
                         {
                             Double? val = sheet.GetRow(row).GetCell(pos).NumericCellValue;
@@ -805,9 +825,9 @@ namespace Cotizador.Controllers
                             productoStaging.costoOriginal = 0;
                         }
 
-                        pos = posicionInicial + 12; // El costo es calculado 
+                        pos = posicionInicial + 14; // El costo es calculado 
 
-                        pos = posicionInicial + 13;
+                        pos = posicionInicial + 15;
                         try
                         {
                             productoStaging.monedaMP = sheet.GetRow(row).GetCell(pos).ToString().Trim();
@@ -817,7 +837,7 @@ namespace Cotizador.Controllers
                             productoStaging.monedaMP = "S";
                         }
 
-                        pos = posicionInicial + 14;
+                        pos = posicionInicial + 16;
                         try
                         {
                             Double? val = sheet.GetRow(row).GetCell(pos).NumericCellValue;
@@ -828,9 +848,9 @@ namespace Cotizador.Controllers
                             productoStaging.precioOriginal = 0;
                         }
 
-                        pos = posicionInicial + 15; // El precio lima es calculado
+                        pos = posicionInicial + 17; // El precio lima es calculado
 
-                        pos = posicionInicial + 16;
+                        pos = posicionInicial + 18;
                         try
                         {
                             Double? val = sheet.GetRow(row).GetCell(pos).NumericCellValue;
@@ -841,9 +861,9 @@ namespace Cotizador.Controllers
                             productoStaging.precioProvinciasOriginal = 0;
                         }
 
-                        pos = posicionInicial + 17; // El precio provincias es calculado
+                        pos = posicionInicial + 19; // El precio provincias es calculado
 
-                        pos = posicionInicial + 18;
+                        pos = posicionInicial + 20;
                         if (sheet.GetRow(row).GetCell(pos) == null)
                         {
                             productoStaging.unidadConteo = null;
@@ -853,7 +873,7 @@ namespace Cotizador.Controllers
                             productoStaging.unidadConteo = sheet.GetRow(row).GetCell(pos).ToString();
                         }
 
-                        pos = posicionInicial + 19;
+                        pos = posicionInicial + 21;
                         if (sheet.GetRow(row).GetCell(pos) == null)
                         {
                             productoStaging.unidadEstandarInternacional = null;
@@ -863,7 +883,7 @@ namespace Cotizador.Controllers
                             productoStaging.unidadEstandarInternacional = sheet.GetRow(row).GetCell(pos).ToString();
                         }
 
-                        pos = posicionInicial + 20;
+                        pos = posicionInicial + 22;
                         if (sheet.GetRow(row).GetCell(pos) == null)
                         {
                             productoStaging.equivalenciaUnidadEstandarUnidadConteo = 0;
@@ -873,7 +893,7 @@ namespace Cotizador.Controllers
                             productoStaging.equivalenciaUnidadEstandarUnidadConteo = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
                         }
 
-                        pos = posicionInicial + 21;
+                        pos = posicionInicial + 23;
                         if (sheet.GetRow(row).GetCell(pos) == null)
                         {
                             productoStaging.unidadProveedorInternacional = null;
@@ -883,7 +903,7 @@ namespace Cotizador.Controllers
                             productoStaging.unidadProveedorInternacional = sheet.GetRow(row).GetCell(pos).ToString();
                         }
 
-                        pos = posicionInicial + 22;
+                        pos = posicionInicial + 24;
                         if (sheet.GetRow(row).GetCell(pos) == null)
                         {
                             productoStaging.equivalenciaUnidadProveedorUnidadConteo = 0;
@@ -893,7 +913,7 @@ namespace Cotizador.Controllers
                             productoStaging.equivalenciaUnidadProveedorUnidadConteo = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
                         }
 
-                        pos = posicionInicial + 23;
+                        pos = posicionInicial + 25;
                         if (sheet.GetRow(row).GetCell(pos) == null)
                         {
                             productoStaging.unidadAlternativaInternacional = null;
@@ -903,7 +923,7 @@ namespace Cotizador.Controllers
                             productoStaging.unidadAlternativaInternacional = sheet.GetRow(row).GetCell(pos).ToString();
                         }
 
-                        pos = posicionInicial + 24;
+                        pos = posicionInicial + 26;
                         if (sheet.GetRow(row).GetCell(pos) == null)
                         {
                             productoStaging.equivalenciaUnidadAlternativaUnidadConteo = 0;
@@ -913,7 +933,7 @@ namespace Cotizador.Controllers
                             productoStaging.equivalenciaUnidadAlternativaUnidadConteo = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
                         }
 
-                        pos = posicionInicial + 25;
+                        pos = posicionInicial + 27;
                         if (sheet.GetRow(row).GetCell(pos) == null)
                         {
                             productoStaging.codigoSunat = null;
@@ -923,7 +943,7 @@ namespace Cotizador.Controllers
                             productoStaging.codigoSunat = sheet.GetRow(row).GetCell(pos).ToString();
                         }
                         
-                        pos = posicionInicial + 26;
+                        pos = posicionInicial + 28;
                         try
                         {
                             productoStaging.exoneradoIgv = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper() == "SI" ? true : false;
@@ -933,7 +953,7 @@ namespace Cotizador.Controllers
                             productoStaging.exoneradoIgv = false;
                         }
 
-                        pos = posicionInicial + 27;
+                        pos = posicionInicial + 29;
                         try
                         {
                             productoStaging.inafecto = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper() == "SI" ? true : false;
@@ -943,7 +963,7 @@ namespace Cotizador.Controllers
                             productoStaging.inafecto = false;
                         }
 
-                        pos = posicionInicial + 28;
+                        pos = posicionInicial + 30;
                         try
                         {
                             string name = sheet.GetRow(row).GetCell(pos).ToString().Trim();
@@ -955,9 +975,9 @@ namespace Cotizador.Controllers
                             productoStaging.tipoProducto = Producto.TipoProducto.Bien;
                         }
 
-                        pos = posicionInicial + 29; // Tipo de cambio se sube en el formulario
+                        pos = posicionInicial + 31; // Tipo de cambio se sube en el formulario
 
-                        pos = posicionInicial + 30;
+                        pos = posicionInicial + 32;
                         try
                         {
                             productoStaging.Estado = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper().Equals("SI") ? 1 : 0;
@@ -967,7 +987,7 @@ namespace Cotizador.Controllers
                             productoStaging.Estado = 0;
                         }
 
-                        pos = posicionInicial + 31;
+                        pos = posicionInicial + 33;
                         try
                         {
                             //productoStaging.descontinuado = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper().Equals("SI") ? 1 : 0;
@@ -980,7 +1000,7 @@ namespace Cotizador.Controllers
                             productoStaging.ventaRestringida = Producto.TipoVentaRestringida.SinRestriccion;
                         }
 
-                        pos = posicionInicial + 32;
+                        pos = posicionInicial + 34;
                         try
                         {
                             productoStaging.motivoRestriccion = sheet.GetRow(row).GetCell(pos).ToString().Trim();
@@ -990,7 +1010,7 @@ namespace Cotizador.Controllers
                             productoStaging.motivoRestriccion = "";
                         }
 
-                        pos = posicionInicial + 33;
+                        pos = posicionInicial + 35;
                         if (sheet.GetRow(row).GetCell(pos) == null)
                         {
                             productoStaging.cantidadMaximaPedidoRestringido = 0;
@@ -1000,7 +1020,7 @@ namespace Cotizador.Controllers
                             productoStaging.cantidadMaximaPedidoRestringido = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
                         }
 
-                        pos = posicionInicial + 34;
+                        pos = posicionInicial + 36;
                         try
                         {
                             productoStaging.descripcionLarga = sheet.GetRow(row).GetCell(pos).ToString().Trim().Replace("\"", "''");
@@ -1010,7 +1030,7 @@ namespace Cotizador.Controllers
                             productoStaging.descripcionLarga = "";
                         }
 
-                        pos = posicionInicial + 35;
+                        pos = posicionInicial + 37;
                         try
                         {
                             productoStaging.agregarDescripcionCotizacion = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper().Equals("SI") ? 1 : 0;
@@ -1018,6 +1038,17 @@ namespace Cotizador.Controllers
                         catch (Exception e)
                         {
                             productoStaging.agregarDescripcionCotizacion = 0;
+                        }
+
+                        pos = posicionInicial + 38;
+                        try
+                        {
+                            Double? val = sheet.GetRow(row).GetCell(pos).NumericCellValue;
+                            productoStaging.topeDescuento = Convert.ToDecimal(val);
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.topeDescuento = 0;
                         }
 
                         //UtilesHelper.setValorCelda(sheet, 1, "AC", Producto.nombreAtributo("tipoProducto"), titleCellStyle);

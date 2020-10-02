@@ -111,7 +111,8 @@ namespace Model
         [Display(Name = "Unidad Proveedor:")]
         public String unidadProveedor { get; set; }
 
-
+        [Display(Name = "Unidad Pedido Proveedor:")]
+        public String unidadPedidoProveedor { get; set; }
         /// <summary>
         /// El campo equivalencia puede contener la equivalencia con respecto a la unidad de proveedor o alternativa
         /// En caso que la unidad se la estandar entonces la equivalencia debe ser 1
@@ -127,6 +128,9 @@ namespace Model
 
         [Display(Name = "Equivalencia Und. Prov.:")]
         public int equivalenciaProveedor { get; set; }
+
+        [Display(Name = "Equivalencia UP/UPP:")]
+        public int equivalenciaUnidadPedidoProveedor { get; set; }
 
         [Display(Name = "Equivalencia Und. Alt. Und. Conteo:")]
         ///<summary>
@@ -224,7 +228,8 @@ namespace Model
 
         public List<PrecioClienteProducto> precioListaList { get; set; }
 
-
+        [Display(Name = "Tope Descuento:")]
+        public Decimal topeDescuento { get; set; }
 
         [Display(Name = "Costo Original:")]
         ///<summary>
@@ -442,14 +447,17 @@ namespace Model
                     case "unidad_alternativa": cp.nombre = Producto.nombreAtributo("unidad_alternativa"); break;
                     case "equivalencia": cp.nombre = Producto.nombreAtributo("equivalenciaAlternativa"); break;
                     case "equivalencia_proveedor": cp.nombre = Producto.nombreAtributo("equivalenciaProveedor"); break;
+                    case "equivalencia_unidad_pedido_proveedor": cp.nombre = Producto.nombreAtributo("equivalenciaUnidadPedidoProveedor"); break;
                     case "moneda_compra": cp.nombre = Producto.nombreAtributo("monedaProveedor"); break;
                     case "moneda_venta": cp.nombre = Producto.nombreAtributo("monedaMP"); break;
                     case "unidad_proveedor": cp.nombre = Producto.nombreAtributo("unidadProveedor"); break;
                     case "unidad_estandar_internacional": cp.nombre = Producto.nombreAtributo("unidadEstandarInternacional"); break;
                     case "unidad_alternativa_internacional": cp.nombre = Producto.nombreAtributo("unidadAlternativaInternacional"); break;
+                    case "unidad_pedido_proveedor": cp.nombre = Producto.nombreAtributo("unidadPedidoProveedor"); break;
                     case "inafecto": cp.nombre = Producto.nombreAtributo("inafecto"); break;
                     case "tipo": cp.nombre = Producto.nombreAtributo("tipoProducto"); break;
 
+                    case "tope_descuento": cp.nombre = Producto.nombreAtributo("topeDescuento"); break;
                     case "costo_original": cp.nombre = Producto.nombreAtributo("costoOriginal"); break;
                     case "precio_original": cp.nombre = Producto.nombreAtributo("precioOriginal"); break;
                     case "precio_provincia_original": cp.nombre = Producto.nombreAtributo("precioProvinciasOriginal"); break;
@@ -534,14 +542,17 @@ namespace Model
                         //Revisar
                     case "equivalencia": lc = instanciarLogCambio(campo); lc.valor = this.equivalenciaAlternativa.ToString(); break;
                     case "equivalencia_proveedor": lc = instanciarLogCambio(campo); lc.valor = this.equivalenciaProveedor.ToString(); break;
+                    case "equivalencia_unidad_pedido_proveedor": lc = instanciarLogCambio(campo); lc.valor = this.equivalenciaUnidadPedidoProveedor.ToString(); break;
                     case "moneda_compra": lc = instanciarLogCambio(campo); lc.valor = this.monedaProveedor; break;
                     case "moneda_venta": lc = instanciarLogCambio(campo); lc.valor = this.monedaMP; break;
                     case "unidad_proveedor": lc = instanciarLogCambio(campo); lc.valor = this.unidadProveedor; break;
+                    case "unidad_pedido_proveedor": lc = instanciarLogCambio(campo); lc.valor = this.unidadPedidoProveedor; break;
                     case "unidad_estandar_internacional": lc = instanciarLogCambio(campo); lc.valor = this.unidadEstandarInternacional; break;
                     case "unidad_alternativa_internacional": lc = instanciarLogCambio(campo); lc.valor = this.unidadAlternativaInternacional; break;
                     case "inafecto": lc = instanciarLogCambio(campo); lc.valor = this.inafecto.ToString(); break;
                     case "tipo": lc = instanciarLogCambio(campo); lc.valor = ((int) this.tipoProducto).ToString(); break;
 
+                    case "tope_descuento": lc = instanciarLogCambio(campo); lc.valor = this.topeDescuento.ToString(); break;
                     case "costo_original": lc = instanciarLogCambio(campo); lc.valor = this.costoOriginal.ToString(); break;
                     case "precio_original": lc = instanciarLogCambio(campo); lc.valor = this.precioOriginal.ToString(); break;
                     case "precio_provincia_original": lc = instanciarLogCambio(campo); lc.valor = this.precioProvinciasOriginal.ToString(); break;
@@ -680,6 +691,21 @@ namespace Model
                             lista.Add(cambio);
                         }
                         break;
+                    case "tope_descuento":
+                        if (this.topeDescuento == decimal.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.topeDescuento = decimal.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
                     case "tipo_cambio":
                         if (this.tipoCambio == decimal.Parse(cambio.valor))
                         {
@@ -815,6 +841,21 @@ namespace Model
                             lista.Add(cambio);
                         }
                         break;
+                    case "unidad_pedido_proveedor":
+                        if (this.unidadPedidoProveedor == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.unidadPedidoProveedor = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
                     case "unidad_conteo":
                         if (this.unidadConteo == cambio.valor)
                         {
@@ -887,6 +928,21 @@ namespace Model
                         else
                         {
                             this.equivalenciaProveedor = int.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "equivalencia_unidad_pedido_proveedor":
+                        if (this.equivalenciaUnidadPedidoProveedor == int.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.equivalenciaUnidadPedidoProveedor = int.Parse(cambio.valor);
                             lista.Add(cambio);
                         }
                         break;

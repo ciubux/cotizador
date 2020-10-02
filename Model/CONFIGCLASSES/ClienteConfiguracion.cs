@@ -9,5 +9,7 @@ namespace Model.CONFIGCLASSES
     public class ClienteConfiguracion
     {
         public bool agregarNombreSedeObservacionFactura { get; set; }
+
+        public bool facturacionCompleja { get; set; }
     }
 }

@@ -2643,6 +2643,7 @@ jQuery(function ($) {
                     itemOrdenCompraCliente = {
                         idOrdenCompraClienteDetalle: lista[i].idOrdenCompraClienteDetalle, sku: lista[i].producto.sku, producto: lista[i].producto.descripcion, unidad: lista[i].unidad,
                         idProducto: lista[i].producto.idProducto, cantidad: lista[i].cantidad, cantidadPendienteAtencion: lista[i].cantidadPendienteAtencion,
+                        producto: lista[i].producto,
                         cantidadPermitida: lista[i].cantidadPermitida, observacionRestriccion: lista[i].observacionRestriccion
                     };
 
@@ -3014,9 +3015,28 @@ jQuery(function ($) {
         for (i = 0; i < fLen; i++) {
             var cantidadRestringir = parseInt(ordenCompraClienteItemsRestringidos[i].cantidad) - parseInt(ordenCompraClienteItemsRestringidos[i].cantidadPermitida);
             var cantidadAtendida = parseInt(ordenCompraClienteItemsRestringidos[i].cantidad) - parseInt(ordenCompraClienteItemsRestringidos[i].cantidadPendienteAtencion);
+            var optionsUnidad = "";
+
+            var producto = ordenCompraClienteItemsRestringidos[i].producto;
+            if (ordenCompraClienteItemsRestringidos[i].unidad == producto.unidad) {
+                optionsUnidad = '<option selected value="0">' + producto.unidad + '</option>';
+            } else {
+                optionsUnidad = '<option value="0">' + producto.unidad + '</option>';
+            }
+
+            var presLen = producto.ProductoPresentacionList.length;
+
+            for (j = 0; j < presLen; j++) {
+                if (producto.ProductoPresentacionList[j].Presentacion == producto.unidad) {
+                    optionsUnidad = optionsUnidad + '<option selected value="' + producto.ProductoPresentacionList[j].IdProductoPresentacion + '">' + producto.ProductoPresentacionList[j].Presentacion + '</option>';
+                } else {
+                    optionsUnidad = optionsUnidad + '<option value="' + producto.ProductoPresentacionList[j].IdProductoPresentacion + '">' + producto.ProductoPresentacionList[j].Presentacion + '</option>';
+                }
+            }
+
             text += '<tr idOrdenCompraClienteDetalle="' + ordenCompraClienteItemsRestringidos[i].idProducto + '">';
-            text += '<td>' + ordenCompraClienteItemsRestringidos[i].sku + ' ' + ordenCompraClienteItemsRestringidos[i].producto + '</td>';
-            text += '<td>' + ordenCompraClienteItemsRestringidos[i].unidad + '</td>';
+            text += '<td>' + ordenCompraClienteItemsRestringidos[i].sku + ' ' + ordenCompraClienteItemsRestringidos[i].producto.descripcion + '</td>';
+            text += '<td><select class="form-control inputUnidad">' + optionsUnidad + '</select></td>';
             text += '<td class="celdaItemCantidad">' + ordenCompraClienteItemsRestringidos[i].cantidad + '</td>';
             text += '<td class="celdaItemCantidadRestante">' + ordenCompraClienteItemsRestringidos[i].cantidad + '</td>';
             text += '<td>' + 
@@ -3034,6 +3054,14 @@ jQuery(function ($) {
         }*/
     }
 
+    $('.divProductosGenerarPedido').on('change', 'tr td .inputUnidad', function (e) {
+        var idDetalle = $(this).closest('tr').attr('idOrdenCompraClienteDetalle');
+        var cantidadAtender = $(this).closest('tr').find('td .inputItemAtender').val();
+        var comentario = $(this).closest('tr').find('td .inputItemObervacionDetalle').val();
+        var productoPresentacion = $(this).val();
+
+        ActualizarDetalleGenerarPedido(idDetalle, cantidadAtender, productoPresentacion, comentario);
+    });
 
     $('.divProductosGenerarPedido').on('change', 'tr td .inputItemAtender', function (e) {
         var cantidadAtender = parseInt($(this).val());
@@ -3051,17 +3079,19 @@ jQuery(function ($) {
 
         var idDetalle = $(this).closest('tr').attr('idOrdenCompraClienteDetalle');
         var comentario = $(this).closest('tr').find('td .inputItemObervacionDetalle').val();
+        var productoPresentacion = $(this).closest('tr').find('td .inputUnidad').val();
 
-        ActualizarDetalleGenerarPedido(idDetalle, cantidadAtender, comentario);
+        ActualizarDetalleGenerarPedido(idDetalle, cantidadAtender, productoPresentacion, comentario);
     });
 
 
     $('.divProductosGenerarPedido').on('change', 'tr td .inputItemObervacionDetalle', function (e) {
         var idDetalle = $(this).closest('tr').attr('idOrdenCompraClienteDetalle');
         var cantidadAtender = $(this).closest('tr').find('td .inputItemAtender').val();
+        var productoPresentacion = $(this).closest('tr').find('td .inputUnidad').val();
         var comentario = $(this).val();
 
-        ActualizarDetalleGenerarPedido(idDetalle, cantidadAtender, comentario);
+        ActualizarDetalleGenerarPedido(idDetalle, cantidadAtender, productoPresentacion, comentario);
     });
 
     $('.divProductosGenerarPedido').on('change', '#occ_generar_pedido_ciudad', function (e) {
@@ -3070,13 +3100,14 @@ jQuery(function ($) {
         ActualizarIdClienteGenerarPedido(idClienteSede);
     });
 
-    function ActualizarDetalleGenerarPedido(idDetalle, cantidad, comentario) {
+    function ActualizarDetalleGenerarPedido(idDetalle, cantidad, productoPresentacion, comentario) {
         $.ajax({
             url: "/OrdenCompraCliente/SetDetalleGenerarPedido",
             type: 'POST',
             data: {
                 idProducto: idDetalle,
                 cantidad: cantidad,
+                productoPresentacion: productoPresentacion,
                 comentario: comentario
             },
             success: function () {

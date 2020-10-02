@@ -589,6 +589,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
                 cotizacionDetalle.producto.sku = Converter.GetString(row, "sku");
                 cotizacionDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
+                cotizacionDetalle.producto.topeDescuento = Converter.GetDecimal(row, "tope_descuento");
                 cotizacionDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
                 cotizacionDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
                 cotizacionDetalle.producto.image = Converter.GetBytes(row, "imagen");
@@ -961,6 +962,7 @@ namespace DataLayer
                 pedidoDetalle.producto.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo_producto");
                 pedidoDetalle.producto.ventaRestringida = (Producto.TipoVentaRestringida) Converter.GetInt(row, "descontinuado");
                 pedidoDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
+                pedidoDetalle.producto.topeDescuento = Converter.GetDecimal(row, "tope_descuento");
 
                 pedidoDetalle.producto.image = Converter.GetBytes(row, "imagen");
 
@@ -1309,7 +1311,8 @@ namespace DataLayer
                 pedidoDetalle.producto.ventaRestringida = (Producto.TipoVentaRestringida) Converter.GetInt(row, "descontinuado");
                 pedidoDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
                 pedidoDetalle.producto.cantidadMaximaPedidoRestringido = Converter.GetInt(row, "cantidad_maxima_pedido_restringido");
-                
+                pedidoDetalle.producto.topeDescuento = Converter.GetDecimal(row, "tope_descuento");
+
                 pedidoDetalle.producto.image = Converter.GetBytes(row, "imagen");
 
                 pedidoDetalle.porcentajeDescuento = Converter.GetDecimal(row, "porcentaje_descuento");
@@ -1508,22 +1511,71 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
         #endregion
 
 
-        public List<Guid> SelectPedidosSinAtencion()
+        public List<Pedido> SelectPedidosSinAtencion()
         {
-            List<Guid> pedidoIds = new List<Guid>();
+            List<Pedido> pedidoIds = new List<Pedido>();
 
             var objCommand = GetSqlCommand("ps_pedidos_sin_atencion");
             DataTable dataTable = Execute(objCommand);
-            
+
+            int ultimoDia = 0;
+            int esFechaExtendida = 0;
+            int mod = 0;
+
             foreach (DataRow row in dataTable.Rows)
             {
-                Guid idPedido = Converter.GetGuid(row, "id_pedido");
+                Pedido item = new Pedido();
+                item.idPedido = Converter.GetGuid(row, "id_pedido");
                 
-                pedidoIds.Add(idPedido);
+                esFechaExtendida = Converter.GetInt(row, "es_fecha_extendida");
+
+                if (esFechaExtendida == 1) {
+                    ultimoDia = Converter.GetInt(row, "es_fecha_limite_extendida");
+                    mod = Converter.GetInt(row, "dias_dif_mod_fecha_entrega_extendida");
+                } else {
+                    ultimoDia = Converter.GetInt(row, "es_fecha_limite");
+                    mod = Converter.GetInt(row, "dias_dif_mod_fecha_entrega");
+                }
+
+                item.accion_truncar = false;
+                item.accion_alertarNoAtendido = false;
+
+                if (mod == 0)
+                {
+                    item.accion_alertarNoAtendido = true;
+                }
+
+                if (ultimoDia == 1)
+                {
+                    item.accion_truncar = true;
+                }
+
+                pedidoIds.Add(item);
             }
             
             return pedidoIds;
         }
+
+        public bool TruncarPedidos(List<Guid> idPedidos)
+        {
+            var objCommand = GetSqlCommand("pu_truncar_pedidos");
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("pedidos", typeof(Guid)));
+
+            // populate DataTable from your List here
+            foreach (var id in idPedidos)
+                tvp.Rows.Add(id);
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@pedidos", tvp);
+            // these next lines are important to map the C# DataTable object to the correct SQL User Defined Type
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+            ExecuteNonQuery(objCommand);
+
+            return true;
+        }
+
 
         public List<SeguimientoPedido> GetHistorialSeguimiento(Guid idPedido)
         {

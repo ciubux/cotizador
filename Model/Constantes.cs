@@ -453,12 +453,20 @@ namespace Model
         public const String VISUALIZA_RUBROS = "P751";
 
         public const String CAMBIA_CLIENTE_FACTURA = "P581";
-        
+        public const String CREA_FACTURA_COMPLEJA = "P582";
 
         public const String BUSCA_NOTAS_INGRESO_TODAS_SEDES = "P320";
+        public const String CREA_ORDENES_COMPRA_CLIENTE = "P380";
+
+
         public const String VALIDA_RESPONSABLES_COMERCIALES_ASIGNADOS = "P780";
 
         public const String MODIFICA_REASIGNACIONES_CLIENTE = "P780";
+
+
+        public const String ACTIVA_CLIENTE_FACTURA_COMPLEJA = "P680";
+
+
 
         public enum paginas
         {
@@ -644,7 +652,7 @@ namespace Model
         #region PARAMETROS MAIL
         public static String SERVER_SMPTP = "smtp.office365.com";
         public static int PUERTO_SERVER_SMPTP = 587;
-        public static String MAIL_ADMINISTRADOR = "c.cornejo@mpinstitucional.com";
+        public static String MAIL_ADMINISTRADOR = "zas.mp@mpinstitucional.com";
         public static String MAIL_SOPORTE_TI = "soporte.ti@mpinstitucional.com";
         public static String MAIL_CREDITOS = "creditos@mpinstitucional.com";
         public static String MAIL_COBRANZAS = "cobranzas@mpinstitucional.com";

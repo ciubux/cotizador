@@ -46,6 +46,9 @@ namespace Model
 
         [Display(Name = "Truncado:")]
         public int truncado { get; set; }
+
+        public bool accion_truncar { get; set; }
+        public bool accion_alertarNoAtendido { get; set; }
         public Guid idPedido { get; set; }
         [Display(Name = "Número Pedido:")]
         public Int64 numeroPedido { get; set; }

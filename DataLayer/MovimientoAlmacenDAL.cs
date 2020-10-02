@@ -7,6 +7,8 @@ using Model;
 using System.Linq;
 using Model.EXCEPTION;
 using System.Data.SqlClient;
+using Newtonsoft.Json;
+using Model.CONFIGCLASSES;
 
 namespace DataLayer
 {
@@ -781,6 +783,17 @@ namespace DataLayer
                 guiaRemision.pedido.cliente.razonSocial = Converter.GetString(row, "razon_social");
                 guiaRemision.pedido.cliente.ruc = Converter.GetString(row, "ruc");
                 guiaRemision.pedido.cliente.domicilioLegal = Converter.GetString(row, "domicilio_legal");
+
+                try
+                {
+                    guiaRemision.pedido.cliente.configuraciones = JsonConvert.DeserializeObject<ClienteConfiguracion>(Converter.GetString(row, "cliente_configuraciones"));
+                    if (guiaRemision.pedido.cliente.configuraciones == null) guiaRemision.pedido.cliente.configuraciones = new ClienteConfiguracion();
+                }
+                catch (Exception ex)
+                {
+                    guiaRemision.pedido.cliente.configuraciones = new ClienteConfiguracion();
+                }
+
                 //USUARIO
                 guiaRemision.usuario = new Usuario();
                 guiaRemision.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");

@@ -124,3 +124,15 @@ The statement has been terminated.
 >>>>>>> dev/yrving
 2020-06-03 14:33:21.6337|ERROR|Cotizador.Controllers.ParentController|jalvarez@ripley.com.pe / Invalid object name 'RUBRO'.
 2020-09-03 00:07:19.5962|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2020-09-30 01:00:53.5050|ERROR|Cotizador.Controllers.ParentController|j.davila@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE' with unique index 'IDX_RUC_SEDE_ESTADO'. The duplicate key value is (10461243679, 39c9d42b-6d94-4aae-93b8-d1d6a5f11a33, 1).
+The statement has been terminated.
+2020-09-30 01:01:15.8418|ERROR|Cotizador.Controllers.ParentController|j.davila@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE' with unique index 'IDX_RUC_SEDE_ESTADO'. The duplicate key value is (10461243679, 703fc430-4dce-470c-87bb-9acc9eda9a0f, 1).
+The statement has been terminated.
+2020-09-30 01:01:29.7995|ERROR|Cotizador.Controllers.ParentController|j.davila@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE' with unique index 'IDX_RUC_SEDE_ESTADO'. The duplicate key value is (10461243679, 8ba0ac4e-fed3-44e4-a422-5567b9c3e65d, 1).
+The statement has been terminated.
+2020-09-30 01:02:25.3000|ERROR|Cotizador.Controllers.ParentController|j.davila@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE_SUNAT' with unique index 'IDX_CLIENTE_SUNAT_RUC'. The duplicate key value is (<NULL>).
+Cannot insert the value NULL into column 'direccion', table 'cotizadormp.dbo.DOMICILIO_LEGAL'; column does not allow nulls. INSERT fails.
+Cannot insert duplicate key row in object 'dbo.CLIENTE' with unique index 'IDX_CLIENTE_CODIGO'. The duplicate key value is (<NULL>, 1).
+The statement has been terminated.
+The statement has been terminated.
+The statement has been terminated.

@@ -90,6 +90,14 @@ namespace Model
             set { _porcentajeDescuento = value; }
         }
 
+        public bool cumpleTopeDescuentoProducto
+        {
+            get
+            {
+                return this.producto.topeDescuento <= 0 || this.producto.topeDescuento > this.porcentajeDescuento;
+            }
+        }
+        
         //Recupera el porcentajeDescuento con la cantidad de decimales que se desea ver en la interfaz
         public Decimal porcentajeDescuentoMostrar
         {
