@@ -329,13 +329,21 @@
 
                     <div class="col-sm-6 col-lg-4">
                         <div class="form-group">
-                            @Html.LabelFor(c => cliente.rubro, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4", @for = "idRubro" })
+                            @Html.LabelFor(c => cliente.rubro, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4", @for = "idRubroPadre" })
                             <div class="col-xs-8 col-sm-8 col-lg-8">
+                                @Html.Action("GetRubros", "Rubro",
+                                    new
+                                    {
+                                        rubroSelectId = "idRubroPadre",
+                                        selectedValue =  cliente.rubro.padre == null ? 0 : cliente.rubro.padre.idRubro
+                                    })
+
                                 @Html.Action("GetRubros", "Rubro",
                                     new
                                     {
                                         rubroSelectId = "idRubro",
                                         selectedValue = cliente.rubro.idRubro,
+                                        idPadre = cliente.rubro.padre == null ? -2 : cliente.rubro.padre.idRubro
                                     })
                             </div>
                         </div>

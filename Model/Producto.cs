@@ -123,16 +123,16 @@ namespace Model
 
 
         // private int _equivalencia;
-        [Display(Name = "Equivalencia Und. Alt.:")]
+        [Display(Name = "Equivalencia Und. Alt. / Und. MP:")]
         public int equivalenciaAlternativa { get; set; }
 
-        [Display(Name = "Equivalencia Und. Prov.:")]
+        [Display(Name = "Equivalencia Und. Prov. / Und. MP:")]
         public int equivalenciaProveedor { get; set; }
 
         [Display(Name = "Equivalencia UP/UPP:")]
         public int equivalenciaUnidadPedidoProveedor { get; set; }
 
-        [Display(Name = "Equivalencia Und. Alt. Und. Conteo:")]
+        [Display(Name = "Equivalencia Und. Alt. / Und. Conteo:")]
         ///<summary>
         ///Equivalencia unidad alternativa unidad conteo
         ///</summary>
@@ -141,7 +141,7 @@ namespace Model
         ///</return>
         public int equivalenciaUnidadAlternativaUnidadConteo { get; set; }
 
-        [Display(Name = "Equivalencia Und. Est. Und. Conteo:")]
+        [Display(Name = "Equivalencia Und. MP / Und. Conteo:")]
         ///<summary>
         ///Equivalencia unidad estandar unidad conteo 
         ///</summary>
@@ -151,7 +151,7 @@ namespace Model
         public int equivalenciaUnidadEstandarUnidadConteo { get; set; }
 
 
-        [Display(Name = "Equivalencia Und. Prov. Und. Conteo:")]
+        [Display(Name = "Equivalencia Und. Prov. / Und. Conteo:")]
         ///<summary>
         ///Equivalencia unidad proveedor unidad conteo 
         ///</summary>
@@ -286,10 +286,10 @@ namespace Model
 
         public int tipoProductoVista { get; set; }
 
-        [Display(Name = "Moneda Proveedor:")]
+        [Display(Name = "Moneda Compra:")]
         public string monedaProveedor { get; set; }
 
-        [Display(Name = "Moneda MP:")]
+        [Display(Name = "Moneda Venta:")]
         public string monedaMP { get; set; }
 
         [Display(Name = "Tipo Cambio:")]

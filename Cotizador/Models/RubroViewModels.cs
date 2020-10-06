@@ -12,7 +12,7 @@ namespace Cotizador.Models
     {
         public string RubroSelectId { get; set; }
         public string SelectedValue { get; set; }
-
+        public int idPadre { get; set; }
         public List<Rubro> Data { get; set; }
 
         public IEnumerable<SelectListItem> Rubros

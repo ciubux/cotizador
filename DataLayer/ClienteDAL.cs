@@ -437,6 +437,14 @@ namespace DataLayer
                 cliente.rubro.idRubro = Converter.GetInt(row, "id_rubro");
                 cliente.rubro.codigo = Converter.GetString(row, "codigo_rubro");
                 cliente.rubro.nombre = Converter.GetString(row, "nombre_rubro");
+
+                int idRubroPadre = Converter.GetInt(row, "id_rubro_padre");
+                if (idRubroPadre > 0)
+                {
+                    RubroDAL rubroDal = new RubroDAL();
+                    cliente.rubro.padre = rubroDal.getRubro(idRubroPadre);
+                }
+
                 //cliente.exoneradoValidacionLiberacionCrediticia = Converter.GetBool(row, "exonerado_validacion_liberacion_crediticia");
             }
 

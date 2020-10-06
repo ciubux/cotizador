@@ -5,15 +5,13 @@
     new
     {
         id = Model.RubroSelectId,
-        @class = "form-control"
-
+        @class = "form-control",
+        @style = "margin-bottom: 7px;"
     })
 
 
 
 <script type="text/javascript">
-document.addEventListener("DOMContentLoaded", function (event) {
-    $("#@Model.RubroSelectId").chosen({ placeholder_text_single: "Seleccione el Rubro", no_results_text: "No se encontró Rubro" }).on('chosen:showing_dropdown');
-});
+
 
 </script>

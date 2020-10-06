@@ -992,6 +992,20 @@ namespace Cotizador.Controllers
                 ClienteSession.rubro.idRubro = Int32.Parse(this.Request.Params["idRubro"]);
         }
 
+        public String ChangeIdRubroPadre()
+        {
+            RubroBL bl = new RubroBL();
+            List<Rubro> rubros = new List<Rubro>();
+            Rubro busq = new Rubro();
+            busq.Estado = 1;
+
+            if (this.Request.Params["idRubro"] != null && this.Request.Params["idRubro"] != String.Empty)
+                rubros = bl.getRubros(busq, Int32.Parse(this.Request.Params["idRubro"]));
+
+            ClienteSession.rubro.idRubro = 0;
+            return JsonConvert.SerializeObject(rubros);
+        }
+
         public void ChangeIdOrigen()
         {
             if (this.Request.Params["idOrigen"] == null || this.Request.Params["idOrigen"] == String.Empty)

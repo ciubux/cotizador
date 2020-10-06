@@ -19,11 +19,11 @@ namespace BusinessLayer
             }
         }
 
-        public List<Rubro> getRubros(Rubro obj)
+        public List<Rubro> getRubros(Rubro obj, int idPadre = -1)
         {
             using (var dal = new RubroDAL())
             {
-                return dal.getRubros(obj);
+                return dal.getRubros(obj, idPadre);
             }
         }
 

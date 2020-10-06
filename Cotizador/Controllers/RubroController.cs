@@ -17,20 +17,21 @@ namespace Cotizador.Controllers
 {
     public class RubroController : ParentController
     {
-        public ActionResult GetRubros(string rubroSelectId, string selectedValue = null)
+        public ActionResult GetRubros(string rubroSelectId, string selectedValue = null, int idPadre = 0)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             Rubro obj = new Rubro();
             obj.Estado = 1;
 
             RubroBL bL = new RubroBL();
-            List<Rubro> list = bL.getRubros(obj);
+            List<Rubro> list = bL.getRubros(obj, idPadre);
 
             var model = new RubroViewModels
             {
                 Data = list,
                 RubroSelectId = rubroSelectId,
-                SelectedValue = selectedValue
+                SelectedValue = selectedValue,
+                idPadre = idPadre
             };
 
             return PartialView("_Rubro", model);

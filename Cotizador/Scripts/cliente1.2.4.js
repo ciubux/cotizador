@@ -1650,6 +1650,25 @@ jQuery(function ($) {
         });
     });
 
+    $("#idRubroPadre").change(function () {
+        var idRubro = $("#idRubroPadre").val();
+        $.ajax({
+            url: "/Cliente/ChangeIdRubroPadre", type: 'POST',
+            data: {
+                idRubro: idRubro
+            },
+            dataType: 'JSON',
+            error: function () { location.reload(); },
+            success: function (res) {
+                var options = '<option value="">Seleccione</option>';
+                for (var i = 0; i < res.length; i++) {
+                    options = options + '<option value="' + res[i].idRubro + '">' + res[i].nombre + '</option>';
+                }
+                $("#idRubro").html(options);
+            }
+        });
+    });
+
     $("#idRubro").change(function () {
         var idRubro = $("#idRubro").val();
         $.ajax({
@@ -2850,7 +2869,7 @@ jQuery(function ($) {
 
                 $("#verEstadoContribuyente").html(cliente.estadoContribuyente);
                 $("#verCondicionContribuyente").html(cliente.condicionContribuyente);
-                $("#verRubro").html(cliente.rubro.nombre);
+                $("#verRubro").html(cliente.rubro.nombreCompleto);
 
                 /*
                 $("#cliente_ubigeo_Departamento").val(cliente.ubigeo.Departamento);

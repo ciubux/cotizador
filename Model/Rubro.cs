@@ -15,6 +15,14 @@ namespace Model
         [Display(Name = "Nombre:")]
         public String nombre { get; set; }
 
+        public Rubro padre { get; set; }
+
+        public String nombreCompleto{ get {
+                return (this.padre != null ? this.padre.nombre + " - " : "") + this.nombre;
+            }
+        }
+
+
         public override string ToString()
         {
             return "Rubro: " + this.nombre + " - Cod: " + this.codigo;

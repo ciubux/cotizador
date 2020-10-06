@@ -32,6 +32,13 @@ namespace DataLayer
                 obj.codigo = Converter.GetString(row, "codigo");
                 obj.nombre = Converter.GetString(row, "nombre");
                 obj.Estado = Converter.GetInt(row, "estado");
+
+                int idPadre = Converter.GetInt(row, "id_rubro_padre");
+
+                if (idPadre > 0)
+                {
+                    obj.padre = this.getRubro(idPadre);
+                }
             }
 
             return obj;
@@ -53,10 +60,12 @@ namespace DataLayer
         }
 
 
-        public List<Rubro> getRubros(Rubro sub)
+        public List<Rubro> getRubros(Rubro sub, int idPadre = -1)
         {
             var objCommand = GetSqlCommand("ps_rubros");
             InputParameterAdd.Int(objCommand, "estado", sub.Estado);
+            InputParameterAdd.Int(objCommand, "idPadre", idPadre);
+
             DataTable dataTable = Execute(objCommand);
             List<Rubro> lista = new List<Rubro>();
 
