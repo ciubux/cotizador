@@ -118,7 +118,7 @@ namespace Model
         /// En caso que la unidad se la estandar entonces la equivalencia debe ser 1
         /// </summary>
    //     public decimal equivalencia { get; set; }
-        [Display(Name = "Unidad Proveedor Internacional:")]
+        [Display(Name = "Unidad Proveedor SUNAT:")]
         public String unidadProveedorInternacional { get; set; }
 
 
@@ -228,7 +228,7 @@ namespace Model
 
         public List<PrecioClienteProducto> precioListaList { get; set; }
 
-        [Display(Name = "Tope Descuento:")]
+        [Display(Name = "Tope Descuento %:")]
         public Decimal topeDescuento { get; set; }
 
         [Display(Name = "Costo Original:")]
@@ -423,6 +423,40 @@ namespace Model
         }
 
         public string motivoRestriccionCompuesto { get { return this.tipoVentaRestingidaToString + ". " + this.motivoRestriccion; } }
+
+        public void calcularCostoPrecio()
+        {
+            if (costoOriginal == 0)
+            {
+                this.costoSinIgv = 0;
+            } else
+            {
+                this.costoSinIgv = this.costoOriginal / (this.equivalenciaProveedor == 0 ? 1 : this.equivalenciaProveedor);
+            }
+
+            if (this.monedaProveedor == "D")
+            {
+                this.costoSinIgv = this.costoSinIgv * this.tipoCambio;
+            }
+
+            if (this.monedaMP == "D")
+            {
+                this.precioSinIgv = this.precioOriginal * this.tipoCambio;
+            }
+            else
+            {
+                this.precioSinIgv = this.precioOriginal;
+            }
+
+            if (this.monedaMP == "D")
+            {
+                this.precioProvinciaSinIgv = this.precioProvinciasOriginal * this.tipoCambio;
+            }
+            else
+            {
+                this.precioProvinciaSinIgv = this.precioProvinciasOriginal;
+            }
+        }
 
         public static List<CampoPersistir> obtenerCampos(List<LogCampo> campos, bool soloPersistentes = false) 
         {

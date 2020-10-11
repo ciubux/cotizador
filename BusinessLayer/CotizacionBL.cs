@@ -161,7 +161,7 @@ namespace BusinessLayer
 
                     if (evaluarDescuento > 0)
                     {
-                        if (cotizacionDetalle.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION || cotizacionDetalle.porcentajeDescuento > cotizacionDetalle.producto.topeDescuento || cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial)
+                        if (cotizacionDetalle.porcentajeDescuento > Constantes.PORCENTAJE_MAX_APROBACION || evaluarDescuento == 6 || cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial)
                         {
                             //Se evalua de donde proviene para indicar el mensaje exacto
                             switch (evaluarDescuento)

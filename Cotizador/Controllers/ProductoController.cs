@@ -131,6 +131,8 @@ namespace Cotizador.Controllers
 
         private void instanciarProducto()
         {
+            ParametroBL parametrobl = new ParametroBL();
+
             Producto producto = new Producto();
             producto.idProducto = Guid.Empty;
             producto.sku = String.Empty;
@@ -144,7 +146,18 @@ namespace Cotizador.Controllers
             producto.unidad = String.Empty;
             producto.unidadProveedor = String.Empty;
             producto.unidad_alternativa = String.Empty;
-            producto.unidadEstandarInternacional = String.Empty;
+            producto.unidadEstandarInternacional = "NIU";
+            producto.unidadAlternativaInternacional = "NIU";
+            producto.unidadProveedorInternacional = "NIU";
+            producto.equivalenciaUnidadPedidoProveedor = 1;
+            producto.equivalenciaAlternativa = 1;
+            producto.equivalenciaProveedor = 1;
+            producto.equivalenciaUnidadAlternativaUnidadConteo = 1;
+            producto.equivalenciaUnidadProveedorUnidadConteo = 1;
+            producto.equivalenciaUnidadEstandarUnidadConteo = 1;
+            producto.tipoCambio = parametrobl.getParametroDecimal("TIPO_CAMBIO");
+            producto.monedaMP = "S";
+            producto.monedaProveedor = "S";
             producto.motivoRestriccion = String.Empty;
             FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
             MemoryStream storeStream = new MemoryStream();
@@ -287,6 +300,7 @@ namespace Cotizador.Controllers
             Producto producto = (Producto)this.Session[Constantes.VAR_SESSION_PRODUCTO];
             producto.familia = this.Session["familia"].ToString();
             producto.proveedor = this.Session["proveedor"].ToString();
+            producto.calcularCostoPrecio();
             producto = productoBL.insertProducto(producto);
             this.Session[Constantes.VAR_SESSION_PRODUCTO] = null;
             String resultado = JsonConvert.SerializeObject(producto);
@@ -300,6 +314,7 @@ namespace Cotizador.Controllers
             Producto producto = (Producto)this.Session[Constantes.VAR_SESSION_PRODUCTO];
             producto.familia = this.Session["familia"].ToString();
             producto.proveedor = this.Session["proveedor"].ToString();
+            producto.calcularCostoPrecio();
             if (producto.idProducto == Guid.Empty)
             {
                 producto = productoBL.insertProducto(producto);

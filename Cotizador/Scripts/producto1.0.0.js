@@ -442,6 +442,11 @@ jQuery(function ($) {
         changeInputString("unidad_alternativa", $("#producto_unidad_alternativa").val());
     });
 
+    $("#producto_unidadPedidoProveedor").change(function () {
+        changeInputString("unidadPedidoProveedor", $("#producto_unidadPedidoProveedor").val());
+    });
+    
+
     $("#producto_equivalenciaAlternativa").change(function () {
         changeInputInt("equivalenciaAlternativa", $("#producto_equivalenciaAlternativa").val());
     });
@@ -450,13 +455,69 @@ jQuery(function ($) {
         changeInputInt("equivalenciaProveedor", $("#producto_equivalenciaProveedor").val());
     });
 
+    $("#producto_equivalenciaUnidadEstandarUnidadConteo").change(function () {
+        changeInputInt("equivalenciaUnidadEstandarUnidadConteo", $("#producto_equivalenciaUnidadEstandarUnidadConteo").val());
+    });
+
+    $("#producto_equivalenciaUnidadAlternativaUnidadConteo").change(function () {
+        changeInputInt("equivalenciaUnidadAlternativaUnidadConteo", $("#producto_equivalenciaUnidadAlternativaUnidadConteo").val());
+    });
+
+    $("#producto_equivalenciaUnidadProveedorUnidadConteo").change(function () {
+        changeInputInt("equivalenciaUnidadProveedorUnidadConteo", $("#producto_equivalenciaUnidadProveedorUnidadConteo").val());
+    });
+
+    $("#producto_equivalenciaUnidadPedidoProveedor").change(function () {
+        changeInputInt("equivalenciaUnidadPedidoProveedor", $("#producto_equivalenciaUnidadPedidoProveedor").val());
+    });
+
+    $("#producto_cantidadMaximaPedidoRestringido").change(function () {
+        changeInputInt("cantidadMaximaPedidoRestringido", $("#producto_cantidadMaximaPedidoRestringido").val());
+    });
+
+
+    $("#producto_unidadEstandarInternacional").change(function () {
+        changeInputString("unidadEstandarInternacional", $("#producto_unidadEstandarInternacional").val());
+    });
+
+    $("#producto_unidadAlternativaInternacional").change(function () {
+        changeInputString("unidadAlternativaInternacional", $("#producto_unidadAlternativaInternacional").val());
+    });
+
+    $("#producto_unidadProveedorInternacional").change(function () {
+        changeInputString("unidadProveedorInternacional", $("#producto_unidadProveedorInternacional").val());
+    });
+
     $("#tipoProducto").change(function () {
         ChangeTipoProducto($("#tipoProducto").val());
     });
 
+    $("#producto_monedaMP").change(function () {
+        changeInputString("monedaMP", $("#producto_monedaMP").val());
+    });
+
+    $("#producto_monedaProveedor").change(function () {
+        changeInputString("monedaProveedor", $("#producto_monedaProveedor").val());
+    });
+
+    $("#producto_unidadConteo").change(function () {
+        changeInputString("unidadConteo", $("#producto_unidadConteo").val());
+    });
+
+    $("#producto_codigoSunat").change(function () {
+        changeInputString("codigoSunat", $("#producto_codigoSunat").val());
+    });
+
+    $("#producto_descripcionLarga").change(function () {
+        changeInputString("descripcionLarga", $("#producto_descripcionLarga").val());
+    });
+    
+
     $("#tipoVentaRestringidaBusqueda").change(function () {
         changeInputInt("tipoVentaRestringidaBusqueda", $("#tipoVentaRestringidaBusqueda").val());
     });
+
+
 
     $("#producto_exoneradoIgv").change(function () {
         var valor = 1;
@@ -465,6 +526,37 @@ jQuery(function ($) {
         }
         changeInputBoolean('exoneradoIgv', valor)
     });
+
+    $("#chkAgregarDescripcionCotizacion").change(function () {
+        var valor = 1;
+        if (!$('#chkAgregarDescripcionCotizacion').prop('checked')) {
+            valor = 0;
+        }
+        changeInputInt('agregarDescripcionCotizacion', valor)
+    });
+    
+
+    $("#producto_precioOriginal").change(function () {
+        changeInputDecimal("precioOriginal", $("#producto_precioOriginal").val());
+    });
+
+    $("#producto_precioProvinciasOriginal").change(function () {
+        changeInputDecimal("precioProvinciasOriginal", $("#producto_precioProvinciasOriginal").val());
+    });
+
+    $("#producto_costoOriginal").change(function () {
+        changeInputDecimal("costoOriginal", $("#producto_costoOriginal").val());
+    });
+
+    $("#producto_tipoCambio").change(function () {
+        changeInputDecimal("tipoCambio", $("#producto_tipoCambio").val());
+    });
+
+    $("#producto_topeDescuento").change(function () {
+        changeInputDecimal("topeDescuento", $("#producto_topeDescuento").val());
+    });
+
+    
 
     $("#producto_precioSinIgv").change(function () {
         changeInputDecimal("precioSinIgv", $("#producto_precioSinIgv").val());
@@ -559,7 +651,17 @@ jQuery(function ($) {
                 $("#verProveedor").html(producto.proveedor);
                 $("#verDescripcion").html(producto.descripcion);
                 $("#verDescripcionLarga").html(producto.descripcionLarga);
-                
+
+                $("#verUnidadConteo").html(producto.unidadConteo);
+                $("#verUnidadAlternativaInternacional").html(producto.unidadAlternativaInternacional);
+                $("#verUnidadProveedorInternacional").html(producto.unidadProveedorInternacional);
+                $("#verUnidadPedidoProveedor").html(producto.unidadPedidoProveedor);
+
+                $("#verEquivalenciaUnidadEstandarUnidadConteo").html(producto.equivalenciaUnidadEstandarUnidadConteo);
+                $("#verEquivalenciaUnidadAlternativaUnidadConteo").html(producto.equivalenciaUnidadAlternativaUnidadConteo);
+                $("#verEquivalenciaUnidadProveedorUnidadConteo").html(producto.equivalenciaUnidadProveedorUnidadConteo);
+                $("#verEquivalenciaUnidadPedidoProveedor").html(producto.equivalenciaUnidadPedidoProveedor);
+
                 $("#verUnidad").html(producto.unidad);
                 $("#verUnidadProveedor").html(producto.unidadProveedor);
                 $("#verUnidadAlternativa").html(producto.unidad_alternativa);
@@ -571,7 +673,31 @@ jQuery(function ($) {
                 $("#verUnidadEstandarInternacional").html(producto.unidadEstandarInternacional);
                 $("#verTipo").html(producto.tipoProductoToString);
 
-               
+
+                $("#verTipoCambio").html(Number(producto.tipoCambio).toFixed(cantidadDecimales));
+
+                if (producto.monedaMP == "D") {
+                    $("#verMonedaMP").html("DÓLARES");
+                }
+                else {
+                    $("#verMonedaMP").html("SOLES");
+                }
+
+                if (producto.monedaProveedor == "D") {
+                    $("#verMonedaProveedor").html("DÓLARES");
+                }
+                else {
+                    $("#verMonedaProveedor").html("SOLES");
+                }
+
+                $("#verCodigoSunat").html(producto.codigoSunat);
+
+                $("#verCostoOriginal").html(Number(producto.costoOriginal).toFixed(cantidadCuatroDecimales));
+                $("#verPrecioOriginal").html(Number(producto.precioOriginal).toFixed(cantidadCuatroDecimales));
+                $("#verPrecioProvinciasOriginal").html(Number(producto.precioProvinciasOriginal).toFixed(cantidadCuatroDecimales));
+
+                $("#verTopeDescuento").html(Number(producto.topeDescuento).toFixed(cantidadDecimales) + " %");
+
                 if (producto.descontinuado) {
                     var spnMotivoRestriccion = "";
                     if (producto.motivoRestriccion != null) {
@@ -596,7 +722,15 @@ jQuery(function ($) {
                 else {
                     $("#verInafecto").html("No");
                 }
-                
+
+                if (producto.agregarDescripcionCotizacion) {
+                    $("#verAgregarDescripcionCotizacion").html("Sí");
+                }
+                else {
+                    $("#verAgregarDescripcionCotizacion").html("No");
+                }
+
+                $("#verCantidadMaximaPedidoRestringido").html(producto.cantidadMaximaPedidoRestringido);
                 
                 $("#modalVerProducto").modal('show');        
             }

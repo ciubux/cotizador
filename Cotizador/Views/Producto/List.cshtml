@@ -279,18 +279,7 @@
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <!--Descripcion-->
-                                <div class="col-sm-12 col-lg-12">
-                                    <div class="form-group">
-                                        @Html.LabelFor(dv => producto.descripcionLarga, htmlAttributes: new { @class = "control-label col-xs-2 col-lg-2" })
-                                        <div class="col-xs-10">
-                                            <p class="form-control-static" id="verDescripcionLarga"></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
+                            
                             <div class="row">
                                 <!--Familia-->
                                 <div class="col-sm-6 col-lg-6">
@@ -351,164 +340,344 @@
                         </div>
                     </div>
 
-
-                    <div class="row">
-                        <!--Unidad-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="form-group">
-                                @Html.LabelFor(c => producto.unidad, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-8 ">
-                                    <p class="form-control-static" id="verUnidad"></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!--Unidad Alternativa-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="form-group">
-                                @Html.LabelFor(c => producto.unidad_alternativa, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-8">
-                                    <p class="form-control-static" id="verUnidadAlternativa"></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!--Equivalencia-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="form-group">
-                                @Html.LabelFor(c => producto.equivalenciaAlternativa, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-6">
-                                    <p class="form-control-static" id="verEquivalenciaAlternativa"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-                    <div class="row">
-                        <div class="col-sm-6 col-lg-4">
-                        </div>
-                        <!--Unidad Proveedor-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="form-group">
-                                @Html.LabelFor(c => producto.unidadProveedor, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-8">
-                                    <p class="form-control-static" id="verUnidadProveedor"></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!--Equivalencia Proveedor-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="form-group">
-                                @Html.LabelFor(c => producto.equivalenciaProveedor, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-6">
-                                    <p class="form-control-static" id="verEquivalenciaProveedor"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="row">
                         <div class="col-sm-6 col-lg-4">
                             <div class="form-group">
-                                <label class="control-label col-xs-4" for="verEquivalencia">Código SUNAT:</label>
-                                <div class="col-xs-6">
+                                @Html.LabelFor(c => producto.unidadConteo, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                <div class="col-xs-6 col-sm-6 col-lg-8">
+                                    <p class="form-control-static" id="verUnidadConteo"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(c => producto.codigoSunat, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                <div class="col-xs-6 col-sm-6 col-lg-8">
                                     <p class="form-control-static" id="verCodigoSunat"></p>
                                 </div>
                             </div>
                         </div>
 
-                        <!--Unidad Estandar Internacional-->
                         <div class="col-sm-6 col-lg-4">
                             <div class="form-group">
-                                @Html.LabelFor(c => producto.unidadEstandarInternacional, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-6">
-                                    <p class="form-control-static" id="verUnidadEstandarInternacional"></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="form-group">
-                                <label class="control-label col-xs-4" for="verEquivalencia">Unidad Alt. SUNAT:</label>
-                                <div class="col-xs-6">
-                                    <p class="form-control-static" id="verUnidadAlternativaSunat"></p>
+                                @Html.LabelFor(c => producto.tipoCambio, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                <div class="col-xs-6 col-sm-6 col-lg-8">
+                                    <p class="form-control-static" id="verTipoCambio"></p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
+
                     <div class="row">
-                        <!--Costo-->
+                        <!--COSTO-->
                         <div class="col-sm-6 col-lg-4">
-                            @if (producto.usuario.visualizaCostos)
-                            {
+                            <div class="form-group">
+                                @Html.LabelFor(c => producto.monedaMP, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                <div class="col-xs-6 col-sm-6 col-lg-8">
+                                    <p class="form-control-static" id="verMonedaMP"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Precio Lima-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(c => producto.precioOriginal, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                <div class="col-xs-6 col-sm-6 col-lg-8">
+                                    <p class="form-control-static" id="verPrecioOriginal"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Precio Provincias-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(c => producto.precioProvinciasOriginal, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                <div class="col-xs-6 col-sm-6 col-lg-8">
+                                    <p class="form-control-static" id="verPrecioProvinciasOriginal"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (producto.usuario.visualizaCostos)
+                    {
+                        <div class="row">
+                            <!--COSTO-->
+                            <div class="col-sm-6 col-lg-4">
                                 <div class="form-group">
-                                    @Html.LabelFor(c => producto.costoSinIgv, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                    <div class="col-xs-6">
-                                        <p class="form-control-static" id="verCosto"></p>
+                                    @Html.LabelFor(c => producto.monedaProveedor, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verMonedaProveedor"></p>
                                     </div>
                                 </div>
-                            }
-                        </div>
-                        
+                            </div>
 
-                        <!--Precio-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="form-group">
-                                @Html.LabelFor(c => producto.precioSinIgv, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-6">
-                                    <p class="form-control-static" id="verPrecio"></p>
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.costoOriginal, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                       <p class="form-control-static" id="verCostoOriginal"></p>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <br />
+                    <fieldset id="fieldSetUnidadMP">
+                        <legend>UNIDAD MP:</legend>
+                        <div class="row">
+                            <!--Unidad-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.unidad, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verUnidad"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Unidad Estandar internacional-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.unidadEstandarInternacional, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verUnidadEstandarInternacional"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Equivalencia Unidad Conteo-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.equivalenciaUnidadEstandarUnidadConteo, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verEquivalenciaUnidadEstandarUnidadConteo"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!--Costo-->
+                            <div class="col-sm-6 col-lg-4">
+                                @if (producto.usuario.visualizaCostos)
+                                {
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => producto.costoSinIgv, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                        <div class="col-xs-6">
+                                            <p class="form-control-static" id="verCosto"></p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+
+                            <!--Precio-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.precioSinIgv, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-6">
+                                        <p class="form-control-static" id="verPrecio"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Precio Provincia-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.precioProvinciaSinIgv, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-6">
+                                        <p class="form-control-static" id="verPrecioProvincia"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset id="fieldSetUnidadAlternativa">
+                        <legend>UNIDAD ALTERNATIVA:</legend>
+                        <div class="row">
+                            <!--Unidad Alternativa-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.unidad_alternativa, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verUnidadAlternativa"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Unidad Sunat -->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.unidadAlternativaInternacional, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verUnidadAlternativaInternacional"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Equivalencia Unidad Conteo-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.equivalenciaUnidadAlternativaUnidadConteo, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verEquivalenciaUnidadAlternativaUnidadConteo"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Equivalencia-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.equivalenciaAlternativa, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verEquivalenciaAlternativa"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset id="fieldSetUnidadProveedor">
+                        <legend>UNIDAD PROVEEDOR:</legend>
+                        <div class="row">
+                            <!--Unidad Alternativa-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.unidadProveedor, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verUnidadProveedor"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Unidad Sunat -->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.unidadProveedorInternacional, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verUnidadProveedorInternacional"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Equivalencia Unidad Conteo-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.equivalenciaUnidadProveedorUnidadConteo, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verEquivalenciaUnidadProveedorUnidadConteo"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Equivalencia-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.equivalenciaProveedor, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verEquivalenciaProveedor"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Unidad Pedido Proveedor -->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.unidadPedidoProveedor, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verUnidadPedidoProveedor"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Equivalencia Unidad Pedido Proveedor-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.equivalenciaUnidadPedidoProveedor, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verEquivalenciaUnidadPedidoProveedor"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <br />
+                    <fieldset id="fieldSetConfiguraciones">
+                        <legend>CONFIGURACION:</legend>
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.topeDescuento, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verTopeDescuento"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.exoneradoIgv, htmlAttributes: new { @class = "control-label col-xs-10 col-sm-10  col-lg-10" })
+                                    <div class="col-xs-2 col-sm-2 col-lg-2">
+                                        <p class="form-control-static" id="verExoneradoIgv"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.inafecto, htmlAttributes: new { @class = "control-label col-xs-10 col-sm-10  col-lg-10" })
+                                    <div class="col-xs-2 col-sm-2 col-lg-2">
+                                        <p class="form-control-static" id="verInafecto"></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!--Precio Provincia-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="form-group">
-                                @Html.LabelFor(c => producto.precioProvinciaSinIgv, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-6">
-                                    <p class="form-control-static" id="verPrecioProvincia"></p>
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-8">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.descripcionLarga, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-2" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-10">
+                                        <p class="form-control-static" id="verDescripcionLarga"></p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="form-group">
-                                @Html.LabelFor(c => producto.descontinuado, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-6">
-                                    <p class="form-control-static" id="verDescontinuado"></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!--Exonerado IGV-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="form-group">
-                                @Html.LabelFor(c => producto.exoneradoIgv, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-6">
-                                    <p class="form-control-static" id="verExoneradoIgv"></p>
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    <label class="control-label col-xs-10 col-sm-10  col-lg-10">Agregar descripción larga a cotización:</label>
+                                    <div class="col-xs-2 col-sm-2 col-lg-2">
+                                        <p class="form-control-static" id="verAgregarDescripcionCotizacion"></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!--Inafecto-->
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="form-group">
-                                @Html.LabelFor(c => producto.inafecto, htmlAttributes: new { @class = "control-label col-xs-4" })
-                                <div class="col-xs-6">
-                                    <p class="form-control-static" id="verInafecto"></p>
+
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.ventaRestringida, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verDescontinuado"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-lg-8">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.cantidadMaximaPedidoRestringido, htmlAttributes: new { @class = "control-label col-xs-9 col-sm-9 col-lg-10" })
+                                    <div class="col-xs-3 col-sm-3 col-lg-2">
+                                        <p class="form-control-static" id="verCantidadMaximaPedidoRestringido"></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-
+                    </fieldset>
                 </form>
             </div>
 

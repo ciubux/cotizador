@@ -883,16 +883,16 @@
 
                 <div class="pull-right">
                     <button type="button" id="btnCancelarVerPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    @if (pedido.usuario.tomaPedidos || pedido.usuario.apruebaPedidos)
+                    @if (pedido.usuario.tomaPedidos || pedido.usuario.apruebaPedidosAlmacen)
                     {
                         <button type="button" id="btnActualizarPedido" class="btn btn-primary" data-toggle='modal' data-target='#modalActualizarPedido'>Observaciones y Adjuntos</button>
                         <button type="button" id="btnEditarPedido" class="btn btn-primary ">Editar</button>
                     }
-                    @if (pedido.usuario.apruebaPedidos)
+                    @if (pedido.usuario.apruebaPedidosAlmacen)
                     {
                         <button type="button" id="btnAprobarIngresoPedido" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Aprobar</button>
                     }
-                    @if (pedido.usuario.apruebaPedidos)
+                    @if (pedido.usuario.apruebaPedidosAlmacen)
                     {
                         <button type="button" id="btnDenegarIngresoPedido" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Denegar</button>
                     }
@@ -921,7 +921,7 @@
                         <button type="button" id="btnVerAtenciones" class="btn btn-primary" data-toggle='modal' data-target='#modalVerGuiasRemision'>Ver Guías Remisión</button>
                         <button type="button" id="btnVerIngresos" class="btn btn-primary" data-toggle='modal' data-target='#modalVerNotasIngreso'>Ver Notas Ingreso</button>
                     }
-                    @if (pedido.usuario.tomaPedidos || pedido.usuario.apruebaPedidos)
+                    @if (pedido.usuario.tomaPedidos || pedido.usuario.apruebaPedidosAlmacen)
                     {
                         <button type="button" id="btnEliminarPedido" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Eliminar</button>
                     }
