@@ -614,6 +614,7 @@ namespace Cotizador.Controllers
 
             String jsonPrecioLista = JsonConvert.SerializeObject(producto.precioListaList);
             String jsonProductoPresentacion = JsonConvert.SerializeObject(producto.ProductoPresentacionList);
+            Decimal costoOriginal = producto.costoOriginal / producto.equivalenciaProveedor;
 
             String resultado = "{" +
                 "\"id\":\"" + producto.idProducto + "\"," +
@@ -623,11 +624,13 @@ namespace Cotizador.Controllers
                 "\"unidad_alternativa\":\"" + producto.unidad_alternativa + "\"," +
                 "\"proveedor\":\"" + producto.proveedor + "\"," +
                 "\"familia\":\"" + producto.familia + "\"," +
+                "\"monedaProveedor\":\"" + producto.monedaProveedor + "\"," +
                 "\"precioUnitarioSinIGV\":\"" + producto.precioSinIgv + "\"," +
              //   "\"precioUnitarioAlternativoSinIGV\":\"" + producto.precioAlternativoSinIgv + "\"," +
                 "\"precioLista\":\"" + producto.precioLista + "\"," +
                 "\"costoSinIGV\":\"" + producto.costoSinIgv + "\"," +
-           //     "\"costoAlternativoSinIGV\":\"" + producto.costoAlternativoSinIgv + "\"," +
+                "\"costoOriginalSinIGV\":\"" + costoOriginal + "\"," +
+                //     "\"costoAlternativoSinIGV\":\"" + producto.costoAlternativoSinIgv + "\"," +
                 "\"fleteDetalle\":\"" + fleteDetalle + "\"," +
                 "\"precioUnitario\":\"" + precioUnitario + "\"," +
                 "\"porcentajeDescuento\":\"" + porcentajeDescuento + "\"," +
@@ -783,7 +786,18 @@ namespace Cotizador.Controllers
             pedido.ubigeoEntrega.Id = this.Request.Params["ubigeoEntregaId"];
             this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA] = pedido;
         }
-      
+
+        public string ChangeMoneda()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA];
+            string moneda = this.Request.Params["moneda"];
+
+            pedido.moneda = Moneda.ListaMonedas.Where(m => m.codigo.Equals(moneda)).FirstOrDefault();
+            this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA] = pedido;
+
+
+            return "{\"simbolo\":\"" + (pedido.moneda != null ? pedido.moneda.simbolo : "") + "\"}";
+        }
 
         public void ChangeNumeroReferenciaCliente()
         {

@@ -193,6 +193,7 @@ namespace Cotizador.Controllers
             producto.descontinuado = -1;
             producto.fechaRegistroDesde = null;
             producto.fechaRegistroHasta = null;
+            producto.ConImagen = -1;
 
             this.Session["familia"] = "Todas";
             this.Session["proveedor"] = "Todos";

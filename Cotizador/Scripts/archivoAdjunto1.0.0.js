@@ -125,14 +125,14 @@
             error: function (detalle) { },
             success: function (files) {
                 
-                $("#nombreArchivos > li").remove().end();
+                $("#nombreArchivos_" + origen + " > li").remove().end();
 
                 for (var i = 0; i < files.length; i++) {
                     
                         var liHTML = '<a href="javascript:mostrar();" class="btnDescargarArchivoAdjunto" idArchivoAdjunto="' + files[i].idArchivoAdjunto + '">' + files[i].nombre + '</a>' +
                             '<a href="javascript:mostrar();"><img src="/images/icon-close.png"  id="' + files[i].nombre + '" class="btnDeleteArchivo" /></a>';
 
-                        $('#nombreArchivos').append($('<li />').html(liHTML));
+                    $("#nombreArchivos_" + origen).append($('<li />').html(liHTML));
                        
 
                     
@@ -145,9 +145,10 @@
 
 //Boton para Cargar Archivo
 $('#fileUpload').change(function (e) {   
-    if (CargarArchivos(e.currentTarget.files) == 0)
-        return;   
     var origen = $('#origenArchivoAdjunto').val();
+    if (CargarArchivos(e.currentTarget.files, origen) == 0)
+        return;   
+    
     $('body').loadingModal({
         text: 'Subiendo Archivo...'
     });
@@ -167,8 +168,8 @@ $('#fileUpload').change(function (e) {
                 $('body').loadingModal('destroy');
                 var liHTML = '<a href="javascript:mostrar();" class="btnDescargarArchivoAdjunto" idArchivoAdjunto="' + idArchivoAdjunto + '">' + e.currentTarget.files[0].name + '</a>' +
                     '<a href="javascript:mostrar();"><img src="/images/icon-close.png"  id="' + e.currentTarget.files[0].name + '" class="btnDeleteArchivo" /></a>';
-
-                $('#nombreArchivos').append($('<li />').html(liHTML));
+               
+                $('#nombreArchivos_' + origen).append($('<li />').html(liHTML));
 
                 //$('#nombreArchivos li:last').find('a').eq(0).attr("idArchivoAdjunto", response);
             },
@@ -180,14 +181,13 @@ $('#fileUpload').change(function (e) {
      });
 
 // Funcion para cargar los archivos encontrados
-function archivosEncontrados(files) {
-
-    $("#nombreArchivos>li").remove().end();
+function archivosEncontrados(files, origen) {
+    $("#nombreArchivos_" + origen + ">li").remove().end();
 
     for (var i = 0; i < files.length; i++) {
         var liHTML = '<a href = "javascript:mostrar();" class="btnDescargarArchivoAdjunto" idArchivoAdjunto="' + files[i].idArchivoAdjunto + '">' + files[i].nombre + '</a > ' +
             '<a href="javascript:mostrar();"><img src="/images/icon-close.png"  id="' + files[i].nombre + '" class="btnDeleteArchivo" /></a>';
-        $('<li/>').html(liHTML).appendTo($('#nombreArchivos'));
+        $('<li/>').html(liHTML).appendTo($("#nombreArchivos_" + origen));
     }
 
     $("#verNombreArchivos > li").remove().end();
@@ -201,12 +201,12 @@ function archivosEncontrados(files) {
 }
 
 
-function CargarArchivos(files) {    
+function CargarArchivos(files, origen) {    
     var numFiles = files.length;
     var fileFound = 1;
     for (i = 0; i < numFiles; i++) {
 
-        $("#nombreArchivos > li").each(function () {
+        $("#nombreArchivos_" + origen + " > li").each(function () {
             if ($(this).find("a.btnDescargarArchivoAdjunto")[0].text == files[0].name) {
                 fileFound = 0;                
             }

@@ -9,10 +9,15 @@ namespace Model
     {
         public Guid idMoneda { get; set; }
 
+        public String codigo { get; set; }
         public String simbolo { get; set;  }
 
         public String nombre { get; set; }
 
-        
+        public static List<Moneda> ListaMonedas = new List<Moneda> {
+            new Moneda { codigo = "PEN", simbolo = "S/", nombre = "Soles" },
+            new Moneda { codigo = "USD", simbolo = "$", nombre = "Dólares" }
+        };
+            
     }
 }

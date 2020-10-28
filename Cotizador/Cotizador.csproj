@@ -234,6 +234,7 @@
     <Compile Include="Controllers\ArchivoAdjuntoController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\ClienteLiteController.cs" />
+    <Compile Include="Controllers\MonedaController.cs" />
     <Compile Include="Controllers\VistaDashboardController.cs" />
     <Compile Include="Controllers\DocumentoCompraController.cs" />
     <Compile Include="Controllers\DomicilioLegalController.cs" />
@@ -323,6 +324,7 @@
     <Compile Include="Models\DomicilioLegalViewModels.cs" />
     <Compile Include="Models\GrupoClienteViewModels.cs" />
     <Compile Include="Models\LogCampoViewModels.cs" />
+    <Compile Include="Models\MonedaViewModels.cs" />
     <Compile Include="Models\RolViewModels.cs" />
     <Compile Include="Models\ProductoMultipleViewModels.cs" />
     <Compile Include="Models\ProductoViewModels.cs" />
@@ -396,6 +398,10 @@
     <Content Include="images\call_center_woman_16.png" />
     <Content Include="images\check.png" />
     <Content Include="images\check2.png" />
+    <Content Include="images\checkstate_a.png" />
+    <Content Include="images\checkstate_b.png" />
+    <Content Include="images\checkstate_c.png" />
+    <Content Include="images\checkstate_d.png" />
     <Content Include="images\clean.png" />
     <Content Include="images\download.png" />
     <Content Include="images\equis.png" />
@@ -668,6 +674,7 @@
     <Content Include="Views\Producto\_LabelDescripcionLarga.cshtml" />
     <Content Include="Views\ArchivoAdjunto\_LoadFiles.cshtml" />
     <Content Include="Views\ArchivoAdjunto\_ViewFiles.cshtml" />
+    <Content Include="Views\Shared\_Moneda.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

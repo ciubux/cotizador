@@ -87,7 +87,7 @@ namespace Cotizador.Controllers
 
         /*****************************************************************************/
 
-        public PartialViewResult cargarArchivo(string origen, Guid idRegistro)
+        public PartialViewResult cargarArchivo(string origen, String idRegistro)
         {
             Usuario user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             ArchivoAdjunto obj = new ArchivoAdjunto();
@@ -130,7 +130,7 @@ namespace Cotizador.Controllers
             return PartialView("_LoadFiles", model);
         }
 
-        public PartialViewResult verArchivos(string origen, Guid idRegistro)
+        public PartialViewResult verArchivos(string origen, String idRegistro)
         {
             Usuario user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             ArchivoAdjunto obj = new ArchivoAdjunto();

@@ -1007,6 +1007,10 @@
                     }
                     @if (pedido.usuario.creaGuias)
                     {
+                        if (pedido.usuario.creaGuiasDiferidas)
+                        {
+                            <button type="button" id="btnAtenderDiferidoPedidoVenta" class="btn btn-danger">Factura Anticipada</button>
+                        }
                         <button type="button" id="btnAtenderPedidoVenta" class="btn btn-success">Generar Guía Remisión</button>
                         <button type="button" id="btnIngresarPedidoVenta" class="btn btn-success">Generar Nota de Ingreso</button>
                     }
@@ -1032,6 +1036,8 @@
         </div>
     </div>
 </div>
+
+
 
 <div class="modal fade" id="modalAprobacion" tabindex="-1">
     <div class="modal-dialog">
@@ -2359,6 +2365,7 @@
 <span id="spnDescripcionLargaInfo" style="display: none;">
     @Html.Partial("../Producto/_LabelDescripcionLarga")
 </span>
+
 
 @section Scripts {
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/pedido")

@@ -55,10 +55,10 @@ namespace DataLayer
             return lista;
         }
 
-        public List<ArchivoAdjunto> getListArchivoAdjuntoByIdRegistro(Guid idRegistro)
+        public List<ArchivoAdjunto> getListArchivoAdjuntoByIdRegistro(String idRegistro)
         {
             var objCommand = GetSqlCommand("ps_adjuntos_id_registro");           
-            InputParameterAdd.Guid(objCommand, "id_registro", idRegistro);
+            InputParameterAdd.Varchar(objCommand, "id_registro", idRegistro);
             DataTable dataTable = Execute(objCommand);
             List<ArchivoAdjunto> lista = new List<ArchivoAdjunto>();
             foreach (DataRow row in dataTable.Rows)
@@ -75,7 +75,7 @@ namespace DataLayer
         public ArchivoAdjunto InsertArchivoGenerico(ArchivoAdjunto obj)
         {           
             var objCommand = GetSqlCommand("pi_archivo_adjunto");
-            InputParameterAdd.Guid(objCommand, "id_registro", obj.idRegistro);
+            InputParameterAdd.Varchar(objCommand, "id_registro", obj.idRegistro);
             InputParameterAdd.Varchar(objCommand, "origen", obj.origen);
             InputParameterAdd.Guid(objCommand, "id_archivo_adjunto", obj.idArchivoAdjunto);
             InputParameterAdd.Guid(objCommand, "id_cliente", obj.idCliente);
@@ -92,10 +92,10 @@ namespace DataLayer
         }
 
 
-        public void updateArchivoAdjunto(List<ArchivoAdjunto> listArchivosAdjuntos,Guid idRegistro)
+        public void updateArchivoAdjunto(List<ArchivoAdjunto> listArchivosAdjuntos,String idRegistro)
         {
             var objCommand = GetSqlCommand("pu_asociar_archivo_adjunto");
-            InputParameterAdd.Guid(objCommand, "id_registro", idRegistro);
+            InputParameterAdd.Varchar(objCommand, "id_registro", idRegistro);
                         
             DataTable tmpuser = new DataTable();
             tmpuser.Columns.Add(new DataColumn("ID", typeof(Guid)));

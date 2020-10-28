@@ -120,6 +120,24 @@
 
         </div>
 
+        <div class="row">
+            <!--NÚMERO PEDIDO-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => pedido.moneda, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @Html.Action("SelectMonedas", "Moneda",
+                                    new
+                                    {
+                                        SelectId = "codigoMoneda",
+                                        selectedValue = pedido.moneda != null ? pedido.moneda.codigo : null
+                                    })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
 
 
 
@@ -499,19 +517,19 @@
                     <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
                     <th data-name="imagen" data-sortable="false" data-breakpoints="xs sm">Imagen</th>
                     <!--<th data-name="valorUnitario" data-sortable="true" data-breakpoints="xs sm">Costo Unitario</th>-->
-                    <th data-name="precioLista" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
+                    <th data-name="precioLista" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Costo Lista</th>
 
                     @if (ViewBag.debug == 1)
                     {
-                        <th data-name="porcentajeDescuento" data-visible="true" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                        <th data-name="porcentajeDescuento" data-visible="true" data-breakpoints="xs sm">Dscto % al C. Lista</th>
                     }
                     else
                     {
-                        <th data-name="porcentajeDescuento" data-visible="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                        <th data-name="porcentajeDescuento" data-visible="false" data-breakpoints="xs sm">Dscto % al C. Lista</th>
                     }
 
-                    <th data-name="porcentajeDescuentoMostrar" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
-                    <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
+                    <th data-name="porcentajeDescuentoMostrar" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Dscto % al C. Lista</th>
+                    <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Costo Neto</th>
 
                     @if (pedido.mostrarCosto || ViewBag.debug == 1)
                     {
@@ -523,15 +541,14 @@
                     }
                     @if (pedido.usuario.visualizaMargen)
                     {
-                        <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                        <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Dif %</th>
                     }
                     else
                     {
-                        <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Dif %</th>
                     }
                     <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
-                    <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
-                    <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Reg. Fact.</th>
+                    <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Costo Unit.</th>
                     <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
                     <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
                     <th data-name="observaciones" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Observaciones</th>
@@ -567,7 +584,7 @@
 
                         <td>  @cotizacionDetalle.unidad  </td>
                         <td class="column-img"><img class="table-product-img" src="data:image/png;base64,@Convert.ToBase64String(cotizacionDetalle.producto.image)"></td>
-                        <td class="@cotizacionDetalle.producto.idProducto detprecioLista" style="text-align:right">@cotizacionDetalle.precioLista</td>
+                        <td class="@cotizacionDetalle.producto.idProducto detprecioLista" style="text-align:right">@(pedido.moneda != null && pedido.moneda.codigo == "USD" ? cotizacionDetalle.costoListaOriginal : cotizacionDetalle.costoLista)</td>
 
                         <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@cotizacionDetalle.porcentajeDescuento %</td>
                         <td class="@cotizacionDetalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@cotizacionDetalle.porcentajeDescuentoMostrar %</td>
@@ -577,8 +594,6 @@
                         <td class="@cotizacionDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@cotizacionDetalle.margen %</td>
 
                         <td class="@cotizacionDetalle.producto.idProducto detflete" style="text-align:right">@cotizacionDetalle.flete</td>
-
-
 
 
                         @if (cotizacionDetalle.producto.precioClienteProducto.precioUnitario == 0)
@@ -608,7 +623,6 @@
                                 <td class="@cotizacionDetalle.producto.idProducto detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">@cotizacionDetalle.precioUnitario </td>
                             }
                         }
-                        <td class="@cotizacionDetalle.producto.idProducto detprecioUnitarioRegistrado" style="text-align:right">@cotizacionDetalle.producto.precioClienteProducto.precioUnitario </td>
 
 
 
@@ -648,20 +662,20 @@
 
                 <div class="form-group">
                     <div class="pull-right">
-                        <span class="totales">Subtotal: S/ </span>
+                        <span class="totales">Subtotal: <span class="simbolo-moneda">@(pedido.moneda != null ? pedido.moneda.simbolo : "")</span> </span>
                         <span class="totales" id="montoSubTotal">@pedido.montoSubTotal</span>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="pull-right">
-                        <span class="totales">IGV 18%: S/ </span>
+                        <span class="totales">IGV 18%: <span class="simbolo-moneda">@(pedido.moneda != null ? pedido.moneda.simbolo : "")</span> </span>
                         <span class="totales" id="montoIGV">@pedido.montoIGV</span>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="pull-right">
                         <input type="hidden" id="total" value="@pedido.montoTotal" />
-                        <span class="totales">TOTAL: S/ </span>
+                        <span class="totales">TOTAL: <span class="simbolo-moneda">@(pedido.moneda != null ? pedido.moneda.simbolo : "")</span> </span>
                         <span class="totales" id="montoTotal">@pedido.montoTotal</span>
                     </div>
                 </div>

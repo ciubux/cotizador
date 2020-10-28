@@ -59,7 +59,8 @@ namespace Model
 
         public bool buscarSedesGrupoCliente { get; set; }
 
-
+        [Display(Name = "Moneda:")]
+        public Moneda moneda { get; set; }
         public OrdenCompraCliente ordenCompracliente { get; set; }
 
         public Cotizacion cotizacion { get; set; }
@@ -267,7 +268,7 @@ namespace Model
         public IDocumentoPago documentoPago { get; set; }
 
         [Display(Name = "Stock Confirmado:")]
-        public Boolean stockConfirmado { get; set; }
+        public int stockConfirmado { get; set; }
 
 
         public DateTime fechaModificacion { get; set; }

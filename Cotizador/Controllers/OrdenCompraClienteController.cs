@@ -1367,7 +1367,7 @@ namespace Cotizador.Controllers
 
             HttpSessionStateBase sessionParams = this.Session;
             var arcBL = new ArchivoAdjuntoBL();
-            arcBL.asociarAchivoRegistro(sessionParams, occ.idOrdenCompraCliente, ArchivoAdjunto.ArchivoAdjuntoOrigen.OC_OCCLIENTE);
+            arcBL.asociarAchivoRegistro(sessionParams, occ.idOrdenCompraCliente.ToString(), ArchivoAdjunto.ArchivoAdjuntoOrigen.OC_OCCLIENTE);
 
             // occ = null;
             this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE] = null;// occ;// null;

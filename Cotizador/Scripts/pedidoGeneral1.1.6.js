@@ -48,6 +48,11 @@ $("#btnAgregarCliente").click(function () {
     );
 });
 
+$("#btnAtenderDiferidoPedidoVenta").click(function () {
+    btnAtenderPedido('VD');
+});
+
+
 $("#btnAtenderPedidoVenta").click(function () {
     btnAtenderPedido('V');
 });

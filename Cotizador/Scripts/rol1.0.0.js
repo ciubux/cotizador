@@ -12,6 +12,16 @@ jQuery(function ($) {
 
         cargarChosenUsuario();
         FooTable.init('#tableUsuariosRol');
+
+        $('.hasTooltipPermiso').tipso(
+            {
+                titleContent: 'DESCRIPCIÓN',
+                titleBackground: '#428bca',
+                titleColor: '#ffffff',
+                background: '#ffffff',
+                color: '#686868',
+                width: 400
+            });
     });
 
     function verificarSiExisteCliente() {

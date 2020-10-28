@@ -784,6 +784,9 @@ namespace DataLayer
                 guiaRemision.pedido.cliente.ruc = Converter.GetString(row, "ruc");
                 guiaRemision.pedido.cliente.domicilioLegal = Converter.GetString(row, "domicilio_legal");
 
+                guiaRemision.pedido.seguimientoCrediticioPedido = new SeguimientoCrediticioPedido();
+                guiaRemision.pedido.seguimientoCrediticioPedido.estado = (SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido)Converter.GetInt(row, "estado_seguimiento_crediticio_pedido");
+
                 try
                 {
                     guiaRemision.pedido.cliente.configuraciones = JsonConvert.DeserializeObject<ClienteConfiguracion>(Converter.GetString(row, "cliente_configuraciones"));

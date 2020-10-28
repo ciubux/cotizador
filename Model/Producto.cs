@@ -21,7 +21,7 @@ namespace Model
             this.cantidadMaximaPedidoRestringido = 0;
         }
 
-
+        public int ConImagen { get; set; }
         public Guid idProducto { get; set; }
 
         [Display(Name = "SKU MP:")]

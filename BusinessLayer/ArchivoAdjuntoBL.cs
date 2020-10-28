@@ -32,7 +32,7 @@ namespace BusinessLayer
             }            
         }
 
-        public List<ArchivoAdjunto> getListArchivoAdjuntoByIdRegistro(Guid idRegistro)
+        public List<ArchivoAdjunto> getListArchivoAdjuntoByIdRegistro(String idRegistro)
         {
             using (var dal = new ArchivoDAL())
             {
@@ -47,17 +47,19 @@ namespace BusinessLayer
             }
         }
 
-        public void asociarAchivoRegistro(HttpSessionStateBase session, Guid idResgistro,ArchivoAdjuntoOrigen origen)
+        public void asociarAchivoRegistro(HttpSessionStateBase session, String idResgistro,ArchivoAdjuntoOrigen origen)
         {         
             String origenString= ((ArchivoAdjuntoOrigen)origen).ToString();
             List<ArchivoAdjunto> listArchivos = (List<ArchivoAdjunto>)session ["ARCHIVO_ADJUNTO_EDIT_"+ origenString];
 
             using (var dal = new ArchivoDAL())
             {
-                dal.updateArchivoAdjunto(listArchivos, idResgistro);
+                dal.updateArchivoAdjunto(listArchivos, idResgistro.ToString());
             }
             session["ARCHIVO_ADJUNTO_EDIT_" + origenString] = new List<ArchivoAdjunto>();            
         }
+
+
         public void limpiarAsociarAchivoRegistro(HttpSessionStateBase session, ArchivoAdjuntoOrigen origen)
         {
             ArchivoAdjuntoBL archivoBL = new ArchivoAdjuntoBL();

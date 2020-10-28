@@ -782,8 +782,14 @@ namespace Cotizador.Controllers
             try
             {
                 var tipo = Request.Params["tipo"];
-
+                this.Session["seAtiendeDiferidoVenta"] = false;
                 Pedido pedido = null;
+                if (tipo.ToString().Equals("VD"))
+                {
+                    tipo = "V";
+                    this.Session["seAtiendeDiferidoVenta"] = true;
+                }
+
                 if ((Pedido.ClasesPedido)Char.Parse(tipo) == Pedido.ClasesPedido.Venta)
                 {
                     pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
@@ -1071,6 +1077,15 @@ namespace Cotizador.Controllers
                 logBL.insertLog(log);
             }
 
+            bool seAtiendeDiferido = this.Session["seAtiendeDiferidoVenta"] != null ? (bool)this.Session["seAtiendeDiferidoVenta"] : false ;
+
+            if (seAtiendeDiferido)
+            {
+                this.CambiarASerieDiferida();
+                this.Session["seAtiendeDiferidoVenta"] = false;
+            }
+
+
             ViewBag.pagina = (int)Constantes.paginas.MantenimientoGuiaRemision;
             return View();
         }
@@ -1125,9 +1140,19 @@ namespace Cotizador.Controllers
             if (usuario.creaGuias)
             {
                 Guid idGuiaDiferida = Guid.Parse(Request["idMovimientoAlmacen"].ToString());
+                MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
+
+                GuiaRemision gr = new GuiaRemision();
+                gr.idMovimientoAlmacen = idGuiaDiferida;
+                gr = movimientoAlmacenBL.GetGuiaRemision(gr);
+
+                if (gr.pedido.seguimientoCrediticioPedido.estado != SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
+                {
+                    resultado = "{\"success\":false, \"message\":\"El pedido debe estar liberado para poder registrar la guía de atención.\"}";
+                    return resultado;
+                }
 
                 String error = String.Empty;
-                MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
                 GuiaRemision guiaRemision = movimientoAlmacenBL.InsertMovimientoAlmacenSalidaDesdeGuiaDiferida(idGuiaDiferida, usuario.idUsuario);
 
                 if (guiaRemision.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
@@ -1135,7 +1160,7 @@ namespace Cotizador.Controllers
                     resultado = "{\"success\":true, \"serieNumeroGuia\":\"" + guiaRemision.serieNumeroGuia + "\"}";
                 } else
                 {
-                    resultado = "{\"success\":false}";
+                    resultado = "{\"success\":false, \"message\":\"" + guiaRemision.guiaRemisionValidacion.tipoErrorValidacionString + "\"}";
                 }
             }
 

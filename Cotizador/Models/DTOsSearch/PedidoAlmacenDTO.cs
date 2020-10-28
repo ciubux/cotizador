@@ -26,7 +26,7 @@ namespace Cotizador.Models.DTOs
         public String observaciones { get; set; }
         public DateTime? fechaProgramacion { get; set; }
         public long numero { get; set; }
-        public bool stockConfirmado { get; set; }
+        public int stockConfirmado { get; set; }
 
         
 

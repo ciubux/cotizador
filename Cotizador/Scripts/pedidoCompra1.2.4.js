@@ -664,6 +664,25 @@ jQuery(function ($) {
         });
     });  
 
+    $("#codigoMoneda").change(function () {
+        var moneda = $("#codigoMoneda").val();
+
+        $.ajax({
+            url: "/PedidoCompra/ChangeMoneda",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                moneda: moneda
+            },
+            error: function (detalle) {
+                alert('Ocurrió un error al intentar cambiar la moneda, por favor inténtelo de nuevo.');
+                location.reload();
+            },
+            success: function (res) {
+                $(".simbolo-moneda").html(res.simbolo);
+            }
+        });
+    });  
     
 
     $("#pedido_numeroReferenciaCliente").change(function () {
@@ -1013,26 +1032,51 @@ jQuery(function ($) {
             success: function (producto) {
                 // var producto = $.parseJSON(respuesta);
 
+                var moneda = $("#codigoMoneda").val();
+                var monedaOriginal = producto.monedaProveedor;
 
                 $("#imgProducto").attr("src", producto.image);
 
                 //Se agrega el precio estandar
-                var options = "<option value='0' selected>" + producto.unidad + "</option>";
+                var options = "<option value='0' precioUnitarioSinIGV='" + producto.precioUnitarioSinIGV + "' costoSinIGV='" + producto.costoSinIGV + "' selected>" + producto.unidad + "</option>";
+
+                $('#costoSiniGV').val(producto.costoSinIGV);
+                $("#costoLista").val(Number(producto.costoLista));
+                $("#precioLista").val(Number(producto.precioLista));
+                $('#precioUnitarioSinIGV').val(producto.precioUnitarioSinIGV);
+                if (moneda == 'USD') {
+                    if (monedaOriginal == 'D') {
+                        options = "<option value='0' precioUnitarioSinIGV='" + producto.costoOriginalSinIGV + "' costoSinIGV='" + producto.costoOriginalSinIGV + "' selected>" + producto.unidad + "</option>";
+                        $('#costoSiniGV').val(producto.costoOriginalSinIGV);
+                        $("#costoLista").val(Number(producto.costoOriginalSinIGV));
+                        $("#precioLista").val(Number(producto.costoOriginalSinIGV));
+                        $('#precioUnitarioSinIGV').val(producto.costoOriginalSinIGV);
+                    } 
+                }
+
 
                 for (var i = 0; i < producto.productoPresentacionList.length; i++) {
                     var reg = producto.productoPresentacionList[i];
-                    options = options + "<option value='" + reg.IdProductoPresentacion + "'  precioUnitarioAlternativoSinIGV='" + reg.PrecioSinIGV + "' costoAlternativoSinIGV='" + reg.CostoSinIGV + "' >" + reg.Presentacion + "</option>";
+
+                    var costo = reg.CostoSinIGV;
+                    if (moneda == 'USD') {
+                        if (monedaOriginal == 'D') {
+                            costo = reg.CostoOriginalSinIGV;
+                        }
+                    }
+
+                    options = options + "<option value='" + reg.IdProductoPresentacion + "'  precioUnitarioAlternativoSinIGV='" + reg.PrecioSinIGV + "' costoAlternativoSinIGV='" + costo + "' >" + reg.Presentacion + "</option>";
                 }
 
+
+
                 //Limpieza de campos
-                $("#costoLista").val(Number(producto.costoLista));
-                $("#precioLista").val(Number(producto.precioLista));
+                
                 $("#unidad").html(options);
                 $("#proveedor").val(producto.proveedor);
                 $("#familia").val(producto.familia);
-                $('#precioUnitarioSinIGV').val(producto.precioUnitarioSinIGV);
                 $('#precioUnitarioAlternativoSinIGV').val(producto.precioUnitarioAlternativoSinIGV);
-                $('#costoSiniGV').val(producto.costoSinIGV);
+                
                 $('#costoAlternativoSinIGV').val(producto.costoAlternativoSinIGV);
                 $('#observacionProducto').val("");
                 $('#fleteDetalle').val(producto.fleteDetalle);
@@ -1110,8 +1154,8 @@ jQuery(function ($) {
         var costoLista = 0;
 
         if (esPrecioAlternativo == 0) {
-            precioLista = Number($("#precioUnitarioSinIGV").val());
-            costoLista = Number($("#costoSinIGV").val());
+            precioLista = $("#unidad option:selected").attr("precioUnitarioSinIGV");
+            costoLista = $("#unidad option:selected").attr("costoSinIGV");
         }
         else {
             //precioLista = Number($("#precioUnitarioAlternativoSinIGV").val());
@@ -2725,9 +2769,13 @@ jQuery(function ($) {
                   
 
                 }
-               
 
-                
+                if (pedido.moneda == null) {
+                    $("#verMoneda").html("No asignado");
+                } else {
+                    $("#verMoneda").html(pedido.moneda.nombre);
+                    $(".simbolo-moneda").html(pedido.moneda.simbolo);
+                }
 
 
               //  

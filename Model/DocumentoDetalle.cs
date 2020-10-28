@@ -185,6 +185,21 @@ namespace Model
             }
         }
 
+        public Decimal costoListaOriginal
+        {
+            get
+            {
+                Decimal costoListaTmp = 0;
+                int factorEqProv = producto.equivalenciaProveedor <= 0 ? 1 : producto.equivalenciaProveedor;
+                if (esPrecioAlternativo)
+                    costoListaTmp = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, (producto.costoOriginal/ factorEqProv) / ProductoPresentacion.Equivalencia));
+                else
+                    costoListaTmp = (producto.costoOriginal/factorEqProv);
+
+                return costoListaTmp;
+            }
+        }
+
         public Decimal costoListaAnterior
         {
             get

@@ -1171,6 +1171,11 @@ jQuery(function ($) {
                 $("#vpMNT_TOT_TRB_IGV").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_TRB_IGV);
                 $("#pvMNT_TOT_PRC_VTA").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_PRC_VTA);
 
+                $("#divVerArchivosFacturaCompra").html("");
+                htmlVerArchivosAdjuntos(idDocumentoCompra, 'FACTURACOMPRA', function (html) {
+                    $("#divVerArchivosFacturaCompra").html(html);
+                });
+
                 $("#modalVerFactura").modal();
 
 

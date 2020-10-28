@@ -1049,3 +1049,38 @@ $darkred: darken($red, 0.2);*/
 #nclIdRubro_chosen {
     width: 100% !important;
 }
+
+
+.dropdown-select-stock-state {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    max-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-select-stock-state a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-select-stock-state a:hover {
+    background-color: #f1f1f1;
+}
+
+
+.dropdown-icons-select:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+.sss-icon, .dropdown-select-stock-state img {
+    height: 20px;
+}
+
+.sss-icon {
+    cursor: pointer;
+}

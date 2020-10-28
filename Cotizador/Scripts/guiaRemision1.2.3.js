@@ -1031,9 +1031,10 @@ jQuery(function ($) {
                             }
                         });
                     } else {
+                        
                         $.alert({
                             title: 'ERROR',
-                            content: "Ocurrió un error al generar la guía",
+                            content: res.message,
                             type: 'red',
                             buttons: {
                                 OK: function () { }

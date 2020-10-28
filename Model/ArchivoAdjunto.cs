@@ -53,7 +53,7 @@ namespace Model
 
         }
 
-        public Guid idRegistro { get; set; }
+        public String idRegistro { get; set; }
 
         public String origen { get; set; }
 
@@ -63,11 +63,12 @@ namespace Model
 
         public enum ArchivoAdjuntoOrigen
         {
-            PRODUCTO=1,
-            FACTURA=2,
-            PEDIDO=3,
-            GUIA_REMISION=4,
-            OC_OCCLIENTE = 5
+            PRODUCTO = 1,
+            FACTURA = 2,
+            PEDIDO = 3,
+            GUIA_REMISION = 4,
+            OC_OCCLIENTE = 5,
+            FACTURACOMPRA = 6
         }
         
     }

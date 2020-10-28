@@ -454,6 +454,14 @@
                             </div>
                         </div>
 
+                        <div class="col-sm-6 col-lg-4" id="divReferenciaCliente">
+                            <div class="form-group">
+                                @Html.LabelFor(p => pedido.moneda, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verMoneda"></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
 
@@ -672,21 +680,21 @@
                                 <th data-name="producto" data-sortable="false">Producto / Descripción</th>
                                 <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
                                 <th data-name="imagen" data-sortable="false" data-breakpoints="xs sm">Imagen</th>
-                                <th data-name="precioLista" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
-                                <th data-name="porcentajeDescuentoMostrar" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                                <th data-name="precioLista" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Costo Lista</th>
+                                <th data-name="porcentajeDescuentoMostrar" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Dscto % al C. Lista</th>
                                 @if (pedido.usuario.esCliente)
                                 {
-                                    <th data-name="precioNeto" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Precio Neto</th>
-                                    <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                            <th data-name="precioNeto" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Costo Neto</th>
+                                    <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Dif %</th>
                                     <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                                 }
                                 else
                                 {
-                                    <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
-                                    <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                            <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Costo Neto</th>
+                                    <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Dif %</th>
                                     <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                                 }
-                                <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
+                            <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Costo Unit.</th>
 
                                 <!--     @if (pedido.usuario.creaDocumentosVenta)
                                      {
@@ -723,19 +731,19 @@
 
                             <div class="form-group">
                                 <div class="pull-right">
-                                    <span class="totales">Subtotal: S/ </span>
+                                    <span class="totales">Subtotal: <span class="simbolo-moneda"></span> </span>
                                     <span class="totales" id="verMontoSubTotal"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="pull-right">
-                                    <span class="totales">IGV 18%: S/ </span>
+                                    <span class="totales">IGV 18%: <span class="simbolo-moneda"></span> </span>
                                     <span class="totales" id="verMontoIGV"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="pull-right">
-                                    <span class="totales">TOTAL: S/ </span>
+                                    <span class="totales">TOTAL: <span class="simbolo-moneda"></span> </span>
                                     <span class="totales" id="verMontoTotal"></span>
                                 </div>
                             </div>

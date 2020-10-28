@@ -1,0 +1,35 @@
+﻿@model Cotizador.Models.MonedaViewModels
+
+@if (Model.Disabled)
+{
+    @Html.DropDownList(
+                Model.SelectId,
+                Model.Monedas, "Seleccione",
+                new
+                {
+                    id = Model.SelectId,
+                    @class = "form-control",
+                    @disabled = "disabled"
+                })
+}
+else
+{
+    @Html.DropDownList(
+            Model.SelectId,
+            Model.Monedas, "Seleccione",
+            new
+            {
+                id = Model.SelectId,
+                @class = "form-control"
+
+            })
+}
+
+
+
+
+
+<script type="text/javascript">
+
+
+</script>

@@ -359,6 +359,23 @@ jQuery(function ($) {
         var valCheck = -1;
         changeInputInt("Estado", valCheck)
     });
+
+    $("#producto_conImagen_si").click(function () {
+        var valCheck = 1;
+        changeInputInt("ConImagen", valCheck)
+    });
+
+    $("#producto_conImagen_no").click(function () {
+        var valCheck = 0;
+        changeInputInt("ConImagen", valCheck)
+    });
+
+    $("#producto_conImagen_todos").click(function () {
+        var valCheck = -1;
+        changeInputInt("ConImagen", valCheck)
+    });
+
+
     
     function changeInputString(propiedad, valor) {
         $.ajax({

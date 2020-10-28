@@ -41,6 +41,8 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
 
+            InputParameterAdd.Varchar(objCommand, "moneda", pedido.moneda == null ? null : pedido.moneda.codigo);
+
             if (pedido.clasePedido == Pedido.ClasesPedido.Venta)
             {
                 InputParameterAdd.Guid(objCommand, "idDireccionEntrega", pedido.direccionEntrega.idDireccionEntrega); //puede ser null
@@ -230,6 +232,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
+            InputParameterAdd.Varchar(objCommand, "moneda", pedido.moneda == null ? null : pedido.moneda.codigo);
 
             if (pedido.clasePedido == Pedido.ClasesPedido.Venta)
             {
@@ -671,7 +674,7 @@ namespace DataLayer
 
                 pedido.FechaRegistro = Converter.GetDateTime(row, "fecha_registro");
                 //pedido.FechaRegistro = pedido.FechaRegistro.AddHours(-5);
-                pedido.stockConfirmado = Converter.GetBool(row, "stock_confirmado");
+                pedido.stockConfirmado = Converter.GetInt(row, "stock_confirmado");
                 /*if (row["fecha_programacion"] == DBNull.Value)
                     pedido.fechaProgramacion = null;
                 else*/
@@ -756,6 +759,11 @@ namespace DataLayer
                 pedido.horaEntregaHasta = Converter.GetString(row, "hora_entrega_hasta");
                 pedido.horaEntregaAdicionalDesde = Converter.GetString(row, "hora_entrega_adicional_desde");
                 pedido.horaEntregaAdicionalHasta = Converter.GetString(row, "hora_entrega_adicional_hasta");
+
+                pedido.moneda = new Moneda();
+                pedido.moneda.codigo = Converter.GetString(row, "moneda");
+
+                pedido.moneda = Moneda.ListaMonedas.Where(m => m.codigo == pedido.moneda.codigo).FirstOrDefault();
 
                 pedido.fechaEntregaExtendida = Converter.GetDateTimeNullable(row, "fecha_entrega_extendida");
                 pedido.truncado = Converter.GetInt(row, "truncado");
@@ -963,12 +971,15 @@ namespace DataLayer
                 pedidoDetalle.producto.ventaRestringida = (Producto.TipoVentaRestringida) Converter.GetInt(row, "descontinuado");
                 pedidoDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
                 pedidoDetalle.producto.topeDescuento = Converter.GetDecimal(row, "tope_descuento");
+                pedidoDetalle.producto.costoOriginal = Converter.GetDecimal(row, "costo_original");
+                pedidoDetalle.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
 
                 pedidoDetalle.producto.image = Converter.GetBytes(row, "imagen");
 
                 pedidoDetalle.porcentajeDescuento = Converter.GetDecimal(row, "porcentaje_descuento");
 
                 pedidoDetalle.observacion = Converter.GetString(row, "observaciones");
+                
 
 
                 PrecioClienteProducto precioClienteProducto = new PrecioClienteProducto();
@@ -1160,6 +1171,11 @@ namespace DataLayer
                 pedido.direccionEntrega.codigoMP = Converter.GetString(row, "direccion_entrega_codigo_mp");
                 pedido.direccionEntrega.nombre = Converter.GetString(row, "direccion_entrega_nombre");
 
+                pedido.moneda = new Moneda();
+                pedido.moneda.codigo = Converter.GetString(row, "moneda");
+
+                pedido.moneda = Moneda.ListaMonedas.Where(m => m.codigo == pedido.moneda.codigo).FirstOrDefault();
+
                 Guid idOrdenCompracliente = Converter.GetGuid(row, "id_orden_compra_cliente");
                 if (idOrdenCompracliente != null && idOrdenCompracliente != Guid.Empty)
                 {
@@ -1312,6 +1328,10 @@ namespace DataLayer
                 pedidoDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
                 pedidoDetalle.producto.cantidadMaximaPedidoRestringido = Converter.GetInt(row, "cantidad_maxima_pedido_restringido");
                 pedidoDetalle.producto.topeDescuento = Converter.GetDecimal(row, "tope_descuento");
+                pedidoDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_producto");
+                pedidoDetalle.producto.costoLista = pedidoDetalle.producto.costoSinIgv;
+                pedidoDetalle.producto.costoOriginal = Converter.GetDecimal(row, "costo_original");
+                pedidoDetalle.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
 
                 pedidoDetalle.producto.image = Converter.GetBytes(row, "imagen");
 
@@ -1492,7 +1512,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
         {
             var objCommand = GetSqlCommand("pu_pedidoStockConfirmado");
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
-            InputParameterAdd.Int(objCommand, "stockConfirmado", pedido.stockConfirmado ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "stockConfirmado", pedido.stockConfirmado);
             InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
             ExecuteNonQuery(objCommand);
         }

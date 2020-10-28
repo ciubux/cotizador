@@ -45,7 +45,7 @@ jQuery(function ($) {
     var TITLE_MENSAJE_BUSQUEDA = "Ingresar datos solicitados";
 
     function hola() {
-        alert('as');
+
     }
 
 
@@ -2939,7 +2939,6 @@ jQuery(function ($) {
     });
 
     $("#documentoVenta_serie").change(function () {
-        alert("as");
         $.alert({
             //icon: 'fa fa-warning',
             title: 'Advertencia',

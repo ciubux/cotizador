@@ -79,7 +79,10 @@ namespace Cotizador.Controllers
 
 
                 documentoCompra = DocumentoCompraBL.InsertarDocumentoCompra(documentoCompra);
-              
+
+                HttpSessionStateBase sessionParams = this.Session;
+                var arcBL = new ArchivoAdjuntoBL();
+                arcBL.asociarAchivoRegistro(sessionParams, documentoCompra.idDocumentoCompra.ToString(), ArchivoAdjunto.ArchivoAdjuntoOrigen.FACTURACOMPRA);
 
                 return JsonConvert.SerializeObject(documentoCompra);
             }

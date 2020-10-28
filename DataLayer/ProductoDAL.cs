@@ -136,6 +136,7 @@ namespace DataLayer
                 }
 
                 producto.costoSinIgv = Converter.GetDecimal(row, "costo");
+                producto.costoOriginal = Converter.GetDecimal(row, "costo_original");
                 if (esCompra)
                 {
                     producto.precioSinIgv = producto.costoSinIgv;
@@ -156,8 +157,9 @@ namespace DataLayer
                 producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
                 producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
                 producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
+                producto.monedaProveedor = Converter.GetString(row, "moneda_compra");
                 //Costo sin IGV
-                
+
                 producto.precioClienteProducto = new PrecioClienteProducto();
                 producto.precioClienteProducto.idPrecioClienteProducto = Guid.Empty;
                 producto.tipoProducto = (Producto.TipoProducto) Converter.GetInt(row, "tipo_producto");
@@ -229,7 +231,7 @@ namespace DataLayer
                 precioLista.precioNeto = Converter.GetDecimal(row, "precio_neto");
                 precioLista.flete = Converter.GetDecimal(row, "flete");
                 precioLista.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
-
+                
                 if (esCompra)
                 {
                     precioLista.precioNeto = producto.costoSinIgv;
@@ -261,6 +263,10 @@ namespace DataLayer
                 productoPresentacion.PrecioProvinciasSinIGV = Converter.GetDecimal(row, "precio_provincias_sin_igv");
                 productoPresentacion.CostoSinIGV = Converter.GetDecimal(row, "costo_sin_igv");
                 productoPresentacion.PrecioSinIGV = productoPresentacion.PrecioLimaSinIGV;
+                productoPresentacion.PrecioLimaOriginalSinIGV = Converter.GetDecimal(row, "precio_lima_original_sin_igv");
+                productoPresentacion.PrecioProvinciasOriginalSinIGV = Converter.GetDecimal(row, "precio_provincias_original_sin_igv");
+                productoPresentacion.CostoOriginalSinIGV = Converter.GetDecimal(row, "costo_original_sin_igv");
+                productoPresentacion.PrecioOriginalSinIGV = productoPresentacion.PrecioLimaOriginalSinIGV;
                 productoPresentacion.UnidadInternacional = Converter.GetString(row, "unidad_internacional");
                 productoPresentacion.Stock = Converter.GetInt(row, "stock");
 
@@ -990,6 +996,7 @@ namespace DataLayer
             InputParameterAdd.VarcharEmpty(objCommand, "skuProveedor", producto.skuProveedor);
             InputParameterAdd.VarcharEmpty(objCommand, "descripcion", producto.descripcion);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
+            InputParameterAdd.Int(objCommand, "conImagen", producto.ConImagen);
             InputParameterAdd.Int(objCommand, "tipo", producto.tipoProductoVista);
             InputParameterAdd.Int(objCommand, "tipoVentaRestingida", producto.tipoVentaRestringidaBusqueda);
             InputParameterAdd.Varchar(objCommand, "familia", producto.familia);

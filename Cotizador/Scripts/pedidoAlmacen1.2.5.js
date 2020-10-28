@@ -3995,35 +3995,7 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
     });
 
 
-    $(document).on('click', "input.chkStockConfirmado", function () {
-
-        var arrrayClass = event.target.getAttribute("class").split(" ");
-        var idPEdido = arrrayClass[0];
-        var numeroPedido = arrrayClass[1];
-
-        var stockConfirmado = 0;
-        if (event.target.checked) {
-            stockConfirmado = 1;
-        }
-
-
-        $.ajax({
-            url: "/PedidoAlmacen/UpdateStockConfirmado",
-            data: {
-                idPEdido: idPEdido,
-                stockConfirmado: stockConfirmado
-            },
-            type: 'POST',
-            error: function (detalle) {
-                mostrarMensajeErrorProceso(MENSAJE_ERROR);
-            },
-            success: function (resultado) {
-
-            }
-        });
-    });
-
-
+    
     $("#btnBusquedaPedidos").click(function () {
 
        
@@ -4096,22 +4068,29 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
                         fechaProgramacion = invertirFormatoFecha(pedidoList[i].fechaProgramacion.substr(0, 10));
                     }
 
-
-                    var stockConfirmado = '';
-                    if (pedidoList[i].stockConfirmado == 1) {
-                        stockConfirmado = '<input class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numero + ' chkStockConfirmado" type="checkbox" checked></input>'
-                    }
-                    else {
-                        stockConfirmado = '<input class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numero + ' chkStockConfirmado" type="checkbox"></input>'
-                    }
+                    var htmlDDSSS = $("#divSelectStockState").html();
 
                     var stockConfirmadoLectura = '';
+                    var stockConfirmado = '';
                     if (pedidoList[i].stockConfirmado == 1) {
-                        stockConfirmadoLectura = '<input disabled type="checkbox" checked></input>'
+                        stockConfirmadoLectura = '<img class="sss-icon" src="/images/checkstate_d.png" />';
                     }
-                    else {
-                        stockConfirmadoLectura = '<input disabled type="checkbox"></input>'
+
+                    if (pedidoList[i].stockConfirmado == 2) {
+                        stockConfirmadoLectura = '<img class="sss-icon" src="/images/checkstate_c.png" style="height: 20px;"/>';
                     }
+
+                    if (pedidoList[i].stockConfirmado == 3) {
+                        stockConfirmadoLectura = '<img class="sss-icon" src="/images/checkstate_b.png" style="height: 20px;"/>';
+                    }
+
+                    if (pedidoList[i].stockConfirmado == 0) {
+                        stockConfirmadoLectura = '<img class="sss-icon" src="/images/checkstate_a.png" style="height: 20px;"/>';
+                    }
+
+                    
+                    stockConfirmado = '<div class="dropdown-icons-select" idPedido="' + pedidoList[i].idPedido + '">' + stockConfirmadoLectura + htmlDDSSS + '</div>'
+
 
                   /*  var codigoCliente = pedidoList[i].cliente.codigo;
                     if (codigoCliente == null || codigoCliente == 'null') {
@@ -4160,6 +4139,51 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
             }
         });
     });
+
+    $(document).on('click', ".dropdown-select-stock-state a", function () {
+        var idPedido = $(this).closest(".dropdown-icons-select").attr("idPedido");
+        var stockConfirmado = $(this).attr("state");
+        var that = this;
+        var imgIcon = $(this).closest(".dropdown-icons-select").find(".sss-icon");
+        $.ajax({
+            url: "/PedidoAlmacen/UpdateStockConfirmado",
+            data: {
+                idPedido: idPedido,
+                stockConfirmado: stockConfirmado
+            },
+            type: 'POST',
+            error: function (detalle) {
+                mostrarMensajeErrorProceso(MENSAJE_ERROR);
+            },
+            success: function (resultado) {
+                if (stockConfirmado == 1) {
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", "/images/checkstate_d.png");
+                }
+                if (stockConfirmado == 2) {
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", "/images/checkstate_c.png");
+                }
+                if (stockConfirmado == 3) {
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", "/images/checkstate_b.png");
+                }
+                if (stockConfirmado == 0) {
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", "/images/checkstate_a.png");
+                }
+
+                $(that).closest(".dropdown-select-stock-state").hide();
+            }
+        });
+    });
+
+    $(document).on('click', ".dropdown-icons-select .sss-icon", function () {
+        
+        if ($(this).closest(".dropdown-icons-select").find(".dropdown-select-stock-state").is(":visible")) {
+            $(this).closest(".dropdown-icons-select").find(".dropdown-select-stock-state").hide();
+        } else {
+            $(this).closest(".dropdown-icons-select").find(".dropdown-select-stock-state").show();
+        }
+    });
+
+
 
     $("#pedido_fechaSolicitudDesde").change(function () {
         var fechaSolicitudDesde = $("#pedido_fechaSolicitudDesde").val();

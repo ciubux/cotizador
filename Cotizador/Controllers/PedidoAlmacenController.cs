@@ -37,7 +37,7 @@ namespace Cotizador.Controllers
         {
             Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
             pedido.idPedido = Guid.Parse(this.Request.Params["idPedido"]);
-            pedido.stockConfirmado = Int32.Parse(this.Request.Params["stockConfirmado"]) == 1;
+            pedido.stockConfirmado = Int32.Parse(this.Request.Params["stockConfirmado"]);
             pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             PedidoBL pedidoBL = new PedidoBL();

@@ -3335,6 +3335,7 @@ jQuery(function ($) {
 
                 //ATENDER PEDIDO
                 $("#btnAtenderPedidoVenta").hide();
+                $("#btnAtenderDiferidoPedidoVenta").hide();
                 $("#btnIngresarPedidoVenta").hide();
                 $("#btnVerAtenciones").hide();
                 $("#btnVerIngresos").hide();
@@ -3355,6 +3356,9 @@ jQuery(function ($) {
                             if (isOwner == 1 || usuario.truncaPedidos) {
                                 $("#btnTruncarPedido").show();
                             }
+
+                            $("#btnAtenderDiferidoPedidoVenta").show();
+
                             if (
                                 pedido.seguimientoCrediticioPedido_estado == ESTADO_PENDIENTE_LIBERACION ||
                                 pedido.seguimientoCrediticioPedido_estado == ESTADO_BLOQUEADO
@@ -3362,7 +3366,7 @@ jQuery(function ($) {
                                 $("#btnAtenderPedidoVenta").hide();
                             }
                             else {
-                                $("#btnAtenderPedidoVenta").show();
+                                $("#btnAtenderPedidoVenta").show();    
                             }
                             
                         }

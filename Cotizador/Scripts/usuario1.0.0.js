@@ -11,7 +11,15 @@ jQuery(function ($) {
         //cargarChosenCliente();
         verificarSiExisteCliente();        
         FooTable.init('#tablePermisosUsuario');
-        
+        $('.hasTooltipPermiso').tipso(
+            {
+                titleContent: 'DESCRIPCIÓN',
+                titleBackground: '#428bca',
+                titleColor: '#ffffff',
+                background: '#ffffff',
+                color: '#686868',
+                width: 400
+            });
     });
 
     function verificarSiExisteCliente() {
