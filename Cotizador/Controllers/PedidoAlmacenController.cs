@@ -35,13 +35,18 @@ namespace Cotizador.Controllers
 
         public void UpdateStockConfirmado()
         {
-            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
-            pedido.idPedido = Guid.Parse(this.Request.Params["idPedido"]);
-            pedido.stockConfirmado = Int32.Parse(this.Request.Params["stockConfirmado"]);
-            pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            PedidoBL pedidoBL = new PedidoBL();
-            pedidoBL.UpdateStockConfirmado(pedido);
+            if (usuario.confirmaStock)
+            {
+                Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
+                pedido.idPedido = Guid.Parse(this.Request.Params["idPedido"]);
+                pedido.stockConfirmado = Int32.Parse(this.Request.Params["stockConfirmado"]);
+                pedido.usuario = usuario;
+
+                PedidoBL pedidoBL = new PedidoBL();
+                pedidoBL.UpdateStockConfirmado(pedido);
+            }
         }
 
         // GET: Pedido

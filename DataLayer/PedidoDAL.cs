@@ -768,6 +768,7 @@ namespace DataLayer
                 pedido.fechaEntregaExtendida = Converter.GetDateTimeNullable(row, "fecha_entrega_extendida");
                 pedido.truncado = Converter.GetInt(row, "truncado");
 
+                pedido.stockConfirmado = Converter.GetInt(row, "stock_confirmado");
                 pedido.incluidoIGV = Converter.GetBool(row, "incluido_igv");
                 pedido.montoIGV = Converter.GetDecimal(row, "igv");
                 pedido.montoTotal = Converter.GetDecimal(row, "total");

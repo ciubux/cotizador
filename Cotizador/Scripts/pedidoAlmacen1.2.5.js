@@ -2816,7 +2816,12 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
                     else {
                         $("#btnEditarPedido").html("Editar");
                     }
-                    $("#btnEditarPedido").show();
+
+                    if (pedido.stockConfirmado <= 0) {
+                        $("#btnEditarPedido").show();
+                    } else {
+                        $("#btnEditarPedido").hide();
+                    }
                 }
                 else {
                     $("#btnEditarPedido").hide();
@@ -4073,19 +4078,19 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
                     var stockConfirmadoLectura = '';
                     var stockConfirmado = '';
                     if (pedidoList[i].stockConfirmado == 1) {
-                        stockConfirmadoLectura = '<img class="sss-icon" src="/images/checkstate_d.png" />';
+                        stockConfirmadoLectura = '<img class="sss-icon" src="' + $("#divSelectStockState").attr("srcSC") + '" title="Stock Completo" />';
                     }
 
                     if (pedidoList[i].stockConfirmado == 2) {
-                        stockConfirmadoLectura = '<img class="sss-icon" src="/images/checkstate_c.png" style="height: 20px;"/>';
+                        stockConfirmadoLectura = '<img class="sss-icon" src="' + $("#divSelectStockState").attr("srcSS") + '" title="Sin Stock"/>';
                     }
 
                     if (pedidoList[i].stockConfirmado == 3) {
-                        stockConfirmadoLectura = '<img class="sss-icon" src="/images/checkstate_b.png" style="height: 20px;"/>';
+                        stockConfirmadoLectura = '<img class="sss-icon" src="' + $("#divSelectStockState").attr("srcSP") + '" title="Stock Parcial"/>';
                     }
 
                     if (pedidoList[i].stockConfirmado == 0) {
-                        stockConfirmadoLectura = '<img class="sss-icon" src="/images/checkstate_a.png" style="height: 20px;"/>';
+                        stockConfirmadoLectura = '<img class="sss-icon" src="' + $("#divSelectStockState").attr("srcNR") + '" title="No Revisado"/>';
                     }
 
                     
@@ -4157,16 +4162,20 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
             },
             success: function (resultado) {
                 if (stockConfirmado == 1) {
-                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", "/images/checkstate_d.png");
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectStockState").attr("srcSC"));
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title","Stock Completo");
                 }
                 if (stockConfirmado == 2) {
-                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", "/images/checkstate_c.png");
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectStockState").attr("srcSS"));
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Sin Stock");;
                 }
                 if (stockConfirmado == 3) {
-                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", "/images/checkstate_b.png");
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectStockState").attr("srcSP"));
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Stock Parcial");
                 }
                 if (stockConfirmado == 0) {
-                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", "/images/checkstate_a.png");
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectStockState").attr("srcNR"));
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "No Revisado");
                 }
 
                 $(that).closest(".dropdown-select-stock-state").hide();

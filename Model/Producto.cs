@@ -111,7 +111,7 @@ namespace Model
         [Display(Name = "Unidad Proveedor:")]
         public String unidadProveedor { get; set; }
 
-        [Display(Name = "Unidad Pedido Proveedor:")]
+        [Display(Name = "Unidad Facturación Proveedor:")]
         public String unidadPedidoProveedor { get; set; }
         /// <summary>
         /// El campo equivalencia puede contener la equivalencia con respecto a la unidad de proveedor o alternativa
@@ -129,7 +129,7 @@ namespace Model
         [Display(Name = "Equivalencia Und. Prov. / Und. MP:")]
         public int equivalenciaProveedor { get; set; }
 
-        [Display(Name = "Equivalencia UP/UPP:")]
+        [Display(Name = "Equivalencia UP/UFP:")]
         public int equivalenciaUnidadPedidoProveedor { get; set; }
 
         [Display(Name = "Equivalencia Und. Alt. / Und. Conteo:")]

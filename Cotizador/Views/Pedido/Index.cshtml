@@ -215,17 +215,17 @@
                     </div>
 
                     @*<div class="form-group">
-                        @Html.LabelFor(p => pedido.truncado, htmlAttributes: new { @class = "control-label col-xs-4" })
+                            @Html.LabelFor(p => pedido.truncado, htmlAttributes: new { @class = "control-label col-xs-4" })
 
-                        <div class="col-xs-8">
-                            <select id="truncado" class="form-control">
-                                <option value="-1">Seleccione</option>
-                                <option value="1">SI</option>
-                                <option value="0">NO</option>
-                            </select>
-                        </div>
+                            <div class="col-xs-8">
+                                <select id="truncado" class="form-control">
+                                    <option value="-1">Seleccione</option>
+                                    <option value="1">SI</option>
+                                    <option value="0">NO</option>
+                                </select>
+                            </div>
 
-                    </div>*@
+                        </div>*@
                 </div>
             </div>
         }
@@ -969,7 +969,7 @@
                     {
                         <button type="button" id="btnBloquearPedido" class="btn btn-danger" data-toggle='modal' data-target='#modalLiberacion'>Bloquear</button>
                     }
-                    
+
                 </div>
 
 
@@ -2365,6 +2365,8 @@
 <span id="spnDescripcionLargaInfo" style="display: none;">
     @Html.Partial("../Producto/_LabelDescripcionLarga")
 </span>
+
+@Html.Partial("../Pedido/_SelectStockIconState")
 
 
 @section Scripts {

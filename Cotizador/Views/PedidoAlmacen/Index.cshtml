@@ -2011,18 +2011,11 @@
     @Html.Partial("../Producto/_LabelDescripcionLarga")
 </span>
 
+@Html.Partial("../Pedido/_SelectStockIconState")
 
-<div id="divSelectStockState" style="display: none;">
-    <div class="dropdown-select-stock-state" style="right:0;">
-        <a class="sss-no-revisado" href="#" state="0"><img src="~/images/checkstate_a.png" /> No Revisado</a>
-        <a class="sss-sin-stock" href="#" state="2"><img src="~/images/checkstate_c.png" /> Sin Stock</a>
-        <a class="sss-stock-parcial" href="#" state="3"><img src="~/images/checkstate_b.png" /> Stock Parcial</a>
-        <a class="sss-stock-completo" href="#" state="1"><img src="~/images/checkstate_d.png" /> Stock Completo</a>
-    </div>
-</div>
+
 
 <style>
-    
 </style>
 
 @section Scripts {

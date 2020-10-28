@@ -4678,34 +4678,6 @@ jQuery(function ($) {
     });
 
 
-    $(document).on('click', "input.chkStockConfirmado", function () {
-
-        var arrrayClass = event.target.getAttribute("class").split(" ");
-        var idPEdido = arrrayClass[0];
-        var numeroPedido = arrrayClass[1];
-
-        var stockConfirmado = 0;
-        if (event.target.checked) {
-            stockConfirmado = 1;
-        }
-
-
-        $.ajax({
-            url: "/Pedido/UpdateStockConfirmado",
-            data: {
-                idPEdido: idPEdido,
-                stockConfirmado: stockConfirmado
-            },
-            type: 'POST',
-            error: function (detalle) {
-                mostrarMensajeErrorProceso(detalle.responseText);
-            },
-            success: function (resultado) {
-
-            }
-        });
-    });
-
 
     $("#btnBusquedaPedidos").click(function () {
 
@@ -4766,22 +4738,29 @@ jQuery(function ($) {
                         fechaProgramacion = invertirFormatoFecha(pedidoList[i].fechaProgramacion.substr(0, 10));
                     }
 
-
-                    var stockConfirmado = '';
-                    if (pedidoList[i].stockConfirmado == 1) {
-                        stockConfirmado = '<input class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numero + ' chkStockConfirmado" type="checkbox" checked></input>'
-                    }
-                    else {
-                        stockConfirmado = '<input class="' + pedidoList[i].idPedido + ' ' + pedidoList[i].numero + ' chkStockConfirmado" type="checkbox"></input>'
-                    }
+                    var htmlDDSSS = $("#divSelectStockState").html();
 
                     var stockConfirmadoLectura = '';
+                    var stockConfirmado = '';
                     if (pedidoList[i].stockConfirmado == 1) {
-                        stockConfirmadoLectura = '<input disabled type="checkbox" checked></input>'
+                        stockConfirmadoLectura = '<img class="sss-icon" src="' + $("#divSelectStockState").attr("srcSC") + '" title="Stock Completo" />';
                     }
-                    else {
-                        stockConfirmadoLectura = '<input disabled type="checkbox"></input>'
+
+                    if (pedidoList[i].stockConfirmado == 2) {
+                        stockConfirmadoLectura = '<img class="sss-icon" src="' + $("#divSelectStockState").attr("srcSS") + '" title="Sin Stock"/>';
                     }
+
+                    if (pedidoList[i].stockConfirmado == 3) {
+                        stockConfirmadoLectura = '<img class="sss-icon" src="' + $("#divSelectStockState").attr("srcSP") + '" title="Stock Parcial"/>';
+                    }
+
+                    if (pedidoList[i].stockConfirmado == 0) {
+                        stockConfirmadoLectura = '<img class="sss-icon" src="' + $("#divSelectStockState").attr("srcNR") + '" title="No Revisado"/>';
+                    }
+
+
+                    stockConfirmado = '<div class="dropdown-icons-select" idPedido="' + pedidoList[i].idPedido + '">' + stockConfirmadoLectura + htmlDDSSS + '</div>'
+
 
                     var truncado = '';
 
@@ -4857,6 +4836,54 @@ jQuery(function ($) {
                 }
             }
         });
+    });
+
+
+    $(document).on('click', ".dropdown-select-stock-state a", function () {
+        var idPedido = $(this).closest(".dropdown-icons-select").attr("idPedido");
+        var stockConfirmado = $(this).attr("state");
+        var that = this;
+        var imgIcon = $(this).closest(".dropdown-icons-select").find(".sss-icon");
+        $.ajax({
+            url: "/Pedido/UpdateStockConfirmado",
+            data: {
+                idPedido: idPedido,
+                stockConfirmado: stockConfirmado
+            },
+            type: 'POST',
+            error: function (detalle) {
+                mostrarMensajeErrorProceso(MENSAJE_ERROR);
+            },
+            success: function (resultado) {
+                if (stockConfirmado == 1) {
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectStockState").attr("srcSC"));
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Stock Completo");
+                }
+                if (stockConfirmado == 2) {
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectStockState").attr("srcSS"));
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Sin Stock");;
+                }
+                if (stockConfirmado == 3) {
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectStockState").attr("srcSP"));
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Stock Parcial");
+                }
+                if (stockConfirmado == 0) {
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectStockState").attr("srcNR"));
+                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "No Revisado");
+                }
+
+                $(that).closest(".dropdown-select-stock-state").hide();
+            }
+        });
+    });
+
+    $(document).on('click', ".dropdown-icons-select .sss-icon", function () {
+
+        if ($(this).closest(".dropdown-icons-select").find(".dropdown-select-stock-state").is(":visible")) {
+            $(this).closest(".dropdown-icons-select").find(".dropdown-select-stock-state").hide();
+        } else {
+            $(this).closest(".dropdown-icons-select").find(".dropdown-select-stock-state").show();
+        }
     });
 
     $("#pedido_fechaSolicitudDesde").change(function () {

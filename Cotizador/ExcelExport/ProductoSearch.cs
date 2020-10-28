@@ -272,8 +272,8 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, 1, "F", "Unidad de Venta", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "G", "Unidad Proveedor", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "H", "Equiva. Und.Prov.", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "I", "Unidad Pedido Proveedor", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "J", "Equivalencia UP/UPP", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "I", "Unidad Facturación Proveedor", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "J", "Equivalencia UP/UFP", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "K", "Unidad Alternativa", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "L", "Equiva. Und. Alt.", titleCellStyle);
                
@@ -309,7 +309,7 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, 1, "AI", "Motivo Venta Restringida", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "AJ", "Cantidad Máxima Para No Restringir Pedido", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "AK", "Descripción Detallada", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "AL", "Agregar Descrición Detallada a Cotización", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "AL", "Agregar Descripción Detallada a Cotización", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "AM", "% Tope Descuento", titleCellStyle);
 
                 MemoryStream ms = new MemoryStream();
