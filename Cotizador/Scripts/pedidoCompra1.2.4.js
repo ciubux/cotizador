@@ -1087,6 +1087,23 @@ jQuery(function ($) {
 
                 $("#verProducto").html(producto.nombre);
 
+                if (producto.descontinuado == 1) {
+                    $("#spnProductoDescontinuado").show();
+
+                    if (producto.motivoRestriccion != null) {
+                        producto.motivoRestriccion = producto.motivoRestriccion.trim();
+
+                        $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").removeClass("tooltip-label");
+                        if (producto.motivoRestriccion != "") {
+                            $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").addClass("tooltip-motivo-restriccion");
+                            $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado .tooltip-label-text").html(producto.motivoRestriccion);
+                        }
+                    }
+                } else {
+                    $("#spnProductoDescontinuado").hide();
+                }
+
+
                 FooTable.init('#tableMostrarPrecios');
                 for (var i = 0; i < producto.precioListaList.length; i++) {
                     var fechaInicioVigencia = producto.precioListaList[i].fechaInicioVigencia;
@@ -1513,6 +1530,29 @@ jQuery(function ($) {
                     }
                 }
 
+                var descontinuadoLabel = "";
+                if (detalle.descontinuado == 1) {
+                    descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
+
+                    if (detalle.motivoRestriccion != null) {
+                        detalle.motivoRestriccion = detalle.motivoRestriccion.trim();
+                        descontinuadoLabel = descontinuadoLabel.replace("_DATA_TIPSO_", detalle.motivoRestriccion);
+
+                        if (detalle.motivoRestriccion != "") {
+                            descontinuadoLabel = descontinuadoLabel.replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+                        }
+                    }
+                }
+
+                var descripcionLargaLabel = "";
+                if (detalle.descripcionLarga != null && detalle.descripcionLarga != '') {
+                    descripcionLargaLabel = "<br/>" + $("#spnDescripcionLargaInfo").html();
+
+                    detalle.descripcionLarga = detalle.descripcionLarga.trim();
+                    descripcionLargaLabel = descripcionLargaLabel.replace("_DATA_TIPSO_", detalle.descripcionLarga);
+                    descripcionLargaLabel = descripcionLargaLabel.replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+                }
+
 
                 $('#tableDetallePedido tbody tr.footable-empty').remove();
                 $("#tableDetallePedido tbody").append('<tr data-expanded="true">' +
@@ -1520,8 +1560,8 @@ jQuery(function ($) {
                     '<td>' + esPrecioAlternativo + '</td>' +
 
                     '<td>' + proveedor + '</td>' +
-                    '<td>' + detalle.codigoProducto + '</td>' +
-                    '<td>' + detalle.nombreProducto + observacionesEnDescripcion + '</td>' +
+                    '<td>' + detalle.codigoProducto + descontinuadoLabel + '</td>' +
+                    '<td>' + detalle.nombreProducto + descripcionLargaLabel + observacionesEnDescripcion + '</td>' +
                     '<td>' + detalle.unidad + '</td>' +
                     '<td class="column-img"><img class="table-product-img" src="' + $("#imgProducto").attr("src") + '"></td>' +
                     '<td class="' + detalle.idProducto + ' detprecioLista" style="text-align:right">' + precioLista + '</td>' +
@@ -2546,7 +2586,7 @@ jQuery(function ($) {
                 var pedido = resultado.pedido;
                 var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
 
-              //  var usuario = resultado.usuario;
+                var usuario = resultado.usuario;
 
 
                 $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
@@ -2643,16 +2683,48 @@ jQuery(function ($) {
                 $("#formVerGuiasRemision").html("");
                 $("#formVerNotasIngreso").html("");
 
+                var tieneProductoRestringido = false;
+
                 var d = '';
                 var lista = pedido.pedidoDetalleList;
                 for (var i = 0; i < lista.length; i++) {
+
+                    var descontinuadoLabel = "";
+                    if (lista[i].producto.descontinuado == 1) {
+                        tieneProductoRestringido = true;
+
+                        if (lista[i].producto.motivoRestriccion != null) {
+                            lista[i].producto.motivoRestriccion = lista[i].producto.motivoRestriccion.trim();
+
+                            $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").removeClass("tooltip-motivo-restriccion");
+                            if (lista[i].producto.motivoRestriccion != "") {
+                                $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").addClass("tooltip-motivo-restriccion");
+                                $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado .tooltip-label-text").html(lista[i].producto.motivoRestriccion);
+                            }
+                        }
+
+                        descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
+                    }
+
+                    var descripcionLargaLabel = "";
+                    if (lista[i].producto.descripcionLarga != null && lista[i].producto.descripcionLarga.trim() != "") {
+
+                        lista[i].producto.descripcionLarga = lista[i].producto.descripcionLarga.trim();
+
+                        $("#spnDescripcionLargaInfo .lblInfoDescripcionLarga ").removeClass("tooltip-motivo-restriccion");
+
+                        $("#spnDescripcionLargaInfo .lblInfoDescripcionLarga ").addClass("tooltip-motivo-restriccion");
+                        $("#spnDescripcionLargaInfo .lblInfoDescripcionLarga .tooltip-label-text").html(lista[i].producto.descripcionLarga);
+
+                        descripcionLargaLabel = "&nbsp;" + $("#spnDescripcionLargaInfo").html();
+                    }
 
                     var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined'? '' : lista[i].observacion;
 
                     d += '<tr>' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
-                        '<td>' + lista[i].producto.sku + '</td>' +
-                        '<td>' + lista[i].producto.descripcion + '</td>' +
+                        '<td>' + lista[i].producto.sku + descontinuadoLabel + '</td>' +
+                        '<td>' + lista[i].producto.descripcion + descripcionLargaLabel + '</td>' +
                         '<td>' + lista[i].unidad + '</td>' +
                         '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + lista[i].producto.image + '"> </td>' +
                         '<td>' + lista[i].precioLista.toFixed(cantidadDecimales) + '</td>' +
@@ -2823,18 +2895,27 @@ jQuery(function ($) {
                 if (
                     (pedido.seguimientoPedido.estado == ESTADO_PENDIENTE_APROBACION ||
                         pedido.seguimientoPedido.estado == ESTADO_DENEGADO)
+                    &&
+                    (!tieneProductoRestringido || (tieneProductoRestringido && usuario.apruebaPedidosVentaRestringida))
                 ) {
 
                     $("#btnAprobarIngresoPedido").show();
+                }
+                else {
+                    $("#btnAprobarIngresoPedido").hide();
+                }
+
+                if (
+                    (pedido.seguimientoPedido.estado == ESTADO_PENDIENTE_APROBACION ||
+                        pedido.seguimientoPedido.estado == ESTADO_DENEGADO)
+                ) {
                     $("#btnExcelCompra").hide();
                     $("#btnCvsCompra").hide();
                 }
                 else {
-                    $("#btnAprobarIngresoPedido").hide();
                     $("#btnExcelCompra").show();
                     $("#btnCvsCompra").show();
                 }
-
 
                 //DENEGAR PEDIDO
                 if (pedido.seguimientoPedido.estado == ESTADO_PENDIENTE_APROBACION)

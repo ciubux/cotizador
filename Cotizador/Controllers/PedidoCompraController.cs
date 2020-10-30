@@ -634,6 +634,8 @@ namespace Cotizador.Controllers
                 "\"fleteDetalle\":\"" + fleteDetalle + "\"," +
                 "\"precioUnitario\":\"" + precioUnitario + "\"," +
                 "\"porcentajeDescuento\":\"" + porcentajeDescuento + "\"," +
+                "\"descontinuado\":\"" + producto.descontinuado.ToString() + "\"," +
+                "\"motivoRestriccion\":\"" + producto.motivoRestriccion + "\"," +
                 "\"precioListaList\":" + jsonPrecioLista + "," +
                 "\"productoPresentacionList\":" + jsonProductoPresentacion + "," +
                 "\"costoLista\":\"" + producto.costoLista + "\"" +
@@ -749,8 +751,11 @@ namespace Cotizador.Controllers
                 igv = pedido.montoIGV.ToString(),
                 subTotal = pedido.montoSubTotal.ToString(),
                 margen = detalle.margen,
+                descripcionLarga = detalle.producto.descripcionLarga,
                 precioUnitario = detalle.precioUnitario,
                 observacion = detalle.observacion,
+                descontinuado = detalle.producto.descontinuado,
+                motivoRestriccion = detalle.producto.motivoRestriccion,
                 total = pedido.montoTotal.ToString(),
                 precioUnitarioRegistrado = precioUnitarioRegistrado
 
@@ -1519,7 +1524,6 @@ namespace Cotizador.Controllers
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
             string jsonPedido = JsonConvert.SerializeObject(pedido);
 
-  
 
             Ciudad ciudad = usuario.sedesMPPedidos.Where(s => s.idCiudad == pedido.ciudad.idCiudad).FirstOrDefault();
             /*
@@ -1545,7 +1549,7 @@ namespace Cotizador.Controllers
             }
 
           
-            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"pedido\":" + jsonPedido + "}";
+            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"pedido\":" + jsonPedido + ", \"usuario\":" + jsonUsuario + "}";
             return json;
         }
 

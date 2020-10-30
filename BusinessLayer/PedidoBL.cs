@@ -345,11 +345,17 @@ namespace BusinessLayer
 
                 //pedidoDetalle.usuario = pedido.usuario;
                 pedidoDetalle.idPedido = pedido.idPedido;
+
+                if (pedidoDetalle.producto.descontinuado == 1 && !pedido.usuario.apruebaPedidosVentaRestringida)
+                {
+                    pedido.seguimientoPedido.observacion = "El producto " + pedidoDetalle.producto.sku + " es de venta restringida.";
+                    pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                }
             }
 
             if (pedido.cliente.tipoLiberacionCrediticia == Persona.TipoLiberacionCrediticia.bloqueado)
             {
-                pedido.seguimientoPedido.observacion = "El cliente se encuentra bloqueado.";
+                pedido.seguimientoPedido.observacion = "El proveedor se encuentra bloqueado.";
                 pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
             }
             

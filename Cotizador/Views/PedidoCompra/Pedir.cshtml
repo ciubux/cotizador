@@ -276,7 +276,7 @@
                                 <span class="input-group-text" id="basic-addon1">Desde:</span>
                             </div>
                             <input type="hidden" id="fechaEntregaDesdetmp" value="@ViewBag.fechaEntregaDesde" />
-                            <input class="form-control" type="text" id="pedido_fechaEntregaDesde" name="pedido_fechaEntregaDesde">
+                            <input class="form-control" type="text" id="pedido_fechaEntregaDesde" name="pedido_fechaEntregaDesde" autocomplete="off">
                         </div>
                         <label for="fechaEntregaHasta" class="control-label col-xs-6 col-lg-4"></label>
                         <div class="input-group col-xs-6 col-lg-8">
@@ -285,7 +285,7 @@
                                 <span class="input-group-text" id="basic-addon1">Hasta:</span>
                             </div>
                             <input type="hidden" id="fechaEntregaHastatmp" value="@ViewBag.fechaEntregaHasta" />
-                            <input class="form-control" type="text" id="pedido_fechaEntregaHasta" name="pedido_fechaEntregaHasta">
+                            <input class="form-control" type="text" id="pedido_fechaEntregaHasta" name="pedido_fechaEntregaHasta" autocomplete="off">
 
                         </div>
                     </div>
@@ -570,11 +570,37 @@
                         <td>  @cotizacionDetalle.producto.idProducto  </td>
                         <td>  @cotizacionDetalle.esPrecioAlternativo  </td>
                         <td>  @cotizacionDetalle.producto.proveedor  </td>
-                        <td>  @cotizacionDetalle.producto.sku  </td>
+                        <td>
+                            @cotizacionDetalle.producto.sku
+                            @if (cotizacionDetalle.producto.descontinuado == 1)
+                            {
+                                <br />
+                                if (cotizacionDetalle.producto.motivoRestriccion != null && !cotizacionDetalle.producto.motivoRestriccion.Trim().IsEmpty())
+                                {
+                                    string descontinuadoLabel = Html.Partial("../Producto/_LabelRestringido").ToString();
+                                    descontinuadoLabel = descontinuadoLabel.Replace("_DATA_TIPSO_", cotizacionDetalle.producto.motivoRestriccion);
+                                    descontinuadoLabel = descontinuadoLabel.Replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+
+                                    @Html.Raw(descontinuadoLabel)
+                                }
+                                else
+                                {
+                                    @Html.Partial("../Producto/_LabelRestringido")
+                                }
+                            }
+                        </td>
                         <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
 
                         <td>
                             @cotizacionDetalle.producto.skuProveedor - @cotizacionDetalle.producto.descripcion
+                            @if (cotizacionDetalle.producto.descripcionLarga != null && !cotizacionDetalle.producto.descripcionLarga.Trim().IsEmpty())
+                            {
+                                string descripcionLargaInfo = Html.Partial("../Producto/_LabelDescripcionLarga").ToString();
+                                descripcionLargaInfo = descripcionLargaInfo.Replace("_DATA_TIPSO_", cotizacionDetalle.producto.descripcionLarga);
+                                descripcionLargaInfo = descripcionLargaInfo.Replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+
+                                @Html.Raw(descripcionLargaInfo)
+                            }
                             <br />
                             <span class="@cotizacionDetalle.producto.idProducto detproductoObservacion" style="color: darkred"> @cotizacionDetalle.observacion</span>
                         </td>
@@ -844,6 +870,9 @@
                             <div class="form-group">
                                 <label for="producto" class="control-label col-xs-3">Producto:</label>
                                 <div class="col-xs-9">
+                                    <span id="spnProductoDescontinuado" style="display: none;">
+                                        @Html.Partial("../Producto/_LabelRestringido")
+                                    </span>
                                     <select class="form-control" id="producto" name="producto">
                                         <option value=""></option>
                                     </select>
