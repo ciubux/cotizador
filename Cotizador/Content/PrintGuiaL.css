@@ -8,6 +8,7 @@
         display: none;
     }
 
+    
 
     body {
         font-family: 'Courier';
@@ -185,8 +186,7 @@
 
         .row_siete > .col_dos {
             float: left;
-            width: 20cm;
-            line-height: 12px;
+            width: 11cm;
         }
 
 
@@ -204,22 +204,24 @@
     /*ROW DETALLE*/
     .row_detalle > .col_uno {
         float: left;
-        width: 2cm;
+        width: 1.8cm;
     }
 
     .row_detalle > .col_dos {
         float: left;
-        width: 1.5cm;
+        width: 1.3cm;
     }
 
     .row_detalle > .col_tres {
         float: left;
-        width: 4cm;
+        font-size: 0.9em;
+        width: 3.5cm;
     }
 
     .row_detalle > .col_cuatro {
         float: left;
-        width: 14.1cm;
+        font-size: 0.9em;
+        width: 12.5cm;
     }
 
 
