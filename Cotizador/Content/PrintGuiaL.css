@@ -14,7 +14,7 @@
         font-family: 'Courier';
         font-stretch: normal;
         font-weight: bold;
-        font-size: 1.2em;
+        font-size: 1em;
     }
 
     html, body {
@@ -31,8 +31,8 @@
         font-family: 'Courier';
         font-stretch: normal;
         font-weight: bold;
-        font-size: 1.3em;
-        margin-top: 3.6cm;
+        font-size: 1.1em;
+        margin-top: 3.4cm;
     }
 
         .row_uno > .col_uno {
@@ -56,7 +56,7 @@
 
     /*ROW DOS*/
     .row_dos {
-        margin-top: 0.08cm;
+        margin-top: 0.07cm;
         font-family: 'Courier';
         font-stretch: normal;
         font-weight: bold;
@@ -85,7 +85,7 @@
 
 
     .row_tres {
-        margin-top: 0.02cm;
+        margin-top: 0.015cm;
         font-family: 'Courier';
         font-stretch: normal;
         font-weight: bold;
@@ -106,7 +106,7 @@
 
     .row_cuatro {
         margin-top: 0cm;
-        font-size: 1.1em;
+        font-size: 1em;
     }
 
 
@@ -138,7 +138,7 @@
         font-family: 'Courier';
         font-stretch: normal;
         font-weight: bold;
-        font-size: 1.1em;
+        font-size: 1em;
     }
         /*ROW CINCO*/
         .row_cinco > .col_uno {
@@ -153,11 +153,11 @@
 
 
     .row_seis {
-        margin-top: 0cm;
+        margin-top: 0.1cm;
         font-family: 'Courier';
         font-stretch: normal;
         font-weight: bold;
-        font-size: 1.1em;
+        font-size: 1em;
     }
         /*ROW SEIS*/
         .row_seis > .col_uno {
@@ -167,16 +167,16 @@
 
         .row_seis > .col_dos {
             float: left;
-            width: 11cm;
+            width: 15cm;
         }
 
 
     .row_siete {
-        margin-top: 0.05cm;
+        margin-top: 0.04cm;
         font-family: 'Courier';
         font-stretch: normal;
         font-weight: bold;
-        font-size: 1.1em;
+        font-size: 1em;
     }
         /*ROW SIETE*/
         .row_siete > .col_uno {
@@ -186,7 +186,7 @@
 
         .row_siete > .col_dos {
             float: left;
-            width: 11cm;
+            width: 15cm;
         }
 
 
@@ -196,7 +196,7 @@
         font-stretch: normal;
         font-weight: bold;
         font-size: 1.2em;
-        margin-top: 1cm;
+        margin-top: 0.9cm;
         margin-left: 0.5cm;
         height: 5.6cm;
     }

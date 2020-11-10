@@ -2906,7 +2906,7 @@ jQuery(function ($) {
                     $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString);
                 }
                 else if (pedido.cotizacion_tipoCotizacion == 1) {
-                    $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString + " (Transitoria)");
+                    $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString + " (Puntual)");
                 }
                 else if (pedido.cotizacion_tipoCotizacion == 2) {
                     $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString + " (Trivial)");
@@ -4851,28 +4851,43 @@ jQuery(function ($) {
                 stockConfirmado: stockConfirmado
             },
             type: 'POST',
+            dataType: 'JSON',
             error: function (detalle) {
                 mostrarMensajeErrorProceso(MENSAJE_ERROR);
             },
             success: function (resultado) {
-                if (stockConfirmado == 1) {
-                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectStockState").attr("srcSC"));
-                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Stock Completo");
-                }
-                if (stockConfirmado == 2) {
-                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectStockState").attr("srcSS"));
-                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Sin Stock");;
-                }
-                if (stockConfirmado == 3) {
-                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectStockState").attr("srcSP"));
-                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Stock Parcial");
-                }
-                if (stockConfirmado == 0) {
-                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectStockState").attr("srcNR"));
-                    $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "No Revisado");
+
+                if (resultado.success == 1) {
+                    if (stockConfirmado == 1) {
+                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectStockState").attr("srcSC"));
+                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Stock Completo");
+                    }
+                    if (stockConfirmado == 2) {
+                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectStockState").attr("srcSS"));
+                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Sin Stock");;
+                    }
+                    if (stockConfirmado == 3) {
+                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectStockState").attr("srcSP"));
+                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Stock Parcial");
+                    }
+                    if (stockConfirmado == 0) {
+                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectStockState").attr("srcNR"));
+                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "No Revisado");
+                    }
+                } else {
+                    $.alert({
+                        title: "ERROR",
+                        content: resultado.message,
+                        type: "red",
+                        buttons: {
+                            OK: function () {
+                            }
+                        }
+                    });
                 }
 
                 $(that).closest(".dropdown-select-stock-state").hide();
+
             }
         });
     });

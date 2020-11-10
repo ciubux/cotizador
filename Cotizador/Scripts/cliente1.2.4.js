@@ -2796,7 +2796,31 @@ jQuery(function ($) {
     });
 
 
-    
+    $("#btnAgregarContacto").click(function () {
+        var contactoRow = '<tr data-expanded="true">' +
+            '<td></td>' +
+            '<td></td>' +
+            '<td><input class="form-control accNombre"><br/>' +
+                '<label class="radio-label">' +
+                    '<input type="checkbox" class="accEsPrincipal" value="1">' +
+                    '<span>Marcar como contacto principal</span>' +
+                '</label>' +
+            '</td>' +
+            '<td><input class="form-control accTelefono"></td>' +
+            '<td><input class="form-control accCorreo"></td>' +
+            '<td><input class="form-control accCargo"></td>' +
+            '<td>' +
+            '<label class="radio-label">' +
+            '<input type="checkbox" class="accAplicaRuc" value="1">' +
+            '<span>Aplica al RUC</span>' +
+            '</label>' +
+            '</td>' +
+            '<td></td>' +
+            '</tr>';   
+        $("#tableListaContactos").append(contactoRow);
+        FooTable.init('#tableListaContactos');
+    });
+
     
 
     var idClienteView = "";
@@ -3063,7 +3087,7 @@ jQuery(function ($) {
                         '</tr>';
 
                     $("#tableListaPrecios").append(preciosRow);
-
+                    
                 }
 
                 if (preciosList.length > 0) {
@@ -3144,6 +3168,27 @@ jQuery(function ($) {
                 }
 
                 loadDireccionesEntrega(arrayDireccionEntrega);
+
+                var contactoList = result.contactoList;
+                for (var i = 0; i < contactoList.length; i++) {
+                    var aplicaRUC = direccionEntregaList[i].aplicaRuc == 1 ? "SI" : "NO";
+                    
+                    var contactoRow = '<tr data-expanded="true">' +
+                        '<td>' + contactoList[i].idClienteContacto + '</td>' +
+                        '<td>' + contactoList[i].idCliente + '</td>' +
+                        '<td>' + contactoList[i].nombre + '</td>' +
+                        '<td>' + contactoList[i].telefono + '</td>' +
+                        '<td>' + contactoList[i].correo  + '</td>' +
+                        '<td>' + contactoList[i].cargo + '</td>' +
+                        '<td>' + aplicaRUC + '</td>' 
+                        '<td>' + ' ' + '</td>' +
+
+                        '</tr>';      
+
+                    $("#tableListaContactos").append(contactoRow);
+                }
+
+                FooTable.init('#tableListaContactos');
 
 
                 $("#direccionEntrega_idDomicilioLegal").find('option')

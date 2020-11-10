@@ -11,7 +11,8 @@ jQuery(function ($) {
         verificarSiExisteCliente();
 
         cargarChosenUsuario();
-        FooTable.init('#tableUsuariosRol');
+        $('#tableUsuariosRol').footable();
+        //FooTable.init('#tableUsuariosRol');
 
         $('.hasTooltipPermiso').tipso(
             {

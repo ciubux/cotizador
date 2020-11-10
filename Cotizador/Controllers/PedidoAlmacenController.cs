@@ -33,20 +33,35 @@ namespace Cotizador.Controllers
             }
         }
 
-        public void UpdateStockConfirmado()
+        public string UpdateStockConfirmado()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            string success = "0";
+            string message = "";
 
             if (usuario.confirmaStock)
             {
                 Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
                 pedido.idPedido = Guid.Parse(this.Request.Params["idPedido"]);
+                
+                PedidoBL pedidoBL = new PedidoBL();
+                pedido = pedidoBL.GetPedido(pedido, usuario);
+                
                 pedido.stockConfirmado = Int32.Parse(this.Request.Params["stockConfirmado"]);
                 pedido.usuario = usuario;
 
-                PedidoBL pedidoBL = new PedidoBL();
-                pedidoBL.UpdateStockConfirmado(pedido);
+                if (pedido.ciudad.idCiudad == usuario.sedeMP.idCiudad)
+                {
+                    success = "1";
+                    pedidoBL.UpdateStockConfirmado(pedido);
+                } else
+                {
+                    message = "Debe pertenecer a la sede del pedido para poder editar la confirmación de Stock";
+                }
             }
+
+            return "{\"success\": " + success + ",\"message\":\"" + message + "\"}";
         }
 
         // GET: Pedido

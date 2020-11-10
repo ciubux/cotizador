@@ -448,8 +448,12 @@ namespace Cotizador.Controllers
             DomicilioLegalBL domicilioLegalBL = new DomicilioLegalBL();
             List<DomicilioLegal> domicilioLegalList = domicilioLegalBL.getDomiciliosLegalesPorCliente(cliente);
 
+            ClienteContactoBL contactoBl = new ClienteContactoBL();
+            List<ClienteContacto> listaContactos = contactoBl.getContactos(idCliente);
+
             String resultado = "{\"cliente\":" + JsonConvert.SerializeObject(cliente) + ", \"precios\":" + JsonConvert.SerializeObject(listaPrecios) + 
-                        ", \"direccionEntregaList\":" + JsonConvert.SerializeObject(direccionEntregaList) + 
+                        ", \"direccionEntregaList\":" + JsonConvert.SerializeObject(direccionEntregaList) +
+                        ", \"contactoList\":" + JsonConvert.SerializeObject(listaContactos) +
                         ", \"domicilioLegalList\":" + JsonConvert.SerializeObject(domicilioLegalList) + "}";
 
             this.Session[Constantes.VAR_SESSION_CLIENTE_VER] = cliente;

@@ -445,6 +445,7 @@
                         <li><a data-toggle="tab" id="showClientePrecios" href="#cliente_precios">Productos y Precios</a></li>
                         <li><a data-toggle="tab" id="showInformacionComercial" href="#cliente_comercial">Gestion Comercial</a></li>
                         <li><a data-toggle="tab" id="showDireccionesEntrega" href="#cliente_direccionesEntrega">Direcciones Entrega</a></li>
+                        <li><a data-toggle="tab" id="showContactos" href="#cliente_contactos">Contactos</a></li>
                         <li><a data-toggle="tab" id="showConfiguraciones" href="#cliente_configuraciones">Configuraciones</a></li>
                     </ul>
 
@@ -970,6 +971,34 @@
                             </table>
                         </div>
 
+                        <div id="cliente_contactos" class="tab-pane fade">
+                            <div class="row">
+                                <div class="col-sm-6 col-lg-6">
+                                    <button id="btnAgregarContacto" type="button" class="btn btn-primary">Agregar Contacto</button>
+                                </div>
+                                <div class="col-sm-6 col-lg-6 text-right">
+                                    @*<button id="btnExportDirecciones" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastShowDirecciones", "Cliente")">Exportar Direcciones</button>*@
+                                </div>
+                            </div>
+                            <table id="tableListaContactos" class="table" data-editing="false"
+                                   data-sorting="true"
+                                   data-show-toggle="false">
+                                <thead>
+                                    <tr>
+                                        <th data-name="idClienteContacto" data-visible="false"></th>
+                                        <th data-name="idCliente" data-visible="false"></th>
+                                        <th data-name="nombre" data-sortable="true" data-breakpoints="xs">Nombre</th>
+                                        <th data-name="telefono" data-sortable="false" data-breakpoints="xs">Teléfono</th>
+                                        <th data-name="correo" data-sortable="false" data-breakpoints="xs">Correo</th>
+                                        <th data-name="cargo" data-sortable="false" data-breakpoints="xs">Cargo</th>
+                                        <th data-name="aplicaRuc" data-sortable="false" data-breakpoints="xs">Aplica al RUC</th>
+                                        <th data-breakpoints="xs"></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
                         <div id="cliente_configuraciones" class="tab-pane fade">
                             <div class="row" style="margin-top: 10px;">
                                 <div class="col-sm-12 col-lg-12">
@@ -995,14 +1024,14 @@
                             </div>
                         </div>
 
-                    <div id="msgBusquedaSinResultados" style="display:none;" class="col-lg-12">
-                        <p class="pagination-centered" style=" font-size: medium" align="center">
-                            No existen precios vigentes.
-                        </p>
-                    </div>
+                        <div id="msgBusquedaSinResultados" style="display:none;" class="col-lg-12">
+                            <p class="pagination-centered" style=" font-size: medium" align="center">
+                                No existen precios vigentes.
+                            </p>
+                        </div>
 
 
-                </form>
+</form>
             </div>
 
             <div class="modal-footer">

@@ -68,6 +68,7 @@
     <Compile Include="LogCambioBL.cs" />
     <Compile Include="PermisoBL.cs" />
     <Compile Include="RubroBL.cs" />
+    <Compile Include="ClienteContactoBL.cs" />
     <Compile Include="SubDistribuidorBL.cs" />
     <Compile Include="OrigenBL.cs" />
     <Compile Include="SerieDocumentoBL.cs" />
