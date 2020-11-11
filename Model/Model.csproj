@@ -52,6 +52,7 @@
     <Compile Include="AlertaValidacion.cs" />
     <Compile Include="Auditoria.cs" />
     <Compile Include="CampoPersistir.cs" />
+    <Compile Include="ClienteContactoTipo.cs" />
     <Compile Include="ClienteContacto.cs" />
     <Compile Include="TipoVistaDashboard.cs" />
     <Compile Include="VistaDashboard.cs" />

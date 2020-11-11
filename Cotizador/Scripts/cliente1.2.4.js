@@ -2796,30 +2796,18 @@ jQuery(function ($) {
     });
 
 
-    $("#btnAgregarContacto").click(function () {
-        var contactoRow = '<tr data-expanded="true">' +
-            '<td></td>' +
-            '<td></td>' +
-            '<td><input class="form-control accNombre"><br/>' +
-                '<label class="radio-label">' +
-                    '<input type="checkbox" class="accEsPrincipal" value="1">' +
-                    '<span>Marcar como contacto principal</span>' +
-                '</label>' +
-            '</td>' +
-            '<td><input class="form-control accTelefono"></td>' +
-            '<td><input class="form-control accCorreo"></td>' +
-            '<td><input class="form-control accCargo"></td>' +
-            '<td>' +
-            '<label class="radio-label">' +
-            '<input type="checkbox" class="accAplicaRuc" value="1">' +
-            '<span>Aplica al RUC</span>' +
-            '</label>' +
-            '</td>' +
-            '<td></td>' +
-            '</tr>';   
-        $("#tableListaContactos").append(contactoRow);
-        FooTable.init('#tableListaContactos');
+    $("#btnCloseAgregarContacto").click(function () {
+        $('#modalContactoCliente').modal('hide');
     });
+    
+
+    $("#btnAgregarContacto").click(function () {
+        limpiarFormularioAgregarContacto();
+    });
+
+    function limpiarFormularioAgregarContacto() {
+
+    }
 
     
 

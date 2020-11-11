@@ -2,6 +2,7 @@
     ViewBag.Title = "Búsqueda Clientes";
     Model.Cliente cliente = ViewBag.cliente;
     Model.DireccionEntrega direccionEntrega = new Model.DireccionEntrega();
+    Model.ClienteContacto clienteContacto = new Model.ClienteContacto();
     List<Model.Cliente> clienteList = ViewBag.clienteList;
 }
 
@@ -488,34 +489,34 @@
                                 </div>
                             </div>
                             <!--
-        <div class="row">
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    @Html.LabelFor(c => cliente.ubigeo.Departamento, htmlAttributes: new { @class = "control-label col-xs-4" })
-                    <div class="col-xs-8">
-                        @Html.TextBoxFor(c => cliente.ubigeo.Departamento, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    @Html.LabelFor(c => cliente.ubigeo.Provincia, htmlAttributes: new { @class = "control-label col-xs-4" })
-                    <div class="col-xs-8">
-                        @Html.TextBoxFor(c => cliente.ubigeo.Provincia, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    @Html.LabelFor(c => cliente.ubigeo.Distrito, htmlAttributes: new { @class = "control-label col-xs-4" })
-                    <div class="col-xs-8">
-                        @Html.TextBoxFor(c => cliente.ubigeo.Distrito, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                    </div>
-                </div>
-            </div>
-        </div>
+                            <div class="row">
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.ubigeo.Departamento, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                        <div class="col-xs-8">
+                                            @Html.TextBoxFor(c => cliente.ubigeo.Departamento, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.ubigeo.Provincia, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                        <div class="col-xs-8">
+                                            @Html.TextBoxFor(c => cliente.ubigeo.Provincia, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(c => cliente.ubigeo.Distrito, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                        <div class="col-xs-8">
+                                            @Html.TextBoxFor(c => cliente.ubigeo.Distrito, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-        <!--ESTADO CONTRIBUYENTE CLIENTE-->
+                            <!--ESTADO CONTRIBUYENTE CLIENTE-->
 
                             <div class="row">
                                 <div class="col-sm-6 col-lg-4">
@@ -732,11 +733,11 @@
                                         </div>
                                     </div>
                                     @*<div class="form-group">
-                        @Html.LabelFor(c => cliente.bloqueado, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
-                        <div class="col-xs-8 col-sm-8 col-lg-8">
-                            <p class="form-control-static" id="verBloqueado"></p>
-                        </div>
-                    </div>*@
+                                            @Html.LabelFor(c => cliente.bloqueado, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                                            <div class="col-xs-8 col-sm-8 col-lg-8">
+                                                <p class="form-control-static" id="verBloqueado"></p>
+                                            </div>
+                                        </div>*@
                                 </div>
 
                             </div>
@@ -926,8 +927,8 @@
 
                         <div id="cliente_direccionesEntrega" class="tab-pane fade">
                             <!--    <table id="tableListaDireccionesEntrega" class="table">
-             </table>
-        -->
+                                 </table>
+                            -->
                             <div class="row">
                                 <div class="col-sm-6 col-lg-6">
 
@@ -974,7 +975,7 @@
                         <div id="cliente_contactos" class="tab-pane fade">
                             <div class="row">
                                 <div class="col-sm-6 col-lg-6">
-                                    <button id="btnAgregarContacto" type="button" class="btn btn-primary">Agregar Contacto</button>
+                                    <button id="btnAgregarContacto" type="button" class="btn btn-primary" data-toggle='modal' data-target='#modalContactoCliente' >Agregar Contacto</button>
                                 </div>
                                 <div class="col-sm-6 col-lg-6 text-right">
                                     @*<button id="btnExportDirecciones" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastShowDirecciones", "Cliente")">Exportar Direcciones</button>*@
@@ -1031,7 +1032,7 @@
                         </div>
 
 
-</form>
+                </form>
             </div>
 
             <div class="modal-footer">
@@ -1289,6 +1290,98 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="modalContactoCliente" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalContactoCliente"><b>Formulario Contacto Cliente</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <input id="idClienteContacto" name="idClienteContacto" class="hidden" />
+                <!--  <input id="idCliente" name="idCliente" class="hidden" />-->
+
+                <div class="form-group row">
+                    @Html.LabelFor(model => clienteContacto.nombre, new { @class = "control-label col-sm-3" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(p => clienteContacto.nombre, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.LabelFor(model => clienteContacto.telefono, new { @class = "control-label col-sm-3" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(p => clienteContacto.telefono, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.LabelFor(model => clienteContacto.correo, new { @class = "control-label col-sm-3" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(p => clienteContacto.correo, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.LabelFor(model => clienteContacto.cargo, new { @class = "control-label col-sm-3" })
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(p => clienteContacto.cargo, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.LabelFor(model => clienteContacto.tipos, new { @class = "control-label col-sm-3" })
+                    <div class="col-sm-9">
+                        <div class="row">
+                            @foreach (Model.ClienteContactoTipo tipo in ViewBag.contactoTipos)
+                            {
+                                <div class="col-sm-6 col-xs-12">
+                                    <label class="radio-label hasTooltipPermiso" for="cliente_contacto_tipo_@tipo.idClienteContactoTipo.ToString()">
+                                        <input type="checkbox" class="chk-permiso" name="cliente_contacto_tipos[]" id="cliente_contacto_tipo_@tipo.idClienteContactoTipo.ToString()" value="@tipo.idClienteContactoTipo.ToString()">
+                                        <span>@tipo.nombre</span>
+                                    </label>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-2">
+                    </div>
+                    <div class="col-sm-10">
+                        <div class="onoffswitch">
+                            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="chkClienteContactoAplicaRuc">
+                            <label class="onoffswitch-label" for="chkClienteContactoAplicaRuc"></label>
+                        </div>
+                        <h5 id="lblChkClienteContactoAplicaRuc" for="chkClienteContactoAplicaRuc" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Aplica a todos los clientes con el mismo RUC</h5>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-2">
+                    </div>
+                    <div class="col-sm-10">
+                        <div class="onoffswitch">
+                            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="chkClienteContactoEsPrincipal">
+                            <label class="onoffswitch-label" for="chkClienteContactoEsPrincipal"></label>
+                        </div>
+                        <h5 id="lblChkClienteContactoEsPrincipal" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Es contacto principal</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="btnGuardarCambiosClienteContacto">Guardar Cambios</button>
+                <button type="button" class="btn btn-default" id="btnCloseAgregarContacto">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <div class="modal fade" id="modalVerHistorialReasignaciones" tabindex="-1">

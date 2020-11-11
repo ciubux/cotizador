@@ -56,9 +56,12 @@ namespace Cotizador.Controllers
             }
 
             Cliente clienteSearch = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA];
+            ClienteContactoTipoBL ccTipoBl = new ClienteContactoTipoBL();
+            List<ClienteContactoTipo> contactoTipos = ccTipoBl.getContactos(1);
 
             ViewBag.pagina = (int)Constantes.paginas.BusquedaClientes;
             ViewBag.cliente = clienteSearch;
+            ViewBag.contactoTipos = contactoTipos;
             ViewBag.Si = Constantes.MENSAJE_SI;
             ViewBag.No = Constantes.MENSAJE_NO;
             ViewBag.fechaVentasDesde = clienteSearch.fechaVentasDesde == null ? null : clienteSearch.fechaVentasDesde.Value.ToString(Constantes.formatoFecha);

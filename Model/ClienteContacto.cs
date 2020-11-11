@@ -22,6 +22,10 @@ namespace Model
         [Display(Name = "Cargo:")]
         public String cargo { get; set; }
 
+        [Display(Name = "Tipo:")]
+        public List<ClienteContactoTipo> tipos { get; set; }
+        public String tiposDescripcion { get; set; }
+
 
         public Guid idCliente { get; set; }
         public int idClienteSunat { get; set; }

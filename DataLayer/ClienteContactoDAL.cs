@@ -3,6 +3,7 @@ using Framework.DAL.Settings.Implementations;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using Model;
 
 namespace DataLayer
@@ -36,6 +37,7 @@ namespace DataLayer
                     telefono = Converter.GetString(row, "telefono"),
                     cargo = Converter.GetString(row, "cargo"),
                     correo = Converter.GetString(row, "correo"),
+                    tiposDescripcion = Converter.GetString(row, "tipos"),
                     esPrincipal = Converter.GetInt(row, "es_principal"),
                     aplicaRuc = Converter.GetInt(row, "aplica_ruc"),
                 };
@@ -56,6 +58,20 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCliente", obj.idCliente);
             InputParameterAdd.Int(objCommand, "aplicaRuc", obj.aplicaRuc);
             InputParameterAdd.Int(objCommand, "esPrincipal", obj.esPrincipal);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(int)));
+
+            foreach (ClienteContactoTipo item in obj.tipos)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = item.idClienteContactoTipo;
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@tipos", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "idContactoCliente");
 
@@ -83,6 +99,20 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "aplicaRuc", obj.aplicaRuc);
             InputParameterAdd.Int(objCommand, "esPrincipal", obj.esPrincipal);
             InputParameterAdd.Int(objCommand, "estado", obj.Estado);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(int)));
+
+            foreach (ClienteContactoTipo item in obj.tipos)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = item.idClienteContactoTipo;
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@tipos", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
 
             ExecuteNonQuery(objCommand);
 

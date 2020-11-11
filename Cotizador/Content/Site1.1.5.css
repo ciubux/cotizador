@@ -243,6 +243,10 @@ textarea {
     #modalCargarProductos .modal-dialog {
         width: 700px;
     }
+
+    #modalContactoCliente .modal-dialog {
+        width: 600px;
+    }
 }
 
 
