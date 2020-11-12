@@ -18,10 +18,10 @@ namespace DataLayer
         {
         }
 
-        public List<ClienteContacto> getContactos(Guid idCLiente)
+        public List<ClienteContacto> getContactos(Guid idCliente)
         {
             var objCommand = GetSqlCommand("ps_contactos_cliente");
-            InputParameterAdd.Guid(objCommand, "idCliente", idCLiente); 
+            InputParameterAdd.Guid(objCommand, "idCliente", idCliente); 
 
             DataTable dataTable = Execute(objCommand);
             List<ClienteContacto> lista = new List<ClienteContacto>();
@@ -41,6 +41,39 @@ namespace DataLayer
                     esPrincipal = Converter.GetInt(row, "es_principal"),
                     aplicaRuc = Converter.GetInt(row, "aplica_ruc"),
                 };
+
+                if (obj.tiposDescripcion == null || obj.tiposDescripcion.Equals(""))
+                {
+                    obj.tiposDescripcion = "NO ASIGNADO";
+                }
+
+                if (obj.nombre == null) obj.nombre = "";
+                if (obj.telefono == null) obj.telefono = "";
+                if (obj.cargo == null) obj.cargo = "";
+                if (obj.correo == null) obj.correo = "";
+
+                lista.Add(obj);
+            }
+            return lista;
+        }
+
+
+        public List<ClienteContactoTipo> getContactoTipos(Guid idClienteContacto)
+        {
+            var objCommand = GetSqlCommand("ps_contacto_cliente_tipos");
+            InputParameterAdd.Guid(objCommand, "idClienteContacto", idClienteContacto);
+
+            DataTable dataTable = Execute(objCommand);
+            List<ClienteContactoTipo> lista = new List<ClienteContactoTipo>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                ClienteContactoTipo obj = new ClienteContactoTipo
+                {
+                    idClienteContactoTipo = Converter.GetGuid(row, "id_cliente_contacto_tipo"),
+                    nombre = Converter.GetString(row, "nombre")
+                };
+
                 lista.Add(obj);
             }
             return lista;
@@ -60,7 +93,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "esPrincipal", obj.esPrincipal);
 
             DataTable tvp = new DataTable();
-            tvp.Columns.Add(new DataColumn("ID", typeof(int)));
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
 
             foreach (ClienteContactoTipo item in obj.tipos)
             {
@@ -101,7 +134,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", obj.Estado);
 
             DataTable tvp = new DataTable();
-            tvp.Columns.Add(new DataColumn("ID", typeof(int)));
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
 
             foreach (ClienteContactoTipo item in obj.tipos)
             {

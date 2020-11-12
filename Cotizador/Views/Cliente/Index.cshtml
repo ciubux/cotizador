@@ -992,8 +992,9 @@
                                         <th data-name="telefono" data-sortable="false" data-breakpoints="xs">Teléfono</th>
                                         <th data-name="correo" data-sortable="false" data-breakpoints="xs">Correo</th>
                                         <th data-name="cargo" data-sortable="false" data-breakpoints="xs">Cargo</th>
+                                        <th data-name="tipos" data-sortable="false" data-breakpoints="xs">Tipo</th>
                                         <th data-name="aplicaRuc" data-sortable="false" data-breakpoints="xs">Aplica al RUC</th>
-                                        <th data-breakpoints="xs"></th>
+                                        <th data-sortable="false" data-breakpoints="xs"></th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -1303,7 +1304,7 @@
             </div>
 
             <div class="modal-body">
-                <input id="idClienteContacto" name="idClienteContacto" class="hidden" />
+                <input id="clienteContacto_idClienteContacto" name="idClienteContacto" class="hidden" />
                 <!--  <input id="idCliente" name="idCliente" class="hidden" />-->
 
                 <div class="form-group row">
@@ -1341,8 +1342,8 @@
                             @foreach (Model.ClienteContactoTipo tipo in ViewBag.contactoTipos)
                             {
                                 <div class="col-sm-6 col-xs-12">
-                                    <label class="radio-label hasTooltipPermiso" for="cliente_contacto_tipo_@tipo.idClienteContactoTipo.ToString()">
-                                        <input type="checkbox" class="chk-permiso" name="cliente_contacto_tipos[]" id="cliente_contacto_tipo_@tipo.idClienteContactoTipo.ToString()" value="@tipo.idClienteContactoTipo.ToString()">
+                                    <label class="radio-label lblTipoClienteContacto" for="cliente_contacto_tipo_@tipo.idClienteContactoTipo.ToString()">
+                                        <input type="checkbox" class="chk-cliente-contacto-tipo" name="cliente_contacto_tipos[]" id="cliente_contacto_tipo_@tipo.idClienteContactoTipo.ToString()" value="@tipo.idClienteContactoTipo.ToString()">
                                         <span>@tipo.nombre</span>
                                     </label>
                                 </div>

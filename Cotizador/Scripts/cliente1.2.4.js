@@ -2797,6 +2797,7 @@ jQuery(function ($) {
 
 
     $("#btnCloseAgregarContacto").click(function () {
+        limpiarFormularioAgregarContacto();
         $('#modalContactoCliente').modal('hide');
     });
     
@@ -2806,10 +2807,182 @@ jQuery(function ($) {
     });
 
     function limpiarFormularioAgregarContacto() {
+        $('#clienteContacto_idClienteContacto').val('');
+        
+        $('#clienteContacto_nombre').val('');
+        $('#clienteContacto_telefono').val('');
+        $('#clienteContacto_correo').val('');
+        $('#clienteContacto_cargo').val('');
 
+        $('.chk-cliente-contacto-tipo').prop('checked', false);
+        $('#chkClienteContactoEsPrincipal').prop('checked', false);
+        $('#chkClienteContactoAplicaRuc').prop('checked', false);
     }
 
-    
+    $("#btnGuardarCambiosClienteContacto").click(function () {
+        var idClienteContacto = $('#clienteContacto_idClienteContacto').val();
+        var nombre = $('#clienteContacto_nombre').val();
+        var telefono = $('#clienteContacto_telefono').val();
+        var correo = $('#clienteContacto_correo').val();
+        var cargo = $('#clienteContacto_cargo').val();
+
+        var aplicaRuc = 0;
+        if ($('#chkClienteContactoAplicaRuc').is(":checked")) {
+            aplicaRuc = 1;
+        }
+
+        var esPrincipal = 0;
+        if ($('#chkClienteContactoEsPrincipal').is(":checked")) {
+            esPrincipal = 1;
+        }
+
+        var tipos = [];
+        var i = 0;
+
+        var tiposDesc = "";
+        $('.chk-cliente-contacto-tipo').each(function () {
+            if (this.checked) {
+                tipos[i] = $(this).attr("value");
+                i = i + 1;
+
+                if (tiposDesc != '') {
+                    tiposDesc = tiposDesc + ", ";
+                }
+                tiposDesc = tiposDesc + $(this).closest('.lblTipoClienteContacto').find('span').html();
+            }
+        });
+
+        if (tiposDesc == '') {
+            tiposDesc = "NO ASIGNADO";
+        }
+
+        $('body').loadingModal({
+            text: 'Guardando Cambios'
+        });
+        $.ajax({
+            url: "/Cliente/RegistroContacto",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idClienteContacto: idClienteContacto,
+                nombre: nombre,
+                telefono: telefono,
+                correo: correo,
+                cargo: cargo,
+                aplicaRuc: aplicaRuc,
+                esPrincipal: esPrincipal,
+                tipos: tipos
+            },
+            error: function (detalle) {
+                $('body').loadingModal('hide');
+                mostrarMensajeErrorProceso("Ocurrió un error");
+            },
+            success: function (res) {
+                if (res.success == 1) {
+                    var message = "Se actualizó el contacto correctamente.";
+                    if (idClienteContacto == '') {
+                        message = "Se registró el contacto correctamente.";
+                    } 
+
+                    $.alert({
+                        title: "Operación exitosa",
+                        type: 'green',
+                        content: message,
+                        buttons: {
+                            OK: function () {
+                                //agregar a la tabla de contactos
+
+                                
+                                var aplicaRUC = res.contacto.aplicaRuc == 1 ? "SI" : "NO";
+
+                                var contactoRow = '<tr data-expanded="true" idClienteContacto="' + res.contacto.idClienteContacto + '">' +
+                                    '<td>' + res.contacto.idClienteContacto + '</td>' +
+                                    '<td>' + res.contacto.idCliente + '</td>' +
+                                    '<td>' + res.contacto.nombre + '</td>' +
+                                    '<td>' + res.contacto.telefono + '</td>' +
+                                    '<td>' + res.contacto.correo + '</td>' +
+                                    '<td>' + res.contacto.cargo + '</td>' +
+                                    '<td>' + tiposDesc + '</td>' +
+                                    '<td>' + aplicaRUC + '</td>' +
+                                    '<td>' + '<button type="button" class="btn btn-primary btnEditarClienteContacto" idClienteContacto="' + res.contacto.idClienteContacto + '">Editar</button>' + '</td>' +
+
+                                    '</tr>';
+
+                                if (idClienteContacto != '') {
+                                    $("#tableListaContactos tr[idClienteContacto='" + res.contacto.idClienteContacto + "']").remove();
+                                } 
+
+                                $("#tableListaContactos").append(contactoRow);
+
+                                FooTable.init('#tableListaContactos');
+                                limpiarFormularioAgregarContacto();
+                                $('#modalContactoCliente').modal('hide');
+                            }
+                        }
+                    });
+                } else {
+                    $.alert({
+                        title: "Ocurrió un error",
+                        type: 'red',
+                        content: res.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                }
+
+                $('body').loadingModal('hide');
+            }
+        });
+    });
+
+    $(document).on('click', "button.btnEditarClienteContacto", function (e) {
+        limpiarFormularioAgregarContacto();
+        $('body').loadingModal({
+            text: '...'
+        });
+
+        var idClienteContacto = $(this).attr('idClienteContacto');
+        $.ajax({
+            url: "/Cliente/GetClienteContacto",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idClienteContacto: idClienteContacto
+            },
+            error: function (detalle) {
+                $('body').loadingModal('hide');
+                mostrarMensajeErrorProceso("Ocurrió un error");
+            },
+            success: function (res) {
+                $('#clienteContacto_idClienteContacto').val(res.clienteContacto.idClienteContacto);
+
+                $('#clienteContacto_nombre').val(res.clienteContacto.nombre);
+                $('#clienteContacto_telefono').val(res.clienteContacto.telefono);
+                $('#clienteContacto_correo').val(res.clienteContacto.correo);
+                $('#clienteContacto_cargo').val(res.clienteContacto.cargo);
+
+
+                var tiposList = res.clienteContacto.tipos;
+                for (var i = 0; i < tiposList.length; i++) {
+                    $('#cliente_contacto_tipo_' + tiposList[i].idClienteContactoTipo).prop('checked', true);
+                }
+
+
+                if (res.clienteContacto.aplicaRuc == 1) {
+                    $('#chkClienteContactoAplicaRuc').prop('checked', true);
+                }
+
+                if (res.clienteContacto.esPrincipal == 1) {
+                    $('#chkClienteContactoEsPrincipal').prop('checked', true);
+                }
+
+                $('body').loadingModal('hide')
+
+                $('#modalContactoCliente').modal('show');
+            }
+        });
+    });
 
     var idClienteView = "";
     $(document).on('click', "button.btnVerCliente", function (e) {
@@ -3157,19 +3330,21 @@ jQuery(function ($) {
 
                 loadDireccionesEntrega(arrayDireccionEntrega);
 
+                $("#tableListaContactos > tbody").empty();
                 var contactoList = result.contactoList;
                 for (var i = 0; i < contactoList.length; i++) {
-                    var aplicaRUC = direccionEntregaList[i].aplicaRuc == 1 ? "SI" : "NO";
+                    var aplicaRUC = contactoList[i].aplicaRuc == 1 ? "SI" : "NO";
                     
-                    var contactoRow = '<tr data-expanded="true">' +
+                    var contactoRow = '<tr data-expanded="true" idClienteContacto="' + contactoList[i].idClienteContacto + '">' +
                         '<td>' + contactoList[i].idClienteContacto + '</td>' +
                         '<td>' + contactoList[i].idCliente + '</td>' +
                         '<td>' + contactoList[i].nombre + '</td>' +
                         '<td>' + contactoList[i].telefono + '</td>' +
                         '<td>' + contactoList[i].correo  + '</td>' +
                         '<td>' + contactoList[i].cargo + '</td>' +
-                        '<td>' + aplicaRUC + '</td>' 
-                        '<td>' + ' ' + '</td>' +
+                        '<td>' + contactoList[i].tiposDescripcion + '</td>' +
+                        '<td>' + aplicaRUC + '</td>' +
+                        '<td>' + '<button type="button" class="btn btn-primary btnEditarClienteContacto" idClienteContacto="' + contactoList[i].idClienteContacto + '">Editar</button>' + '</td>' +
 
                         '</tr>';      
 

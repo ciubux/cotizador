@@ -16,6 +16,15 @@ namespace BusinessLayer
             }
         }
 
+        public List<ClienteContactoTipo> getContactoTipos(Guid idClienteContacto)
+        {
+            using (var dal = new ClienteContactoDAL())
+            {
+                return dal.getContactoTipos(idClienteContacto);
+            }
+        }
+
+
         public ClienteContacto insert(ClienteContacto obj)
         {
             using (var dal = new ClienteContactoDAL())

@@ -12,6 +12,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.WebPages;
 
 namespace Cotizador.Controllers
 {
@@ -312,6 +313,65 @@ namespace Cotizador.Controllers
             return excel.generateExcel(obj, soloCanastaHabitual);
         }
 
+        [HttpPost]
+        public String RegistroContacto(string idClienteContacto, string nombre, string telefono, string correo, string cargo, int aplicaRuc, int esPrincipal, String[] tipos)
+        {
+            int success = 0;
+            string message = "Error Desconocido";
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
+
+            ClienteContacto obj = new ClienteContacto();
+
+            obj.nombre = nombre;
+            obj.telefono = telefono;
+            obj.correo = correo;
+            obj.cargo = cargo;
+            obj.aplicaRuc = aplicaRuc;
+            obj.esPrincipal = esPrincipal;
+
+            obj.IdUsuarioRegistro = usuario.idUsuario;
+
+            obj.tipos = new List<ClienteContactoTipo>();
+            if (tipos != null)
+            {
+                foreach (string idTipo in tipos)
+                {
+                    ClienteContactoTipo item = new ClienteContactoTipo();
+                    item.idClienteContactoTipo = Guid.Parse(idTipo);
+                    obj.tipos.Add(item);
+                }
+            }
+
+
+            ClienteContactoBL ccBl = new ClienteContactoBL();
+            
+            if (idClienteContacto.IsEmpty())
+            {
+                obj.idCliente = cliente.idCliente;
+                ccBl.insert(obj);
+            } else
+            {
+                obj.idClienteContacto = Guid.Parse(idClienteContacto);
+
+                List<ClienteContacto> listaContactos = (List<ClienteContacto>)this.Session[Constantes.VAR_SESSION_CLIENTE_VER_CONTACTOS];
+
+                ClienteContacto item = listaContactos.Where(c => c.idClienteContacto == obj.idClienteContacto).FirstOrDefault();
+
+                obj.idCliente = item.idCliente;
+                obj.idClienteVista = cliente.idCliente;
+                ccBl.update(obj);
+
+                listaContactos.Remove(item);
+                listaContactos.Add(obj);
+            }
+
+            success = 1;
+
+            return "{\"success\": " + success.ToString() + ",\"message\": \"" + message + "\",\"contacto\": " + JsonConvert.SerializeObject(obj) + "}";
+        }
+        
 
         [HttpGet]
         public ActionResult ExportLastShowDirecciones()
@@ -454,13 +514,28 @@ namespace Cotizador.Controllers
             ClienteContactoBL contactoBl = new ClienteContactoBL();
             List<ClienteContacto> listaContactos = contactoBl.getContactos(idCliente);
 
+
             String resultado = "{\"cliente\":" + JsonConvert.SerializeObject(cliente) + ", \"precios\":" + JsonConvert.SerializeObject(listaPrecios) + 
                         ", \"direccionEntregaList\":" + JsonConvert.SerializeObject(direccionEntregaList) +
                         ", \"contactoList\":" + JsonConvert.SerializeObject(listaContactos) +
                         ", \"domicilioLegalList\":" + JsonConvert.SerializeObject(domicilioLegalList) + "}";
 
             this.Session[Constantes.VAR_SESSION_CLIENTE_VER] = cliente;
+            this.Session[Constantes.VAR_SESSION_CLIENTE_VER_CONTACTOS] = listaContactos;
+
             return resultado;
+        }
+
+        public String GetClienteContacto(string idClienteContacto)
+        {
+            List<ClienteContacto> listaContactos = (List<ClienteContacto>)this.Session[Constantes.VAR_SESSION_CLIENTE_VER_CONTACTOS];
+
+            ClienteContacto obj = listaContactos.Where(c => c.idClienteContacto == Guid.Parse(idClienteContacto)).FirstOrDefault();
+
+            ClienteContactoBL contactoBl = new ClienteContactoBL();
+            obj.tipos = contactoBl.getContactoTipos(obj.idClienteContacto);
+
+            return "{\"clienteContacto\":" + JsonConvert.SerializeObject(obj) + "}";
         }
 
         [HttpPost]
