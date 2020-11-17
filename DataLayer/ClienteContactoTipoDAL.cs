@@ -35,6 +35,9 @@ namespace DataLayer
                     descripcion = Converter.GetString(row, "descripcion"),
                     Estado = Converter.GetInt(row, "estado")
                 };
+
+                if (obj.nombre == null) obj.nombre = "";
+                if (obj.descripcion == null) obj.descripcion = "";
                 lista.Add(obj);
             }
             return lista;

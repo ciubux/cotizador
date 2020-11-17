@@ -8,7 +8,7 @@ namespace BusinessLayer
 {
     public class ClienteContactoTipoBL
     {
-        public List<ClienteContactoTipo> getContactos(int estado)
+        public List<ClienteContactoTipo> getTipos(int estado)
         {
             using (var dal = new ClienteContactoTipoDAL())
             {

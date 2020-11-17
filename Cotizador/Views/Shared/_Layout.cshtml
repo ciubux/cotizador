@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "690";
+    TempData["ScriptVersion"] = "695";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -129,6 +129,8 @@
 
                         var linkAsignacionPermisos = "";
 
+                        var linkMantenimientoTipoContactoCliente = "";
+
                     }
                     @if (this.Session["pagina"] != null)
                     {
@@ -209,6 +211,8 @@
                             case 104: linkMantenimientoUsuario = "ative"; linkMaestros = "active"; break;
 
                             case 710: linkBusquedaClienteLite = "ative"; linkMaestros = "active"; break;
+
+                            case 761: linkMantenimientoTipoContactoCliente = "active"; linkMaestros = "active"; break;
                         }
 
                         if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
@@ -399,6 +403,11 @@
                                     @if (usuario.modificaMaestroClientes || usuario.visualizaClientes)
                                     {
                                         <li id="linkBusquedaClienteLite" class="@linkBusquedaClienteLite">@Html.ActionLink("Cliente Potencial - Búsqueda", "List", "ClienteLite")</li>
+                                    }
+
+                                    @if (usuario.modificaClienteContactoTipo)
+                                    {
+                                        <li id="linkModificaClienteContactoTipo" class="@linkMantenimientoTipoContactoCliente">@Html.ActionLink("Tipo Contacto Cliente", "Lista", "TipoClienteContacto")</li>
                                     }
 
                                     @if (usuario.modificaGrupoClientes || usuario.visualizaGrupoClientes || usuario.esVendedor)

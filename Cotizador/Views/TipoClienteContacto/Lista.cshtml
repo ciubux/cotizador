@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "Tipo Cliente Contacto";
+    Model.ClienteContactoTipo tipo = ViewBag.tipo;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="idUsuario" value="" />
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+
+
+
+    @*<div class="row">
+        <div class="col-sm-6 col-lg-8">
+            <div class="form-group">
+                @Html.LabelFor(c => parametro.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
+                <div class="col-xs-8">
+                    @Html.TextBoxFor(c => parametro.codigo, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+    </div>*@
+
+    @*<div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
+        <button id="btnLimpiarBusquedaParametro" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
+        <button id="btnBusquedaParametro" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
+    </div>*@
+
+    @*<div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px; display: none;">
+            <button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchExcel", "Usuario")">Exportar</button>
+        </div>*@
+
+    <table id="tableLista" class="table" data-editing="false" data-paging="true"
+           data-editing-allow-add="false"
+           data-editing-allow-delete="false"
+           data-editing-allow-edit="false"
+           data-sorting="true"
+           data-show-toggle="false"
+           data-editing-hide-text="Finalizar edición"
+           data-editing-add-text="Descartar cambios">
+        <thead>
+            <tr>
+                <th data-name="idClienteContactoTipo" data-visible="false"></th>
+                <th data-name="nombre" data-visible="true">Nombre</th>
+                <th data-name="descripcion" data-visible="true" data-sortable="true">Descripcion</th>
+                <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+</div>
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/tipoClienteContacto")
+}

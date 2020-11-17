@@ -253,6 +253,7 @@ namespace Model
 
         public static Decimal VARIACION_PRECIO_ITEM_PEDIDO = 0.01M;
 
+        public static String VAR_SESSION_CLIENTE_CONTACTO_TIPO_LISTA = "clienteContactoTipoList";
 
         public static String USER_EOL_TEST = "";
         public static String PASSWORD_EOL_TEST = "";
@@ -466,7 +467,7 @@ namespace Model
 
         public const String ACTIVA_CLIENTE_FACTURA_COMPLEJA = "P680";
 
-
+        public const String MODIFICA_CLIENTE_CONTACTO_TIPO = "P761";
 
         public enum paginas
         {
@@ -644,8 +645,11 @@ namespace Model
             [Display(Name = "BUSQUEDA RUBRO")]
             BusquedaRubros = 750,
             [Display(Name = "CREATE/UPDATE RUBRO")]
-            MantenimientoRubro = 751
+            MantenimientoRubro = 751,
 
+            /*PARAMETRO*/
+            [Display(Name = "TIPO CLIENTE CONTACTO")]
+            MantenimientoClienteContactoTipo = 761
         };
 
 

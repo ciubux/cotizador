@@ -213,6 +213,8 @@ namespace Model
         public bool modificaRubro { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_RUBRO)).FirstOrDefault() != null; } }
         public bool visualizaRubros { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_RUBROS)).FirstOrDefault() != null; } }
 
+        /*Clietne Contacto Tipo*/
+        public bool modificaClienteContactoTipo { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_CLIENTE_CONTACTO_TIPO)).FirstOrDefault() != null; } }
 
         /*Vendedores*/
         public bool modificaVendedor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_VENDEDORES)).FirstOrDefault() != null; } }

@@ -73,6 +73,10 @@ namespace Cotizador
                      "~/Scripts/clienteLite1.0.0.js"
                      ));
 
+            bundles.Add(new ScriptBundle("~/bundles/tipoClienteContacto").Include(
+                     "~/Scripts/tipoClienteContacto.js"
+                     ));
+
             bundles.Add(new ScriptBundle("~/bundles/grupoCliente").Include(
                      "~/Scripts/grupoCliente1.2.4.js"
                      ));
