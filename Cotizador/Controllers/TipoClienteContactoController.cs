@@ -24,9 +24,16 @@ namespace Cotizador.Controllers
 
 
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoClienteContactoTipo;
+            ParametroBL parametrobl = new ParametroBL();
+            int maxTipos = parametrobl.getParametroInt("MAX_TIPOS_CONTACTO_CLIENTE");
 
+            ClienteContactoTipoBL bL = new ClienteContactoTipoBL();
+            List<ClienteContactoTipo> list = bL.getTipos(-1);
 
             ViewBag.pagina = (int)Constantes.paginas.MantenimientoClienteContactoTipo;
+
+            ViewBag.tipos = list;
+            ViewBag.maxTipos = maxTipos;
 
             return View();
         }
@@ -51,11 +58,30 @@ namespace Cotizador.Controllers
             obj.idClienteContactoTipo = Guid.Parse(Request["idTipo"].ToString());
             obj.nombre = Request["nombre"].ToString();
             obj.descripcion = Request["descripcion"].ToString();
-            
+            obj.Estado = 1;
+
             Usuario user = new Usuario();
             user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             obj.IdUsuarioRegistro = user.idUsuario;
             bL.update(obj);
+
+            String resultado = JsonConvert.SerializeObject(obj);
+            return resultado;
+        }
+
+        public String Insert()
+        {
+            ClienteContactoTipo obj = new ClienteContactoTipo();
+            ClienteContactoTipoBL bL = new ClienteContactoTipoBL();
+
+            obj.nombre = Request["nombre"].ToString();
+            obj.descripcion = Request["descripcion"].ToString();
+            obj.Estado = 1;
+
+            Usuario user = new Usuario();
+            user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            obj.IdUsuarioRegistro = user.idUsuario;
+            bL.insert(obj);
 
             String resultado = JsonConvert.SerializeObject(obj);
             return resultado;

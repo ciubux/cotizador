@@ -323,6 +323,32 @@ namespace Cotizador.Controllers
                 return "{\"existe\":\"true\",\"idUsuario\":\"" + obj.idUsuario + "\"}";
         }
 
+        public String GetFirmaLogueado()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            return "{\"success\":\"true\",\"firmaImagen\":\"" + @Convert.ToBase64String(usuario.firmaImagen) + "\"}";
+        }
+
+        public String ChangeFirmaImagen()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            UsuarioBL bl = new UsuarioBL();
+
+            String imgBase = this.Request.Params["imgBase"].ToString();
+            string[] sepImgBase = imgBase.Split(new string[] { "base64," }, StringSplitOptions.None);
+
+            if (sepImgBase.Count() == 2)
+            {
+                imgBase = sepImgBase[1];
+                usuario.firmaImagen = Convert.FromBase64String(imgBase);
+            }
+
+            bl.updateUsuarioCambiarImagenFirma(usuario.firmaImagen, usuario.idUsuario);
+
+            return "{\"success\":\"true\"}";
+        }
+
         public ActionResult Editar(Guid? idUsuario)
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoUsuario;

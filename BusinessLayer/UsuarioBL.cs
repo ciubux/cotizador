@@ -2,6 +2,7 @@ using DataLayer;
 using System.Collections.Generic;
 using System;
 using Model;
+using System.IO;
 
 namespace BusinessLayer
 {
@@ -18,6 +19,16 @@ namespace BusinessLayer
                 usuario.ipAddress = IPAddress;
                 usuario = usuarioDAL.getUsuarioLogin(usuario);
 
+                if (usuario.firmaImagen == null)
+                {
+                    FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
+                    MemoryStream storeStream = new MemoryStream();
+                    storeStream.SetLength(inStream.Length);
+                    inStream.Read(storeStream.GetBuffer(), 0, (int)inStream.Length);
+                    storeStream.Flush();
+                    inStream.Close();
+                    usuario.firmaImagen = storeStream.GetBuffer();
+                }
 
                 //usuario.idUsuario != null && usuario.idUsuario != Guid.Empty;
             }
@@ -183,6 +194,13 @@ namespace BusinessLayer
             {
                usuarioDAL.updateUsuarioCambioPassword(passNuevo, idUsuario);
             }           
+        }
+        public void updateUsuarioCambiarImagenFirma(Byte[] imagen, Guid idUsuario)
+        {
+            using (var usuarioDAL = new UsuarioDAL())
+            {
+                usuarioDAL.updateUsuarioCambiarImagenFirma(imagen, idUsuario);
+            }
         }
     }
 }

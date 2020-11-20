@@ -679,6 +679,7 @@
     <Content Include="Views\Shared\_Moneda.cshtml" />
     <Content Include="Views\Pedido\_SelectStockIconState.cshtml" />
     <Content Include="Views\TipoClienteContacto\Lista.cshtml" />
+    <Content Include="Views\Shared\CambiarFirmaUsuario.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

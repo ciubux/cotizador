@@ -5,7 +5,12 @@
     var TITLE_EXITO = 'Operación Realizada';
 
     $(document).ready(function () {
-        buscarLista();
+        $("#tableLista").footable({
+            "paging": {
+                "enabled": false
+            }
+        });
+        //buscarLista();
     });   
 
     function buscarLista() {
@@ -29,20 +34,15 @@
             success: function (list) {
 
                 $("#tableLista > tbody").empty();
-                $("#tableLista").footable({
-                    "paging": {
-                        "enabled": false
-                    }
-                });
+                
 
                 for (var i = 0; i < list.length; i++) {
 
                     if (list[i].descripcion == 'null') list[i].descripcion = "";
 
                     var ItemRow = '<tr data-expanded="true">' +
-
-                        '<td>' + list[i].idClienteContactoTipo +
-                        '<td class="cctNombre" valor="' + list[i].nombre + '">' + list[i].nombre + '</span></td>' +
+                        '<td>' + list[i].idClienteContactoTipo + '</td>' +
+                        '<td class="cctNombre" valor="' + list[i].nombre + '">' + list[i].nombre + '</td>' +
                         '<td class="cctDesripcion" valor="' + list[i].descripcion + '">' + list[i].descripcion + '</td>' +
                         '<td>' +
 
@@ -55,10 +55,37 @@
                     $("#tableLista").append(ItemRow);
 
                 }
+
+                $("#tableLista").footable({
+                    "paging": {
+                        "enabled": false
+                    }
+                });
             }
         });
     }
-    
+
+    $('#btnAgregar').click(function () {
+
+        var ItemRow = '<tr data-expanded="true">' +
+            '<td></td>' +
+            '<td class="cctNombre" valor=""><input class="inputCctNombre" class="form-control" value=""></td>' +
+            '<td class="cctDesripcion" valor=""><input class="inputCctDesripcion" class="form-control" value=""></td>' +
+            '<td>' +
+                '<button type="button" id="" class="btnGuardar btn btn-primary">Guardar</button>' +
+                '&nbsp;<button type="button" id="" class="btnCancelar btn btn-secondary">Cancelar</button>' +
+            '</td>' +
+            '</tr>';
+
+        $("#tableLista").append(ItemRow);
+
+        $("#tableLista").footable({
+            "paging": {
+                "enabled": false
+            }
+        });
+    });
+
     $('body').on('click', "button.btnEditar", function () {
 
         var idTipo = $(this).attr('id');       
@@ -74,12 +101,18 @@
     
     
     $('body').on('click', "button.btnCancelar", function () {
-        $(this).closest('tr').find('.cctNombre').html($(this).closest('tr').find('.cctNombre').attr("valor"));
-        $(this).closest('tr').find('.cctDesripcion').html($(this).closest('tr').find('.cctDesripcion').attr("valor"));
+        var idTipo = $(this).attr('id');
 
-        $(this).hide();
-        $(this).closest('tr').find('.btnGuardar').hide();
-        $(this).closest('tr').find('.btnEditar').show();        
+        if (idTipo == "") {
+            $(this).closest('tr').remove();
+        } else {
+            $(this).closest('tr').find('.cctNombre').html($(this).closest('tr').find('.cctNombre').attr("valor"));
+            $(this).closest('tr').find('.cctDesripcion').html($(this).closest('tr').find('.cctDesripcion').attr("valor"));
+
+            $(this).hide();
+            $(this).closest('tr').find('.btnGuardar').hide();
+            $(this).closest('tr').find('.btnEditar').show();
+        }
     });
 
     $('body').on('click', "button.btnGuardar", function () {
@@ -89,6 +122,7 @@
         var descripcion = $(this).closest('tr').find('td.cctDesripcion .inputCctDesripcion').val(); 
 
         var that = this;
+
 
         if (nombre == "" || nombre == null) {
             $.alert({
@@ -104,8 +138,13 @@
             return false;
         } 
 
+        var url = "/TipoClienteContacto/Update";
+        if (idTipo == "") {
+            url = "/TipoClienteContacto/Insert";
+        }
+
         $.ajax({
-            url: "/TipoClienteContacto/Update",
+            url: url,
             type: 'POST',
             data:
             {
@@ -134,22 +173,24 @@
                     type: 'green',
                     buttons: {
                         OK: function () {
-                            $(that).closest('tr').find('.cctNombre').html(nombre);
-                            $(that).closest('tr').find('.cctDesripcion').html(descripcion);
+                            if (idTipo == "") {
+                                location.reload();
+                            } else {
+                                $(that).closest('tr').find('.cctNombre').html(nombre);
+                                $(that).closest('tr').find('.cctDesripcion').html(descripcion);
 
-                            $(this).closest('tr').find('.cctNombre').attr("valor", nombre);
-                            $(this).closest('tr').find('.cctDesripcion').attr("valor", descripcion);
+                                $(that).closest('tr').find('.cctNombre').attr("valor", nombre);
+                                $(that).closest('tr').find('.cctDesripcion').attr("valor", descripcion);
 
-                            $(that).hide();
-                            $(that).closest('tr').find('.btnCancelar').hide();
-                            $(that).closest('tr').find('.btnEditar').show();
+                                $(that).hide();
+                                $(that).closest('tr').find('.btnCancelar').hide();
+                                $(that).closest('tr').find('.btnEditar').show();
+                            }
                         }
                     }
                 });
-
-                $
             }
-        });         
+        });
     });
 
 });

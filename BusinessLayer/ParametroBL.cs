@@ -37,7 +37,19 @@ namespace BusinessLayer
 
             return valor;
         }
-        
+
+        public int getParametroInt(String codigo)
+        {
+            int valor = 0;
+            using (var dal = new ParametroDAL())
+            {
+                string param = dal.getParametro(codigo);
+                valor = int.Parse(param);
+            }
+
+            return valor;
+        }
+
         public List<Parametro> getListParametro(Parametro param)
         {
             using (var dal = new ParametroDAL())

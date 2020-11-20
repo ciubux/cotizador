@@ -1,0 +1,53 @@
+﻿<div id="ModalCambiarFirmaUsuario" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" id="changePassword">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h3 class="control-label">Cambiar Contraseña</h3>
+            </div>
+            <div class="modal-body form-horizontal container">
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="row text-center">
+                        <img id="verImagenFirma"
+                             style="height:80px;"
+                             class="image-fluid"
+                             accept="image/x-png,image/gif,image/jpeg"
+                             src="">
+
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-12">
+                                <div class="form-group">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col text-center align-self-center">
+                                <label for="imgProductUpload" class="btn btn-primary btn-load-image">Cambiar Firma</label>
+                            </div>
+                            <div>
+                                <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">
+                                    Solo puede subir imágenes de hasta 100KB de tamaño y con extensiones: .jpg o .png. Las imágenes deben ser de 80px de alto y de 100px de ancho
+                                </span>
+                            </div>
+                        </div>
+                        <input type="file"
+                               id="imgSignUpload"
+                               style="display:none;"
+                               accept="image/x-png,image/gif,image/jpeg"
+                               class="hiddenfileinput"
+                               data-max-size="102400"
+                               data-max-size-text="100KB"
+                               data-url-set-image="@Url.Action("ChangeFirmaImagen", "Usuario")">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn submit" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+                <button class="btn btn-primary" id="changesign_modal_save">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+

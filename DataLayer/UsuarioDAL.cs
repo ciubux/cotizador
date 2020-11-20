@@ -172,6 +172,8 @@ namespace DataLayer
                 usuario.nombre = Converter.GetString(row, "nombre");
                 usuario.contacto = Converter.GetString(row, "contacto");
 
+                usuario.firmaImagen = Converter.GetBytes(row, "firma_imagen");
+
                 //Cotizaciones
                 usuario.maximoPorcentajeDescuentoAprobacion = Converter.GetDecimal(row, "maximo_porcentaje_descuento_aprobacion");
                 usuario.cotizacionSerializada = Converter.GetString(row, "cotizacion_serializada");
@@ -744,6 +746,14 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "id_usuario", idUsuario);
             InputParameterAdd.Varchar(objCommand, "pass_nuevo", passNuevo);
             ExecuteNonQuery(objCommand);            
+        }
+
+        public void updateUsuarioCambiarImagenFirma(Byte[] imagen, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pu_cambiar_firma_usuario");
+            InputParameterAdd.Guid(objCommand, "id_usuario", idUsuario);
+            InputParameterAdd.Binary(objCommand, "imagen", imagen);
+            ExecuteNonQuery(objCommand);
         }
     }
 }

@@ -79,6 +79,113 @@
             });
         }
     });
+
+    function cargarImagenFirma() {
+        $.ajax({
+            url: "/Usuario/GetFirmaLogueado",
+            type: 'POST',
+            datatype: "JSON",
+            data: {
+            },
+            success: function (res) {
+                $("#verImagenFirma").attr("src", "data:image/png;base64," + res.image);
+            }
+        });
+        
+    }
+
+    var imagenValida = false;
+
+    $('#imgSignUpload').change(function (event) {
+        var fileInput = $(event.target);
+        var maxSize = fileInput.data('max-size');
+        var maxSizeText = fileInput.data('max-size-text');
+        var imagenValida = true;
+        if (fileInput.get(0).files.length) {
+            var fileSize = fileInput.get(0).files[0].size; // in bytes
+
+            if (fileSize > maxSize) {
+                $.alert({
+                    title: "Imagen Inválida",
+                    type: 'red',
+                    content: 'El tamaño del archivo debe ser como maximo ' + maxSizeText + '.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+                imagenValida = false;
+            }
+
+
+        } else {
+            $.alert({
+                title: "Imagen Inválida",
+                type: 'red',
+                content: 'Seleccione una imagen por favor.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            imagenValida = false;
+        }
+
+        if (imagenValida) {
+            $('body').loadingModal({
+                text: '...'
+            });
+
+            var that = document.getElementById('imgSignUpload');
+            var file = that.files[0];
+            var form = new FormData();
+
+            var reader = new FileReader();
+            var mime = file.type;
+
+            reader.onload = function (e) {
+                // get loaded data and render thumbnail.
+                document.getElementById("verImagenFirma").src = e.target.result;
+                var img = new Image();
+
+                img.onload = function () {
+                    var width = img.width;
+                    var height = img.height;
+
+                    imagenValida = true;
+                    $('body').loadingModal('hide');
+                };
+                img.src = e.target.result;
+            };
+
+            // read the image file as a data URL.
+            reader.readAsDataURL(file);
+
+            form.append('image', file);
+        }
+    });
+
+    $('body').on('click', "button#changesign_modal_save", function () {
+        if (imagenValida) {
+            $('body').loadingModal({
+                text: '...'
+            });
+
+            var that = document.getElementById('imgSignUpload');
+            var url = $(that).data("urlSetImage");
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                cache: false,
+                data: {
+                    imgBase: $("#verImagenFirma").attr("src")
+                },
+                success: function () { }
+
+            }).done(function () {
+                $('body').loadingModal('hide');
+            });
+        } 
+    });
 });
 
 

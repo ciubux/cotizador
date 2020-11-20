@@ -30,6 +30,7 @@ namespace Model
         [Display(Name = "Descuento Maximo (%):")]
         public Decimal maximoPorcentajeDescuentoAprobacion { get; set; }
 
+        public Byte[] firmaImagen { get; set; }
         public Guid idUsuarioModificacion { get; set; }
         public Ciudad sedeMP { get; set; }
 
