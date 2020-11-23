@@ -296,7 +296,8 @@ namespace DataLayer
                 cotizacion.usuario = new Usuario();
                 cotizacion.usuario.nombre = Converter.GetString(row, "nombre_usuario");
                 cotizacion.usuario.cargo = Converter.GetString(row, "cargo");
-                cotizacion.usuario.contacto = Converter.GetString(row, "contacto_usuario");
+                cotizacion.usuario.contacto = Converter.GetString(row, "contacto_usuario"); 
+                cotizacion.usuario.firmaImagen = Converter.GetBytes(row, "usuario_firma_imagen");
                 cotizacion.usuario.email = Converter.GetString(row, "email");           
                 //ESTADO
                 cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();

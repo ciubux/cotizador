@@ -326,8 +326,9 @@ namespace Cotizador.Controllers
         public String GetFirmaLogueado()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-
-            return "{\"success\":\"true\",\"firmaImagen\":\"" + @Convert.ToBase64String(usuario.firmaImagen) + "\"}";
+            
+            return JsonConvert.SerializeObject(usuario); ;
+            //return "{\"success\":\"true\",\"firmaImagen\":\"" + @Convert.ToBase64String(usuario.firmaImagen) + "\"}";
         }
 
         public String ChangeFirmaImagen()

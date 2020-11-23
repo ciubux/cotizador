@@ -80,15 +80,22 @@
         }
     });
 
+
+    $('#linkModalCambiarFirma').click(function (event) {
+        cargarImagenFirma();
+    });
+
     function cargarImagenFirma() {
         $.ajax({
             url: "/Usuario/GetFirmaLogueado",
+            data: { dat: 1 },
             type: 'POST',
-            datatype: "JSON",
-            data: {
-            },
-            success: function (res) {
-                $("#verImagenFirma").attr("src", "data:image/png;base64," + res.image);
+            dataType: 'JSON',
+            cache: false,
+            success: function (result) {
+                var usuario = result;
+
+                $("#verImagenFirma").attr("src", "data:image/png;base64," + usuario.firmaImagen);
             }
         });
         
@@ -100,7 +107,7 @@
         var fileInput = $(event.target);
         var maxSize = fileInput.data('max-size');
         var maxSizeText = fileInput.data('max-size-text');
-        var imagenValida = true;
+        imagenValida = true;
         if (fileInput.get(0).files.length) {
             var fileSize = fileInput.get(0).files[0].size; // in bytes
 
@@ -133,6 +140,7 @@
             $('body').loadingModal({
                 text: '...'
             });
+            $('body').loadingModal('show');
 
             var that = document.getElementById('imgSignUpload');
             var file = that.files[0];
@@ -144,15 +152,9 @@
             reader.onload = function (e) {
                 // get loaded data and render thumbnail.
                 document.getElementById("verImagenFirma").src = e.target.result;
-                var img = new Image();
+                imagenValida = true;
+                $('body').loadingModal('hide');
 
-                img.onload = function () {
-                    var width = img.width;
-                    var height = img.height;
-
-                    imagenValida = true;
-                    $('body').loadingModal('hide');
-                };
                 img.src = e.target.result;
             };
 
@@ -168,7 +170,7 @@
             $('body').loadingModal({
                 text: '...'
             });
-
+            $('body').loadingModal('show');
             var that = document.getElementById('imgSignUpload');
             var url = $(that).data("urlSetImage");
 
@@ -179,7 +181,26 @@
                 data: {
                     imgBase: $("#verImagenFirma").attr("src")
                 },
-                success: function () { }
+                success: function () {
+                    $.alert({
+                        title: "ERROR",
+                        type: 'red',
+                        content: 'Ocurrio un error al actualizar la firma.',
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                },
+                success: function () {
+                    $.alert({
+                        title: "Registro Exitoso",
+                        type: 'green',
+                        content: 'La firma digital fue actualizada correctamente.',
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                }
 
             }).done(function () {
                 $('body').loadingModal('hide');

@@ -534,6 +534,16 @@ namespace cotizadorPDF
                     xPage2 = margenLeft;
                 }
 
+                if (cot.usuario.firmaImagen != null)
+                {
+                    MemoryStream stream = new MemoryStream(cot.usuario.firmaImagen);
+                    PdfImage imageFirma = PdfImage.FromStream(stream);
+                    width = 50f;
+                    height = 40f;
+                    sectionFirma.Canvas.DrawImage(imageFirma, xPage2, y, width, height);
+                    y = y + 40 + 3;
+                }
+
                 sectionFirma.Canvas.DrawString(cot.usuario.nombre, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 y = y + sepLine;
                 sectionFirma.Canvas.DrawString(cot.usuario.cargo, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);

@@ -16,7 +16,8 @@
                 @if (usuario.enviaMensaje || usuario.modificaMensaje)
                 {
                     <li><a id="MensajeRapidoMenu">Enviar mensaje</a></li> 
-                }  
+                }
+                <li><a id="linkModalCambiarFirma" href="#ModalCambiarFirmaUsuario " data-toggle="modal">Cambiar Firma</a></li>
                 <li><a href="#ModalcambiarPassword" data-toggle="modal">Cambiar contraseña</a></li>
                 <li>  @Html.ActionLink("Salir", "Exit", "General")</li>
             </ul>

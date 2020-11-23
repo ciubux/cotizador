@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "698";
+    TempData["ScriptVersion"] = "711";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -20,6 +20,7 @@
 <body>
     @RenderPage("ModalMensaje.cshtml")
     @RenderPage("CambiarPassword.cshtml")
+    @RenderPage("CambiarFirmaUsuario.cshtml")
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -239,8 +240,8 @@
                             </li>
                         }
 
-                        if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos || usuario.tomaPedidosCompra 
-                             || usuario.creaDocumentosVenta || usuario.tomaPedidosAlmacen || usuario.apruebaPedidosCompra 
+                        if (usuario.tomaPedidos || usuario.apruebaPedidos || usuario.visualizaPedidos || usuario.tomaPedidosCompra
+                             || usuario.creaDocumentosVenta || usuario.tomaPedidosAlmacen || usuario.apruebaPedidosCompra
                              || usuario.apruebaPedidosAlmacen)
                         {
 
@@ -357,9 +358,9 @@
                                     }
 
                                     @*@if (usuario.visualizaDocumentoVentaNotificacion)
-        {
-            <li id="linkBusquedaDocumentoVentaNotificacion" class="@linkBusquedaDocumentoVentaNotificacion">@Html.ActionLink("Documentos de Venta - Notificaciones pendientes", "ValidarNotificacionAnulacion", "DocumentoVenta")</li>
-        }*@
+                                        {
+                                            <li id="linkBusquedaDocumentoVentaNotificacion" class="@linkBusquedaDocumentoVentaNotificacion">@Html.ActionLink("Documentos de Venta - Notificaciones pendientes", "ValidarNotificacionAnulacion", "DocumentoVenta")</li>
+                                        }*@
 
 
                                     @if (usuario.exportarVentasContabilidad)
@@ -465,7 +466,7 @@
                             </li>
                         }
 
-                        if (usuario.visualizaRoles || usuario.modificaRol || usuario.administraPermisos || usuario.visualizaVendedor || usuario.modificaVendedor || usuario.visualizaMensaje || usuario.modificaMensaje || usuario.enviaMensaje||usuario.modificaVistaDashboard || usuario.verArchivos)
+                        if (usuario.visualizaRoles || usuario.modificaRol || usuario.administraPermisos || usuario.visualizaVendedor || usuario.modificaVendedor || usuario.visualizaMensaje || usuario.modificaMensaje || usuario.enviaMensaje || usuario.modificaVistaDashboard || usuario.verArchivos)
                         {
                             <li class="@linkMaestros">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
