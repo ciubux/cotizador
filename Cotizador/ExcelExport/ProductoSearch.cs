@@ -183,7 +183,7 @@ namespace Cotizador.ExcelExport
 
                 /*Cabecera, Sub total*/
                 int rTotal = (list.Count) + 1;
-                int cTotal = 39 + 2;
+                int cTotal = 40 + 2;
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
@@ -261,6 +261,7 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "AK", obj.descripcionLarga);
                     UtilesHelper.setValorCelda(sheet, i, "AL", obj.agregarDescripcionCotizacion == 1 ? "SI" : "NO");
                     UtilesHelper.setValorCelda(sheet, i, "AM", (double)obj.topeDescuento);
+                    UtilesHelper.setValorCelda(sheet, i, "AN", obj.compraRestringida == 1 ? "SI" : "NO");
                     i++;
                 }
 
@@ -311,6 +312,7 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, 1, "AK", "Descripción Detallada", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "AL", "Agregar Descripción Detallada a Cotización", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "AM", "% Tope Descuento", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "AN", "Compra Restringida", titleCellStyle);
 
                 MemoryStream ms = new MemoryStream();
                 using (MemoryStream tempStream = new MemoryStream())

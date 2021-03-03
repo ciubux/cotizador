@@ -406,6 +406,7 @@ namespace DataLayer
                 cliente.negociacionMultiregional = Converter.GetBool(row, "negociacion_multiregional");
 
                 cliente.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
+                cliente.ultimaActualizacionContactos = Converter.GetDateTimeNullable(row, "ultima_actualizacion_contactos");
 
                 try
                 {

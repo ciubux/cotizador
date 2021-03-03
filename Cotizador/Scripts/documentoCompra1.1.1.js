@@ -1131,7 +1131,7 @@ jQuery(function ($) {
                     $('.datosNotaCreditoDebito').hide();
                 }
 
-                $("#iddocumentoCompra").val(documentoCompra.iddocumentoCompra);
+                $("#idDocumentoCompra").val(documentoCompra.iddocumentoCompra);
                 /*FECHA HORA EMISIÓN -  SERIE CORRELATIVO*/
                 $("#vpFEC_EMI_HOR_EMI").html(documentoCompra.cPE_CABECERA_COMPRA.FEC_EMI)
                 $("#vpSERIE_CORRELATIVO").html(documentoCompra.cPE_CABECERA_COMPRA.SERIE + ' ' + documentoCompra.cPE_CABECERA_COMPRA.CORRELATIVO);
@@ -1242,7 +1242,7 @@ jQuery(function ($) {
         }*/
 
 
-        var idDocumentoVenta = $("#idDocumentoVenta").val();
+        var idDocumentoCompra = $("#idDocumentoCompra").val();
         var idProducto = $("#idProducto").val();
 
         if (tipoNotaCredito == null) {
@@ -1254,12 +1254,11 @@ jQuery(function ($) {
 
         var yourWindow;
         $.ajax({
-            url: "/NotaCredito/iniciarCreacionNotaCredito",
+            url: "/NotaCreditoCompra/iniciarCreacionNotaCredito",
             type: 'POST',
             dataType: 'JSON',
             data: {
-
-                idDocumentoVenta: idDocumentoVenta,
+                idDocumentoCompra: idDocumentoCompra,
                 tipoNotaCredito: tipoNotaCredito,
                 idProducto: idProducto
             },
@@ -1272,7 +1271,7 @@ jQuery(function ($) {
 
                
                 if (venta.tipoErrorCrearTransaccion == 0) {
-                    window.location = '/NotaCredito/Crear';
+                    window.location = '/NotaCreditoCompra/Crear';
                 }
                 else {
                     mostrarMensajeErrorProceso(MENSAJE_ERROR + "\n" + "Detalle Error: " + venta.descripcionError);
@@ -1327,7 +1326,7 @@ jQuery(function ($) {
 
         var yourWindow;
         $.ajax({
-            url: "/NotaDebito/iniciarCreacion",
+            url: "/NotaDebitoCompra/iniciarCreacion",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -1346,7 +1345,7 @@ jQuery(function ($) {
 
 
                 if (venta.tipoErrorCrearTransaccion == 0) {
-                    window.location = '/NotaDebito/Crear';
+                    window.location = '/NotaDebitoCompra/Crear';
                 }
                 else {
                     mostrarMensajeErrorProceso(MENSAJE_ERROR + "\n" + "Detalle Error: " + venta.descripcionError);

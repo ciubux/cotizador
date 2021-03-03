@@ -1,5 +1,6 @@
 ﻿using BusinessLayer;
 using Model;
+using Model.UTILES;
 using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
@@ -23,21 +24,14 @@ namespace Cotizador.Controllers
             Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
 
             IDocumento documento = (IDocumento)this.Session[Request["controller"].ToString()];
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             //Para recuperar el producto se envia si la sede seleccionada es provincia o no
             PrecioClienteProductoBL precioClienteProductoBL = new PrecioClienteProductoBL();
             List<PrecioClienteProducto> precioClienteProductoList = precioClienteProductoBL.getPreciosRegistrados(idProducto, idCliente);
             String nombreProducto = String.Empty;
             String skuProducto = String.Empty;
-            foreach (DocumentoDetalle documentoDetalle in documento.documentoDetalle)
-            {
-                if (documentoDetalle.producto.idProducto == idProducto)
-                {
-                    nombreProducto = documentoDetalle.producto.descripcion;
-                    skuProducto = documentoDetalle.producto.sku;
-                    break;
-                }
-            }
+          
 
             foreach (PrecioClienteProducto precio in precioClienteProductoList)
             {
@@ -53,13 +47,22 @@ namespace Cotizador.Controllers
             ProductoBL productoBL = new ProductoBL();
             Producto producto = productoBL.getProductoById(idProducto);
 
+            nombreProducto = producto.descripcion;
+            skuProducto = producto.sku;
+
             String jsonPrecioLista = JsonConvert.SerializeObject(precioClienteProductoList);
 
             String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto +
-                "\", \"unidad\":\"" + producto.unidad + "\", \"precio\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioSinIgv) +
-                "\", \"unidadAlternativa\":\"" + producto.unidad_alternativa + "\", \"precioAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioAlternativo) +
-                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor) + 
-                "\", \"precioLista\": " + jsonPrecioLista + "}";
+                "\", \"unidad\":\"" + producto.unidad + "\", \"precio\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioSinIgv) + "\", \"precioProvincia\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProvinciaSinIgv) +
+                "\", \"unidadAlternativa\":\"" + producto.unidad_alternativa + "\", \"precioAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioAlternativo) + "\", \"precioProvinciaAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProvinciaAlternativo) +
+                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor) + "\", \"precioProvinciaProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProvinciaProveedor);
+
+            if (usuario.visualizaCostos)
+            {
+                json = json + "\", \"costo\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoSinIgv) + "\", \"costoAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoAlternativo) + "\", \"costoProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoProveedor);
+            }
+
+            json = json + "\", \"precioLista\": " + jsonPrecioLista + "}";
 
             return json;
         }
@@ -68,7 +71,7 @@ namespace Cotizador.Controllers
         {
             Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
             int idGrupoCliente = int.Parse(Request["idGrupoCliente"].ToString());
-
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
 
             //Para recuperar el producto se envia si la sede seleccionada es provincia o no
@@ -79,13 +82,31 @@ namespace Cotizador.Controllers
             String nombreProducto = producto.descripcion;
             String skuProducto = producto.sku;
 
+            foreach (PrecioClienteProducto precio in precioGrupoClienteProductoList)
+            {
+                if (precio.numeroCotizacion == null)
+                {
+                    precio.numeroCotizacion = "No Identificado";
+                }
+                else
+                {
+                    precio.numeroCotizacion = precio.numeroCotizacion + " (Grupal)";
+                }
+            }
+
             String jsonPrecioLista = JsonConvert.SerializeObject(precioGrupoClienteProductoList);
 
             String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto +
-                "\", \"unidad\":\"" + producto.unidad + "\", \"precio\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioSinIgv) +
-                "\", \"unidadAlternativa\":\"" + producto.unidad_alternativa + "\", \"precioAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioAlternativo) +
-                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor) +
-                "\", \"precioLista\": " + jsonPrecioLista + "}";
+                "\", \"unidad\":\"" + producto.unidad + "\", \"precio\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioSinIgv) + "\", \"precioProvincia\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProvinciaSinIgv) +
+                "\", \"unidadAlternativa\":\"" + producto.unidad_alternativa + "\", \"precioAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioAlternativo) + "\", \"precioProvinciaAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProvinciaAlternativo) +
+                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor) + "\", \"precioProvinciaProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProvinciaProveedor);
+            
+            if (usuario.visualizaCostos)
+            {
+                json = json + "\", \"costo\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoSinIgv) + "\", \"costoAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoAlternativo) + "\", \"costoProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoProveedor);
+            }
+
+            json = json + "\", \"precioLista\": " + jsonPrecioLista + "}";
 
             return json;
         }
@@ -95,8 +116,8 @@ namespace Cotizador.Controllers
         {
             Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
             Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            
 
             //Para recuperar el producto se envia si la sede seleccionada es provincia o no
             PrecioClienteProductoBL precioClienteProductoBL = new PrecioClienteProductoBL();
@@ -123,11 +144,14 @@ namespace Cotizador.Controllers
             String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto +
                 "\", \"unidad\":\"" + producto.unidad + "\", \"precio\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioSinIgv) +
                 "\", \"unidadAlternativa\":\"" + producto.unidad_alternativa + "\", \"precioAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioAlternativo) +
-                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor) +
-                "\", \"precioLista\": " + jsonPrecioLista + "}";
+                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor);
 
-            
+            if (usuario.visualizaCostos)
+            {
+                json = json + "\", \"costo\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoSinIgv) + "\", \"costoAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoAlternativo) + "\", \"costoProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoProveedor);
+            }
 
+            json = json + "\", \"precioLista\": " + jsonPrecioLista + "}";
 
             return json;
         }
@@ -137,7 +161,7 @@ namespace Cotizador.Controllers
             Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
 
             Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA];
-        
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
 
             IDocumento documento = (IDocumento)venta.pedido;
@@ -165,8 +189,14 @@ namespace Cotizador.Controllers
             String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto +
                 "\", \"unidad\":\"" + producto.unidad + "\", \"precio\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioSinIgv) +
                 "\", \"unidadAlternativa\":\"" + producto.unidad_alternativa + "\", \"precioAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioAlternativo) +
-                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor) + 
-                "\", \"precioLista\": " + jsonPrecioLista + "}";
+                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor);
+
+            if (usuario.visualizaCostos)
+            {
+                json = json + "\", \"costo\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoSinIgv) + "\", \"costoAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoAlternativo) + "\", \"costoProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoProveedor);
+            }
+
+            json = json + "\", \"precioLista\": " + jsonPrecioLista + "}";
 
             return json;
         }
@@ -211,9 +241,49 @@ namespace Cotizador.Controllers
             return json;
         }
 
-        
 
 
+        public ActionResult LogPrecioProducto()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            ViewBag.usuario = usuario;
+
+            return PartialView();
+        }
+
+
+        public string GetLogPrecioProducto()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
+
+            ProductoBL bl = new ProductoBL();
+            List<LogRegistroCampos> historial = bl.GetHistorialPreciosProductos(idProducto);
+            
+            if (!usuario.visualizaCostos)
+            {
+                List<LogRegistroCampos> temp = new List<LogRegistroCampos>();
+                foreach (LogRegistroCampos log in historial)
+                {
+                    log.dato3 = "";
+                    if ((log.dato1 == null || log.dato1.Trim().Equals("")) && (log.dato2 == null || log.dato2.Trim().Equals("")))
+                    {
+                        temp.Add(log);
+                    }
+                }
+
+                foreach (LogRegistroCampos log in temp)
+                {
+                    historial.Remove(log);
+                }
+            }
+            String jsonHistorial = JsonConvert.SerializeObject(historial);
+
+            String json = "{\"mostrarCostos\":" + (usuario.visualizaCostos ? "1" : "0") + ", \"historial\": " + jsonHistorial + "}";
+
+            return json;
+        }
 
 
         [HttpGet]

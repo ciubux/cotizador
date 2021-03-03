@@ -3,6 +3,7 @@ using Framework.DAL.Settings.Implementations;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using Model;
 using System.IO;
 
@@ -168,6 +169,7 @@ namespace DataLayer
                 producto.ventaRestringida = (Producto.TipoVentaRestringida) Converter.GetInt(row, "descontinuado");
                 producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
                 producto.cantidadMaximaPedidoRestringido = Converter.GetInt(row, "cantidad_maxima_pedido_restringido");
+                producto.compraRestringida = Converter.GetInt(row, "compra_restringida");
                 producto.exoneradoIgv = Converter.GetInt(row, "exonerado_igv") == 1 ? true : false;
                 producto.inafecto = Converter.GetInt(row, "inafecto") == 1 ? true : false;
 
@@ -766,10 +768,16 @@ namespace DataLayer
             return documentoDetalleList;
         }
 
-        public List<DocumentoDetalle> getPreciosVigentesGrupoCliente(int idGrupoCliente)
+        public List<DocumentoDetalle> getPreciosVigentesGrupoCliente(int idGrupoCliente, DateTime? fechaPreciosVigenciaDesde = null)
         {
             var objCommand = GetSqlCommand("ps_productosVigentesGrupo");
             InputParameterAdd.Int(objCommand, "idGrupoCliente", idGrupoCliente);
+
+            if (fechaPreciosVigenciaDesde != null)
+            {
+                InputParameterAdd.DateTime(objCommand, "fechaConsideracion", fechaPreciosVigenciaDesde.Value);
+            }
+
             DataTable cotizacionDetalleDataTable = Execute(objCommand);
 
             List<DocumentoDetalle> documentoDetalleList = new List<DocumentoDetalle>();
@@ -1057,6 +1065,8 @@ namespace DataLayer
                 item.monedaMP = Converter.GetString(row, "moneda_venta");
                 item.monedaProveedor = Converter.GetString(row, "moneda_compra");
 
+                item.compraRestringida = Converter.GetInt(row, "compra_restringida");
+
                 item.image = Converter.GetBytes(row, "imagen");
                 item.Estado = Converter.GetInt(row, "estado");
                 item.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");
@@ -1067,6 +1077,94 @@ namespace DataLayer
             }
       
             return productoList;
+        }
+
+
+        public List<Producto> GetProductosBySKU(List<String> skus)
+        {
+            var objCommand = GetSqlCommand("ps_productosBySku");
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(string)));
+
+            foreach (String sku in skus)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = sku;
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@skuProductos", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.VarcharCList";
+
+            DataTable dataTable = Execute(objCommand);
+
+            List<Producto> lista = new List<Producto>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Producto item = new Producto();
+
+                item.idProducto = Converter.GetGuid(row, "id_producto");
+                item.sku = Converter.GetString(row, "sku");
+                item.skuProveedor = Converter.GetString(row, "sku_proveedor");
+                item.descripcion = Converter.GetString(row, "descripcion");
+                item.descripcionLarga = Converter.GetString(row, "descripcion_larga");
+                item.familia = Converter.GetString(row, "familia");
+                item.proveedor = Converter.GetString(row, "proveedor");
+                item.unidad = Converter.GetString(row, "unidad");
+                item.unidadConteo = Converter.GetString(row, "unidad_conteo");
+
+                item.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
+                item.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
+                item.unidadPedidoProveedor = Converter.GetString(row, "unidad_pedido_proveedor");
+                item.equivalenciaUnidadPedidoProveedor = Converter.GetInt(row, "equivalencia_unidad_pedido_proveedor");
+                item.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
+                item.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+                item.equivalenciaUnidadAlternativaUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_alternativa_unidad_conteo");
+                item.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_estandar_unidad_conteo");
+                item.equivalenciaUnidadProveedorUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_proveedor_unidad_conteo");
+                item.Estado = Converter.GetInt(row, "estado");
+                item.exoneradoIgv = Converter.GetInt(row, "exonerado_igv") == 1 ? true : false;
+                item.inafecto = Converter.GetInt(row, "inafecto") == 1 ? true : false;
+                item.unidadProveedorInternacional = Converter.GetString(row, "unidad_proveedor_internacional");
+                item.unidadEstandarInternacional = Converter.GetString(row, "unidad_estandar_internacional");
+                item.unidadAlternativaInternacional = Converter.GetString(row, "unidad_alternativa_internacional");
+
+                item.Estado = Converter.GetInt(row, "estado");
+                item.agregarDescripcionCotizacion = Converter.GetInt(row, "agregar_descripcion_cotizacion");
+                item.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo");
+                item.tipoProductoVista = (int)item.tipoProducto;
+                //,usuario_creacion
+                //,fecha_creacion
+                //,usuario_modificacion
+                //,fecha_modificacion
+
+                item.monedaProveedor = Converter.GetString(row, "moneda_compra");
+                item.monedaMP = Converter.GetString(row, "moneda_venta");
+                item.tipoCambio = Converter.GetDecimal(row, "tipo_cambio");
+
+                item.topeDescuento = Converter.GetDecimal(row, "tope_descuento");
+                item.precioSinIgv = Converter.GetDecimal(row, "precio");
+                item.precioOriginal = Converter.GetDecimal(row, "precio_original");
+                item.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia");
+                item.precioProvinciasOriginal = Converter.GetDecimal(row, "precio_provincia_original");
+                item.costoSinIgv = Converter.GetDecimal(row, "costo");
+                item.costoOriginal = Converter.GetDecimal(row, "costo_original");
+
+                item.codigoSunat = Converter.GetString(row, "codigo_sunat");
+                item.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+
+                item.image = Converter.GetBytes(row, "imagen");
+                item.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");
+                item.compraRestringida = Converter.GetInt(row, "compra_restringida");
+                item.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
+                item.cantidadMaximaPedidoRestringido = Converter.GetInt(row, "cantidad_maxima_pedido_restringido");
+
+                lista.Add(item);
+            }
+
+            return lista;
         }
 
         public Producto GetProductoById(Guid idProducto)
@@ -1130,6 +1228,7 @@ namespace DataLayer
 
                 item.image = Converter.GetBytes(row, "imagen");
                 item.ventaRestringida = (Producto.TipoVentaRestringida) Converter.GetInt(row, "descontinuado");
+                item.compraRestringida = Converter.GetInt(row, "compra_restringida");
                 item.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
                 item.cantidadMaximaPedidoRestringido = Converter.GetInt(row, "cantidad_maxima_pedido_restringido");
             }
@@ -1158,6 +1257,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "equivalenciaUnidadPedidoProveedor", producto.equivalenciaUnidadPedidoProveedor);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
             InputParameterAdd.Int(objCommand, "descontinuado", (int) producto.ventaRestringida);
+            InputParameterAdd.Int(objCommand, "compraRestringida", producto.compraRestringida);
             InputParameterAdd.VarcharEmpty(objCommand, "motivoRestriccion", producto.motivoRestriccion);
             InputParameterAdd.Int(objCommand, "exoneradoIgv", (producto.exoneradoIgv ? 1 : 0));
             InputParameterAdd.Int(objCommand, "inafecto", producto.inafecto ? 1 : 0);
@@ -1253,6 +1353,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "equivalenciaUnidadPedidoProveedor", producto.equivalenciaUnidadPedidoProveedor);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
             InputParameterAdd.Int(objCommand, "descontinuado", (int) producto.ventaRestringida);
+            InputParameterAdd.Int(objCommand, "compraRestringida", producto.compraRestringida);
 
             if (producto.descripcionLarga == null) producto.descripcionLarga = "";
             InputParameterAdd.Varchar(objCommand, "descripcionLarga", producto.descripcionLarga.Replace("\"", "''"));

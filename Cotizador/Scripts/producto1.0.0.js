@@ -345,6 +345,16 @@ jQuery(function ($) {
         });
     }
 
+    $("#producto_compraRestringida_si").click(function () {
+        var valCheck = 1;
+        changeInputInt("compraRestringida", valCheck)
+    });
+
+    $("#producto_compraRestringida_no").click(function () {
+        var valCheck = 0;
+        changeInputInt("compraRestringida", valCheck)
+    });
+
     $("#producto_estado_si").click(function () {
         var valCheck = 1;
         changeInputInt("Estado", valCheck)
@@ -745,6 +755,13 @@ jQuery(function ($) {
                 }
                 else {
                     $("#verAgregarDescripcionCotizacion").html("No");
+                }
+
+                if (producto.compraRestringida == 1) {
+                    $("#verCompraRestringida").html("Sí");
+                }
+                else {
+                    $("#verCompraRestringida").html("No");
                 }
 
                 $("#verCantidadMaximaPedidoRestringido").html(producto.cantidadMaximaPedidoRestringido);

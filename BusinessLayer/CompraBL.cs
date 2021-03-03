@@ -19,17 +19,17 @@ namespace BusinessLayer
             }           
         }
 
-        public void InsertTransaccionNotaCredito(Transaccion transaccion)
+        public void InsertTransaccionNotaCredito(Compra transaccion)
         {
-            using (var dal = new VentaDAL())
+            using (var dal = new CompraDAL())
             {
                 dal.InsertTransaccionNotaCredito(transaccion);
             }
         }
 
-        public void UpdateTransaccionNotaCredito(Transaccion transaccion)
+        public void UpdateTransaccionNotaCredito(Compra transaccion)
         {
-            using (var dal = new VentaDAL())
+            using (var dal = new CompraDAL())
             {
                 dal.UpdateTransaccionNotaCredito(transaccion);
             }
@@ -84,6 +84,35 @@ namespace BusinessLayer
             }
             return transaccion;
         }
+
+
+
+        public Compra GetPlantillaCompra(Compra transaccion, Usuario usuario)
+        {
+            using (var dal = new CompraDAL())
+            {
+                transaccion = dal.SelectPlantillaCompra(transaccion, usuario);
+                if (transaccion.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
+                {
+                    this.procesarVenta(transaccion);
+                }
+            }
+            return transaccion;
+        }
+
+        public Compra GetPlantillaCompraDescuentoGlobal(Compra transaccion, Usuario usuario, Guid idProducto)
+        {
+            using (var dal = new CompraDAL())
+            {
+                transaccion = dal.SelectPlantillaCompra(transaccion, usuario, idProducto);
+                if (transaccion.tipoErrorCrearTransaccion == Venta.TiposErrorCrearTransaccion.NoExisteError)
+                {
+                    this.procesarVenta(transaccion);
+                }
+            }
+            return transaccion;
+        }
+
 
         public Transaccion GetPlantillaVentaCargos(Transaccion transaccion, Usuario usuario, List<Guid> idProductoList)
         {

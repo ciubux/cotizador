@@ -341,6 +341,13 @@ namespace Model
         [Display(Name = "Fecha Ventas Desde:")]
         public DateTime? fechaVentasDesde { get; set; }
 
+        public DateTime? ultimaActualizacionContactos { get; set; }
+
+        public string ultimaActualizacionContactosDesc
+        {
+            get { return ultimaActualizacionContactos == null ? "-" :  ultimaActualizacionContactos.Value.ToString("dd/MM/yyyy HH:mm:ss"); }
+        }
+
         public Boolean fechaVentasEsModificada { get; set; }
     }
 

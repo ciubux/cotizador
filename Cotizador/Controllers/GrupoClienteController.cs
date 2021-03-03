@@ -19,9 +19,9 @@ namespace Cotizador.Controllers
         {
 
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaGrupoClientes;
-            
 
-            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null )
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -43,6 +43,11 @@ namespace Cotizador.Controllers
             ViewBag.grupoCliente = grupoClienteSearch;
             ViewBag.Si = Constantes.MENSAJE_SI;
             ViewBag.No = Constantes.MENSAJE_NO;
+
+            DateTime fechaConsultaPrecios = new DateTime(DateTime.Now.AddDays(-720).Year, 1, 1, 0, 0, 0);
+            this.Session[Constantes.VAR_SESSION_GRUPO_CLIENTE_BUSQUEDA_FECHA_PRECIOS_VER] = fechaConsultaPrecios;
+            ViewBag.fechaConsultaPrecios = fechaConsultaPrecios;
+
             return View();
 
         }
@@ -488,11 +493,13 @@ namespace Cotizador.Controllers
         {
             int idGrupoCliente = int.Parse(Request["idGrupoCliente"].ToString());
 
+            DateTime fechaPrecios = (DateTime)this.Session[Constantes.VAR_SESSION_GRUPO_CLIENTE_BUSQUEDA_FECHA_PRECIOS_VER];
+
             GrupoClienteBL bl = new GrupoClienteBL();
             GrupoCliente grupoCliente = bl.getGrupo(idGrupoCliente);
             grupoCliente.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            List<DocumentoDetalle> listaPrecios = bl.getPreciosVigentesGrupoCliente(idGrupoCliente);
+            List<DocumentoDetalle> listaPrecios = bl.getPreciosVigentesGrupoCliente(idGrupoCliente, fechaPrecios);
             List<Cliente> clientes = bl.getClientesGrupo(idGrupoCliente);
 
             grupoCliente.miembros = clientes;
@@ -505,6 +512,29 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+        public String ConsultaPreciosGrupo()
+        {
+            int idGrupoCliente = int.Parse(Request["idGrupoCliente"].ToString());
+            DateTime fechaPrecios = (DateTime) this.Session[Constantes.VAR_SESSION_GRUPO_CLIENTE_BUSQUEDA_FECHA_PRECIOS_VER];
+
+            GrupoClienteBL bl = new GrupoClienteBL();
+            List<DocumentoDetalle> listaPrecios = bl.getPreciosVigentesGrupoCliente(idGrupoCliente, fechaPrecios);
+
+
+            String resultado = "{\"precios\":" + JsonConvert.SerializeObject(listaPrecios) + "}";
+
+
+            return resultado;
+        }
+
+        public void ChangeFechaVigenciaPrecios()
+        {
+            if (this.Request.Params["val"] != null && this.Request.Params["val"] != String.Empty)
+            {
+                String[] fiv = this.Request.Params["val"].Split('/');
+                this.Session[Constantes.VAR_SESSION_GRUPO_CLIENTE_BUSQUEDA_FECHA_PRECIOS_VER] = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]), 0, 0, 0);
+            }
+        }
 
         [HttpPost]
         public String ActualizarSKUCliente()

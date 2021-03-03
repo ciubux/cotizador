@@ -235,6 +235,7 @@
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\ClienteLiteController.cs" />
     <Compile Include="Controllers\MonedaController.cs" />
+    <Compile Include="Controllers\NotaCreditoCompraController.cs" />
     <Compile Include="Controllers\TipoClienteContactoController.cs" />
     <Compile Include="Controllers\VistaDashboardController.cs" />
     <Compile Include="Controllers\DocumentoCompraController.cs" />
@@ -404,6 +405,7 @@
     <Content Include="images\checkstate_c.png" />
     <Content Include="images\checkstate_d.png" />
     <Content Include="images\clean.png" />
+    <Content Include="images\deshabilitado_label.png" />
     <Content Include="images\download.png" />
     <Content Include="images\equis.png" />
     <Content Include="images\etiqueta-de-precio-en-dolares.png" />
@@ -417,6 +419,7 @@
     <Content Include="images\logo_sunat.svg" />
     <Content Include="images\map.png" />
     <Content Include="images\pdf-icon.png" />
+    <Content Include="images\producto_inactivo_label.png" />
     <Content Include="images\proveedores.png" />
     <Content Include="images\down.png" />
     <Content Include="images\down2.png" />
@@ -451,7 +454,9 @@
     <None Include="Properties\PublishProfiles\zasmp - Web Deploy.pubxml" />
     <Content Include="Scripts\account1.0.0.js" />
     <Content Include="Scripts\clienteLite1.0.0.js" />
+    <Content Include="Scripts\notaCreditoCompra.js" />
     <Content Include="Scripts\tipoClienteContacto.js" />
+    <Content Include="Scripts\utilesAjax.js" />
     <Content Include="Scripts\vistaDashboard1.0.0.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chosen\chosen.ajaxaddition.jquery.js" />
@@ -680,6 +685,9 @@
     <Content Include="Views\Pedido\_SelectStockIconState.cshtml" />
     <Content Include="Views\TipoClienteContacto\Lista.cshtml" />
     <Content Include="Views\Shared\CambiarFirmaUsuario.cshtml" />
+    <Content Include="Views\NotaCreditoCompra\Crear.cshtml" />
+    <Content Include="Views\Producto\_LabelCompraRestringida.cshtml" />
+    <Content Include="Views\Precio\LogPrecioProducto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

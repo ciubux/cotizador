@@ -42,8 +42,8 @@ namespace cotizadorPDF
                 PdfPageBase page = doc.Pages.Add(PdfPageSize.A4);
 
                 PdfImage image = PdfImage.FromFile(AppDomain.CurrentDomain.BaseDirectory + "\\images\\logo.png");
-                float width = 80 * 2.4f;
-                float height = 20 * 2.4f;
+                float width = 62 * 2.4f;
+                float height = 26 * 2.4f;
                 page.Canvas.DrawImage(image, 0, 0, width, height);
 
                 PdfImage imageCli = PdfImage.FromFile(AppDomain.CurrentDomain.BaseDirectory + "\\images\\proveedores.png");

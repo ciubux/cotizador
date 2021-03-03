@@ -1571,7 +1571,12 @@ jQuery(function ($) {
 
                 $("#verProducto").html(producto.nombre);
                 $("#verCodigoProducto").html(producto.sku);
-                
+
+                $("#lnkMostrarLogPrecioProducto").attr("nombreProducto", producto.nombre);
+                $("#lnkMostrarLogPrecioProducto").attr("sku", producto.sku);
+                $("#lnkMostrarLogPrecioProducto").attr("idProducto", idProducto);
+
+
                 $("#verUnidadProveedor").html(producto.unidadProveedor);
                 $("#verUnidadMP").html(producto.unidad);
                 $("#verUnidadAlternativa").html(producto.unidadAlternativa);
@@ -1579,6 +1584,16 @@ jQuery(function ($) {
                 $("#verPrecioProveedor").html(producto.precioProveedor);
                 $("#verPrecioMP").html(producto.precio);
                 $("#verPrecioAlternativa").html(producto.precioAlternativa);
+
+                $("#verPrecioProvinciaProveedor").html(producto.precioProvinciaProveedor);
+                $("#verPrecioProvinciaMP").html(producto.precioProvincia);
+                $("#verPrecioProvinciaAlternativa").html(producto.precioProvinciaAlternativa);
+
+                if ($("#verCostoMP").length) {
+                    $("#verCostoProveedor").html(producto.costoProveedor);
+                    $("#verCostoMP").html(producto.costo);
+                    $("#verCostoAlternativa").html(producto.costoAlternativa);
+                }
 
                 var precioListaList = producto.precioLista;
 

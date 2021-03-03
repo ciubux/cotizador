@@ -610,6 +610,637 @@ namespace Cotizador.Controllers
         }
 
 
+
+        [HttpPost]
+        public ActionResult LoadNEW(HttpPostedFileBase file)
+        {
+
+            Usuario usuario = (Usuario)this.Session["usuario"];
+            LogCampoBL logCambioBl = new LogCampoBL();
+            List<LogCampo> campos = logCambioBl.getCampoLogPorTabla(Producto.NOMBRE_TABLA);
+
+            List<CampoPersistir> registrarCampos = Producto.obtenerCampos(campos);
+            //List<CampoPersistir> registrarCampos = new List<CampoPersistir>();
+            int select = 0;
+
+            foreach (CampoPersistir cp in registrarCampos)
+            {
+                cp.registra = false;
+                cp.persiste = false;
+
+                //si ha sido seleccionado o es un campo no actualizable en la carga masiva debe agregarse a la lista de cmapos a registrar
+                if (Request["registra_" + cp.campo.nombre] != null || !Producto.esCampoActualizableCargaMasiva(cp.campo.nombre))
+                {
+
+                    if (!Producto.esCampoActualizableCargaMasiva(cp.campo.nombre))
+                    {
+                        select = 1;
+                    }
+                    else
+                    {
+                        select = Int32.Parse(Request["registra_" + cp.campo.nombre].ToString());
+                    }
+
+                    if (select == 1)
+                    {
+                        cp.registra = true;
+
+                        if (Request["persiste_" + cp.campo.nombre] != null)
+                        {
+                            int persiste = Int32.Parse(Request["registra_" + cp.campo.nombre].ToString());
+                            cp.persiste = persiste == 1 ? true : false;
+                        }
+                    }
+                }
+            }
+
+            LogCambioBL logCambiobl = new LogCambioBL();
+            ParametroBL parametrobl = new ParametroBL();
+
+            //Decimal tipoCambio = parametrobl.getParametroDecimal("TIPO_CAMBIO");
+            Decimal tipoCambio = Decimal.Parse(this.Request.Params["tipo_cambio"].ToString());
+            String[] fiv = this.Request.Params["fechaInicioVigencia"].Split('/');
+            DateTime fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
+
+            int nFIV = (fechaInicioVigencia.Year * 10000) + (fechaInicioVigencia.Month * 100) + fechaInicioVigencia.Day;
+            int nFT = (DateTime.Now.Year * 10000) + (DateTime.Now.Month * 100) + DateTime.Now.Day;
+            int nFR = 0;
+            bool isNew = false;
+            HSSFWorkbook hssfwb;
+
+            ProductoBL productoBL = new ProductoBL();
+
+            hssfwb = new HSSFWorkbook(file.InputStream);
+
+            ISheet sheet = hssfwb.GetSheetAt(0);
+            int row = 1;
+            int cantidad = Int32.Parse(Request["cantidadLineas"].ToString());
+            if (cantidad == 0)
+                cantidad = sheet.LastRowNum;
+
+            //   cantidad = 2008;
+            int lastrow = sheet.LastRowNum;
+            int posicionInicial = 0;
+            int pos = 0;
+            int contInsert = 0;
+            int contUpdate = 0;
+            bool agregar = false;
+
+            List<Producto> productosExcel = new List<Producto>();
+            List<String> skus = new List<String>();
+
+            for (row = 1; row <= cantidad; row++)
+            {
+                int a = 1;
+                if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
+                {
+                    isNew = false;
+
+                    Producto productoStaging = new Producto();
+                    agregar = true;
+                    try
+                    {
+                        pos = posicionInicial + 0;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.sku = null;
+                            agregar = false;
+                        }
+                        else
+                        {
+                            productoStaging.sku = sheet.GetRow(row).GetCell(pos).ToString();
+                            if (productoStaging.sku.Trim().Equals(""))
+                            {
+                                agregar = false;
+                            } else
+                            {
+                                skus.Add(productoStaging.sku);
+                            }
+                        }
+
+                        pos = posicionInicial + 1;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.skuProveedor = null;
+                        }
+                        else
+                        {
+                            productoStaging.skuProveedor = sheet.GetRow(row).GetCell(pos).ToString();
+                        }
+
+                        pos = posicionInicial + 2;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.proveedor = null;
+                        }
+                        else
+                        {
+                            productoStaging.proveedor = sheet.GetRow(row).GetCell(pos).ToString();
+                        }
+
+                        pos = posicionInicial + 3;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.familia = "No proporcionada";
+                        }
+                        else
+                        {
+                            productoStaging.familia = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                        }
+
+                        pos = posicionInicial + 4;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.descripcion = null;
+                        }
+                        else
+                        {
+                            productoStaging.descripcion = sheet.GetRow(row).GetCell(pos).ToString().Replace("\"", "''").Trim();
+                        }
+
+                        pos = posicionInicial + 5;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.unidad = null;
+                        }
+                        else
+                        {
+                            productoStaging.unidad = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                        }
+
+                        pos = posicionInicial + 6;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.unidadProveedor = null;
+                        }
+                        else
+                        {
+                            productoStaging.unidadProveedor = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                        }
+
+                        pos = posicionInicial + 7;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.equivalenciaProveedor = 0;
+                        }
+                        else
+                        {
+                            productoStaging.equivalenciaProveedor = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
+                        }
+
+                        pos = posicionInicial + 8;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.unidadPedidoProveedor = null;
+                        }
+                        else
+                        {
+                            productoStaging.unidadPedidoProveedor = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                        }
+
+                        pos = posicionInicial + 9;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.equivalenciaUnidadPedidoProveedor = 0;
+                        }
+                        else
+                        {
+                            productoStaging.equivalenciaUnidadPedidoProveedor = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
+                        }
+
+                        pos = posicionInicial + 10;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.unidad_alternativa = null;
+                        }
+                        else
+                        {
+                            productoStaging.unidad_alternativa = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                        }
+
+                        pos = posicionInicial + 11;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.equivalenciaAlternativa = 0;
+                        }
+                        else
+                        {
+                            productoStaging.equivalenciaAlternativa = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
+                        }
+
+                        pos = posicionInicial + 12;
+                        try
+                        {
+                            productoStaging.monedaProveedor = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.monedaProveedor = "S";
+                        }
+
+                        pos = posicionInicial + 13;
+                        try
+                        {
+                            Double? val = sheet.GetRow(row).GetCell(pos).NumericCellValue;
+                            productoStaging.costoOriginal = Convert.ToDecimal(val);
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.costoOriginal = 0;
+                        }
+
+                        pos = posicionInicial + 14; // El costo es calculado 
+
+                        pos = posicionInicial + 15;
+                        try
+                        {
+                            productoStaging.monedaMP = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.monedaMP = "S";
+                        }
+
+                        pos = posicionInicial + 16;
+                        try
+                        {
+                            Double? val = sheet.GetRow(row).GetCell(pos).NumericCellValue;
+                            productoStaging.precioOriginal = Convert.ToDecimal(val);
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.precioOriginal = 0;
+                        }
+
+                        pos = posicionInicial + 17; // El precio lima es calculado
+
+                        pos = posicionInicial + 18;
+                        try
+                        {
+                            Double? val = sheet.GetRow(row).GetCell(pos).NumericCellValue;
+                            productoStaging.precioProvinciasOriginal = Convert.ToDecimal(val);
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.precioProvinciasOriginal = 0;
+                        }
+
+                        pos = posicionInicial + 19; // El precio provincias es calculado
+
+                        pos = posicionInicial + 20;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.unidadConteo = null;
+                        }
+                        else
+                        {
+                            productoStaging.unidadConteo = sheet.GetRow(row).GetCell(pos).ToString();
+                        }
+
+                        pos = posicionInicial + 21;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.unidadEstandarInternacional = null;
+                        }
+                        else
+                        {
+                            productoStaging.unidadEstandarInternacional = sheet.GetRow(row).GetCell(pos).ToString();
+                        }
+
+                        pos = posicionInicial + 22;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.equivalenciaUnidadEstandarUnidadConteo = 0;
+                        }
+                        else
+                        {
+                            productoStaging.equivalenciaUnidadEstandarUnidadConteo = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
+                        }
+
+                        pos = posicionInicial + 23;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.unidadProveedorInternacional = null;
+                        }
+                        else
+                        {
+                            productoStaging.unidadProveedorInternacional = sheet.GetRow(row).GetCell(pos).ToString();
+                        }
+
+                        pos = posicionInicial + 24;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.equivalenciaUnidadProveedorUnidadConteo = 0;
+                        }
+                        else
+                        {
+                            productoStaging.equivalenciaUnidadProveedorUnidadConteo = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
+                        }
+
+                        pos = posicionInicial + 25;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.unidadAlternativaInternacional = null;
+                        }
+                        else
+                        {
+                            productoStaging.unidadAlternativaInternacional = sheet.GetRow(row).GetCell(pos).ToString();
+                        }
+
+                        pos = posicionInicial + 26;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.equivalenciaUnidadAlternativaUnidadConteo = 0;
+                        }
+                        else
+                        {
+                            productoStaging.equivalenciaUnidadAlternativaUnidadConteo = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
+                        }
+
+                        pos = posicionInicial + 27;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.codigoSunat = null;
+                        }
+                        else
+                        {
+                            productoStaging.codigoSunat = sheet.GetRow(row).GetCell(pos).ToString();
+                        }
+
+                        pos = posicionInicial + 28;
+                        try
+                        {
+                            productoStaging.exoneradoIgv = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper() == "SI" ? true : false;
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.exoneradoIgv = false;
+                        }
+
+                        pos = posicionInicial + 29;
+                        try
+                        {
+                            productoStaging.inafecto = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper() == "SI" ? true : false;
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.inafecto = false;
+                        }
+
+                        pos = posicionInicial + 30;
+                        try
+                        {
+                            string name = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+
+                            productoStaging.tipoProducto = (Producto.TipoProducto)Enum.Parse(typeof(Producto.TipoProducto), name);
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.tipoProducto = Producto.TipoProducto.Bien;
+                        }
+
+                        pos = posicionInicial + 31; // Tipo de cambio se sube en el formulario
+
+                        pos = posicionInicial + 32;
+                        try
+                        {
+                            productoStaging.Estado = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper().Equals("SI") ? 1 : 0;
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.Estado = 0;
+                        }
+
+                        pos = posicionInicial + 33;
+                        try
+                        {
+                            //productoStaging.descontinuado = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper().Equals("SI") ? 1 : 0;
+                            string tipoVentaRestringida = sheet.GetRow(row).GetCell(pos).ToString();
+                            productoStaging.ventaRestringida = (Producto.TipoVentaRestringida)Enum.Parse(typeof(Producto.TipoVentaRestringida), tipoVentaRestringida);
+
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.ventaRestringida = Producto.TipoVentaRestringida.SinRestriccion;
+                        }
+
+                        pos = posicionInicial + 34;
+                        try
+                        {
+                            productoStaging.motivoRestriccion = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.motivoRestriccion = "";
+                        }
+
+                        pos = posicionInicial + 35;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            productoStaging.cantidadMaximaPedidoRestringido = 0;
+                        }
+                        else
+                        {
+                            productoStaging.cantidadMaximaPedidoRestringido = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
+                        }
+
+                        pos = posicionInicial + 36;
+                        try
+                        {
+                            productoStaging.descripcionLarga = sheet.GetRow(row).GetCell(pos).ToString().Trim().Replace("\"", "''");
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.descripcionLarga = "";
+                        }
+
+                        pos = posicionInicial + 37;
+                        try
+                        {
+                            productoStaging.agregarDescripcionCotizacion = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper().Equals("SI") ? 1 : 0;
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.agregarDescripcionCotizacion = 0;
+                        }
+
+                        pos = posicionInicial + 38;
+                        try
+                        {
+                            Double? val = sheet.GetRow(row).GetCell(pos).NumericCellValue;
+                            productoStaging.topeDescuento = Convert.ToDecimal(val);
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.topeDescuento = 0;
+                        }
+
+
+                        pos = posicionInicial + 39;
+                        try
+                        {
+                            productoStaging.compraRestringida = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper() == "SI" ? 1 : 0;
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.compraRestringida = 0;
+                        }
+
+                        //UtilesHelper.setValorCelda(sheet, 1, "AC", Producto.nombreAtributo("tipoProducto"), titleCellStyle);
+
+
+                        productoStaging.costoSinIgv = productoStaging.costoOriginal / (productoStaging.equivalenciaProveedor == 0 ? 1 : productoStaging.equivalenciaProveedor);
+                        if (productoStaging.monedaProveedor == "D")
+                        {
+                            productoStaging.costoSinIgv = productoStaging.costoSinIgv * tipoCambio;
+                        }
+
+                        if (productoStaging.monedaMP == "D")
+                        {
+                            productoStaging.precioSinIgv = productoStaging.precioOriginal * tipoCambio;
+                        }
+                        else
+                        {
+                            productoStaging.precioSinIgv = productoStaging.precioOriginal;
+                        }
+
+                        if (productoStaging.monedaMP == "D")
+                        {
+                            productoStaging.precioProvinciaSinIgv = productoStaging.precioProvinciasOriginal * tipoCambio;
+                        }
+                        else
+                        {
+                            productoStaging.precioProvinciaSinIgv = productoStaging.precioProvinciasOriginal;
+                        }
+
+                        productoStaging.tipoCambio = tipoCambio;
+                        productoStaging.usuario = usuario;
+                        productoStaging.fechaInicioVigencia = fechaInicioVigencia;
+
+                        productosExcel.Add(productoStaging);
+
+                        if (!agregar) { 
+                            row = sheet.LastRowNum;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log log = new Log(ex.ToString() + " paso:" + pos, TipoLog.Error, usuario);
+                        LogBL logBL = new LogBL();
+                        logBL.insertLog(log);
+                    }
+
+                    
+
+                    
+                    // obtener productos segun skus
+
+                    foreach(Producto prodAgregar in productosExcel)
+                    {
+                        Guid idRegistro = productoBL.getAllProductoId(productoStaging.sku);
+
+                        if (idRegistro == Guid.Empty)
+                        {
+                            idRegistro = Guid.NewGuid();
+                            isNew = true;
+                        }
+
+                        productoStaging.idProducto = idRegistro;
+
+
+                        if (isNew)
+                        {
+                            contInsert++;
+                        }
+                        else
+                        {
+                            contUpdate++;
+                        }
+
+                        // --REVERT-- if (nFIV >= nFT)
+                        if (nFIV > nFT)
+                        {
+                            //Fecha Inicio vigencia es mayor o igual a la fecha actual
+                            if (isNew)
+                            {
+                                //Si es un nuevo registro se guarda el log con todos los campos
+                                logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos, true));
+                            }
+                            else
+                            {
+                                logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos));
+                            }
+                        }
+                        else
+                        {
+                            //Fecha Inicio vigencia es menor a la fecha actual
+                            /* --REVERT-- Producto existente = productoBL.getProductoById(idRegistro);
+
+                            if (existente.fechaInicioVigencia != null)
+                            {
+                                //En caso exista y tenga una fecha de inicio de vigencia se toma la fecha de inicio de vigencia del registro existente
+                                nFR = (existente.fechaInicioVigencia.Year * 10000) + (existente.fechaInicioVigencia.Month * 100) + existente.fechaInicioVigencia.Day;
+                            }
+                            else
+                            {
+                                nFR = int.MinValue;
+                            }
+                            */
+
+                            nFR = int.MinValue;
+                            if (nFR <= nFIV)
+                            {
+                                //Si la fecha de inicio de vigencia del registro es menor a la fecha de inicio de vigencia se manda todo al log programado
+                                if (isNew)
+                                {
+                                    productoStaging.CargaMasiva = false;
+                                    productoBL.insertProducto(productoStaging);
+
+                                    // --REVERT-- logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos, true));
+                                }
+                                else
+                                {
+                                    productoStaging.CargaMasiva = false;
+                                    productoBL.updateProducto(productoStaging);
+
+                                    // --REVERT--logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos));
+                                }
+                            }
+                            else
+                            {
+                                //Si la fecha de inicio de vigencia del registro es mayor a la fecha de inicio de vigencia se manda todo al log normal
+                                if (isNew)
+                                {
+                                    //Registrar
+                                    productoStaging.CargaMasiva = false;
+                                    productoBL.insertProducto(productoStaging);
+                                }
+                                else
+                                {
+                                    //Registrar log
+                                    logCambiobl.insertLogCambios(productoStaging.obtenerLogProgramado(registrarCampos));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            //this.Session["ImportProducts_Inserts"] = contInsert;
+            //this.Session["ImportProducts_Updates"] = contUpdate;
+
+            if (nFIV <= nFT)
+            {
+                logCambiobl.aplicarLogCambios();
+            }
+
+            ViewBag.tipoCarga = "archivo";
+            ViewBag.contInsert = contInsert;
+            ViewBag.contUpdate = contUpdate;
+            return View("CargaCorrecta");
+        }
+
+
         [HttpPost]
         public ActionResult Load(HttpPostedFileBase file)
         {
@@ -737,7 +1368,7 @@ namespace Cotizador.Controllers
                         }
                         else
                         {
-                            productoStaging.familia = sheet.GetRow(row).GetCell(pos).ToString();
+                            productoStaging.familia = sheet.GetRow(row).GetCell(pos).ToString().Trim();
                         }
 
                         pos = posicionInicial + 4;
@@ -747,7 +1378,7 @@ namespace Cotizador.Controllers
                         }
                         else
                         {
-                            productoStaging.descripcion = sheet.GetRow(row).GetCell(pos).ToString().Replace("\"", "''");
+                            productoStaging.descripcion = sheet.GetRow(row).GetCell(pos).ToString().Replace("\"", "''").Trim();
                         }
 
                         pos = posicionInicial + 5;
@@ -757,7 +1388,7 @@ namespace Cotizador.Controllers
                         }
                         else
                         {
-                            productoStaging.unidad = sheet.GetRow(row).GetCell(pos).ToString();
+                            productoStaging.unidad = sheet.GetRow(row).GetCell(pos).ToString().Trim();
                         }
 
                         pos = posicionInicial + 6;
@@ -767,7 +1398,7 @@ namespace Cotizador.Controllers
                         }
                         else
                         {
-                            productoStaging.unidadProveedor = sheet.GetRow(row).GetCell(pos).ToString();
+                            productoStaging.unidadProveedor = sheet.GetRow(row).GetCell(pos).ToString().Trim();
                         }
 
                         pos = posicionInicial + 7;
@@ -787,7 +1418,7 @@ namespace Cotizador.Controllers
                         }
                         else
                         {
-                            productoStaging.unidadPedidoProveedor = sheet.GetRow(row).GetCell(pos).ToString();
+                            productoStaging.unidadPedidoProveedor = sheet.GetRow(row).GetCell(pos).ToString().Trim();
                         }
 
                         pos = posicionInicial + 9;
@@ -807,7 +1438,7 @@ namespace Cotizador.Controllers
                         }
                         else
                         {
-                            productoStaging.unidad_alternativa = sheet.GetRow(row).GetCell(pos).ToString();
+                            productoStaging.unidad_alternativa = sheet.GetRow(row).GetCell(pos).ToString().Trim();
                         }
 
                         pos = posicionInicial + 11;
@@ -1067,17 +1698,18 @@ namespace Cotizador.Controllers
                             productoStaging.topeDescuento = 0;
                         }
 
-                        //UtilesHelper.setValorCelda(sheet, 1, "AC", Producto.nombreAtributo("tipoProducto"), titleCellStyle);
 
-
-                        Guid idRegistro = productoBL.getAllProductoId(productoStaging.sku);
-                            
-
-                        if (idRegistro == Guid.Empty)
+                        pos = posicionInicial + 39;
+                        try
                         {
-                            idRegistro = Guid.NewGuid();
-                            isNew = true;
+                            productoStaging.compraRestringida = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper() == "SI" ? 1 : 0;
                         }
+                        catch (Exception e)
+                        {
+                            productoStaging.compraRestringida = 0;
+                        }
+
+                        //UtilesHelper.setValorCelda(sheet, 1, "AC", Producto.nombreAtributo("tipoProducto"), titleCellStyle);
 
 
                         productoStaging.costoSinIgv = productoStaging.costoOriginal / (productoStaging.equivalenciaProveedor == 0 ? 1 : productoStaging.equivalenciaProveedor);
@@ -1104,6 +1736,16 @@ namespace Cotizador.Controllers
                             productoStaging.precioProvinciaSinIgv = productoStaging.precioProvinciasOriginal;
                         }
 
+
+                        Guid idRegistro = productoBL.getAllProductoId(productoStaging.sku);
+
+
+                        if (idRegistro == Guid.Empty)
+                        {
+                            idRegistro = Guid.NewGuid();
+                            isNew = true;
+                        }
+
                         productoStaging.tipoCambio = tipoCambio;
                         productoStaging.idProducto = idRegistro;
                         productoStaging.usuario = usuario;
@@ -1118,7 +1760,8 @@ namespace Cotizador.Controllers
                                 contUpdate++;
                             }
 
-                            if (nFIV >= nFT)
+                            // --REVERT-- if (nFIV >= nFT)
+                            if (nFIV > nFT)
                             {
                                 //Fecha Inicio vigencia es mayor o igual a la fecha actual
                                 if (isNew)
@@ -1134,8 +1777,8 @@ namespace Cotizador.Controllers
                             else
                             {
                                 //Fecha Inicio vigencia es menor a la fecha actual
-                                Producto existente = productoBL.getProductoById(idRegistro);
-
+                                /* --REVERT-- Producto existente = productoBL.getProductoById(idRegistro);
+                                
                                 if (existente.fechaInicioVigencia != null)
                                 {
                                     //En caso exista y tenga una fecha de inicio de vigencia se toma la fecha de inicio de vigencia del registro existente
@@ -1145,17 +1788,25 @@ namespace Cotizador.Controllers
                                 {
                                     nFR = int.MinValue;
                                 }
+                                */
 
+                                nFR = int.MinValue;
                                 if (nFR <= nFIV)
                                 {
                                     //Si la fecha de inicio de vigencia del registro es menor a la fecha de inicio de vigencia se manda todo al log programado
                                     if (isNew)
                                     {
-                                        logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos, true));
+                                        productoStaging.CargaMasiva = false;
+                                        productoBL.insertProducto(productoStaging);
+
+                                        // --REVERT-- logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos, true));
                                     }
                                     else
                                     {
-                                        logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos));
+                                        productoStaging.CargaMasiva = false;
+                                        productoBL.updateProducto(productoStaging);
+
+                                        // --REVERT--logCambiobl.insertLogCambiosPogramados(productoStaging.obtenerLogProgramado(registrarCampos));
                                     }
                                 }
                                 else

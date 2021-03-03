@@ -897,6 +897,7 @@ namespace DataLayer
                 pedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_creacion");
                 pedido.usuario.nombre = Converter.GetString(row, "nombre_usuario");
                 pedido.usuario.cargo = Converter.GetString(row, "cargo");
+                pedido.usuario.firmaImagen = Converter.GetBytes(row, "usuario_firma_imagen");
                 pedido.usuario.contacto = Converter.GetString(row, "contacto_usuario");
                 pedido.usuario.email = Converter.GetString(row, "email");
 
@@ -971,6 +972,7 @@ namespace DataLayer
                 pedidoDetalle.producto.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo_producto");
                 pedidoDetalle.producto.ventaRestringida = (Producto.TipoVentaRestringida) Converter.GetInt(row, "descontinuado");
                 pedidoDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
+                pedidoDetalle.producto.compraRestringida = Converter.GetInt(row, "compra_restringida");
                 pedidoDetalle.producto.topeDescuento = Converter.GetDecimal(row, "tope_descuento");
                 pedidoDetalle.producto.costoOriginal = Converter.GetDecimal(row, "costo_original");
                 pedidoDetalle.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
@@ -1333,6 +1335,7 @@ namespace DataLayer
                 pedidoDetalle.producto.costoLista = pedidoDetalle.producto.costoSinIgv;
                 pedidoDetalle.producto.costoOriginal = Converter.GetDecimal(row, "costo_original");
                 pedidoDetalle.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+                pedidoDetalle.producto.compraRestringida = Converter.GetInt(row, "compra_restringida");
 
                 pedidoDetalle.producto.image = Converter.GetBytes(row, "imagen");
 

@@ -322,11 +322,11 @@ namespace DataLayer
       
 
 
-        /*
+        
         public void InsertarDocumentoCompraNotaCreditoDebito(DocumentoCompra documentoCompra)
         {
             var objCommand = GetSqlCommand("pi_documentoCompraNotaCreditoDebito");
-            InputParameterAdd.Guid(objCommand, "idVenta", documentoCompra.venta.idVenta);
+            InputParameterAdd.Guid(objCommand, "idVenta", documentoCompra.compra.idCompra);
             InputParameterAdd.Int(objCommand, "tipoDocumento", (int)documentoCompra.tipoDocumento);
             InputParameterAdd.DateTime(objCommand, "fechaEmision", documentoCompra.fechaEmision);
             InputParameterAdd.DateTime(objCommand, "fechaVencimiento", documentoCompra.fechaVencimiento);
@@ -334,11 +334,11 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "formaPago", (int)documentoCompra.formaPago);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoCompra.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "serie", documentoCompra.serie);
-            InputParameterAdd.Guid(objCommand, "idDocumentoReferenciaVenta", documentoCompra.venta.documentoReferencia.idDocumentoReferenciaVenta);
+            InputParameterAdd.Guid(objCommand, "idDocumentoReferenciaVenta", documentoCompra.compra.documentoReferencia.idDocumentoReferenciaVenta);
             InputParameterAdd.Varchar(objCommand, "observaciones", documentoCompra.observaciones==null?"": documentoCompra.observaciones);
-            InputParameterAdd.Varchar(objCommand, "codigoCliente", documentoCompra.cliente.codigo);
+            InputParameterAdd.Varchar(objCommand, "codigoCliente", documentoCompra.proveedor.codigo);
             InputParameterAdd.Varchar(objCommand, "observacionesUsoInterno", documentoCompra.observacionesUsoInterno);
-            OutputParameterAdd.UniqueIdentifier(objCommand, "idDocumentoCompra");
+            OutputParameterAdd.Int(objCommand, "idDocumentoCompra");
             OutputParameterAdd.Int(objCommand, "tipoError");
             OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
 
@@ -351,7 +351,7 @@ namespace DataLayer
 
 
       
-
+        /*
         public DocumentoCompra UpdateSiguienteNumeroFacturaConsolidada(DocumentoCompra documentoCompra, String idMovimientoAlmacenList)
         {
             var objCommand = GetSqlCommand("pu_siguienteNumeroFacturaConsolidada");

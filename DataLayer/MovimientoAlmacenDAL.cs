@@ -961,10 +961,13 @@ namespace DataLayer
                 guiaRemision.estaFacturado = Converter.GetBool(row, "facturado");
                 guiaRemision.estaNoEntregado = Converter.GetBool(row, "no_entregado");
                 guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)Char.Parse(Converter.GetString(row, "motivo_traslado"));
+
+                guiaRemision.cpeNro = Converter.GetString(row, "serie_factura") + "-" + Converter.GetString(row, "correlativo_factura");
                 //PEDIDO
                 guiaRemision.pedido = new Pedido();
                 guiaRemision.pedido.idPedido = Converter.GetGuid(row, "id_pedido");
                 guiaRemision.pedido.numeroPedido = Converter.GetLong(row, "numero_pedido");
+                guiaRemision.pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
                 //CLIENTE
                 guiaRemision.pedido.cliente = new Cliente();
                 guiaRemision.pedido.cliente.codigo = Converter.GetString(row, "codigo");

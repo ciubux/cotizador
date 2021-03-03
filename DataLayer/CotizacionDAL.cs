@@ -32,6 +32,7 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaFinVigenciaPrecios", cotizacion.fechaFinVigenciaPrecios);
             InputParameterAdd.SmallInt(objCommand, "incluidoIgv", short.Parse((cotizacion.incluidoIGV?1:0).ToString()));
             InputParameterAdd.Int(objCommand, "consideraCantidades", (int)cotizacion.considerarCantidades);
+            InputParameterAdd.Guid(objCommand, "idCotizacionAntecedente", cotizacion.idCotizacionAntecedente);
 
             //Si no se cuenta con idCliente entonces se registra el grupo
             if (cotizacion.cliente.idCliente == Guid.Empty)
@@ -262,6 +263,10 @@ namespace DataLayer
                 cotizacion.maximoPorcentajeDescuentoPermitido = Converter.GetDecimal(row, "maximo_porcentaje_descuento");
                 cotizacion.esPagoContado = Converter.GetBool(row, "es_pago_contado");
                 cotizacion.tipoCotizacion = (Cotizacion.TiposCotizacion)Converter.GetInt(row, "tipo_cotizacion");
+
+                cotizacion.idCotizacionAntecedente = Converter.GetGuid(row, "id_cotizacion_antecedente");
+                cotizacion.codigoAntecedente = Converter.GetInt(row, "codigo_antecedente");
+
                 //CLIENTE
                 cotizacion.cliente = new Cliente();
                 cotizacion.cliente.codigo = Converter.GetString(row, "codigo");
@@ -271,6 +276,11 @@ namespace DataLayer
                 cotizacion.cliente.ruc = Converter.GetString(row, "ruc");
                 cotizacion.cliente.sedePrincipal = Converter.GetBool(row, "sede_principal");
                 cotizacion.cliente.esClienteLite = Converter.GetInt(row, "cliente_lite") == 1 ? true : false;
+
+                cotizacion.cliente.grupoCliente = new GrupoCliente();
+                cotizacion.cliente.grupoCliente.idGrupoCliente = Converter.GetInt(row, "cliente_id_grupo_cliente");
+                cotizacion.cliente.grupoCliente.codigo = Converter.GetString(row, "cliente_codigo_grupo");
+                cotizacion.cliente.grupoCliente.nombre = Converter.GetString(row, "cliente_nombre_grupo");
 
                 cotizacion.cliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
                 cotizacion.cliente.tipoPagoFactura =  (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
@@ -340,6 +350,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
                 cotizacionDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
                 cotizacionDetalle.producto.image = Converter.GetBytes(row, "imagen");
+                cotizacionDetalle.producto.Estado = Converter.GetInt(row, "estado");
                 cotizacionDetalle.porcentajeDescuento = Converter.GetDecimal(row, "porcentaje_descuento");
                 cotizacionDetalle.observacion = Converter.GetString(row, "observaciones");
 

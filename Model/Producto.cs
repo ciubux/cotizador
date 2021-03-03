@@ -188,6 +188,14 @@ namespace Model
             }
         }
 
+        public Decimal costoProveedor
+        {
+            get
+            {
+                return (costoSinIgv * equivalenciaProveedor);
+            }
+        }
+
         public Decimal precioProvinciaProveedor
         {
             get
@@ -197,6 +205,13 @@ namespace Model
         }
 
 
+        public Decimal costoAlternativo
+        {
+            get
+            {
+                return equivalenciaAlternativa == 0 ? 0 : (costoSinIgv / equivalenciaAlternativa);
+            }
+        }
         public Decimal precioAlternativo
         {
             get
@@ -410,6 +425,9 @@ namespace Model
                 _descontinuado = value;
             }
         }
+
+        [Display(Name = "Compra Restringida:")]
+        public int compraRestringida { get; set; }
 
         [Display(Name = "Agregar descripción larga en detalle de cotización:")]
         public int agregarDescripcionCotizacion { get; set; }

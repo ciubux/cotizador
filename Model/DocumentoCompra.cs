@@ -406,7 +406,7 @@ namespace Model
         [Display(Name = "Sede MP:")]
         public Ciudad ciudad { get; set; }
 
-        [Display(Name = "Cliente:")]
+        [Display(Name = "Proveedor:")]
         public Proveedor proveedor { get; set; }
 
         [Display(Name = "Tasa IGV:")]

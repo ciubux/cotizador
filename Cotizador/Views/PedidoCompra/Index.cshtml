@@ -1403,6 +1403,60 @@
 
                     </div>
 
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-12 text-center" style="text-align: center;">Unidad Proveedor</label>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center" id="verUnidadProveedor"></p>
+                                </div>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center"><b>Precio: </b> S/ <span id="verPrecioProveedor"></span></p>
+                                    <p class="form-control-static text-center"><b>Precio Provincia: </b> S/ <span id="verPrecioProvinciaProveedor"></span></p>
+                                    @if (pedido.usuario.visualizaCostos)
+                                    {
+                                        <p class="form-control-static text-center"><b>Costo: </b> S/ <span id="verCostoProveedor"></span></p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-12" style="text-align: center;">Unidad MP</label>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center" id="verUnidadMP"></p>
+                                </div>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center"><b>Precio: </b> S/ <span id="verPrecioMP"></span></p>
+                                    <p class="form-control-static text-center"><b>Precio Provincia: </b> S/ <span id="verPrecioProvinciaMP"></span></p>
+                                    @if (pedido.usuario.visualizaCostos)
+                                    {
+                                        <p class="form-control-static text-center"><b>Costo: </b> S/ <span id="verCostoMP"></span></p>
+                                    }
+                                    <p class="form-control-static text-center">
+                                        <button id="lnkMostrarLogPrecioProducto" type="button" class="btn btn-link lnkAction lnkActionLabel" data-toggle="modal" data-target="#modalLogPrecioProducto">Ver Histórico</button>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-12 text-center" style="text-align: center;">Unidad Alternativa</label>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center" id="verUnidadAlternativa"></p>
+                                </div>
+                                <div class="col-xs-12">
+                                    <p class="form-control-static text-center"><b>Precio: </b> S/ <span id="verPrecioAlternativa"></span></p>
+                                    <p class="form-control-static text-center"><b>Precio Provincia: </b> S/ <span id="verPrecioProvinciaAlternativa"></span></p>
+                                    @if (pedido.usuario.visualizaCostos)
+                                    {
+                                        <p class="form-control-static text-center"><b>Costo: </b> S/ <span id="verCostoAlternativa"></span></p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <table id="tableMostrarPrecios" class="table" data-editing="false"
                            data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
                            data-editing-allow-add="true"
@@ -1436,6 +1490,7 @@
     </div>
 </div>
 
+@Html.Action("LogPrecioProducto", "Precio")
 
 
 <div class="modal fade" id="modalGenerarExtorno" tabindex="-1">
@@ -1869,6 +1924,11 @@
 <span id="spnProductoDescontinuado" style="display: none;">
     @Html.Partial("../Producto/_LabelRestringido")
 </span>
+
+<span id="spnProductoCompraRestringida" style="display: none;">
+    @Html.Partial("../Producto/_LabelCompraRestringida")
+</span>
+
 
 <span id="spnDescripcionLargaInfo" style="display: none;">
     @Html.Partial("../Producto/_LabelDescripcionLarga")

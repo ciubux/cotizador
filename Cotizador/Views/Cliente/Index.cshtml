@@ -560,12 +560,12 @@
                                 </div>
 
                                 <div class="col-sm-6 col-lg-4">
-                                    <div class="form-group">
+                                    @*<div class="form-group">
                                         @Html.LabelFor(c => cliente.contacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
                                         <div class="col-xs-8 col-sm-8 col-lg-8">
                                             <p class="form-control-static" id="verContacto"></p>
                                         </div>
-                                    </div>
+                                    </div>*@
                                 </div>
                             </div>
 
@@ -582,12 +582,12 @@
                                 </div>
 
                                 <div class="col-sm-6 col-lg-4">
-                                    <div class="form-group">
+                                    @*<div class="form-group">
                                         @Html.LabelFor(c => cliente.telefonoContacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
                                         <div class="col-xs-8 col-sm-8 col-lg-8">
                                             <p class="form-control-static" id="verTelefonoContacto"></p>
                                         </div>
-                                    </div>
+                                    </div>*@
                                 </div>
 
 
@@ -603,12 +603,12 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6 col-lg-4">
-                                    <div class="form-group">
+                                    @*<div class="form-group">
                                         @Html.LabelFor(c => cliente.emailContacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
                                         <div class="col-xs-8 col-sm-8 col-lg-8">
                                             <p class="form-control-static" id="verEmailContacto"></p>
                                         </div>
-                                    </div>
+                                    </div>*@
 
                                 </div>
                             </div>
@@ -975,10 +975,14 @@
                         <div id="cliente_contactos" class="tab-pane fade">
                             <div class="row">
                                 <div class="col-sm-6 col-lg-6">
-                                    <button id="btnAgregarContacto" type="button" class="btn btn-primary" data-toggle='modal' data-target='#modalContactoCliente' >Agregar Contacto</button>
+                                    <button id="btnAgregarContacto" type="button" class="btn btn-primary" data-toggle='modal' data-target='#modalContactoCliente'>Agregar Contacto</button>
+                                    @*<button id="btnExportDirecciones" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastShowDirecciones", "Cliente")">Exportar Direcciones</button>*@
                                 </div>
                                 <div class="col-sm-6 col-lg-6 text-right">
-                                    @*<button id="btnExportDirecciones" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastShowDirecciones", "Cliente")">Exportar Direcciones</button>*@
+                                    <div class="form-group" style="padding-right: 15px;">
+                                        <label class="control-label">Última Actualización:</label>
+                                        <span class="form-control-static" id="verFechaActualizacionContactos"></span>
+                                    </div>                                    
                                 </div>
                             </div>
                             <table id="tableListaContactos" class="table" data-editing="false"
@@ -993,7 +997,8 @@
                                         <th data-name="correo" data-sortable="false" data-breakpoints="xs">Correo</th>
                                         <th data-name="cargo" data-sortable="false" data-breakpoints="xs">Cargo</th>
                                         <th data-name="tipos" data-sortable="false" data-breakpoints="xs">Tipo</th>
-                                        <th data-name="aplicaRuc" data-sortable="false" data-breakpoints="xs">Aplica al RUC</th>
+                                        <th data-name="aplicaRuc" data-sortable="false" data-breakpoints="xs">Visible para otras Sedes</th>
+                                        <th data-name="fechaActualizacion" data-sortable="false" data-breakpoints="xs">Última Actualización</th>
                                         <th data-sortable="false" data-breakpoints="xs"></th>
                                     </tr>
                                 </thead>
@@ -1361,7 +1366,7 @@
                             <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="chkClienteContactoAplicaRuc">
                             <label class="onoffswitch-label" for="chkClienteContactoAplicaRuc"></label>
                         </div>
-                        <h5 id="lblChkClienteContactoAplicaRuc" for="chkClienteContactoAplicaRuc" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Aplica a todos los clientes con el mismo RUC</h5>
+                        <h5 id="lblChkClienteContactoAplicaRuc" for="chkClienteContactoAplicaRuc" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Visible para todas las sedes del cliente RUC</h5>
                     </div>
                 </div>
                 <div class="form-group row">

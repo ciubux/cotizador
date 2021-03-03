@@ -33,6 +33,11 @@ namespace Model
 
         public Guid idCotizacion { get; set; }
 
+        public Guid idCotizacionAntecedente { get; set; }
+
+        public bool productosInactivosRemovidos { get; set; }
+        public Int64 codigoAntecedente { get; set; }
+
         [Display(Name = "Número Cotización:")]
         public Int64 codigo { get; set; }
         public DateTime fecha { get; set; }

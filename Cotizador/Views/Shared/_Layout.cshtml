@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "711";
+    TempData["ScriptVersion"] = "758";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -34,9 +34,6 @@
                 @Html.HiddenFor(model => usuario.idUsuario)
 
                 <img src="~/images/logo_ind.jpg" id="imagenMP" height="42" style="margin:3px; margin-right: 10px ;" />
-
-
-
 
 
             </div>

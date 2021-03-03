@@ -38,7 +38,7 @@ namespace BusinessLayer
             }
         }        
 
-        /*
+        
         public DocumentoCompra InsertarNotaCredito(DocumentoCompra documentoCompra)
         {
             using (var dal = new DocumentoCompraDAL())
@@ -56,20 +56,21 @@ namespace BusinessLayer
                     //Se recupera el documento de venta creado para poder visualizarlo
                     documentoCompra = dal.SelectDocumentoCompra(documentoCompra);
                     documentoCompra.tipoPago = (DocumentoCompra.TipoPago)Int32.Parse(documentoCompra.cPE_CABECERA_COMPRA.TIP_PAG);
-                    documentoCompra.cPE_RESPUESTA_BE = new CPE_RESPUESTA_BE();
-                    documentoCompra.cPE_RESPUESTA_BE.CODIGO = Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK;
+                    documentoCompra.cPE_RESPUESTA_COMPRA = new CPE_RESPUESTA_COMPRA();
+                    documentoCompra.cPE_RESPUESTA_COMPRA.CODIGO = Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK;
                 }
                 else
                 {
-                    documentoCompra.cPE_RESPUESTA_BE = new CPE_RESPUESTA_BE();
-                    documentoCompra.cPE_RESPUESTA_BE.CODIGO = Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_ERROR_DATA;
-                    documentoCompra.cPE_RESPUESTA_BE.DETALLE = documentoCompra.tiposErrorValidacionString + ". " + documentoCompra.descripcionError;
+                    documentoCompra.cPE_RESPUESTA_COMPRA = new CPE_RESPUESTA_COMPRA();
+                    documentoCompra.cPE_RESPUESTA_COMPRA.CODIGO = Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_ERROR_DATA;
+                    documentoCompra.cPE_RESPUESTA_COMPRA.DETALLE = documentoCompra.tiposErrorValidacionString + ". " + documentoCompra.descripcionError;
                 }
                 return documentoCompra;
             }
         }
 
 
+        /*
         public DocumentoCompra InsertarNotaDebito(DocumentoCompra documentoCompra)
         {
             using (var dal = new DocumentoCompraDAL())

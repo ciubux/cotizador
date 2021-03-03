@@ -247,6 +247,10 @@ textarea {
     #modalContactoCliente .modal-dialog {
         width: 600px;
     }
+
+    #modalLogPrecioProducto .modal-dialog {
+        width: 800px;
+    }
 }
 
 
@@ -841,6 +845,22 @@ $darkred: darken($red, 0.2);*/
     margin-left: -3px;
 }
 
+
+.lblAlertaProductoCompraRestringida {
+    background-color: #D98880;
+    border-radius: 3px;
+    color: #111111;
+    font-size: 10px;
+    text-align: center;
+    padding: 2px 3px 1px 3px;
+    font-weight: bold;
+}
+
+.lblAlertaProductoCompraRestringida img {
+    margin-top: -2px;
+    margin-left: -3px;
+}
+
 /* Efecto Parpadeo */
 
 .labelModificado {
@@ -1087,4 +1107,18 @@ $darkred: darken($red, 0.2);*/
 
 .sss-icon {
     cursor: pointer;
+}
+
+
+.mini-info-text {
+    font-size: 12px;
+    color: #aaaaaa;
+}
+
+.producto-inactivo-row {
+    opacity: 0.5;
+    background-image: url(/images/producto_inactivo_label.png);
+    background-position: center;
+    background-repeat: round;
+    background-size: contain;
 }

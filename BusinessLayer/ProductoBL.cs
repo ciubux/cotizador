@@ -3,6 +3,7 @@ using DataLayer;
 using System.Collections.Generic;
 using System;
 using Model;
+using Model.UTILES;
 using System.IO;
 
 namespace BusinessLayer
@@ -115,7 +116,7 @@ namespace BusinessLayer
                 return producto;
             }
         }
-
+        
         public List<Producto> getProductos(Producto producto)
         {
             using (var productoDAL = new ProductoDAL())
@@ -123,6 +124,60 @@ namespace BusinessLayer
                 return productoDAL.SelectProductos(producto);
             }
         }
+
+        public List<Producto> GetProductosBySKU(List<String> skus)
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                return productoDAL.GetProductosBySKU(skus);
+            }
+        }
+
+        public List<LogRegistroCampos> GetHistorialPreciosProductos(Guid idProducto)
+        {
+            using (LogCambioDAL logDal = new LogCambioDAL())
+            {
+                List<int> campos = new List<int>();
+                campos.Add(79);
+                campos.Add(80);
+                campos.Add(81);
+
+                List<LogCambio> logs = logDal.getLogCamposRegistro(idProducto.ToString(), campos);
+
+                List<LogRegistroCampos> historial = new List<LogRegistroCampos>();
+
+                LogRegistroCampos item = null;
+
+                foreach (LogCambio log in logs)
+                {
+                    if (item == null || !item.fechaInicioVigencia.Equals(log.fechaInicioVigencia.ToString("dd/MM/yyyy")))
+                    {
+                        if (item != null)
+                        {
+                            historial.Add(item);
+                        }
+                        item = new LogRegistroCampos();
+
+                        item.fechaInicioVigencia = log.fechaInicioVigencia.ToString("dd/MM/yyyy");
+                    } 
+
+                    switch(log.idCampo)
+                    {
+                        case 79: item.dato1 = log.valor; item.fechaModificacion1 = log.FechaEdicion.ToString("dd/MM/yyyy HH:mm"); break;
+                        case 80: item.dato2 = log.valor; item.fechaModificacion2 = log.FechaEdicion.ToString("dd/MM/yyyy HH:mm"); break;
+                        case 81: item.dato3 = log.valor; item.fechaModificacion3 = log.FechaEdicion.ToString("dd/MM/yyyy HH:mm"); break;
+                    }
+                }
+
+                if (item != null)
+                {
+                    historial.Add(item);
+                }
+
+                return historial;
+            }
+        }
+
 
         public Producto getProductoById(Guid idProducto) 
         {

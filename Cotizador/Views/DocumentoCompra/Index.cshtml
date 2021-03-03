@@ -253,7 +253,7 @@
         </div>
 
         <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px; display: none;">
-            <button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchExcel", "DocumentoComprat")">Exportar</button>
+            <button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchExcel", "DocumentoCompra")">Exportar</button>
         </div>
 
         <table id="tableFacturas" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
@@ -637,7 +637,7 @@
 
             <div class="modal-footer">
 
-                <input type="hidden" id="idDocumentoVenta" />
+                <input type="hidden" id="idDocumentoCompra" />
                 <div class="pull-left">
                     @if (documentoCompra.usuario.creaDocumentosVenta || documentoCompra.usuario.visualizaDocumentosVenta)
                     {

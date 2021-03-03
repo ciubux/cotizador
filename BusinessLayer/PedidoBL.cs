@@ -351,6 +351,12 @@ namespace BusinessLayer
                     pedido.seguimientoPedido.observacion = "El producto " + pedidoDetalle.producto.sku + " es de venta restringida.";
                     pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
                 }
+
+                if (pedidoDetalle.producto.compraRestringida == 1 && !pedido.usuario.apruebaPedidosVentaRestringida)
+                {
+                    pedido.seguimientoPedido.observacion = "El producto " + pedidoDetalle.producto.sku + " tiene RESTRICCIÓN DE COMPRA.";
+                    pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                }
             }
 
             if (pedido.cliente.tipoLiberacionCrediticia == Persona.TipoLiberacionCrediticia.bloqueado)

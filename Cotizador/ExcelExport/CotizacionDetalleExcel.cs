@@ -362,7 +362,6 @@ namespace Cotizador.ExcelExport
                     HSSFPicture pictdet = drawing.CreatePicture(detAnchor, picDet) as HSSFPicture;
                     pictdet.Resize(1);
 
-
                     definirListaUnidades(sheet, obj, det, i - 1, 5);
 
                     String unidadDesc = "";

@@ -1,0 +1,68 @@
+﻿@{ 
+    Model.Usuario usuario = ViewBag.usuario;
+}
+<div class="modal fade" id="modalLogPrecioProducto" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalLogPrecioProductoTitle"><b>Historial de precios de lista</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-2">Producto:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="verProductoLPP"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-4">Código:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCodigoProductoLPP"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table id="tableLogPrecioProducto" class="table" data-editing="false"
+                           data-editing-allow-add="true"
+                           data-editing-allow-delete="true"
+                           data-editing-allow-edit="false"
+                           data-sorting="true"
+                           data-show-toggle="false"
+                           data-editing-hide-text="Finalizar edición"
+                           data-editing-add-text="Descartar cambios">
+                        <thead>
+                            <tr>
+                                <th data-name="fechaInicioVigencia" data-visible="true">Fecha Inicio Vigencia</th>
+                                <th data-name="precio" data-visible="true">Precio</th>
+                                <th data-name="precioProvincias" data-visible="true">Precio Provincia</th>
+                                @if (usuario.visualizaCostos)
+                                {
+                                <th data-name="costo" data-visible="true">Costo</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>

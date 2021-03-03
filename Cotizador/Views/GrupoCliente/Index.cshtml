@@ -323,17 +323,37 @@
                             <div class="row">
 
                                 <div class="col-sm-12 col-lg-6">
-                                    <div class="onoffswitch">
-                                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="chkSoloCanasta">
-                                        <label class="onoffswitch-label" for="chkSoloCanasta"></label>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="onoffswitch">
+                                                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="chkSoloCanasta">
+                                                <label class="onoffswitch-label" for="chkSoloCanasta"></label>
+                                            </div>
+                                            <h5 id="lblChkCanasta" style="width: 80%; margin-left: 45px; margin-top: -22px; font-weight:bold; cursor:pointer;" class="text-muted">Ver solo canasta de compra habitual</h5>
+                                        </div>
+                                        
+                                        <div class="col-sm-12">
+                                            <div class="onoffswitch">
+                                                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="chkSoloVigentes">
+                                                <label class="onoffswitch-label" for="chkSoloVigentes"></label>
+                                            </div>
+                                            <h5 id="lblChkSoloVigentes" style="width: 80%; margin-left: 45px; margin-top: -22px; font-weight:bold; cursor:pointer;" class="text-muted">Ocultar precios vencidos</h5>
+                                        </div>
                                     </div>
-                                    <h5 id="lblChkCanasta" style="width: 80%; margin-left: 45px; margin-top: -22px; font-weight:bold; cursor:pointer;" class="text-muted">Ver solo canasta de compra habitual</h5>
-
                                 </div>
                                 <div class="col-sm-12 col-lg-6">
                                     <div class="form-group right" style="padding-right: 10px;">
-                                        <button type="button" id="btnLimpiarCanasta" class="btn btn-primary ">Limpiar Canasta Habitual</button>
-                                        <button id="btnExportCanasta" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastShowCanasta", "GrupoCliente")">Exportar Canasta</button>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <span> Mostrar precios vigentes desde </span>
+                                                <input style="width: 90px;" type="text" id="ppFechaDesde" name="ppFechaDesde" autocomplete="off" value="@ViewBag.fechaConsultaPrecios.ToString("dd/MM/yyyy")">
+                                                <button type="button" id="btnPPActualizarFechaDesde" class="btn btn-success">Buscar Precios</button>
+                                            </div>
+                                            <div class="col-sm-12" style="text-align: right; margin-top: 5px;">
+                                                <button type="button" id="btnLimpiarCanasta" class="btn btn-primary ">Limpiar Canasta Habitual</button>
+                                                <button id="btnExportCanasta" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastShowCanasta", "GrupoCliente")">Exportar Canasta</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -346,9 +366,9 @@
                                 <thead>
                                     <tr>
                                         <th data-name="idProducto" data-visible="false"></th>
-                                       
-                                        <th data-name="canasta" class="listaPreciosCanasta" data-sortable="false" hasEdit="@editaCanasta" >Pertenece <br />Canasta<br />Habitual</th>
-                                        
+
+                                        <th data-name="canasta" class="listaPreciosCanasta" data-sortable="false" hasEdit="@editaCanasta">Pertenece <br />Canasta<br />Habitual</th>
+
                                         <th data-name="proveedor" data-sortable="false">Prov.</th>
                                         <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
                                         <th data-name="producto" data-sortable="false">Producto / Descripción</th>

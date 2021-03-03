@@ -265,7 +265,7 @@ namespace DataLayer
 
 
 
-        public Transaccion SelectPlantillaCompra(Compra transaccion, Usuario usuario, Guid? idProducto = null, List<Guid> idProductoList = null)
+        public Compra SelectPlantillaCompra(Compra transaccion, Usuario usuario, Guid? idProducto = null, List<Guid> idProductoList = null)
         {
             var objCommand = GetSqlCommand("ps_plantillaCompra");
 
@@ -425,19 +425,10 @@ namespace DataLayer
 
 
 
-        /*
-
-
-
-
-
-
-
-
         public void InsertTransaccionNotaCredito(Compra transaccionExtorno)
         {
             this.BeginTransaction(IsolationLevel.ReadCommitted);
-            var objCommand = GetSqlCommand("pi_ventaNotaCredito");
+            var objCommand = GetSqlCommand("pi_compraNotaCredito");
             InputParameterAdd.Guid(objCommand, "idUsuario", transaccionExtorno.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "serieDocumentoReferencia", transaccionExtorno.documentoReferencia.serie);
             InputParameterAdd.Varchar(objCommand, "numeroDocumentoReferencia", transaccionExtorno.documentoReferencia.numero);
@@ -452,17 +443,17 @@ namespace DataLayer
             
 
 
-            OutputParameterAdd.UniqueIdentifier(objCommand, "idCompra");
-            OutputParameterAdd.BigInt(objCommand, "numeroCompra");
-            OutputParameterAdd.UniqueIdentifier(objCommand, "idDocumentoReferenciaCompra");
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idVenta");
+            OutputParameterAdd.BigInt(objCommand, "numeroVenta");
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idDocumentoReferenciaVenta");
 
             OutputParameterAdd.Int(objCommand, "tipoError");
             OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
             ExecuteNonQuery(objCommand);
 
-            transaccionExtorno.idCompra = (Int)objCommand.Parameters["@idCompra"].Value;
-            transaccionExtorno.numero = (Int64)objCommand.Parameters["@numeroCompra"].Value;
-            transaccionExtorno.documentoReferencia.idDocumentoReferenciaCompra = (Guid)objCommand.Parameters["@idDocumentoReferenciaCompra"].Value;
+            transaccionExtorno.idCompra = (Guid)objCommand.Parameters["@idVenta"].Value;
+            transaccionExtorno.numero = (Int64)objCommand.Parameters["@numeroVenta"].Value;
+            transaccionExtorno.documentoReferencia.idDocumentoReferenciaVenta = (Guid)objCommand.Parameters["@idDocumentoReferenciaVenta"].Value;
 
             var tipoErrorValidacion = (GuiaRemisionValidacion.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
             var descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
@@ -470,7 +461,7 @@ namespace DataLayer
             this.InsertCompraDetalle(transaccionExtorno);
 
             objCommand = GetSqlCommand("pu_venta");
-            InputParameterAdd.Guid(objCommand, "idCompra", transaccionExtorno.idCompra);
+            InputParameterAdd.Guid(objCommand, "idVenta", transaccionExtorno.idCompra);
             InputParameterAdd.Varchar(objCommand, "observaciones", "Se crea Transacción.");
             ExecuteNonQuery(objCommand);
 
@@ -482,7 +473,7 @@ namespace DataLayer
         {
             this.BeginTransaction(IsolationLevel.ReadCommitted);
             var objCommand = GetSqlCommand("pu_ventaNotaCredito");
-            transaccionExtorno.idCompra = transaccionExtorno.documentoCompra.movimientoAlmacen.venta.idCompra;
+            transaccionExtorno.idCompra = transaccionExtorno.documentoCompra.movimientoAlmacen.venta.idVenta;
 
             InputParameterAdd.Guid(objCommand, "idCompra", transaccionExtorno.idCompra);
             InputParameterAdd.Guid(objCommand, "idUsuario", transaccionExtorno.usuario.idUsuario);
@@ -498,13 +489,13 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "tipoNotaCredito", (int)transaccionExtorno.tipoNotaCredito);
             InputParameterAdd.DateTime(objCommand, "fechaEmision", transaccionExtorno.documentoCompra.fechaEmision);
 
-            OutputParameterAdd.UniqueIdentifier(objCommand, "idDocumentoReferenciaCompra");
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idDocumentoReferenciaVenta");
 
             OutputParameterAdd.Int(objCommand, "tipoError");
             OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
             ExecuteNonQuery(objCommand);
 
-            transaccionExtorno.documentoReferencia.idDocumentoReferenciaCompra = (Guid)objCommand.Parameters["@idDocumentoReferenciaCompra"].Value;
+            transaccionExtorno.documentoReferencia.idDocumentoReferenciaVenta = (Guid)objCommand.Parameters["@idDocumentoReferenciaVenta"].Value;
 
             var tipoErrorValidacion = (GuiaRemisionValidacion.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
             var descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
@@ -520,20 +511,22 @@ namespace DataLayer
 
         }
 
-
         public void InsertCompraDetalle(Transaccion venta)
         {
             foreach (PedidoDetalle documentoDetalle in venta.pedido.pedidoDetalleList)
             {
                 var objCommand = GetSqlCommand("pi_ventaDetalle");
-                InputParameterAdd.Guid(objCommand, "idCompra", venta.idCompra);
+                InputParameterAdd.Guid(objCommand, "idVenta", venta.idVenta);
                 InputParameterAdd.Guid(objCommand, "idUsuario", venta.usuario.idUsuario);
                 InputParameterAdd.Guid(objCommand, "idProducto", documentoDetalle.producto.idProducto);
                 InputParameterAdd.Int(objCommand, "cantidad", documentoDetalle.cantidad);
                 InputParameterAdd.Varchar(objCommand, "observaciones", documentoDetalle.observacion);
                 InputParameterAdd.Varchar(objCommand, "unidadInternacional", documentoDetalle.unidadInternacional);
                 InputParameterAdd.Decimal(objCommand, "precioUnitario", documentoDetalle.precioUnitario);
-                InputParameterAdd.Int(objCommand, "equivalencia", documentoDetalle.producto.equivalencia);
+                if (documentoDetalle.esPrecioAlternativo)
+                    InputParameterAdd.Decimal(objCommand, "equivalencia", documentoDetalle.ProductoPresentacion.Equivalencia);
+                else
+                    InputParameterAdd.Decimal(objCommand, "equivalencia", 1);
                 InputParameterAdd.Varchar(objCommand, "unidad", documentoDetalle.unidad);
                 InputParameterAdd.Int(objCommand, "esPrecioAlternativo", documentoDetalle.esPrecioAlternativo ? 1 : 0);
 
@@ -544,7 +537,7 @@ namespace DataLayer
 
 
 
-
+        /*
 
         public void InsertCompraNotaDebito(Compra venta)
         {

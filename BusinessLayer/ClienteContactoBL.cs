@@ -40,5 +40,13 @@ namespace BusinessLayer
                 return dal.update(obj);
             }
         }
+
+        public bool updateEliminar(Guid idClienteContacto, Guid idUsuario, Guid idCliente)
+        {
+            using (var dal = new ClienteContactoDAL())
+            {
+                return dal.updateEliminar(idClienteContacto, idUsuario, idCliente);
+            }
+        }
     }
 }

@@ -99,6 +99,7 @@ namespace Model
         public static String VAR_SESSION_GRUPO_CLIENTE_BUSQUEDA = "grupoClienteBusqueda";
         public static String VAR_SESSION_GRUPO_CLIENTE_LISTA = "grupoClienteList";
         public static String VAR_SESSION_GRUPO_CLIENTE_VER = "grupoClienteVer";
+        public static String VAR_SESSION_GRUPO_CLIENTE_BUSQUEDA_FECHA_PRECIOS_VER = "grupoClienteVeFechaPreciosVer";
 
         public static String VAR_SESSION_PRODUCTO = "producto";
         public static String VAR_SESSION_PRODUCTO_BUSQUEDA = "productoBusqueda";

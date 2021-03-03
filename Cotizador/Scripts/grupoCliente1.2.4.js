@@ -6,13 +6,38 @@ jQuery(function ($) {
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
     var TITLE_EXITO = 'Operación Realizada';
 
+    /**
+     * ######################## INICIO CONTROLES DE FECHAS
+     */
+    $.datepicker.regional['es'] = {
+        closeText: 'Cerrar',
+        prevText: '< Ant',
+        nextText: 'Sig >',
+        currentText: 'Hoy',
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+        weekHeader: 'Sm',
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+    };
+    $.datepicker.setDefaults($.datepicker.regional['es']);
+
+    $("#ppFechaDesde").datepicker({ dateFormat: "dd/mm/yy" });
+
+
     $(document).ready(function () {
         console.log("Hello world!");
         $("#btnBusqueda").click();
         cargarChosenCliente();
         cargarChosenClienteRuc();
         verificarSiExisteGrupoCliente();
-       
+        
         FooTable.init('#tableMiembrosGrupoCliente');
         console.log("Hello world!");
     });
@@ -243,7 +268,20 @@ jQuery(function ($) {
     }
 
 
+    $("#ppFechaDesde").change(function () {
+        changeAjaxVal($(this).val(), "ChangeFechaVigenciaPrecios");
+    });
 
+    function changeAjaxVal(val, url) {
+        $.ajax({
+            url: "/GrupoCliente/" + url,
+            type: 'POST',
+            data: {
+                val: val
+            },
+            success: function () { }
+        });
+    }
 
 
     function validacionDatosGrupoCliente() {
@@ -1293,6 +1331,108 @@ jQuery(function ($) {
         window.location.href = $(this).attr("actionLink");
     });
 
+    $("#btnPPActualizarFechaDesde").click(function () {
+
+        $.ajax({
+            url: "/GrupoCliente/ConsultaPreciosGrupo",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idGrupoCliente: idGrupoClienteView
+            },
+            success: function (res) {
+                var preciosList = res.precios;
+                setTablePrecios(preciosList);
+            }
+        });
+    });
+
+    function setTablePrecios(preciosList) {
+        $("#tableListaPrecios > tbody").empty();
+        var margenText = "";
+        var canastaText = "";
+
+        for (var i = 0; i < preciosList.length; i++) {
+            var fechaInicioVigencia = preciosList[i].precioCliente.fechaInicioVigencia;
+            var fechaFinVigencia = preciosList[i].precioCliente.fechaFinVigencia;
+
+            var checkedCanasta = "";
+            if (preciosList[i].producto.precioClienteProducto.estadoCanasta) {
+                checkedCanasta = "checked";
+            }
+
+            if (fechaInicioVigencia == null)
+                fechaInicioVigencia = "No Definida";
+            else
+                fechaInicioVigencia = invertirFormatoFecha(preciosList[i].precioCliente.fechaInicioVigencia.substr(0, 10));
+
+            if (fechaFinVigencia == null)
+                fechaFinVigencia = "No Definida";
+            else
+                fechaFinVigencia = invertirFormatoFecha(preciosList[i].precioCliente.fechaFinVigencia.substr(0, 10));
+
+            margenText = "";
+            if ($("#tableListaPrecios th.porcentajeMargen").length) {
+                margenText = '<td>  ' + Number(preciosList[i].porcentajeMargenMostrar).toFixed(1) + ' % </td>';
+            }
+
+            canastaText = "";
+
+            if ($("#tableListaPrecios th.listaPreciosCanasta").length) {
+                canastaText = '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + ' ' + disabledCanastaView + '>  </td>';
+            }
+
+            spnSkuCliente = '<span class="spnTextSkuCliente" savedValue=""> <span class="spnSkuCliente"></span><br/> <a class="btn btn-link lnkAction lnkActionLabel lnkAgregarSkuCliente">Agregar SKU Cliente</a></span>';
+            if (preciosList[i].precioCliente.skuCliente != null && preciosList[i].precioCliente.skuCliente != '') {
+                spnSkuCliente = '<span class="spnTextSkuCliente" savedValue="' + preciosList[i].precioCliente.skuCliente + '"> - <span class="spnSkuCliente">' + preciosList[i].precioCliente.skuCliente + '</span>' + '<br/> <a class="btn btn-link lnkAction lnkActionLabel lnkAgregarSkuCliente">Editar SKU Cliente</a></span>';
+            }
+
+            var precioVigente = "0";
+            if (preciosList[i].precioCliente.precioVigente) {
+                precioVigente = "1";
+            }
+
+            var preciosRow = '<tr data-expanded="true" precioVigente="' + precioVigente + '">' +
+                '<td>  ' + preciosList[i].producto.idProducto + '</td>' +
+                canastaText +
+                '<td>  ' + preciosList[i].producto.proveedor + '  </td>' +
+                '<td>  ' + preciosList[i].producto.sku + spnSkuCliente + '</td>' +
+                '<td>  ' + preciosList[i].producto.skuProveedor + ' - ' + preciosList[i].producto.descripcion + ' </td>' +
+                '<td>' + fechaInicioVigencia + '</td>' +
+                '<td>' + fechaFinVigencia + '</td>' +
+                '<td>  ' + preciosList[i].unidad + '</td>' +
+                '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + preciosList[i].producto.image + '">  </td>' +
+                '<td>  ' + Number(preciosList[i].precioLista).toFixed(cantidadDecimales) + '  </td>' +
+                '<td>  ' + Number(preciosList[i].porcentajeDescuentoMostrar).toFixed(1) + ' % </td>' +
+
+                '<td>  ' + Number(preciosList[i].precioNeto).toFixed(cantidadDecimales) + '  </td>' +
+                '<td>  ' + Number(preciosList[i].flete).toFixed(cantidadDecimales) + '</td>' +
+                '<td>  ' + Number(preciosList[i].producto.precioClienteProducto.precioUnitario).toFixed(cantidadDecimales) + '</td>' +
+                margenText +
+                '<td>' +
+                '<button type="button" idProducto="' + preciosList[i].producto.idProducto + '" class="btnMostrarPrecios btn btn-primary bouton-image botonPrecios">Ver</button>' +
+                '</td>' +
+                '</tr>';
+
+            $("#tableListaPrecios").append(preciosRow);
+
+        }
+
+        if (preciosList.length > 0) {
+            $("#msgPreciosSinResultados").hide();
+        }
+        else {
+            $("#msgPreciosSinResultados").show();
+        }
+
+        FooTable.init('#tableListaPrecios');
+
+        $("#chkSoloCanasta").prop("checked", false);
+        $("#chkSoloVigentes").prop("checked", false);
+        $("#lblChkCanasta").addClass("text-muted");
+        $("#lblChkSoloVigentes").addClass("text-muted");
+    }
+
     var idClienteView = "";
 
     $("#btnExportCanasta").click(function () {
@@ -1412,6 +1552,7 @@ jQuery(function ($) {
     
 
     var idGrupoClienteView = "";
+    var disabledCanastaView = "";
     var editGrupoCliente = 0;
     var editaMiembros = 0;
 
@@ -1463,88 +1604,15 @@ jQuery(function ($) {
 
                 
 
-                var preciosList = result.precios;
-                var margenText = "";
-                var canastaText = "";
-                var disabledCanasta = "";
-
-                var editaCliente = parseInt($("#tableListaPrecios th.listaPreciosCanasta").attr("hasEdit"));
-
-                disabledCanasta = "";
 
                 if (obj.modificaCanasta != 1) {
-                    disabledCanasta = "disabled";
+                    disabledCanastaView = "disabled";
                 }
 
-                $("#tableListaPrecios > tbody").empty();
-                for (var i = 0; i < preciosList.length; i++) {
-                    var fechaInicioVigencia = preciosList[i].precioCliente.fechaInicioVigencia;
-                    var fechaFinVigencia = preciosList[i].precioCliente.fechaFinVigencia;
+                var preciosList = result.precios;
+                setTablePrecios(preciosList);
 
-                    var checkedCanasta = "";
-                    if (preciosList[i].producto.precioClienteProducto.estadoCanasta) {
-                        checkedCanasta = "checked";
-                    }
-
-                    if (fechaInicioVigencia == null)
-                        fechaInicioVigencia = "No Definida";
-                    else
-                        fechaInicioVigencia = invertirFormatoFecha(preciosList[i].precioCliente.fechaInicioVigencia.substr(0, 10));
-
-                    if (fechaFinVigencia == null)
-                        fechaFinVigencia = "No Definida";
-                    else
-                        fechaFinVigencia = invertirFormatoFecha(preciosList[i].precioCliente.fechaFinVigencia.substr(0, 10));
-
-                    margenText = "";
-                    if ($("#tableListaPrecios th.porcentajeMargen").length) {
-                        margenText = '<td>  ' + Number(preciosList[i].porcentajeMargenMostrar).toFixed(1) + ' % </td>';
-                    }
-
-                    canastaText = "";
-                    
-                    if ($("#tableListaPrecios th.listaPreciosCanasta").length) {
-                        canastaText = '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + ' ' + disabledCanasta + '>  </td>';
-                    }
-
-                    spnSkuCliente = '<span class="spnTextSkuCliente" savedValue=""> <span class="spnSkuCliente"></span><br/> <a class="btn btn-link lnkAction lnkActionLabel lnkAgregarSkuCliente">Agregar SKU Cliente</a></span>';
-                    if (preciosList[i].precioCliente.skuCliente != null && preciosList[i].precioCliente.skuCliente != '') {
-                        spnSkuCliente = '<span class="spnTextSkuCliente" savedValue="' + preciosList[i].precioCliente.skuCliente + '"> - <span class="spnSkuCliente">' + preciosList[i].precioCliente.skuCliente + '</span>' + '<br/> <a class="btn btn-link lnkAction lnkActionLabel lnkAgregarSkuCliente">Editar SKU Cliente</a></span>';
-                    }
-
-                    var preciosRow = '<tr data-expanded="true">' +
-                        '<td>  ' + preciosList[i].producto.idProducto + '</td>' +
-                        canastaText +
-                        '<td>  ' + preciosList[i].producto.proveedor + '  </td>' +
-                        '<td>  ' + preciosList[i].producto.sku + spnSkuCliente + '</td>' +
-                        '<td>  ' + preciosList[i].producto.skuProveedor + ' - ' + preciosList[i].producto.descripcion + ' </td>' +
-                        '<td>' + fechaInicioVigencia + '</td>' +
-                        '<td>' + fechaFinVigencia + '</td>' +
-                        '<td>  ' + preciosList[i].unidad + '</td>' +
-                        '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + preciosList[i].producto.image + '">  </td>' +
-                        '<td>  ' + Number(preciosList[i].precioLista).toFixed(cantidadDecimales) + '  </td>' +
-                        '<td>  ' + Number(preciosList[i].porcentajeDescuentoMostrar).toFixed(1) + ' % </td>' +
-
-                        '<td>  ' + Number(preciosList[i].precioNeto).toFixed(cantidadDecimales) + '  </td>' +
-                        '<td>  ' + Number(preciosList[i].flete).toFixed(cantidadDecimales) + '</td>' +
-                        '<td>  ' + Number(preciosList[i].producto.precioClienteProducto.precioUnitario).toFixed(cantidadDecimales) + '</td>' +
-                        margenText +
-                        '<td>' +
-                        '<button type="button" idProducto="' + preciosList[i].producto.idProducto + '" class="btnMostrarPrecios btn btn-primary bouton-image botonPrecios">Ver</button>' +
-                        '</td>' +
-                        '</tr>';
-
-                    $("#tableListaPrecios").append(preciosRow);
-
-                }
-             
-                if (preciosList.length > 0) {
-                    $("#msgPreciosSinResultados").hide();
-                }
-                else {
-                    $("#msgPreciosSinResultados").show();
-                }
-                
+               
                 if (obj.editaGrupo != 1) {
                     editGrupoCliente = 0;
                     $("#btnEditarGrupoCliente").hide();
@@ -1561,13 +1629,8 @@ jQuery(function ($) {
                     $("#btnMiembrosGrupoCliente").show();
                 }
                 
-                FooTable.init('#tableListaPrecios');
-
-                $("#chkSoloCanasta").prop("checked", false);
-                $("#lblChkCanasta").addClass("text-muted");
 
                 var clienteList = obj.miembros;
-                var margenText = "";
                
                 $("#tableMiembrosGrupo > tbody").empty();
                 for (var i = 0; i < clienteList.length; i++) {
@@ -1810,29 +1873,73 @@ jQuery(function ($) {
     });
 
 
-    $("#chkSoloCanasta").change(function () {
-        if ($(this).is(":checked")) {
+    $("#chkSoloVigentes").change(function () {
+        chkSoloVigentesApply();
+    });
 
+    function chkSoloVigentesApply() {
+        if ($("#chkSoloVigentes").is(":checked")) {
             $("#tableListaPrecios tbody tr").hide();
-            $(".chkCanasta:checked").closest("tr").show();
+            if ($("#chkSoloCanasta").is(":checked")) {
+                $(".chkCanasta:checked").closest('tr[precioVigente="1"]').show();
+            } else {
+                $('tr[precioVigente="1"]').show();
+            }
+            $("#lblChkSoloVigentes").removeClass("text-muted");
+        } else {
+            if ($("#chkSoloCanasta").is(":checked")) {
+                $(".chkCanasta:checked").closest("tr").show();
+            } else {
+                $("#tableListaPrecios tbody tr").show();
+            }
+
+            $("#lblChkSoloVigentes").addClass("text-muted");
+        }
+    }
+
+    $("#chkSoloCanasta").change(function () {
+        chkSoloCanastaApply();
+    });
+
+    function chkSoloCanastaApply() {
+        if ($("#chkSoloCanasta").is(":checked")) {
+            $("#tableListaPrecios tbody tr").hide();
+            if ($("#chkSoloVigentes").is(":checked")) {
+                $(".chkCanasta:checked").closest('tr[precioVigente="1"]').show();
+            } else {
+                $(".chkCanasta:checked").closest("tr").show();
+            }
+
             $("#lblChkCanasta").removeClass("text-muted");
         } else {
-            $("#tableListaPrecios tbody tr").show();
+
+            if ($("#chkSoloVigentes").is(":checked")) {
+                $('tr[precioVigente="1"]').show();
+            } else {
+                $("#tableListaPrecios tbody tr").show();
+            }
             $("#lblChkCanasta").addClass("text-muted");
         }
-    });
+    }
 
     $("#lblChkCanasta").click(function () {
         if ($("#chkSoloCanasta").is(":checked")) {
             $("#chkSoloCanasta").prop("checked", false);
-            $("#tableListaPrecios tbody tr").show();
-            $("#lblChkCanasta").addClass("text-muted");
         } else {
             $("#chkSoloCanasta").prop("checked", true);
-            $("#tableListaPrecios tbody tr").hide();
-            $(".chkCanasta:checked").closest("tr").show();
-            $("#lblChkCanasta").removeClass("text-muted");
         }
+
+        chkSoloCanastaApply();
+    });
+
+    $("#lblChkSoloVigentes").click(function () {
+        if ($("#chkSoloVigentes").is(":checked")) {
+            $("#chkSoloVigentes").prop("checked", false);
+        } else {
+            $("#chkSoloVigentes").prop("checked", true);
+        }
+
+        chkSoloVigentesApply();
     });
 
     

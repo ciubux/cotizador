@@ -306,17 +306,17 @@
                             }
                             else
                             {
-                                 @Html.Action("GetDepartamentos", "Ubigeo",
-                                                                              new
-                                                                              {
-                                                                                  departamentoSelectId = "ActualDepartamento",
-                                                                                  provinciaSelectId = "ActualProvincia",
-                                                                                  distritoSelectId = "ActualDistrito",
-                                                                                  provinciaDivId = "dvProvincias",
-                                                                                  distritoDivId = "dvDistritos",
-                                                                                  selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 2),
-                                                                                  disabled = true
-                                                                              })
+                                @Html.Action("GetDepartamentos", "Ubigeo",
+                                                                             new
+                                                                             {
+                                                                                 departamentoSelectId = "ActualDepartamento",
+                                                                                 provinciaSelectId = "ActualProvincia",
+                                                                                 distritoSelectId = "ActualDistrito",
+                                                                                 provinciaDivId = "dvProvincias",
+                                                                                 distritoDivId = "dvDistritos",
+                                                                                 selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 2),
+                                                                                 disabled = true
+                                                                             })
                             }
 
                         </div>
@@ -343,17 +343,17 @@
                             }
                             else
                             {
-                                 @Html.Action("GetProvinciasPorDepartamento", "Ubigeo",
-                                                new
-                                                {
-                                                    departamentoSelectId = "ActualDepartamento",
-                                                    provinciaSelectId = "ActualProvincia",
-                                                    distritoSelectId = "ActualDistrito",
-                                                    distritoDivId = "dvDistritos",
-                                                    codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
-                                                    selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 4),
-                                                    disabled = true
-                                                })
+                                @Html.Action("GetProvinciasPorDepartamento", "Ubigeo",
+                                               new
+                                               {
+                                                   departamentoSelectId = "ActualDepartamento",
+                                                   provinciaSelectId = "ActualProvincia",
+                                                   distritoSelectId = "ActualDistrito",
+                                                   distritoDivId = "dvDistritos",
+                                                   codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
+                                                   selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 4),
+                                                   disabled = true
+                                               })
                             }
                         </div>
                     </div>
@@ -375,14 +375,14 @@
                             }
                             else
                             {
-                                 @Html.Action("GetDistritosPorProvincia", "Ubigeo", new
-                            {
-                                distritoSelectId = "ActualDistrito",
-                                codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
-                                codigoProvincia = pedido.ubigeoEntrega.Id.Substring(0, 4),
-                                selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 6),
-                                disabled = true
-                            })
+                                @Html.Action("GetDistritosPorProvincia", "Ubigeo", new
+                           {
+                               distritoSelectId = "ActualDistrito",
+                               codigoDepartamento = pedido.ubigeoEntrega.Id.Substring(0, 2),
+                               codigoProvincia = pedido.ubigeoEntrega.Id.Substring(0, 4),
+                               selectedValue = pedido.ubigeoEntrega.Id.Substring(0, 6),
+                               disabled = true
+                           })
                             }
 
 
@@ -1345,6 +1345,11 @@
                                 </div>
                                 <div class="col-xs-12">
                                     <p class="form-control-static text-center"><b>Precio: </b> S/ <span id="verPrecioProveedor"></span></p>
+                                    <p class="form-control-static text-center"><b>Precio Provincia: </b> S/ <span id="verPrecioProvinciaProveedor"></span></p>
+                                    @if (pedido.usuario.visualizaCostos)
+                                    {
+                                        <p class="form-control-static text-center"><b>Costo: </b> S/ <span id="verCostoProveedor"></span></p>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -1356,6 +1361,14 @@
                                 </div>
                                 <div class="col-xs-12">
                                     <p class="form-control-static text-center"><b>Precio: </b> S/ <span id="verPrecioMP"></span></p>
+                                    <p class="form-control-static text-center"><b>Precio Provincia: </b> S/ <span id="verPrecioProvinciaMP"></span></p>
+                                    @if (pedido.usuario.visualizaCostos)
+                                    {
+                                        <p class="form-control-static text-center"><b>Costo: </b> S/ <span id="verCostoMP"></span></p>
+                                    }
+                                    <p class="form-control-static text-center">
+                                        <button id="lnkMostrarLogPrecioProducto" type="button" class="btn btn-link lnkAction lnkActionLabel" data-toggle="modal" data-target="#modalLogPrecioProducto">Ver Histórico</button>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -1367,6 +1380,11 @@
                                 </div>
                                 <div class="col-xs-12">
                                     <p class="form-control-static text-center"><b>Precio: </b> S/ <span id="verPrecioAlternativa"></span></p>
+                                    <p class="form-control-static text-center"><b>Precio Provincia: </b> S/ <span id="verPrecioProvinciaAlternativa"></span></p>
+                                    @if (pedido.usuario.visualizaCostos)
+                                    {
+                                        <p class="form-control-static text-center"><b>Costo: </b> S/ <span id="verCostoAlternativa"></span></p>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -1753,6 +1771,8 @@
         </div>
     </div>
 </div>
+
+@Html.Action("LogPrecioProducto", "Precio")
 
 <span id="spnDescripcionLargaInfo" style="display: none;">
     @Html.Partial("../Producto/_LabelDescripcionLarga")

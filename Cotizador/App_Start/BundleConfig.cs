@@ -11,6 +11,7 @@ namespace Cotizador
 
             bundles.Add(new ScriptBundle("~/bundles/utiles").Include(
                          "~/Scripts/utiles1.1.7.js",
+                         "~/Scripts/utilesAjax.js",
                          "~/Scripts/utilesFacturacion1.1.4.js"
                          ));
 
@@ -36,6 +37,10 @@ namespace Cotizador
 
             bundles.Add(new ScriptBundle("~/bundles/notaCredito").Include(
                         "~/Scripts/notaCredito1.1.3.js"
+                        ));
+
+            bundles.Add(new ScriptBundle("~/bundles/notaCreditoCompra").Include(
+                        "~/Scripts/notaCreditoCompra.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/notaDebito").Include(

@@ -40,6 +40,7 @@ namespace DataLayer
                     tiposDescripcion = Converter.GetString(row, "tipos"),
                     esPrincipal = Converter.GetInt(row, "es_principal"),
                     aplicaRuc = Converter.GetInt(row, "aplica_ruc"),
+                    FechaEdicion = Converter.GetDateTime(row, "fecha_modificacion")
                 };
 
                 if (obj.tiposDescripcion == null || obj.tiposDescripcion.Equals(""))
@@ -151,6 +152,19 @@ namespace DataLayer
 
             return obj;
 
+        }
+
+        public bool updateEliminar(Guid idClienteContacto, Guid idUsuario, Guid idCliente)
+        {
+            var objCommand = GetSqlCommand("pu_eliminar_cliente_contacto");
+
+            InputParameterAdd.Guid(objCommand, "idContactoCliente", idClienteContacto);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Guid(objCommand, "idClienteVista", idCliente);
+
+            ExecuteNonQuery(objCommand);
+
+            return true;
         }
     }
 }

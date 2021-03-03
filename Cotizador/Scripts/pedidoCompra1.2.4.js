@@ -1388,7 +1388,28 @@ jQuery(function ($) {
 
                 $("#verProducto").html(producto.nombre);
                 $("#verCodigoProducto").html(producto.sku);
-                
+
+                $("#lnkMostrarLogPrecioProducto").attr("nombreProducto", producto.nombre);
+                $("#lnkMostrarLogPrecioProducto").attr("sku", producto.sku);
+                $("#lnkMostrarLogPrecioProducto").attr("idProducto", idProducto);
+
+                $("#verUnidadProveedor").html(producto.unidadProveedor);
+                $("#verUnidadMP").html(producto.unidad);
+                $("#verUnidadAlternativa").html(producto.unidadAlternativa);
+
+                $("#verPrecioProveedor").html(producto.precioProveedor);
+                $("#verPrecioMP").html(producto.precio);
+                $("#verPrecioAlternativa").html(producto.precioAlternativa);
+
+                $("#verPrecioProvinciaProveedor").html(producto.precioProvinciaProveedor);
+                $("#verPrecioProvinciaMP").html(producto.precioProvincia);
+                $("#verPrecioProvinciaAlternativa").html(producto.precioProvinciaAlternativa);
+
+                if ($("#verCostoMP").length) {
+                    $("#verCostoProveedor").html(producto.costoProveedor);
+                    $("#verCostoMP").html(producto.costo);
+                    $("#verCostoAlternativa").html(producto.costoAlternativa);
+                }
 
                 var precioListaList = producto.precioLista;
 
@@ -1542,6 +1563,10 @@ jQuery(function ($) {
                             descontinuadoLabel = descontinuadoLabel.replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
                         }
                     }
+                }
+
+                if (detalle.compraRestringida == 1) {
+                    descontinuadoLabel = descontinuadoLabel + "<br/>" + $("#spnProductoCompraRestringida").html();
                 }
 
                 var descripcionLargaLabel = "";
@@ -2696,14 +2721,22 @@ jQuery(function ($) {
                         if (lista[i].producto.motivoRestriccion != null) {
                             lista[i].producto.motivoRestriccion = lista[i].producto.motivoRestriccion.trim();
 
-                            $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").removeClass("tooltip-motivo-restriccion");
+                            $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado").removeClass("tooltip-motivo-restriccion");
                             if (lista[i].producto.motivoRestriccion != "") {
-                                $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").addClass("tooltip-motivo-restriccion");
+                                $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado").addClass("tooltip-motivo-restriccion");
                                 $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado .tooltip-label-text").html(lista[i].producto.motivoRestriccion);
                             }
                         }
 
                         descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
+                    }
+
+                    if (lista[i].producto.compraRestringida == 1) {
+                        tieneProductoRestringido = true;
+
+                        $("#spnProductoCompraRestringida .lblAlertaProductoCompraRestringida").removeClass("tooltip-motivo-restriccion");
+                        
+                        descontinuadoLabel = descontinuadoLabel + "<br/>" + $("#spnProductoCompraRestringida").html();
                     }
 
                     var descripcionLargaLabel = "";

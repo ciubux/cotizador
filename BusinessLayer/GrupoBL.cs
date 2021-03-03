@@ -24,11 +24,11 @@ namespace BusinessLayer
             }
         }
 
-        public List<DocumentoDetalle> getPreciosVigentesGrupoCliente(int idGrupoCliente)
+        public List<DocumentoDetalle> getPreciosVigentesGrupoCliente(int idGrupoCliente, DateTime? fechaPreciosVigenciaDesde = null)
         {
             using (var productoDal = new ProductoDAL())
             {
-                List<DocumentoDetalle> items = productoDal.getPreciosVigentesGrupoCliente(idGrupoCliente);
+                List<DocumentoDetalle> items = productoDal.getPreciosVigentesGrupoCliente(idGrupoCliente, fechaPreciosVigenciaDesde);
                 foreach (DocumentoDetalle pedidoDetalle in items)
                 {
                     if (pedidoDetalle.producto.image == null)

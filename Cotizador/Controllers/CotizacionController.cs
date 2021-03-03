@@ -280,6 +280,14 @@ namespace Cotizador.Controllers
                 }
                 Cotizacion cotizacion = this.CotizacionSession;
 
+                ViewBag.productosInactivosRemovidos = 0;
+                if (cotizacion.productosInactivosRemovidos)
+                {
+                    ViewBag.productosInactivosRemovidos = 1;
+                    cotizacion.productosInactivosRemovidos = false;
+
+                    this.CotizacionSession = cotizacion;
+                }
 
                 int existeCliente = 0;
                 if (cotizacion.cliente.idCliente != Guid.Empty)// || cotizacion.grupo.idGrupoCliente != Guid.Empty)
@@ -288,6 +296,8 @@ namespace Cotizador.Controllers
                 }
                 ViewBag.existeCliente = existeCliente;
 
+                
+                
 
                 if (cotizacion.cliente.idCliente != Guid.Empty)
                 {
@@ -363,6 +373,14 @@ namespace Cotizador.Controllers
                 }
                 Cotizacion cotizacion = this.CotizacionSession;
 
+                ViewBag.productosInactivosRemovidos = 0;
+                if (cotizacion.productosInactivosRemovidos)
+                {
+                    ViewBag.productosInactivosRemovidos = 1;
+                    cotizacion.productosInactivosRemovidos = false;
+
+                    this.CotizacionSession = cotizacion;
+                }
 
                 int existeCliente = 0;
                 if (cotizacion.cliente.idCliente != Guid.Empty)// || cotizacion.grupo.idGrupoCliente != Guid.Empty)
@@ -932,12 +950,12 @@ namespace Cotizador.Controllers
             String resultado = "{" +
                 "\"id\":\"" + producto.idProducto + "\"," +
                 "\"nombre\":\"" + producto.descripcion + "\"," +
-                "\"image\":\"data:image/png;base64, " + Convert.ToBase64String(producto.image) + "\"," +
+                "\"image\":\"" + Convert.ToBase64String(producto.image) + "\"," +
                 "\"unidad\":\"" + producto.unidad + "\"," +
                 "\"unidad_alternativa\":\"" + producto.unidad_alternativa + "\"," +
                 "\"proveedor\":\"" + producto.proveedor + "\"," +
                 "\"observaciones\":\"" + observaciones + "\"," +
-                "\"familia\":\"" + producto.familia + "\"," +
+                "\"familia\":\"" + producto.familia.Trim() + "\"," +
                 "\"descontinuado\":" + producto.descontinuado + "," +
                 "\"motivoRestriccion\":\"" + producto.motivoRestriccion + "\"," +
                 "\"agregarDescripcionCotizacion\":\"" + producto.agregarDescripcionCotizacion + "\"," +
@@ -1514,12 +1532,10 @@ namespace Cotizador.Controllers
             cotizacion.fechaInicioVigenciaPrecios = null;
             cotizacion.fechaFinVigenciaPrecios = null;
             cotizacion.fechaLimiteValidezOferta = cotizacion.fecha.AddDays(Constantes.PLAZO_OFERTA_DIAS);
-
+            cotizacion.ajusteCalculoPrecios = true;
+            cotizacion.validezOfertaEnDias = Constantes.PLAZO_OFERTA_DIAS;
 
             return cotizacion;
-
-           
-
         }
 
 

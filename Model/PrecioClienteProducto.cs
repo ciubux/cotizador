@@ -13,6 +13,16 @@ namespace Model
 
         public DateTime? fechaFinVigencia { get; set; }
 
+        public bool precioVigente { get {
+                DateTime hoy = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+                if (fechaFinVigencia != null && fechaFinVigencia.Value.CompareTo(hoy) >= 0)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
         public String unidad { get; set; }
 
         public String skuCliente { get; set; }

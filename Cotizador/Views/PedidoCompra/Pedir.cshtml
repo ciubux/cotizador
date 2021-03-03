@@ -588,6 +588,11 @@
                                     @Html.Partial("../Producto/_LabelRestringido")
                                 }
                             }
+
+                            @if (cotizacionDetalle.producto.compraRestringida == 1)
+                            {
+                                @Html.Partial("../Producto/_LabelCompraRestringida")
+                            }
                         </td>
                         <!--Mostrar Codigo de Proveedor y observaciones en el campo descripcion de producto-->
 
@@ -1539,6 +1544,9 @@
     </div>
 </div>
 
+<span id="spnProductoCompraRestringida" style="display: none;">
+    @Html.Partial("../Producto/_LabelCompraRestringida")
+</span>
 
 @section Scripts {
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/pedidoCompra")

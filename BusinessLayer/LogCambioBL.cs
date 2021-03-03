@@ -38,6 +38,18 @@ namespace BusinessLayer
             }
         }
 
+        public bool insertLogCambiosPogramadosFull(List<LogCambio> cambios)
+        {
+            using (var dal = new LogCambioDAL())
+            {
+                foreach (LogCambio cambio in cambios)
+                {
+                    dal.insertLog(cambio);
+                }
+
+                return true;
+            }
+        }
         public List<LogCambio> getCambiosAplicar()
         {
             using (var dal = new LogCambioDAL())

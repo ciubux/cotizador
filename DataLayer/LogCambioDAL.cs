@@ -87,6 +87,45 @@ namespace DataLayer
             return true;
         }
 
+        public List<LogCambio> getLogCamposRegistro(string idRegistro, List<int> campos)
+        {
+            var objCommand = GetSqlCommand("ps_log_registro");
+            InputParameterAdd.Varchar(objCommand, "idRegistro", idRegistro);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(int)));
+
+            foreach (int idCampo in campos)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = idCampo;
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@campos", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.IntegerList";
+
+            DataTable dataTable = Execute(objCommand);
+            List<LogCambio> lista = new List<LogCambio>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                LogCambio obj = new LogCambio();
+                obj.idCampo = Converter.GetInt(row, "id_catalogo_campo");
+                obj.idRegistro = idRegistro;
+                
+                obj.valor = Converter.GetString(row, "valor");
+
+                obj.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+                obj.FechaEdicion = Converter.GetDateTime(row, "fecha_modificacion");
+
+                lista.Add(obj);
+            }
+
+            return lista;
+        }
+
         public LogCambio insertLogProgramado(LogCambio log)
         {
             var objCommand = GetSqlCommand("pi_cambio_dato_programado");
@@ -121,6 +160,45 @@ namespace DataLayer
 
             return log;
         }
+
+        /*
+        public void insertLogProgramadoFull(List<LogCambio> logs)
+        {
+            var objCommand = GetSqlCommand("pi_cambios_datos_programados");
+
+            InputParameterAdd.Guid(objCommand, "idUsuario", log.idUsuarioModificacion);
+            InputParameterAdd.Int(objCommand, "idCatalogoTabla", log.idTabla);
+            InputParameterAdd.Int(objCommand, "idCatalogoCampo", log.idCampo);
+
+            InputParameterAdd.Varchar(objCommand, "idRegistro", log.idRegistro);
+            InputParameterAdd.Varchar(objCommand, "valor", log.valor);
+            InputParameterAdd.Varchar(objCommand, "fechaInicioVigencia", log.fechaInicioVigencia.ToString("yyyy-MM-dd"));
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID_USUARIO", typeof(Guid)));
+            tvp.Columns.Add(new DataColumn("ID_REGISTRO", typeof(Guid)));
+            tvp.Columns.Add(new DataColumn("ID_CATALOGO_TABLA", typeof(int)));
+            tvp.Columns.Add(new DataColumn("ID_CATALOGO_CAMPO", typeof(int)));
+            tvp.Columns.Add(new DataColumn("VALOR", typeof(string)));
+            tvp.Columns.Add(new DataColumn("FECHA_INICIO_VIGENCIA", typeof(string)));
+
+            foreach (LogCambio item in logs)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = item.idCambio;
+                rowObj["ID_REGISTRO"] = item.idRegistro;
+                rowObj["REPITE_DATO"] = item.repiteDato ? 1 : 0;
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@cambios", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.LogAplicarProgramadoList";
+
+
+            ExecuteNonQuery(objCommand);
+        }
+        */
 
         /* Elimina el log de cambios programdos con fecha de inicio de vigencia de hoy al pasado y sin enviarlos al log de cambios pasados */
         public bool limpiarCambiosProgramados()

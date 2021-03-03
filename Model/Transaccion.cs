@@ -68,7 +68,6 @@ namespace Model
         [Display(Name = "Documento Venta:")]
         public DocumentoVenta documentoVenta { get; set; }
 
-
         public String tipoDocumentoVentaString
         {
             get

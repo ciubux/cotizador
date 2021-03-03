@@ -136,3 +136,5 @@ Cannot insert duplicate key row in object 'dbo.CLIENTE' with unique index 'IDX_C
 The statement has been terminated.
 The statement has been terminated.
 The statement has been terminated.
+2020-11-30 17:51:47.1982|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE' with unique index 'IDX_RUC_SEDE_ESTADO'. The duplicate key value is (10461243679, 15526227-2108-4113-b46a-1c8ab5c0e581, 1).
+The statement has been terminated.

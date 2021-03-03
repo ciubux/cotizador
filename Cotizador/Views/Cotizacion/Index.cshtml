@@ -19,13 +19,13 @@
                     <label for="numero" class="control-label col-xs-4">Número:</label>
                     <div class="col-xs-8">
                         @if (cotizacion.codigo > 0)
-                {
-                    <input class="form-control" type="number" value="@cotizacion.codigo" min="0" id="numero" name="numero">
-        }
-        else
-        {
-            <input class="form-control" type="number" value="" min="0" id="numero" name="numero">
-}
+                        {
+                            <input class="form-control" type="number" value="@cotizacion.codigo" min="0" id="numero" name="numero">
+                        }
+                        else
+                        {
+                            <input class="form-control" type="number" value="" min="0" id="numero" name="numero">
+                        }
                         <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Si ingresa el número los demás criterios no serán considerados al realizar la búsqueda.</span>
                     </div>
 
@@ -149,14 +149,14 @@
                         }
                         Solo Grupales
                     </label>
-                   
+
                 </div>
             </div>
         </div>
 
 
         <div class="row">
-        
+
             <div class="col-sm-6 col-lg-4">
                 <!--USUARIO-->
                 <div class="form-group">
@@ -215,7 +215,7 @@
                     <th data-name="ciudad" data-sortable="false" data-breakpoints="xs">Ciudad</th>
                     <th data-name="subtotal" data-visible="false" data-sortable="true" data-breakpoints="xs">Sub Total</th>
                     <th data-name="igv" data-visible="false" data-sortable="true" data-breakpoints="xs">IGV</th>
-                    <th data-name="total" data-sortable="true" data-breakpoints="xs">Total (No Inc. IGV)</th>
+                    <th data-name="total" data-sortable="true" data-breakpoints="xs">Total</th>
                     <th data-name="maximoPorcentajeDescuento" data-sortable="true" data-breakpoints="xs">Desc % (max)</th>
                     <th data-name="minimoMargen" data-visible="false" data-sortable="true" data-breakpoints="xs">Mg % (min)</th>
                     <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado</th>
@@ -665,6 +665,11 @@
                                 </div>
                                 <div class="col-xs-12">
                                     <p class="form-control-static text-center"><b>Precio: </b> S/ <span id="verPrecioProveedor"></span></p>
+                                    <p class="form-control-static text-center"><b>Precio Provincia: </b> S/ <span id="verPrecioProvinciaProveedor"></span></p>
+                                    @if (cotizacion.usuario.visualizaCostos)
+                                    {
+                                        <p class="form-control-static text-center"><b>Costo: </b> S/ <span id="verCostoProveedor"></span></p>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -676,6 +681,14 @@
                                 </div>
                                 <div class="col-xs-12">
                                     <p class="form-control-static text-center"><b>Precio: </b> S/ <span id="verPrecioMP"></span></p>
+                                    <p class="form-control-static text-center"><b>Precio Provincia: </b> S/ <span id="verPrecioProvinciaMP"></span></p>
+                                    @if (cotizacion.usuario.visualizaCostos)
+                                    {
+                                        <p class="form-control-static text-center"><b>Costo: </b> S/ <span id="verCostoMP"></span></p>
+                                    }
+                                    <p class="form-control-static text-center">
+                                        <button id="lnkMostrarLogPrecioProducto" type="button" class="btn btn-link lnkAction lnkActionLabel" data-toggle="modal" data-target="#modalLogPrecioProducto">Ver Histórico</button>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -687,6 +700,11 @@
                                 </div>
                                 <div class="col-xs-12">
                                     <p class="form-control-static text-center"><b>Precio: </b> S/ <span id="verPrecioAlternativa"></span></p>
+                                    <p class="form-control-static text-center"><b>Precio Provincia: </b> S/ <span id="verPrecioProvinciaAlternativa"></span></p>
+                                    @if (cotizacion.usuario.visualizaCostos)
+                                    {
+                                        <p class="form-control-static text-center"><b>Costo: </b> S/ <span id="verCostoAlternativa"></span></p>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -768,6 +786,8 @@
         </div>
     </div>
 </div>
+
+@Html.Action("LogPrecioProducto", "Precio")
 
 <span id="spnProductoDescontinuado" style="display: none;">
     @Html.Partial("../Producto/_LabelRestringido")

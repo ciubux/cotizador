@@ -2904,7 +2904,10 @@ jQuery(function ($) {
                                     '<td>' + res.contacto.cargo + '</td>' +
                                     '<td>' + tiposDesc + '</td>' +
                                     '<td>' + aplicaRUC + '</td>' +
-                                    '<td>' + '<button type="button" class="btn btn-primary btnEditarClienteContacto" idClienteContacto="' + res.contacto.idClienteContacto + '">Editar</button>' + '</td>' +
+                                    '<td>' + res.contacto.FechaEdicionDesc + '</td>' +
+                                    '<td>' + '<button type="button" class="btn btn-primary btnEditarClienteContacto" idClienteContacto="' + res.contacto.idClienteContacto + '">Editar</button>' +
+                                    '&nbsp; <button type="button" class="btn btn-danger btnEliminarClienteContacto" idClienteContacto="' + res.contacto.idClienteContacto + '" nombreContacto="' + res.contacto.nombre + '">Eliminar</button>' +
+                                    '</td>' +
 
                                     '</tr>';
 
@@ -2935,6 +2938,86 @@ jQuery(function ($) {
             }
         });
     });
+
+
+    $(document).on('click', "button.btnEliminarClienteContacto", function (e) {
+        var nombreContacto = $(this).attr('nombreContacto');
+        var idClienteContacto = $(this).attr('idClienteContacto');
+        var that = this;
+
+        $.confirm({
+            title: 'Confirmación',
+            content: '¿Está seguro de eliminar el contacto "' + nombreContacto + '"',
+            type: 'orange',
+            buttons: {
+                confirm: {
+                    text: 'Sí',
+                    btnClass: 'btn-red',
+                    action: function () {
+                        $('body').loadingModal({
+                            text: 'Eliminando...'
+                        });
+
+                        $('body').loadingModal('show');
+
+                        $.ajax({
+                            url: "/Cliente/EliminarContacto",
+                            type: 'POST',
+                            dataType: 'JSON',
+                            data: {
+                                idClienteContacto: idClienteContacto
+                            },
+                            error: function (detalle) {
+                                $('body').loadingModal('hide');
+
+                                $.alert({
+                                    title: "ERROR",
+                                    type: 'red',
+                                    content: "Ocurrió un error, contacte con el Administrador.",
+                                    buttons: {
+                                        OK: function () {
+                                        }
+                                    }
+                                });
+                            },
+                            success: function (res) {
+                                $('body').loadingModal('hide');
+                                if (res.success == 1) {
+                                    $.alert({
+                                        title: "Operación exitosa",
+                                        type: 'green',
+                                        content: "Se eliminó el registro correctamente.",
+                                        buttons: {
+                                            OK: function () {
+                                                $(that).closest("tr").remove();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    $.alert({
+                                        title: "Error",
+                                        type: 'red',
+                                        content: res.message,
+                                        buttons: {
+                                            OK: function () {
+                                                location.reload();
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                },
+                cancel: {
+                    text: 'No',
+                    action: function () {
+                    }
+                }
+            },
+        });
+    });
+
 
     $(document).on('click', "button.btnEditarClienteContacto", function (e) {
         limpiarFormularioAgregarContacto();
@@ -3080,6 +3163,8 @@ jQuery(function ($) {
 
                 $("#spnVerOrigen").html(cliente.origen.nombre);
 
+                $("#verFechaActualizacionContactos").html(cliente.ultimaActualizacionContactosDesc);
+                
                 if (cliente.habilitadoNegociacionGrupal) {
                     $("#verHabilitadoNegociacionGrupal").show();
                     $("#verHabilitadoNegociacionGrupal").html("Este Cliente (" + cliente.codigo + ") hereda los precios del grupo.");
@@ -3344,8 +3429,10 @@ jQuery(function ($) {
                         '<td>' + contactoList[i].cargo + '</td>' +
                         '<td>' + contactoList[i].tiposDescripcion + '</td>' +
                         '<td>' + aplicaRUC + '</td>' +
-                        '<td>' + '<button type="button" class="btn btn-primary btnEditarClienteContacto" idClienteContacto="' + contactoList[i].idClienteContacto + '">Editar</button>' + '</td>' +
-
+                        '<td>' + contactoList[i].FechaEdicionDesc + '</td>' +
+                        '<td>' + '<button type="button" class="btn btn-primary btnEditarClienteContacto" idClienteContacto="' + contactoList[i].idClienteContacto + '">Editar</button>' +
+                        '&nbsp; <button type="button" class="btn btn-danger btnEliminarClienteContacto" idClienteContacto="' + contactoList[i].idClienteContacto + '" nombreContacto="' + contactoList[i].nombre + '">Eliminar</button>' +
+                        '</td>' +
                         '</tr>';      
 
                     $("#tableListaContactos").append(contactoRow);

@@ -12,6 +12,7 @@ namespace Cotizador.Models.DTOshow
         public Guid idCotizacion { get; set; }
         public Guid cliente_idCliente { get; set; }
         public long codigo { get; set; }
+        public long codigoAntecedente { get; set; }
         public String ciudad_nombre { get; set; }
         public String cliente_razonSocial { get; set; }     
         public bool cliente_esClienteLite { get; set; }

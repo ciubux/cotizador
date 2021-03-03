@@ -58,8 +58,10 @@ namespace Cotizador.Models.DTOsShow
             cotizacionDTOshow.idCotizacion = cotizacion.idCotizacion;
             cotizacionDTOshow.cliente_idCliente = cotizacion.cliente.idCliente;
             cotizacionDTOshow.codigo = cotizacion.codigo;
+            cotizacionDTOshow.codigoAntecedente = cotizacion.codigoAntecedente;
             cotizacionDTOshow.ciudad_nombre = cotizacion.ciudad.nombre;
             cotizacionDTOshow.cliente_razonSocial = cotizacion.cliente.razonSocial;//no se muestra
+            
             cotizacionDTOshow.fecha = cotizacion.fecha;
             cotizacionDTOshow.fechaLimiteValidezOferta = cotizacion.fechaLimiteValidezOferta;
             cotizacionDTOshow.fechaInicioVigenciaPrecios = cotizacion.fechaInicioVigenciaPrecios;
@@ -82,6 +84,12 @@ namespace Cotizador.Models.DTOsShow
             cotizacionDTOshow.maximoPorcentajeDescuentoPermitido = cotizacion.maximoPorcentajeDescuentoPermitido;
             cotizacionDTOshow.grupo_codigoNombre = cotizacion.grupo.codigoNombre;
             cotizacionDTOshow.cliente_codigoRazonSocial = cotizacion.cliente.codigoRazonSocial;
+
+            if (cotizacion.cliente.grupoCliente != null && cotizacion.cliente.grupoCliente.idGrupoCliente > 0)
+            {
+                cotizacionDTOshow.cliente_codigoRazonSocial = cotizacionDTOshow.cliente_codigoRazonSocial + " (Grupo: " + cotizacion.cliente.grupoCliente.codigoNombre + ")";
+            }
+
             cotizacionDTOshow.tipoCotizacion = (int)cotizacion.tipoCotizacion;
             cotizacionDTOshow.contacto = cotizacion.contacto;
             cotizacionDTOshow.cliente_esClienteLite = cotizacion.cliente.esClienteLite;

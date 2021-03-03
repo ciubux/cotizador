@@ -41,6 +41,20 @@ jQuery(function ($) {
     var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la creación/edición; no se guardarán los cambios?';
 
     $(document).ready(function () {
+        if ($("#productosInactivosRemovidos").length) {
+            var removioProductosInactivos = $("#productosInactivosRemovidos").val();
+            if (removioProductosInactivos == '1') {
+                $.alert({
+                    title: "Productos Inactivos Removidos",
+                    type: 'orange',
+                    content: 'La cotización original tenía productos inactivos que fueron removidos.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            }
+        }
+
         cambiarMostrarValidezOfertaEnDias();
   //      setTimeout(autoGuardarCotizacion, MILISEGUNDOS_AUTOGUARDADO);
         obtenerConstantes();
@@ -51,6 +65,8 @@ jQuery(function ($) {
         $("#btnBusquedaCotizaciones").click();
 
         $('#tipoCotizacion option[value="2"]').remove();
+
+        
     });
 
     function Alerta(message) {
@@ -765,7 +781,7 @@ jQuery(function ($) {
                 idProducto: $(this).val(),
             },
             success: function (producto) {
-                $("#imgProducto").attr("src", producto.image);
+                $("#imgProducto").attr("src", "data:image/png;base64," + producto.image);
 
                 /*Temporalmente se permitirá trabajar en ambos modos hasta que se compruebe que no se presentan errores*/
                 var options = "<option value='0' selected>" + producto.unidad + "</option>";
@@ -1085,6 +1101,10 @@ jQuery(function ($) {
                 $("#verProducto").html(producto.nombre);
                 $("#verCodigoProducto").html(producto.sku);
 
+                $("#lnkMostrarLogPrecioProducto").attr("nombreProducto", producto.nombre);
+                $("#lnkMostrarLogPrecioProducto").attr("sku", producto.sku);
+                $("#lnkMostrarLogPrecioProducto").attr("idProducto", idProducto);
+                
                 $("#verUnidadProveedor").html(producto.unidadProveedor);
                 $("#verUnidadMP").html(producto.unidad);
                 $("#verUnidadAlternativa").html(producto.unidadAlternativa);
@@ -1093,6 +1113,16 @@ jQuery(function ($) {
                 $("#verPrecioMP").html(producto.precio);
                 $("#verPrecioAlternativa").html(producto.precioAlternativa);
 
+                $("#verPrecioProvinciaProveedor").html(producto.precioProvinciaProveedor);
+                $("#verPrecioProvinciaMP").html(producto.precioProvincia);
+                $("#verPrecioProvinciaAlternativa").html(producto.precioProvinciaAlternativa);
+
+                if ($("#verCostoMP").length) {
+                    $("#verCostoProveedor").html(producto.costoProveedor);
+                    $("#verCostoMP").html(producto.costo);
+                    $("#verCostoAlternativa").html(producto.costoAlternativa);
+                }
+                
                 var precioListaList = producto.precioLista;
 
                 // var producto = $.parseJSON(respuesta);
@@ -1151,7 +1181,7 @@ jQuery(function ($) {
         });
     });
 
-2
+
     $("#btnAddProduct").click(function () {
         //Se desactiva el boton mientras se agrega el producto
         desactivarBtnAddProduct();
@@ -2096,8 +2126,13 @@ jQuery(function ($) {
                     $("#verClienteLite").val("0");
                 }
 
+                var numeroCot = '<span id="codigoCotizacionShow">' + cotizacion.codigo + '</span>';
+                if (cotizacion.codigoAntecedente) {
+                    numeroCot = numeroCot + " (Recotizado desde " + cotizacion.codigoAntecedente  + ")";
+                }
+
                 $("#verIdGrupoCliente").val(cotizacion.grupo_idGrupoCliente);
-                $("#verNumero").html(cotizacion.codigo);
+                $("#verNumero").html(numeroCot);
                 $("#verCiudad").html(cotizacion.ciudad_nombre);
                 $("#verContacto").html(cotizacion.contacto);
 
@@ -2205,7 +2240,12 @@ jQuery(function ($) {
                         tieneDescuentoMayorATope = true;
                     }
 
-                    d += '<tr>' +
+                    var inactivoClass = ""
+                    if (lista[i].producto.Estado == 0) {
+                        inactivoClass = 'producto-inactivo-row';
+                    }
+
+                    d += '<tr class="' + inactivoClass + '">' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
                         '<td>' + lista[i].producto.sku + descontinuadoLabel + '</td>' +
                         '<td>' + lista[i].producto.descripcion + '</td>' +
@@ -2575,7 +2615,7 @@ jQuery(function ($) {
             var url = "/Cotizacion/recotizarGrupo";
         }
 
-        var numero = $("#verNumero").html();
+        var numero = $("#codigoCotizacionShow").html();
         $.ajax({
             url: url,
             data: {
@@ -2671,7 +2711,7 @@ jQuery(function ($) {
             alert('Está creando una nueva cotización; para continuar por favor diríjase a la página "Crear/Modificar Cotización" y luego haga clic en el botón Cancelar, Finalizar Creación o Guardar (si elige Guardar indique No cuando se le consulte si desea continuar editanto ahora).');
         }
         else {
-            if (resultado.numero == $("#verNumero").html())
+            if (resultado.numero == $("#codigoCotizacionShow").html())
                 alert('Ya se encuentra editando la cotización número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Cotización".');
             else
                 alert('Está editando la cotización número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Cotización" y luego haga clic en el botón Cancelar, Finalizar Edición o Guardar (si elige Guardar indique No cuando se le consulte si desea continuar editanto ahora).');
@@ -2685,7 +2725,7 @@ jQuery(function ($) {
             alert('Está creando una nueva cotización; para continuar por favor diríjase a la página "Crear/Modificar Cotización Grupal" y luego haga clic en el botón Cancelar, Finalizar Creación o Guardar (si elige Guardar indique No cuando se le consulte si desea continuar editanto ahora).');
         }
         else {
-            if (resultado.numero == $("#verNumero").html())
+            if (resultado.numero == $("#codigoCotizacionShow").html())
                 alert('Ya se encuentra editando la cotización número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Cotización Grupal".');
             else
                 alert('Está editando la cotización número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Cotización Grupal" y luego haga clic en el botón Cancelar, Finalizar Edición o Guardar (si elige Guardar indique No cuando se le consulte si desea continuar editanto ahora).');
@@ -2722,7 +2762,7 @@ jQuery(function ($) {
                         alert('Está creando un nuevo pedido; para continuar por favor diríjase a la página "Crear/Modificar Pedido" y luego haga clic en el botón Cancelar, Finalizar Creación o Guardar (si elige Guardar indique No cuando se le consulte si desea continuar editanto ahora).');
                     }
                     else {
-                        if (resultado.numero == $("#verNumero").html())
+                        if (resultado.numero == $("#codigoCotizacionShow").html())
                             alert('Ya se encuentra editando el pedido número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Cotización".');
                         else
                             alert('Está editando el pedido número ' + resultado.numero + '; para continuar por favor dirigase a la página "Crear/Modificar Pedido" y luego haga clic en el botón Cancelar, Finalizar Edición o Guardar (si elige Guardar indique No cuando se le consulte si desea continuar editanto ahora).');
@@ -2746,7 +2786,7 @@ jQuery(function ($) {
         //$(document).on('click', "button.btnReCotizacion", function () {
         // var codigo = event.target.getAttribute("class").split(" ")[0];
      //   desactivarBotonesVer();
-        var numero = $("#verNumero").html();
+        var numero = $("#codigoCotizacionShow").html();
         $.ajax({
             url: "/Cotizacion/GenerarPDFdesdeIdCotizacion",
             data: {
@@ -2863,7 +2903,7 @@ jQuery(function ($) {
                 return false;
             }
         }
-        var codigo = $("#verNumero").html();
+        var codigo = $("#codigoCotizacionShow").html();
 
         $.ajax({
             url: "/Cotizacion/updateEstadoCotizacion",
@@ -3715,7 +3755,7 @@ jQuery(function ($) {
             dataType: 'JSON',
             error: function (detalle) { $('body').loadingModal('hide'); alert("Ocurrió un problema al obtener el historial de la cotización."); },
             success: function (resultado) {
-                $("#historial_titulo_numero_cotizacion").html($("#verNumero").html());
+                $("#historial_titulo_numero_cotizacion").html($("#codigoCotizacionShow").html());
                 $("#tableHistorialCotizacion > tbody").empty();
 
                 FooTable.init('#tableHistorialCotizacion');

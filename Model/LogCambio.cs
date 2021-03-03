@@ -26,7 +26,12 @@ namespace Model
         public int catalogoId { get; set; }
 
 
-        
+        public DateTime FechaEdicion { get; set; }
+
+        public string FechaEdicionDesc
+        {
+            get { return FechaEdicion.ToString("dd/MM/yyyy HH:mm:ss"); }
+        }
     }
 }
 

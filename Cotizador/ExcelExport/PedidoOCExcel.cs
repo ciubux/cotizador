@@ -46,6 +46,9 @@ namespace Cotizador.ExcelExport
                 formLabelCellStyle.FillPattern = FillPattern.SolidForeground;
                 formLabelCellStyle.FillForegroundColor = HSSFColor.White.Index;
 
+                HSSFCellStyle boldTextCenterCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                boldTextCenterCellStyle.SetFont(formLabelFont);
+                boldTextCenterCellStyle.Alignment = HorizontalAlignment.Center;
 
                 HSSFCellStyle formDataCenterCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
                 formDataCenterCellStyle.Alignment = HorizontalAlignment.Center;
@@ -357,10 +360,34 @@ namespace Cotizador.ExcelExport
 
                 UtilesHelper.combinarCeldas(sheet, i, i, "A", "F");
                 UtilesHelper.setValorCelda(sheet, i, "A", "* Condición de Pago: " + obj.textoCondicionesPago);
+
+                if (obj.usuario.firmaImagen != null)
+                {
+                    i = i + 2;
+                    UtilesHelper.combinarCeldas(sheet, i, i, "A", "D");
+                    UtilesHelper.setRowHeight(sheet, i, 900);
+
+                    int imgSign = newWorkbook.AddPicture(obj.usuario.firmaImagen, PictureType.PNG);
+                    HSSFClientAnchor signAnchor = helper.CreateClientAnchor() as HSSFClientAnchor;
+                    signAnchor.Col1 = 2;
+                    signAnchor.Row1 = i - 1;
+                    signAnchor.AnchorType = AnchorType.MoveDontResize;
+
+
+                    HSSFPicture picSign = drawing.CreatePicture(signAnchor, imgSign) as HSSFPicture;
+                    picSign.Resize(1);
+                    i++;
+
+                    UtilesHelper.combinarCeldas(sheet, i, i, "A", "D");
+                    UtilesHelper.setValorCelda(sheet, i, "A", obj.usuario.nombre + " - " + obj.usuario.cargo, boldTextCenterCellStyle);
+
+                    i = i + 2;
+                } else
+                {
+                    i = i + 3;
+                }
+
                 
-
-
-                i = i + 3;
                 UtilesHelper.combinarCeldas(sheet, i, i, "A", "H");
                 UtilesHelper.setValorCelda(sheet, i, "A", "Si usted tiene alguna pregunta sobre esta orden de compra, por favor, póngase en contacto con", footerTextCellStyle);
 

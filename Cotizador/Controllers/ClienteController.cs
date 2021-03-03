@@ -330,6 +330,7 @@ namespace Cotizador.Controllers
             obj.cargo = cargo;
             obj.aplicaRuc = aplicaRuc;
             obj.esPrincipal = esPrincipal;
+            obj.Estado = 1;
 
             obj.IdUsuarioRegistro = usuario.idUsuario;
 
@@ -371,7 +372,37 @@ namespace Cotizador.Controllers
 
             return "{\"success\": " + success.ToString() + ",\"message\": \"" + message + "\",\"contacto\": " + JsonConvert.SerializeObject(obj) + "}";
         }
-        
+
+
+        [HttpPost]
+        public String EliminarContacto(string idClienteContacto)
+        {
+            int success = 0;
+            string message = "Error Desconocido";
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
+
+            ClienteContactoBL ccBl = new ClienteContactoBL();
+
+            
+            Guid idObj = Guid.Parse(idClienteContacto);
+
+            List<ClienteContacto> listaContactos = (List<ClienteContacto>)this.Session[Constantes.VAR_SESSION_CLIENTE_VER_CONTACTOS];
+
+            ClienteContacto item = listaContactos.Where(c => c.idClienteContacto == idObj).FirstOrDefault();
+
+            if (item != null)
+            {
+                ccBl.updateEliminar(idObj, usuario.idUsuario, cliente.idCliente);
+                listaContactos.Remove(item);
+                success = 1;
+            }
+
+
+            return "{\"success\": " + success.ToString() + ",\"message\": \"" + message + "\"}";
+        }
+
 
         [HttpGet]
         public ActionResult ExportLastShowDirecciones()
@@ -553,7 +584,7 @@ namespace Cotizador.Controllers
             if (cliente.modificaCanasta == 1)
             {
                 DocumentoDetalle prod = cliente.listaPrecios.Where(p => p.producto.idProducto == idProducto).FirstOrDefault();
-                int isdas = 0;
+                
                 if (cliente.listaPrecios.Where(p => p.producto.idProducto == idProducto).FirstOrDefault() != null &&clienteBl.setSKUCliente(skuCliente, cliente.idCliente, usuario.idUsuario, idProducto))
                 {
                     message = "Se registró el SKU del cliente.";
