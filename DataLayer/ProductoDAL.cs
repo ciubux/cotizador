@@ -538,10 +538,19 @@ namespace DataLayer
             return documentoDetalleList;
         }
 
-        public List<DocumentoDetalle> getPreciosVigentesCliente(Guid idCliente)
+        public List<DocumentoDetalle> getPreciosVigentesCliente(Guid idCliente, DateTime? fechaPreciosVigenciaDesde = null)
         {
             var objCommand = GetSqlCommand("ps_productosVigentesCliente");
             InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
+            if (fechaPreciosVigenciaDesde != null)
+            {
+                InputParameterAdd.DateTime(objCommand, "fechaConsideracion", fechaPreciosVigenciaDesde.Value);
+            }
+            else
+            {
+                InputParameterAdd.DateTime(objCommand, "fechaConsideracion", DateTime.Now);
+            }
+
             DataTable cotizacionDetalleDataTable = Execute(objCommand);
 
             List<DocumentoDetalle> documentoDetalleList = new List<DocumentoDetalle>();
@@ -776,6 +785,9 @@ namespace DataLayer
             if (fechaPreciosVigenciaDesde != null)
             {
                 InputParameterAdd.DateTime(objCommand, "fechaConsideracion", fechaPreciosVigenciaDesde.Value);
+            } else
+            {
+                InputParameterAdd.DateTime(objCommand, "fechaConsideracion", DateTime.Now);
             }
 
             DataTable cotizacionDetalleDataTable = Execute(objCommand);

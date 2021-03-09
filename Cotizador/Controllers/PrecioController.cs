@@ -266,8 +266,8 @@ namespace Cotizador.Controllers
                 List<LogRegistroCampos> temp = new List<LogRegistroCampos>();
                 foreach (LogRegistroCampos log in historial)
                 {
-                    log.dato3 = "";
-                    if ((log.dato1 == null || log.dato1.Trim().Equals("")) && (log.dato2 == null || log.dato2.Trim().Equals("")))
+                    log.dato03 = null;
+                    if ((log.dato01 == null || log.dato01.valor.Trim().Equals("")) && (log.dato02 == null || log.dato02.valor.Trim().Equals("")))
                     {
                         temp.Add(log);
                     }
@@ -280,7 +280,7 @@ namespace Cotizador.Controllers
             }
             String jsonHistorial = JsonConvert.SerializeObject(historial);
 
-            String json = "{\"mostrarCostos\":" + (usuario.visualizaCostos ? "1" : "0") + ", \"historial\": " + jsonHistorial + "}";
+            String json = "{\"mostrarCostos\":" + (usuario.visualizaCostos ? "1" : "0") + ", \"editaDatoHistorico\": " + (usuario.modificaLogDatoHistorico ? "1" : "0") + ", \"historial\": " + jsonHistorial + "}";
 
             return json;
         }

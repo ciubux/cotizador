@@ -148,6 +148,11 @@ namespace BusinessLayer
 
                 LogRegistroCampos item = null;
 
+                bool bloquearEditar01 = true;
+                bool bloquearEditar02 = true;
+                bool bloquearEditar03 = true;
+
+
                 foreach (LogCambio log in logs)
                 {
                     if (item == null || !item.fechaInicioVigencia.Equals(log.fechaInicioVigencia.ToString("dd/MM/yyyy")))
@@ -159,13 +164,54 @@ namespace BusinessLayer
                         item = new LogRegistroCampos();
 
                         item.fechaInicioVigencia = log.fechaInicioVigencia.ToString("dd/MM/yyyy");
-                    } 
+                    }
 
-                    switch(log.idCampo)
+                    switch (log.idCampo)
                     {
-                        case 79: item.dato1 = log.valor; item.fechaModificacion1 = log.FechaEdicion.ToString("dd/MM/yyyy HH:mm"); break;
-                        case 80: item.dato2 = log.valor; item.fechaModificacion2 = log.FechaEdicion.ToString("dd/MM/yyyy HH:mm"); break;
-                        case 81: item.dato3 = log.valor; item.fechaModificacion3 = log.FechaEdicion.ToString("dd/MM/yyyy HH:mm"); break;
+                        case 79: 
+                            item.dato01 = new LogRegistroCampoDato();
+                            if (bloquearEditar01)
+                            {
+                                bloquearEditar01 = false;
+                                item.dato01.editable = false;
+                            } else
+                            {
+                                item.dato01.editable = true;
+                            }
+                            item.dato01.idRegistroCambio = log.idCambio;
+                            item.dato01.valor = log.valor; 
+                            item.dato01.fechaModificacion = log.FechaEdicion.ToString("dd/MM/yyyy HH:mm"); 
+                            break;
+                        case 80:
+                            item.dato02 = new LogRegistroCampoDato();
+                            if (bloquearEditar02)
+                            {
+                                bloquearEditar02 = false;
+                                item.dato02.editable = false;
+                            }
+                            else
+                            {
+                                item.dato02.editable = true;
+                            }
+                            item.dato02.idRegistroCambio = log.idCambio;
+                            item.dato02.valor = log.valor;
+                            item.dato02.fechaModificacion = log.FechaEdicion.ToString("dd/MM/yyyy HH:mm");
+                            break;
+                        case 81:
+                            item.dato03 = new LogRegistroCampoDato();
+                            if (bloquearEditar03)
+                            {
+                                bloquearEditar03 = false;
+                                item.dato03.editable = false;
+                            }
+                            else
+                            {
+                                item.dato03.editable = true;
+                            }
+                            item.dato03.idRegistroCambio = log.idCambio;
+                            item.dato03.valor = log.valor;
+                            item.dato03.fechaModificacion = log.FechaEdicion.ToString("dd/MM/yyyy HH:mm");
+                            break;
                     }
                 }
 

@@ -339,7 +339,26 @@ jQuery(function ($) {
     
 
 
+    $.datepicker.regional['es'] = {
+        closeText: 'Cerrar',
+        prevText: '< Ant',
+        nextText: 'Sig >',
+        currentText: 'Hoy',
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+        weekHeader: 'Sm',
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+    };
+    $.datepicker.setDefaults($.datepicker.regional['es']);
 
+    $("#ppFechaDesde").datepicker({ dateFormat: "dd/mm/yy" });
 
 
     $(document).ready(function () {
@@ -364,25 +383,7 @@ jQuery(function ($) {
             }
         });
 
-        $.datepicker.regional['es'] = {
-            closeText: 'Cerrar',
-            prevText: '< Ant',
-            nextText: 'Sig >',
-            currentText: 'Hoy',
-            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
-            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
-            weekHeader: 'Sm',
-            dateFormat: 'dd/mm/yy',
-            firstDay: 1,
-            isRTL: false,
-            showMonthAfterYear: false,
-            yearSuffix: ''
-        };
-        $.datepicker.setDefaults($.datepicker.regional['es']);
-
+        
         var fecha = $("#chrFechaInicioVigenciaAsesor").val();
         $("#chrFechaInicioVigenciaAsesor").datepicker({ dateFormat: "dd/mm/yy", minDate: $("#fechaRegistro").val() }).datepicker("setDate", fecha);
 
@@ -2593,6 +2594,7 @@ jQuery(function ($) {
 
     $("#btnExportCanasta").click(function () {
         var actionLink = $(this).attr("actionLink");
+        var fecha = $("#ppFechaDesde").val();
         $.confirm({
             title: 'Tipo descarga',
             content: 'Seleccione el tipo de descarga de la canasta:',
@@ -2610,6 +2612,13 @@ jQuery(function ($) {
                     btnClass: 'btn-blue',
                     action: function () {
                         window.location.href = actionLink + "?tipoDescarga=2";
+                    }
+                },
+                basketdate: {
+                    text: 'LISTA PRECIOS VIGENTES DESDE ' + fecha,
+                    btnClass: 'btn-green',
+                    action: function () {
+                        window.location.href = actionLink + "?tipoDescarga=4";
                     }
                 },
                 record: {
@@ -3068,6 +3077,8 @@ jQuery(function ($) {
     });
 
     var idClienteView = "";
+    var disabledCanastaView = "";
+
     $(document).on('click', "button.btnVerCliente", function (e) {
         e.preventDefault();
         $('body').loadingModal({
@@ -3264,89 +3275,13 @@ jQuery(function ($) {
                 var preciosList = result.precios;
                 var margenText = "";
                 var canastaText = "";
-                var disabledCanasta = "";
                 var spnSkuCliente = "";
 
-
-                $("#tableListaPrecios > tbody").empty();
-
-                for (var i = 0; i < preciosList.length; i++) {
-                    var fechaInicioVigencia = preciosList[i].precioCliente.fechaInicioVigencia;
-                    var fechaFinVigencia = preciosList[i].precioCliente.fechaFinVigencia;
-
-                    if (fechaInicioVigencia == null)
-                        fechaInicioVigencia = "No Definida";
-                    else
-                        fechaInicioVigencia = invertirFormatoFecha(preciosList[i].precioCliente.fechaInicioVigencia.substr(0, 10));
-
-                    if (fechaFinVigencia == null)
-                        fechaFinVigencia = "No Definida";
-                    else
-                        fechaFinVigencia = invertirFormatoFecha(preciosList[i].precioCliente.fechaFinVigencia.substr(0, 10));
-
-                    margenText = "";
-                    if ($("#tableListaPrecios th.porcentajeMargen").length) {
-                        margenText = '<td>  ' + Number(preciosList[i].porcentajeMargenMostrar).toFixed(1)  + ' % </td>';
-                    }
-
-                    var checkedCanasta = "";
-                    if (preciosList[i].producto.precioClienteProducto.estadoCanasta) {
-                        checkedCanasta = "checked";
-                    }
-
-                    canastaText = "";
-                    if (cliente.modificaCanasta != 1) { 
-                        disabledCanasta = "disabled";
-                    }
-
-                    if ($("#tableListaPrecios th.listaPreciosCanasta").length) {
-                        canastaText = '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + ' ' + disabledCanasta + '>  </td>';
-                    } 
-
-                    spnSkuCliente = '<span class="spnTextSkuCliente" savedValue=""> <span class="spnSkuCliente"></span><br/> <a class="btn btn-link lnkAction lnkActionLabel lnkAgregarSkuCliente">Agregar SKU Cliente</a></span>';
-                    if (preciosList[i].precioCliente.skuCliente != null && preciosList[i].precioCliente.skuCliente != '') {
-                        spnSkuCliente = '<span class="spnTextSkuCliente" savedValue="' + preciosList[i].precioCliente.skuCliente + '"> - <span class="spnSkuCliente">' + preciosList[i].precioCliente.skuCliente + '</span>' + '<br/> <a class="btn btn-link lnkAction lnkActionLabel lnkAgregarSkuCliente">Editar SKU Cliente</a></span>';
-                    }
-
-                    var preciosRow = '<tr data-expanded="true">' +
-                        '<td>  ' + preciosList[i].producto.idProducto + '</td>' +
-                        canastaText +
-                        '<td>  ' + preciosList[i].producto.proveedor  + '  </td>' +
-                        '<td>  ' + preciosList[i].producto.sku + spnSkuCliente + '</td>' +
-                        '<td>  ' + preciosList[i].producto.skuProveedor + ' - ' + preciosList[i].producto.descripcion + ' </td>' +
-                        '<td>' + fechaInicioVigencia + '</td>' +
-                        '<td>' + fechaFinVigencia + '</td>' +
-                        '<td>  ' + preciosList[i].unidad + '</td>' +
-                        '<td>  ' + preciosList[i].producto.precioClienteProducto.equivalencia.toFixed(cantidadDecimales) + '</td>' +
-                        '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + preciosList[i].producto.image + '">  </td>' +
-                        '<td>  ' + Number(preciosList[i].precioLista).toFixed(cantidadDecimales) + '  </td>' +
-                        '<td>  ' + Number(preciosList[i].porcentajeDescuentoMostrar).toFixed(1) + ' % </td>' +
-                        
-                        '<td>  ' + Number(preciosList[i].precioNeto).toFixed(cantidadDecimales) + '  </td>' +
-                        '<td>  ' + Number(preciosList[i].flete).toFixed(cantidadDecimales) + '</td>' +
-
-                        '<td>  ' + Number(preciosList[i].producto.precioClienteProducto.precioUnitario).toFixed(cantidadDecimales) + '</td>' +
-                         margenText +
-                        '<td>' +
-                        '<button type="button" idProducto="' + preciosList[i].producto.idProducto + '" class="btnMostrarPrecios btn btn-primary bouton-image botonPrecios">Ver</button>' +
-                        '</td>' +
-                        '</tr>';
-
-                    $("#tableListaPrecios").append(preciosRow);
-                    
+                if (cliente.modificaCanasta != 1) {
+                    disabledCanastaView = "disabled";
                 }
 
-                if (preciosList.length > 0) {
-                    $("#msgPreciosSinResultados").hide();
-                }
-                else {
-                    $("#msgPreciosSinResultados").show();
-                }
-                FooTable.init('#tableListaPrecios');
-
-
-                $("#chkSoloCanasta").prop("checked", false);
-                $("#lblChkCanasta").addClass("text-muted");
+                setTablePrecios(preciosList);
 
 
                 /**
@@ -3887,29 +3822,73 @@ jQuery(function ($) {
         $("#insertCHRFechaInicioVigencia").val("");
     }
 
-    $("#chkSoloCanasta").change(function () {
-        if ($(this).is(":checked")) {
+    $("#chkSoloVigentes").change(function () {
+        chkSoloVigentesApply();
+    });
 
+    function chkSoloVigentesApply() {
+        if ($("#chkSoloVigentes").is(":checked")) {
             $("#tableListaPrecios tbody tr").hide();
-            $(".chkCanasta:checked").closest("tr").show();
+            if ($("#chkSoloCanasta").is(":checked")) {
+                $(".chkCanasta:checked").closest('tr[precioVigente="1"]').show();
+            } else {
+                $('tr[precioVigente="1"]').show();
+            }
+            $("#lblChkSoloVigentes").removeClass("text-muted");
+        } else {
+            if ($("#chkSoloCanasta").is(":checked")) {
+                $(".chkCanasta:checked").closest("tr").show();
+            } else {
+                $("#tableListaPrecios tbody tr").show();
+            }
+
+            $("#lblChkSoloVigentes").addClass("text-muted");
+        }
+    }
+
+    $("#chkSoloCanasta").change(function () {
+        chkSoloCanastaApply();
+    });
+
+    function chkSoloCanastaApply() {
+        if ($("#chkSoloCanasta").is(":checked")) {
+            $("#tableListaPrecios tbody tr").hide();
+            if ($("#chkSoloVigentes").is(":checked")) {
+                $(".chkCanasta:checked").closest('tr[precioVigente="1"]').show();
+            } else {
+                $(".chkCanasta:checked").closest("tr").show();
+            }
+
             $("#lblChkCanasta").removeClass("text-muted");
         } else {
-            $("#tableListaPrecios tbody tr").show();
+
+            if ($("#chkSoloVigentes").is(":checked")) {
+                $('tr[precioVigente="1"]').show();
+            } else {
+                $("#tableListaPrecios tbody tr").show();
+            }
             $("#lblChkCanasta").addClass("text-muted");
         }
-    });
+    }
 
     $("#lblChkCanasta").click(function () {
         if ($("#chkSoloCanasta").is(":checked")) {
             $("#chkSoloCanasta").prop("checked", false);
-            $("#tableListaPrecios tbody tr").show();
-            $("#lblChkCanasta").addClass("text-muted");
         } else {
             $("#chkSoloCanasta").prop("checked", true);
-            $("#tableListaPrecios tbody tr").hide();
-            $(".chkCanasta:checked").closest("tr").show();
-            $("#lblChkCanasta").removeClass("text-muted");
         }
+
+        chkSoloCanastaApply();
+    });
+
+    $("#lblChkSoloVigentes").click(function () {
+        if ($("#chkSoloVigentes").is(":checked")) {
+            $("#chkSoloVigentes").prop("checked", false);
+        } else {
+            $("#chkSoloVigentes").prop("checked", true);
+        }
+
+        chkSoloVigentesApply();
     });
 
     $("#showClientePrecios").click(function () {
@@ -3931,6 +3910,114 @@ jQuery(function ($) {
             }
         }, 500);
     });
+
+    $("#btnPPActualizarFechaDesde").click(function () {
+
+        $.ajax({
+            url: "/Cliente/ConsultaPreciosCliente",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCliente: idClienteView
+            },
+            success: function (res) {
+                var preciosList = res.precios;
+                setTablePrecios(preciosList);
+            }
+        });
+    });
+
+    $("#ppFechaDesde").change(function () {
+        changeAjaxVal($(this).val(), "ChangeFechaVigenciaPrecios");
+    });
+
+    function setTablePrecios(preciosList) {
+        $("#tableListaPrecios > tbody").empty();
+        var margenText = "";
+        var canastaText = "";
+
+        for (var i = 0; i < preciosList.length; i++) {
+            var fechaInicioVigencia = preciosList[i].precioCliente.fechaInicioVigencia;
+            var fechaFinVigencia = preciosList[i].precioCliente.fechaFinVigencia;
+
+            if (fechaInicioVigencia == null)
+                fechaInicioVigencia = "No Definida";
+            else
+                fechaInicioVigencia = invertirFormatoFecha(preciosList[i].precioCliente.fechaInicioVigencia.substr(0, 10));
+
+            if (fechaFinVigencia == null)
+                fechaFinVigencia = "No Definida";
+            else
+                fechaFinVigencia = invertirFormatoFecha(preciosList[i].precioCliente.fechaFinVigencia.substr(0, 10));
+
+            margenText = "";
+            if ($("#tableListaPrecios th.porcentajeMargen").length) {
+                margenText = '<td>  ' + Number(preciosList[i].porcentajeMargenMostrar).toFixed(1) + ' % </td>';
+            }
+
+            var checkedCanasta = "";
+            if (preciosList[i].producto.precioClienteProducto.estadoCanasta) {
+                checkedCanasta = "checked";
+            }
+
+            canastaText = "";
+            
+            if ($("#tableListaPrecios th.listaPreciosCanasta").length) {
+                canastaText = '<td><input type="checkbox" class="chkCanasta" idProducto="' + preciosList[i].producto.idProducto + '" ' + checkedCanasta + ' ' + disabledCanastaView + '>  </td>';
+            }
+
+            spnSkuCliente = '<span class="spnTextSkuCliente" savedValue=""> <span class="spnSkuCliente"></span><br/> <a class="btn btn-link lnkAction lnkActionLabel lnkAgregarSkuCliente">Agregar SKU Cliente</a></span>';
+            if (preciosList[i].precioCliente.skuCliente != null && preciosList[i].precioCliente.skuCliente != '') {
+                spnSkuCliente = '<span class="spnTextSkuCliente" savedValue="' + preciosList[i].precioCliente.skuCliente + '"> - <span class="spnSkuCliente">' + preciosList[i].precioCliente.skuCliente + '</span>' + '<br/> <a class="btn btn-link lnkAction lnkActionLabel lnkAgregarSkuCliente">Editar SKU Cliente</a></span>';
+            }
+
+            var precioVigente = "0";
+            if (preciosList[i].precioCliente.precioVigente) {
+                precioVigente = "1";
+            }
+
+            var preciosRow = '<tr data-expanded="true" precioVigente="' + precioVigente + '">' +
+                '<td>  ' + preciosList[i].producto.idProducto + '</td>' +
+                canastaText +
+                '<td>  ' + preciosList[i].producto.proveedor + '  </td>' +
+                '<td>  ' + preciosList[i].producto.sku + spnSkuCliente + '</td>' +
+                '<td>  ' + preciosList[i].producto.skuProveedor + ' - ' + preciosList[i].producto.descripcion + ' </td>' +
+                '<td>' + fechaInicioVigencia + '</td>' +
+                '<td>' + fechaFinVigencia + '</td>' +
+                '<td>  ' + preciosList[i].unidad + '</td>' +
+                '<td>  ' + preciosList[i].producto.precioClienteProducto.equivalencia.toFixed(cantidadDecimales) + '</td>' +
+                '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + preciosList[i].producto.image + '">  </td>' +
+                '<td>  ' + Number(preciosList[i].precioLista).toFixed(cantidadDecimales) + '  </td>' +
+                '<td>  ' + Number(preciosList[i].porcentajeDescuentoMostrar).toFixed(1) + ' % </td>' +
+
+                '<td>  ' + Number(preciosList[i].precioNeto).toFixed(cantidadDecimales) + '  </td>' +
+                '<td>  ' + Number(preciosList[i].flete).toFixed(cantidadDecimales) + '</td>' +
+
+                '<td>  ' + Number(preciosList[i].producto.precioClienteProducto.precioUnitario).toFixed(cantidadDecimales) + '</td>' +
+                margenText +
+                '<td>' +
+                '<button type="button" idProducto="' + preciosList[i].producto.idProducto + '" class="btnMostrarPrecios btn btn-primary bouton-image botonPrecios">Ver</button>' +
+                '</td>' +
+                '</tr>';
+
+            $("#tableListaPrecios").append(preciosRow);
+
+        }
+
+        if (preciosList.length > 0) {
+            $("#msgPreciosSinResultados").hide();
+        }
+        else {
+            $("#msgPreciosSinResultados").show();
+        }
+        FooTable.init('#tableListaPrecios');
+
+
+        $("#chkSoloCanasta").prop("checked", false);
+        $("#chkSoloVigentes").prop("checked", false);
+        $("#lblChkCanasta").addClass("text-muted");
+        $("#lblChkSoloVigentes").addClass("text-muted");
+    }
 
     $("#modalVerCliente").on('click', ".btnMostrarPrecios", function () {
 

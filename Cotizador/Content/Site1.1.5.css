@@ -251,6 +251,10 @@ textarea {
     #modalLogPrecioProducto .modal-dialog {
         width: 800px;
     }
+
+    #modalLogEditarDato .modal-dialog {
+        width: 500px;
+    }
 }
 
 

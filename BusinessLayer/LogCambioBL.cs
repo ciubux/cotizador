@@ -176,5 +176,15 @@ namespace BusinessLayer
 
             return this.limpiarCambiosProgramados();
         }
+
+        public bool UpdateLog(LogCambio cambio)
+        {
+            using (var dal = new LogCambioDAL())
+            {
+                dal.UpdatetLog(cambio);
+              
+                return true;
+            }
+        }
     }
 }

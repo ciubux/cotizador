@@ -199,12 +199,15 @@ namespace Cotizador.Controllers
 
             CanastaGrupoCliente excel = new CanastaGrupoCliente();
             GrupoClienteBL bl = new GrupoClienteBL();
+            DateTime fechaPrecios = (DateTime)this.Session[Constantes.VAR_SESSION_GRUPO_CLIENTE_BUSQUEDA_FECHA_PRECIOS_VER];
 
             bool soloCanastaHabitual = false;
             switch (tipoDescarga)
             {
+                case 1: obj.listaPrecios = bl.getPreciosVigentesGrupoCliente(obj.idGrupoCliente); break;
                 case 2: soloCanastaHabitual = true; break;
                 case 3: obj.listaPrecios = bl.getPreciosHistoricoGrupoCliente(obj.idGrupoCliente); break;
+                case 4: obj.listaPrecios = bl.getPreciosVigentesGrupoCliente(obj.idGrupoCliente, fechaPrecios); break;
             }
 
             return excel.generateExcel(obj, soloCanastaHabitual);

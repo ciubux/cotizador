@@ -1437,6 +1437,7 @@ jQuery(function ($) {
 
     $("#btnExportCanasta").click(function () {
         var actionLink = $(this).attr("actionLink");
+        var fecha = $("#ppFechaDesde").val();
         $.confirm({
             title: 'Tipo descarga',
             content: 'Seleccione el tipo de descarga de la canasta:',
@@ -1456,11 +1457,25 @@ jQuery(function ($) {
                         window.location.href = actionLink + "?tipoDescarga=2";
                     }
                 },
+                basketdate: {
+                    text: 'LISTA PRECIOS VIGENTES DESDE ' + fecha,
+                    btnClass: 'btn-green',
+                    action: function () {
+                        window.location.href = actionLink + "?tipoDescarga=4";
+                    }
+                },
                 record: {
                     text: 'LISTA PRECIOS HISTORICO',
                     btnClass: 'btn-red',
                     action: function () {
                         window.location.href = actionLink + "?tipoDescarga=3";
+                    }
+                },
+                cancel: {
+                    text: 'CANCELAR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                    btnClass: '',
+                    action: function () {
+
                     }
                 }
             },

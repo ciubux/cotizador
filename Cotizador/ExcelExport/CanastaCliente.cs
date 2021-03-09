@@ -177,7 +177,7 @@ namespace Cotizador.ExcelExport
 
                 /*Cabecera, Sub total*/
                 int rTotal = (obj.listaPrecios.Count) + cantFilasRegistrosAdicionales;
-                int cTotal = 14;
+                int cTotal = 16;
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
@@ -189,47 +189,52 @@ namespace Cotizador.ExcelExport
                     }
                 }
 
-                
-                int i = filaInicioDatos - 1; 
 
-                UtilesHelper.setRowHeight(sheet, i, 540);
+                int i = filaInicioDatos - 1;
+
+                UtilesHelper.setRowHeight(sheet, i, 810);
                 UtilesHelper.setValorCelda(sheet, i, "A", "PROV.", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "B", "SKU", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "C", "DESCRIPCIÓN", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "D", "IMG.", titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "E", "UNIDAD", titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "F", "EQUIV.", titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "G", "P. LISTA", titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "H", "% DSCTO PRECIO LISTA.", titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "I", "P. NETO", titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "J", "FLETE", titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "K", "P. UNIT.", titleDataCellStyle);
-              
-                
+                UtilesHelper.setValorCelda(sheet, i, "E", "FECHA INICIO VIGENCIA", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "F", "FECHA FIN VIGENCIA", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "G", "UNIDAD", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "H", "EQUIV.", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "I", "P. LISTA", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "J", "% DSCTO PRECIO LISTA.", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "K", "P. NETO", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "L", "FLETE", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "M", "P. UNIT.", titleDataCellStyle);
+
+
 
                 UtilesHelper.setColumnWidth(sheet, "A", 2100);
                 UtilesHelper.setColumnWidth(sheet, "B", 3000);
                 UtilesHelper.setColumnWidth(sheet, "C", 12000);
                 UtilesHelper.setColumnWidth(sheet, "D", 2300);
-                UtilesHelper.setColumnWidth(sheet, "E", 8000);
-                UtilesHelper.setColumnWidth(sheet, "F", 2000);
-                UtilesHelper.setColumnWidth(sheet, "G", 3000);
-                UtilesHelper.setColumnWidth(sheet, "H", 3000);
+                UtilesHelper.setColumnWidth(sheet, "E", 5000);
+                UtilesHelper.setColumnWidth(sheet, "F", 5000);
+                UtilesHelper.setColumnWidth(sheet, "G", 8000);
+                UtilesHelper.setColumnWidth(sheet, "H", 2000);
                 UtilesHelper.setColumnWidth(sheet, "I", 3000);
                 UtilesHelper.setColumnWidth(sheet, "J", 3000);
                 UtilesHelper.setColumnWidth(sheet, "K", 3000);
+                UtilesHelper.setColumnWidth(sheet, "L", 3000);
+                UtilesHelper.setColumnWidth(sheet, "M", 3000);
 
                 if (obj.usuario.visualizaMargen)
                 {
-                    UtilesHelper.setValorCelda(sheet, i, "L", "% MARGEN", titleDataCellStyle);
-                    UtilesHelper.setColumnWidth(sheet, "L", 3500);
+                    UtilesHelper.setValorCelda(sheet, i, "N", "% MARGEN", titleDataCellStyle);
+                    UtilesHelper.setColumnWidth(sheet, "N", 3500);
 
-                    UtilesHelper.setValorCelda(sheet, i, "M", "PERTENECE CANASTA HABITUAL", titleDataCellStyle);
-                    UtilesHelper.setColumnWidth(sheet, "M", 5000);
-                } else
+                    UtilesHelper.setValorCelda(sheet, i, "O", "PERTENECE CANASTA HABITUAL", titleDataCellStyle);
+                    UtilesHelper.setColumnWidth(sheet, "O", 5000);
+                }
+                else
                 {
-                    UtilesHelper.setValorCelda(sheet, i, "L", "PERTENECE CANASTA HABITUAL", titleDataCellStyle);
-                    UtilesHelper.setColumnWidth(sheet, "L", 5000);
+                    UtilesHelper.setValorCelda(sheet, i, "N", "PERTENECE CANASTA HABITUAL", titleDataCellStyle);
+                    UtilesHelper.setColumnWidth(sheet, "N", 5000);
                 }
 
 
@@ -271,24 +276,27 @@ namespace Cotizador.ExcelExport
                         UtilesHelper.setValorCelda(sheet, i, "A", det.producto.proveedor, tableDataCenterCellStyle);
                         UtilesHelper.setValorCelda(sheet, i, "B", det.producto.sku, tableDataCenterCellStyle);
                         UtilesHelper.setValorCelda(sheet, i, "C", det.producto.descripcion, tableDataCellStyle);
-                        UtilesHelper.setValorCelda(sheet, i, "E", det.unidad, tableDataCenterCellStyle);
-                        UtilesHelper.setValorCelda(sheet, i, "F", (double)det.producto.precioClienteProducto.equivalencia, twoDecCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "E", det.precioCliente.fechaInicioVigencia == null ? "" : det.precioCliente.fechaInicioVigencia.Value.ToString("dd/MM/yyyy"), tableDataCenterCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "F", det.precioCliente.fechaFinVigencia == null ? "" : det.precioCliente.fechaFinVigencia.Value.ToString("dd/MM/yyyy"), tableDataCenterCellStyle);
 
-                        UtilesHelper.setValorCelda(sheet, i, "G", (double)det.precioLista, twoDecCellStyle);
-                        UtilesHelper.setValorCelda(sheet, i, "H", (double)det.porcentajeDescuentoMostrar, twoDecCellStyle);
-                        UtilesHelper.setValorCelda(sheet, i, "I", (double)det.precioNeto, twoDecCellStyle);
-                        UtilesHelper.setValorCelda(sheet, i, "J", (double)det.flete, twoDecCellStyle);
-                        UtilesHelper.setValorCelda(sheet, i, "K", (double)det.producto.precioClienteProducto.precioUnitario, twoDecCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "G", det.unidad, tableDataCenterCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "H", (double)det.producto.precioClienteProducto.equivalencia, twoDecCellStyle);
+
+                        UtilesHelper.setValorCelda(sheet, i, "I", (double)det.precioLista, twoDecCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "J", (double)det.porcentajeDescuentoMostrar, twoDecCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "K", (double)det.precioNeto, twoDecCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "L", (double)det.flete, twoDecCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "M", (double)det.producto.precioClienteProducto.precioUnitario, twoDecCellStyle);
 
 
                         if (obj.usuario.visualizaMargen)
                         {
-                            UtilesHelper.setValorCelda(sheet, i, "L", (double)det.porcentajeMargenMostrar, twoDecCellStyle);
-                            UtilesHelper.setValorCelda(sheet, i, "M", det.producto.precioClienteProducto.estadoCanasta ? "SI" : "NO", tableDataCenterCellStyle);
+                            UtilesHelper.setValorCelda(sheet, i, "N", (double)det.porcentajeMargenMostrar, twoDecCellStyle);
+                            UtilesHelper.setValorCelda(sheet, i, "O", det.producto.precioClienteProducto.estadoCanasta ? "SI" : "NO", tableDataCenterCellStyle);
                         }
                         else
                         {
-                            UtilesHelper.setValorCelda(sheet, i, "L", det.producto.precioClienteProducto.estadoCanasta ? "SI" : "NO", tableDataCenterCellStyle);
+                            UtilesHelper.setValorCelda(sheet, i, "N", det.producto.precioClienteProducto.estadoCanasta ? "SI" : "NO", tableDataCenterCellStyle);
                         }
 
                         i++;
@@ -307,12 +315,15 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i, "J", "", lastDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "K", "", lastDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "L", "", lastDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "M", "", lastDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "N", "", lastDataCellStyle);
 
                 if (obj.usuario.visualizaMargen)
                 {
-                    UtilesHelper.setValorCelda(sheet, i, "M", "", lastDataCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "O", "", lastDataCellStyle);
                 }
-                
+
+
 
                 MemoryStream ms = new MemoryStream();
                 using (MemoryStream tempStream = new MemoryStream())

@@ -1,4 +1,4 @@
-﻿@{ 
+﻿@{
     Model.Usuario usuario = ViewBag.usuario;
 }
 <div class="modal fade" id="modalLogPrecioProducto" tabindex="-1">
@@ -50,7 +50,7 @@
                                 <th data-name="precioProvincias" data-visible="true">Precio Provincia</th>
                                 @if (usuario.visualizaCostos)
                                 {
-                                <th data-name="costo" data-visible="true">Costo</th>
+                                    <th data-name="costo" data-visible="true">Costo</th>
                                 }
                             </tr>
                         </thead>
@@ -66,3 +66,49 @@
         </div>
     </div>
 </div>
+
+@if (usuario.modificaLogDatoHistorico)
+{
+    <div class="modal fade" id="modalLogEditarDatoHistorico" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalLogEditarDatoHistoricoTitle"><b>Editar Registro Histórico</b></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <p></p>
+                </div>
+
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <input type="hidden" id="editLogIdLog" name="editLogIdLog">
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-12">
+                                <div class="form-group">
+                                    <label for="numero" class="control-label col-xs-4">Fecha Vigencia:</label>
+                                    <div class="col-xs-8">
+                                        <input class="form-control" type="text" id="editLogFechaVigencia" name="editLogFechaVigencia" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-lg-12">
+                                <div class="form-group">
+                                    <label for="numero" class="control-label col-xs-4">Dato:</label>
+                                    <div class="col-xs-8">
+                                        <input class="form-control hasDatepicker" type="text" id="editLogValor" name="editLogValor" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnLogActualizarDatoHistorico" class="btn btn-primary">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div> 
+}

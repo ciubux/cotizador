@@ -55,6 +55,7 @@
     <Compile Include="ClienteContactoTipo.cs" />
     <Compile Include="ClienteContacto.cs" />
     <Compile Include="TipoVistaDashboard.cs" />
+    <Compile Include="UTILES\LogRegistroCampoDato.cs" />
     <Compile Include="UTILES\LogRegistroCampos.cs" />
     <Compile Include="VistaDashboard.cs" />
     <Compile Include="Parametro.cs" />

@@ -93,6 +93,8 @@ namespace Model
         public static String VAR_SESSION_CLIENTE_LITE_LISTA = "clienteLiteList";
         public static String VAR_SESSION_CLIENTE_VER = "clienteVer";
         public static String VAR_SESSION_CLIENTE_VER_CONTACTOS = "clienteVerContactos";
+        public static String VAR_SESSION_CLIENTE_BUSQUEDA_FECHA_PRECIOS_VER = "clienteVeFechaPreciosVer";
+
 
         public static String VAR_SESSION_GRUPO_CLIENTE = "grupoCliente";
         public static String VAR_SESSION_GRUPO_CLIENTE_MIEMBROS = "grupoClienteMiembros";
@@ -434,6 +436,7 @@ namespace Model
         public const String VISUALIZA_VENDEDORES = "P822";
         public const String MODIFICA_LOGCAMPO = "P823";
         public const String VISUALIZA_LOGCAMPO = "P824";
+        public const String MODIFICA_LOGDATOHISTORICO = "P825";
 
         public const String VISUALIZA_DOCUMENTOVENTANOTIFICACION = "P420";
 

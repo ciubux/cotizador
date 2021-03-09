@@ -112,6 +112,7 @@ namespace DataLayer
             foreach (DataRow row in dataTable.Rows)
             {
                 LogCambio obj = new LogCambio();
+                obj.idCambio = Converter.GetGuid(row, "id_cambio");
                 obj.idCampo = Converter.GetInt(row, "id_catalogo_campo");
                 obj.idRegistro = idRegistro;
                 
@@ -160,6 +161,21 @@ namespace DataLayer
 
             return log;
         }
+
+        public LogCambio UpdatetLog(LogCambio log)
+        {
+            var objCommand = GetSqlCommand("pu_cambio_dato");
+
+            InputParameterAdd.Guid(objCommand, "idUsuario", log.idUsuarioModificacion);
+            InputParameterAdd.Guid(objCommand, "idCambio", log.idCambio);
+            InputParameterAdd.Varchar(objCommand, "valor", log.valor);
+            InputParameterAdd.Varchar(objCommand, "fechaInicioVigencia", log.fechaInicioVigencia.ToString("yyyy-MM-dd"));
+
+            ExecuteNonQuery(objCommand);
+
+            return log;
+        }
+
 
         /*
         public void insertLogProgramadoFull(List<LogCambio> logs)

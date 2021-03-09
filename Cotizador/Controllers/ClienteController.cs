@@ -60,6 +60,10 @@ namespace Cotizador.Controllers
             ClienteContactoTipoBL ccTipoBl = new ClienteContactoTipoBL();
             List<ClienteContactoTipo> contactoTipos = ccTipoBl.getTipos(1);
 
+            DateTime fechaConsultaPrecios = new DateTime(DateTime.Now.AddDays(-720).Year, 1, 1, 0, 0, 0);
+            this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA_FECHA_PRECIOS_VER] = fechaConsultaPrecios;
+            ViewBag.fechaConsultaPrecios = fechaConsultaPrecios;
+
             ViewBag.pagina = (int)Constantes.paginas.BusquedaClientes;
             ViewBag.cliente = clienteSearch;
             ViewBag.contactoTipos = contactoTipos;
@@ -299,6 +303,7 @@ namespace Cotizador.Controllers
         public ActionResult ExportLastShowCanasta(int tipoDescarga)
         {
             Cliente obj = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_VER];
+            DateTime fechaPrecios = (DateTime)this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA_FECHA_PRECIOS_VER];
 
             CanastaCliente excel = new CanastaCliente();
             ClienteBL bl = new ClienteBL();
@@ -306,8 +311,10 @@ namespace Cotizador.Controllers
             bool soloCanastaHabitual = false;
             switch(tipoDescarga)
             {
+                case 1: obj.listaPrecios = bl.getPreciosVigentesCliente(obj.idCliente); break;
                 case 2: soloCanastaHabitual = true; break;
                 case 3: obj.listaPrecios = bl.getPreciosHistoricoCliente(obj.idCliente);break;
+                case 4: obj.listaPrecios = bl.getPreciosVigentesCliente(obj.idCliente, fechaPrecios); break;
             }
 
             return excel.generateExcel(obj, soloCanastaHabitual);
@@ -530,11 +537,13 @@ namespace Cotizador.Controllers
 
         public String Show()
         {
+            DateTime fechaPrecios = (DateTime)this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA_FECHA_PRECIOS_VER];
+
             Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
             ClienteBL clienteBl = new ClienteBL();
             Cliente cliente = clienteBl.getCliente(idCliente);
             cliente.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            List<DocumentoDetalle> listaPrecios = clienteBl.getPreciosVigentesCliente(idCliente);
+            List<DocumentoDetalle> listaPrecios = clienteBl.getPreciosVigentesCliente(idCliente, fechaPrecios);
             cliente.listaPrecios = listaPrecios;
             DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
             List<DireccionEntrega> direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(idCliente);
@@ -555,6 +564,30 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_CLIENTE_VER_CONTACTOS] = listaContactos;
 
             return resultado;
+        }
+
+        public String ConsultaPreciosCliente()
+        {
+            Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
+            DateTime fechaPrecios = (DateTime)this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA_FECHA_PRECIOS_VER];
+
+            ClienteBL bl = new ClienteBL();
+            List<DocumentoDetalle> listaPrecios = bl.getPreciosVigentesCliente(idCliente, fechaPrecios);
+
+
+            String resultado = "{\"precios\":" + JsonConvert.SerializeObject(listaPrecios) + "}";
+
+
+            return resultado;
+        }
+
+        public void ChangeFechaVigenciaPrecios()
+        {
+            if (this.Request.Params["val"] != null && this.Request.Params["val"] != String.Empty)
+            {
+                String[] fiv = this.Request.Params["val"].Split('/');
+                this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA_FECHA_PRECIOS_VER] = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]), 0, 0, 0);
+            }
         }
 
         public String GetClienteContacto(string idClienteContacto)

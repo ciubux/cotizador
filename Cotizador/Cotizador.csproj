@@ -234,6 +234,7 @@
     <Compile Include="Controllers\ArchivoAdjuntoController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\ClienteLiteController.cs" />
+    <Compile Include="Controllers\LogCambioController.cs" />
     <Compile Include="Controllers\MonedaController.cs" />
     <Compile Include="Controllers\NotaCreditoCompraController.cs" />
     <Compile Include="Controllers\TipoClienteContactoController.cs" />

@@ -1054,6 +1054,7 @@ jQuery(function ($) {
                         '<td>  ' + list[i].FechaEdicionFormatoFecha + '  </td>' +
                         '<td>' +
                         '<button type="button" class="' + list[i].idProducto + ' ' + list[i].sku + ' btnVerProducto btn btn-primary ">Ver</button>' +
+                        '<button type="button" idProducto="' + list[i].idProducto + '" skuProducto="' + list[i].sku + '" nombreProducto="' + list[i].descripcion + '" class="btnVerHistorialProducto btn btn-success ">Historial</button>' +
                         '</td>' +
                         '</tr>';
 

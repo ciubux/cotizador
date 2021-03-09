@@ -224,6 +224,7 @@ namespace Model
         /*LogCambio*/
         public bool modificaLogCampo { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_LOGCAMPO)).FirstOrDefault() != null; } }
         public bool visualizaLogCampo { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_LOGCAMPO)).FirstOrDefault() != null; } }
+        public bool modificaLogDatoHistorico { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_LOGDATOHISTORICO)).FirstOrDefault() != null; } }
 
         /*Mensaje*/
         public bool modificaMensaje { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_MENSAJE)).FirstOrDefault() != null; } }
