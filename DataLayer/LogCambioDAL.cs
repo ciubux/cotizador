@@ -176,6 +176,17 @@ namespace DataLayer
             return log;
         }
 
+        public LogCambio AnularLog(LogCambio log)
+        {
+            var objCommand = GetSqlCommand("pd_cambio");
+
+            InputParameterAdd.Guid(objCommand, "idUsuario", log.idUsuarioModificacion);
+            InputParameterAdd.Guid(objCommand, "idCambio", log.idCambio);
+            ExecuteNonQuery(objCommand);
+
+            return log;
+        }
+
 
         /*
         public void insertLogProgramadoFull(List<LogCambio> logs)

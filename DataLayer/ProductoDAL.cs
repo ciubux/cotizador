@@ -1091,6 +1091,57 @@ namespace DataLayer
             return productoList;
         }
 
+        public List<Producto> ProductosPlantillaStock(Producto producto)
+        {
+            var objCommand = GetSqlCommand("ps_productos_plantilla_stock");
+            InputParameterAdd.VarcharEmpty(objCommand, "sku", producto.sku);
+            InputParameterAdd.VarcharEmpty(objCommand, "descripcion", producto.descripcion);
+            InputParameterAdd.Int(objCommand, "estado", producto.Estado);
+            InputParameterAdd.Int(objCommand, "tipoVentaRestingida", producto.tipoVentaRestringidaBusqueda);
+            InputParameterAdd.Varchar(objCommand, "familia", producto.familia);
+            InputParameterAdd.Varchar(objCommand, "proveedor", producto.proveedor);
+
+            DataTable dataTable = Execute(objCommand);
+
+            List<Producto> productoList = new List<Producto>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Producto item = new Producto();
+                item.idProducto = Converter.GetGuid(row, "id_producto");
+                item.sku = Converter.GetString(row, "sku");
+                item.skuProveedor = Converter.GetString(row, "sku_proveedor");
+                item.descripcion = Converter.GetString(row, "descripcion");
+                item.familia = Converter.GetString(row, "familia");
+                item.proveedor = Converter.GetString(row, "proveedor");
+                item.unidad = Converter.GetString(row, "unidad");
+                item.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
+                item.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
+                item.unidadConteo = Converter.GetString(row, "unidad_conteo");
+                item.unidadProveedorInternacional = Converter.GetString(row, "unidad_proveedor_internacional");
+                item.unidadEstandarInternacional = Converter.GetString(row, "unidad_estandar_internacional");
+                item.unidadAlternativaInternacional = Converter.GetString(row, "unidad_alternativa_internacional");
+                item.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
+                item.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+                item.unidadPedidoProveedor = Converter.GetString(row, "unidad_pedido_proveedor");
+                item.equivalenciaUnidadPedidoProveedor = Converter.GetInt(row, "equivalencia_unidad_pedido_proveedor");
+                item.equivalenciaUnidadAlternativaUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_alternativa_unidad_conteo");
+                item.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_estandar_unidad_conteo");
+                item.equivalenciaUnidadProveedorUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_proveedor_unidad_conteo");
+
+                
+                item.tipoProducto = Producto.TipoProducto.Bien;
+                item.tipoProductoVista = (int)item.tipoProducto;
+
+                item.Estado = Converter.GetInt(row, "estado");
+                item.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");
+                item.FechaEdicion = Converter.GetDateTime(row, "fecha_modificacion");
+
+                productoList.Add(item);
+            }
+
+            return productoList;
+        }
+
 
         public List<Producto> GetProductosBySKU(List<String> skus)
         {

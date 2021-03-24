@@ -186,5 +186,15 @@ namespace BusinessLayer
                 return true;
             }
         }
+
+        public bool AnularLog(LogCambio cambio)
+        {
+            using (var dal = new LogCambioDAL())
+            {
+                dal.AnularLog(cambio);
+
+                return true;
+            }
+        }
     }
 }

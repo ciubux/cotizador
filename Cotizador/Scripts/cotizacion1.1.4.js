@@ -2223,7 +2223,10 @@ jQuery(function ($) {
 
                     var descontinuadoLabel = "";
                     if (lista[i].producto.descontinuado == 1) {
-                        tieneProductoRestringido = true;
+                        if (lista[i].cantidad > 1 && lista[i].cantidad > lista[i].producto.cantidadMaximaPedidoRestringido) {
+                            tieneProductoRestringido = true;
+                        }
+                        
                         descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
 
                         if (lista[i].producto.motivoRestriccion != null) {
@@ -2237,6 +2240,7 @@ jQuery(function ($) {
                     }
 
                     if (lista[i].producto.topeDescuento > 0 && lista[i].producto.topeDescuento < lista[i].porcentajeDescuento) {
+                        //TODO: Validar que si la cotizacion es puntual el precio no sea vigente
                         tieneDescuentoMayorATope = true;
                     }
 

@@ -61,11 +61,12 @@ function cargarVistaLogPreciosHistoricos() {
                 var addRow = '<td>' + historial[i].fechaInicioVigencia + '</td>';
 
                 if (historial[i].dato01 != null) {
-                    var addRow = addRow + '<td idHistorico="' + historial[i].dato01.idRegistroCambio + '" valor="' + historial[i].dato01.valor + '">'
+                    var addRow = addRow + '<td editable="' + historial[i].dato01.editable + '" idHistorico="' + historial[i].dato01.idRegistroCambio + '" valor="' + historial[i].dato01.valor + '">'
                         + Number(historial[i].dato01.valor).toFixed(2) + '<br/><span class="mini-info-text">' + historial[i].dato01.fechaModificacion + '<span>';
-                    if (res.editaDatoHistorico && historial[i].dato01.editable) {
+                    if (res.editaDatoHistorico) {
                         addRow = addRow + "<br/>" + '<button class="btn btn-link lnkAction lnkActionLabel lnkLogEditarDatoHistorico"'
-                            + ' data-toggle="modal" data-target="#modalLogEditarDatoHistorico" >Editar</button>';
+                            + ' data-toggle="modal" data-target="#modalLogEditarDatoHistorico" >Editar</button>'
+                            + '<button type="button" class="btn btn-danger btnLogAnularDatoHistorico">Anular</button>';
                     }
                     addRow = addRow + "</td>";
 
@@ -74,11 +75,12 @@ function cargarVistaLogPreciosHistoricos() {
                 }
 
                 if (historial[i].dato02 != null) {
-                    var addRow = addRow + '<td idHistorico="' + historial[i].dato02.idRegistroCambio + '" valor="' + historial[i].dato02.valor + '">'
+                    var addRow = addRow + '<td editable="' + historial[i].dato02.editable + '" idHistorico="' + historial[i].dato02.idRegistroCambio + '" valor="' + historial[i].dato02.valor + '">'
                         + Number(historial[i].dato02.valor).toFixed(2) + '<br/><span class="mini-info-text">' + historial[i].dato02.fechaModificacion + '<span>';
-                    if (res.editaDatoHistorico && historial[i].dato02.editable) {
+                    if (res.editaDatoHistorico) {
                         addRow = addRow + "<br/>" + '<button class="btn btn-link lnkAction lnkActionLabel lnkLogEditarDatoHistorico"'
-                            + ' data-toggle="modal" data-target="#modalLogEditarDatoHistorico" >Editar</button>';
+                            + ' data-toggle="modal" data-target="#modalLogEditarDatoHistorico" >Editar</button>'
+                            + '<button type="button" class="btn btn-danger btnLogAnularDatoHistorico">Anular</button>';
                     }
                     addRow = addRow + "</td>";
                 } else {
@@ -87,11 +89,12 @@ function cargarVistaLogPreciosHistoricos() {
 
                 if (res.mostrarCostos == 1) {
                     if (historial[i].dato03 != null) {
-                        var addRow = addRow + '<td idHistorico="' + historial[i].dato03.idRegistroCambio + '" valor="' + historial[i].dato03.valor + '">'
+                        var addRow = addRow + '<td editable="' + historial[i].dato03.editable + '" idHistorico="' + historial[i].dato03.idRegistroCambio + '" valor="' + historial[i].dato03.valor + '">'
                             + Number(historial[i].dato03.valor).toFixed(2) + '<br/><span class="mini-info-text">' + historial[i].dato03.fechaModificacion + '<span>';
-                        if (res.editaDatoHistorico && historial[i].dato03.editable) {
+                        if (res.editaDatoHistorico) {
                             addRow = addRow + "<br/>" + '<button class="btn btn-link lnkAction lnkActionLabel lnkLogEditarDatoHistorico"'
-                                + ' data-toggle="modal" data-target="#modalLogEditarDatoHistorico" >Editar</button>';
+                                + ' data-toggle="modal" data-target="#modalLogEditarDatoHistorico" >Editar</button>'
+                                + '<button type="button" class="btn btn-danger btnLogAnularDatoHistorico">Anular</button>';
                         }
                         addRow = addRow + "</td>";
                     } else {
@@ -107,10 +110,13 @@ function cargarVistaLogPreciosHistoricos() {
     });
 }
 
+var onEditEditable = '';
+
 $(document).on('click', ".lnkLogEditarDatoHistorico", function () {
     $("#editLogFechaVigencia").val($(this).closest("tr").attr("fechaInicioVigencia"));
     $("#editLogIdLog").val($(this).closest("td").attr("idHistorico"));
     $("#editLogValor").val($(this).closest("td").attr("valor"));
+    onEditEditable = $(this).closest("td").attr("editable");
 });
 
 $(document).on('click', "#btnLogActualizarDatoHistorico", function () {
@@ -129,17 +135,31 @@ $(document).on('click', "#btnLogActualizarDatoHistorico", function () {
         },
         success: function (res) {
             if (res.success == 1) {
-                $.alert({
-                    title: 'Actualización exitosa',
-                    content: 'Se actualizó el dato correctamente.',
-                    type: 'green',
-                    buttons: {
-                        OK: function () {
-                            $('#modalLogEditarDatoHistorico').modal('hide');
-                            cargarVistaLogPreciosHistoricos();
+                if (onEditEditable == "false") {
+                    $.alert({
+                        title: 'Registro Vigente',
+                        content: 'El registro se actualizó correctamente, pero debe verificar la consistencia del nuevo valor con el dato del catálogo.',
+                        type: 'orange',
+                        buttons: {
+                            OK: function () {
+                                $('#modalLogEditarDatoHistorico').modal('hide');
+                                cargarVistaLogPreciosHistoricos();
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    $.alert({
+                        title: 'Actualización exitosa',
+                        content: 'Se actualizó el dato correctamente.',
+                        type: 'green',
+                        buttons: {
+                            OK: function () {
+                                $('#modalLogEditarDatoHistorico').modal('hide');
+                                cargarVistaLogPreciosHistoricos();
+                            }
+                        }
+                    });
+                }
                 
             } else {
                 $.alert({
@@ -154,6 +174,80 @@ $(document).on('click', "#btnLogActualizarDatoHistorico", function () {
             }
         }
     });
+});
+
+
+$(document).on('click', ".btnLogAnularDatoHistorico", function () {
+    var idLog = $(this).closest("td").attr("idHistorico");
+    var editable = $(this).closest("td").attr("editable");
+
+    $.confirm({
+        title: 'Anular Registro',
+        content: '¿Esta seguro que desea anular el registro?',
+        type: 'orange',
+        buttons: {
+            confirm: {
+                text: 'Sí',
+                btnClass: 'btn-red',
+                action: function () {
+                    $.ajax({
+                        url: "/LogCambio/AnularRegistro",
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: {
+                            idLog: idLog
+                        },
+                        success: function (res) {
+                            if (res.success == 1) {
+                                if (editable == "false") {
+                                    $.alert({
+                                        title: 'Registro Vigente',
+                                        content: 'El registro se anuló correctamente, pero debe verificar la consistencia de datos con el catálogo.',
+                                        type: 'orange',
+                                        buttons: {
+                                            OK: function () {
+                                                cargarVistaLogPreciosHistoricos();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    $.alert({
+                                        title: 'Actualización exitosa',
+                                        content: 'Se actualizó el dato correctamente.',
+                                        type: 'green',
+                                        buttons: {
+                                            OK: function () {
+                                                cargarVistaLogPreciosHistoricos();
+                                            }
+                                        }
+                                    });
+                                }
+                            } else {
+                                $.alert({
+                                    title: 'Ocurrió un error',
+                                    content: 'Por favor contacte con el administrador.',
+                                    type: 'red',
+                                    buttons: {
+                                        OK: function () {
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            },
+            cancel: {
+                text: 'No',
+                //btnClass: 'btn-blue',
+                action: function () {
+                }
+            }
+        }
+    });
+
+
+    
 });
 
 

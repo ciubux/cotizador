@@ -111,6 +111,7 @@ namespace Model
         public static String VAR_SESSION_PRODUCTO_SEARCH_PARAM = "productoSearchParamn_";
         public static String VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM = "pedidoSearchProductoParamn_";
 
+        public static String VAR_SESSION_STOCK_PRODUCTO_BUSQUEDA = "stockProductoBusqueda";
 
         public static String VAR_SESSION_ORIGEN = "origen";
         public static String VAR_SESSION_ORIGEN_BUSQUEDA = "origenBusqueda";
@@ -650,6 +651,11 @@ namespace Model
             BusquedaRubros = 750,
             [Display(Name = "CREATE/UPDATE RUBRO")]
             MantenimientoRubro = 751,
+
+            [Display(Name = "PLANTILLA CARGA MASIVA STOCK")]
+            DescargaPlantillMasivaStock = 720,
+            [Display(Name = "CARGA MASIVA STOCK")]
+            CargaMasivaStock = 721,
 
             /*PARAMETRO*/
             [Display(Name = "TIPO CLIENTE CONTACTO")]

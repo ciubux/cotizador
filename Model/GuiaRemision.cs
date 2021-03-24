@@ -70,6 +70,7 @@ namespace Model
         public DocumentoVenta documentoVenta { get; set; }
 
         public string cpeNro { get; set; }
+        public string cpeFechaEmision { get; set; }
         [Display(Name = "Transportista:")]
         public Transportista transportista { get; set; }
 

@@ -181,7 +181,28 @@ namespace BusinessLayer
 
                     if (!cotizacionDetalle.cumpleTopeDescuentoProducto && cotizacion.usuario.maximoPorcentajeDescuentoAprobacion < 100)
                     {
-                        evaluarDescuento = 6;
+                        evaluarDescuento = 0;
+                        if (cotizacion.tipoCotizacion != Cotizacion.TiposCotizacion.Normal)
+                        {
+                            if (!cotizacionDetalle.esPrecioAlternativo)
+                            {
+                                if (cotizacionDetalle.precioUnitario != precioClienteProducto.precioUnitario)
+                                {
+                                    evaluarDescuento = 6;
+                                }
+                            }
+                            else
+                            {
+                                if (cotizacionDetalle.precioUnitario !=
+                                    Decimal.Parse(String.Format(Constantes.formatoDecimalesPrecioNeto, precioClienteProducto.precioUnitario / cotizacionDetalle.ProductoPresentacion.Equivalencia))
+)
+                                {
+                                    evaluarDescuento = 6;
+                                }
+                            }
+                        } else {
+                            evaluarDescuento = 6;
+                        }
                     }
                     
 
@@ -219,10 +240,13 @@ namespace BusinessLayer
                     }
                 }
 
-                if (cotizacionDetalle.producto.descontinuado == 1 && !cotizacion.usuario.apruebaCotizacionesVentaRestringida)
+                if (cotizacionDetalle.producto.descontinuado == 1 && !cotizacion.usuario.apruebaCotizacionesVentaRestringida && cotizacion.considerarCantidades != Cotizacion.OpcionesConsiderarCantidades.Observaciones)
                 {
-                    cotizacion.seguimientoCotizacion.observacion = "El producto " + cotizacionDetalle.producto.sku + " es de venta restringida.\n";
-                    cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
+                    if (cotizacionDetalle.cantidad > 1 && cotizacionDetalle.cantidad > cotizacionDetalle.producto.cantidadMaximaPedidoRestringido)
+                    {
+                        cotizacion.seguimientoCotizacion.observacion = "El producto " + cotizacionDetalle.producto.sku + " es de venta restringida.\n";
+                        cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
+                    }
                 }
             }
            

@@ -59,13 +59,26 @@ namespace Cotizador.Controllers
         }
 
 
+        public String AnularRegistro()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
+            if (usuario.modificaLogDatoHistorico)
+            {
+                Guid idCambio = Guid.Parse(this.Request.Params["idLog"]);
+                
+                LogCambioBL bL = new LogCambioBL();
 
+                LogCambio log = new LogCambio();
+                log.idCambio = idCambio;
+                log.idUsuarioModificacion = usuario.idUsuario;
 
+                bL.AnularLog(log);
 
+                return "{\"success\": 1}";
+            }
 
-
-
-
+            return "{\"success\": 0}";
+        }
     }
 }

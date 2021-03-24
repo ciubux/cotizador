@@ -35,6 +35,10 @@ namespace Cotizador
                         "~/Scripts/boleta.js"
                         ));
 
+            bundles.Add(new ScriptBundle("~/bundles/stock").Include(
+                        "~/Scripts/stock.js"
+                        ));
+
             bundles.Add(new ScriptBundle("~/bundles/notaCredito").Include(
                         "~/Scripts/notaCredito1.1.3.js"
                         ));

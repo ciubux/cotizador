@@ -234,6 +234,7 @@
     <Compile Include="Controllers\ArchivoAdjuntoController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\ClienteLiteController.cs" />
+    <Compile Include="Controllers\StockController.cs" />
     <Compile Include="Controllers\LogCambioController.cs" />
     <Compile Include="Controllers\MonedaController.cs" />
     <Compile Include="Controllers\NotaCreditoCompraController.cs" />
@@ -295,6 +296,7 @@
     <Compile Include="ExcelExport\ClienteSearch.cs" />
     <Compile Include="ExcelExport\CotizacionDetalleExcel.cs" />
     <Compile Include="ExcelExport\PedidoOCExcel.cs" />
+    <Compile Include="ExcelExport\PlantillaCargaStock.cs" />
     <Compile Include="ExcelExport\RubroSearch.cs" />
     <Compile Include="ExcelExport\SubDistribuidorSearch.cs" />
     <Compile Include="ExcelExport\OrigenSearch.cs" />
@@ -456,6 +458,7 @@
     <Content Include="Scripts\account1.0.0.js" />
     <Content Include="Scripts\clienteLite1.0.0.js" />
     <Content Include="Scripts\notaCreditoCompra.js" />
+    <Content Include="Scripts\stock.js" />
     <Content Include="Scripts\tipoClienteContacto.js" />
     <Content Include="Scripts\utilesAjax.js" />
     <Content Include="Scripts\vistaDashboard1.0.0.js" />
@@ -689,6 +692,7 @@
     <Content Include="Views\NotaCreditoCompra\Crear.cshtml" />
     <Content Include="Views\Producto\_LabelCompraRestringida.cshtml" />
     <Content Include="Views\Precio\LogPrecioProducto.cshtml" />
+    <Content Include="Views\Stock\PlantillaStock.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

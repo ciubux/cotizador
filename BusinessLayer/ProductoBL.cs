@@ -125,6 +125,14 @@ namespace BusinessLayer
             }
         }
 
+        public List<Producto> getProductosPlantillaStock(Producto producto)
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                return productoDAL.ProductosPlantillaStock(producto);
+            }
+        }
+
         public List<Producto> GetProductosBySKU(List<String> skus)
         {
             using (var productoDAL = new ProductoDAL())

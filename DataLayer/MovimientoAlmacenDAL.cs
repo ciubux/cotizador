@@ -963,6 +963,8 @@ namespace DataLayer
                 guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)Char.Parse(Converter.GetString(row, "motivo_traslado"));
 
                 guiaRemision.cpeNro = Converter.GetString(row, "serie_factura") + "-" + Converter.GetString(row, "correlativo_factura");
+                guiaRemision.cpeFechaEmision = Converter.GetString(row, "fecha_emision_factura");
+
                 //PEDIDO
                 guiaRemision.pedido = new Pedido();
                 guiaRemision.pedido.idPedido = Converter.GetGuid(row, "id_pedido");
