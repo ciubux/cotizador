@@ -1,0 +1,91 @@
+﻿@{
+    ViewBag.Title = "Carga Cierre Stock";
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <form action="/Stock/Load" method="post" enctype="multipart/form-data" id="formCargarStock">
+        <div class="row">
+            <div class="col-sm-12 col-lg-6">
+                <p>
+                    <b>INSTRUCCIONES DE USO - ARCHIVO DE CARGA DE STOCK:</b>
+                    <ol>
+                        <li>
+                            Descargar la plantilla de archivo de carga de stock <a target="_blank" href="@Url.Action("PlantillaStock", "Stock")">ingresando aquí.</a>
+                        </li>
+                        <li>
+                            Ingresar para cada SKU la cantidad de stock de cada producto según la unidad respectiva; las unidades del producto que no tengan stock, dejarlas en "0" o vacías.
+                        </li>
+                        <li>
+                            Seleccionar la fecha que represente el cierre de la toma de stock. Si el stock se toma al inicio del día seleccionar la fecha del día anterior, si el stock se toma al final del día se registra la fecha del mismo día.
+                        </li>
+                        <li>
+                            Si en la toma física del inventario se encuentran SKUs que no se descargaron en la plantilla, por favor comunicarlo al área de logística. No se registrará el stock de productos que no existan en el ZAS.
+                        </li>
+                        <li>
+                            Al cargar el archivo asegurarse de que el archivo de carga de stock tenga el formato Excel 1997-2003 que tiene la extensión ".xls"
+                        </li>
+                    </ol>
+                </p>
+            </div>
+
+            <div class="col-sm-12 col-lg-6">
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12">
+                        <!--Items-->
+                        <label class="control-label col-xs-4" for="idCiudad">
+                            Sede:
+                        </label>
+                        <div class="col-xs-4">
+                            @Html.Action("GetCiudades", "Ciudad",
+                                            new
+                                            {
+                                                ciudadSelectId = "idCiudad"
+                                            })
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12">
+                        <!--Fecha Inicio Vigencia-->
+                        <label class="control-label col-xs-4" for="fechaCierre">Fecha Inventario:</label>
+                        <div class="col-xs-4">
+                            <input class="form-control" type="text" id="fechaCierre" name="fechaCierre" value="@DateTime.Now.ToString("dd/MM/yyyy")">
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12">
+                        <!--Archivo-->
+                        <label class="control-label col-xs-4" for="file">Archivo Stock:</label>
+                        <div class="col-xs-8">
+                            <input class="form-control" type="file" name="file" id="file" />
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12">
+                        <div class="col-xs-12 text-right">
+                            <button id="btnCargarStock" type="button" class="btn btn-primary">Cargar Stock</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/stock")
+}

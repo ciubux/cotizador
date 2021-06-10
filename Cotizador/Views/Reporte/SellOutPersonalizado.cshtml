@@ -1,0 +1,109 @@
+﻿@{
+    ViewBag.Title = "Reporte de SellOut Personalizado";
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+
+
+    <div class="row">
+        <div class="col-sm-12 col-lg-12">
+            <!--Fecha Inicio Vigencia-->
+            <label class="control-label col-xs-2" for="fechaInicio">Rango Fecha Ventas:</label>
+            <div class="col-xs-10">
+                <input class="form-control" type="text" id="fechaInicio" name="fechaInicio" autocomplete="off" value="@ViewBag.fechaInicio" style="width:120px; display: inline-block;">
+                <b> - </b>
+                <input class="form-control" type="text" id="fechaFin" name="fechaFin" autocomplete="off" value="@ViewBag.fechaFin" style="width:120px; display: inline-block;">
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-sm-12 col-lg-12">
+            <!--Fecha Inicio Vigencia-->
+            <label class="control-label col-xs-2" for="skuProducto">Proveedor:</label>
+            <div class="col-xs-9">
+                <div style="width: 120px;">
+                    @Html.Action("list", "Proveedor")
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-sm-12 col-lg-12">
+            <!--Fecha Inicio Vigencia-->
+            <label class="control-label col-xs-2" for="skuProducto">SKU:</label>
+            <div class="col-xs-9">
+                <input class="form-control" type="text" id="skuProducto" name="skuProducto" style="width:120px" value="@ViewBag.sku">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-lg-12">
+            <div class="form-group">
+                <label class="control-label col-xs-2" for="rucsCliente">RUCs Cliente:</label>
+                <div class="col-xs-10">
+                    <select class="form-control" multiple id="rucsCliente" name="rucsCliente">
+                        @foreach (string item in ViewBag.rucs)
+                        {
+                            <option selected value="@item">@item</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-lg-12">
+            <div class="form-group">
+                <label class="control-label col-xs-2" for="codigosCliente">Códigos Cliente:</label>
+                <div class="col-xs-10">
+                    <select class="form-control" multiple id="codigosCliente" name="codigosCliente">
+                        @foreach (string item in ViewBag.codigosCliente)
+                        {
+                            <option selected value="@item">@item</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-lg-12">
+            <div class="form-group">
+                <label class="control-label col-xs-2" for="codigosGrupoCliente">Códigos Grupo Cliente:</label>
+                <div class="col-xs-10">
+                    <select class="form-control" multiple id="codigosGrupoCliente" name="codigosGrupoCliente">
+                        @foreach (string item in ViewBag.codigosGrupoCliente)
+                        {
+                            <option selected value="@item">@item</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-lg-4">
+
+        </div>
+    </div>
+
+    <div class="row pull-right" style="margin-top: 20px; margin-bottom: 10px; margin-right: 0px">
+        <button id="btnLimpiarFormulario" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
+        <button id="btnActualizarVista" type="button" class="btn btn-success">Actualizar Vista</button>
+    </div>
+
+</div>
+
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/reportes")
+}

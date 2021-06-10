@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "Cargas Stock";
+    Model.Rol rol = ViewBag.rol;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="idProducto" value="" />
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+
+    <form class="form-horizontal">
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
+            @*<button id="btnLimpiarBusqueda" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>*@
+            <button id="btnBusqueda" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
+        </div>
+
+        @*<div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px; display: none;">
+                <button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchExcel", "Rol")">Exportar</button>
+            </div>*@
+
+        <table id="tableCargasStock" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
+               data-editing-allow-add="false"
+               data-editing-allow-delete="false"
+               data-editing-allow-edit="false"
+               data-sorting="true"
+               data-show-toggle="false"
+               data-editing-hide-text="Finalizar edición"
+               data-editing-add-text="Descartar cambios">
+            <thead>
+                <tr>
+                    <th data-name="idCierreStock" data-visible="false"></th>
+                    <th data-name="fecha" data-visible="true">Fecha</th>
+                    <th data-name="sede" data-visible="true">Sede</th>
+                    <th data-name="usuario" data-visible="true">Usuario</th>
+                    <th data-name="usuario" data-visible="true">Archivo</th>
+                    <th data-name="usuario" data-visible="true">Fecha Creación</th>
+                    @*<th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>*@
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Model.CierreStock item in ViewBag.cargas)
+                {
+                <tr>
+                    <td>@item.idCierreStock.ToString()</td>
+                    <td>@item.fecha.ToString("dd/MM/yyyy")</td>
+                    <td>@item.ciudad.nombre</td>
+                    <td>@item.UsuarioRegistro.nombre</td>
+                    <td><a href="#" class="btnDescargarArchivoAdjunto" idArchivoAdjunto="@item.archivo.idArchivoAdjunto.ToString()">Descargar</a></td>
+                    <td>@item.FechaRegistroDesc</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+</div>
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/stock")
+}
