@@ -100,6 +100,7 @@
                             <option @(producto.tipoVentaRestringidaBusqueda == 1 ? "selected" : "") value="1">Descontinuado</option>
                             <option @(producto.tipoVentaRestringidaBusqueda == 2 ? "selected" : "") value="2">Inestabilidad de precios</option>
                             <option @(producto.tipoVentaRestringidaBusqueda == 3 ? "selected" : "") value="3">Stock limitado</option>
+                            <option @(producto.tipoVentaRestringidaBusqueda == 4 ? "selected" : "") value="4">Venta Controlada</option>
                             <option @(producto.tipoVentaRestringidaBusqueda == 9999 ? "selected" : "") value="9999">Todos los restringidos</option>
                         </select>
                     </div>
@@ -425,26 +426,34 @@
 
                     @if (producto.usuario.visualizaCostos)
                     {
-                        <div class="row">
-                            <!--COSTO-->
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="form-group">
-                                    @Html.LabelFor(c => producto.monedaProveedor, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
-                                    <div class="col-xs-6 col-sm-6 col-lg-8">
-                                        <p class="form-control-static" id="verMonedaProveedor"></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="form-group">
-                                    @Html.LabelFor(c => producto.costoOriginal, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
-                                    <div class="col-xs-6 col-sm-6 col-lg-8">
-                                        <p class="form-control-static" id="verCostoOriginal"></p>
-                                    </div>
+                    <div class="row">
+                        <!--COSTO-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(c => producto.monedaProveedor, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                <div class="col-xs-6 col-sm-6 col-lg-8">
+                                    <p class="form-control-static" id="verMonedaProveedor"></p>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(c => producto.costoOriginal, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                <div class="col-xs-6 col-sm-6 col-lg-8">
+                                    <p class="form-control-static" id="verCostoOriginal"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(c => producto.costoReferencialOriginal, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                <div class="col-xs-6 col-sm-6 col-lg-8">
+                                    <p class="form-control-static" id="verCostoReferencialOriginal"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     }
                     <br />
                     <fieldset id="fieldSetUnidadMP">

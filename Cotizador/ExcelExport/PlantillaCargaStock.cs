@@ -103,6 +103,15 @@ namespace Cotizador.ExcelExport
                 HSSFCellStyle tableDataCenterCellStyle = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataCellStyle);
                 tableDataCenterCellStyle.Alignment = HorizontalAlignment.Center;
 
+                HSSFCellStyle tableDataCellStyleB = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataCellStyle);
+                tableDataCellStyleB.Alignment = HorizontalAlignment.Left;
+                tableDataCellStyleB.FillPattern = FillPattern.SolidForeground;
+                tableDataCellStyleB.FillForegroundColor = HSSFColor.Grey25Percent.Index;
+
+                HSSFCellStyle tableDataCenterCellStyleB = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataCenterCellStyle);
+                tableDataCenterCellStyleB.FillPattern = FillPattern.SolidForeground;
+                tableDataCenterCellStyleB.FillForegroundColor = HSSFColor.Grey25Percent.Index;
+
                 HSSFCellStyle tableDataLastCenterCellStyle = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataLastCellStyle);
                 tableDataLastCenterCellStyle.Alignment = HorizontalAlignment.Center;
 
@@ -113,7 +122,7 @@ namespace Cotizador.ExcelExport
 
 
                 // create sheet
-                sheet = (HSSFSheet)wb.CreateSheet("Atenciones");
+                sheet = (HSSFSheet)wb.CreateSheet("Productos");
 
 
                 /*guiaRemision,fecha_emision, ma.direccion_entrega, ub.distrito, 
@@ -171,15 +180,15 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setColumnWidth(sheet, "D", 15000);
                 
                 UtilesHelper.setColumnWidth(sheet, "E", 500);
-                UtilesHelper.setColumnWidth(sheet, "F", 5000);
+                UtilesHelper.setColumnWidth(sheet, "F", 6000);
                 UtilesHelper.setColumnWidth(sheet, "G", 2000);
 
                 UtilesHelper.setColumnWidth(sheet, "H", 500);
-                UtilesHelper.setColumnWidth(sheet, "I", 5000);
+                UtilesHelper.setColumnWidth(sheet, "I", 6000);
                 UtilesHelper.setColumnWidth(sheet, "J", 2000);
 
                 UtilesHelper.setColumnWidth(sheet, "K", 500);
-                UtilesHelper.setColumnWidth(sheet, "L", 5000);
+                UtilesHelper.setColumnWidth(sheet, "L", 6000);
                 UtilesHelper.setColumnWidth(sheet, "M", 2000);
 
 
@@ -188,12 +197,14 @@ namespace Cotizador.ExcelExport
                 /*  for (int iii = 0; iii<50;iii++)
                   { */
                 string familia = "";
+                bool bStyle = false;
                 foreach (Producto obj in list)
                 {
                     if (!familia.Equals(obj.familia))
                     {
                         i++;
                         familia = obj.familia;
+                        bStyle = false;
                         if (!familia.Trim().Equals(""))
                         {
                             UtilesHelper.setValorCelda(sheet, i, "A", obj.familia, familiaCellStyle);
@@ -201,34 +212,86 @@ namespace Cotizador.ExcelExport
                         }
                     }
 
-                    UtilesHelper.setValorCelda(sheet, i, "A", obj.sku, tableDataCenterCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "B", obj.proveedor, tableDataCenterCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "C", obj.skuProveedor, tableDataCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "D", obj.descripcion, tableDataCellStyle);
-
-                    if (obj.equivalenciaProveedor > 1)
+                    if (bStyle)
                     {
-                        UtilesHelper.setValorCelda(sheet, i, "F", obj.unidadProveedor, tableDataCellStyle);
-                        UtilesHelper.setValorCelda(sheet, i, "G", "", tableDataCenterCellStyle);
-                    } else
-                    {
-                        UtilesHelper.combinarCeldas(sheet, i, i, "F", "G");
-                        UtilesHelper.setValorCelda(sheet, i, "F", "", blockedDataCellStyle);
-                    }
+                        UtilesHelper.setValorCelda(sheet, i, "A", obj.sku, tableDataCenterCellStyleB);
+                        UtilesHelper.setValorCelda(sheet, i, "B", obj.proveedor, tableDataCenterCellStyleB);
+                        UtilesHelper.setValorCelda(sheet, i, "C", obj.skuProveedor, tableDataCellStyleB);
+                        UtilesHelper.setValorCelda(sheet, i, "D", obj.descripcion, tableDataCellStyleB);
 
-                    UtilesHelper.setValorCelda(sheet, i, "I", obj.unidad_alternativa, tableDataCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "J", "", tableDataCenterCellStyle);
+                        if (obj.equivalenciaProveedor > 1)
+                        {
+                            UtilesHelper.setValorCelda(sheet, i, "F", obj.unidadProveedor, tableDataCellStyleB);
+                            UtilesHelper.setValorCelda(sheet, i, "G", "", tableDataCenterCellStyleB);
+                        }
 
-                    if (obj.equivalenciaAlternativa > 1)
-                    {
-                        UtilesHelper.setValorCelda(sheet, i, "L", obj.unidad_alternativa, tableDataCellStyle);
-                        UtilesHelper.setValorCelda(sheet, i, "M", "", tableDataCenterCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "I", obj.unidad, tableDataCellStyleB);
+                        UtilesHelper.setValorCelda(sheet, i, "J", "", tableDataCenterCellStyleB);
+
+                        if (obj.equivalenciaAlternativa > 1)
+                        {
+                            UtilesHelper.setValorCelda(sheet, i, "L", obj.unidad_alternativa, tableDataCellStyleB);
+                            UtilesHelper.setValorCelda(sheet, i, "M", "", tableDataCenterCellStyleB);
+                        }
+
+                        if (obj.equivalenciaProveedor <= 1)
+                        {
+                            UtilesHelper.combinarCeldas(sheet, i, i, "F", "G");
+                            UtilesHelper.setValorCelda(sheet, i, "F", "", tableDataCenterCellStyleB);
+                            UtilesHelper.setValorCelda(sheet, i, "G", "", tableDataCenterCellStyleB);
+                        }
+
+
+                        if (obj.equivalenciaAlternativa <= 1)
+                        {
+                            UtilesHelper.combinarCeldas(sheet, i, i, "L", "M");
+                            UtilesHelper.setValorCelda(sheet, i, "L", "", tableDataCenterCellStyleB);
+                            UtilesHelper.setValorCelda(sheet, i, "M", "", tableDataCenterCellStyleB);
+                        }
+
                     }
                     else
                     {
-                        UtilesHelper.combinarCeldas(sheet, i, i, "L", "M");
-                        UtilesHelper.setValorCelda(sheet, i, "L", "", blockedDataCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "A", obj.sku, tableDataCenterCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "B", obj.proveedor, tableDataCenterCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "C", obj.skuProveedor, tableDataCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "D", obj.descripcion, tableDataCellStyle);
+
+                        if (obj.equivalenciaProveedor > 1)
+                        {
+                            UtilesHelper.setValorCelda(sheet, i, "F", obj.unidadProveedor, tableDataCellStyle);
+                            UtilesHelper.setValorCelda(sheet, i, "G", "", tableDataCenterCellStyle);
+                        }
+
+                        UtilesHelper.setValorCelda(sheet, i, "I", obj.unidad, tableDataCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "J", "", tableDataCenterCellStyle);
+
+                        if (obj.equivalenciaAlternativa > 1)
+                        {
+                            UtilesHelper.setValorCelda(sheet, i, "L", obj.unidad_alternativa, tableDataCellStyle);
+                            UtilesHelper.setValorCelda(sheet, i, "M", "", tableDataCenterCellStyle);
+                        }
+
+                        if (obj.equivalenciaProveedor <= 1)
+                        {
+                            UtilesHelper.combinarCeldas(sheet, i, i, "F", "G");
+                            UtilesHelper.setValorCelda(sheet, i, "F", "", tableDataCenterCellStyle);
+                            UtilesHelper.setValorCelda(sheet, i, "G", "", tableDataCenterCellStyle);
+                        }
+
+
+                        if (obj.equivalenciaAlternativa <= 1)
+                        {
+                            UtilesHelper.combinarCeldas(sheet, i, i, "L", "M");
+                            UtilesHelper.setValorCelda(sheet, i, "L", "", tableDataCenterCellStyle);
+                            UtilesHelper.setValorCelda(sheet, i, "M", "", tableDataCenterCellStyle);
+                        }
+
                     }
+
+
+
+                    if (bStyle) { bStyle = false; } else { bStyle = true; }
 
                     i++;
                 }

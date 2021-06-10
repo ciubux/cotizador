@@ -302,6 +302,7 @@ namespace Cotizador.Controllers
             producto.familia = this.Session["familia"].ToString();
             producto.proveedor = this.Session["proveedor"].ToString();
             producto.calcularCostoPrecio();
+            producto.calcularEquivalenciasConteo();
             producto = productoBL.insertProducto(producto);
             this.Session[Constantes.VAR_SESSION_PRODUCTO] = null;
             String resultado = JsonConvert.SerializeObject(producto);
@@ -316,6 +317,7 @@ namespace Cotizador.Controllers
             producto.familia = this.Session["familia"].ToString();
             producto.proveedor = this.Session["proveedor"].ToString();
             producto.calcularCostoPrecio();
+            producto.calcularEquivalenciasConteo();
             if (producto.idProducto == Guid.Empty)
             {
                 producto = productoBL.insertProducto(producto);
@@ -1550,7 +1552,7 @@ namespace Cotizador.Controllers
                             productoStaging.unidadProveedorInternacional = sheet.GetRow(row).GetCell(pos).ToString();
                         }
 
-                        pos = posicionInicial + 24;
+                        /*pos = posicionInicial + 24;
                         if (sheet.GetRow(row).GetCell(pos) == null)
                         {
                             productoStaging.equivalenciaUnidadProveedorUnidadConteo = 0;
@@ -1558,7 +1560,7 @@ namespace Cotizador.Controllers
                         else
                         {
                             productoStaging.equivalenciaUnidadProveedorUnidadConteo = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
-                        }
+                        }*/
 
                         pos = posicionInicial + 25;
                         if (sheet.GetRow(row).GetCell(pos) == null)
@@ -1570,7 +1572,7 @@ namespace Cotizador.Controllers
                             productoStaging.unidadAlternativaInternacional = sheet.GetRow(row).GetCell(pos).ToString();
                         }
 
-                        pos = posicionInicial + 26;
+                        /*pos = posicionInicial + 26;
                         if (sheet.GetRow(row).GetCell(pos) == null)
                         {
                             productoStaging.equivalenciaUnidadAlternativaUnidadConteo = 0;
@@ -1578,7 +1580,7 @@ namespace Cotizador.Controllers
                         else
                         {
                             productoStaging.equivalenciaUnidadAlternativaUnidadConteo = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
-                        }
+                        }*/
 
                         pos = posicionInicial + 27;
                         if (sheet.GetRow(row).GetCell(pos) == null)
@@ -1709,32 +1711,23 @@ namespace Cotizador.Controllers
                             productoStaging.compraRestringida = 0;
                         }
 
+                        pos = posicionInicial + 40;
+                        try
+                        {
+                            Double? val = sheet.GetRow(row).GetCell(pos).NumericCellValue;
+                            productoStaging.costoReferencialOriginal = Convert.ToDecimal(val);
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.costoReferencialOriginal = 0;
+                        }
+
+                        pos = posicionInicial + 42; // Costo referencial calculado
                         //UtilesHelper.setValorCelda(sheet, 1, "AC", Producto.nombreAtributo("tipoProducto"), titleCellStyle);
 
-
-                        productoStaging.costoSinIgv = productoStaging.costoOriginal / (productoStaging.equivalenciaProveedor == 0 ? 1 : productoStaging.equivalenciaProveedor);
-                        if (productoStaging.monedaProveedor == "D")
-                        {
-                            productoStaging.costoSinIgv = productoStaging.costoSinIgv * tipoCambio;
-                        }
-
-                        if (productoStaging.monedaMP == "D")
-                        {
-                            productoStaging.precioSinIgv = productoStaging.precioOriginal * tipoCambio;
-                        }
-                        else
-                        {
-                            productoStaging.precioSinIgv = productoStaging.precioOriginal;
-                        }
-
-                        if (productoStaging.monedaMP == "D")
-                        {
-                            productoStaging.precioProvinciaSinIgv = productoStaging.precioProvinciasOriginal * tipoCambio;
-                        }
-                        else
-                        {
-                            productoStaging.precioProvinciaSinIgv = productoStaging.precioProvinciasOriginal;
-                        }
+                        productoStaging.tipoCambio = tipoCambio;
+                        productoStaging.calcularCostoPrecio();
+                        productoStaging.calcularEquivalenciasConteo();
 
 
                         Guid idRegistro = productoBL.getAllProductoId(productoStaging.sku);
@@ -1746,10 +1739,10 @@ namespace Cotizador.Controllers
                             isNew = true;
                         }
 
-                        productoStaging.tipoCambio = tipoCambio;
                         productoStaging.idProducto = idRegistro;
                         productoStaging.usuario = usuario;
                         productoStaging.fechaInicioVigencia = fechaInicioVigencia;
+
                         if (agregar)
                         {
                             if (isNew)

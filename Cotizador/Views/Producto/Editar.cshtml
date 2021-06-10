@@ -242,29 +242,38 @@
 
         @if (producto.usuario.visualizaCostos)
         {
-            <div class="row">
-                <!--COSTO-->
-                <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(c => producto.monedaProveedor, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
-                        <div class="col-xs-6 col-sm-6 col-lg-8">
-                            <select class="form-control" id="producto_monedaProveedor">
-                                <option @(producto.monedaProveedor == "S" ? "selected" : "") value="S">Soles</option>
-                                <option @(producto.monedaProveedor == "D" ? "selected" : "") value="D">Dólares</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(c => producto.costoOriginal, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
-                        <div class="col-xs-6 col-sm-6 col-lg-8">
-                            @Html.TextBoxFor(c => producto.costoOriginal, htmlAttributes: new { @class = "form-control", @type = "number", @step = "0.01" })
-                        </div>
+        <div class="row">
+            <!--COSTO-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => producto.monedaProveedor, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                        <select class="form-control" id="producto_monedaProveedor">
+                            <option @(producto.monedaProveedor == "S" ? "selected" : "") value="S">Soles</option>
+                            <option @(producto.monedaProveedor == "D" ? "selected" : "") value="D">Dólares</option>
+                        </select>
                     </div>
                 </div>
             </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => producto.costoOriginal, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                        @Html.TextBoxFor(c => producto.costoOriginal, htmlAttributes: new { @class = "form-control", @type = "number", @step = "0.01" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => producto.costoReferencialOriginal, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                        @Html.TextBoxFor(c => producto.costoReferencialOriginal, htmlAttributes: new { @class = "form-control", @type = "number", @step = "0.01" })
+                    </div>
+                </div>
+            </div>
+        </div>
         }
         <br />
         <fieldset id="fieldSetUnidadMP">
@@ -326,14 +335,14 @@
                 </div>
 
                 <!--Equivalencia Unidad Conteo-->
-                <div class="col-sm-6 col-lg-4">
+                @*<div class="col-sm-6 col-lg-4">
                     <div class="form-group">
                         @Html.LabelFor(c => producto.equivalenciaUnidadAlternativaUnidadConteo, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
                         <div class="col-xs-6 col-sm-6 col-lg-8">
                             @Html.TextBoxFor(c => producto.equivalenciaUnidadAlternativaUnidadConteo, htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
-                </div>
+                </div>*@
 
                 <!--Equivalencia-->
                 <div class="col-sm-6 col-lg-4">
@@ -371,14 +380,14 @@
                 </div>
 
                 <!--Equivalencia Unidad Conteo-->
-                <div class="col-sm-6 col-lg-4">
+                @*<div class="col-sm-6 col-lg-4">
                     <div class="form-group">
                         @Html.LabelFor(c => producto.equivalenciaUnidadProveedorUnidadConteo, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
                         <div class="col-xs-6 col-sm-6 col-lg-8">
                             @Html.TextBoxFor(c => producto.equivalenciaUnidadProveedorUnidadConteo, htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
-                </div>
+                </div>*@
 
                 <!--Equivalencia-->
                 <div class="col-sm-6 col-lg-4">

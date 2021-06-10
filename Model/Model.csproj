@@ -52,9 +52,11 @@
     <Compile Include="AlertaValidacion.cs" />
     <Compile Include="Auditoria.cs" />
     <Compile Include="CampoPersistir.cs" />
+    <Compile Include="CierreStock.cs" />
     <Compile Include="ClienteContactoTipo.cs" />
     <Compile Include="ClienteContacto.cs" />
     <Compile Include="TipoVistaDashboard.cs" />
+    <Compile Include="UTILES\RegistroCargaStock.cs" />
     <Compile Include="UTILES\LogRegistroCampoDato.cs" />
     <Compile Include="UTILES\LogRegistroCampos.cs" />
     <Compile Include="VistaDashboard.cs" />

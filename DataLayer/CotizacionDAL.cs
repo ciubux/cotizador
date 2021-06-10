@@ -304,6 +304,7 @@ namespace DataLayer
                 cotizacion.grupo.ciudad = cotizacion.ciudad;
                 //USUARIO
                 cotizacion.usuario = new Usuario();
+                cotizacion.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
                 cotizacion.usuario.nombre = Converter.GetString(row, "nombre_usuario");
                 cotizacion.usuario.cargo = Converter.GetString(row, "cargo");
                 cotizacion.usuario.contacto = Converter.GetString(row, "contacto_usuario"); 

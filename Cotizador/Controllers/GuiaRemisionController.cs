@@ -396,16 +396,16 @@ namespace Cotizador.Controllers
 
 
             this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA] = null;
-            if (guiaRemisionList.Count > 0)
-            {
-                this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA] = guiaRemisionList[0];
-            }
+            //if (guiaRemisionList.Count > 0)
+            //{
+            //    this.Session[Constantes.VAR_SESSION_GUIA_CONSOLIDADA] = guiaRemisionList[0];
+            //}
 
-            foreach (GuiaRemision guiaRemisionId in guiaRemisionList)
-            {
-                movimientoAlmacenIdList.Add(guiaRemisionId.idMovimientoAlmacen);
-            }
-            this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS] = movimientoAlmacenIdList;
+            //foreach (GuiaRemision guiaRemisionId in guiaRemisionList)
+            //{
+            //    movimientoAlmacenIdList.Add(guiaRemisionId.idMovimientoAlmacen);
+            //}
+            //this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS] = movimientoAlmacenIdList;
 
 
             //Se coloca en session el resultado de la búsqueda

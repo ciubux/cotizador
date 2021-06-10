@@ -61,10 +61,18 @@ namespace Cotizador.Controllers
             return "{ \"IGV\":\"" + Constantes.IGV + "\", \"SIMBOLO_SOL\":\"" + Constantes.SIMBOLO_SOL + "\", \"MILISEGUNDOS_AUTOGUARDADO\":\"" 
                    + Constantes.MILISEGUNDOS_AUTOGUARDADO + "\", \"VARIACION_PRECIO_ITEM_PEDIDO\":\"" + Constantes.VARIACION_PRECIO_ITEM_PEDIDO 
                    + "\", \"DESCARGAR_XML\":\"" + Constantes.DESCARGAR_XML + "\", \"ID_SEDE_TODOS\":\"" + Constantes.ID_SEDE_TODOS
-                   + "\", \"DIAS_MAX_COTIZACION_TRANSITORIA\":\"" + Constantes.DIAS_MAX_COTIZACION_TRANSITORIA + "\" }";
+                   + "\", \"DIAS_MAX_VALIDEZ_OFERTA_COTIZACION_PUNTUAL\":\"" + Constantes.DIAS_MAX_VALIDEZ_OFERTA_COTIZACION_PUNTUAL
+                   + "\", \"DIAS_DEFECTO_VALIDEZ_OFERTA_COTIZACION_PUNTUAL\":\"" + Constantes.DIAS_DEFECTO_VALIDEZ_OFERTA_COTIZACION_PUNTUAL + "\" }";
         }
 
+        public String ChosenDinamico()
+        {
+            String data = this.Request.Params["data[q]"];
 
+            return "{\"q\":\"" + data + "\",\"results\":[{\"id\":\"" + data + "\",\"text\":\"" + data + "\"}]}";
+        }
+
+        
         public void ChangeField()
         {
             String VAR_SESION =  this.Request.Params["numeroReferenciaCliente"];

@@ -230,7 +230,7 @@ namespace Cotizador.Controllers
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            if (!usuario.modificaUsuario)
+            if (!usuario.administraPermisos)
             {
                 return RedirectToAction("List", "Usuario");
             }

@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "778";
+    TempData["ScriptVersion"] = "804";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -83,6 +83,9 @@
 
                         var linkBusquedaProducto = "";
                         var linkCargaMasivaProducto = "";
+                        var linkCargaMasivaStock = "";
+                        var linkPlantillaStock = "";
+                        var linkReporteStock = "";
                         var linkMantenimientoProducto = "";
 
                         var linkBusquedaOrigen = "";
@@ -129,6 +132,10 @@
 
                         var linkMantenimientoTipoContactoCliente = "";
 
+                        var linkSistema = "";
+                        var linkReportes = "";
+
+                        var linkReporteSellOutPersonalizado = "";
                     }
                     @if (this.Session["pagina"] != null)
                     {
@@ -170,6 +177,10 @@
                             case 28: linkCargaMasivaProducto = "ative"; linkMaestros = "active"; break;
                             case 29: linkMantenimientoProducto = "ative"; linkMaestros = "active"; break;
 
+                            case 720: linkPlantillaStock = "ative"; linkMaestros = "active"; break;
+                            case 721: linkCargaMasivaStock = "ative"; linkMaestros = "active"; break;
+                            case 722: linkReporteStock = "ative"; linkMaestros = "active"; break;
+
                             case 30: linkBusquedaOrigen = "ative"; linkMaestros = "active"; break;
                             case 31: linkMantenimientoOrigen = "ative"; linkMaestros = "active"; break;
 
@@ -193,24 +204,26 @@
                             case 36: linkBusquedaGrupoCliente = "ative"; linkMaestros = "active"; break;
                             case 37: linkMantenimientoGrupoCliente = "ative"; linkMaestros = "active"; break;
 
-                            case 38: linkAsignacionPermisos = "ative"; linkMaestros = "active"; break;
+                            case 38: linkAsignacionPermisos = "ative"; linkSistema = "active"; break;
 
-                            case 41: linkBusquedaVendedor = "ative"; linkMaestros = "active"; break;
-                            case 42: linkMantenimientoVendedor = "ative"; linkMaestros = "active"; break;
+                            case 41: linkBusquedaVendedor = "ative"; linkSistema = "active"; break;
+                            case 42: linkMantenimientoVendedor = "ative"; linkSistema = "active"; break;
 
-                            case 43: linkMantenimientoLogCampo = "ative"; linkMaestros = "active"; break;
+                            case 43: linkMantenimientoLogCampo = "ative"; linkSistema = "active"; break;
 
                             case 45: linkCrearMensaje = "ative"; linkMaestros = "active"; break;
                             case 46: linkBusquedaVentas = "ative"; linkMaestros = "active"; break;
 
-                            case 101: linkBusquedaRol = "ative"; linkMaestros = "active"; break;
-                            case 102: linkMantenimientoRol = "ative"; linkMaestros = "active"; break;
-                            case 103: linkBusquedaUsuario = "ative"; linkMaestros = "active"; break;
-                            case 104: linkMantenimientoUsuario = "ative"; linkMaestros = "active"; break;
+                            case 101: linkBusquedaRol = "ative"; linkSistema = "active"; break;
+                            case 102: linkMantenimientoRol = "ative"; linkSistema = "active"; break;
+                            case 103: linkBusquedaUsuario = "ative"; linkSistema = "active"; break;
+                            case 104: linkMantenimientoUsuario = "ative"; linkSistema = "active"; break;
 
                             case 710: linkBusquedaClienteLite = "ative"; linkMaestros = "active"; break;
 
                             case 761: linkMantenimientoTipoContactoCliente = "active"; linkMaestros = "active"; break;
+
+                            case 901: linkReporteSellOutPersonalizado = "active"; linkReportes = "active"; break;
                         }
 
                         if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
@@ -355,9 +368,9 @@
                                     }
 
                                     @*@if (usuario.visualizaDocumentoVentaNotificacion)
-                                        {
-                                            <li id="linkBusquedaDocumentoVentaNotificacion" class="@linkBusquedaDocumentoVentaNotificacion">@Html.ActionLink("Documentos de Venta - Notificaciones pendientes", "ValidarNotificacionAnulacion", "DocumentoVenta")</li>
-                                        }*@
+                        {
+                            <li id="linkBusquedaDocumentoVentaNotificacion" class="@linkBusquedaDocumentoVentaNotificacion">@Html.ActionLink("Documentos de Venta - Notificaciones pendientes", "ValidarNotificacionAnulacion", "DocumentoVenta")</li>
+                        }*@
 
 
                                     @if (usuario.exportarVentasContabilidad)
@@ -431,6 +444,19 @@
                                         <li id="linkCRProducto" class="@linkCargaMasivaProducto">@Html.ActionLink("Producto - Importar ", "Index", "Producto")</li>
                                     }
 
+                                    @if (usuario.realizaCargaMasivaStock)
+                                    {
+                                        <li id="linkPlantillaStock" class="@linkCargaMasivaProducto">@Html.ActionLink("Stock - Búsqueda Cargas Realizadas", "CargasStock", "Stock")</li>
+                                    }
+                                    @if (usuario.realizaCargaMasivaStock)
+                                    {
+                                        <li id="linkCRStock" class="@linkCargaMasivaProducto">@Html.ActionLink("Stock - Cargar Inventario Stock", "CargaMasivaStock", "Stock")</li>
+                                    }
+
+                                    @if (usuario.visualizaReporteGlobalStock)
+                                    {
+                                        <li id="linkCRStock" class="@linkReporteStock">@Html.ActionLink("Stock - Reporte Stock", "ReporteStock", "Stock")</li>
+                                    }
 
                                     @if (usuario.modificaOrigen || usuario.visualizaOrigenes)
                                     {
@@ -465,7 +491,7 @@
 
                         if (usuario.visualizaRoles || usuario.modificaRol || usuario.administraPermisos || usuario.visualizaVendedor || usuario.modificaVendedor || usuario.visualizaMensaje || usuario.modificaMensaje || usuario.enviaMensaje || usuario.modificaVistaDashboard || usuario.verArchivos)
                         {
-                            <li class="@linkMaestros">
+                            <li class="@linkSistema">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
                                     Sistema
                                     <span class="caret"></span>
@@ -520,9 +546,9 @@
                                     }
 
                                     @*if (usuario.modificaMensaje)
-                                        {
-                                            <li id="linkCrearMensaje" class="@linkCrearMensaje">@Html.ActionLink("Mensaje - Crear/Modificar", "Editar", "Mensaje")</li>
-                                        }
+                        {
+                            <li id="linkCrearMensaje" class="@linkCrearMensaje">@Html.ActionLink("Mensaje - Crear/Modificar", "Editar", "Mensaje")</li>
+                        }
                                     *@
 
                                     @if (usuario.modificaParametro)
@@ -547,6 +573,22 @@
                                         <li id="linkAsignaPermisos" class="@linkAsignacionPermisos">@Html.ActionLink("Permisos - Búsqueda", "List", "Permiso")</li>
                                     }
 
+                                </ul>
+                            </li>
+                        }
+
+                        if (usuario.visualizaReporteSellOutPersonalizado)
+                        {
+                            <li class="@linkReportes">
+                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                    Reportes
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    @if (usuario.visualizaReporteSellOutPersonalizado)
+                                    {
+                                        <li id="linkAsignaPermisos" class="@linkReporteSellOutPersonalizado">@Html.ActionLink("Reporte SellOut Personalizado", "SellOutPersonalizado", "Reporte")</li>
+                                    }
                                 </ul>
                             </li>
                         }

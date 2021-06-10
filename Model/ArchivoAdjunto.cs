@@ -68,7 +68,8 @@ namespace Model
             PEDIDO = 3,
             GUIA_REMISION = 4,
             OC_OCCLIENTE = 5,
-            FACTURACOMPRA = 6
+            FACTURACOMPRA = 6,
+            CIERRE_STOCK = 7
         }
         
     }

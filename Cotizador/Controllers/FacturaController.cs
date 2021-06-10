@@ -573,6 +573,24 @@ namespace Cotizador.Controllers
 
         }
 
+        public String RechazarAnulacion()
+        {
+            DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
+            /*  List<DocumentoVenta> documentoVentaList = (List<DocumentoVenta>)this.Session[Constantes.VAR_SESSION_FACTURA_LISTA];
+              Guid idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
+              DocumentoVenta documentoVenta = documentoVentaList.Where(d => d.idDocumentoVenta == idDocumentoVenta).FirstOrDefault();
+  */
+            DocumentoVenta documentoVenta = new DocumentoVenta();
+            documentoVenta.idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
+            documentoVenta = documentoVentaBL.GetDocumentoVenta(documentoVenta);
+            documentoVenta.comentarioAprobacionAnulacion = this.Request.Params["comentarioRechazoAnulacion"];
+            documentoVenta.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+
+            documentoVentaBL.rechazarAnulacionDocumentoVenta(documentoVenta, documentoVenta.usuario);
+            return JsonConvert.SerializeObject(documentoVenta);
+
+        }
 
 
 
@@ -728,14 +746,6 @@ namespace Cotizador.Controllers
         {
             this.FacturaSession.solicitadoAnulacion = Int32.Parse(this.Request.Params["solicitadoAnulacion"]) == 1;
         }
-
-
-
-
-
-
-
-
 
 
 

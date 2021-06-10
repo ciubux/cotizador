@@ -234,6 +234,7 @@
     <Compile Include="Controllers\ArchivoAdjuntoController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\ClienteLiteController.cs" />
+    <Compile Include="Controllers\ReporteController.cs" />
     <Compile Include="Controllers\StockController.cs" />
     <Compile Include="Controllers\LogCambioController.cs" />
     <Compile Include="Controllers\MonedaController.cs" />
@@ -296,6 +297,8 @@
     <Compile Include="ExcelExport\ClienteSearch.cs" />
     <Compile Include="ExcelExport\CotizacionDetalleExcel.cs" />
     <Compile Include="ExcelExport\PedidoOCExcel.cs" />
+    <Compile Include="ExcelExport\ReporteCargaStock .cs" />
+    <Compile Include="ExcelExport\ReporteStock .cs" />
     <Compile Include="ExcelExport\PlantillaCargaStock.cs" />
     <Compile Include="ExcelExport\RubroSearch.cs" />
     <Compile Include="ExcelExport\SubDistribuidorSearch.cs" />
@@ -417,6 +420,7 @@
     <Content Include="images\hombre-de-negocios2.png" />
     <Content Include="images\icon-close.png" />
     <Content Include="images\icon_info_22.png" />
+    <Content Include="images\icon_stock.png" />
     <Content Include="images\icon_warning.png" />
     <Content Include="images\icon_warning_18.png" />
     <Content Include="images\logo_sunat.svg" />
@@ -458,6 +462,7 @@
     <Content Include="Scripts\account1.0.0.js" />
     <Content Include="Scripts\clienteLite1.0.0.js" />
     <Content Include="Scripts\notaCreditoCompra.js" />
+    <Content Include="Scripts\reportes.js" />
     <Content Include="Scripts\stock.js" />
     <Content Include="Scripts\tipoClienteContacto.js" />
     <Content Include="Scripts\utilesAjax.js" />
@@ -693,6 +698,12 @@
     <Content Include="Views\Producto\_LabelCompraRestringida.cshtml" />
     <Content Include="Views\Precio\LogPrecioProducto.cshtml" />
     <Content Include="Views\Stock\PlantillaStock.cshtml" />
+    <Content Include="Views\Stock\CargaMasivaStock.cshtml" />
+    <Content Include="Views\Stock\CargaCorrecta.cshtml" />
+    <Content Include="Views\Stock\ReporteStock.cshtml" />
+    <Content Include="Views\Reporte\SellOutPersonalizado.cshtml" />
+    <Content Include="Views\Stock\_ModalStockProducto.cshtml" />
+    <Content Include="Views\Stock\CargasStock.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

@@ -527,6 +527,7 @@ jQuery(function ($) {
         $("btnIniciarNotaCredito").attr("disabled", "disabled");
         $("btnIniciarNotaDebito").attr("disabled", "disabled");
         $("btnIniciarAprobacion").attr("disabled", "disabled");
+        $("btnRechazarAprobacion").attr("disabled", "disabled");
         $("btnIniciarRefacturacion").attr("disabled", "disabled");
     }
 
@@ -540,6 +541,7 @@ jQuery(function ($) {
         $("btnIniciarNotaCredito").removeAttr("disabled");
         $("btnIniciarNotaDebito").removeAttr("disabled");
         $("btnIniciarAprobacion").removeAttr("disabled");
+        $("btnRechazarAprobacion").removeAttr("disabled");
         $("btnIniciarRefacturacion").removeAttr("disabled");
     }
 
@@ -651,7 +653,12 @@ jQuery(function ($) {
         $("#modalAprobacionAnulacion").modal();
     });
 
+    $('#btnRechazarAprobacion').click(function () {
+        $("#serieNumeroRechazoAnulacion").val($("#vpSERIE_CORRELATIVO").html());
+        $("#modalRechazoAnulacion").modal();
+    });
 
+    
 
     $(document).on('click', "button.btnAprobarAnulacion", function () {
 
@@ -765,7 +772,38 @@ jQuery(function ($) {
     });
 
 
+    $(document).on('click', "#btnRechazarAnulacion", function () {
+        var arrrayClass = event.target.getAttribute("class").split(" ");
+        var idDocumentoVenta = $("#idDocumentoVenta").val();
+        var serieNumero = $("#serieNumero").val();
+        var comentarioRechazoAnulacion = $("#comentarioRechazoAnulacion").val();
 
+        $("#btnRechazarAnulacion").attr("disabled", "disabled");
+        $.ajax({
+            url: "/Factura/RechazarAnulacion",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                comentarioRechazoAnulacion: comentarioRechazoAnulacion,
+                idDocumentoVenta: idDocumentoVenta
+            },
+            error: function () {
+                $("#btnRechazarAnulacion").removeAttr("disabled");
+                mostrarMensajeErrorProceso(MENSAJE_ERROR);
+            },
+            success: function (documentoVenta) {
+                $("#btnRechazarAnulacion").removeAttr("disabled");
+                $.alert({
+                    title: TITLE_EXITO,
+                    type: 'green',
+                    content: "Se realizó el rechazo de la Solicitud de Anulación del documento: " + documentoVenta.cPE_CABECERA_BE.SERIE + "-" + documentoVenta.cPE_CABECERA_BE.CORRELATIVO + ".",
+                    buttons: {
+                        OK: function () { location.reload(); }
+                    }
+                })
+            }
+        });
+    });
 
 
     $("#btnAceptarCambioEstado").click(function () {
@@ -1136,11 +1174,12 @@ jQuery(function ($) {
                     || documentoVenta.estadoDocumentoSunat == '103')
                 ) {
                     $('#btnIniciarAprobacion').show();
+                    $('#btnRechazarAprobacion').show();
                 }
                 else {
                     $('#btnIniciarAprobacion').hide();
+                    $('#btnRechazarAprobacion').hide();
                 }
-
 
                 //Nota de Crédito
                 if ((documentoVenta.estadoDocumentoSunat == '102'

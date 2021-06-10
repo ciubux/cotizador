@@ -201,6 +201,9 @@ namespace Model
         //public bool modificaProducto { get; set; }
         public bool realizaCargaMasivaProductos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REALIZA_CARGA_MASIVA_PRODUCTOS)).FirstOrDefault() != null; } }
 
+        public bool realizaCargaMasivaStock { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CARGA_MASIVA_STOCK)).FirstOrDefault() != null; } }
+        public bool visualizaReporteGlobalStock { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_REPORTE_GLOBAL_STOCK)).FirstOrDefault() != null; } }
+
         /*SubDistribuidores*/
         public bool modificaSubDistribuidor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_SUBDISTRIBUIDOR)).FirstOrDefault() != null; } }
         public bool visualizaSubDistribuidores { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_SUBDISTRIBUIDORES)).FirstOrDefault() != null; } }
@@ -267,6 +270,8 @@ namespace Model
 
         public bool buscaNotasIngresoTodasSedes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.BUSCA_NOTAS_INGRESO_TODAS_SEDES)).FirstOrDefault() != null; } }
         public bool validaReponsablescomercialesAsignados { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VALIDA_RESPONSABLES_COMERCIALES_ASIGNADOS)).FirstOrDefault() != null; } }
+
+        public bool visualizaReporteSellOutPersonalizado{ get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_REPORTE_SELLOUT_PERSONALIZADO)).FirstOrDefault() != null; } }
     }
 }
 

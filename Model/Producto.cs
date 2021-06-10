@@ -123,7 +123,7 @@ namespace Model
 
 
         // private int _equivalencia;
-        [Display(Name = "Equivalencia Und. Alt. / Und. MP:")]
+        [Display(Name = "Equivalencia Und. MP / Und. Alt.:")]
         public int equivalenciaAlternativa { get; set; }
 
         [Display(Name = "Equivalencia Und. Prov. / Und. MP:")]
@@ -181,6 +181,12 @@ namespace Model
 
         [Display(Name = "Precio Lima:")]
         public Decimal precioSinIgv { get; set; }
+
+        [Display(Name = "Costo Lista:")]
+        public Decimal costoReferencial { get; set; }
+
+        [Display(Name = "Costo Lista Original:")]
+        public Decimal costoReferencialOriginal { get; set; }
 
         public Decimal precioProveedor {
             get {
@@ -343,7 +349,9 @@ namespace Model
             [Display(Name = "Inestabilidad de precios")]
             InestabilidadPrecios = 2,
             [Display(Name = "Stock limitado")]
-            StockLimitado = 3
+            StockLimitado = 3,
+            [Display(Name = "Venta controlada")]
+            VentaControlada = 4
         }
 
 
@@ -368,6 +376,7 @@ namespace Model
                 case TipoVentaRestringida.Descontinuado: if (validador.apruebaCotizacionesVentaRestringida) { return true; } break;
                 case TipoVentaRestringida.InestabilidadPrecios: if (validador.apruebaCotizacionesVentaRestringida) { return true; } break;
                 case TipoVentaRestringida.StockLimitado: if (validador.apruebaCotizacionesVentaRestringida) { return true; } break;
+                case TipoVentaRestringida.VentaControlada: if (validador.apruebaCotizacionesVentaRestringida) { return true; } break;
 
             }
 
@@ -387,7 +396,7 @@ namespace Model
                 case TipoVentaRestringida.Descontinuado: if (validador.apruebaPedidosVentaRestringida) { return true; } break;
                 case TipoVentaRestringida.InestabilidadPrecios: if (validador.apruebaPedidosVentaRestringida) { return true; } break;
                 case TipoVentaRestringida.StockLimitado: if (validador.apruebaPedidosVentaRestringida) { return true; } break;
-
+                case TipoVentaRestringida.VentaControlada: if (validador.apruebaPedidosVentaRestringida) { return true; } break;
             }
 
             return false;
@@ -452,9 +461,19 @@ namespace Model
                 this.costoSinIgv = this.costoOriginal / (this.equivalenciaProveedor == 0 ? 1 : this.equivalenciaProveedor);
             }
 
+            if (costoReferencialOriginal == 0)
+            {
+                this.costoReferencial = 0;
+            }
+            else
+            {
+                this.costoReferencial = this.costoReferencialOriginal / (this.equivalenciaProveedor == 0 ? 1 : this.equivalenciaProveedor);
+            }
+
             if (this.monedaProveedor == "D")
             {
                 this.costoSinIgv = this.costoSinIgv * this.tipoCambio;
+                this.costoReferencial = this.costoReferencial * this.tipoCambio;
             }
 
             if (this.monedaMP == "D")
@@ -476,10 +495,17 @@ namespace Model
             }
         }
 
+        public void calcularEquivalenciasConteo()
+        {
+            this.equivalenciaUnidadProveedorUnidadConteo = this.equivalenciaProveedor * this.equivalenciaUnidadEstandarUnidadConteo;
+            this.equivalenciaUnidadAlternativaUnidadConteo = this.equivalenciaUnidadEstandarUnidadConteo / this.equivalenciaAlternativa;
+        }
+
+
         public static List<CampoPersistir> obtenerCampos(List<LogCampo> campos, bool soloPersistentes = false) 
         {
             List<CampoPersistir> lista = new List<CampoPersistir>();
-
+            
             Producto obj = new Producto();
             foreach (LogCampo campo in campos)
             {
@@ -529,7 +555,10 @@ namespace Model
 
                     case "descripcion_larga": cp.nombre = Producto.nombreAtributo("descripcionLarga"); break;
                     case "agregar_descripcion_cotizacion": cp.nombre = Producto.nombreAtributo("agregarDescripcionCotizacion"); break;
-                        
+
+                    case "costo_referencial": cp.nombre = Producto.nombreAtributo("costoReferencial"); break; 
+                    case "costo_original_referencial": cp.nombre = Producto.nombreAtributo("costoReferencialOriginal"); break;
+
                     default: cp.nombre = "[NOT_FOUND]"; break;
 
                         /* TO DO: Evaluar si se usan
@@ -620,6 +649,9 @@ namespace Model
                     case "descontinuado": lc = instanciarLogCambio(campo); lc.valor = ((int) this.ventaRestringida).ToString(); break;
                     case "motivo_restriccion": lc = instanciarLogCambio(campo); lc.valor = this.motivoRestriccion; break;
                     case "cantidad_maxima_pedido_restringido": lc = instanciarLogCambio(campo); lc.valor = this.cantidadMaximaPedidoRestringido.ToString(); break;
+
+                    case "costo_referencial": lc = instanciarLogCambio(campo); lc.valor = this.costoReferencial.ToString(); break;
+                    case "costo_original_referencial": lc = instanciarLogCambio(campo); lc.valor = this.costoReferencialOriginal.ToString(); break;
 
                     case "descripcion_larga": lc = instanciarLogCambio(campo); lc.valor = this.descripcionLarga.ToString(); break;
                     case "agregar_descripcion_cotizacion": lc = instanciarLogCambio(campo); lc.valor = this.agregarDescripcionCotizacion.ToString(); break;
@@ -740,6 +772,36 @@ namespace Model
                         else
                         {
                             this.precioProvinciasOriginal = decimal.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "costo_referencial":
+                        if (this.costoReferencial == decimal.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.costoReferencial = decimal.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "costo_original_referencial":
+                        if (this.costoReferencialOriginal == decimal.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.costoReferencialOriginal = decimal.Parse(cambio.valor);
                             lista.Add(cambio);
                         }
                         break;
@@ -1277,6 +1339,7 @@ namespace Model
                 case "precio": return false; break;
                 case "precio_provincia": return false; break;
                 case "costo": return false; break;
+                case "costo_referencial": return false; break;
                 case "tipo_cambio": return false; break;
                 
                 default: return true; break;
@@ -1291,6 +1354,7 @@ namespace Model
             {
                 case "precio": return true; break;
                 case "precio_provincia": return true; break;
+                case "costo_referencial": return true; break;
                 case "costo": return true; break;
 
                 default: return false; break;

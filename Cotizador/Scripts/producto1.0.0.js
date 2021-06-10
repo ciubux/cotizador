@@ -575,6 +575,10 @@ jQuery(function ($) {
         changeInputDecimal("costoOriginal", $("#producto_costoOriginal").val());
     });
 
+    $("#producto_costoReferencialOriginal").change(function () {
+        changeInputDecimal("costoReferencialOriginal", $("#producto_costoReferencialOriginal").val());
+    });
+
     $("#producto_tipoCambio").change(function () {
         changeInputDecimal("tipoCambio", $("#producto_tipoCambio").val());
     });
@@ -720,6 +724,8 @@ jQuery(function ($) {
                 $("#verCodigoSunat").html(producto.codigoSunat);
 
                 $("#verCostoOriginal").html(Number(producto.costoOriginal).toFixed(cantidadCuatroDecimales));
+                $("#verCostoReferencialOriginal").html(Number(producto.costoReferencialOriginal).toFixed(cantidadCuatroDecimales));
+                
                 $("#verPrecioOriginal").html(Number(producto.precioOriginal).toFixed(cantidadCuatroDecimales));
                 $("#verPrecioProvinciasOriginal").html(Number(producto.precioProvinciasOriginal).toFixed(cantidadCuatroDecimales));
 

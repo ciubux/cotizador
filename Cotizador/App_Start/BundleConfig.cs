@@ -39,6 +39,10 @@ namespace Cotizador
                         "~/Scripts/stock.js"
                         ));
 
+            bundles.Add(new ScriptBundle("~/bundles/reportes").Include(
+                        "~/Scripts/reportes.js"
+                        ));
+
             bundles.Add(new ScriptBundle("~/bundles/notaCredito").Include(
                         "~/Scripts/notaCredito1.1.3.js"
                         ));

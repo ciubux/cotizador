@@ -46,7 +46,7 @@ namespace BusinessLayer
             }
         }
 
-        
+
         public Guid getAllProductoId(String sku)
         {
             using (var dal = new ProductoDAL())
@@ -116,7 +116,7 @@ namespace BusinessLayer
                 return producto;
             }
         }
-        
+
         public List<Producto> getProductos(Producto producto)
         {
             using (var productoDAL = new ProductoDAL())
@@ -176,19 +176,20 @@ namespace BusinessLayer
 
                     switch (log.idCampo)
                     {
-                        case 79: 
+                        case 79:
                             item.dato01 = new LogRegistroCampoDato();
                             if (bloquearEditar01)
                             {
                                 bloquearEditar01 = false;
                                 item.dato01.editable = false;
-                            } else
+                            }
+                            else
                             {
                                 item.dato01.editable = true;
                             }
                             item.dato01.idRegistroCambio = log.idCambio;
-                            item.dato01.valor = log.valor; 
-                            item.dato01.fechaModificacion = log.FechaEdicion.ToString("dd/MM/yyyy HH:mm"); 
+                            item.dato01.valor = log.valor;
+                            item.dato01.fechaModificacion = log.FechaEdicion.ToString("dd/MM/yyyy HH:mm");
                             break;
                         case 80:
                             item.dato02 = new LogRegistroCampoDato();
@@ -233,11 +234,11 @@ namespace BusinessLayer
         }
 
 
-        public Producto getProductoById(Guid idProducto) 
+        public Producto getProductoById(Guid idProducto)
         {
             using (var productoDAL = new ProductoDAL())
             {
-                Producto producto = productoDAL.GetProductoById(idProducto); 
+                Producto producto = productoDAL.GetProductoById(idProducto);
                 if (producto.image == null)
                 {
                     FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
@@ -287,7 +288,7 @@ namespace BusinessLayer
                         storeStream.Flush();
                         inStream.Close();
                         cotizacionDetalle.producto.image = storeStream.GetBuffer();
-                    }                 
+                    }
 
                     //Si es provincia se considera el precioProvincia
                     //cotizacion.ciudad.
@@ -302,9 +303,9 @@ namespace BusinessLayer
                         cotizacionDetalle.porcentajeDescuento = 100 - ((cotizacionDetalle.precioNeto * cotizacionDetalle.ProductoPresentacion.Equivalencia) * 100 / cotizacionDetalle.producto.precioSinIgv);
                     }
                     else
-                    { 
+                    {
                         cotizacionDetalle.precioNeto = cotizacionDetalle.precioNeto;
-                        cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNeto  * 100 / cotizacionDetalle.producto.precioSinIgv);
+                        cotizacionDetalle.porcentajeDescuento = 100 - (cotizacionDetalle.precioNeto * 100 / cotizacionDetalle.producto.precioSinIgv);
                     }
 
 
@@ -327,16 +328,16 @@ namespace BusinessLayer
                         cotizacionDetalle.producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.costoSinIgv));
                     }
 
-                 /*   if (cotizacionDetalle.esPrecioAlternativo)
-                    {
-                        cotizacionDetalle.producto.costoListaAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.costoListaAnterior / cotizacionDetalle.ProductoPresentacion.Equivalencia));
-                    }*/
-                    
+                    /*   if (cotizacionDetalle.esPrecioAlternativo)
+                       {
+                           cotizacionDetalle.producto.costoListaAnterior = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.costoListaAnterior / cotizacionDetalle.ProductoPresentacion.Equivalencia));
+                       }*/
+
                 }
 
                 return documentoDetalleList;
             }
-            
+
         }
 
 
@@ -449,7 +450,8 @@ namespace BusinessLayer
                 bool aplicaPrecio = false;
                 bool aplicaPrecioProvincias = false;
 
-                foreach(CampoPersistir cp in campos) {
+                foreach (CampoPersistir cp in campos)
+                {
                     if (cp.registra && cp.campo.nombre == "costo")
                     {
                         aplicaCosto = true;
@@ -478,6 +480,37 @@ namespace BusinessLayer
         public static bool esCampoCalculado(string campo)
         {
             return Producto.esCampoCalculado(campo);
+        }
+
+        public bool RegistroCierreStock(List<RegistroCargaStock> stock, DateTime fechaCierre, Guid idCiudad, Guid idUsuario, Guid idArchivoAdjunto)
+        {
+            using (ProductoDAL dal = new ProductoDAL())
+            {
+                return dal.RegistroCierreStock(stock, fechaCierre, idCiudad, idUsuario, idArchivoAdjunto);
+            }
+        }
+
+        public List<RegistroCargaStock> InventarioStock(DateTime fechaReferencia, Guid idUsuario)
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                return productoDAL.InventarioStock(fechaReferencia, idUsuario);
+            }
+        }
+        public List<RegistroCargaStock> StockProducto(string sku, Guid idUsuario)
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                return productoDAL.StockProducto(sku, idUsuario);
+            }
+        }
+
+        public List<CierreStock> CargasStock(Guid idUsuario, Guid idCiudad)
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                return productoDAL.CargasStock(idUsuario, idCiudad);
+            }
         }
     }
 }

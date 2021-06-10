@@ -10,7 +10,8 @@ jQuery(function ($) {
     var SIMBOLO_SOL = "S/";
     var MILISEGUNDOS_AUTOGUARDADO = 5000;
     var ESTADOS_TODOS = -1;
-    var DIAS_MAX_COTIZACION_TRANSITORIA = 10
+    var DIAS_MAX_VALIDEZ_OFERTA_COTIZACION_PUNTUAL = 15;
+    var DIAS_DEFECTO_VALIDEZ_OFERTA_COTIZACION_PUNTUAL = 15;
 
     var TRABAJAR_CON_UNIDADES = true;
 
@@ -62,6 +63,7 @@ jQuery(function ($) {
         verificarSiExisteDetalle();
         verificiarSiFechaEsModificada();
         verificarSiExisteCliente();
+        ajustarFormularioPorTipoCotizacion();
         $("#btnBusquedaCotizaciones").click();
 
         $('#tipoCotizacion option[value="2"]').remove();
@@ -153,7 +155,8 @@ jQuery(function ($) {
                 IGV = constantes.IGV;
                 SIMBOLO_SOL = constantes.SIMBOLO_SOL;
                 MILISEGUNDOS_AUTOGUARDADO = constantes.MILISEGUNDOS_AUTOGUARDADO;
-                DIAS_MAX_COTIZACION_TRANSITORIA = constantes.DIAS_MAX_COTIZACION_TRANSITORIA;
+                DIAS_MAX_VALIDEZ_OFERTA_COTIZACION_PUNTUAL = constantes.DIAS_MAX_VALIDEZ_OFERTA_COTIZACION_PUNTUAL;
+                DIAS_DEFECTO_VALIDEZ_OFERTA_COTIZACION_PUNTUAL = constantes.DIAS_DEFECTO_VALIDEZ_OFERTA_COTIZACION_PUNTUAL;
             }
         });
     }
@@ -1684,83 +1687,89 @@ jQuery(function ($) {
             }   
         }
 
-        var fechaInicioVigenciaPrecios = $("#fechaInicioVigenciaPrecios").val();
-        if (fechaInicioVigenciaPrecios.trim() != "") {
+        
 
-            if (convertirFechaNumero(fechaInicioVigenciaPrecios) < convertirFechaNumero(fecha)) {
-                //Si no está vacía no puede ser menor a la fecha
-                var anioInicioVigencia = convertirFechaNumero(fechaInicioVigenciaPrecios).toString().substr(0, 4);
-                //var anioCotizacion = convertirFechaNumero(fecha).toString().substr(0, 4);
-                var fechatmp = new Date();
-                var anioCotizacion = fechatmp.getFullYear();
 
-                if (Number(anioInicioVigencia) != anioCotizacion) {
-                    alert("El año del inicio de vigencia de precios no puede ser menor al año actual.");
-                    $("#fechaInicioVigenciaPrecios").focus();
+        if ($('#tipoCotizacion').val() == 1) {
+
+            if ($("#mostrarValidezOfertaEnDias").val() == 0) {
+                if ($("#validezOfertaEnDias").val() > parseInt(DIAS_MAX_VALIDEZ_OFERTA_COTIZACION_PUNTUAL)) {
+                    alert("La cantidad de días de validez de oferta debe como máximo " + DIAS_MAX_VALIDEZ_OFERTA_COTIZACION_PUNTUAL + ".");
+                    $("#validezOfertaEnDias").focus();
                     return false;
                 }
-            }   
+            }
+            else {
+                //la fecha de validez de oferta no debe estar vacía
+                var fechaLimiteValidezOferta = $("#fechaLimiteValidezOferta").val();
+                var fechaMaxValidezOferta = new Date();
+                fechaMaxValidezOferta.setDate(fechaMaxValidezOferta.getDate() + parseInt(DIAS_MAX_VALIDEZ_OFERTA_COTIZACION_PUNTUAL));
 
-        }
+                var fechaMaxValidezOfertaTexto = "";
+                let day = fechaMaxValidezOferta.getDate()
+                let month = fechaMaxValidezOferta.getMonth() + 1
+                let year = fechaMaxValidezOferta.getFullYear()
 
+                if (month < 10) {
+                    fechaMaxValidezOfertaTexto = `${day}/0${month}/${year}`;
+                } else {
+                    fechaMaxValidezOfertaTexto = `${day}/${month}/${year}`;
+                }
 
-
-        var fechaFinVigenciaPrecios = $("#fechaFinVigenciaPrecios").val();
-        if (fechaFinVigenciaPrecios.trim() != "") {
-
-          
-            //Si la fecha de inicio de vigencia no es vacío se compara con la fecha de inicio de vigencia
+                if (convertirFechaNumero(fechaLimiteValidezOferta) > convertirFechaNumero(fechaMaxValidezOfertaTexto)) {
+                    alert("La Fecha de fin de Validez de Oferta debe ser como maximo el " + fechaMaxValidezOfertaTexto + ".");
+                    $("#fechaLimiteValidezOferta").focus();
+                    return false;
+                }
+            }
+        } else {
+            var fechaInicioVigenciaPrecios = $("#fechaInicioVigenciaPrecios").val();
             if (fechaInicioVigenciaPrecios.trim() != "") {
-                
-                   //Si no está vacía no puede ser menor a la fecha de inicio de vigencia
-                if (convertirFechaNumero(fechaFinVigenciaPrecios) < convertirFechaNumero(fechaInicioVigenciaPrecios)) {
-                    alert("El fin de vigencia de precios debe ser mayor o igual al inicio de vigencia de precios.");
-                    $("#fechaFinVigenciaPrecios").focus();
-                    return false;
-                }
 
-                //Si es una cotización transitoria la fecha de fin de vigencia no puede ser mayor a la fecha de inicio de vigencia por más de 10 días
-                if ($('#tipoCotizacion').val() == 1) {
+                if (convertirFechaNumero(fechaInicioVigenciaPrecios) < convertirFechaNumero(fecha)) {
+                    //Si no está vacía no puede ser menor a la fecha
+                    var anioInicioVigencia = convertirFechaNumero(fechaInicioVigenciaPrecios).toString().substr(0, 4);
+                    //var anioCotizacion = convertirFechaNumero(fecha).toString().substr(0, 4);
+                    var fechatmp = new Date();
+                    var anioCotizacion = fechatmp.getFullYear();
 
-                    var fechaInicioTmp = fechaInicioVigenciaPrecios.split("/");
-                 
-                    var fechaInicioTmpMas10 = new Date(parseInt(fechaInicioTmp[2]), parseInt(fechaInicioTmp[1]) - 1, parseInt(fechaInicioTmp[0]), 0, 0, 0);
-                    //alert(fechaInicioTmpMas10 + parseInt(DIAS_MAX_COTIZACION_TRANSITORIA));
-                    fechaInicioTmpMas10.setDate(fechaInicioTmpMas10.getDate() + parseInt(DIAS_MAX_COTIZACION_TRANSITORIA))
-
-                //    alert(fechaInicioTmpMas10)
-                    var day = fechaInicioTmpMas10.getDate();
-                    if (fechaInicioTmpMas10.getDate() < 10)
-                        day = "0" + fechaInicioTmpMas10.getDate();
-
-                    var mesTmp = (fechaInicioTmpMas10.getMonth() + 1);
-
-                    var mes = mesTmp;
-                    if (mesTmp< 10)
-                        mes = "0"+mesTmp;
-
-                    var fechaInicioTmpMas10tmp = day + "/" + mes + "/" + fechaInicioTmpMas10.getFullYear()
-              /*      alert(fechaInicioTmpMas10tmp)
-                    alert(convertirFechaNumero(fechaInicioTmpMas10tmp))
-                    alert(convertirFechaNumero(fechaFinVigenciaPrecios))*/
-                    if (convertirFechaNumero(fechaInicioTmpMas10tmp) < convertirFechaNumero(fechaFinVigenciaPrecios)) {
-                        alert("El fin de vigencia de precios no puede ser mayor al inicio de vigencia de precios por más de 10 días en una cotización transitoria.");
-                        $("#fechaFinVigenciaPrecios").focus();
+                    if (Number(anioInicioVigencia) != anioCotizacion) {
+                        alert("El año del inicio de vigencia de precios no puede ser menor al año actual.");
+                        $("#fechaInicioVigenciaPrecios").focus();
                         return false;
                     }
                 }
-            }
-            else
-            {  //Si no está vacía no puede ser menor a la fecha de inicio de vigencia
-                if (convertirFechaNumero(fechaFinVigenciaPrecios) < convertirFechaNumero(fecha)) {
-                    alert("El fin de vigencia de precios debe ser mayor o igual a la fecha de la cotización.");
-                    $("#fechaFinVigenciaPrecios").focus();
-                    return false;
-                }
 
             }
+
+            var fechaFinVigenciaPrecios = $("#fechaFinVigenciaPrecios").val();
+            if (fechaFinVigenciaPrecios.trim() != "") {
+
+
+                //Si la fecha de inicio de vigencia no es vacío se compara con la fecha de inicio de vigencia
+                if (fechaInicioVigenciaPrecios.trim() != "") {
+
+                    //Si no está vacía no puede ser menor a la fecha de inicio de vigencia
+                    if (convertirFechaNumero(fechaFinVigenciaPrecios) < convertirFechaNumero(fechaInicioVigenciaPrecios)) {
+                        alert("El fin de vigencia de precios debe ser mayor o igual al inicio de vigencia de precios.");
+                        $("#fechaFinVigenciaPrecios").focus();
+                        return false;
+                    }
+
+                    //Si es una cotización transitoria la fecha de fin de vigencia no puede ser mayor a la fecha de inicio de vigencia por más de 10 días
+
+                }
+                else {  //Si no está vacía no puede ser menor a la fecha de inicio de vigencia
+                    if (convertirFechaNumero(fechaFinVigenciaPrecios) < convertirFechaNumero(fecha)) {
+                        alert("El fin de vigencia de precios debe ser mayor o igual a la fecha de la cotización.");
+                        $("#fechaFinVigenciaPrecios").focus();
+                        return false;
+                    }
+
+                }
+            }
+
         }
-        
 
         var contador = 0;
         var $j_object = $("td.detcantidad");
@@ -3057,10 +3066,23 @@ jQuery(function ($) {
         });
     });
 
+    function ajustarFormularioPorTipoCotizacion() {
+        var tipoCotizacion = $("#tipoCotizacion").val();
+
+        if (tipoCotizacion == 0) {
+            $("#fechaInicioVigenciaPrecios").closest("div.row").show();
+        } else {
+            $("#fechaInicioVigenciaPrecios").closest("div.row").hide();
+
+        }
+    }
+
+
     $("#tipoCotizacion").change(function () {
         var tipoCotizacion = $("#tipoCotizacion").val();
      
         if (tipoCotizacion == 0) {
+            $("#fechaInicioVigenciaPrecios").closest("div.row").show();
             $("#fechaInicioVigenciaPrecios").removeAttr("disabled");
             $("#fechaFinVigenciaPrecios").removeAttr("disabled");
         }
@@ -3075,17 +3097,32 @@ jQuery(function ($) {
         }
         else
         {
-            $("#fechaInicioVigenciaPrecios").attr("disabled", "disabled");
-            $("#fechaFinVigenciaPrecios").removeAttr("disabled");
-            var hoy = new Date();
-            $("#fechaInicioVigenciaPrecios").datepicker().datepicker("setDate", hoy);
-            hoy.setDate(hoy.getDate() + parseInt(DIAS_MAX_COTIZACION_TRANSITORIA))
-            $("#fechaFinVigenciaPrecios").datepicker().datepicker("setDate", hoy);
-            $("#fechaInicioVigenciaPrecios").change();
-            $("#fechaFinVigenciaPrecios").change();
-        }
+            $("#fechaInicioVigenciaPrecios").closest("div.row").hide();
 
-      
+            if ($("#mostrarValidezOfertaEnDias").val() == 0) {
+                $("#validezOfertaEnDias").val(DIAS_DEFECTO_VALIDEZ_OFERTA_COTIZACION_PUNTUAL);
+                $("#validezOfertaEnDias").change();
+            }
+            else {
+                //la fecha de validez de oferta no debe estar vacía
+                var fechaDefectoValidezOferta = new Date();
+                fechaDefectoValidezOferta.setDate(fechaDefectoValidezOferta.getDate() + parseInt(DIAS_DEFECTO_VALIDEZ_OFERTA_COTIZACION_PUNTUAL));
+
+                var fechaDefectoValidezOfertaTexto = "";
+                let day = fechaDefectoValidezOferta.getDate()
+                let month = fechaDefectoValidezOferta.getMonth() + 1
+                let year = fechaDefectoValidezOferta.getFullYear()
+
+                if (month < 10) {
+                    fechaDefectoValidezOfertaTexto = `${day}/0${month}/${year}`;
+                } else {
+                    fechaDefectoValidezOfertaTexto = `${day}/${month}/${year}`;
+                }
+
+                $("#fechaLimiteValidezOferta").datepicker("setDate", fechaDefectoValidezOfertaTexto);
+                $("#fechaLimiteValidezOferta").change();
+            }
+        }
 
         
         $.ajax({

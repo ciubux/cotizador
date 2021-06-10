@@ -66,7 +66,16 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
 
-        
+
+        public void rechazarAnulacionDocumentoVenta(DocumentoVenta documentoVenta)
+        {
+            var objCommand = GetSqlCommand("pu_rechazarAnulacionFactura");
+            InputParameterAdd.Guid(objCommand, "idDocumentoVenta", documentoVenta.idDocumentoVenta);
+            InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario); 
+            ExecuteNonQuery(objCommand);
+        }
+
+
 
         public void aprobarAnularDocumentoVenta(DocumentoVenta documentoVenta)
         {
@@ -494,6 +503,9 @@ namespace DataLayer
                 documentoVenta.permiteAnulacion = Converter.GetBool(row, "permite_anulacion");
                 documentoVenta.tieneNotaCredito = Converter.GetBool(row, "tiene_nota_credito");
                 documentoVenta.tieneNotaDebito = Converter.GetBool(row, "tiene_nota_debito");
+                documentoVenta.usuarioSolicitudAnulacion = new Usuario();
+                documentoVenta.usuarioSolicitudAnulacion.idUsuario = Converter.GetGuid(row, "usuario_solicitud_anulacion");
+                
 
                 foreach (String column in columnasCabecera)
                 {

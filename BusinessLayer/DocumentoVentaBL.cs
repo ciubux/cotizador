@@ -421,9 +421,54 @@ namespace BusinessLayer
             using (var dal = new DocumentoVentaDAL())
             {
                 dal.anularDocumentoVenta(documentoVenta);
+
+                AlertaValidacion alerta = new AlertaValidacion();
+                alerta.idRegistro = documentoVenta.idDocumentoVenta.ToString();
+                alerta.nombreTabla = "CPE_CABECERA_BE";
+                alerta.Estado = 0;
+                alerta.UsuarioCreacion = documentoVenta.usuario;
+                alerta.IdUsuarioCreacion = documentoVenta.usuario.idUsuario;
+                alerta.tipo = AlertaValidacion.SOLICITUD_ANULACION_CPE;
+                alerta.data = new DataAlertaValidacion();
+
+                alerta.data.ObjData = documentoVenta.tipoDocumentoString + " " + documentoVenta.cPE_CABECERA_BE.SERIE + "-" + documentoVenta.cPE_CABECERA_BE.CORRELATIVO;
+
+                AlertaValidacionDAL alertaDal = new AlertaValidacionDAL();
+                alertaDal.insertAlertaValidacion(alerta);
             }
         }
 
+        public void rechazarAnulacionDocumentoVenta(DocumentoVenta documentoVenta, Usuario usuario)
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                dal.rechazarAnulacionDocumentoVenta(documentoVenta);
+
+                if (!documentoVenta.usuarioSolicitudAnulacion.idUsuario.Equals(usuario.idUsuario))
+                {
+                    List<Usuario> recep = new List<Usuario>();
+                    recep.Add(documentoVenta.usuarioSolicitudAnulacion);
+
+                    Mensaje notificacion = new Mensaje();
+                    notificacion.titulo = "SOLICITUD ANULACIÓN RECHAZADA";
+                    notificacion.mensaje = "Su solicitud de anulación de la " + documentoVenta.tipoDocumentoString + " " + documentoVenta.cPE_CABECERA_BE.SERIE + "-" + documentoVenta.cPE_CABECERA_BE.CORRELATIVO + " fue RECHAZADA.";
+                    if (!documentoVenta.comentarioAprobacionAnulacion.Trim().Equals(""))
+                    {
+                        notificacion.mensaje = notificacion.mensaje + "<br/><br/><b>Comentario:</b> " + documentoVenta.comentarioAprobacionAnulacion;
+                    }
+
+                    notificacion.fechaInicioMensaje = DateTime.Now;
+                    notificacion.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
+                    notificacion.user = usuario;
+                    notificacion.importancia = "Alta";
+
+                    notificacion.listUsuario = recep;
+
+                    MensajeBL mensajeBl = new MensajeBL();
+                    mensajeBl.insertMensaje(notificacion);
+                }
+            }
+        }
         public void aprobarAnulacionDocumentoVenta(DocumentoVenta documentoVenta, Usuario usuario)
         {
             IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
@@ -503,7 +548,29 @@ namespace BusinessLayer
                 mailService.enviar(correos, Constantes.ASUNTO_ANULACION_FACTURA,
                     body, Constantes.MAIL_COMUNICACION_FACTURAS, Constantes.PASSWORD_MAIL_COMUNICACION_FACTURAS, usuario);
 
+                if (!documentoVenta.usuarioSolicitudAnulacion.idUsuario.Equals(usuario.idUsuario))
+                {
+                    List<Usuario> recep = new List<Usuario>();
+                    recep.Add(documentoVenta.usuarioSolicitudAnulacion);
 
+                    Mensaje notificacion = new Mensaje();
+                    notificacion.titulo = "SOLICITUD ANULACIÓN APROBADA";
+                    notificacion.mensaje = "Su solicitud de anulación de la " + documentoVenta.tipoDocumentoString + " " + documentoVenta.cPE_CABECERA_BE.SERIE + "-" + documentoVenta.cPE_CABECERA_BE.CORRELATIVO + " fue APROBADA.";
+                    if (!documentoVenta.comentarioAprobacionAnulacion.Trim().Equals(""))
+                    {
+                        notificacion.mensaje = notificacion.mensaje + "<br/><br/><b>Comentario:</b> " + documentoVenta.comentarioAprobacionAnulacion;
+                    }
+
+                    notificacion.fechaInicioMensaje = DateTime.Now;
+                    notificacion.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
+                    notificacion.user = usuario;
+                    notificacion.importancia = "Alta";
+
+                    notificacion.listUsuario = recep;
+
+                    MensajeBL mensajeBl = new MensajeBL();
+                    mensajeBl.insertMensaje(notificacion);
+                }
             }
 
         }

@@ -312,9 +312,10 @@ namespace DataLayer
                         Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS = valorParametro; break;
                     case "ID_VENDEDOR_POR_ASIGNAR":
                         Constantes.ID_VENDEDOR_POR_ASIGNAR = int.Parse(valorParametro); break;
-                    case "DIAS_MAX_COTIZACION_TRANSITORIA":
-                        Constantes.DIAS_MAX_COTIZACION_TRANSITORIA = int.Parse(valorParametro); break;
-
+                    case "DIAS_DEFECTO_VALIDEZ_OFERTA_COTIZACION_PUNTUAL":
+                        Constantes.DIAS_DEFECTO_VALIDEZ_OFERTA_COTIZACION_PUNTUAL = int.Parse(valorParametro); break;
+                    case "DIAS_MAX_VALIDEZ_OFERTA_COTIZACION_PUNTUAL":
+                        Constantes.DIAS_MAX_VALIDEZ_OFERTA_COTIZACION_PUNTUAL = int.Parse(valorParametro); break;
 
                     case "HORA_CORTE_CREDITOS_LIMA":
                         {

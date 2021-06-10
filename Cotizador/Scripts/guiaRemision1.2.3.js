@@ -454,6 +454,12 @@ jQuery(function ($) {
         });
     }
 
+    
+
+    $("#guiaRemision_cpeNro").change(function () {
+        changeInputString("cpeNro", $("#guiaRemision_cpeNro").val())
+    });
+
     $("#guiaRemision_sku").change(function () {
         changeInputString("sku", $("#guiaRemision_sku").val())
     });

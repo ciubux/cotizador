@@ -160,7 +160,7 @@
 
 
                     <div class="col-xs-4">
-                        <select class="form-control " id="mostrarValidezOfertaEnDias"  name="mostrarValidezOfertaEnDias">
+                        <select class="form-control " id="mostrarValidezOfertaEnDias" name="mostrarValidezOfertaEnDias">
                             <option value="0">Días</option>
                             @if (cotizacion.mostrarValidezOfertaEnDias == 1)
                             {
@@ -175,10 +175,10 @@
                     <div class="col-xs-4">
                         <input type="hidden" id="fechaLimiteValidezOfertaTmp" value='@cotizacion.fechaLimiteValidezOferta.ToString("dd/MM/yyyy")' />
                         <div id="fechaVigenciadiv">
-                            <input class="form-control"  type="text" id="fechaLimiteValidezOferta" name="fechaLimiteValidezOferta">
+                            <input class="form-control" type="text" id="fechaLimiteValidezOferta" name="fechaLimiteValidezOferta">
                         </div>
                         <div id="diasVigenciadiv">
-                            <input class="form-control"  type="number" min="1" step="1" id="validezOfertaEnDias" value="@cotizacion.validezOfertaEnDias" name="fechaLimiteValidezOferta">
+                            <input class="form-control" type="number" min="1" step="1" id="validezOfertaEnDias" value="@cotizacion.validezOfertaEnDias" name="fechaLimiteValidezOferta">
                         </div>
 
                     </div>
@@ -603,7 +603,13 @@
                 <td class="@cotizacionDetalle.producto.idProducto detsubtotal" style="text-align:right">@cotizacionDetalle.subTotal</td>
                 <td class="@cotizacionDetalle.producto.idProducto detobservacion" style="text-align:left">@cotizacionDetalle.observacion</td>
                 <!--class="@cotizacionDetalle.producto.idProducto detobservacion"-->
-                <td class="@cotizacionDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@cotizacionDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
+                <td class="@cotizacionDetalle.producto.idProducto detbtnMostrarPrecios">
+                    <button type="button" class="@cotizacionDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button>
+                    <br />
+                    <button type="button" title="Consultar Stock" class="verModalStockProducto btn" sku="@cotizacionDetalle.producto.sku" idProductoPresentacion="@(cotizacionDetalle.esPrecioAlternativo ? cotizacionDetalle.ProductoPresentacion.IdProductoPresentacion : 0)" idCiudad="@cotizacion.ciudad.idCiudad" style="margin-top: 7px;">
+                        <img src="~/images/icon_stock.png" height="25" />
+                    </button>
+                </td>
 
                 @if (!cotizacion.esRecotizacion)
                 {
@@ -1562,6 +1568,8 @@
 
 @Html.Partial("_ModalImportarDetallesExcel")
 
+
+@Html.Partial("../Stock/_ModalStockProducto")
 
 <div class="modal fade" id="modalComentarioAprobacion" tabindex="-1">
 

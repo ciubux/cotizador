@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using Model;
+using Model.UTILES;
 using System.IO;
 
 namespace DataLayer
@@ -54,8 +55,8 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pu_productoStaging");
             ExecuteNonQuery(objCommand);
         }
-        
-        public List<Producto> getProductosBusqueda(String textoBusqueda,bool considerarDescontinuados, String proveedor, String familia, Pedido.tiposPedido? tipoPedido = null, int incluyeDescontinuados = 1)
+
+        public List<Producto> getProductosBusqueda(String textoBusqueda, bool considerarDescontinuados, String proveedor, String familia, Pedido.tiposPedido? tipoPedido = null, int incluyeDescontinuados = 1)
         {
             var objCommand = GetSqlCommand("ps_getproductos_search");
             InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
@@ -63,7 +64,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "familia", familia);
             InputParameterAdd.Int(objCommand, "considerarDescontinuados", considerarDescontinuados ? 1 : 0);
             InputParameterAdd.Int(objCommand, "incluyeDescontinuados", incluyeDescontinuados);
-            InputParameterAdd.Char(objCommand, "tipoPedido", tipoPedido == null? null: ((Char)tipoPedido).ToString());
+            InputParameterAdd.Char(objCommand, "tipoPedido", tipoPedido == null ? null : ((Char)tipoPedido).ToString());
 
             DataTable dataTable = Execute(objCommand);
             List<Producto> lista = new List<Producto>();
@@ -95,7 +96,7 @@ namespace DataLayer
             }
             return idProducto;
         }
-        
+
         public Guid getAllProductoId(String sku)
         {
             var objCommand = GetSqlCommand("ps_allProductoId");
@@ -109,7 +110,7 @@ namespace DataLayer
             }
             return idProducto;
         }
-        
+
         public Producto getProducto(Guid idProducto, Guid idCliente, Boolean esCompra = false, Boolean soloActivos = true)
         {
             var objCommand = GetSqlCommand("ps_getproducto");
@@ -148,9 +149,9 @@ namespace DataLayer
                     producto.precioSinIgv = Converter.GetDecimal(row, "precio");
                     producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia");
                 }
-                
+
                 producto.familia = Converter.GetString(row, "familia");
-               // producto.clase = Converter.GetString(row, "clase");
+                // producto.clase = Converter.GetString(row, "clase");
                 producto.proveedor = Converter.GetString(row, "proveedor");
                 producto.unidad = Converter.GetString(row, "unidad");
                 producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
@@ -163,10 +164,10 @@ namespace DataLayer
 
                 producto.precioClienteProducto = new PrecioClienteProducto();
                 producto.precioClienteProducto.idPrecioClienteProducto = Guid.Empty;
-                producto.tipoProducto = (Producto.TipoProducto) Converter.GetInt(row, "tipo_producto");
+                producto.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo_producto");
                 producto.agregarDescripcionCotizacion = Converter.GetInt(row, "agregar_descripcion_cotizacion");
 
-                producto.ventaRestringida = (Producto.TipoVentaRestringida) Converter.GetInt(row, "descontinuado");
+                producto.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");
                 producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
                 producto.cantidadMaximaPedidoRestringido = Converter.GetInt(row, "cantidad_maxima_pedido_restringido");
                 producto.compraRestringida = Converter.GetInt(row, "compra_restringida");
@@ -182,7 +183,7 @@ namespace DataLayer
                     producto.precioClienteProducto.precioNeto = Converter.GetDecimal(row, "precio_neto");
                     producto.precioClienteProducto.flete = Converter.GetDecimal(row, "flete");
                     producto.precioClienteProducto.equivalencia = Converter.GetDecimal(row, "precio_cliente_producto_equivalencia");
-//                    producto.equivalencia = producto.precioClienteProducto.equivalencia;
+                    //                    producto.equivalencia = producto.precioClienteProducto.equivalencia;
                     producto.precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
                     producto.precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
                     producto.precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
@@ -195,7 +196,7 @@ namespace DataLayer
                     {
                         producto.precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
                     }
-                //    producto.precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
+                    //    producto.precioClienteProducto.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
                     producto.precioClienteProducto.cliente = new Cliente();
                     producto.precioClienteProducto.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                 }
@@ -216,7 +217,7 @@ namespace DataLayer
                     precioLista.fechaInicioVigencia = null;
                 }
                 else
-                { 
+                {
                     precioLista.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
                 }
 
@@ -233,7 +234,7 @@ namespace DataLayer
                 precioLista.precioNeto = Converter.GetDecimal(row, "precio_neto");
                 precioLista.flete = Converter.GetDecimal(row, "flete");
                 precioLista.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
-                
+
                 if (esCompra)
                 {
                     precioLista.precioNeto = producto.costoSinIgv;
@@ -248,7 +249,7 @@ namespace DataLayer
                 {
                     precioLista.numeroCotizacion = Converter.GetInt(row, "numero_cotizacion").ToString().PadLeft(10, '0');
                 }
-              
+
                 precioListaList.Add(precioLista);
             }
 
@@ -272,13 +273,13 @@ namespace DataLayer
                 productoPresentacion.UnidadInternacional = Converter.GetString(row, "unidad_internacional");
                 productoPresentacion.Stock = Converter.GetInt(row, "stock");
 
-                if(esCompra)
+                if (esCompra)
                 {
                     productoPresentacion.PrecioLimaSinIGV = productoPresentacion.CostoSinIGV;
                     productoPresentacion.PrecioProvinciasSinIGV = productoPresentacion.CostoSinIGV;
                 }
                 producto.ProductoPresentacionList.Add(productoPresentacion);
-            }           
+            }
 
             return producto;
         }
@@ -299,7 +300,7 @@ namespace DataLayer
             //Detalle de la cotizacion
             foreach (DataRow row in cotizacionDetalleDataTable.Rows)
             {
-                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(false,false);
+                CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(false, false);
                 cotizacionDetalle.producto = new Producto();
 
 
@@ -329,8 +330,8 @@ namespace DataLayer
                     cotizacionDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
                 }
 
-                
-                
+
+
                 cotizacionDetalle.unidad = Converter.GetString(row, "unidad");
 
 
@@ -341,7 +342,7 @@ namespace DataLayer
                 Decimal precioNetoRecalculado = Converter.GetDecimal(row, "precio_neto_recalculado");
                 precioNetoRecalculado = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNetoRecalculado));
 
-                
+
                 cotizacionDetalle.producto.precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
                 cotizacionDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
                 cotizacionDetalle.producto.precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
@@ -367,16 +368,16 @@ namespace DataLayer
                 //cotizacionDetalle.porcentajeDescuento = cotizacionDetalle.producto.precioClienteProducto.precioNeto
                 //    75×25 / 100 = 18,75
 
-               // cotizacionDetalle
+                // cotizacionDetalle
 
                 if (cotizacionDetalle.esPrecioAlternativo)
                 {
-                    
+
 
                     //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                     //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
-                  //  cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.ProductoPresentacion.Equivalencia));
-                  //  cotizacionDetalle.producto.precioClienteProducto.precioUnitario = cotizacionDetalle.producto.precioClienteProducto.precioUnitario * cotizacionDetalle.ProductoPresentacion.Equivalencia;
+                    //  cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.ProductoPresentacion.Equivalencia));
+                    //  cotizacionDetalle.producto.precioClienteProducto.precioUnitario = cotizacionDetalle.producto.precioClienteProducto.precioUnitario * cotizacionDetalle.ProductoPresentacion.Equivalencia;
 
 
                     cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.producto.precioClienteProducto.equivalencia));
@@ -391,7 +392,7 @@ namespace DataLayer
 
 
                 //Se multiplica por la equivalente para que cuando se haga el recalculo a la hora de obtener el precioneto se recupere correctamente
-           //     cotizacionDetalle.precioNeto = cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.producto.precioClienteProducto.equivalencia;
+                //     cotizacionDetalle.precioNeto = cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.producto.precioClienteProducto.equivalencia;
                 cotizacionDetalle.flete = Converter.GetDecimal(row, "flete");
 
 
@@ -399,7 +400,8 @@ namespace DataLayer
                 {
                     cotizacionDetalle.observacion = "El precio lista NO ha variado.";
                 }
-                else {
+                else
+                {
                     cotizacionDetalle.observacion = "El precio de lista ha variado.";
                 }
 
@@ -414,7 +416,7 @@ namespace DataLayer
                     {
                         //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                         //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
-                        cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNetoRecalculado* cotizacionDetalle.ProductoPresentacion.Equivalencia));
+                        cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNetoRecalculado * cotizacionDetalle.ProductoPresentacion.Equivalencia));
 
                     }
                     else
@@ -468,13 +470,13 @@ namespace DataLayer
                 cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
                 cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
                 cotizacionDetalle.producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia_sin_igv");
-                
+
 
                 //El Precio sin igv es el precio lista
                 cotizacionDetalle.producto.precioLista = cotizacionDetalle.producto.precioSinIgv;
 
 
-                
+
                 cotizacionDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
 
                 if (cotizacionDetalle.esPrecioAlternativo)
@@ -579,8 +581,8 @@ namespace DataLayer
 
                 //El Precio sin igv es el precio lista
                 cotizacionDetalle.producto.precioLista = cotizacionDetalle.producto.precioSinIgv;
-                
-                
+
+
                 cotizacionDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
                 cotizacionDetalle.unidad = Converter.GetString(row, "unidad");
 
@@ -785,7 +787,8 @@ namespace DataLayer
             if (fechaPreciosVigenciaDesde != null)
             {
                 InputParameterAdd.DateTime(objCommand, "fechaConsideracion", fechaPreciosVigenciaDesde.Value);
-            } else
+            }
+            else
             {
                 InputParameterAdd.DateTime(objCommand, "fechaConsideracion", DateTime.Now);
             }
@@ -818,7 +821,7 @@ namespace DataLayer
 
                 //El Precio sin igv es el precio lista
                 cotizacionDetalle.producto.precioLista = cotizacionDetalle.producto.precioSinIgv;
-                
+
                 cotizacionDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
                 cotizacionDetalle.unidad = Converter.GetString(row, "unidad");
 
@@ -1026,12 +1029,12 @@ namespace DataLayer
 
 
             DataTable dataTable = Execute(objCommand);
-            
+
 
             List<Producto> productoList = new List<Producto>();
             foreach (DataRow row in dataTable.Rows)
             {
-                
+
                 Producto item = new Producto();
                 item.idProducto = Converter.GetGuid(row, "id_producto");
                 item.sku = Converter.GetString(row, "sku");
@@ -1072,6 +1075,8 @@ namespace DataLayer
                 item.precioProvinciasOriginal = Converter.GetDecimal(row, "precio_provincia_original");
                 item.costoSinIgv = Converter.GetDecimal(row, "costo");
                 item.costoOriginal = Converter.GetDecimal(row, "costo_original");
+                item.costoReferencial = Converter.GetDecimal(row, "costo_referencial");
+                item.costoReferencialOriginal = Converter.GetDecimal(row, "costo_original_referencial");
 
                 item.tipoCambio = Converter.GetDecimal(row, "tipo_cambio");
                 item.monedaMP = Converter.GetString(row, "moneda_venta");
@@ -1087,7 +1092,7 @@ namespace DataLayer
 
                 productoList.Add(item);
             }
-      
+
             return productoList;
         }
 
@@ -1128,7 +1133,7 @@ namespace DataLayer
                 item.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_estandar_unidad_conteo");
                 item.equivalenciaUnidadProveedorUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_proveedor_unidad_conteo");
 
-                
+
                 item.tipoProducto = Producto.TipoProducto.Bien;
                 item.tipoProductoVista = (int)item.tipoProducto;
 
@@ -1235,7 +1240,7 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_producto");
             InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
             DataTable dataTable = Execute(objCommand);
-            
+
             Producto item = new Producto();
             foreach (DataRow row in dataTable.Rows)
             {
@@ -1286,11 +1291,14 @@ namespace DataLayer
                 item.costoSinIgv = Converter.GetDecimal(row, "costo");
                 item.costoOriginal = Converter.GetDecimal(row, "costo_original");
 
+                item.costoReferencial = Converter.GetDecimal(row, "costo_referencial");
+                item.costoReferencialOriginal = Converter.GetDecimal(row, "costo_original_referencial");
+
                 item.codigoSunat = Converter.GetString(row, "codigo_sunat");
                 item.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
 
                 item.image = Converter.GetBytes(row, "imagen");
-                item.ventaRestringida = (Producto.TipoVentaRestringida) Converter.GetInt(row, "descontinuado");
+                item.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");
                 item.compraRestringida = Converter.GetInt(row, "compra_restringida");
                 item.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
                 item.cantidadMaximaPedidoRestringido = Converter.GetInt(row, "cantidad_maxima_pedido_restringido");
@@ -1302,7 +1310,7 @@ namespace DataLayer
         public Producto insertProducto(Producto producto)
         {
             var objCommand = GetSqlCommand("pi_producto");
-            
+
             InputParameterAdd.Guid(objCommand, "idUsuario", producto.IdUsuarioRegistro);
             InputParameterAdd.Varchar(objCommand, "sku", producto.sku);
             InputParameterAdd.Binary(objCommand, "imagen", producto.image);
@@ -1319,16 +1327,17 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "equivalenciaProveedor", producto.equivalenciaProveedor);
             InputParameterAdd.Int(objCommand, "equivalenciaUnidadPedidoProveedor", producto.equivalenciaUnidadPedidoProveedor);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
-            InputParameterAdd.Int(objCommand, "descontinuado", (int) producto.ventaRestringida);
+            InputParameterAdd.Int(objCommand, "descontinuado", (int)producto.ventaRestringida);
             InputParameterAdd.Int(objCommand, "compraRestringida", producto.compraRestringida);
             InputParameterAdd.VarcharEmpty(objCommand, "motivoRestriccion", producto.motivoRestriccion);
             InputParameterAdd.Int(objCommand, "exoneradoIgv", (producto.exoneradoIgv ? 1 : 0));
             InputParameterAdd.Int(objCommand, "inafecto", producto.inafecto ? 1 : 0);
-            InputParameterAdd.Int(objCommand, "tipo", (int) producto.tipoProducto);
+            InputParameterAdd.Int(objCommand, "tipo", (int)producto.tipoProducto);
             InputParameterAdd.Decimal(objCommand, "topeDescuento", producto.topeDescuento);
             InputParameterAdd.Decimal(objCommand, "precio", producto.precioSinIgv);
             InputParameterAdd.Decimal(objCommand, "precioProvincia", producto.precioProvinciaSinIgv);
             InputParameterAdd.Decimal(objCommand, "costo", producto.costoSinIgv);
+            InputParameterAdd.Decimal(objCommand, "costoReferencial", producto.costoReferencial);
             InputParameterAdd.DateTime(objCommand, "fechaInicioVigencia", DateTime.Now);
             InputParameterAdd.Int(objCommand, "esCargaMasiva", producto.CargaMasiva ? 1 : 0);
 
@@ -1349,11 +1358,12 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "equivalenciaUnidadProveedorUnidadConteo", producto.equivalenciaUnidadProveedorUnidadConteo);
 
             InputParameterAdd.Decimal(objCommand, "costoOriginal", producto.costoOriginal);
+            InputParameterAdd.Decimal(objCommand, "costoReferencialOriginal", producto.costoReferencialOriginal);
             InputParameterAdd.Decimal(objCommand, "precioOriginal", producto.precioOriginal);
             InputParameterAdd.Decimal(objCommand, "precioProvinciaOriginal", producto.precioProvinciasOriginal);
             InputParameterAdd.Decimal(objCommand, "tipoCambio", producto.tipoCambio);
-            
-            
+
+
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
 
             ExecuteNonQuery(objCommand);
@@ -1415,7 +1425,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "equivalenciaProveedor", producto.equivalenciaProveedor);
             InputParameterAdd.Int(objCommand, "equivalenciaUnidadPedidoProveedor", producto.equivalenciaUnidadPedidoProveedor);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
-            InputParameterAdd.Int(objCommand, "descontinuado", (int) producto.ventaRestringida);
+            InputParameterAdd.Int(objCommand, "descontinuado", (int)producto.ventaRestringida);
             InputParameterAdd.Int(objCommand, "compraRestringida", producto.compraRestringida);
 
             if (producto.descripcionLarga == null) producto.descripcionLarga = "";
@@ -1434,9 +1444,10 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "precio", producto.precioSinIgv);
             InputParameterAdd.Decimal(objCommand, "precioProvincia", producto.precioProvinciaSinIgv);
             InputParameterAdd.Decimal(objCommand, "costo", producto.costoSinIgv);
+            InputParameterAdd.Decimal(objCommand, "costoReferencial", producto.costoReferencial);
             InputParameterAdd.DateTime(objCommand, "fechaInicioVigencia", DateTime.Now);
             InputParameterAdd.Int(objCommand, "esCargaMasiva", producto.CargaMasiva ? 1 : 0);
-            
+
             InputParameterAdd.Varchar(objCommand, "monedaCompra", producto.monedaProveedor);
             InputParameterAdd.Varchar(objCommand, "monedaVenta", producto.monedaMP);
             InputParameterAdd.Varchar(objCommand, "unidadAlternativaInternacional", producto.unidadAlternativaInternacional);
@@ -1451,10 +1462,11 @@ namespace DataLayer
 
             InputParameterAdd.Decimal(objCommand, "topeDescuento", producto.topeDescuento);
             InputParameterAdd.Decimal(objCommand, "costoOriginal", producto.costoOriginal);
+            InputParameterAdd.Decimal(objCommand, "costoReferencialOriginal", producto.costoReferencialOriginal);
             InputParameterAdd.Decimal(objCommand, "precioOriginal", producto.precioOriginal);
             InputParameterAdd.Decimal(objCommand, "precioProvinciaOriginal", producto.precioProvinciasOriginal);
             InputParameterAdd.Decimal(objCommand, "tipoCambio", producto.tipoCambio);
-            
+
             ExecuteNonQuery(objCommand);
 
             return producto;
@@ -1465,14 +1477,223 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("pp_actualiza_tipo_cambio_productos");
             InputParameterAdd.Int(objCommand, "aplicaCosto", aplicaCosto ? 1 : 0);
-            InputParameterAdd.Int(objCommand, "aplicaPrecio", aplicaPrecio  ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "aplicaPrecio", aplicaPrecio ? 1 : 0);
             InputParameterAdd.Int(objCommand, "aplicaPrecioProvincia", aplicaPrecioProvincias ? 1 : 0);
             InputParameterAdd.Decimal(objCommand, "tipoCambio", tipoCambio);
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             InputParameterAdd.DateTime(objCommand, "fechaInicioVigencia", fechaInicioVigencia);
 
             ExecuteNonQuery(objCommand);
-            
+
+        }
+
+        public bool RegistroCierreStock(List<RegistroCargaStock> stock, DateTime fechaCierre, Guid idCiudad, Guid idUsuario, Guid idArchivoAdjunto)
+        {
+            var objCommand = GetSqlCommand("pi_cierre_stock");
+
+            InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
+            InputParameterAdd.DateTime(objCommand, "fechaCierre", fechaCierre);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Guid(objCommand, "idArchivoAdjunto", idArchivoAdjunto);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("SKU", typeof(string)));
+            tvp.Columns.Add(new DataColumn("CANTIDADPROVEEDOR", typeof(int)));
+            tvp.Columns.Add(new DataColumn("CANTIDADMP", typeof(int)));
+            tvp.Columns.Add(new DataColumn("CANTIDADALTERNATIVA", typeof(int)));
+
+            foreach (RegistroCargaStock item in stock)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["SKU"] = item.sku;
+                rowObj["CANTIDADPROVEEDOR"] = item.cantidadProveedor;
+                rowObj["CANTIDADMP"] = item.cantidadMp;
+                rowObj["CANTIDADALTERNATIVA"] = item.cantidadAlternativa;
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@stocks", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.CierreStockDetalleList";
+
+            OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
+
+            ExecuteNonQuery(objCommand);
+
+            Guid idCierreStock = (Guid)objCommand.Parameters["@newId"].Value;
+
+            return true;
+        }
+
+        public List<RegistroCargaStock> InventarioStock(DateTime fechaReferencia, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_stock_global");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.DateTime(objCommand, "fechaReferencia", fechaReferencia);
+
+            DataSet dataSet = ExecuteDataSet(objCommand);
+
+
+            DataTable dataTable = dataSet.Tables[0];
+            DataTable dataTableTodos = dataSet.Tables[1];
+
+            List<RegistroCargaStock> productoList = new List<RegistroCargaStock>();
+
+            foreach (DataRow row in dataTableTodos.Rows)
+            {
+                RegistroCargaStock item = new RegistroCargaStock();
+                item.producto = new Producto();
+                item.ciudad = new Ciudad();
+                item.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                item.producto.sku = Converter.GetString(row, "sku");
+                item.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
+                item.producto.descripcion = Converter.GetString(row, "descripcion");
+                item.producto.familia = Converter.GetString(row, "familia");
+                item.producto.proveedor = Converter.GetString(row, "proveedor");
+                item.producto.unidad = Converter.GetString(row, "unidad_mp");
+                item.producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
+                item.producto.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
+                item.producto.unidadConteo = Converter.GetString(row, "unidad_conteo");
+                item.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia_alternativa");
+                item.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+                item.producto.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_mp_conteo");
+                item.cantidadProveedor = Converter.GetInt(row, "cantidad_unidad_proveedor");
+                item.cantidadMp = Converter.GetInt(row, "cantidad_unidad_mp");
+                item.cantidadAlternativa = Converter.GetInt(row, "cantidad_unidad_alternativa");
+                item.cantidadConteo = Converter.GetInt(row, "cantidad_unidad_conteo") + Converter.GetInt(row, "movimientos_unidad_conteo");
+
+                item.ciudad.idCiudad = Guid.Empty;
+                item.ciudad.nombre = "TODOS";
+
+                item.fecha = Converter.GetDateTime(row, "fecha");
+
+                productoList.Add(item);
+            }
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                RegistroCargaStock item = new RegistroCargaStock();
+                item.producto = new Producto();
+                item.ciudad = new Ciudad();
+                item.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                item.producto.sku = Converter.GetString(row, "sku");
+                item.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
+                item.producto.descripcion = Converter.GetString(row, "descripcion");
+                item.producto.familia = Converter.GetString(row, "familia");
+                item.producto.proveedor = Converter.GetString(row, "proveedor");
+                item.producto.unidad = Converter.GetString(row, "unidad_mp");
+                item.producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
+                item.producto.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
+                item.producto.unidadConteo = Converter.GetString(row, "unidad_conteo");
+                item.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia_alternativa");
+                item.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+                item.producto.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_mp_conteo");
+                item.cantidadProveedor = Converter.GetInt(row, "cantidad_unidad_proveedor");
+                item.cantidadMp = Converter.GetInt(row, "cantidad_unidad_mp");
+                item.cantidadAlternativa = Converter.GetInt(row, "cantidad_unidad_alternativa");
+                item.cantidadConteo = Converter.GetInt(row, "cantidad_unidad_conteo") + Converter.GetInt(row, "movimientos_unidad_conteo");
+
+                item.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                item.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
+
+                item.fecha = Converter.GetDateTime(row, "fecha");
+
+                productoList.Add(item);
+            }
+
+
+
+
+            return productoList;
+        }
+
+        public List<RegistroCargaStock> StockProducto(string sku, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_stock_global_producto");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Varchar(objCommand, "sku", sku);
+
+            DataSet dataSet = ExecuteDataSet(objCommand);
+
+
+            DataTable dataTable = dataSet.Tables[0];
+
+            List<RegistroCargaStock> productoList = new List<RegistroCargaStock>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                RegistroCargaStock item = new RegistroCargaStock();
+                item.producto = new Producto();
+                item.ciudad = new Ciudad();
+                item.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                item.producto.sku = Converter.GetString(row, "sku");
+                item.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
+                item.producto.descripcion = Converter.GetString(row, "descripcion");
+                item.producto.familia = Converter.GetString(row, "familia");
+                item.producto.proveedor = Converter.GetString(row, "proveedor");
+                item.producto.unidad = Converter.GetString(row, "unidad");
+                item.producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
+                item.producto.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
+                item.producto.unidadConteo = Converter.GetString(row, "unidad_conteo");
+                item.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
+                item.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+                item.producto.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_mp_conteo");
+                item.cantidadConteo = Converter.GetInt(row, "cantidad_unidad_conteo") + Converter.GetInt(row, "movimientos_unidad_conteo");
+
+                item.cantidadProveedorCalc = ((Decimal)item.cantidadConteo) / ((Decimal)(item.producto.equivalenciaProveedor * item.producto.equivalenciaUnidadEstandarUnidadConteo));
+                item.cantidadProveedorCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadProveedorCalc));
+                item.cantidadAlternativaCalc = ((Decimal)(item.cantidadConteo * item.producto.equivalenciaAlternativa)) / ((Decimal)item.producto.equivalenciaUnidadEstandarUnidadConteo);
+                item.cantidadAlternativaCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadAlternativaCalc));
+                item.cantidadMpCalc = ((Decimal)item.cantidadConteo) / ((Decimal)item.producto.equivalenciaUnidadEstandarUnidadConteo);
+                item.cantidadMpCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadMpCalc));
+
+                item.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                item.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
+
+                item.tieneRegistroStock = Converter.GetBool(row, "tiene_registro_stock");
+                item.registradoPeridoAplicable = Converter.GetBool(row, "registrado_periodo_aplicable");
+
+                //item.fecha = Converter.GetDateTime(row, "fecha");
+
+                productoList.Add(item);
+            }
+            return productoList;
+        }
+
+        public List<CierreStock> CargasStock(Guid idUsuario, Guid idCiudad)
+        {
+            var objCommand = GetSqlCommand("ps_cierres_stock");
+            InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable dataTable = Execute(objCommand);
+
+            List<CierreStock> lista = new List<CierreStock>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                CierreStock item = new CierreStock();
+
+                item.idCierreStock = Converter.GetGuid(row, "id_cierre_stock");
+                item.fecha = Converter.GetDateTime(row, "fecha");
+                item.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
+
+                item.ciudad = new Ciudad();
+                item.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                item.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
+
+                item.UsuarioRegistro = new Usuario();
+                item.UsuarioRegistro.idUsuario = Converter.GetGuid(row, "id_usuario");
+                item.UsuarioRegistro.nombre = Converter.GetString(row, "nombre_usuario");
+
+                item.archivo = new ArchivoAdjunto();
+                item.archivo.idArchivoAdjunto = Converter.GetGuid(row, "id_archivo_adjunto");
+                item.archivo.nombre = Converter.GetString(row, "nombre_archivo");
+
+                lista.Add(item);
+            }
+
+            return lista;
         }
     }
 }

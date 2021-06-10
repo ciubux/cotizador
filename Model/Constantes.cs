@@ -27,7 +27,8 @@ namespace Model
         public static String UBIGEO_VACIO = "000000";
         public static int DIAS_DESDE_BUSQUEDA = 10;
         public static int ID_VENDEDOR_POR_ASIGNAR = 43;
-        public static int DIAS_MAX_COTIZACION_TRANSITORIA = 10;
+        public static int DIAS_DEFECTO_VALIDEZ_OFERTA_COTIZACION_PUNTUAL = 15;
+        public static int DIAS_MAX_VALIDEZ_OFERTA_COTIZACION_PUNTUAL = 15;
         public static Guid ID_SEDE_LIMA = Guid.Parse("15526227-2108-4113-B46A-1C8AB5C0E581");
 
         public static String URL_VER_PEDIDO = "http://cotizadormp.azurewebsites.net/Pedido?idPedido=";
@@ -452,6 +453,8 @@ namespace Model
         public const String EXPORTAR_VENTAS_CONTABILIDAD = "P590";
         public const String VISUALIZA_VENTAS = "P730";
 
+        public const String CARGA_MASIVA_STOCK = "P721";
+        public const String VISUALIZA_REPORTE_GLOBAL_STOCK = "P722";
 
         public const String RECTIFICAR_VENTA = "P731";
 
@@ -473,6 +476,8 @@ namespace Model
         public const String ACTIVA_CLIENTE_FACTURA_COMPLEJA = "P680";
 
         public const String MODIFICA_CLIENTE_CONTACTO_TIPO = "P761";
+
+        public const String VISUALIZA_REPORTE_SELLOUT_PERSONALIZADO = "R001";
 
         public enum paginas
         {
@@ -656,6 +661,11 @@ namespace Model
             DescargaPlantillMasivaStock = 720,
             [Display(Name = "CARGA MASIVA STOCK")]
             CargaMasivaStock = 721,
+            [Display(Name = "REPORTE STOCK")]
+            ReporteStock = 722,
+
+            [Display(Name = "REPORTE SELLOUT PERSONALIZADO")]
+            ReporteSellOutPersonalizado = 901,
 
             /*PARAMETRO*/
             [Display(Name = "TIPO CLIENTE CONTACTO")]

@@ -1132,6 +1132,7 @@ namespace Cotizador.Controllers
                 precioUnitario = detalle.precioUnitario,
                 precioNetoAnt = precioNetoAnterior,
                 observacion = detalle.observacion,
+                IdProductoPresentacion = detalle.esPrecioAlternativo ? detalle.ProductoPresentacion.IdProductoPresentacion : 0,
                 total = cotizacion.montoTotal.ToString(),
                 varprecioNetoAnterior = detalle.variacionPrecioAnterior,
                 variacionPrecioListaAnterior = detalle.variacionPrecioListaAnterior,
@@ -1230,12 +1231,24 @@ namespace Cotizador.Controllers
                 {
                     throw new System.Exception("Cotización ya se encuentra creada");
                 }
-
-                if (Constantes.PLAZO_OFERTA_DIAS < 7)
+                if (cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Normal)
                 {
-                    cotizacion.validezOfertaEnDias = Constantes.PLAZO_OFERTA_DIAS;
-                    cotizacion.mostrarValidezOfertaEnDias = 1;
-                    cotizacion.fechaLimiteValidezOferta = DateTime.Now.AddDays(Constantes.PLAZO_OFERTA_DIAS);
+                    if (Constantes.PLAZO_OFERTA_DIAS < 7)
+                    {
+                        cotizacion.validezOfertaEnDias = Constantes.PLAZO_OFERTA_DIAS;
+                        cotizacion.mostrarValidezOfertaEnDias = 1;
+                        cotizacion.fechaLimiteValidezOferta = DateTime.Now.AddDays(Constantes.PLAZO_OFERTA_DIAS);
+                    }
+                } else
+                {
+                    cotizacion.fechaInicioVigenciaPrecios = DateTime.Now;
+                    if (cotizacion.mostrarValidezOfertaEnDias == 0)
+                    {
+                        cotizacion.fechaFinVigenciaPrecios = cotizacion.fechaInicioVigenciaPrecios.Value.AddDays(cotizacion.validezOfertaEnDias);
+                    } else
+                    {
+                        cotizacion.fechaFinVigenciaPrecios = cotizacion.fechaLimiteValidezOferta;
+                    }
                 }
 
                 bl.InsertCotizacion(cotizacion);
@@ -1292,11 +1305,26 @@ namespace Cotizador.Controllers
             cotizacion.usuario = usuario;
             CotizacionBL bl = new CotizacionBL();
 
-            if (Constantes.PLAZO_OFERTA_DIAS < 7)
+            if (cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Normal)
             {
-                cotizacion.validezOfertaEnDias = Constantes.PLAZO_OFERTA_DIAS;
-                cotizacion.mostrarValidezOfertaEnDias = 1;
-                cotizacion.fechaLimiteValidezOferta = DateTime.Now.AddDays(Constantes.PLAZO_OFERTA_DIAS);
+                if (Constantes.PLAZO_OFERTA_DIAS < 7)
+                {
+                    cotizacion.validezOfertaEnDias = Constantes.PLAZO_OFERTA_DIAS;
+                    cotizacion.mostrarValidezOfertaEnDias = 1;
+                    cotizacion.fechaLimiteValidezOferta = DateTime.Now.AddDays(Constantes.PLAZO_OFERTA_DIAS);
+                }
+            }
+            else
+            {
+                cotizacion.fechaInicioVigenciaPrecios = DateTime.Now;
+                if (cotizacion.mostrarValidezOfertaEnDias == 0)
+                {
+                    cotizacion.fechaFinVigenciaPrecios = cotizacion.fechaInicioVigenciaPrecios.Value.AddDays(cotizacion.validezOfertaEnDias);
+                }
+                else
+                {
+                    cotizacion.fechaFinVigenciaPrecios = cotizacion.fechaLimiteValidezOferta;
+                }
             }
 
             Cotizacion cotizacionAprobada = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_APROBADA];
@@ -1477,6 +1505,8 @@ namespace Cotizador.Controllers
             CotizacionBL cotizacionBL = new CotizacionBL();
             Cotizacion cotizacion = new Cotizacion();
             cotizacion.codigo = codigo;
+
+            Usuario us = (Usuario)this.Session["usuario"];
             //REVISAR
             cotizacion.fechaModificacion = DateTime.Now;// cotizacionSession.fechaModificacion;
             cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
@@ -1484,16 +1514,37 @@ namespace Cotizador.Controllers
             cotizacion.seguimientoCotizacion.observacion = observacion;
             cotizacion.usuario = (Usuario)this.Session["usuario"];
             cotizacionBL.cambiarEstadoCotizacion(cotizacion);
+
+            if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada)
+            {
+                cotizacion = cotizacionBL.GetCotizacion(cotizacion, us);
+
+                if (!cotizacion.usuario.idUsuario.Equals(us.idUsuario))
+                {
+                    List<Usuario> recep = new List<Usuario>();
+                    recep.Add(cotizacion.usuario);
+
+                    Mensaje notificacion = new Mensaje();
+                    notificacion.titulo = "COTIZACION APROBADA";
+                    notificacion.mensaje = "La cotización " + cotizacion.codigo.ToString() + " fue aprobada.";
+                    if (!observacion.Trim().Equals(""))
+                    {
+                        notificacion.mensaje = notificacion.mensaje + "<br/><br/><b>Observación:</b> " + observacion;
+                    }
+
+                    notificacion.fechaInicioMensaje = DateTime.Now;
+                    notificacion.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
+                    notificacion.user = us;
+                    notificacion.importancia = "Alta";
+
+                    notificacion.listUsuario = recep;
+
+                    MensajeBL mensajeBl = new MensajeBL();
+                    mensajeBl.insertMensaje(notificacion);
+                }
+            }
+
         }
-
-
-
-
-
-
-
-
-
 
 
 

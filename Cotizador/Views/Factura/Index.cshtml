@@ -659,6 +659,7 @@
                     @if (documentoVenta.usuario.apruebaAnulaciones)
                     {
                         <button type="button" id="btnIniciarAprobacion" class="btn btn-danger">Aprobar Anulación</button>
+                        <button type="button" id="btnRechazarAprobacion" class="btn btn-warning">Rechazar Anulación</button>
                     }
                     @if (documentoVenta.usuario.creaNotasCredito)
                     {
@@ -795,6 +796,59 @@
             <div class="modal-footer">
                 <button type="button" id="btnCancelarAprobacionAnulacion" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <button type="button" id="btnAprobarAnulacion" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalRechazoAnulacion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalRechazoTitle"><b>Rechazar Anulación Documento de Venta Electrónico</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-12">
+                            <div class="form-group">
+                                <label for="serieNumero" class="control-label col-xs-3">Número Documento:</label>
+                                <div class="col-xs-9">
+                                    <input class="form-control" type="text" id="serieNumeroRechazoAnulacion" disabled />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-12">
+
+                            <!--MOTIVO ANULACION-->
+                            <div class="form-group">
+                                <label for="comentarioRechazoAnulacion" class="control-label col-xs-3">Motivo:</label>
+
+                                <div class="col-xs-9">
+                                    <textarea class="form-control" rows="5" id="comentarioRechazoAnulacion" name="comentarioRechazoAnulacion"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarRechazoAnulacion" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnRechazarAnulacion" class="btn btn-primary">Aceptar</button>
             </div>
         </div>
     </div>

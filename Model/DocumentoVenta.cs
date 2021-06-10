@@ -452,6 +452,7 @@ namespace Model
 
         public bool buscarSedesGrupoCliente { get; set; }
 
+        public Usuario usuarioSolicitudAnulacion { get; set; }
 
         /**
          * Utilizado para búsqueda
