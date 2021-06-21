@@ -24,6 +24,7 @@ namespace Cotizador.Models.DTOshow
         public String cliente_asistenteServicioCliente_usuario_email { get; set; }
         public String fechaHorarioEntrega { get; set; }
         public String ciudad_nombre { get; set; }
+        public Guid ciudad_idCiudad { get; set; }
         public Guid cliente_idCliente { get; set; }
         public String cliente_codigoRazonSocial { get; set; }
         public String numeroReferenciaCliente { get; set; }

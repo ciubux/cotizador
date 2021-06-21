@@ -30,14 +30,17 @@ namespace Cotizador.ExcelExport
         private HSSFCellStyle formDataCenterCellStyle;
         private HSSFCellStyle tableDataCellStyle;
         private HSSFFont titleFont;
+        private HSSFFont negativeStockFont;
         private HSSFCellStyle titleCellStyle;
         private HSSFCellStyle blockedDataCellStyle;
         private HSSFCellStyle titleDataCellStyle;
         private HSSFCellStyle familiaCellStyle;
         private HSSFCellStyle tableDataLastCellStyle;
         private HSSFCellStyle tableDataCenterCellStyle;
+        private HSSFCellStyle tableDataCenterCellStyleNegative;
         private HSSFCellStyle tableDataCellStyleB;
         private HSSFCellStyle tableDataCenterCellStyleB;
+        private HSSFCellStyle tableDataCenterCellStyleNegativeB;
         private HSSFCellStyle tableDataLastCenterCellStyle;
         private IDataFormat format;
 
@@ -83,6 +86,12 @@ namespace Cotizador.ExcelExport
             tableDataCellStyle.BorderBottom = BorderStyle.Thin;
 
 
+            negativeStockFont = (HSSFFont)wb.CreateFont();
+            negativeStockFont.FontHeightInPoints = (short)11;
+            negativeStockFont.FontName = "Arial";
+            negativeStockFont.Color = IndexedColors.Red.Index;
+            negativeStockFont.IsBold = true;
+
             titleFont = (HSSFFont)wb.CreateFont();
             titleFont.FontHeightInPoints = (short)11;
             titleFont.FontName = "Arial";
@@ -123,6 +132,9 @@ namespace Cotizador.ExcelExport
             tableDataCenterCellStyle = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataCellStyle);
             tableDataCenterCellStyle.Alignment = HorizontalAlignment.Center;
 
+            tableDataCenterCellStyleNegative = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataCenterCellStyle);
+            tableDataCenterCellStyleNegative.SetFont(negativeStockFont);
+
             tableDataCellStyleB = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataCellStyle);
             tableDataCellStyleB.Alignment = HorizontalAlignment.Left;
             tableDataCellStyleB.FillPattern = FillPattern.SolidForeground;
@@ -131,6 +143,9 @@ namespace Cotizador.ExcelExport
             tableDataCenterCellStyleB = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataCenterCellStyle);
             tableDataCenterCellStyleB.FillPattern = FillPattern.SolidForeground;
             tableDataCenterCellStyleB.FillForegroundColor = HSSFColor.Grey25Percent.Index;
+
+            tableDataCenterCellStyleNegativeB = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataCenterCellStyleB);
+            tableDataCenterCellStyleNegativeB.SetFont(negativeStockFont);
 
             tableDataLastCenterCellStyle = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataLastCellStyle);
             tableDataLastCenterCellStyle.Alignment = HorizontalAlignment.Center;
@@ -215,7 +230,22 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "D", obj.producto.descripcion, tableDataCellStyleB);
 
                     UtilesHelper.setValorCelda(sheet, i, "F", unidad, tableDataCellStyleB);
-                    UtilesHelper.setValorCelda(sheet, i, "G", String.Format(Constantes.formatoDosDecimales, stock), tableDataCenterCellStyleB);
+                    if (obj.stockNoDisponible)
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "G", "No Disponible", tableDataCenterCellStyleB);
+                    }
+                    else
+                    {
+                        if (stock < 0)
+                        {
+                            UtilesHelper.setValorCelda(sheet, i, "G", String.Format(Constantes.formatoDosDecimales, stock), tableDataCenterCellStyleNegativeB);
+                        }
+                        else
+                        {
+                            UtilesHelper.setValorCelda(sheet, i, "G", String.Format(Constantes.formatoDosDecimales, stock), tableDataCenterCellStyleB);
+                        }
+                        
+                    }
 
                     //if (obj.producto.equivalenciaProveedor > 1)
                     //{
@@ -256,7 +286,22 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "D", obj.producto.descripcion, tableDataCellStyle);
 
                     UtilesHelper.setValorCelda(sheet, i, "F", unidad, tableDataCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "G", String.Format(Constantes.formatoDosDecimales, stock), tableDataCenterCellStyle);
+                    if (obj.stockNoDisponible)
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "G", "No Disponible", tableDataCenterCellStyle);
+                    }
+                    else
+                    {
+                        if (stock < 0)
+                        {
+                            UtilesHelper.setValorCelda(sheet, i, "G", String.Format(Constantes.formatoDosDecimales, stock), tableDataCenterCellStyleNegative);
+                        }
+                        else
+                        {
+                            UtilesHelper.setValorCelda(sheet, i, "G", String.Format(Constantes.formatoDosDecimales, stock), tableDataCenterCellStyle);
+                        }
+                    }
+                    
 
                     //if (obj.producto.equivalenciaProveedor > 1)
                     //{
@@ -373,7 +418,7 @@ namespace Cotizador.ExcelExport
 
             UtilesHelper.setColumnWidth(sheet, "E", 500);
             UtilesHelper.setColumnWidth(sheet, "F", 6000);
-            UtilesHelper.setColumnWidth(sheet, "G", 3000);
+            UtilesHelper.setColumnWidth(sheet, "G", 3500);
 
             //UtilesHelper.setColumnWidth(sheet, "H", 500);
             //UtilesHelper.setColumnWidth(sheet, "I", 6000);

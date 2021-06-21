@@ -221,7 +221,7 @@
                     <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado</th>
                     <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Modificado última vez por</th>
                     <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>
-                    <th data-name="historialPrecios" data-sortable="true" data-breakpoints="xs">Historial Precios</th>
+                    <th data-name="historialPrecios" data-sortable="true" data-breakpoints="xs">Historial Precios / Stock</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -788,6 +788,8 @@
 </div>
 
 @Html.Action("LogPrecioProducto", "Precio")
+
+@Html.Partial("../Stock/_ModalStockProducto")
 
 <span id="spnProductoDescontinuado" style="display: none;">
     @Html.Partial("../Producto/_LabelRestringido")

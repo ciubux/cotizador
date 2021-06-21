@@ -209,6 +209,16 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(stocks); 
         }
 
+        public String ReporteStockProductoKardex(Guid idCiudad, Guid idProducto, int idProductoPresentacion)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            ProductoBL bl = new ProductoBL();
+            MovimientoKardexCabecera kardex = bl.StockProductoKardex(usuario.idUsuario, idCiudad, idProducto, idProductoPresentacion);
+
+            return JsonConvert.SerializeObject(kardex);
+        }
+
         public ActionResult CargasStock()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];

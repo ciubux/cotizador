@@ -1132,7 +1132,7 @@ namespace Cotizador.Controllers
                 precioUnitario = detalle.precioUnitario,
                 precioNetoAnt = precioNetoAnterior,
                 observacion = detalle.observacion,
-                IdProductoPresentacion = detalle.esPrecioAlternativo ? detalle.ProductoPresentacion.IdProductoPresentacion : 0,
+                idProductoPresentacion = detalle.esPrecioAlternativo ? detalle.ProductoPresentacion.IdProductoPresentacion : 0,
                 total = cotizacion.montoTotal.ToString(),
                 varprecioNetoAnterior = detalle.variacionPrecioAnterior,
                 variacionPrecioListaAnterior = detalle.variacionPrecioListaAnterior,

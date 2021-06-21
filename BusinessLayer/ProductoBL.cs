@@ -512,5 +512,49 @@ namespace BusinessLayer
                 return productoDAL.CargasStock(idUsuario, idCiudad);
             }
         }
+
+        public MovimientoKardexCabecera StockProductoKardex(Guid idUsuario, Guid idCiudad, Guid idProducto, int idProductoPresentacion)
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                CiudadDAL ciudadDal = new CiudadDAL();
+                
+                MovimientoKardexCabecera kardex = productoDAL.StockProductoKardex(idUsuario, idCiudad, idProducto);
+                kardex.producto = productoDAL.GetProductoById(idProducto);
+                kardex.unidadConteo = kardex.producto.unidadConteo;
+                kardex.ciudad = ciudadDal.getCiudad(idCiudad);
+
+                switch (idProductoPresentacion)
+                {
+                    case 0: kardex.unidad = kardex.producto.unidad; break;
+                    case 1: kardex.unidad = kardex.producto.unidad_alternativa; break;
+                    case 2: kardex.unidad = kardex.producto.unidadProveedor; break;
+                }
+
+                int stockConteo = 0;
+                foreach (MovimientoKardexDetalle item in kardex.movimientos)
+                {
+                    switch (item.tipoMovimiento)
+                    {
+                        case 1: stockConteo -= item.cantidadConteo; break;
+                        case 2: stockConteo += item.cantidadConteo; break;
+                        case 99: stockConteo += item.cantidadConteo; break;
+                    }
+
+                    item.stockConteo = stockConteo;
+                    
+                    switch (idProductoPresentacion)
+                    {
+                        case 0: item.stockUnidad = ((Decimal)item.stockConteo) / ((Decimal)kardex.producto.equivalenciaUnidadEstandarUnidadConteo); break;
+                        case 1: item.stockUnidad = ((Decimal)(item.stockConteo * kardex.producto.equivalenciaAlternativa)) / ((Decimal)kardex.producto.equivalenciaUnidadEstandarUnidadConteo); break;
+                        case 2: item.stockUnidad = ((Decimal)item.stockConteo) / ((Decimal)(kardex.producto.equivalenciaProveedor * kardex.producto.equivalenciaUnidadEstandarUnidadConteo)); break;
+                    }
+
+                    item.stockUnidad = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.stockUnidad));
+                }                
+
+                return kardex;
+            }
+        }
     }
 }

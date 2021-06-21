@@ -259,6 +259,14 @@ namespace Model
         }
 
        public ProductoPresentacion ProductoPresentacion { get; set; }
+
+        public int idProductoPresentación
+        {
+            get
+            {
+                return ProductoPresentacion == null ? 0 : ProductoPresentacion.IdProductoPresentacion;
+            }
+        }
     }
 
 

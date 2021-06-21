@@ -771,7 +771,10 @@ jQuery(function ($) {
                 }
 
                 $("#verCantidadMaximaPedidoRestringido").html(producto.cantidadMaximaPedidoRestringido);
+
+                $(".verModalStockProducto").attr("sku", producto.sku);
                 
+
                 $("#modalVerProducto").modal('show');        
             }
         });

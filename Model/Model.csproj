@@ -56,6 +56,8 @@
     <Compile Include="ClienteContactoTipo.cs" />
     <Compile Include="ClienteContacto.cs" />
     <Compile Include="TipoVistaDashboard.cs" />
+    <Compile Include="UTILES\MovimientoKardexCabecera.cs" />
+    <Compile Include="UTILES\MovimientoKardexDetalle.cs" />
     <Compile Include="UTILES\RegistroCargaStock.cs" />
     <Compile Include="UTILES\LogRegistroCampoDato.cs" />
     <Compile Include="UTILES\LogRegistroCampos.cs" />

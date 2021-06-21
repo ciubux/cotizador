@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using Model;
 using Model.UTILES;
 using System.IO;
+using System.Linq;
 
 namespace DataLayer
 {
@@ -1535,40 +1536,9 @@ namespace DataLayer
 
 
             DataTable dataTable = dataSet.Tables[0];
-            DataTable dataTableTodos = dataSet.Tables[1];
 
             List<RegistroCargaStock> productoList = new List<RegistroCargaStock>();
-
-            foreach (DataRow row in dataTableTodos.Rows)
-            {
-                RegistroCargaStock item = new RegistroCargaStock();
-                item.producto = new Producto();
-                item.ciudad = new Ciudad();
-                item.producto.idProducto = Converter.GetGuid(row, "id_producto");
-                item.producto.sku = Converter.GetString(row, "sku");
-                item.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
-                item.producto.descripcion = Converter.GetString(row, "descripcion");
-                item.producto.familia = Converter.GetString(row, "familia");
-                item.producto.proveedor = Converter.GetString(row, "proveedor");
-                item.producto.unidad = Converter.GetString(row, "unidad_mp");
-                item.producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
-                item.producto.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
-                item.producto.unidadConteo = Converter.GetString(row, "unidad_conteo");
-                item.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia_alternativa");
-                item.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
-                item.producto.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_mp_conteo");
-                item.cantidadProveedor = Converter.GetInt(row, "cantidad_unidad_proveedor");
-                item.cantidadMp = Converter.GetInt(row, "cantidad_unidad_mp");
-                item.cantidadAlternativa = Converter.GetInt(row, "cantidad_unidad_alternativa");
-                item.cantidadConteo = Converter.GetInt(row, "cantidad_unidad_conteo") + Converter.GetInt(row, "movimientos_unidad_conteo");
-
-                item.ciudad.idCiudad = Guid.Empty;
-                item.ciudad.nombre = "TODOS";
-
-                item.fecha = Converter.GetDateTime(row, "fecha");
-
-                productoList.Add(item);
-            }
+            List<RegistroCargaStock> finalList = new List<RegistroCargaStock>();
 
             foreach (DataRow row in dataTable.Rows)
             {
@@ -1596,15 +1566,51 @@ namespace DataLayer
                 item.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 item.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
 
+                item.tieneRegistroStock = Converter.GetBool(row, "tiene_registro_stock");
+                item.registradoPeridoAplicable = Converter.GetBool(row, "registrado_periodo_aplicable");
+
                 item.fecha = Converter.GetDateTime(row, "fecha");
 
                 productoList.Add(item);
             }
 
+            foreach (RegistroCargaStock item in productoList)
+            {
+                RegistroCargaStock obj = finalList.Where(l => l.producto.idProducto == item.producto.idProducto).FirstOrDefault();
+                if (obj == null)
+                {
+                    obj = new RegistroCargaStock();
+                    obj.producto = item.producto;
+                    obj.ciudad = new Ciudad();
 
+                    obj.cantidadProveedor = 0;
+                    obj.cantidadMp = 0;
+                    obj.cantidadAlternativa = 0;
+                    obj.cantidadConteo = 0;
 
+                    obj.ciudad.idCiudad = Guid.Empty;
+                    obj.ciudad.nombre = "TODOS";
 
-            return productoList;
+                    obj.fecha = item.fecha;
+                    obj.registradoPeridoAplicable = item.registradoPeridoAplicable;
+                    obj.tieneRegistroStock = item.tieneRegistroStock;
+
+                    finalList.Add(obj);
+                }
+
+                obj.cantidadConteo += item.cantidadConteo;
+                if (!obj.tieneRegistroStock)
+                {
+                    obj.tieneRegistroStock = item.tieneRegistroStock;
+                }
+            }
+            
+            foreach (RegistroCargaStock item in productoList)
+            {
+                finalList.Add(item);
+            }
+
+            return finalList;
         }
 
         public List<RegistroCargaStock> StockProducto(string sku, Guid idUsuario)
@@ -1638,14 +1644,23 @@ namespace DataLayer
                 item.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
                 item.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
                 item.producto.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_mp_conteo");
-                item.cantidadConteo = Converter.GetInt(row, "cantidad_unidad_conteo") + Converter.GetInt(row, "movimientos_unidad_conteo");
 
+                item.cantidadConteo = Converter.GetInt(row, "cantidad_unidad_conteo") + Converter.GetInt(row, "movimientos_unidad_conteo");
                 item.cantidadProveedorCalc = ((Decimal)item.cantidadConteo) / ((Decimal)(item.producto.equivalenciaProveedor * item.producto.equivalenciaUnidadEstandarUnidadConteo));
                 item.cantidadProveedorCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadProveedorCalc));
                 item.cantidadAlternativaCalc = ((Decimal)(item.cantidadConteo * item.producto.equivalenciaAlternativa)) / ((Decimal)item.producto.equivalenciaUnidadEstandarUnidadConteo);
                 item.cantidadAlternativaCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadAlternativaCalc));
                 item.cantidadMpCalc = ((Decimal)item.cantidadConteo) / ((Decimal)item.producto.equivalenciaUnidadEstandarUnidadConteo);
                 item.cantidadMpCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadMpCalc));
+
+                item.cantidadSeparadaConteo = (int) Converter.GetDecimal(row, "stock_separado_unidad_conteo");
+                item.cantidadSeparadaMpCalc = ((Decimal)item.cantidadSeparadaConteo) / ((Decimal)item.producto.equivalenciaUnidadEstandarUnidadConteo);
+                item.cantidadSeparadaMpCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadSeparadaMpCalc));
+                item.cantidadSeparadaProveedorCalc = item.cantidadSeparadaMpCalc / ((Decimal)item.producto.equivalenciaProveedor);
+                item.cantidadSeparadaProveedorCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadSeparadaProveedorCalc));
+                item.cantidadSeparadaAlternativaCalc = item.cantidadSeparadaMpCalc * ((Decimal)item.producto.equivalenciaAlternativa);
+                item.cantidadSeparadaAlternativaCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadSeparadaAlternativaCalc));
+                
 
                 item.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 item.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
@@ -1694,6 +1709,72 @@ namespace DataLayer
             }
 
             return lista;
+        }
+
+        public MovimientoKardexCabecera StockProductoKardex(Guid idUsuario, Guid idCiudad, Guid idProducto)
+        {
+            var objCommand = GetSqlCommand("ps_movimientos_stock_producto");
+            InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
+            InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable dataTable = Execute(objCommand);
+
+            MovimientoKardexCabecera kardex = new MovimientoKardexCabecera();
+            kardex.movimientos = new List<MovimientoKardexDetalle>();
+
+            DataSet dataSet = ExecuteDataSet(objCommand);
+
+            DataTable dataTableCargas = dataSet.Tables[0];
+            DataTable dataTableMovimientos = dataSet.Tables[1];
+
+            foreach (DataRow row in dataTableCargas.Rows)
+            {
+                MovimientoKardexDetalle item = new MovimientoKardexDetalle();
+
+                item.fecha = Converter.GetDateTime(row, "fecha");
+                item.cantidadConteo = Converter.GetInt(row, "cantidad_unidad_conteo");
+                item.tipoMovimiento = 99;
+
+                kardex.movimientos.Add(item);
+            }
+
+            foreach (DataRow row in dataTableMovimientos.Rows)
+            {
+                MovimientoKardexDetalle item = new MovimientoKardexDetalle();
+
+                item.fecha = Converter.GetDateTime(row, "fecha_emision");
+                item.cantidadConteo = Converter.GetInt(row, "cantidad_unidad_conteo");
+                item.serieDocumento = Converter.GetString(row, "serie_documento");
+                item.numeroDocumento = Converter.GetString(row, "numero_documento");
+                item.unidadMovimiento = Converter.GetString(row, "unidad");
+                item.cantidadMovimiento = Converter.GetInt(row, "cantidad");
+
+                string tipoMovimiento = Converter.GetString(row, "tipo_movimiento");
+                switch (tipoMovimiento)
+                {
+                    case "E": item.tipoMovimiento = 2; break;
+                    case "S": item.tipoMovimiento = 1; break;
+                }
+
+                string tipoDocumento = Converter.GetString(row, "tipo_documento");
+                switch (tipoDocumento)
+                {
+                    case "GR": item.tipoDocumento = 1; break;
+                    case "NI": item.tipoDocumento = 2; break;
+                }
+
+                if (kardex.ciudad == null)
+                {
+                    kardex.ciudad = new Ciudad();
+                    kardex.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                    kardex.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
+                }
+
+                kardex.movimientos.Add(item);
+            }
+
+            return kardex;
         }
     }
 }

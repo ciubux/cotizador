@@ -840,7 +840,7 @@
                                 <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant. Pend. Entrega.</th>
                                 <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
                                 <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Observaciones</th>
-                                <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios</th>
+                                <th data-name="historialPrecios" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Historial Precios / Stock</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -2387,6 +2387,7 @@
 
 @Html.Partial("../Pedido/_SelectStockIconState")
 
+@Html.Partial("../Stock/_ModalStockProducto")
 
 @section Scripts {
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/pedido")

@@ -35,5 +35,12 @@ namespace Model.UTILES
 
 
         public int cantidadConteo { get; set; }
+
+        public int cantidadSeparadaConteo { get; set; }
+
+        public decimal cantidadSeparadaProveedorCalc { get; set; }
+        public decimal cantidadSeparadaMpCalc { get; set; }
+        public decimal cantidadSeparadaAlternativaCalc { get; set; }
+
     }
 }

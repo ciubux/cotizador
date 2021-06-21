@@ -76,6 +76,10 @@ textarea {
 
 @media screen and (min-width: 768px) {
 
+    #modalStockProductoKardex .modal-dialog {
+        width: 800px;
+    }
+
     #modalStockProductoSedes .modal-dialog {
         width: 900px;
     }
@@ -1129,4 +1133,27 @@ $darkred: darken($red, 0.2);*/
     background-position: center;
     background-repeat: round;
     background-size: contain;
+}
+
+
+#idCiudadModalStockSedeProducto {
+    width: 160px;
+    display: inline;
+}
+
+
+.tableFixHead {
+    overflow: auto;
+    height: 400px;
+}
+
+.tableFixHead thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #eee;
+}
+
+#tableMovimientosStockKardex th, #tableMovimientosStockKardex td {
+    text-align: center;
 }

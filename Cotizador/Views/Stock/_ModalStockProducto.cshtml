@@ -4,7 +4,7 @@
 
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modalMostrarPreciosTitle"><b>Stock de producto en la Sede </b></h4>
+                <h4 class="modal-title" id="modalMostrarPreciosTitle"><b>Stock de producto por Sede</b></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -42,7 +42,7 @@
                 <div class="row">
                     <div class="col-sm-12 col-lg-12">
                         <div class="form-group">
-                            <label for="numero" class="control-label col-xs-4">Stock en la Sede(<span id="verNombreSedeProductoStock"></span>):</label>
+                            <label for="numero" class="control-label col-xs-4">Stock en la Sede (<span id="verNombreSedeProductoStock"></span>):</label>
 
                             <div class="col-xs-8">
                                 <span class="form-control-static text-center" id="verStockSedeProducto"></span>
@@ -59,6 +59,28 @@
 
                 <div class="row" id="divStockProductoOtrasSedes">
                 </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12">
+                        <p><b>*</b> El número que esta entre corchetes "[ ]" al lado del stock de cada sede pertenece a la cantidad del producto por atender en pedidos que tienen plazo de entrega activo, o que su plazo de entrega comenzara en los próximos 14 días, o cuyo plazo de entrega se venció hace 7 días o menos.</p>
+                    </div>
+                </div>
+                <br />
+                <div class="row" id="divCiudadModalStockSedeProducto">
+                    <div class="col-sm-12 col-lg-12">
+                        <h4>
+                            Ver Kardex en la sede:
+                            @Html.Action("GetCiudades", "Ciudad",
+                            new
+                            {
+                             ciudadSelectId = "idCiudadModalStockSedeProducto"
+                            })
+                            <button type="button" class="btn btn-primary verModalStockProductoKardex">Ver Kardex</button>
+                        </h4>
+                    </div>
+                </div>
+
+                <br />
             </div>
 
         </div>
@@ -66,11 +88,12 @@
 </div>
 
 <script type="text/javascript">
-    window.onload = function () {
+    function funcionesModalStockProducto() {
         $(document).on('click', "button.verModalStockProducto", function () {
             var idCiudad = $(this).attr("idCiudad");
             var sku = $(this).attr("sku");
             var idProductoPresentacion = $(this).attr("idProductoPresentacion");
+            var idProducto = "";
 
             $.ajax({
                 url: "/Stock/ReporteStockProducto",
@@ -82,12 +105,14 @@
                 },
                 success: function (lista) {
                     var htmlStockSedes = "";
-                    var stock;
+                    var stock, stockSeparado;
+                    var disponible = false;
                     for (var i = 0; i < lista.length; i++) {
-                        stock = 0;
+                        stock = 0; stockSeparado = 0;
                         if (lista[i].ciudad.idCiudad == idCiudad) {
                             $("#verNombreSedeProductoStock").html(lista[i].ciudad.nombre);
-                            
+                            $(".verModalStockProductoKardex").attr("nombreCiudad", lista[i].ciudad.nombre);
+                            idProducto = lista[i].producto.idProducto;
 
                             $("#verNombreProductoStock").html(lista[i].producto.descripcion);
                             $("#verCodigoProductoStock").html(lista[i].producto.sku);
@@ -95,39 +120,68 @@
                             if (lista[i].stockNoDisponible) {
                                 stock = "No Disponible";
                             } else {
+                                disponible = true;
                                 if (idProductoPresentacion == '0') {
                                     stock = lista[i].cantidadMpCalc;
+                                    stockSeparado = lista[i].cantidadSeparadaMpCalc;
                                     $("#verUnidadProductoStock").html(lista[i].producto.unidad);
                                 }
                                 if (idProductoPresentacion == '1') {
                                     stock = lista[i].cantidadAlternativaCalc;
+                                    stockSeparado = lista[i].cantidadSeparadaAlternativaCalc;
                                     $("#verUnidadProductoStock").html(lista[i].producto.unidad_alternativa);
                                 }
                                 if (idProductoPresentacion == '2') {
                                     stock = lista[i].cantidadProveedorCalc;
+                                    stockSeparado = lista[i].cantidadSeparadaProveedorCalc;
                                     $("#verUnidadProductoStock").html(lista[i].producto.unidadProveedor);
+                                }
+
+                                if (stockSeparado > 0) {
+                                    stock = stock + ' [-' + stockSeparado + ']';
                                 }
                             }
                             $("#verStockSedeProducto").html(stock);
+
                         } else {
                             if (lista[i].stockNoDisponible) {
                                 stock = "No Disponible";
                             } else {
+                                disponible = true;
                                 if (idProductoPresentacion == '0') {
                                     stock = lista[i].cantidadMpCalc;
+                                    stockSeparado = lista[i].cantidadSeparadaMpCalc;
                                 }
                                 if (idProductoPresentacion == '1') {
                                     stock = lista[i].cantidadAlternativaCalc;
+                                    stockSeparado = lista[i].cantidadSeparadaAlternativaCalc;
                                 }
                                 if (idProductoPresentacion == '2') {
                                     stock = lista[i].cantidadProveedorCalc;
+                                    stockSeparado = lista[i].cantidadSeparadaProveedorCalc;
+                                }
+
+                                if (stockSeparado > 0) {
+                                    stock = stock + ' [-' + stockSeparado + ']';
                                 }
                             }
 
-                            var htmlStockSedes = htmlStockSedes + '<div class="col-sm-4 col-lg-4"><div class="form-group"><label class="control-label col-xs-8">' +
-                                lista[i].ciudad.nombre + '</label><div class="col-xs-4"><span class="form-control-stati">' + stock + '</span></div></div></div>';
+                            var htmlStockSedes = htmlStockSedes + '<div class="col-sm-4 col-lg-4"><div class="form-group"><label class="control-label col-xs-6">' +
+                                lista[i].ciudad.nombre + '</label><div class="col-xs-6"><span class="form-control-stati">' + stock + '</span></div></div></div>';
                         }
                     }
+
+                    if (disponible) {
+                        $("#divCiudadModalStockSedeProducto").show();
+                    } else {
+                        $("#divCiudadModalStockSedeProducto").hide();
+                    }
+
+                    $(".verModalStockProductoKardex").attr("idCiudad", idCiudad);
+                    $(".verModalStockProductoKardex").attr("idProducto", idProducto);
+                    $(".verModalStockProductoKardex").attr("idProductoPresentacion", idProductoPresentacion);
+
+                    $("#idCiudadModalStockSedeProducto").val(idCiudad);
 
                     $("#divStockProductoOtrasSedes").html(htmlStockSedes);
 
@@ -135,5 +189,24 @@
                 }
             });
         });
+
+        $(document).on('change', "#idCiudadModalStockSedeProducto", function () {
+            $(".verModalStockProductoKardex").attr("idCiudad", $(this).val());
+            $(".verModalStockProductoKardex").attr("nombreCiudad", $(this).closest("option:selected").text());
+        });
     };
+
+    if (window.addEventListener) // W3C standard
+    {
+        window.addEventListener('load', funcionesModalStockProducto, false); 
+    }
+    else if (window.attachEvent) // Microsoft
+    {
+        window.attachEvent('onload', funcionesModalStockProducto);
+    }
+
 </script>
+
+
+
+@Html.Partial("../Stock/_ModalKardexStockProducto")

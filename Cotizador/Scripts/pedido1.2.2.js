@@ -3121,7 +3121,12 @@ jQuery(function ($) {
                         '<td>' + lista[i].cantidadPendienteAtencion + '</td>' +
                         '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + observacion + '</td>' +
-                        '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>' +
+                        '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button>' + 
+                        '<br/><button type="button" title="Consultar Stock" class="verModalStockProducto btn" sku="' + lista[i].producto.sku + '" idProductoPresentacion="' +
+                        lista[i].idProductoPresentación + '" idCiudad="' + pedido.ciudad_idCiudad + '" style="margin-top: 7px;">' +
+                        '<img src="/images/icon_stock.png" height="25" />' +
+                        '</button>' +
+                        '</td>' +
                         '</tr>';
                 }
 

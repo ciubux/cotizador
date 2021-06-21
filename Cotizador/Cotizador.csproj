@@ -704,6 +704,7 @@
     <Content Include="Views\Reporte\SellOutPersonalizado.cshtml" />
     <Content Include="Views\Stock\_ModalStockProducto.cshtml" />
     <Content Include="Views\Stock\CargasStock.cshtml" />
+    <Content Include="Views\Stock\_ModalKardexStockProducto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

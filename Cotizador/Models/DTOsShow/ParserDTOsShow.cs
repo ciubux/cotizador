@@ -60,6 +60,7 @@ namespace Cotizador.Models.DTOsShow
             cotizacionDTOshow.codigo = cotizacion.codigo;
             cotizacionDTOshow.codigoAntecedente = cotizacion.codigoAntecedente;
             cotizacionDTOshow.ciudad_nombre = cotizacion.ciudad.nombre;
+            cotizacionDTOshow.ciudad_idCiudad = cotizacion.ciudad.idCiudad;
             cotizacionDTOshow.cliente_razonSocial = cotizacion.cliente.razonSocial;//no se muestra
             
             cotizacionDTOshow.fecha = cotizacion.fecha;
@@ -358,6 +359,8 @@ namespace Cotizador.Models.DTOsShow
             pedidoDTOshow.textoCondicionesPago = pedido.textoCondicionesPago;
             pedidoDTOshow.fechaHorarioEntrega = pedido.fechaHorarioEntrega;
             pedidoDTOshow.ciudad_nombre = pedido.ciudad.nombre;
+            pedidoDTOshow.ciudad_idCiudad = pedido.ciudad.idCiudad;
+
             pedidoDTOshow.cliente_idCliente = pedido.cliente.idCliente;
             pedidoDTOshow.cliente_codigoRazonSocial = pedido.cliente.codigoRazonSocial;
             pedidoDTOshow.numeroReferenciaCliente = pedido.numeroReferenciaCliente;

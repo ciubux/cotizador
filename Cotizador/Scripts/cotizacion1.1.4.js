@@ -1222,7 +1222,7 @@ jQuery(function ($) {
         var flete = Number($("#fleteDetalle").val());
         var observacion = $("#observacionProducto").val();
         var costo = $("#costoLista").val();
-
+        var idCiudad = $("#idCiudad").val();
 
         $.ajax({
             url: "/Cotizacion/AddProducto",
@@ -1299,7 +1299,13 @@ jQuery(function ($) {
                     '<td class="' + detalle.idProducto + ' detcantidad" style="text-align:right">' + cantidad + '</td>' +
                     '<td class="' + detalle.idProducto + ' detsubtotal" style="text-align:right">' + detalle.subTotalItem + '</td>' +
                     '<td class="' + detalle.idProducto + ' detobservacion" style="text-align:left">' + observacion + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + detalle.idProducto+' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>'+
+                    '<td class="' + detalle.idProducto + ' detbtnMostrarPrecios">' +
+                    '<button  type="button" class="' + detalle.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button>' +
+                    '<br/><button type="button" title="Consultar Stock" class="verModalStockProducto btn" sku="' + detalle.codigoProducto + '" idProductoPresentacion="' + 
+                        detalle.idProductoPresentacion + '" idCiudad="' + idCiudad + '" style="margin-top: 7px;">' +
+                    '<img src="/images/icon_stock.png" height="25" />' +
+                    '</button>' +
+                    '</td > '+
 
                     esRecotizacion +
 
@@ -2279,7 +2285,12 @@ jQuery(function ($) {
                         '<td class="tdprecioUnitarioAnterior">' + lista[i].variacionPrecioAnterior + ' %</td>' +
                         '<td class="tdprecioUnitarioAnterior">' + lista[i].variacionPrecioListaAnterior + ' %</td>' +
                         '<td class="tdprecioUnitarioAnterior">' + lista[i].variacionCosto + ' %</td>' +
-                        '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>' +
+                        '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button>' +
+                        '<br/><button type="button" title="Consultar Stock" class="verModalStockProducto btn" sku="' + lista[i].producto.sku + '" idProductoPresentacion="' +
+                        lista[i].idProductoPresentación + '" idCiudad="' + cotizacion.ciudad_idCiudad + '" style="margin-top: 7px;">' +
+                        '<img src="/images/icon_stock.png" height="25" />' +
+                        '</button>' +
+                        '</td>' +
                         '</tr>';
 
                 }
