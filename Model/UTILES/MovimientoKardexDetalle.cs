@@ -25,6 +25,10 @@ namespace Model.UTILES
         public string serieDocumento { get; set; }
         public string numeroDocumento { get; set; }
 
+        public int tipoDocumentoCliente { get; set; }
+        public string nroDocumentoCliente { get; set; }
+        public string razonSocialCliente { get; set; }
+
         public string NumeroDocumentoDesc { 
             get {
                 string nro = "";
@@ -60,6 +64,21 @@ namespace Model.UTILES
                 return desc;
             }
         }
+
+        public string TipoDocumentoClienteDesc
+        {
+            get
+            {
+                string desc = "";
+                switch (this.tipoDocumentoCliente)
+                {
+                    case 1: desc = "DNI"; break;
+                    case 6: desc = "RUC"; break;
+                    case 4: desc = "C.E."; break;
+                }
+
+                return desc;
+            }
+        }
     }
-    
 }

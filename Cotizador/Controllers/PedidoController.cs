@@ -2060,7 +2060,7 @@ namespace Cotizador.Controllers
                 return "{\"existe\":\"true\",\"numero\":\"" + pedido.numeroPedido + "\"}";
         }
 
-        public String Show()
+        public String Show(int soloLectura = 0)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             PedidoBL pedidoBL = new PedidoBL();
@@ -2068,7 +2068,10 @@ namespace Cotizador.Controllers
             Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
             pedido.idPedido = Guid.Parse(Request["idPedido"].ToString());
             pedido = pedidoBL.GetPedido(pedido,usuario);
-            this.Session[Constantes.VAR_SESSION_PEDIDO_VER] = pedido;
+
+            if (soloLectura == 0) { 
+                this.Session[Constantes.VAR_SESSION_PEDIDO_VER] = pedido;
+            }
 
             ClienteBL clienteBl = new ClienteBL();
             Cliente cliente = clienteBl.getCliente(pedido.cliente.idCliente);
@@ -2088,13 +2091,19 @@ namespace Cotizador.Controllers
 
             }
 
-            this.Session["pedidoDRIds"] = new List<Guid>();
-            this.Session["pedidoDRCantidades"] = new List<int>();
-            this.Session["pedidoDRComentarios"] = new List<String>();
+            if (soloLectura == 0)
+            {
+
+                this.Session["pedidoDRIds"] = new List<Guid>();
+                this.Session["pedidoDRCantidades"] = new List<int>();
+                this.Session["pedidoDRComentarios"] = new List<String>();
+            }
 
             String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"pedido\":" + jsonPedido + ", \"usuario\":" + jsonUsuario + ", \"isOwner\":" + (cliente.isOwner || pedido.usuario.idUsuario == usuario.idUsuario ? "1" : "0") + "}";
             return json;
         }
+
+
 
         public void autoGuardarPedido()
         {

@@ -46,7 +46,7 @@
                                 <tr>
                                     <th rowspan="2">Tipo Mov.</th>
                                     <th rowspan="2">Fecha Emisión</th>
-                                    <th rowspan="2">Nro. Documento</th>
+                                    <th rowspan="2">Información Movimiento</th>
                                     <th rowspan="2">Unidad Movimiento</th>
                                     <th rowspan="2">Cant. Mov.</th>
                                     <th colspan="2">Stock en:</th>
@@ -95,6 +95,7 @@
 
                     var htmlMovimientos = "";
                     var lista = kardex.movimientos;
+                    var infoMov = "";
 
                     for (var i = 0; i < lista.length; i++) {
                         htmlMovimientos = htmlMovimientos + '<tr>' +
@@ -108,8 +109,18 @@
                                 '<td></td>';
 
                         } else {
+                            infoMov = "";
+                            if (lista[i].tipoMovimiento == 1) {
+                                infoMov = infoMov + "<b>Entregado a:</b> " + lista[i].razonSocialCliente + " " + lista[i].TipoDocumentoClienteDesc + ": " + lista[i].nroDocumentoCliente + "<br/>";
+                            }
+
+                            if (lista[i].tipoMovimiento == 2) {
+                                infoMov = infoMov + "<b>Recibido de:</b> " + lista[i].razonSocialCliente + " " + lista[i].TipoDocumentoClienteDesc + ": " + lista[i].nroDocumentoCliente + "<br/>";
+                            }
+                            infoMov = infoMov + "<b>N° Mov.:</b> " + lista[i].NumeroDocumentoDesc;
+
                             htmlMovimientos = htmlMovimientos +
-                                '<td>' + lista[i].NumeroDocumentoDesc + '</td>' +
+                                '<td>' + infoMov + '</td>' +
                                 '<td>' + lista[i].unidadMovimiento + '</td>' +
                                 '<td>' + lista[i].cantidadMovimiento + '</td>';
                         }

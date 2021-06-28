@@ -141,6 +141,10 @@ textarea {
         width: 1200px;
     }
 
+    #modalPedidoReadOnly .modal-dialog {
+        width: 1200px;
+    }
+
     #modalVerOrdenCompraCliente .modal-dialog {
         width: 1200px;
     }

@@ -643,11 +643,11 @@
                     }
                 </div>
 
-                <div class="pull-right">
-                    @if (documentoVenta.usuario.creaDocumentosVenta || documentoVenta.usuario.visualizaDocumentosVenta)
-                    {
-                        <button type="button" id="btnCancelarConfirmarFacturarPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    }
+                <div class="pull-right">    
+                    <button type="button" id="btnCancelarConfirmarFacturarPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+
+                    <button type="button" class="btn btn-primary verModalPedidoReadOnly">Ver Pedido</button>
+
                     @if (documentoVenta.usuario.creaDocumentosVenta || documentoVenta.usuario.visualizaDocumentosVenta)
                     {
                         <!--        <button type="button" id="btnActualizarEstado" class="btn btn-primary">Actualizar Estado</button>-->
@@ -1124,9 +1124,7 @@
     <button type="button" id="btnCancelarVerGuiasRemision" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
 </div>
 
-
-
-
+@Html.Partial("../Pedido/_ModalPedidoReadOnly")
 
 
 

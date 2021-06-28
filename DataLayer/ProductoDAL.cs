@@ -1750,6 +1750,10 @@ namespace DataLayer
                 item.unidadMovimiento = Converter.GetString(row, "unidad");
                 item.cantidadMovimiento = Converter.GetInt(row, "cantidad");
 
+                item.nroDocumentoCliente = Converter.GetString(row, "ruc_cliente");
+                item.razonSocialCliente = Converter.GetString(row, "razon_social_cliente");
+                item.tipoDocumentoCliente = Converter.GetInt(row, "tipo_documento_cliente");
+
                 string tipoMovimiento = Converter.GetString(row, "tipo_movimiento");
                 switch (tipoMovimiento)
                 {

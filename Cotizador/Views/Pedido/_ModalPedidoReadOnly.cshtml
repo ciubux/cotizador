@@ -1,0 +1,880 @@
+﻿@{
+    Model.Pedido vPed = new Model.Pedido();
+
+    
+    vPed.usuario = ViewBag.usuario;
+}
+
+<div class="modal fade" id="modalPedidoReadOnly" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalPedidoReadOnlyTitle"><b>Información de Pedido Venta</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <input type="hidden" id="verIdPedido" />
+                    <input type="hidden" id="verIdCliente" />
+                    <input type="hidden" id="verFechaEntregaExtendida" />
+                    <!--NUMEROS PEDIDO-->
+                    <div class="row">
+                        <!--NÚMERO PEDIDO-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => vPed.numeroPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verNumero"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!--NUMERO PEDIDO GRUPO
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => vPed.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verNumeroGrupo"></p>
+                                </div>
+                            </div>
+                        </div>-->
+                        <!--NUMERO COTIZACION-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => vPed.cotizacion.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCotizacionCodigo"></p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => vPed.tipoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verTipoPedido"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!--DATOS DEL CLIENTE-->
+                    <div class="row">
+                        <!--CIUDAD-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => vPed.ciudad, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCiudad"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!--CLIENTE-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => vPed.cliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCliente"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="estado" class="control-label col-xs-4">Grupo Cliente:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verGrupoCliente"></p>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                    <div class="row" id="divReferenciaCliente">
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => vPed.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verNumeroReferenciaCliente"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => vPed.numeroRequerimiento, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verNumeroRequerimiento"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <!--DATOS DE LA CREACIÓN-->
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => vPed.usuarioCreacion, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verUsuarioCreacion"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => vPed.fechaHoraRegistro, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verFechaHoraRegistro"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!--NUMERO REFERENCIA ADICIONAL-->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => vPed.numeroReferenciaAdicional, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verNumeroReferenciaAdicional"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--DATOS DEL VENDEDOR-->
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => vPed.cliente.responsableComercial, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verResponsableComercial"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => vPed.cliente.supervisorComercial, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verSupervisorComercial"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => vPed.cliente.asistenteServicioCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verAsistenteServicioCliente"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <fieldset>
+                        <legend id="divpedido_direccionEntrega">Datos de Entrega:</legend>
+
+                        <!--DIRECCION ENTREGA-->
+                        <div class="row">
+
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => vPed.ubigeoEntrega, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verUbigeoEntrega"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--DIRECCION ENTREGA -->
+                            <div class="col-sm-6 col-lg-8">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => vPed.direccionEntrega.descripcion, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                    <div class="col-xs-10">
+                                        <p class="form-control-static" id="verDireccionEntrega"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <!--CONTACTO y FECHAS ENTREGA -->
+                        <div class="row">
+                            <!--CONTACTO ENTREGA-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => vPed.direccionEntrega.contacto, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verContactoEntrega"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--TELEFONO CONTACTO ENTREGA-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => vPed.direccionEntrega.telefono, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verTelefonoContactoEntrega"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--FECHAS ENTREGA-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+
+                                    @Html.LabelFor(p => vPed.fechaHorarioEntrega, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verFechaHorarioEntrega"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </fieldset>
+
+
+                    <fieldset>
+                        <legend id="divpedido_direccionEntrega">Datos de Solicitud:</legend>
+
+                        <div class="row">
+                            <!--CONTACTO PEDIDO-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => vPed.contactoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verContactoPedido"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--TELEFONO CORREO CONTACTO PEDIDO-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => vPed.telefonoCorreoContactoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verTelefonoCorreoContactoPedido"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--FECHA HORA SOLICITUD-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(p => vPed.fechaHoraSolicitud, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verFechaHoraSolicitud"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </fieldset>
+
+
+                    <!--Otros datos -->
+                    <fieldset>
+                        <legend id="divpedido_direccionEntrega">Estado Pedido:</legend>
+                        <div class="row">
+                            <!--Estado-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="estado" class="control-label col-xs-4">Estado:</label>
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verEstado"></p>
+                                        <a id="lnkVerHistorial" href="#">Ver Historial</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Modificado POR-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="modificado" class="control-label col-xs-4">Modificado Por:</label>
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verModificadoPor"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Observación Estado-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="modificado" class="control-label col-xs-4">Comentario Estado:</label>
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verObservacionEstado">
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend id="divpedido_direccionEntrega">Estado Crediticio del Pedido:</legend>
+                        <div class="row">
+                            <!--Estado-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="estado" class="control-label col-xs-4">Estado:</label>
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verEstadoCrediticio"></p>
+                                        <a id="lnkVerHistorialCrediticio" href="#">Ver Historial</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Modificado POR-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="modificado" class="control-label col-xs-4">Modificado Por:</label>
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verModificadoCrediticioPor"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Observación Estado-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="modificado" class="control-label col-xs-4">Comentario Estado:</label>
+                                    <div class="col-xs-8">
+                                        <p class="form-control-static" id="verObservacionEstadoCrediticio">
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </fieldset>
+
+                    <table id="tableDetallePedido" class="table" data-editing="false"
+                           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                           data-editing-allow-add="false"
+                           data-editing-allow-delete="false"
+                           data-editing-allow-edit="false"
+                           data-sorting="true"
+                           data-show-toggle="false"
+                           data-editing-hide-text="Finalizar edición"
+                           data-editing-add-text="Descartar cambios">
+                        <thead>
+                            <tr>
+                                <th data-name="indicadorAprobacion" data-sortable="false"></th>
+                                <th data-name="proveedor" data-sortable="false">Prov.</th>
+                                <th data-name="codigo" data-sortable="false" data-breakpoints="xs">Código</th>
+                                <th data-name="producto" data-sortable="false">Producto / Descripción</th>
+                                <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
+                                <th data-name="imagen" data-sortable="false" data-breakpoints="xs sm">Imagen</th>
+                                <th data-name="precioLista" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Precio Lista</th>
+                                <th data-name="porcentajeDescuentoMostrar" data-sortable="false" data-breakpoints="xs sm">Dscto % al P. Lista</th>
+                                @if (vPed.usuario.esCliente)
+                                {
+                                    <th data-name="precioNeto" data-sortable="false" data-visible="false" data-breakpoints="xs sm">Precio Neto</th>
+                                    <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                                }
+                                else
+                                {
+                                    <!--Si no es cliente-->
+                                    <th data-name="precioNeto" data-sortable="false" data-breakpoints="xs sm">Precio Neto</th>
+                                    if (vPed.usuario.visualizaMargen)
+                                    {
+                                        <th data-name="margen" data-visible="true" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                                    }
+                                    else
+                                    {
+                                        <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
+                                    }
+                                }
+
+                                <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
+                                <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
+
+                                <!--     @if (vPed.usuario.creaDocumentosVenta)
+                                     {
+                                         <th data-name="precioUnitarioVenta" data-visible="true" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
+                                         }
+                                         else
+                                         {
+                                                         <th data-name="precioUnitarioVenta" data-visible="false" data-sortable="false" data-breakpoints="xs sm">Precio Unit Venta.</th>
+                                         }
+                                -->
+                                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant.</th>
+                                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cant. Pend. Entrega.</th>
+                                <th data-name="subTotal" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Sub Total</th>
+                                <th data-name="observaciones" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Observaciones</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+
+                    <div class="row" style="margin-right: 10px">
+                        <div class="col-sm-6 col-lg-9">
+                            <div class="form-group">
+                                @Html.LabelFor(p => vPed.observaciones, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="verObservaciones">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-3" id="montosTotalesDiv">
+
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">Subtotal: S/ </span>
+                                    <span class="totales" id="verMontoSubTotal"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">IGV 18%: S/ </span>
+                                    <span class="totales" id="verMontoIGV"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <span class="totales">TOTAL: S/ </span>
+                                    <span class="totales" id="verMontoTotal"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-9">
+                            <div class="form-group">
+                                <label for="verCondicionesPago" class="control-label col-xs-2">Condición de Pago:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCondicionesPago">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-9">
+                            <div class="form-group">
+                                @Html.LabelFor(p => vPed.observacionesGuiaRemision, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="verObservacionesGuiaRemision">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-9">
+                            <div class="form-group">
+                                @Html.LabelFor(p => vPed.observacionesFactura, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="verObservacionesFactura">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row" style="margin-right: 10px">
+                        <div class="col-sm-6 col-lg-9">
+                            <div class="form-group">
+                                <label for="verNombreArchivos" class="control-label col-xs-2">Archivos Adjuntos:</label>
+                                <div class="col-xs-10">
+                                    <ul id="verNombreArchivos"><li>as</li></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    @if (vPed.usuario.tomaPedidos)
+                    {
+                        <!--
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-9">
+                                <div class="form-group">
+                                    <label for="archivoAdjunto" class="control-label col-xs-2">Adjunto:</label>
+                                    <div class="col-xs-3">
+                                        <div class="upload-btn-wrapper">
+                                            <button class="btn btn-primary">Adjuntar Archivo(s)</button>
+                                            <input type="file" class="form-control" name="files" id="files" accept=".*" multiple>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div><button id="btnGuardarArchivosAdjuntos" type="button" class="btn btn-primary">Guardar Archivos Adjuntos</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+
+                    }
+
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <div class="pull-left">
+
+                </div>
+
+                <div class="pull-right">
+                    <button type="button" id="btnOcultarPedidoReadOnly" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<span id="spnProductoDescontinuado" style="display: none;">
+    @Html.Partial("../Producto/_LabelRestringido")
+</span>
+
+<span id="spnDetalleRestringido" style="display: none;">
+    @Html.Partial("../Pedido/_LabelDetalleRestringido")
+</span>
+
+<span id="spnDescripcionLargaInfo" style="display: none;">
+    @Html.Partial("../Producto/_LabelDescripcionLarga")
+</span>
+
+
+<script type="text/javascript">
+
+    function funcionesModalPedidoReadOnly() {
+        $(document).on('click', "button.verModalPedidoReadOnly", function () {
+            var idPedido = $(this).attr("idPedido");
+
+            $.ajax({
+                url: "/Pedido/Show",
+                data: {
+                    idPedido: idPedido,
+                    soloLectura: 1
+                },
+                type: 'POST',
+                dataType: 'JSON',
+                error: function (detalle) {
+                    //alert("Ocurrió un problema al obtener el detalle del Pedido N° " + numeroPedido + ".");
+                    $('body').loadingModal('hide');
+                    mostrarMensajeErrorProceso(detalle.responseText);
+                },
+                success: function (resultado) {
+                    $('body').loadingModal('hide');
+                    //var cotizacion = $.parseJSON(respuesta);
+                    var pedido = resultado.pedido;
+                    var usuario = resultado.usuario;
+                    var isOwner = resultado.isOwner;
+                    var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
+                    viendoPedidoRestringido = false;
+                    pedidoItemsRestringidos = [];
+                    //  var usuario = resultado.usuario;
+
+                    $("#verIdPedido").val(pedido.idPedido);
+
+                    $('#pedido_numeroGrupo')
+                        .find('option')
+                        .remove()
+                        .end()
+                        ;
+
+                    $('#pedido_numeroGrupo').append($('<option>', {
+                        value: 0,
+                        text: "Seleccione Número Grupo"
+                    }));
+
+                    for (var m = 0; m < pedido.pedidoGrupoList.length; m++) {
+                        $('#pedido_numeroGrupo').append($('<option>', {
+                            value: pedido.pedidoGrupoList[m].numero,
+                            text: pedido.pedidoGrupoList[m].numeroToString + " Solicitado: " + pedido.pedidoGrupoList[m].fechaSolicitudToString
+                        }));
+                    }
+
+                    $('#pedido_numeroGrupo').val(pedido.numeroGrupoPedido);
+
+
+
+                    $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
+                    $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaHasta.substr(0, 10)));
+                    $("#fechaProgramaciontmp").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
+                    //Important
+
+                    $("#idPedido").val(pedido.idPedido);
+
+                    var numeroPedido = pedido.numeroPedidoString;
+
+                    if (pedido.numeroGrupoPedidoString == "") {
+                        numeroPedido = pedido.numeroPedidoString;
+                    }
+                    else {
+                        numeroPedido = pedido.numeroPedidoString + " (" + pedido.numeroGrupoPedidoString + ")";
+                    }
+
+                    if (pedido.truncado == 1) {
+                        numeroPedido = numeroPedido + '<br/><span style="color:red; font-weight: bold;">TRUNCADO</span>';
+                    }
+
+                    $("#verNumero").html(numeroPedido);
+
+                    if (pedido.cotizacion_tipoCotizacion == 0) {
+                        $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString);
+                    }
+                    else if (pedido.cotizacion_tipoCotizacion == 1) {
+                        $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString + " (Puntual)");
+                    }
+                    else if (pedido.cotizacion_tipoCotizacion == 2) {
+                        $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString + " (Trivial)");
+                    }
+
+
+
+                    $("#verTipoPedido").html(pedido.tiposPedidoString);
+
+                    $("#verResponsableComercial").html(pedido.cliente_responsableComercial_codigoDescripcion + " " + pedido.cliente_responsableComercial_usuario_email);
+                    $("#verSupervisorComercial").html(pedido.cliente_supervisorComercial_codigoDescripcion + " " + pedido.cliente_supervisorComercial_usuario_email);
+                    $("#verAsistenteServicioCliente").html(pedido.cliente_asistenteServicioCliente_codigoDescripcion + " " + pedido.cliente_asistenteServicioCliente_usuario_email);
+
+                    /*if (pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)) {
+                        $("#divReferenciaCliente").hide();
+                        $("#divCiudadSolicitante").show();
+                        $("#verCiudadSolicitante").html(pedido.cliente.ciudad.nombre);
+                    }
+                    else {*/
+                    $("#divReferenciaCliente").show();
+                    $("#divCiudadSolicitante").hide();
+                    //}
+
+                    $("#verCondicionesPago").html(pedido.textoCondicionesPago);
+
+                    $("#verFechaHorarioEntrega").html(pedido.fechaHorarioEntrega);
+
+                    $("#verCiudad").html(pedido.ciudad_nombre);
+                    $("#verIdCliente").val(pedido.cliente_idCliente);
+                    $("#verCliente").html(pedido.cliente_codigoRazonSocial);
+
+
+                    $("#verGrupoCliente").html(pedido.grupoCliente_nombre == null ? "" : pedido.grupoCliente_nombre);
+
+
+                    $("#verNumeroReferenciaCliente").html(pedido.numeroReferenciaCliente);
+                    $("#verNumeroReferenciaAdicional").html(pedido.numeroReferenciaAdicional);
+                    $("#verNumeroRequerimiento").html(pedido.numeroRequerimiento);
+
+                    $("#verFechaEntregaExtendida").val(pedido.fechaEntregaExtendidaString);
+
+                    $("#verDireccionEntrega").html(pedido.direccionEntrega_descripcion);
+                    $("#verTelefonoContactoEntrega").html(pedido.direccionEntrega_telefono);
+                    $("#verContactoEntrega").html(pedido.direccionEntrega_contacto);
+
+                    $("#verUsuarioCreacion").html(pedido.usuario_nombre);
+                    $("#verFechaHoraRegistro").html(pedido.fechaHoraRegistro);
+
+                    $("#verUbigeoEntrega").html(pedido.ubigeoEntrega.ToString);
+
+                    $("#verContactoPedido").html(pedido.contactoPedido);
+                    $("#verTelefonoCorreoContactoPedido").html(pedido.telefonoCorreoContactoPedido);
+
+
+
+
+                    $("#verFechaHoraSolicitud").html(pedido.fechaHoraSolicitud);
+
+                    $("#verEstado").html(pedido.seguimientoPedido_estadoString);
+                    $("#verModificadoPor").html(pedido.seguimientoPedido_usuario_nombre);
+                    $("#verObservacionEstado").html(pedido.seguimientoPedido_observacion);
+
+                    $("#verEstadoCrediticio").html(pedido.seguimientoCrediticioPedido_estadoString);
+                    $("#verModificadoCrediticioPor").html(pedido.seguimientoCrediticioPedido_usuario_nombre);
+                    $("#verObservacionEstadoCrediticio").html(pedido.seguimientoCrediticioPedido_observacion);
+
+
+                    $("#verObservaciones").html(pedido.observaciones);
+                    $("#verObservacionesFactura").html(pedido.observacionesFactura);
+                    $("#verObservacionesGuiaRemision").html(pedido.observacionesGuiaRemision);
+                    $("#verMontoSubTotal").html(Number(pedido.montoSubTotal).toFixed(cantidadDecimales));
+                    $("#verMontoIGV").html(Number(pedido.montoIGV).toFixed(cantidadDecimales));
+                    $("#verMontoTotal").html(Number(pedido.montoTotal).toFixed(cantidadDecimales));
+                    $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
+
+                    /*      $("#verMontoSubTotalVenta").html(Number(pedido.venta.subTotal).toFixed(cantidadDecimales));
+                          $("#verMontoIGVVenta").html(Number(pedido.venta.igv).toFixed(cantidadDecimales));
+                          $("#verMontoTotalVenta").html(Number(pedido.venta.total).toFixed(cantidadDecimales));
+          */
+                    //  nombreArchivos
+
+                    $("#nombreArchivos > li").remove().end();
+
+
+                    for (var i = 0; i < pedido.pedidoAdjuntoList.length; i++) {
+                        var liHTML = '<a href="javascript:mostrar();" class="descargar">' + pedido.pedidoAdjuntoList[i].nombre + '</a>';
+                        $('<li />').html(liHTML).appendTo($('#nombreArchivos'));
+                    }
+
+
+                    $("#verNombreArchivos > li").remove().end();
+
+
+                    for (var i = 0; i < pedido.pedidoAdjuntoList.length; i++) {
+                        var liHTML = '<a href="javascript:mostrar();" class="descargar">' + pedido.pedidoAdjuntoList[i].nombre + '</a>';
+                        //$('<li />').html(liHTML).appendTo($('#nombreArchivos'));
+                        $('#verNombreArchivos').append($('<li />').html(liHTML));
+                    }
+
+
+                    $("#tableDetallePedido > tbody").empty();
+
+                    FooTable.init('#tableDetallePedido');
+
+                    $("#formVerGuiasRemision").html("");
+                    $("#formVerNotasIngreso").html("");
+
+                    var d = '';
+                    var lista = pedido.pedidoDetalleList;
+                    var tieneProductoRestringido = false;
+                    var tienePendienteAtencion = false;
+                    for (var i = 0; i < lista.length; i++) {
+
+                        var imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Aprobado"> <img class="table-product-img"  src="/images/semaforo_verde_small.png"  srcset="semaforo_verde_min.png 2x"/></a>';
+                        if (lista[i].indicadorAprobacion == 2)
+                            imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Pendiente Aprobación"> <img class="table-product-img" src="/images/semaforo_naranja_small.png" srcset="semaforo_naranja_min.png 2x"/></a>';
+                        else if (lista[i].indicadorAprobacion == 3)
+                            imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Pendiente Aprobación"><img class="table-product-img " src="/images/semaforo_rojo_small.png" srcset="semaforo_rojo_min.png 2x"/></a>';
+
+
+                        var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
+
+                        var descontinuadoLabel = "";
+                        if (lista[i].producto.descontinuado == 1) {
+                            tieneProductoRestringido = true;
+
+                            if (lista[i].producto.motivoRestriccion != null) {
+                                lista[i].producto.motivoRestriccion = lista[i].producto.motivoRestriccion.trim();
+
+                                $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").removeClass("tooltip-motivo-restriccion");
+                                if (lista[i].producto.motivoRestriccion != "") {
+                                    $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").addClass("tooltip-motivo-restriccion");
+                                    $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado .tooltip-label-text").html(lista[i].producto.motivoRestriccion);
+                                }
+                            }
+
+                            descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
+                        }
+
+
+                        var restringidoLabel = "";
+                        if (lista[i].cantidadPermitida < lista[i].cantidad) {
+                            if (lista[i].observacionRestriccion != null) {
+                                lista[i].observacionRestriccion = lista[i].observacionRestriccion.trim();
+
+                                $("#spnDetalleRestringido .lblAlertaDanger .cantidadPermitidaAtender").html(lista[i].cantidadPermitida);
+                                $("#spnDetalleRestringido .lblAlertaDanger ").removeClass("tooltip-motivo-restriccion");
+                                if (lista[i].observacionRestriccion != "") {
+                                    $("#spnDetalleRestringido .lblAlertaDanger ").addClass("tooltip-motivo-restriccion");
+                                    $("#spnDetalleRestringido .lblAlertaDanger .tooltip-label-danger-text").html(lista[i].observacionRestriccion);
+                                }
+                            }
+
+                            restringidoLabel = "<br/>" + $("#spnDetalleRestringido").html();
+                        }
+
+                        var descripcionLargaLabel = "";
+                        if (lista[i].producto.descripcionLarga != null && lista[i].producto.descripcionLarga.trim() != "") {
+
+                            lista[i].producto.descripcionLarga = lista[i].producto.descripcionLarga.trim();
+
+                            $("#spnDescripcionLargaInfo .lblInfoDescripcionLarga ").removeClass("tooltip-motivo-restriccion");
+
+                            $("#spnDescripcionLargaInfo .lblInfoDescripcionLarga ").addClass("tooltip-motivo-restriccion");
+                            $("#spnDescripcionLargaInfo .lblInfoDescripcionLarga .tooltip-label-text").html(lista[i].producto.descripcionLarga);
+
+                            descripcionLargaLabel = "&nbsp;" + $("#spnDescripcionLargaInfo").html();
+                        }
+
+
+                        if (lista[i].cantidadPendienteAtencion > 0) {
+                            tienePendienteAtencion = true;
+                        }
+
+                        d += '<tr>' +
+                            '<td>' + imgIndicadorAprobacion + '</td>' +
+                            '<td>' + lista[i].producto.proveedor + '</td>' +
+                            '<td>' + lista[i].producto.sku + descontinuadoLabel + '</td>' +
+                            '<td>' + lista[i].producto.descripcion + descripcionLargaLabel + '</td>' +
+                            '<td>' + lista[i].unidad + '</td>' +
+                            '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + lista[i].producto.image + '"> </td>' +
+                            '<td>' + lista[i].precioLista.toFixed(cantidadDecimales) + '</td>' +
+                            '<td>' + lista[i].porcentajeDescuentoMostrar.toFixed(cantidadDecimales) + ' %</td>' +
+                            '<td>' + lista[i].precioNeto.toFixed(cantidadCuatroDecimales) + '</td>' +
+                            '<td>' + lista[i].margen.toFixed(cantidadDecimales) + ' %</td>' +
+                            '<td>' + lista[i].flete.toFixed(cantidadDecimales) + '</td>' +
+                            '<td>' + lista[i].precioUnitario.toFixed(cantidadCuatroDecimales) + '</td>' +
+                            //       '<td>' + lista[i].precioUnitarioVenta.toFixed(cantidadCuatroDecimales) + '</td>' +
+                            '<td>' + lista[i].cantidad + restringidoLabel + '</td>' +
+                            '<td>' + lista[i].cantidadPendienteAtencion + '</td>' +
+                            '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
+                            '<td>' + observacion + '</td>' +
+                            '</tr>';
+                    }
+
+
+
+
+                    $("#verRazonSocialSunat").html(pedido.cliente_razonSocialSunat);
+                    $("#verRUC").html(pedido.cliente_ruc);
+                    $("#verDireccionDomicilioLegalSunat").html(pedido.cliente_direccionDomicilioLegalSunat);
+                    $("#verCodigo").html(pedido.cliente_codigo);
+
+                    $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
+                    $("#verCorreoEnvioFactura").html(pedido.cliente_correoEnvioFactura);
+
+                    //
+                    // sleep
+                    $("#tableDetallePedido").append(d);
+
+
+                    /**/
+                    if (pedido.seguimientoPedido_estado == ESTADO_ATENDIDO) {
+                        $("#pedido_observacionesGuiaRemision").attr("disabled", "disabled");
+                    }
+                    else {
+                        $("#pedido_observacionesGuiaRemision").removeAttr("disabled");
+                    }
+
+                    if (pedido.seguimientoPedido_estado == ESTADO_FACTURADO) {
+                        $("#pedido_observacionesFactura").attr("disabled", "disabled");
+                    }
+                    else {
+                        $("#pedido_observacionesFactura").removeAttr("disabled");
+                    }
+
+
+                    $("#modalPedidoReadOnly").modal('show');
+                }
+            });
+        });
+    };
+
+
+    if (window.addEventListener) // W3C standard
+    {
+        window.addEventListener('load', funcionesModalPedidoReadOnly, false); // NB **not** 'onload'
+    }
+    else if (window.attachEvent) // Microsoft
+    {
+        window.attachEvent('onload', funcionesModalPedidoReadOnly);
+    }
+</script>

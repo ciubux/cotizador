@@ -420,7 +420,7 @@ namespace Cotizador.Controllers
 
             ViewBag.Si = Constantes.MENSAJE_SI;
             ViewBag.No = Constantes.MENSAJE_NO;
-
+            ViewBag.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             //ViewBag.descuentoList = Constantes.DESCUENTOS_LIST;
             return View();
 

@@ -1155,6 +1155,13 @@ jQuery(function ($) {
                     $("#btnVerNotaDebito").show();
                 }
 
+                var numeroPedido = documentoVenta.pedido.numeroPedido;
+                $(".verModalPedidoReadOnly").attr("idPedido", documentoVenta.pedido.idPedido);
+                if (numeroPedido > 0) {
+                    $(".verModalPedidoReadOnly").show();
+                } else {
+                    $(".verModalPedidoReadOnly").hide();
+                }
 
                 /*Solicitar Anulación */
                 if (documentoVenta.solicitadoAnulacion == false

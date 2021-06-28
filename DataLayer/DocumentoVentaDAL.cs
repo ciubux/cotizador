@@ -495,7 +495,7 @@ namespace DataLayer
             documentoVenta.cPE_FAC_GUIA_BEList = new List<CPE_FAC_GUIA_BE>();
             documentoVenta.cPE_DOC_ASOC_BEList = new List<CPE_DOC_ASOC_BE>();
 
-
+            documentoVenta.pedido = new Pedido();
             foreach (DataRow row in cpeCabeceraBETable.Rows)
             {
 
@@ -540,13 +540,25 @@ namespace DataLayer
                         !column.Equals("fecha_aprobacion") &&
                         !column.Equals("observaciones") &&
                         !column.Equals("tiene_nota_credito") &&
+                        !column.Equals("id_pedido") &&
+                        !column.Equals("numero_pedido") &&
                         !column.Equals("tiene_nota_debito")
                         )
                     {
                         if (documentoVenta.cPE_CABECERA_BE.GetType().GetProperty(column) != null)
                         {
                             documentoVenta.cPE_CABECERA_BE.GetType().GetProperty(column).SetValue(documentoVenta.cPE_CABECERA_BE, Converter.GetString(row, column));
-                        }
+                        }   
+                    }
+
+                    switch(column)
+                    {
+                        case "id_pedido":
+                            documentoVenta.pedido.idPedido = Converter.GetGuid(row, column); 
+                            break;
+                        case "numero_pedido":
+                            documentoVenta.pedido.numeroPedido = Converter.GetInt(row, column);
+                            break;
                     }
                 }
             }
