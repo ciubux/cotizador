@@ -166,6 +166,11 @@ namespace Cotizador.ExcelExport
                 blockedCellStyle.FillPattern = FillPattern.SolidForeground;
                 blockedCellStyle.FillForegroundColor = HSSFColor.Grey25Percent.Index;
 
+                HSSFCellStyle blockedCenterCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                blockedCenterCellStyle.FillPattern = FillPattern.SolidForeground;
+                blockedCenterCellStyle.FillForegroundColor = HSSFColor.Grey25Percent.Index;
+                blockedCenterCellStyle.Alignment = HorizontalAlignment.Center;
+
                 //titleCellStyle.FillBackgroundColor = HSSFColor.BlueGrey.Index;
 
                 IDataFormat format = wb.CreateDataFormat();
@@ -183,7 +188,7 @@ namespace Cotizador.ExcelExport
 
                 /*Cabecera, Sub total*/
                 int rTotal = (list.Count) + 1;
-                int cTotal = 42 + 2;
+                int cTotal = 43 + 2;
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
@@ -265,6 +270,8 @@ namespace Cotizador.ExcelExport
 
                     UtilesHelper.setValorCelda(sheet, i, "AO", (double)obj.costoReferencialOriginal);
                     UtilesHelper.setValorCelda(sheet, i, "AP", (double)obj.costoReferencial, blockedCellStyle);
+
+                    UtilesHelper.setValorCelda(sheet, i, "AQ", obj.esComercial == 1 ? "X" : "", blockedCenterCellStyle);
                     i++;
                 }
 
@@ -319,6 +326,7 @@ namespace Cotizador.ExcelExport
 
                 UtilesHelper.setValorCelda(sheet, 1, "AO", "Costo Lista Prov", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "AP", "Costo Lista MP", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "AQ", "Item No Comercial", titleCellStyle);
 
                 MemoryStream ms = new MemoryStream();
                 using (MemoryStream tempStream = new MemoryStream())

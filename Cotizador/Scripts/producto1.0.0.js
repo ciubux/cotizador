@@ -609,6 +609,13 @@ jQuery(function ($) {
         changeInputBoolean('inafecto', valor)
     });
 
+    $("#producto_esComercial").change(function () {
+        var valor = 1;
+        if (!$('#producto_esComercial').prop('checked')) {
+            valor = 0;
+        }
+        changeInputInt('esComercial', valor)
+    });
     
     $("#ventaRestringida").change(function () {
         ChangeTipoVentaRestringida($("#ventaRestringida").val());
@@ -755,6 +762,14 @@ jQuery(function ($) {
                 else {
                     $("#verInafecto").html("No");
                 }
+
+                if (producto.esComercial == 1) {
+                    $("#verEsComercial").show();
+                }
+                else {
+                    $("#verEsComercial").hide();
+                }
+
 
                 if (producto.agregarDescripcionCotizacion) {
                     $("#verAgregarDescripcionCotizacion").html("Sí");

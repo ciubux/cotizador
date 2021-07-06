@@ -1079,6 +1079,8 @@ namespace DataLayer
                 item.costoReferencial = Converter.GetDecimal(row, "costo_referencial");
                 item.costoReferencialOriginal = Converter.GetDecimal(row, "costo_original_referencial");
 
+                item.esComercial = Converter.GetInt(row, "es_comercial");
+
                 item.tipoCambio = Converter.GetDecimal(row, "tipo_cambio");
                 item.monedaMP = Converter.GetString(row, "moneda_venta");
                 item.monedaProveedor = Converter.GetString(row, "moneda_compra");
@@ -1295,6 +1297,8 @@ namespace DataLayer
                 item.costoReferencial = Converter.GetDecimal(row, "costo_referencial");
                 item.costoReferencialOriginal = Converter.GetDecimal(row, "costo_original_referencial");
 
+                item.esComercial = Converter.GetInt(row, "es_comercial");
+
                 item.codigoSunat = Converter.GetString(row, "codigo_sunat");
                 item.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
 
@@ -1353,6 +1357,8 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "unidadConteo", producto.unidadConteo);
             InputParameterAdd.VarcharEmpty(objCommand, "unidadProveedorInternacional", producto.unidadProveedorInternacional == null ? "" : producto.unidadProveedorInternacional);
             InputParameterAdd.Varchar(objCommand, "codigoSunat", producto.codigoSunat);
+
+            InputParameterAdd.Int(objCommand, "esComercial", producto.esComercial);
 
             InputParameterAdd.Int(objCommand, "equivalenciaUnidadAlternativaUnidadConteo", producto.equivalenciaUnidadAlternativaUnidadConteo);
             InputParameterAdd.Int(objCommand, "equivalenciaUnidadEstandarUnidadConteo", producto.equivalenciaUnidadEstandarUnidadConteo);
@@ -1448,6 +1454,8 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "costoReferencial", producto.costoReferencial);
             InputParameterAdd.DateTime(objCommand, "fechaInicioVigencia", DateTime.Now);
             InputParameterAdd.Int(objCommand, "esCargaMasiva", producto.CargaMasiva ? 1 : 0);
+
+            InputParameterAdd.Int(objCommand, "esComercial", producto.esComercial);
 
             InputParameterAdd.Varchar(objCommand, "monedaCompra", producto.monedaProveedor);
             InputParameterAdd.Varchar(objCommand, "monedaVenta", producto.monedaMP);

@@ -121,6 +121,8 @@ namespace Model
         [Display(Name = "Unidad Proveedor SUNAT:")]
         public String unidadProveedorInternacional { get; set; }
 
+        [Display(Name = "ITEM NO COMERCIAL")]
+        public int esComercial { get; set; }
 
         // private int _equivalencia;
         [Display(Name = "Equivalencia Und. MP / Und. Alt.:")]
@@ -549,6 +551,8 @@ namespace Model
                     case "tipo_cambio": cp.nombre = Producto.nombreAtributo("tipoCambio"); break;
                     case "estado": cp.nombre = Producto.nombreAtributo("Estado"); break;
 
+                    case "es_comercial": cp.nombre = Producto.nombreAtributo("esComercial"); break;
+
                     case "descontinuado": cp.nombre = Producto.nombreAtributo("descontinuado"); break;
                     case "motivo_restriccion": cp.nombre = Producto.nombreAtributo("motivoRestriccion"); break;
                     case "cantidad_maxima_pedido_restringido": cp.nombre = Producto.nombreAtributo("cantidadMaximaPedidoRestringido"); break;
@@ -650,6 +654,8 @@ namespace Model
                     case "motivo_restriccion": lc = instanciarLogCambio(campo); lc.valor = this.motivoRestriccion; break;
                     case "cantidad_maxima_pedido_restringido": lc = instanciarLogCambio(campo); lc.valor = this.cantidadMaximaPedidoRestringido.ToString(); break;
 
+                    case "es_comercial": lc = instanciarLogCambio(campo); lc.valor = this.esComercial.ToString(); break;
+                        
                     case "costo_referencial": lc = instanciarLogCambio(campo); lc.valor = this.costoReferencial.ToString(); break;
                     case "costo_original_referencial": lc = instanciarLogCambio(campo); lc.valor = this.costoReferencialOriginal.ToString(); break;
 
@@ -1298,6 +1304,21 @@ namespace Model
                         else
                         {
                             this.agregarDescripcionCotizacion = int.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "es_comercial":
+                        if (this.esComercial == int.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.esComercial = int.Parse(cambio.valor);
                             lista.Add(cambio);
                         }
                         break;

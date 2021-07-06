@@ -124,23 +124,31 @@
                                 if (idProductoPresentacion == '0') {
                                     stock = lista[i].cantidadMpCalc;
                                     stockSeparado = lista[i].cantidadSeparadaMpCalc;
-                                    $("#verUnidadProductoStock").html(lista[i].producto.unidad);
                                 }
                                 if (idProductoPresentacion == '1') {
                                     stock = lista[i].cantidadAlternativaCalc;
                                     stockSeparado = lista[i].cantidadSeparadaAlternativaCalc;
-                                    $("#verUnidadProductoStock").html(lista[i].producto.unidad_alternativa);
                                 }
                                 if (idProductoPresentacion == '2') {
                                     stock = lista[i].cantidadProveedorCalc;
                                     stockSeparado = lista[i].cantidadSeparadaProveedorCalc;
-                                    $("#verUnidadProductoStock").html(lista[i].producto.unidadProveedor);
                                 }
 
                                 if (stockSeparado > 0) {
                                     stock = stock + ' [-' + stockSeparado + ']';
                                 }
                             }
+
+                            if (idProductoPresentacion == '0') {
+                                $("#verUnidadProductoStock").html(lista[i].producto.unidad);
+                            }
+                            if (idProductoPresentacion == '1') {
+                                $("#verUnidadProductoStock").html(lista[i].producto.unidad_alternativa);
+                            }
+                            if (idProductoPresentacion == '2') {
+                                $("#verUnidadProductoStock").html(lista[i].producto.unidadProveedor);
+                            }
+
                             $("#verStockSedeProducto").html(stock);
 
                         } else {
