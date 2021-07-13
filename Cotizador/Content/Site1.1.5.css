@@ -1161,3 +1161,16 @@ $darkred: darken($red, 0.2);*/
 #tableMovimientosStockKardex th, #tableMovimientosStockKardex td {
     text-align: center;
 }
+
+
+.guia-stock-success {
+    background-color: #26ff68;
+}
+
+.guia-stock-danger {
+    background-color: #ff5757;
+}
+
+.guia-stock-warning {
+    background-color: #f9ff57;
+}

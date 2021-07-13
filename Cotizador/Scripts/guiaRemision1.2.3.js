@@ -39,6 +39,96 @@ jQuery(function ($) {
             cargarChosenClienteFactura();
         }
 
+        if ($("#pagina").val() == 5) {
+            cargarStockProductos();
+        }
+    });
+
+    function cargarStockProductos() {
+        $.ajax({
+            url: "/GuiaRemision/GetStockProductos",
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (lista) {
+                var stock = 0;
+                var stockLibre = 0;
+                var noDisponible = 0;
+                var idProductoPresentacion = 1;
+                for (var i = 0; i < lista.length; i++) {
+                    idProductoPresentacion = $("#tableDetalleGuia tr[idProducto='" + lista[i].producto.idProducto + "']").attr("idProductoPresentacion");
+                    stock = 0;
+                    stockLibre = 0;
+                    noDisponible = 0;
+                    if (lista[i].stockNoDisponible) {
+                        $("." + lista[i].producto.idProducto + ".detStock").html("No Disponible");
+                        noDisponible = 1;
+                    } else {
+                        if (idProductoPresentacion = "0") {
+                            stock = lista[i].cantidadMpCalc;
+                            stockLibre = lista[i].cantidadMpCalc - lista[i].cantidadSeparadaMpCalc;
+                        }
+                        if (idProductoPresentacion = "1") {
+                            stock = lista[i].cantidadAlternativaCalc;
+                            stockLibre = lista[i].cantidadAlternativaCalc - lista[i].cantidadSeparadaAlternativaCalc;
+                        }
+                        if (idProductoPresentacion = "2") {
+                            stock = lista[i].cantidadProveedorCalc;
+                            stockLibre = lista[i].cantidadProveedorCalc - lista[i].cantidadSeparadaProveedorCalc;
+                        }
+
+                        $("." + lista[i].producto.idProducto + ".detStock").html(stock);
+                    }
+
+                    $("#tableDetalleGuia tr[idProducto='" + lista[i].producto.idProducto + "']").attr("noDisponible", noDisponible);
+                    $("#tableDetalleGuia tr[idProducto='" + lista[i].producto.idProducto + "']").attr("stock", stock);
+                    $("#tableDetalleGuia tr[idProducto='" + lista[i].producto.idProducto + "']").attr("stockLibre", stockLibre);
+
+                    validarStock(lista[i].producto.idProducto);
+                }
+
+                
+            }
+        });
+    }
+
+    function validarStock(idProducto, atender = -1) {
+        var noDisponible = $("#tableDetalleGuia tr[idProducto='" + idProducto + "']").attr("noDisponible");
+
+        if (noDisponible == 1) {
+            return;
+        } else {
+            var stock = $("#tableDetalleGuia tr[idProducto='" + idProducto + "']").attr("stock");
+            stock = parseFloat(stock);
+            var stockLibre = $("#tableDetalleGuia tr[idProducto='" + idProducto + "']").attr("stockLibre");
+            stockLibre = parseFloat(stockLibre);
+            if (atender == -1) {
+                atender = $("#tableDetalleGuia tr[idProducto='" + idProducto + "'] td.detcantidad").html();
+            }
+            atender = parseFloat(atender);
+
+            $("#tableDetalleGuia tr[idProducto='" + idProducto + "'] td.detStock").removeClass("guia-stock-danger");
+            $("#tableDetalleGuia tr[idProducto='" + idProducto + "'] td.detStock").removeClass("guia-stock-warning");
+            $("#tableDetalleGuia tr[idProducto='" + idProducto + "'] td.detStock").removeClass("guia-stock-success");
+
+            if (stock < atender) {
+                $("#tableDetalleGuia tr[idProducto='" + idProducto + "'] td.detStock").addClass("guia-stock-danger");
+            } else {
+                if (stockLibre < atender) {
+                    $("#tableDetalleGuia tr[idProducto='" + idProducto + "'] td.detStock").addClass("guia-stock-warning")
+                } else {
+                    $("#tableDetalleGuia tr[idProducto='" + idProducto + "'] td.detStock").addClass("guia-stock-success")
+                }
+            }
+
+        }
+    }
+
+    $(document).on('change', "input.detincantidad", function () {
+        var that = this;
+        setTimeout(function () {
+            validarStock($(that).closest("tr").attr("idProducto"), $(that).val());
+        }, 1000);
+        
     });
 
     window.onafterprint = function () {

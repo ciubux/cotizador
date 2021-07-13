@@ -298,7 +298,7 @@ namespace Cotizador.Controllers
                     RegistroCargaStock nuevo = new RegistroCargaStock();
                     //try
                     //{
-                        pos = posicionInicial + 0;
+                        pos = posicionInicial + 1;
                         if (sheet.GetRow(row).GetCell(pos) == null)
                         {
                             nuevo.sku = null;
@@ -313,7 +313,7 @@ namespace Cotizador.Controllers
                             }
                         }
 
-                        pos = posicionInicial + 6;
+                        pos = posicionInicial + 7;
                         if (sheet.GetRow(row).GetCell(pos) == null)
                         {
                             nuevo.cantidadProveedor = 0;
@@ -330,7 +330,7 @@ namespace Cotizador.Controllers
                             }
                         }
 
-                        pos = posicionInicial + 9;
+                        pos = posicionInicial + 10;
                         if (sheet.GetRow(row).GetCell(pos) == null)
                         {
                             nuevo.cantidadMp = 0;
@@ -348,7 +348,7 @@ namespace Cotizador.Controllers
                         }
 
 
-                        pos = posicionInicial + 12;
+                        pos = posicionInicial + 13;
                         if (sheet.GetRow(row).GetCell(pos) == null)
                         {
                             nuevo.cantidadAlternativa = 0;

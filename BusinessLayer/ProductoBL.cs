@@ -497,11 +497,20 @@ namespace BusinessLayer
                 return productoDAL.InventarioStock(fechaReferencia, idUsuario);
             }
         }
+
         public List<RegistroCargaStock> StockProducto(string sku, Guid idUsuario)
         {
             using (var productoDAL = new ProductoDAL())
             {
                 return productoDAL.StockProducto(sku, idUsuario);
+            }
+        }
+
+        public List<RegistroCargaStock> StockProductosSede(List<Guid> idProductos, Guid idCiudad, Guid idUsuario)
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                return productoDAL.StockProductosSede(idProductos, idCiudad, idUsuario);
             }
         }
 

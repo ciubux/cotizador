@@ -4,6 +4,7 @@ using Cotizador.Models.DTOsSearch;
 using Cotizador.Models.DTOsShow;
 using Model;
 using Model.EXCEPTION;
+using Model.UTILES;
 using Newtonsoft.Json;
 using NPOI.HSSF.Model;
 using NPOI.HSSF.UserModel;
@@ -1275,7 +1276,37 @@ namespace Cotizador.Controllers
             }
         }
 
-        
+        [HttpPost]
+        public String GetStockProductos()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+            {
+                return "";
+            }
+            else
+            {
+                if (!usuario.creaGuias)
+                {
+                    return "";
+                }
+            }
+
+            GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
+            List<Guid> idProductos = new List<Guid>();
+            
+            foreach(DocumentoDetalle det in guiaRemision.documentoDetalle)
+            {
+                idProductos.Add(det.producto.idProducto);
+            }
+
+            ProductoBL bl = new ProductoBL();
+            List<RegistroCargaStock> stocks = bl.StockProductosSede(idProductos, guiaRemision.ciudadOrigen.idCiudad, usuario.idUsuario);
+
+            return JsonConvert.SerializeObject(stocks);
+        }
+
+
         #endregion
 
 
