@@ -173,11 +173,16 @@ namespace DataLayer
 
 
 
-        public List<Cliente> getClientesBusqueda(String textoBusqueda, Guid idCiudad)
+        public List<Cliente> getClientesBusqueda(String textoBusqueda, Guid idCiudad, bool excluirLites = false)
         {
             var objCommand = GetSqlCommand("ps_getclientes_search");
             InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
             InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
+
+            if(excluirLites) {
+                InputParameterAdd.Int(objCommand, "excluirLites", 1);
+            }
+
 
             DataTable dataTable = Execute(objCommand);
             List<Cliente> clienteList = new List<Cliente>();

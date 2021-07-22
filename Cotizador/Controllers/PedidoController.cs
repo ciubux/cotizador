@@ -951,7 +951,7 @@ namespace Cotizador.Controllers
                 String data = this.Request.Params["data[q]"];
                 ClienteBL clienteBL = new ClienteBL();
                 Pedido pedido = this.PedidoSession;
-                return clienteBL.getCLientesBusqueda(data, pedido.ciudad.idCiudad);
+                return clienteBL.getCLientesBusqueda(data, pedido.ciudad.idCiudad, true);
             }
             catch (Exception e)
             {
@@ -2201,6 +2201,20 @@ namespace Cotizador.Controllers
 
                 PedidoBL pedidoBL = new PedidoBL();
                 pedidoBL.TruncarPedido(pedido);
+
+            }
+        }
+
+        public void DestruncarPedido()
+        {
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] != null)
+            {
+                Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
+                pedido.idPedido = Guid.Parse(this.Request.Params["idPedido"]);
+                pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+                PedidoBL pedidoBL = new PedidoBL();
+                pedidoBL.DestruncarPedido(pedido);
 
             }
         }

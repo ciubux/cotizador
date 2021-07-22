@@ -479,6 +479,9 @@ namespace Model
 
         public const String VISUALIZA_REPORTE_SELLOUT_PERSONALIZADO = "R001";
 
+        public const String REVIERTE_TRUNCADO_PEDIDOS = "P341";
+
+        
         public enum paginas
         {
             /*COTIZACION*/

@@ -83,7 +83,7 @@ jQuery(function ($) {
                     $("#tableDetalleGuia tr[idProducto='" + lista[i].producto.idProducto + "']").attr("stock", stock);
                     $("#tableDetalleGuia tr[idProducto='" + lista[i].producto.idProducto + "']").attr("stockLibre", stockLibre);
 
-                    validarStock(lista[i].producto.idProducto);
+                    validarStockItem(lista[i].producto.idProducto);
                 }
 
                 
@@ -91,7 +91,7 @@ jQuery(function ($) {
         });
     }
 
-    function validarStock(idProducto, atender = -1) {
+    function validarStockItem(idProducto, atender = -1) {
         var noDisponible = $("#tableDetalleGuia tr[idProducto='" + idProducto + "']").attr("noDisponible");
 
         if (noDisponible == 1) {
@@ -126,10 +126,37 @@ jQuery(function ($) {
     $(document).on('change', "input.detincantidad", function () {
         var that = this;
         setTimeout(function () {
-            validarStock($(that).closest("tr").attr("idProducto"), $(that).val());
-        }, 1000);
+            validarStockItem($(that).closest("tr").attr("idProducto"), $(that).val());
+        }, 500);
         
     });
+
+    function stockValido() {
+        var valido = true;
+
+        var esGuiaDiferida = $("#esGuiaDiferida").val();
+        if (esGuiaDiferida == 1) {
+            return true;
+        }
+
+        $('#tableDetalleGuia tbody tr').each(function () {
+            var noDisponible = $(this).attr("noDisponible");
+            
+            if (noDisponible == 0) {
+                var stock = $(this).attr("stock");
+                stock = parseFloat(stock);
+                var stockLibre = $(this).attr("stockLibre");
+                stockLibre = parseFloat(stockLibre);
+                var atender = $(this).find("td.detcantidad").html();
+                atender = parseFloat(atender);
+                if (stock < atender) {
+                    valido = false;
+                }
+            }
+        });
+
+        return valido;
+    }
 
     window.onafterprint = function () {
         if ($("#pagina").val() == 14) {
@@ -785,6 +812,17 @@ jQuery(function ($) {
             return false;
         }
 
+        if (!stockValido()) {
+            $.alert({
+                type: 'red',
+                title: "STOCK INSUFICIENTE",
+                content: 'No se puede atender productos que no tengan stock suficiente. Verifique los item con stock en color ROJO.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            return false;
+        }
 
         return true;
     }

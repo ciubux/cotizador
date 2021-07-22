@@ -196,11 +196,11 @@ namespace BusinessLayer
         }
 
 
-        public String getCLientesBusqueda(String textoBusqueda, Guid idCiudad)
+        public String getCLientesBusqueda(String textoBusqueda, Guid idCiudad, bool excluirLites = false)
         {
             using (var clienteDAL = new ClienteDAL())
             {
-                List<Cliente> clienteList = clienteDAL.getClientesBusqueda(textoBusqueda, idCiudad);
+                List<Cliente> clienteList = clienteDAL.getClientesBusqueda(textoBusqueda, idCiudad, excluirLites);
                 String resultado = "{\"q\":\"" + textoBusqueda + "\",\"results\":[";
                 Boolean existeCliente = false;
                 foreach (Cliente cliente in clienteList)

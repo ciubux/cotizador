@@ -14,6 +14,7 @@
     <input type="hidden" id="respuestaConfirmacion" />
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
     <input type="hidden" value="@ViewBag.debug" />
+    <input type="hidden" id="esGuiaDiferida" value="@(guiaRemision.esGuiaDiferida ? "1" : "0")" />
     <form class="form-horizontal">
         <input type="hidden" id="idGuiaRemision" name="idGuiaRemision" value="2" />
 
@@ -93,7 +94,7 @@
                             }
                             else
                             {
-                                <button id="btnCambiarASerieDiferida" type="button" class="btn btn-warning" >Atención Diferida</button>
+                                <button id="btnCambiarASerieDiferida" type="button" class="btn btn-warning">Atención Diferida</button>
                                 <button id="btnCambiarASerieNormal" type="button" class="btn btn-info" style="display: none;">Atención Normal</button>
                             }
                         }
@@ -613,27 +614,27 @@
 
 
                         contador++;
-                <tr data-expanded="true" idProducto="@documentoDetalle.producto.idProducto" idProductoPresentacion="@(documentoDetalle.ProductoPresentacion == null ? 0 : documentoDetalle.ProductoPresentacion.IdProductoPresentacion)">
-                    <td>  @documentoDetalle.producto.idProducto</td>
-                    <td>  @documentoDetalle.producto.sku</td>
-                    <!--<td class="@documentoDetalle.producto.idProducto" style="text-align:right">@documentoDetalle.cantidadSolicitada</td>-->
+                        <tr data-expanded="true" idProducto="@documentoDetalle.producto.idProducto" idProductoPresentacion="@(documentoDetalle.ProductoPresentacion == null ? 0 : documentoDetalle.ProductoPresentacion.IdProductoPresentacion)">
+                            <td>  @documentoDetalle.producto.idProducto</td>
+                            <td>  @documentoDetalle.producto.sku</td>
+                            <!--<td class="@documentoDetalle.producto.idProducto" style="text-align:right">@documentoDetalle.cantidadSolicitada</td>-->
 
-                    <td class="@documentoDetalle.producto.idProducto detcantidadSaldo" style="text-align:right">@documentoDetalle.cantidadPendienteAtencionPermitida</td>
-                    <td class="@documentoDetalle.producto.idProducto detStock" style="text-align:right; font-weight: bold;">...</td>
-                    <td class="@documentoDetalle.producto.idProducto detcantidad" style="text-align:right">@documentoDetalle.cantidadPorAtenderPermitida</td>
-                    <td>  @documentoDetalle.unidad</td>
-                    <td>
-                        @documentoDetalle.producto.descripcion
-                        @if (documentoDetalle.producto.descripcionLarga != null && !documentoDetalle.producto.descripcionLarga.Trim().IsEmpty())
-                        {
-                            string descripcionLargaInfo = Html.Partial("../Producto/_LabelDescripcionLarga").ToString();
-                            descripcionLargaInfo = descripcionLargaInfo.Replace("_DATA_TIPSO_", documentoDetalle.producto.descripcionLarga);
-                            descripcionLargaInfo = descripcionLargaInfo.Replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
+                            <td class="@documentoDetalle.producto.idProducto detcantidadSaldo" style="text-align:right">@documentoDetalle.cantidadPendienteAtencionPermitida</td>
+                            <td class="@documentoDetalle.producto.idProducto detStock" style="text-align:right; font-weight: bold;">...</td>
+                            <td class="@documentoDetalle.producto.idProducto detcantidad" style="text-align:right">@documentoDetalle.cantidadPorAtenderPermitida</td>
+                            <td>  @documentoDetalle.unidad</td>
+                            <td>
+                                @documentoDetalle.producto.descripcion
+                                @if (documentoDetalle.producto.descripcionLarga != null && !documentoDetalle.producto.descripcionLarga.Trim().IsEmpty())
+                                {
+                                    string descripcionLargaInfo = Html.Partial("../Producto/_LabelDescripcionLarga").ToString();
+                                    descripcionLargaInfo = descripcionLargaInfo.Replace("_DATA_TIPSO_", documentoDetalle.producto.descripcionLarga);
+                                    descripcionLargaInfo = descripcionLargaInfo.Replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
 
-                            @Html.Raw(descripcionLargaInfo)
-                        }
-                    </td>
-                </tr>
+                                    @Html.Raw(descripcionLargaInfo)
+                                }
+                            </td>
+                        </tr>
                     }
                 }
             </tbody>

@@ -3351,7 +3351,7 @@ jQuery(function ($) {
 
                 //Truncar Pedido
                 $("#btnTruncarPedido").hide();
-
+                $("#btnDestruncarPedido").hide();
 
                 //ATENDER PEDIDO
                 $("#btnAtenderPedidoVenta").hide();
@@ -3386,9 +3386,13 @@ jQuery(function ($) {
                                 $("#btnAtenderPedidoVenta").hide();
                             }
                             else {
-                                $("#btnAtenderPedidoVenta").show();    
+                                $("#btnAtenderPedidoVenta").show();
                             }
-                            
+
+                        } else {
+                            if (usuario.revierteTruncadoPedidos) {
+                                $("#btnDestruncarPedido").show();
+                            }
                         }
                     }
                     else {
@@ -3878,6 +3882,68 @@ jQuery(function ($) {
         });
     });
 
+
+    $("#btnDestruncarPedido").click(function () {
+        $.confirm({
+            title: 'Confirmación',
+            content: '¿Está seguro que desea revertir el truncado del pedido?',
+            type: 'orange',
+            buttons: {
+                confirm: {
+                    text: 'Sí',
+                    btnClass: 'btn-red',
+                    action: function () {
+                        var idPedido = $("#verIdPedido").val();
+
+                        $.ajax({
+                            url: "/Pedido/DestruncarPedido",
+                            data: {
+                                idPedido: idPedido,
+                            },
+                            type: 'POST',
+                            error: function (detalle) {
+                                $.alert({
+                                    title: 'ERROR',
+                                    content: "Ocurrió un error al intentar revertir el truncado del pedido.",
+                                    type: 'red',
+                                    buttons: {
+
+                                        OK: function () {
+                                        }
+                                    }
+                                });
+                            },
+                            success: function () {
+                                $.alert({
+                                    title: 'REGISTRO EXITOSO',
+                                    content: "Se revertió el truncado del pedido correctamente.",
+                                    type: 'green',
+                                    buttons: {
+
+                                        OK: function () {
+                                            location.reload();
+                                        }
+                                    }
+                                });
+                            }
+                        });
+
+
+
+                    }
+                },
+                cancel: {
+                    text: 'No',
+                    //btnClass: 'btn-blue',
+                    //                        keys: ['enter', 'shift'],
+                    action: function () {
+
+                    }
+                }
+            },
+
+        });
+    });
 
 
     $('#modalAprobacion').on('shown.bs.modal', function (e) {

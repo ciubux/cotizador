@@ -130,6 +130,7 @@ namespace Model
         public bool apruebaPedidosVentaRestringida { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_PEDIDOS_VENTA_RESTRINGIDA)).FirstOrDefault() != null; } }
 
         public bool truncaPedidos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.TRUNCA_PEDIDOS)).FirstOrDefault() != null; } }
+        public bool revierteTruncadoPedidos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REVIERTE_TRUNCADO_PEDIDOS)).FirstOrDefault() != null; } }
         public bool visualizaPedidosLima { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_PEDIDOS_LIMA)).FirstOrDefault() != null; } }
         public bool visualizaPedidosProvincias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_PEDIDOS_PROVINCIAS)).FirstOrDefault() != null; } }
         public bool visualizaPedidos { get { return visualizaPedidosLima || visualizaPedidosProvincias; } }

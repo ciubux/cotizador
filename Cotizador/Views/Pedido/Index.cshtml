@@ -981,6 +981,11 @@
                         <button type="button" id="btnTruncarPedido" class="btn btn-warning">Truncar</button>
                     }
 
+                    @if (pedido.usuario.revierteTruncadoPedidos)
+                    {
+                        <button type="button" id="btnDestruncarPedido" class="btn btn-warning">Revertir Truncado</button>
+                    }
+
                     @if (pedido.usuario.tomaPedidos || pedido.usuario.apruebaPedidos)
                     {
                         <button type="button" id="btnActualizarPedido" class="btn btn-primary" data-toggle='modal' data-target='#modalActualizarPedido'>Observaciones y Adjuntos</button>

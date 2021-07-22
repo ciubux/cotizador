@@ -202,7 +202,15 @@ namespace Cotizador.Controllers
             cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
             cotizacionTmp.igv = Constantes.IGV;
             cotizacionTmp.flete = 0;
-            cotizacionTmp.ajusteCalculoPrecios = true;
+            cotizacionTmp.ajusteCalculoPrecios = false;
+
+            ParametroBL parametroBL = new ParametroBL();
+            string ajusteDefecto = parametroBL.getParametro("COTIZACION_AJUSTAR_PRECIO_UNIDADES_MENORES");
+            if(ajusteDefecto.Trim().Equals("SI"))
+            {
+                cotizacionTmp.ajusteCalculoPrecios = true;
+            }
+
             cotizacionTmp.validezOfertaEnDias = Constantes.PLAZO_OFERTA_DIAS;
             cotizacionTmp.considerarCantidades = Cotizacion.OpcionesConsiderarCantidades.Observaciones;
             Usuario usuario = (Usuario)this.Session["usuario"];
@@ -1583,7 +1591,17 @@ namespace Cotizador.Controllers
             cotizacion.fechaInicioVigenciaPrecios = null;
             cotizacion.fechaFinVigenciaPrecios = null;
             cotizacion.fechaLimiteValidezOferta = cotizacion.fecha.AddDays(Constantes.PLAZO_OFERTA_DIAS);
-            cotizacion.ajusteCalculoPrecios = true;
+            
+            cotizacion.ajusteCalculoPrecios = false;
+            ParametroBL parametroBL = new ParametroBL();
+            string ajusteDefecto = parametroBL.getParametro("COTIZACION_AJUSTAR_PRECIO_UNIDADES_MENORES");
+            if (ajusteDefecto.Trim().Equals("SI"))
+            {
+                cotizacion.ajusteCalculoPrecios = true;
+            }
+
+
+
             cotizacion.validezOfertaEnDias = Constantes.PLAZO_OFERTA_DIAS;
 
             return cotizacion;
