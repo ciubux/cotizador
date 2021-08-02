@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Descargar Reporte Stock";
+    Model.Producto producto = ViewBag.producto;
 }
 
 <div class="page-header">
@@ -8,11 +9,52 @@
 <div class="container">
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
 
+    <div class="row">
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group row">
+                <!--Fecha Inicio Vigencia-->
+                <label class="control-label col-xs-4" for="fechaStock">A la Fecha:</label>
+                <div class="col-xs-8">
+                    <input class="form-control" type="text" id="fechaStock" name="fechaStock" value="@DateTime.Now.ToString("dd/MM/yyyy")">
+                </div>
+            </div>
+        </div>
 
-    @*<div class="row">
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group row">
+                <!--Items-->
+                <label class="control-label col-xs-4" for="idCiudad">
+                    Sede:
+                </label>
+                <div class="col-xs-8">
+                    @Html.Action("GetCiudades", "Ciudad",
+                                    new
+                                    {
+                                        ciudadSelectId = "idCiudad"
+                                    })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group row">
+                <label class="control-label col-xs-4" for="tipoUnidad">Unidad:</label>
+                <div class="col-xs-8">
+                    <select class="form-control" id="tipoUnidad" name="tipoUnidad">
+                        <option selected value="1">MP</option>
+                        <option value="2">Alternativa</option>
+                        <option value="3">Proveedor</option>
+                        <option value="99">Conteo</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         <!--codigo-->
         <div class="col-sm-6 col-lg-4">
-            <div class="form-group">
+            <div class="form-group row">
                 @Html.LabelFor(c => producto.sku, htmlAttributes: new { @class = "control-label col-xs-4" })
                 <div class="col-xs-8">
                     @Html.TextBoxFor(c => producto.sku, htmlAttributes: new { @class = "form-control" })
@@ -30,132 +72,60 @@
                 </div>
             </div>
 
-            <div class="form-group row">
-                @Html.LabelFor(c => producto.proveedor, htmlAttributes: new { @class = "control-label col-xs-4" })
-                <div class="col-xs-8">
-                    @Html.Action("list", "Proveedor")
-                </div>
-            </div>
-
         </div>
 
 
         <div class="col-sm-6 col-lg-4">
-            <div class="form-group row">
-                <label class="control-label col-xs-4" for="producto_skuProveedor">Estado:</label>
-                <div class="col-xs-8">
-                    <div class="radio radio-inline">
-                        <label class="radio-label">
-                            @if (producto.Estado == 1)
-                            {
-                                <input class="radio-input" checked type="radio" name="producto_estado" id="producto_estado_si" value="1"><span>Activo</span>
-                            }
-                            else
-                            {
-                                <input class="radio-input" type="radio" name="producto_estado" id="producto_estado_si" value="1"><span>Activo</span>
-                            }
-
-                        </label>
-                    </div>
-                    <div class="radio radio-inline">
-                        <label class="radio-label">
-                            @if (producto.Estado == 0)
-                            {
-                                <input class="radio-input" checked type="radio" name="producto_estado" id="producto_estado_no" value="0"><span>Inactivo</span>
-                            }
-                            else
-                            {
-                                <input class="radio-input" type="radio" name="producto_estado" id="producto_estado_no" value="0"><span>Inactivo</span>
-                            }
-                        </label>
-                    </div>
-                    <div class="radio radio-inline">
-                        <label class="radio-label">
-                            @if (producto.Estado == -1)
-                            {
-                                <input class="radio-input" checked type="radio" name="producto_estado" id="producto_estado_todos" value="0"><span>Todos</span>
-                            }
-                            else
-                            {
-                                <input class="radio-input" type="radio" name="producto_estado" id="producto_estado_todos" value="0"><span>Todos</span>
-                            }
-                        </label>
-                    </div>
-                </div>
-            </div>
-
             <div class="form-group row">
                 @Html.LabelFor(c => producto.familia, htmlAttributes: new { @class = "control-label col-xs-4" })
                 <div class="col-xs-8">
                     @Html.Action("list", "Familia")
                 </div>
             </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(c => producto.proveedor, htmlAttributes: new { @class = "control-label col-xs-4" })
+                <div class="col-xs-8">
+                    @Html.Action("list", "Proveedor")
+                </div>
+            </div>
         </div>
     </div>
 
-        <!--Familia, proveedor, producto -->
-        <div class="row">
-            <!--Familia-->
-
-            <!--Descripcion producto-->
-            <div class="col-sm-6 col-lg-8">
-
-                <div class="form-group">
-                    @Html.LabelFor(c => producto.descripcion, htmlAttributes: new { @class = "control-label col-xs-2" })
-                    <div class="col-xs-10">
-                        @Html.TextBoxFor(c => producto.descripcion, htmlAttributes: new { @class = "form-control" })
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="col-sm-6 col-lg-4">
-
-                <div class="form-group">
-                    @Html.LabelFor(c => producto.tipoVentaRestringidaBusqueda, htmlAttributes: new { @class = "control-label col-xs-4" })
-                    <div class="col-xs-8">
-                        <select class="form-control" id="tipoVentaRestringidaBusqueda" name="tipoVentaRestringidaBusqueda">
-                            <option @(producto.tipoVentaRestringidaBusqueda == -1 ? "selected" : "") value="-1">Seleccione</option>
-                            <option @(producto.tipoVentaRestringidaBusqueda == 1 ? "selected" : "") value="1">Descontinuado</option>
-                            <option @(producto.tipoVentaRestringidaBusqueda == 2 ? "selected" : "") value="2">Inestabilidad de precios</option>
-                            <option @(producto.tipoVentaRestringidaBusqueda == 3 ? "selected" : "") value="3">Stock limitado</option>
-                            <option @(producto.tipoVentaRestringidaBusqueda == 9999 ? "selected" : "") value="9999">Todos los restringidos</option>
-                        </select>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-6 col-lg-4">
-
-            </div>
-        </div>
-    *@
-
+    <!--Familia, proveedor, producto -->
     <div class="row">
-        <div class="col-sm-6 col-lg-4">
-            <!--Fecha Inicio Vigencia-->
-            <label class="control-label col-xs-4" for="fechaStock">A la Fecha:</label>
-            <div class="col-xs-8">
-                <input class="form-control" type="text" id="fechaStock" name="fechaStock" value="@DateTime.Now.ToString("dd/MM/yyyy")">
-            </div>
-        </div>
-        <div class="col-sm-6 col-lg-4">
+        <!--Familia-->
+        <!--Descripcion producto-->
+        <div class="col-sm-6 col-lg-8">
+
             <div class="form-group">
-                <label class="control-label col-xs-4" for="tipoUnidad">Unidad:</label>
+                @Html.LabelFor(c => producto.descripcion, htmlAttributes: new { @class = "control-label col-xs-2" })
+                <div class="col-xs-10">
+                    @Html.TextBoxFor(c => producto.descripcion, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-6 col-lg-4">
+
+            <div class="form-group">
+                @Html.LabelFor(c => producto.tipoVentaRestringidaBusqueda, htmlAttributes: new { @class = "control-label col-xs-4" })
                 <div class="col-xs-8">
-                    <select class="form-control" id="tipoUnidad" name="tipoUnidad">
-                        <option selected value="1">MP</option>
-                        <option value="2">Alternativa</option>
-                        <option value="3">Proveedor</option>
-                        <option  value="99">Conteo</option>
+                    <select class="form-control" id="tipoVentaRestringidaBusqueda" name="tipoVentaRestringidaBusqueda">
+                        <option @(producto.tipoVentaRestringidaBusqueda == -1 ? "selected" : "") value="-1">Seleccione</option>
+                        <option @(producto.tipoVentaRestringidaBusqueda == 1 ? "selected" : "") value="1">Descontinuado</option>
+                        <option @(producto.tipoVentaRestringidaBusqueda == 2 ? "selected" : "") value="2">Inestabilidad de precios</option>
+                        <option @(producto.tipoVentaRestringidaBusqueda == 3 ? "selected" : "") value="3">Stock limitado</option>
+                        <option @(producto.tipoVentaRestringidaBusqueda == 9999 ? "selected" : "") value="9999">Todos los restringidos</option>
                     </select>
                 </div>
             </div>
+
         </div>
     </div>
+
+
     <div class="row">
         <div class="col-sm-6 col-lg-4">
 

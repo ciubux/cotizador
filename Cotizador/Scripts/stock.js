@@ -124,7 +124,8 @@ jQuery(function ($) {
     $("#btnReporteStockExcel").click(function () {
         var fechaStock = $("#fechaStock").val();
         var tipoUnidad = $("#tipoUnidad").val();
-        window.location.href = $(this).attr("actionLink") + '?tipoUnidad=' + tipoUnidad + '&fechaStock=' + fechaStock;
+        var idCiudad = $("#idCiudad").val();
+        window.location.href = $(this).attr("actionLink") + '?tipoUnidad=' + tipoUnidad + '&fechaStock=' + fechaStock + '&idCiudad=' + idCiudad;
     });
 
     $("#btnCargarStock").click(function () {

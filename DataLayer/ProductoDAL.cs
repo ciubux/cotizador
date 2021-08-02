@@ -1534,11 +1534,17 @@ namespace DataLayer
             return true;
         }
 
-        public List<RegistroCargaStock> InventarioStock(DateTime fechaReferencia, Guid idUsuario)
+        public List<RegistroCargaStock> InventarioStock(DateTime fechaReferencia, Guid idUsuario, Guid idCiudad, Producto producto)
         {
             var objCommand = GetSqlCommand("ps_stock_global");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
             InputParameterAdd.DateTime(objCommand, "fechaReferencia", fechaReferencia);
+            InputParameterAdd.VarcharEmpty(objCommand, "sku", producto.sku);
+            InputParameterAdd.VarcharEmpty(objCommand, "descripcion", producto.descripcion);
+            InputParameterAdd.Int(objCommand, "tipoVentaRestingida", producto.tipoVentaRestringidaBusqueda);
+            InputParameterAdd.Varchar(objCommand, "familia", producto.familia);
+            InputParameterAdd.Varchar(objCommand, "proveedor", producto.proveedor);
 
             DataSet dataSet = ExecuteDataSet(objCommand);
 
@@ -1546,7 +1552,6 @@ namespace DataLayer
             DataTable dataTable = dataSet.Tables[0];
 
             List<RegistroCargaStock> productoList = new List<RegistroCargaStock>();
-            List<RegistroCargaStock> finalList = new List<RegistroCargaStock>();
 
             foreach (DataRow row in dataTable.Rows)
             {
@@ -1582,43 +1587,7 @@ namespace DataLayer
                 productoList.Add(item);
             }
 
-            foreach (RegistroCargaStock item in productoList)
-            {
-                RegistroCargaStock obj = finalList.Where(l => l.producto.idProducto == item.producto.idProducto).FirstOrDefault();
-                if (obj == null)
-                {
-                    obj = new RegistroCargaStock();
-                    obj.producto = item.producto;
-                    obj.ciudad = new Ciudad();
-
-                    obj.cantidadProveedor = 0;
-                    obj.cantidadMp = 0;
-                    obj.cantidadAlternativa = 0;
-                    obj.cantidadConteo = 0;
-
-                    obj.ciudad.idCiudad = Guid.Empty;
-                    obj.ciudad.nombre = "TODOS";
-
-                    obj.fecha = item.fecha;
-                    obj.registradoPeridoAplicable = item.registradoPeridoAplicable;
-                    obj.tieneRegistroStock = item.tieneRegistroStock;
-
-                    finalList.Add(obj);
-                }
-
-                obj.cantidadConteo += item.cantidadConteo;
-                if (!obj.tieneRegistroStock)
-                {
-                    obj.tieneRegistroStock = item.tieneRegistroStock;
-                }
-            }
-            
-            foreach (RegistroCargaStock item in productoList)
-            {
-                finalList.Add(item);
-            }
-
-            return finalList;
+            return productoList;
         }
 
         public List<RegistroCargaStock> StockProducto(string sku, Guid idUsuario)

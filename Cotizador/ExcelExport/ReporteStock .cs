@@ -158,7 +158,7 @@ namespace Cotizador.ExcelExport
             int i = 0;
             // create sheet
 
-
+            
 
             string tituloUnidad = "";
             switch (tipoUnidad)
@@ -169,179 +169,131 @@ namespace Cotizador.ExcelExport
                 case 99: tituloUnidad = "UNIDAD CONTEO"; break;
             }
 
-            i = 3;
+            i = 2;
 
             /*  for (int iii = 0; iii<50;iii++)
                 { */
-            string familia = "";
-            string sede = "";
+
             bool bStyle = false;
+            Guid idSedeInicial = Guid.Empty;
+
+            if (list.Count > 0) idSedeInicial = list[0].ciudad.idCiudad;
+
+            sheet = NuevaHoja(wb, "STOCK", list.Count + 50, tituloUnidad);
+
+            int col = 0;
+            decimal total = 0;
+
+            string[] colLetters = new string[12] { "H", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T" };
             foreach (RegistroCargaStock obj in list)
             {
-                if (!sede.Equals(obj.ciudad.nombre))
+                if (idSedeInicial.Equals(obj.ciudad.idCiudad))
                 {
-                    sede = obj.ciudad.nombre;
-                    sheet = NuevaHoja(wb, sede, list.Count + 200, tituloUnidad);
-                    i = 3;
-                    familia = "";
-                }
-
-                if (!familia.Equals(obj.producto.familia))
-                {
-                    i++;
-                    familia = obj.producto.familia;
-                    bStyle = false;
-                    if (!familia.Trim().Equals(""))
+                    if (i>=3 && col > 0)
                     {
-                        UtilesHelper.setValorCelda(sheet, i, "A", obj.producto.familia, familiaCellStyle);
-                        i++;
+                        if (i==3)
+                        {
+                            UtilesHelper.setColumnWidth(sheet, colLetters[col + 1], 3500);
+                            UtilesHelper.setValorCelda(sheet, 1, colLetters[col + 1], "TOTAL", titleDataCellStyle);
+                        }
+
+                        UtilesHelper.setValorCelda(sheet, i, colLetters[col + 1], String.Format(Constantes.formatoDosDecimales, total), bStyle ? tableDataCenterCellStyleNegativeB : tableDataCenterCellStyleNegative);
                     }
+
+                    i++;
+
+                    total = 0;
+                    col = 0;
+                    string unidad = "";
+
+                    switch (tipoUnidad)
+                    {
+                        case 1:
+                            unidad = obj.producto.unidad;
+                            break;
+                        case 2:
+                            unidad = obj.producto.unidad_alternativa;
+                            break;
+                        case 3:
+                            unidad = obj.producto.unidadProveedor;
+                            break;
+                        case 99:
+                            unidad = obj.producto.unidadConteo;
+                            break;
+                    }
+
+                    if (bStyle)
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "A", obj.producto.familia, tableDataCenterCellStyleB);
+                        UtilesHelper.setValorCelda(sheet, i, "B", obj.producto.sku, tableDataCenterCellStyleB);
+                        UtilesHelper.setValorCelda(sheet, i, "C", obj.producto.proveedor, tableDataCenterCellStyleB);
+                        UtilesHelper.setValorCelda(sheet, i, "D", obj.producto.skuProveedor, tableDataCellStyleB);
+                        UtilesHelper.setValorCelda(sheet, i, "E", obj.producto.descripcion, tableDataCellStyleB);
+
+                        UtilesHelper.setValorCelda(sheet, i, "G", unidad, tableDataCellStyleB);
+                    }
+                    else
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "A", obj.producto.familia, tableDataCenterCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "B", obj.producto.sku, tableDataCenterCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "C", obj.producto.proveedor, tableDataCenterCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "D", obj.producto.skuProveedor, tableDataCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "E", obj.producto.descripcion, tableDataCellStyle);
+
+                        UtilesHelper.setValorCelda(sheet, i, "G", unidad, tableDataCellStyle);
+                    }
+
+
+                    if (bStyle) { bStyle = false; } else { bStyle = true; }
+                } else
+                {
+                    col++;
+                }
+                
+                
+                if (i == 3)
+                {
+                    UtilesHelper.setColumnWidth(sheet, colLetters[col], 3500);
+                    UtilesHelper.setValorCelda(sheet, 1, colLetters[col], obj.ciudad.nombre, titleDataCellStyle);
                 }
 
                 decimal stock = 0;
-                string unidad = "";
-
+                
                 switch (tipoUnidad)
                 {
                     case 1:
-                        unidad = obj.producto.unidad;
                         stock = ((decimal)obj.cantidadConteo) / ((decimal)(obj.producto.equivalenciaUnidadEstandarUnidadConteo));
                         break;
                     case 2:
-                        unidad = obj.producto.unidad_alternativa;
-                        stock = (((decimal) obj.cantidadConteo) / ((decimal) obj.producto.equivalenciaUnidadEstandarUnidadConteo)) * ((decimal) obj.producto.equivalenciaAlternativa);
+                        stock = (((decimal)obj.cantidadConteo) / ((decimal)obj.producto.equivalenciaUnidadEstandarUnidadConteo)) * ((decimal)obj.producto.equivalenciaAlternativa);
                         break;
                     case 3:
-                        unidad = obj.producto.unidadProveedor;
                         stock = ((decimal)obj.cantidadConteo) / ((decimal)(obj.producto.equivalenciaProveedor * obj.producto.equivalenciaUnidadEstandarUnidadConteo));
                         break;
                     case 99:
-                        unidad = obj.producto.unidadConteo;
-                        stock = (decimal) obj.cantidadConteo;
+                        stock = (decimal)obj.cantidadConteo;
                         break;
                 }
-                
 
-                if (bStyle)
+                total += stock;
+
+                if (obj.stockNoDisponible)
                 {
-                    UtilesHelper.setValorCelda(sheet, i, "A", obj.producto.sku, tableDataCenterCellStyleB);
-                    UtilesHelper.setValorCelda(sheet, i, "B", obj.producto.proveedor, tableDataCenterCellStyleB);
-                    UtilesHelper.setValorCelda(sheet, i, "C", obj.producto.skuProveedor, tableDataCellStyleB);
-                    UtilesHelper.setValorCelda(sheet, i, "D", obj.producto.descripcion, tableDataCellStyleB);
-
-                    UtilesHelper.setValorCelda(sheet, i, "F", unidad, tableDataCellStyleB);
-                    if (obj.stockNoDisponible)
-                    {
-                        UtilesHelper.setValorCelda(sheet, i, "G", "No Disponible", tableDataCenterCellStyleB);
-                    }
-                    else
-                    {
-                        if (stock < 0)
-                        {
-                            UtilesHelper.setValorCelda(sheet, i, "G", String.Format(Constantes.formatoDosDecimales, stock), tableDataCenterCellStyleNegativeB);
-                        }
-                        else
-                        {
-                            UtilesHelper.setValorCelda(sheet, i, "G", String.Format(Constantes.formatoDosDecimales, stock), tableDataCenterCellStyleB);
-                        }
-                        
-                    }
-
-                    //if (obj.producto.equivalenciaProveedor > 1)
-                    //{
-                    //    UtilesHelper.setValorCelda(sheet, i, "F", obj.producto.unidadProveedor, tableDataCellStyleB);
-                    //    UtilesHelper.setValorCelda(sheet, i, "G", obj.cantidadProveedor, tableDataCenterCellStyleB);
-                    //}
-
-                    //UtilesHelper.setValorCelda(sheet, i, "I", obj.producto.unidad, tableDataCellStyleB);
-                    //UtilesHelper.setValorCelda(sheet, i, "J", obj.cantidadMp, tableDataCenterCellStyleB);
-
-                    //if (obj.producto.equivalenciaAlternativa > 1)
-                    //{
-                    //    UtilesHelper.setValorCelda(sheet, i, "L", obj.producto.unidad_alternativa, tableDataCellStyleB);
-                    //    UtilesHelper.setValorCelda(sheet, i, "M", obj.cantidadAlternativa, tableDataCenterCellStyleB);
-                    //}
-
-                    //if (obj.producto.equivalenciaProveedor <= 1)
-                    //{
-                    //    UtilesHelper.combinarCeldas(sheet, i, i, "F", "G");
-                    //    UtilesHelper.setValorCelda(sheet, i, "F", "", tableDataCenterCellStyleB);
-                    //    UtilesHelper.setValorCelda(sheet, i, "G", "", tableDataCenterCellStyleB);
-                    //}
-
-
-                    //if (obj.producto.equivalenciaAlternativa <= 1)
-                    //{
-                    //    UtilesHelper.combinarCeldas(sheet, i, i, "L", "M");
-                    //    UtilesHelper.setValorCelda(sheet, i, "L", "", tableDataCenterCellStyleB);
-                    //    UtilesHelper.setValorCelda(sheet, i, "M", "", tableDataCenterCellStyleB);
-                    //}
-
+                    UtilesHelper.setValorCelda(sheet, i, colLetters[col], "No Disponible", bStyle ? tableDataCenterCellStyleB : tableDataCenterCellStyle);
                 }
                 else
                 {
-                    UtilesHelper.setValorCelda(sheet, i, "A", obj.producto.sku, tableDataCenterCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "B", obj.producto.proveedor, tableDataCenterCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "C", obj.producto.skuProveedor, tableDataCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "D", obj.producto.descripcion, tableDataCellStyle);
-
-                    UtilesHelper.setValorCelda(sheet, i, "F", unidad, tableDataCellStyle);
-                    if (obj.stockNoDisponible)
+                    if (stock < 0)
                     {
-                        UtilesHelper.setValorCelda(sheet, i, "G", "No Disponible", tableDataCenterCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, colLetters[col], String.Format(Constantes.formatoDosDecimales, stock), bStyle ? tableDataCenterCellStyleNegativeB : tableDataCenterCellStyleNegative);
                     }
                     else
                     {
-                        if (stock < 0)
-                        {
-                            UtilesHelper.setValorCelda(sheet, i, "G", String.Format(Constantes.formatoDosDecimales, stock), tableDataCenterCellStyleNegative);
-                        }
-                        else
-                        {
-                            UtilesHelper.setValorCelda(sheet, i, "G", String.Format(Constantes.formatoDosDecimales, stock), tableDataCenterCellStyle);
-                        }
+                        UtilesHelper.setValorCelda(sheet, i, colLetters[col], String.Format(Constantes.formatoDosDecimales, stock), bStyle ? tableDataCenterCellStyleB : tableDataCenterCellStyle);
                     }
-                    
-
-                    //if (obj.producto.equivalenciaProveedor > 1)
-                    //{
-                    //    UtilesHelper.setValorCelda(sheet, i, "F", obj.producto.unidadProveedor, tableDataCellStyle);
-                    //    UtilesHelper.setValorCelda(sheet, i, "G", obj.cantidadProveedor, tableDataCenterCellStyle);
-                    //}
-
-                    //UtilesHelper.setValorCelda(sheet, i, "I", obj.producto.unidad, tableDataCellStyle);
-                    //UtilesHelper.setValorCelda(sheet, i, "J", obj.cantidadMp, tableDataCenterCellStyle);
-
-                    //if (obj.producto.equivalenciaAlternativa > 1)
-                    //{
-                    //    UtilesHelper.setValorCelda(sheet, i, "L", obj.producto.unidad_alternativa, tableDataCellStyle);
-                    //    UtilesHelper.setValorCelda(sheet, i, "M", obj.cantidadAlternativa, tableDataCenterCellStyle);
-                    //}
-
-                    //if (obj.producto.equivalenciaProveedor <= 1)
-                    //{
-                    //    UtilesHelper.combinarCeldas(sheet, i, i, "F", "G");
-                    //    UtilesHelper.setValorCelda(sheet, i, "F", "", tableDataCenterCellStyle);
-                    //    UtilesHelper.setValorCelda(sheet, i, "G", "", tableDataCenterCellStyle);
-                    //}
-
-
-                    //if (obj.producto.equivalenciaAlternativa <= 1)
-                    //{
-                    //    UtilesHelper.combinarCeldas(sheet, i, i, "L", "M");
-                    //    UtilesHelper.setValorCelda(sheet, i, "L", "", tableDataCenterCellStyle);
-                    //    UtilesHelper.setValorCelda(sheet, i, "M", "", tableDataCenterCellStyle);
-                    //}
-
                 }
-
-
-
-                if (bStyle) { bStyle = false; } else { bStyle = true; }
-
-                i++;
             }
-                
+
             MemoryStream ms = new MemoryStream();
             using (MemoryStream tempStream = new MemoryStream())
             {
@@ -385,19 +337,21 @@ namespace Cotizador.ExcelExport
             UtilesHelper.combinarCeldas(sheet, i, i + 1, "B", "B");
             UtilesHelper.combinarCeldas(sheet, i, i + 1, "C", "C");
             UtilesHelper.combinarCeldas(sheet, i, i + 1, "D", "D");
+            UtilesHelper.combinarCeldas(sheet, i, i + 1, "E", "E");
 
-            UtilesHelper.combinarCeldas(sheet, i, i, "F", "G");
+            UtilesHelper.combinarCeldas(sheet, i, i, "G", "H");
             //UtilesHelper.combinarCeldas(sheet, i, i, "I", "J");
             //UtilesHelper.combinarCeldas(sheet, i, i, "L", "M");
 
-            UtilesHelper.setValorCelda(sheet, i, "A", "SKU", titleDataCellStyle);
-            UtilesHelper.setValorCelda(sheet, i, "B", "Prov.", titleDataCellStyle);
-            UtilesHelper.setValorCelda(sheet, i, "C", "Cod. Proveedor", titleDataCellStyle);
-            UtilesHelper.setValorCelda(sheet, i, "D", "Descripcion", titleDataCellStyle);
+            UtilesHelper.setValorCelda(sheet, i, "A", "Categoría", titleDataCellStyle);
+            UtilesHelper.setValorCelda(sheet, i, "B", "SKU", titleDataCellStyle);
+            UtilesHelper.setValorCelda(sheet, i, "C", "Prov.", titleDataCellStyle);
+            UtilesHelper.setValorCelda(sheet, i, "D", "Cod. Proveedor", titleDataCellStyle);
+            UtilesHelper.setValorCelda(sheet, i, "E", "Descripcion", titleDataCellStyle);
 
-            UtilesHelper.setValorCelda(sheet, i, "F", unidad, titleDataCellStyle);
-            UtilesHelper.setValorCelda(sheet, i + 1, "F", "Unidad", titleDataCellStyle);
-            UtilesHelper.setValorCelda(sheet, i + 1, "G", "Stock", titleDataCellStyle);
+            UtilesHelper.setValorCelda(sheet, i, "G", unidad, titleDataCellStyle);
+            UtilesHelper.setValorCelda(sheet, i + 1, "G", "Unidad", titleDataCellStyle);
+            
 
 
             //UtilesHelper.setValorCelda(sheet, i, "I", "UNIDAD MP", titleDataCellStyle);
@@ -410,15 +364,15 @@ namespace Cotizador.ExcelExport
 
 
 
+            UtilesHelper.setColumnWidth(sheet, "A", 6500);
+            UtilesHelper.setColumnWidth(sheet, "B", 2700);
+            UtilesHelper.setColumnWidth(sheet, "C", 1800);
+            UtilesHelper.setColumnWidth(sheet, "D", 4200);
+            UtilesHelper.setColumnWidth(sheet, "E", 15000);
 
-            UtilesHelper.setColumnWidth(sheet, "A", 2700);
-            UtilesHelper.setColumnWidth(sheet, "B", 1800);
-            UtilesHelper.setColumnWidth(sheet, "C", 4200);
-            UtilesHelper.setColumnWidth(sheet, "D", 15000);
-
-            UtilesHelper.setColumnWidth(sheet, "E", 500);
-            UtilesHelper.setColumnWidth(sheet, "F", 6000);
-            UtilesHelper.setColumnWidth(sheet, "G", 3500);
+            UtilesHelper.setColumnWidth(sheet, "F", 500);
+            UtilesHelper.setColumnWidth(sheet, "G", 6000);
+           
 
             //UtilesHelper.setColumnWidth(sheet, "H", 500);
             //UtilesHelper.setColumnWidth(sheet, "I", 6000);

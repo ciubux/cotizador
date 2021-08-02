@@ -64,6 +64,7 @@ namespace Cotizador.Controllers
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
                     case Constantes.paginas.DescargaPlantillMasivaStock: producto = (Producto)this.Session[Constantes.VAR_SESSION_STOCK_PRODUCTO_BUSQUEDA]; break;
+                    case Constantes.paginas.ReporteStock: producto = (Producto)this.Session[Constantes.VAR_SESSION_STOCK_PRODUCTO_REPORTE]; break;
                 }
                 return producto;
             }
@@ -72,6 +73,7 @@ namespace Cotizador.Controllers
                 switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
                 {
                     case Constantes.paginas.DescargaPlantillMasivaStock: this.Session[Constantes.VAR_SESSION_STOCK_PRODUCTO_BUSQUEDA] = value; break;
+                    case Constantes.paginas.ReporteStock: this.Session[Constantes.VAR_SESSION_STOCK_PRODUCTO_REPORTE] = value; break;
                 }
             }
         }
@@ -94,7 +96,7 @@ namespace Cotizador.Controllers
             this.Session["familia"] = "Todas";
             this.Session["proveedor"] = "Todos";
 
-            this.Session[Constantes.VAR_SESSION_STOCK_PRODUCTO_BUSQUEDA] = producto;
+            this.ProductoBusquedaSession = producto;
         }
 
         [HttpGet]
@@ -170,6 +172,12 @@ namespace Cotizador.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
+            if (this.Session[Constantes.VAR_SESSION_STOCK_PRODUCTO_REPORTE] == null)
+            {
+                instanciarProductoBusqueda();
+            }
+
+            ViewBag.producto = this.ProductoBusquedaSession;
 
             return View();
         }
@@ -179,7 +187,7 @@ namespace Cotizador.Controllers
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            //Guid idSede = Guid.Parse(this.Request.Params["idCiudad"].ToString());
+            Guid idSede = Guid.Parse(this.Request.Params["idCiudad"].ToString());
             int tipoUnidad = int.Parse(this.Request.Params["tipoUnidad"].ToString());
             String[] fiv = this.Request.Params["fechaStock"].Split('/');
             DateTime fechaStock = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
@@ -190,10 +198,14 @@ namespace Cotizador.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
+            Producto obj = (Producto)this.Session[Constantes.VAR_SESSION_STOCK_PRODUCTO_REPORTE];
+
+            obj.familia = this.Session["familia"].ToString();
+            obj.proveedor = this.Session["proveedor"].ToString();
 
             ReporteStock excel = new ReporteStock();
             ProductoBL bl = new ProductoBL();
-            List<RegistroCargaStock> lista = bl.InventarioStock(fechaStock, usuario.idUsuario);
+            List<RegistroCargaStock> lista = bl.InventarioStock(fechaStock, usuario.idUsuario, idSede, obj);
 
 
             return excel.generateExcel(lista, usuario, tipoUnidad);
