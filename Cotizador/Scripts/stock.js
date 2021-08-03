@@ -2,6 +2,7 @@
 jQuery(function ($) {
     var pagina = 28
 
+    var ID_SEDE_TODOS = "00000000-0000-0000-0000-000000000000";
 
     $.datepicker.regional['es'] = {
         closeText: 'Cerrar',
@@ -28,6 +29,13 @@ jQuery(function ($) {
     
 
     $(document).ready(function () {
+
+        if ($("#pagina").val() == 722) {
+            if ($('#idCiudad option').length > 3) {
+                $('#idCiudad').append('<option value = "' + ID_SEDE_TODOS + '" >TODOS</option>');
+            }
+        }
+
         FooTable.init('#tableCargasStock');
     });
 

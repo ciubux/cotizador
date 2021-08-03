@@ -184,7 +184,7 @@ namespace Cotizador.ExcelExport
             int col = 0;
             decimal total = 0;
 
-            string[] colLetters = new string[12] { "H", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T" };
+            string[] colLetters = new string[13] { "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T" };
             foreach (RegistroCargaStock obj in list)
             {
                 if (idSedeInicial.Equals(obj.ciudad.idCiudad))
@@ -194,7 +194,7 @@ namespace Cotizador.ExcelExport
                         if (i==3)
                         {
                             UtilesHelper.setColumnWidth(sheet, colLetters[col + 1], 3500);
-                            UtilesHelper.setValorCelda(sheet, 1, colLetters[col + 1], "TOTAL", titleDataCellStyle);
+                            UtilesHelper.setValorCelda(sheet, 2, colLetters[col + 1], "TOTAL", titleDataCellStyle);
                         }
 
                         UtilesHelper.setValorCelda(sheet, i, colLetters[col + 1], String.Format(Constantes.formatoDosDecimales, total), bStyle ? tableDataCenterCellStyleNegativeB : tableDataCenterCellStyleNegative);
@@ -254,7 +254,7 @@ namespace Cotizador.ExcelExport
                 if (i == 3)
                 {
                     UtilesHelper.setColumnWidth(sheet, colLetters[col], 3500);
-                    UtilesHelper.setValorCelda(sheet, 1, colLetters[col], obj.ciudad.nombre, titleDataCellStyle);
+                    UtilesHelper.setValorCelda(sheet, 2, colLetters[col], obj.ciudad.nombre, titleDataCellStyle);
                 }
 
                 decimal stock = 0;
@@ -319,7 +319,7 @@ namespace Cotizador.ExcelExport
                 * ub.provincia,  ub.departamento, ma.observaciones,*/
 
             /*Cabecera, Sub total*/
-            int cTotal = 14 + 2;
+            int cTotal = 14 + 10;
 
             /*Se crean todas las celdas*/
             for (int r = 0; r < rows; r++)

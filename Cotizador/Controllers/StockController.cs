@@ -131,7 +131,7 @@ namespace Cotizador.Controllers
             }
 
 
-
+            ViewBag.pagina = (int)this.Session[Constantes.VAR_SESSION_PAGINA];
             ViewBag.producto = this.ProductoBusquedaSession;
             return View();
         }
@@ -177,6 +177,7 @@ namespace Cotizador.Controllers
                 instanciarProductoBusqueda();
             }
 
+            ViewBag.pagina = (int) this.Session[Constantes.VAR_SESSION_PAGINA];
             ViewBag.producto = this.ProductoBusquedaSession;
 
             return View();
@@ -188,6 +189,8 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             Guid idSede = Guid.Parse(this.Request.Params["idCiudad"].ToString());
+            if (idSede == null) idSede = Guid.Empty;
+
             int tipoUnidad = int.Parse(this.Request.Params["tipoUnidad"].ToString());
             String[] fiv = this.Request.Params["fechaStock"].Split('/');
             DateTime fechaStock = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
