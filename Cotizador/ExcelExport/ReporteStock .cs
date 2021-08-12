@@ -193,11 +193,21 @@ namespace Cotizador.ExcelExport
                     {
                         if (i==3)
                         {
+                            UtilesHelper.combinarCeldas(sheet, 1, 1, "H", colLetters[col + 1]);
                             UtilesHelper.setColumnWidth(sheet, colLetters[col + 1], 3500);
                             UtilesHelper.setValorCelda(sheet, 2, colLetters[col + 1], "TOTAL", titleDataCellStyle);
                         }
 
-                        UtilesHelper.setValorCelda(sheet, i, colLetters[col + 1], String.Format(Constantes.formatoDosDecimales, total), bStyle ? tableDataCenterCellStyleNegativeB : tableDataCenterCellStyleNegative);
+                        if (total < 0)
+                        {
+                            UtilesHelper.setValorCelda(sheet, i, colLetters[col + 1], String.Format(Constantes.formatoDosDecimales, total), bStyle ? tableDataCenterCellStyleNegativeB : tableDataCenterCellStyleNegative);
+                        }
+                        else
+                        {
+                            UtilesHelper.setValorCelda(sheet, i, colLetters[col + 1], String.Format(Constantes.formatoDosDecimales, total), bStyle ? tableDataCenterCellStyleB : tableDataCenterCellStyle);
+                        }
+
+                        if (bStyle) { bStyle = false; } else { bStyle = true; }
                     }
 
                     i++;
@@ -242,9 +252,6 @@ namespace Cotizador.ExcelExport
 
                         UtilesHelper.setValorCelda(sheet, i, "G", unidad, tableDataCellStyle);
                     }
-
-
-                    if (bStyle) { bStyle = false; } else { bStyle = true; }
                 } else
                 {
                     col++;
@@ -294,6 +301,27 @@ namespace Cotizador.ExcelExport
                 }
             }
 
+            if (i >= 3 && col > 0)
+            {
+                if (i == 3)
+                {
+                    UtilesHelper.combinarCeldas(sheet, 1, 1, "H", colLetters[col + 1]);
+                    UtilesHelper.setColumnWidth(sheet, colLetters[col + 1], 3500);
+                    UtilesHelper.setValorCelda(sheet, 2, colLetters[col + 1], "TOTAL", titleDataCellStyle);
+                }
+
+                if (total < 0)
+                {
+                    UtilesHelper.setValorCelda(sheet, i, colLetters[col + 1], String.Format(Constantes.formatoDosDecimales, total), bStyle ? tableDataCenterCellStyleNegativeB : tableDataCenterCellStyleNegative);
+                }
+                else
+                {
+                    UtilesHelper.setValorCelda(sheet, i, colLetters[col + 1], String.Format(Constantes.formatoDosDecimales, total), bStyle ? tableDataCenterCellStyleB : tableDataCenterCellStyle);
+                }
+
+                if (bStyle) { bStyle = false; } else { bStyle = true; }
+            }
+
             MemoryStream ms = new MemoryStream();
             using (MemoryStream tempStream = new MemoryStream())
             {
@@ -339,7 +367,7 @@ namespace Cotizador.ExcelExport
             UtilesHelper.combinarCeldas(sheet, i, i + 1, "D", "D");
             UtilesHelper.combinarCeldas(sheet, i, i + 1, "E", "E");
 
-            UtilesHelper.combinarCeldas(sheet, i, i, "G", "H");
+            
             //UtilesHelper.combinarCeldas(sheet, i, i, "I", "J");
             //UtilesHelper.combinarCeldas(sheet, i, i, "L", "M");
 
@@ -350,8 +378,10 @@ namespace Cotizador.ExcelExport
             UtilesHelper.setValorCelda(sheet, i, "E", "Descripcion", titleDataCellStyle);
 
             UtilesHelper.setValorCelda(sheet, i, "G", unidad, titleDataCellStyle);
-            UtilesHelper.setValorCelda(sheet, i + 1, "G", "Unidad", titleDataCellStyle);
-            
+            UtilesHelper.combinarCeldas(sheet, i, i + 1, "G", "G");
+            //UtilesHelper.setValorCelda(sheet, i + 1, "G", "Unidad", titleDataCellStyle);
+
+            UtilesHelper.setValorCelda(sheet, i, "H", "STOCK EN SEDE", titleDataCellStyle);
 
 
             //UtilesHelper.setValorCelda(sheet, i, "I", "UNIDAD MP", titleDataCellStyle);

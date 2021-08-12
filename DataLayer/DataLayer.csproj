@@ -65,6 +65,7 @@
     <Compile Include="MovimientoAlmacenDAL.cs" />
     <Compile Include="CompraDAL.cs" />
     <Compile Include="LogCampoDAL.cs" />
+    <Compile Include="TipoCambioSunatDAL.cs" />
     <Compile Include="TipoVistaDashboardDAL.cs" />
     <Compile Include="VendedorDAL.cs" />
     <Compile Include="VentaDAL.cs" />

@@ -8,9 +8,15 @@ namespace Model
 {
     public class TipoCambio : Auditoria
     {
-        public Guid idTipoCambio { get; set; }
+        public int idTipoCambio { get; set; }
 
-        public Decimal monto { get; set; }
-    
+        public DateTime fecha { get; set; }
+        public Decimal valorSunatCompra { get; set; }
+        public Decimal valorSunatVenta { get; set; }
+
+        public Decimal valor { get; set; }
+
+        public string codigoMoneda { get; set; }
+
     }
 }

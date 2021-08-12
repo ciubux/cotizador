@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -126,6 +127,14 @@ namespace Cotizador.Controllers
             LogCambioBL logCambioBL = new LogCambioBL();
 
             logCambioBL.aplicarLogCambios();
+        }
+
+        public async Task<String> TipoCambioSunat()
+        {
+            TipoCambioSunatBL tipoCambioBL = new TipoCambioSunatBL();
+            TipoCambioSunat tc = await tipoCambioBL.ObtenerTipoCambioSunat();
+
+            return "";
         }
     }
 }

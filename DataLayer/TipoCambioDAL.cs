@@ -26,8 +26,8 @@ namespace DataLayer
             {
                 tipoCambio = new TipoCambio
                 {
-                    idTipoCambio = Converter.GetGuid(row, "id_tipo_cambio"),
-                    monto = Converter.GetDecimal(row, "monto")
+                    idTipoCambio = Converter.GetInt(row, "id_tipo_cambio"),
+                    valor = Converter.GetDecimal(row, "valor")
                 };
             }
             return tipoCambio;

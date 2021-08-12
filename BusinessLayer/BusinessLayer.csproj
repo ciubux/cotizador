@@ -49,6 +49,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
@@ -78,6 +79,7 @@
     <Compile Include="DocumentoCompraBL.cs" />
     <Compile Include="MovimientoAlmacenBL.cs" />
     <Compile Include="LogCampoBL.cs" />
+    <Compile Include="TipoCambioSunatBL.cs" />
     <Compile Include="TipoVistaDashboardBL.cs" />
     <Compile Include="UtilesHelper.cs" />
     <Compile Include="CompraBL.cs" />

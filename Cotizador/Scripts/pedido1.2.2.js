@@ -1160,6 +1160,7 @@ jQuery(function ($) {
             return false;
         }
 
+        $("#btnStockUnidadAddProduct").attr('disabled', 'disabled');
 
         //Se limpia el mensaje de resultado de agregar producto
         $("#resultadoAgregarProducto").html("");
@@ -1250,6 +1251,13 @@ jQuery(function ($) {
                     //Se agrega el precio alternativo
                     options = options + "<option value='1'>" + producto.unidad_alternativa + "</option>";
                 }*/
+
+                $("#btnStockUnidadAddProduct").removeAttr("disabled");
+
+                var idCiudad = $("#idCiudad").val();
+                $("#btnStockUnidadAddProduct").attr("sku", producto.sku);
+                $("#btnStockUnidadAddProduct").attr("idCiudad", idCiudad);
+                $("#btnStockUnidadAddProduct").attr("idProductoPresentacion", "0");
 
                 //Limpieza de campos
                 $("#costoLista").val(Number(producto.costoLista));
@@ -1354,6 +1362,8 @@ jQuery(function ($) {
 
         var precioLista = 0;
         var costoLista = 0;
+
+        $("#btnStockUnidadAddProduct").attr("idProductoPresentacion", codigoPrecioAlternativo);
 
         if (codigoPrecioAlternativo == 0) {
             precioLista = Number($("#precioUnitarioSinIGV").val());
@@ -1681,7 +1691,7 @@ jQuery(function ($) {
         var flete = Number($("#fleteDetalle").val());
         var observacion = $("#observacionProducto").val();
         var costo = $("#costoLista").val();
-        
+        var idCiudad = $("#idCiudad").val();
 
         $.ajax({
             url: "/Pedido/AddProducto",
@@ -1794,7 +1804,13 @@ jQuery(function ($) {
                     '<td class="' + detalle.idProducto + ' detcantidad" style="text-align:right">' + cantidad + '</td>' +
                     '<td class="' + detalle.idProducto + ' detsubtotal" style="text-align:right">' + subtotal + '</td>' +
                     '<td class="' + detalle.idProducto + ' detobservacion" style="text-align:left">' + observacion + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + detalle.idProducto+' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>' +
+                    '<td class="' + detalle.idProducto + ' detbtnMostrarPrecios"> ' +
+                    '<button  type="button" class="' + detalle.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button>' +
+                    '<br/><button type="button" title="Consultar Stock" class="verModalStockProducto btn" sku="' + detalle.codigoProducto + '" idProductoPresentacion="' +
+                    detalle.idProductoPresentacion + '" idCiudad="' + idCiudad + '" style="margin-top: 7px;">' +
+                    '<img src="/images/icon_stock.png" height="25" />' +
+                    '</button>' +
+                    + '</td>' +
 
 
                  //   esRecotizacion +

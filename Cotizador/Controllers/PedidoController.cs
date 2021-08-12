@@ -1057,6 +1057,7 @@ namespace Cotizador.Controllers
                 String resultado = "{" +
                     "\"id\":\"" + producto.idProducto + "\"," +
                     "\"nombre\":\"" + producto.descripcion + "\"," +
+                    "\"sku\":\"" + producto.sku + "\"," +
                     "\"image\":\"data:image/png;base64, " + Convert.ToBase64String(producto.image) + "\"," +
                     "\"unidad\":\"" + producto.unidad + "\"," +
                     "\"unidad_alternativa\":\"" + producto.unidad_alternativa + "\"," +
@@ -1219,6 +1220,7 @@ namespace Cotizador.Controllers
                     motivoRestriccion = detalle.producto.motivoRestriccion,
                     observacion = detalle.observacion,
                     total = pedido.montoTotal.ToString(),
+                    idProductoPresentacion = detalle.esPrecioAlternativo ? detalle.ProductoPresentacion.IdProductoPresentacion : 0,
                     precioUnitarioRegistrado = precioUnitarioRegistrado
 
                 };

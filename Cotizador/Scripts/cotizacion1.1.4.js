@@ -713,7 +713,7 @@ jQuery(function ($) {
     });
 
     $('#btnOpenAgregarProducto').click(function () {
-
+        $("#btnStockUnidadAddProduct").attr('disabled', 'disabled');
         indicarFamiliaTodas();
         indicarProveedorTodos();
         if (!validarSeleccionClienteOGrupo()) {
@@ -785,13 +785,12 @@ jQuery(function ($) {
             },
             success: function (producto) {
                 $("#imgProducto").attr("src", "data:image/png;base64," + producto.image);
-
                 /*Temporalmente se permitirá trabajar en ambos modos hasta que se compruebe que no se presentan errores*/
                 var options = "<option value='0' selected>" + producto.unidad + "</option>";
                 if (TRABAJAR_CON_UNIDADES) {
                     for (var i = 0; i < producto.productoPresentacionList.length; i++) {
                         var reg = producto.productoPresentacionList[i];
-                        options = options + "<option value='" + reg.IdProductoPresentacion + "'  precioUnitarioAlternativoSinIGV='" + reg.PrecioSinIGV + "' costoAlternativoSinIGV='" + reg.CostoSinIGV+"' >" + reg.Presentacion + "</option>";
+                        options = options + "<option value='" + reg.IdProductoPresentacion + "'  precioUnitarioAlternativoSinIGV='" + reg.PrecioSinIGV + "' costoAlternativoSinIGV='" + reg.CostoSinIGV + "' >" + reg.Presentacion + "</option>";
                     }
                 }
                 else {
@@ -802,6 +801,7 @@ jQuery(function ($) {
                             options = options + "<option value='1'>" + producto.unidad_alternativa + "</option>";
                         }
                 }
+                $("#btnStockUnidadAddProduct").removeAttr("disabled");
 
                 //Limpieza de campos
                 $("#costoLista").val(Number(producto.costoLista));
@@ -811,7 +811,12 @@ jQuery(function ($) {
                 $("#unidad").html(options);
                 $("#proveedor").val(producto.proveedor);
                 $("#familia").val(producto.familia);
-                
+
+                var idCiudad = $("#idCiudad").val();
+                $("#btnStockUnidadAddProduct").attr("sku", producto.sku);
+                $("#btnStockUnidadAddProduct").attr("idCiudad", idCiudad);
+                $("#btnStockUnidadAddProduct").attr("idProductoPresentacion", "0");
+
                 $('#fleteDetalle').val(producto.fleteDetalle);
                 $("#porcentajeDescuento").val(Number(producto.porcentajeDescuento).toFixed(4));
                 $("#cantidad").val(1);
@@ -897,6 +902,8 @@ jQuery(function ($) {
 
         var precioLista = 0;
         var costoLista = 0;
+
+        $("#btnStockUnidadAddProduct").attr("idProductoPresentacion", codigoPrecioAlternativo);
 
         if (codigoPrecioAlternativo == 0) {
             precioLista = Number($("#precioUnitarioSinIGV").val());

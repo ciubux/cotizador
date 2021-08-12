@@ -959,6 +959,7 @@ namespace Cotizador.Controllers
                 "\"id\":\"" + producto.idProducto + "\"," +
                 "\"nombre\":\"" + producto.descripcion + "\"," +
                 "\"image\":\"" + Convert.ToBase64String(producto.image) + "\"," +
+                "\"sku\":\"" + producto.sku + "\"," +
                 "\"unidad\":\"" + producto.unidad + "\"," +
                 "\"unidad_alternativa\":\"" + producto.unidad_alternativa + "\"," +
                 "\"proveedor\":\"" + producto.proveedor + "\"," +
