@@ -1174,3 +1174,12 @@ $darkred: darken($red, 0.2);*/
 .guia-stock-warning {
     background-color: #f9ff57;
 }
+
+.box-moneda-detalles {
+    margin-top: -5px;
+    margin-bottom: -10px;
+}
+
+.box-moneda-detalles > span {
+    font-size: 18px;
+}

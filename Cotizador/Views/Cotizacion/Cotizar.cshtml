@@ -71,6 +71,20 @@
                 </div>
             </div>
 
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => cotizacion.moneda, htmlAttributes: new { @class = "control-label col-xs-4", @for = "codigoMoneda" })
+                    <div class="col-xs-8">
+                        @Html.Action("SelectMonedas", "Moneda",
+                                    new
+                                    {
+                                        SelectId = "codigoMoneda",
+                                        selectedValue = cotizacion.moneda != null ? cotizacion.moneda.codigo : null
+                                    })
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="row">
@@ -712,20 +726,20 @@
         {
             <div class="row form-group">
                 <div class="pull-right">
-                    <span class="totales">Subtotal: S/ </span>
+                    <span class="totales">Subtotal: <span class="mostrarSimboloMoneda">@(cotizacion.moneda != null ? cotizacion.moneda.simbolo : "")</span> </span>
                     <span class="totales" id="montoSubTotal">@cotizacion.montoSubTotal</span>
                 </div>
             </div>
             <div class="row form-group">
                 <div class="pull-right">
-                    <span class="totales">IGV 18%: S/ </span>
+                    <span class="totales">IGV 18%: <span class="mostrarSimboloMoneda">@(cotizacion.moneda != null ? cotizacion.moneda.simbolo : "")</span> </span>
                     <span class="totales" id="montoIGV">@cotizacion.montoIGV</span>
                 </div>
             </div>
             <div class="row form-group">
                 <div class="pull-right">
                     <input type="hidden" id="total" value="@cotizacion.montoTotal" />
-                    <span class="totales">TOTAL: S/ </span>
+                    <span class="totales">TOTAL: <span class="mostrarSimboloMoneda">@(cotizacion.moneda != null ? cotizacion.moneda.simbolo : "")</span> </span>
                     <span class="totales" id="montoTotal">@cotizacion.montoTotal</span>
                 </div>
             </div>

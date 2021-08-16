@@ -65,6 +65,8 @@ namespace Model
         public String usuarioCreacion { get; set; }
       //  public Usuario usuario_aprobador { get; set; }
         public Decimal igv { get; set; }
+
+        [Display(Name = "Moneda:")]
         public Moneda moneda { get; set; }
 
         [Display(Name = "Sede MP:")]

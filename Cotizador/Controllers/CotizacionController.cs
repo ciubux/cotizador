@@ -203,6 +203,7 @@ namespace Cotizador.Controllers
             cotizacionTmp.igv = Constantes.IGV;
             cotizacionTmp.flete = 0;
             cotizacionTmp.ajusteCalculoPrecios = false;
+            
 
             ParametroBL parametroBL = new ParametroBL();
             string ajusteDefecto = parametroBL.getParametro("COTIZACION_AJUSTAR_PRECIO_UNIDADES_MENORES");
@@ -818,6 +819,33 @@ namespace Cotizador.Controllers
             
         }
 
+        public String ChangeMoneda()
+        {
+            Cotizacion cotizacion = this.CotizacionSession;
+            string moneda = this.Request.Params["codigoMoneda"];
+            int success = 0;
+            string message = "";
+
+            if (cotizacion.cotizacionDetalleList != null && cotizacion.cotizacionDetalleList.Count > 0)
+            {
+                message = "No se puede cambiar de moneda";
+            }
+            else
+            {
+                success = 1;
+                cotizacion.moneda = Moneda.ListaMonedas.Where(m => m.codigo.Equals(moneda)).FirstOrDefault();
+                this.CotizacionSession = cotizacion;
+            }
+
+            var v = new
+            {
+                success = success,
+                message = message,
+                simbolo = cotizacion.moneda != null ? cotizacion.moneda.simbolo : ""
+            };
+
+            return JsonConvert.SerializeObject(v);
+        }
 
 
         public void changeTipoCotizacion()

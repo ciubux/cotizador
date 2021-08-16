@@ -15,8 +15,8 @@ namespace Model
         public String nombre { get; set; }
 
         public static List<Moneda> ListaMonedas = new List<Moneda> {
-            new Moneda { codigo = "PEN", simbolo = "S/", nombre = "Soles" },
-            new Moneda { codigo = "USD", simbolo = "$", nombre = "Dólares" }
+            new Moneda { codigo = "PEN", simbolo = "S/", nombre = "SOL" },
+            new Moneda { codigo = "USD", simbolo = "US$", nombre = "DÓLAR" }
         };
             
     }

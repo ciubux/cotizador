@@ -1472,6 +1472,22 @@ jQuery(function ($) {
                 $("#btnCancelarObtenerProductos").click();
                 return false;
             }
+
+            var codigoMoneda = $("#codigoMoneda").val();
+            if (codigoMoneda == "" || $("#codigoMoneda").val() == null) {
+                $.alert({
+                    title: "Seleccionar Moneda",
+                    type: 'orange',
+                    content: 'Debe seleccionar la moneda a utilizar en la cotización.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+                $("#codigoMoneda").focus();
+                $("#btnCancelarObtenerProductos").click();
+                return false;
+            }
+
             var idCliente = $("#idCliente").val();
             if (idCliente.trim() == "") {
                 $.alert({
@@ -1504,6 +1520,20 @@ jQuery(function ($) {
                 return false;
             }
 
+            var codigoMoneda = $("#codigoMoneda").val();
+            if (codigoMoneda == "" || $("#codigoMoneda").val() == null) {
+                $.alert({
+                    title: "Seleccionar Moneda",
+                    type: 'orange',
+                    content: 'Debe seleccionar la moneda a utilizar en la cotización.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+                $("#codigoMoneda").focus();
+                $("#btnCancelarObtenerProductos").click();
+                return false;
+            }
         }
         return true;
     }
@@ -2137,6 +2167,10 @@ jQuery(function ($) {
                 $('body').loadingModal('hide');
                 var cotizacion = resultado.cotizacion;
                 var usuario = resultado.usuario;
+                var simboloMoneda = cotizacion.monedaSimbolo;
+
+                $(".mostrarSimboloMoneda").html(cotizacion.monedaSimbolo);
+                $(".mostrarDescripcionMoneda").html(cotizacion.monedaNombre + " (" + cotizacion.monedaSimbolo + ")");
 
                 $("#verCondicionesPago").html(cotizacion.textoCondicionesPago);
                 $("#verIdCotizacion").val(cotizacion.idCotizacion);
@@ -4051,6 +4085,46 @@ jQuery(function ($) {
             }
         });
     });  
+
+    $("#codigoMoneda").change(function () {
+        var moneda = $("#codigoMoneda").val();
+
+        $.ajax({
+            url: "/Cotizacion/ChangeMoneda",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                codigoMoneda: moneda
+            },
+            error: function (detalle) {
+                $.alert({
+                    title: "ERROR",
+                    type: 'red',
+                    content: 'Ocurrió un error al intentar cambiar la moneda, por favor inténtelo de nuevo.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+                location.reload();
+            },
+            success: function (res) {
+                if (res.success == 1) {
+                    $(".mostrarSimboloMoneda").html(res.simbolo);
+                } else {
+                    $.alert({
+                        title: "ERROR",
+                        type: 'red',
+                        content: res.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                }
+                
+            }
+        });
+    });
+
 
     $("#buscarSedesGrupoCliente").change(function () {
         var valor = $("input[name=buscarSedesGrupoCliente]:checked").val();

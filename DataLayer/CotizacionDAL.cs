@@ -31,6 +31,9 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaInicioVigenciaPrecios", cotizacion.fechaInicioVigenciaPrecios);
             InputParameterAdd.DateTime(objCommand, "fechaFinVigenciaPrecios", cotizacion.fechaFinVigenciaPrecios);
             InputParameterAdd.SmallInt(objCommand, "incluidoIgv", short.Parse((cotizacion.incluidoIGV?1:0).ToString()));
+            InputParameterAdd.Varchar(objCommand, "codigoMoneda", cotizacion.moneda.codigo);
+
+            
             InputParameterAdd.Int(objCommand, "consideraCantidades", (int)cotizacion.considerarCantidades);
             InputParameterAdd.Guid(objCommand, "idCotizacionAntecedente", cotizacion.idCotizacionAntecedente);
 
@@ -302,6 +305,13 @@ namespace DataLayer
                 cotizacion.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
                 cotizacion.ciudad.esProvincia = Converter.GetBool(row, "es_provincia");
                 cotizacion.grupo.ciudad = cotizacion.ciudad;
+
+                //MONEDA
+                cotizacion.moneda = new Moneda();
+                cotizacion.moneda.codigo = Converter.GetString(row, "codigo_moneda");
+                cotizacion.moneda.nombre = Converter.GetString(row, "nombre_moneda");
+                cotizacion.moneda.simbolo = Converter.GetString(row, "simbolo_moneda");
+
                 //USUARIO
                 cotizacion.usuario = new Usuario();
                 cotizacion.usuario.idUsuario = Converter.GetGuid(row, "id_usuario");
