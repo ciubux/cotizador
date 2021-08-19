@@ -44,7 +44,7 @@ namespace Cotizador.ExcelExport
         private HSSFCellStyle tableDataLastCenterCellStyle;
         private IDataFormat format;
 
-        public FileStreamResult generateExcel(List<RegistroCargaStock> list, Usuario usuario, int tipoUnidad)
+        public FileStreamResult generateExcel(List<RegistroCargaStock> list, Usuario usuario, int tipoUnidad, DateTime fechaReporte)
         {
             
             HSSFWorkbook wb;
@@ -143,6 +143,7 @@ namespace Cotizador.ExcelExport
             tableDataCenterCellStyleB = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataCenterCellStyle);
             tableDataCenterCellStyleB.FillPattern = FillPattern.SolidForeground;
             tableDataCenterCellStyleB.FillForegroundColor = HSSFColor.Grey25Percent.Index;
+            
 
             tableDataCenterCellStyleNegativeB = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataCenterCellStyleB);
             tableDataCenterCellStyleNegativeB.SetFont(negativeStockFont);
@@ -269,16 +270,20 @@ namespace Cotizador.ExcelExport
                 switch (tipoUnidad)
                 {
                     case 1:
-                        stock = ((decimal)obj.cantidadConteo) / ((decimal)(obj.producto.equivalenciaUnidadEstandarUnidadConteo));
+                        //stock = ((decimal)obj.cantidadConteo) / ((decimal)(obj.producto.equivalenciaUnidadEstandarUnidadConteo));
+                        stock = ((decimal)obj.cantidadConTrasladosConteo) / ((decimal)(obj.producto.equivalenciaUnidadEstandarUnidadConteo));
                         break;
                     case 2:
-                        stock = (((decimal)obj.cantidadConteo) / ((decimal)obj.producto.equivalenciaUnidadEstandarUnidadConteo)) * ((decimal)obj.producto.equivalenciaAlternativa);
+                        //stock = (((decimal)obj.cantidadConteo) / ((decimal)obj.producto.equivalenciaUnidadEstandarUnidadConteo)) * ((decimal)obj.producto.equivalenciaAlternativa);
+                        stock = (((decimal)obj.cantidadConTrasladosConteo) / ((decimal)obj.producto.equivalenciaUnidadEstandarUnidadConteo)) * ((decimal)obj.producto.equivalenciaAlternativa);
                         break;
                     case 3:
-                        stock = ((decimal)obj.cantidadConteo) / ((decimal)(obj.producto.equivalenciaProveedor * obj.producto.equivalenciaUnidadEstandarUnidadConteo));
+                        //stock = ((decimal)obj.cantidadConteo) / ((decimal)(obj.producto.equivalenciaProveedor * obj.producto.equivalenciaUnidadEstandarUnidadConteo));
+                        stock = ((decimal)obj.cantidadConTrasladosConteo) / ((decimal)(obj.producto.equivalenciaProveedor * obj.producto.equivalenciaUnidadEstandarUnidadConteo));
                         break;
                     case 99:
-                        stock = (decimal)obj.cantidadConteo;
+                        //stock = (decimal)obj.cantidadConteo;
+                        stock = (decimal)obj.cantidadConTrasladosConteo;
                         break;
                 }
 
@@ -292,12 +297,13 @@ namespace Cotizador.ExcelExport
                 {
                     if (stock < 0)
                     {
-                        UtilesHelper.setValorCelda(sheet, i, colLetters[col], String.Format(Constantes.formatoDosDecimales, stock), bStyle ? tableDataCenterCellStyleNegativeB : tableDataCenterCellStyleNegative);
+                        UtilesHelper.setValorCelda(sheet, i, colLetters[col], double.Parse(String.Format(Constantes.formatoDosDecimales, stock)), bStyle ? tableDataCenterCellStyleNegativeB : tableDataCenterCellStyleNegative);
                     }
                     else
                     {
-                        UtilesHelper.setValorCelda(sheet, i, colLetters[col], String.Format(Constantes.formatoDosDecimales, stock), bStyle ? tableDataCenterCellStyleB : tableDataCenterCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, colLetters[col], double.Parse(String.Format(Constantes.formatoDosDecimales, stock)), bStyle ? tableDataCenterCellStyleB : tableDataCenterCellStyle);
                     }
+                    UtilesHelper.defineCellType(sheet, i, colLetters[col], CellType.Numeric);
                 }
             }
 
@@ -332,7 +338,7 @@ namespace Cotizador.ExcelExport
                 ms.Position = 0;
                 FileStreamResult result = new FileStreamResult(ms, "application/vnd.ms-excel");
 
-                result.FileDownloadName = "ReporteStock_" + DateTime.Now.ToString("yyyyMMddHHmmss") + " .xls";
+                result.FileDownloadName = "ReporteStockAl" + fechaReporte.ToString("yyyyMMdd") + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + " .xls";
 
                 return result;
             }

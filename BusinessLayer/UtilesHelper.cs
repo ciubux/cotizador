@@ -58,8 +58,14 @@ namespace BusinessLayer
         public static void setValorCelda(ISheet sheet, int fila, string columna, double valor, ICellStyle cellStyle = null)
         {
             sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).SetCellValue(valor);
+            
             if (cellStyle != null)
             { sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).CellStyle = cellStyle; }
+        }
+
+        public static void defineCellType(ISheet sheet, int fila, string columna, CellType cellType)
+        {
+            sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).SetCellType(cellType);
         }
 
         public static void setValorCelda(ISheet sheet, int fila, int columna, double valor)

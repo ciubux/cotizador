@@ -42,5 +42,11 @@ namespace Model.UTILES
         public decimal cantidadSeparadaMpCalc { get; set; }
         public decimal cantidadSeparadaAlternativaCalc { get; set; }
 
+        public int cantidadTrasladosSumarConteo { get; set; }
+        public decimal cantidadTrasladosSumarProveedorCalc { get; set; }
+        public decimal cantidadTrasladosSumarMpCalc { get; set; }
+        public decimal cantidadTrasladosSumarAlternativaCalc { get; set; }
+
+        public int cantidadConTrasladosConteo { get { return cantidadConteo + cantidadTrasladosSumarConteo; } }
     }
 }

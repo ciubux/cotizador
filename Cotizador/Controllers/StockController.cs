@@ -211,7 +211,7 @@ namespace Cotizador.Controllers
             List<RegistroCargaStock> lista = bl.InventarioStock(fechaStock, usuario.idUsuario, idSede, obj);
 
 
-            return excel.generateExcel(lista, usuario, tipoUnidad);
+            return excel.generateExcel(lista, usuario, tipoUnidad, fechaStock);
         }
 
         public String ReporteStockProducto(Guid idCiudad, String sku)

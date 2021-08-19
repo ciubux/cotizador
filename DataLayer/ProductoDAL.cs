@@ -1576,6 +1576,8 @@ namespace DataLayer
                 item.cantidadAlternativa = Converter.GetInt(row, "cantidad_unidad_alternativa");
                 item.cantidadConteo = Converter.GetInt(row, "cantidad_unidad_conteo") + Converter.GetInt(row, "movimientos_unidad_conteo");
 
+                item.cantidadTrasladosSumarConteo = Converter.GetInt(row, "movimientos_traslado_sumar");
+
                 item.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 item.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
 

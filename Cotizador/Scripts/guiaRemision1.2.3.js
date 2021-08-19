@@ -59,19 +59,20 @@ jQuery(function ($) {
                     stock = 0;
                     stockLibre = 0;
                     noDisponible = 0;
+
                     if (lista[i].stockNoDisponible) {
                         $("." + lista[i].producto.idProducto + ".detStock").html("No Disponible");
                         noDisponible = 1;
                     } else {
-                        if (idProductoPresentacion = "0") {
+                        if (idProductoPresentacion == "0") {
                             stock = lista[i].cantidadMpCalc;
                             stockLibre = lista[i].cantidadMpCalc - lista[i].cantidadSeparadaMpCalc;
                         }
-                        if (idProductoPresentacion = "1") {
+                        if (idProductoPresentacion == "1") {
                             stock = lista[i].cantidadAlternativaCalc;
                             stockLibre = lista[i].cantidadAlternativaCalc - lista[i].cantidadSeparadaAlternativaCalc;
                         }
-                        if (idProductoPresentacion = "2") {
+                        if (idProductoPresentacion == "2") {
                             stock = lista[i].cantidadProveedorCalc;
                             stockLibre = lista[i].cantidadProveedorCalc - lista[i].cantidadSeparadaProveedorCalc;
                         }
@@ -113,7 +114,7 @@ jQuery(function ($) {
             if (stock < atender) {
                 $("#tableDetalleGuia tr[idProducto='" + idProducto + "'] td.detStock").addClass("guia-stock-danger");
             } else {
-                if (stockLibre < atender) {
+                if ((stockLibre + atender) < atender) {
                     $("#tableDetalleGuia tr[idProducto='" + idProducto + "'] td.detStock").addClass("guia-stock-warning")
                 } else {
                     $("#tableDetalleGuia tr[idProducto='" + idProducto + "'] td.detStock").addClass("guia-stock-success")
