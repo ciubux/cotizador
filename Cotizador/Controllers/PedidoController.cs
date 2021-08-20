@@ -15,6 +15,7 @@ using System.Web.Mvc;
 using Cotizador.Models.DTOsSearch;
 using NLog;
 using Cotizador.Models.DTOsShow;
+using Model.UTILES;
 
 namespace Cotizador.Controllers
 {
@@ -2105,6 +2106,28 @@ namespace Cotizador.Controllers
             return json;
         }
 
+        [HttpPost]
+        public String GetStockProductos()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || pedido == null)
+            {
+                return "";
+            }
+            
+            List<Guid> idProductos = new List<Guid>();
+
+            foreach (DocumentoDetalle det in pedido.documentoDetalle)
+            {
+                idProductos.Add(det.producto.idProducto);
+            }
+
+            ProductoBL bl = new ProductoBL();
+            List<RegistroCargaStock> stocks = bl.StockProductosSede(idProductos, pedido.ciudad.idCiudad, usuario.idUsuario);
+
+            return JsonConvert.SerializeObject(stocks);
+        }
 
 
         public void autoGuardarPedido()

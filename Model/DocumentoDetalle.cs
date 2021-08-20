@@ -260,7 +260,7 @@ namespace Model
 
        public ProductoPresentacion ProductoPresentacion { get; set; }
 
-        public int idProductoPresentación
+        public int idProductoPresentacion
         {
             get
             {

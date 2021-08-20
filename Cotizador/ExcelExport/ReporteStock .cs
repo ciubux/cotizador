@@ -291,7 +291,7 @@ namespace Cotizador.ExcelExport
 
                 if (obj.stockNoDisponible)
                 {
-                    UtilesHelper.setValorCelda(sheet, i, colLetters[col], "No Disponible", bStyle ? tableDataCenterCellStyleB : tableDataCenterCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, colLetters[col], "No Registrado", bStyle ? tableDataCenterCellStyleB : tableDataCenterCellStyle);
                 }
                 else
                 {

@@ -3119,7 +3119,7 @@ jQuery(function ($) {
                         tienePendienteAtencion = true;
                     }
 
-                    d += '<tr>' +
+                    d += '<tr sku="' + lista[i].producto.sku + '" idProductoPresentacion="' + lista[i].idProductoPresentacion + '">' +
                         '<td>' + imgIndicadorAprobacion + '</td>' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
                         '<td>' + lista[i].producto.sku + descontinuadoLabel + '</td>' +
@@ -3134,12 +3134,12 @@ jQuery(function ($) {
                         '<td>' + lista[i].precioUnitario.toFixed(cantidadCuatroDecimales) + '</td>' +
                         //       '<td>' + lista[i].precioUnitarioVenta.toFixed(cantidadCuatroDecimales) + '</td>' +
                         '<td>' + lista[i].cantidad + restringidoLabel + '</td>' +
-                        '<td>' + lista[i].cantidadPendienteAtencion + '</td>' +
+                        '<td class="cantidadPendienteAtencion">' + lista[i].cantidadPendienteAtencion + '</td>' +
                         '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + observacion + '</td>' +
                         '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button>' + 
                         '<br/><button type="button" title="Consultar Stock" class="verModalStockProducto btn" sku="' + lista[i].producto.sku + '" idProductoPresentacion="' +
-                        lista[i].idProductoPresentación + '" idCiudad="' + pedido.ciudad_idCiudad + '" style="margin-top: 7px;">' +
+                        lista[i].idProductoPresentacion + '" idCiudad="' + pedido.ciudad_idCiudad + '" style="margin-top: 7px;">' +
                         '<img src="/images/icon_stock.png" height="25" />' +
                         '</button>' +
                         '</td>' +
@@ -3482,13 +3482,72 @@ jQuery(function ($) {
                 }
                 $("#modalVerPedido").modal('show');
 
+                cargarStockProductos();
                 //  window.location = '/Pedido/Index';
             }
         });
     }
 
 
+    function cargarStockProductos() {
+        $.ajax({
+            url: "/Pedido/GetStockProductos",
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (lista) {
+                var stock = 0;
+                var stockLibre = 0;
+                var noDisponible = 0;
+                var idProductoPresentacion = 1;
+                for (var i = 0; i < lista.length; i++) {
+                    idProductoPresentacion = $("#tableDetallePedido tr[sku='" + lista[i].producto.sku + "']").attr("idProductoPresentacion");
+                    stock = 0;
+                    stockLibre = 0;
+                    noDisponible = 0;
 
+                    var atender = Number($("#tableDetallePedido tr[sku='" + lista[i].producto.sku + "'] .cantidadPendienteAtencion").html());
+
+                    htmlCantidadPendienteAtencion = $("#tableDetallePedido tr[sku='" + lista[i].producto.sku + "'] .cantidadPendienteAtencion").html() + "<br/>";
+
+                    if (lista[i].stockNoDisponible) {
+                        htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-no-registrado">STOCK NO REGISTRADO</label>';
+                        noDisponible = 1;
+                    } else {
+                        if (idProductoPresentacion == "0") {
+                            stock = lista[i].cantidadMpCalc;
+                            stockLibre = lista[i].cantidadMpCalc - lista[i].cantidadSeparadaMpCalc;
+                        }
+                        if (idProductoPresentacion == "1") {
+                            stock = lista[i].cantidadAlternativaCalc;
+                            stockLibre = lista[i].cantidadAlternativaCalc - lista[i].cantidadSeparadaAlternativaCalc;
+                        }
+                        if (idProductoPresentacion == "2") {
+                            stock = lista[i].cantidadProveedorCalc;
+                            stockLibre = lista[i].cantidadProveedorCalc - lista[i].cantidadSeparadaProveedorCalc;
+                        }
+
+
+                        if (stock < atender) {
+                            htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-danger">';
+                        } else {
+                            if (stockLibre < atender) {
+                                htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-warning">';
+                            } else {
+                                htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-success">';
+                            }
+                        }
+
+                        htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + 'STOCK: ' + stock + '</label>';
+                    }
+
+                   
+                    $("#tableDetallePedido tr[sku='" + lista[i].producto.sku + "'] .cantidadPendienteAtencion").html(htmlCantidadPendienteAtencion);
+                }
+
+
+            }
+        });
+    }
 
    
     $("#btnCancelarPedido").click(function () {

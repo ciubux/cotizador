@@ -1183,3 +1183,68 @@ $darkred: darken($red, 0.2);*/
 .box-moneda-detalles > span {
     font-size: 18px;
 }
+
+
+.lbl-stock-success {
+    background-color: #26ff68;
+    border-radius: 3px;
+    color: #111111;
+    font-size: 10px;
+    text-align: center;
+    padding: 2px 3px 1px 3px;
+    font-weight: bold;
+}
+
+.lbl-stock-danger {
+    background-color: #ff5757;
+    border-radius: 3px;
+    color: #fefefe;
+    font-size: 10px;
+    text-align: center;
+    padding: 2px 3px 1px 3px;
+    font-weight: bold;
+}
+
+.lbl-stock-warning {
+    background-color: #fcba03;
+    border-radius: 3px;
+    color: #111111;
+    font-size: 10px;
+    text-align: center;
+    padding: 2px 3px 1px 3px;
+    font-weight: bold;
+}
+
+.lbl-stock-no-registrado {
+    background-color: #dddddd;
+    border-radius: 3px;
+    color: #111111;
+    font-size: 10px;
+    text-align: center;
+    padding: 2px 3px 1px 3px;
+    font-weight: bold;
+}
+
+.leyenda-box-color {
+    height: 22px;
+    width: 32px;
+}
+
+.leyenda-box-title {
+    font-weight: bold;
+}
+
+.leyenda-box-inline div {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.leyenda-box-inline > div {
+    margin-right: 15px;
+}
+
+
+.leyenda-box-inline {
+    margin-top: 0px;
+    margin-bottom: 20px;
+}

@@ -61,7 +61,7 @@ jQuery(function ($) {
                     noDisponible = 0;
 
                     if (lista[i].stockNoDisponible) {
-                        $("." + lista[i].producto.idProducto + ".detStock").html("No Disponible");
+                        $("." + lista[i].producto.idProducto + ".detStock").html("No Registrado");
                         noDisponible = 1;
                     } else {
                         if (idProductoPresentacion == "0") {
@@ -98,6 +98,8 @@ jQuery(function ($) {
         if (noDisponible == 1) {
             return;
         } else {
+            var cantidadPedido = Number($("." + idProducto + ".detcantidadSaldo").html());
+
             var stock = $("#tableDetalleGuia tr[idProducto='" + idProducto + "']").attr("stock");
             stock = parseFloat(stock);
             var stockLibre = $("#tableDetalleGuia tr[idProducto='" + idProducto + "']").attr("stockLibre");
@@ -114,7 +116,7 @@ jQuery(function ($) {
             if (stock < atender) {
                 $("#tableDetalleGuia tr[idProducto='" + idProducto + "'] td.detStock").addClass("guia-stock-danger");
             } else {
-                if ((stockLibre + atender) < atender) {
+                if ((stockLibre + cantidadPedido) < atender) {
                     $("#tableDetalleGuia tr[idProducto='" + idProducto + "'] td.detStock").addClass("guia-stock-warning")
                 } else {
                     $("#tableDetalleGuia tr[idProducto='" + idProducto + "'] td.detStock").addClass("guia-stock-success")
