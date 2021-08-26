@@ -16,6 +16,7 @@ using System.Reflection;
 using Cotizador.Models.DTOsSearch;
 using Cotizador.Models.DTOsShow;
 using NLog;
+using Model.UTILES;
 
 namespace Cotizador.Controllers
 {
@@ -203,7 +204,7 @@ namespace Cotizador.Controllers
             cotizacionTmp.igv = Constantes.IGV;
             cotizacionTmp.flete = 0;
             cotizacionTmp.ajusteCalculoPrecios = false;
-            
+            cotizacionTmp.moneda = Moneda.ListaMonedas.Where(m => m.codigo.Equals("PEN")).FirstOrDefault();
 
             ParametroBL parametroBL = new ParametroBL();
             string ajusteDefecto = parametroBL.getParametro("COTIZACION_AJUSTAR_PRECIO_UNIDADES_MENORES");
@@ -1526,6 +1527,28 @@ namespace Cotizador.Controllers
             return json;
         }
 
+        [HttpPost]
+        public String GetStockProductos()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Cotizacion cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_VER];
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || cotizacion == null)
+            {
+                return "";
+            }
+
+            List<Guid> idProductos = new List<Guid>();
+
+            foreach (DocumentoDetalle det in cotizacion.documentoDetalle)
+            {
+                idProductos.Add(det.producto.idProducto);
+            }
+
+            ProductoBL bl = new ProductoBL();
+            List<RegistroCargaStock> stocks = bl.StockProductosSede(idProductos, cotizacion.ciudad.idCiudad, usuario.idUsuario);
+
+            return JsonConvert.SerializeObject(stocks);
+        }
 
         public void updateEstadoCotizacion()
         {

@@ -1248,3 +1248,25 @@ $darkred: darken($red, 0.2);*/
     margin-top: 0px;
     margin-bottom: 20px;
 }
+
+
+.circle-price-status-success {
+    background-color: #26ff68;
+    border-radius: 14px;
+    height: 28px;
+    width: 28px;
+}
+
+.circle-price-status-warning {
+    background-color: #fcba03;
+    border-radius: 14px;
+    height: 28px;
+    width: 28px;
+}
+
+.circle-price-status-danger {
+    background-color: #ff5757;
+    border-radius: 14px;
+    height: 28px;
+    width: 28px;
+}

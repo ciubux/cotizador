@@ -413,6 +413,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaAdicional", pedido.numeroReferenciaAdicional);
             InputParameterAdd.DateTime(objCommand, "fechaEntregaExtendida", !pedido.fechaEntregaExtendida.HasValue ? null: pedido.fechaEntregaExtendida);
             InputParameterAdd.Varchar(objCommand, "observaciones", pedido.observaciones);
+            InputParameterAdd.Varchar(objCommand, "observacionesAlmacen", pedido.observacionesAlmacen);
             InputParameterAdd.Varchar(objCommand, "observacionesGuiaRemision", pedido.observacionesGuiaRemision);
             InputParameterAdd.Varchar(objCommand, "observacionesFactura", pedido.observacionesFactura);
             InputParameterAdd.BigInt(objCommand, "numeroGrupoPedido", pedido.numeroGrupoPedido);
@@ -801,6 +802,7 @@ namespace DataLayer
                 pedido.solicitante.correo = pedido.correoContactoPedido;
 
                 pedido.fechaProgramacion = Converter.GetDateTime(row, "fecha_programacion");
+                pedido.observacionesAlmacen = Converter.GetString(row, "observaciones_almacen");
                 pedido.observacionesFactura = Converter.GetString(row, "observaciones_factura");
                 pedido.observacionesGuiaRemision = Converter.GetString(row, "observaciones_guia_remision");
 

@@ -1473,20 +1473,20 @@ jQuery(function ($) {
                 return false;
             }
 
-            var codigoMoneda = $("#codigoMoneda").val();
-            if (codigoMoneda == "" || $("#codigoMoneda").val() == null) {
-                $.alert({
-                    title: "Seleccionar Moneda",
-                    type: 'orange',
-                    content: 'Debe seleccionar la moneda a utilizar en la cotización.',
-                    buttons: {
-                        OK: function () { }
-                    }
-                });
-                $("#codigoMoneda").focus();
-                $("#btnCancelarObtenerProductos").click();
-                return false;
-            }
+            //var codigoMoneda = $("#codigoMoneda").val();
+            //if (codigoMoneda == "" || $("#codigoMoneda").val() == null) {
+            //    $.alert({
+            //        title: "Seleccionar Moneda",
+            //        type: 'orange',
+            //        content: 'Debe seleccionar la moneda a utilizar en la cotización.',
+            //        buttons: {
+            //            OK: function () { }
+            //        }
+            //    });
+            //    $("#codigoMoneda").focus();
+            //    $("#btnCancelarObtenerProductos").click();
+            //    return false;
+            //}
 
             var idCliente = $("#idCliente").val();
             if (idCliente.trim() == "") {
@@ -1520,20 +1520,20 @@ jQuery(function ($) {
                 return false;
             }
 
-            var codigoMoneda = $("#codigoMoneda").val();
-            if (codigoMoneda == "" || $("#codigoMoneda").val() == null) {
-                $.alert({
-                    title: "Seleccionar Moneda",
-                    type: 'orange',
-                    content: 'Debe seleccionar la moneda a utilizar en la cotización.',
-                    buttons: {
-                        OK: function () { }
-                    }
-                });
-                $("#codigoMoneda").focus();
-                $("#btnCancelarObtenerProductos").click();
-                return false;
-            }
+            //var codigoMoneda = $("#codigoMoneda").val();
+            //if (codigoMoneda == "" || $("#codigoMoneda").val() == null) {
+            //    $.alert({
+            //        title: "Seleccionar Moneda",
+            //        type: 'orange',
+            //        content: 'Debe seleccionar la moneda a utilizar en la cotización.',
+            //        buttons: {
+            //            OK: function () { }
+            //        }
+            //    });
+            //    $("#codigoMoneda").focus();
+            //    $("#btnCancelarObtenerProductos").click();
+            //    return false;
+            //}
         }
         return true;
     }
@@ -2238,13 +2238,7 @@ jQuery(function ($) {
                 $("#verModificadoPor").html(cotizacion.seguimientoCotizacion_usuario_nombre);
                 $("#verObservacionEstado").html(cotizacion.seguimientoCotizacion_observacion);
 
-                if (cotizacion.considerarCantidades != CANT_SOLO_OBSERVACIONES) {
-                    $("#montosTotalesDiv").show();
-                }
-                else {
-                    $("#montosTotalesDiv").hide();
-                }
-
+                
                 $("#verObservaciones").html(cotizacion.observaciones);
                 if (cotizacion.aplicaSedes === true) {
                     $("#verSedesAplica").html("Esta cotización aplicará también para las sedes: " + cotizacion.cliente_sedeListWebString.replace(new RegExp('<br>', 'g'), ', '));
@@ -2305,7 +2299,7 @@ jQuery(function ($) {
                         inactivoClass = 'producto-inactivo-row';
                     }
 
-                    d += '<tr class="' + inactivoClass + '">' +
+                    d += '<tr class="' + inactivoClass + '" sku = "' + lista[i].producto.sku + '" idProductoPresentacion="' + lista[i].idProductoPresentacion + '" >' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
                         '<td>' + lista[i].producto.sku + descontinuadoLabel + '</td>' +
                         '<td>' + lista[i].producto.descripcion + '</td>' +
@@ -2318,7 +2312,7 @@ jQuery(function ($) {
                         '<td>' + lista[i].margen.toFixed(cantidadDecimales) + ' %</td>' +
                         '<td>' + lista[i].flete.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
                         '<td>' + lista[i].precioUnitario.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
-                        '<td>' + lista[i].cantidad + '</td>' +
+                        '<td  class="cantidadSolicitada">' + lista[i].cantidad + '</td>' +
                         '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
 
                         '<td>' + observacion + '</td>' +
@@ -2328,7 +2322,7 @@ jQuery(function ($) {
                         '<td class="tdprecioUnitarioAnterior">' + lista[i].variacionCosto + ' %</td>' +
                         '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button>' +
                         '<br/><button type="button" title="Consultar Stock" class="verModalStockProducto btn" sku="' + lista[i].producto.sku + '" idProductoPresentacion="' +
-                        lista[i].idProductoPresentación + '" idCiudad="' + cotizacion.ciudad_idCiudad + '" style="margin-top: 7px;">' +
+                        lista[i].idProductoPresentacion + '" idCiudad="' + cotizacion.ciudad_idCiudad + '" style="margin-top: 7px;">' +
                         '<img src="/images/icon_stock.png" height="25" />' +
                         '</button>' +
                         '</td>' +
@@ -2339,6 +2333,7 @@ jQuery(function ($) {
                 // sleep
                 $("#tableDetalleCotizacion").append(d);
 
+                
 
                 /*EDITAR COTIZACIÓN*/
                 if (
@@ -2390,7 +2385,7 @@ jQuery(function ($) {
                 }
 
 
-
+                
 
                 /*APROBAR DENEGAR COTIZACIÓN*/
 
@@ -2498,6 +2493,14 @@ jQuery(function ($) {
 
                 FooTable.init('#tableDetalleCotizacion');
 
+                if (cotizacion.considerarCantidades != CANT_SOLO_OBSERVACIONES) {
+                    $("#montosTotalesDiv").show();
+                    setTimeout(function () { cargarStockProductos();}, 500);
+
+                }
+                else {
+                    $("#montosTotalesDiv").hide();
+                }
 
                 if (
                     cotizacion.seguimientoCotizacion_estado == ESTADO_ACEPTADA
@@ -2532,6 +2535,68 @@ jQuery(function ($) {
             }
         });
     });
+
+
+    function cargarStockProductos() {
+        $.ajax({
+            url: "/Cotizacion/GetStockProductos",
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (lista) {
+                var stock = 0;
+                var stockLibre = 0;
+                var noDisponible = 0;
+                var idProductoPresentacion = 1;
+                for (var i = 0; i < lista.length; i++) {
+                    idProductoPresentacion = $("#tableDetalleCotizacion tr[sku='" + lista[i].producto.sku + "']").attr("idProductoPresentacion");
+                    stock = 0;
+                    stockLibre = 0;
+                    noDisponible = 0;
+
+                    var atender = Number($("#tableDetalleCotizacion tr[sku='" + lista[i].producto.sku + "'] .cantidadSolicitada").html());
+
+                    htmlCantidadPendienteAtencion = $("#tableDetalleCotizacion tr[sku='" + lista[i].producto.sku + "'] .cantidadSolicitada").html() + "<br/>";
+
+                    if (lista[i].stockNoDisponible) {
+                        htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-no-registrado">STOCK NO REGISTRADO</label>';
+                        noDisponible = 1;
+                    } else {
+                        if (idProductoPresentacion == "0") {
+                            stock = lista[i].cantidadMpCalc;
+                            stockLibre = lista[i].cantidadMpCalc - lista[i].cantidadSeparadaMpCalc;
+                        }
+                        if (idProductoPresentacion == "1") {
+                            stock = lista[i].cantidadAlternativaCalc;
+                            stockLibre = lista[i].cantidadAlternativaCalc - lista[i].cantidadSeparadaAlternativaCalc;
+                        }
+                        if (idProductoPresentacion == "2") {
+                            stock = lista[i].cantidadProveedorCalc;
+                            stockLibre = lista[i].cantidadProveedorCalc - lista[i].cantidadSeparadaProveedorCalc;
+                        }
+
+
+                        if (stock < atender) {
+                            htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-danger">';
+                        } else {
+                            if (stockLibre < atender) {
+                                htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-warning">';
+                            } else {
+                                htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-success">';
+                            }
+                        }
+
+                        htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + 'STOCK: ' + stock + '</label>';
+                    }
+
+
+                    $("#tableDetalleCotizacion tr[sku='" + lista[i].producto.sku + "'] .cantidadSolicitada").html(htmlCantidadPendienteAtencion);
+                }
+
+
+            }
+        });
+    }
+
 
     function ocultarPrecioUnitarioAnterior() {
         //$(".tdprecioUnitarioAnterior").attr("data-visible", "false");
@@ -4086,44 +4151,44 @@ jQuery(function ($) {
         });
     });  
 
-    $("#codigoMoneda").change(function () {
-        var moneda = $("#codigoMoneda").val();
+    //$("#codigoMoneda").change(function () {
+    //    var moneda = $("#codigoMoneda").val();
 
-        $.ajax({
-            url: "/Cotizacion/ChangeMoneda",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                codigoMoneda: moneda
-            },
-            error: function (detalle) {
-                $.alert({
-                    title: "ERROR",
-                    type: 'red',
-                    content: 'Ocurrió un error al intentar cambiar la moneda, por favor inténtelo de nuevo.',
-                    buttons: {
-                        OK: function () { }
-                    }
-                });
-                location.reload();
-            },
-            success: function (res) {
-                if (res.success == 1) {
-                    $(".mostrarSimboloMoneda").html(res.simbolo);
-                } else {
-                    $.alert({
-                        title: "ERROR",
-                        type: 'red',
-                        content: res.message,
-                        buttons: {
-                            OK: function () { }
-                        }
-                    });
-                }
+    //    $.ajax({
+    //        url: "/Cotizacion/ChangeMoneda",
+    //        type: 'POST',
+    //        dataType: 'JSON',
+    //        data: {
+    //            codigoMoneda: moneda
+    //        },
+    //        error: function (detalle) {
+    //            $.alert({
+    //                title: "ERROR",
+    //                type: 'red',
+    //                content: 'Ocurrió un error al intentar cambiar la moneda, por favor inténtelo de nuevo.',
+    //                buttons: {
+    //                    OK: function () { }
+    //                }
+    //            });
+    //            location.reload();
+    //        },
+    //        success: function (res) {
+    //            if (res.success == 1) {
+    //                $(".mostrarSimboloMoneda").html(res.simbolo);
+    //            } else {
+    //                $.alert({
+    //                    title: "ERROR",
+    //                    type: 'red',
+    //                    content: res.message,
+    //                    buttons: {
+    //                        OK: function () { }
+    //                    }
+    //                });
+    //            }
                 
-            }
-        });
-    });
+    //        }
+    //    });
+    //});
 
 
     $("#buscarSedesGrupoCliente").change(function () {

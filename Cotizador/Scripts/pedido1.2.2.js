@@ -3007,6 +3007,7 @@ jQuery(function ($) {
 
                 $("#verObservaciones").html(pedido.observaciones);
                 $("#verObservacionesFactura").html(pedido.observacionesFactura);
+                $("#verObservacionesAlmacen").html(pedido.observacionesAlmacen);
                 $("#verObservacionesGuiaRemision").html(pedido.observacionesGuiaRemision);
                 $("#verMontoSubTotal").html(Number(pedido.montoSubTotal).toFixed(cantidadDecimales));
                 $("#verMontoIGV").html(Number(pedido.montoIGV).toFixed(cantidadDecimales));
@@ -3051,11 +3052,11 @@ jQuery(function ($) {
                 var tienePendienteAtencion = false;
                 for (var i = 0; i < lista.length; i++) {
 
-                    var imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Aprobado"> <img class="table-product-img"  src="/images/semaforo_verde_small.png"  srcset="semaforo_verde_min.png 2x"/></a>';
+                    var imgIndicadorAprobacion = '<div class="circle-price-status-success"></div>';
                     if (lista[i].indicadorAprobacion == 2)
-                        imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Pendiente Aprobación"> <img class="table-product-img" src="/images/semaforo_naranja_small.png" srcset="semaforo_naranja_min.png 2x"/></a>';
+                        imgIndicadorAprobacion = '<div class="circle-price-status-warning"></div>';
                     else if (lista[i].indicadorAprobacion == 3)
-                        imgIndicadorAprobacion = '<a data-toggle="tooltip" title="Pendiente Aprobación"><img class="table-product-img " src="/images/semaforo_rojo_small.png" srcset="semaforo_rojo_min.png 2x"/></a>';
+                        imgIndicadorAprobacion = '<div class="circle-price-status-danger"></div>';
 
 
                     var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
@@ -3482,7 +3483,8 @@ jQuery(function ($) {
                 }
                 $("#modalVerPedido").modal('show');
 
-                cargarStockProductos();
+                setTimeout(function () { cargarStockProductos(); }, 500);
+
                 //  window.location = '/Pedido/Index';
             }
         });
@@ -3530,7 +3532,7 @@ jQuery(function ($) {
                         if (stock < atender) {
                             htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-danger">';
                         } else {
-                            if (stockLibre < atender) {
+                            if (stockLibre < 0) {
                                 htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-warning">';
                             } else {
                                 htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-success">';
@@ -3678,6 +3680,12 @@ jQuery(function ($) {
         var fechaEntregaExtendida = $("#pedido_fechaEntregaExtendida").val();
 
         var observaciones = $("#pedido_observaciones").val();
+
+        var observacionesAlmacen = "";
+        if ($("#pedido_observacionesAlmacen").length) {
+            observacionesAlmacen = $("#pedido_observacionesAlmacen").val();
+        }
+
         var observacionesGuiaRemision = $("#pedido_observacionesGuiaRemision").val();
         var observacionesFactura = $("#pedido_observacionesFactura").val();
 
@@ -3697,6 +3705,7 @@ jQuery(function ($) {
                 numeroReferenciaAdicional: numeroReferenciaAdicional,
                 fechaEntregaExtendida: fechaEntregaExtendida,
                 observaciones: observaciones,
+                observacionesAlmacen: observacionesAlmacen,
                 observacionesGuiaRemision: observacionesGuiaRemision,
                 observacionesFactura: observacionesFactura,
                 pedidoNumeroGrupo: pedidoNumeroGrupo
@@ -3743,6 +3752,9 @@ jQuery(function ($) {
         $("#pedido_fechaEntregaExtendida").val($("#verFechaEntregaExtendida").val());
 
         $("#pedido_observacionesFactura").val($("#verObservacionesFactura").html());
+        $("#pedido_observacionesAlmacen").val($("#verObservacionesAlmacen").html());
+
+        
         $("#pedido_observacionesGuiaRemision").val($("#verObservacionesGuiaRemision").html());
         $("#pedido_observaciones").val($("#verObservaciones").html());
         

@@ -130,10 +130,29 @@ jQuery(function ($) {
     });
 
     $("#btnReporteStockExcel").click(function () {
+
         var fechaStock = $("#fechaStock").val();
         var tipoUnidad = $("#tipoUnidad").val();
+        var ajusteMercaderiaTransito = 0;
+        if ($("#chkAjusteMercaderiaTransito").prop('checked')) {
+            ajusteMercaderiaTransito = 1;
+        }
+
         var idCiudad = $("#idCiudad").val();
-        window.location.href = $(this).attr("actionLink") + '?tipoUnidad=' + tipoUnidad + '&fechaStock=' + fechaStock + '&idCiudad=' + idCiudad;
+
+        if (idCiudad == null || idCiudad == "") {
+            $.alert({
+                title: "FALTA INGRESAR DATOS",
+                type: 'orange',
+                content: 'Seleccione una Sede',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+        } else {
+            window.location.href = $(this).attr("actionLink") + '?tipoUnidad=' + tipoUnidad + '&fechaStock=' + fechaStock + '&idCiudad=' + idCiudad + '&ajusteMercaderiaTransito=' + ajusteMercaderiaTransito;
+        }
+        
     });
 
     $("#btnCargarStock").click(function () {

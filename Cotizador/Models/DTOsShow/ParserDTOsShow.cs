@@ -386,6 +386,7 @@ namespace Cotizador.Models.DTOsShow
             pedidoDTOshow.seguimientoCrediticioPedido_usuario_nombre = pedido.seguimientoCrediticioPedido.usuario.nombre;
             pedidoDTOshow.seguimientoCrediticioPedido_observacion = pedido.seguimientoCrediticioPedido.observacion;
             pedidoDTOshow.observaciones = pedido.observaciones;
+            pedidoDTOshow.observacionesAlmacen = pedido.observacionesAlmacen;
             pedidoDTOshow.observacionesFactura = pedido.observacionesFactura;
             pedidoDTOshow.observacionesGuiaRemision = pedido.observacionesGuiaRemision;
             pedidoDTOshow.montoSubTotal = pedido.montoSubTotal;

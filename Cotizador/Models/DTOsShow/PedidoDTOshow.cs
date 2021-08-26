@@ -46,6 +46,7 @@ namespace Cotizador.Models.DTOshow
         public String seguimientoCrediticioPedido_usuario_nombre { get; set; }
         public String seguimientoCrediticioPedido_observacion { get; set; }
         public String observaciones { get; set; }
+        public String observacionesAlmacen { get; set; }
         public String observacionesFactura { get; set; }
         public String observacionesGuiaRemision { get; set; }
         public Decimal montoSubTotal { get; set; }

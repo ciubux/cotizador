@@ -122,6 +122,7 @@ namespace Model
         public bool tomaPedidos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.TOMA_PEDIDOS_LIMA)).FirstOrDefault() != null; } }
         public bool modificaPedidoFechaEntregaExtendida { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_PEDIDO_FECHA_ENTREGA_EXTENDIDA)).FirstOrDefault() != null; } }
         public bool realizaCargaMasivaPedidos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REALIZA_CARGA_MASIVA_PEDIDOS)).FirstOrDefault() != null; } }
+        public bool pedidoRegistraObservacionAlmacen { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.PEDIDO_REGISTRA_OBSERVACION_ALMACEN)).FirstOrDefault() != null; } }
         public bool apruebaPedidos { get { return apruebaPedidosLima || apruebaPedidosProvincias; } }
         public bool apruebaPedidosCompra { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_PEDIDOS_COMPRA)).FirstOrDefault() != null; } }
         public bool apruebaPedidosAlmacen { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_PEDIDOS_ALMACEN)).FirstOrDefault() != null; } }

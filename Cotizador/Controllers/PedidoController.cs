@@ -1633,6 +1633,12 @@ namespace Cotizador.Controllers
             pedido.numeroReferenciaAdicional = this.Request.Params["numeroReferenciaAdicional"];
             pedido.numeroReferenciaCliente = this.Request.Params["numeroReferenciaCliente"];
             pedido.observaciones = this.Request.Params["observaciones"];
+
+            if (pedido.usuario.pedidoRegistraObservacionAlmacen)
+            {
+                pedido.observacionesAlmacen = this.Request.Params["observacionesAlmacen"];
+            }
+
             pedido.observacionesGuiaRemision = this.Request.Params["observacionesGuiaRemision"];
             pedido.observacionesFactura = this.Request.Params["observacionesFactura"];
             pedido.numeroGrupoPedido = Int32.Parse(this.Request.Params["pedidoNumeroGrupo"]);

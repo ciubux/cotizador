@@ -137,6 +137,9 @@ namespace Model
         [Display(Name = "Observaciones Guía Remisión:")]
         public String observacionesGuiaRemision { get; set; }
 
+        [Display(Name = "Observaciones Almacén:")]
+        public String observacionesAlmacen { get; set; }
+
         [Display(Name = "Observaciones Factura:")]
         public String observacionesFactura { get; set; }
 

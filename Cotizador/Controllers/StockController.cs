@@ -189,6 +189,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             Guid idSede = Guid.Parse(this.Request.Params["idCiudad"].ToString());
+            int ajusteMercaderiaTransito = int.Parse(this.Request.Params["ajusteMercaderiaTransito"].ToString());
             if (idSede == null) idSede = Guid.Empty;
 
             int tipoUnidad = int.Parse(this.Request.Params["tipoUnidad"].ToString());
@@ -208,7 +209,7 @@ namespace Cotizador.Controllers
 
             ReporteStock excel = new ReporteStock();
             ProductoBL bl = new ProductoBL();
-            List<RegistroCargaStock> lista = bl.InventarioStock(fechaStock, usuario.idUsuario, idSede, obj);
+            List<RegistroCargaStock> lista = bl.InventarioStock(ajusteMercaderiaTransito, fechaStock, usuario.idUsuario, idSede, obj);
 
 
             return excel.generateExcel(lista, usuario, tipoUnidad, fechaStock);
@@ -305,7 +306,7 @@ namespace Cotizador.Controllers
 
             List<RegistroCargaStock> listaStock = new List<RegistroCargaStock>();
 
-            for (row = 2; row <= cantidad; row++)
+            for (row = 1; row <= cantidad; row++)
             {
                 if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
                 {

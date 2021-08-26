@@ -729,7 +729,7 @@
 
 
                     for (var i = 0; i < pedido.pedidoAdjuntoList.length; i++) {
-                        var liHTML = '<a href="javascript:mostrar();" class="descargar">' + pedido.pedidoAdjuntoList[i].nombre + '</a>';
+                        var liHTML = '<a href="javascript:mostrar();" class="descargar btnDescargarArchivoAdjunto" idArchivoAdjunto="' + pedido.pedidoAdjuntoList[i].idArchivoAdjunto + '">' + pedido.pedidoAdjuntoList[i].nombre + '</a>';
                         //$('<li />').html(liHTML).appendTo($('#nombreArchivos'));
                         $('#verNombreArchivos').append($('<li />').html(liHTML));
                     }

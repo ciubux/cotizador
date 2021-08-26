@@ -1534,11 +1534,12 @@ namespace DataLayer
             return true;
         }
 
-        public List<RegistroCargaStock> InventarioStock(DateTime fechaReferencia, Guid idUsuario, Guid idCiudad, Producto producto)
+        public List<RegistroCargaStock> InventarioStock(int ajusteMercaderiaTransito, DateTime fechaReferencia, Guid idUsuario, Guid idCiudad, Producto producto)
         {
             var objCommand = GetSqlCommand("ps_stock_global");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
+            InputParameterAdd.Int(objCommand, "ajusteMercaderiaTransito", ajusteMercaderiaTransito);
             InputParameterAdd.DateTime(objCommand, "fechaReferencia", fechaReferencia);
             InputParameterAdd.VarcharEmpty(objCommand, "sku", producto.sku);
             InputParameterAdd.VarcharEmpty(objCommand, "descripcion", producto.descripcion);

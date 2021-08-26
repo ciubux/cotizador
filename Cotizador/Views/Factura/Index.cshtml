@@ -643,7 +643,7 @@
                     }
                 </div>
 
-                <div class="pull-right">    
+                <div class="pull-right">
                     <button type="button" id="btnCancelarConfirmarFacturarPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
 
                     <button type="button" class="btn btn-primary verModalPedidoReadOnly">Ver Pedido</button>
@@ -1130,4 +1130,5 @@
 
 @section Scripts {
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/factura")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/archivoAdjunto")
 }

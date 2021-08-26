@@ -18,8 +18,16 @@
                     <input class="form-control" type="text" id="fechaStock" name="fechaStock" value="@DateTime.Now.ToString("dd/MM/yyyy")">
                 </div>
             </div>
+            <div class="form-group row right">
+                <div class="col-xs-12">
+                    <div class="onoffswitch" title="Considera en el stock los productos cuyo ingreso fue registrado posterior a la fecha del reporte que ya eran propiedad de MP.">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="chkAjusteMercaderiaTransito">
+                        <label class="onoffswitch-label" for="chkAjusteMercaderiaTransito"></label>
+                    </div>
+                    <h5 id="lblchkAjusteMercaderiaTransito" for="chkAjusteMercaderiaTransito" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;" title="Considera en el stock productos cuyo ingreso fue registrado posterior a la fecha del reporte que ya eran propiedad de MP.">Agregar productos en tránsito.</h5>
+                </div>
+            </div>
         </div>
-
         <div class="col-sm-6 col-lg-4">
             <div class="form-group row">
                 <!--Items-->

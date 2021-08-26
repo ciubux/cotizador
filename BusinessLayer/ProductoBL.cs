@@ -490,11 +490,11 @@ namespace BusinessLayer
             }
         }
 
-        public List<RegistroCargaStock> InventarioStock(DateTime fechaReferencia, Guid idUsuario, Guid idCiudad, Producto producto)
+        public List<RegistroCargaStock> InventarioStock(int ajusteMercaderiaTransito, DateTime fechaReferencia, Guid idUsuario, Guid idCiudad, Producto producto)
         {
             using (var productoDAL = new ProductoDAL())
             {
-                return productoDAL.InventarioStock(fechaReferencia, idUsuario, idCiudad, producto);
+                return productoDAL.InventarioStock(ajusteMercaderiaTransito, fechaReferencia, idUsuario, idCiudad, producto);
             }
         }
 
