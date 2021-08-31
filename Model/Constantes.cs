@@ -289,17 +289,20 @@ namespace Model
 
         public static String USER_EOL
         {
-            get { return AMBIENTE_EOL.Equals("TEST") ? USER_EOL_TEST : USER_EOL_PROD; }
+            get { return "demo@mp.eol.pe"; }
+            //get { return AMBIENTE_EOL.Equals("TEST") ? USER_EOL_TEST : USER_EOL_PROD; }
         }
 
         public static String ENDPOINT_ADDRESS_EOL
         {
-            get { return AMBIENTE_EOL.Equals("TEST") ? ENDPOINT_ADDRESS_EOL_TEST : ENDPOINT_ADDRESS_EOL_PROD; }
+            get { return "http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc"; }
+            //get { return AMBIENTE_EOL.Equals("TEST") ? ENDPOINT_ADDRESS_EOL_TEST : ENDPOINT_ADDRESS_EOL_PROD; }
         }
 
         public static String PASSWORD_EOL
         {
-            get { return AMBIENTE_EOL.Equals("TEST") ? PASSWORD_EOL_TEST : PASSWORD_EOL_PROD; }
+            get { return "59deda36"; }
+            //get { return AMBIENTE_EOL.Equals("TEST") ? PASSWORD_EOL_TEST : PASSWORD_EOL_PROD; }
         }
 
         public static bool ES_EOL_PRODUCCION

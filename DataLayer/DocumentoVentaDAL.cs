@@ -89,13 +89,30 @@ namespace DataLayer
 
         public void InsertarDocumentoVenta(DocumentoVenta documentoVenta)
         {
-            var objCommand = GetSqlCommand("pi_documentoVenta");
+            var objCommand = GetSqlCommand("pi_documentoVenta_b");
             //var objCommand = GetSqlCommand("pi_documentoVenta_vInafecto");
-            
+
+            int diasCredito = 0;
+
+            switch(documentoVenta.tipoPago)
+            {
+                case DocumentoVenta.TipoPago.Crédito1: diasCredito = 1; break;
+                case DocumentoVenta.TipoPago.Crédito7: diasCredito = 7; break;
+                case DocumentoVenta.TipoPago.Crédito15: diasCredito = 15; break;
+                case DocumentoVenta.TipoPago.Crédito20: diasCredito = 20; break;
+                case DocumentoVenta.TipoPago.Crédito21: diasCredito = 21; break;
+                case DocumentoVenta.TipoPago.Crédito25: diasCredito = 25; break;
+                case DocumentoVenta.TipoPago.Crédito30: diasCredito = 30; break;
+                case DocumentoVenta.TipoPago.Crédito45: diasCredito = 45; break;
+                case DocumentoVenta.TipoPago.Crédito60: diasCredito = 60; break;
+                case DocumentoVenta.TipoPago.Crédito90: diasCredito = 90; break;
+                case DocumentoVenta.TipoPago.Crédito120: diasCredito = 120; break;
+            }
 
             InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
             InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", documentoVenta.venta.guiaRemision.idMovimientoAlmacen);
             InputParameterAdd.Int(objCommand, "tipoDocumento", (int)documentoVenta.tipoDocumento);
+            InputParameterAdd.Int(objCommand, "diasCredito", diasCredito);
             InputParameterAdd.DateTime(objCommand, "fechaEmision", documentoVenta.fechaEmision);
             InputParameterAdd.DateTime(objCommand, "fechaVencimiento", documentoVenta.fechaVencimiento);
             InputParameterAdd.Int(objCommand, "tipoPago", (int)documentoVenta.tipoPago);
@@ -479,7 +496,7 @@ namespace DataLayer
             DataTable cpeDetalleBETable = dataSet.Tables[1];
             DataTable cpeDatAdicBETable = dataSet.Tables[2];
             DataTable cpeDocRefBETable = dataSet.Tables[3];
-
+            DataTable cpeCabeceraFPGTable = dataSet.Tables[4];
 
             //Se obtienen todas las columnas de la tabla 
             var columnasCabecera = cpeCabeceraBETable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
@@ -494,6 +511,7 @@ namespace DataLayer
             documentoVenta.cPE_ANTICIPO_BEList = new List<CPE_ANTICIPO_BE>();
             documentoVenta.cPE_FAC_GUIA_BEList = new List<CPE_FAC_GUIA_BE>();
             documentoVenta.cPE_DOC_ASOC_BEList = new List<CPE_DOC_ASOC_BE>();
+            documentoVenta.cPE_CABECERA_FPGList = new List<CPE_CABECERA_FPG>();
 
             documentoVenta.pedido = new Pedido();
             foreach (DataRow row in cpeCabeceraBETable.Rows)
@@ -614,8 +632,27 @@ namespace DataLayer
                 documentoVenta.cPE_DOC_REF_BEList.Add(cPE_DOC_REF_BE);
 
             }
-            
 
+            foreach (DataRow row in cpeCabeceraFPGTable.Rows)
+            {
+                CPE_CABECERA_FPG cPE_CABECERA_FPG = new CPE_CABECERA_FPG();
+                foreach (String column in columnnasDocRef)
+                {
+                    if (!column.Equals("id_cpe_cabecera_fpg") && !column.Equals("id_cpe_cabecera_be"))
+                    {
+                        if (cPE_CABECERA_FPG.GetType().GetProperty(column) != null)
+                        {
+                            cPE_CABECERA_FPG.GetType().GetProperty(column).SetValue(cPE_CABECERA_FPG, Converter.GetString(row, column));
+                        }
+                    }
+                }
+                documentoVenta.cPE_CABECERA_FPGList.Add(cPE_CABECERA_FPG);
+            }
+
+            if (documentoVenta.cPE_CABECERA_FPGList.Count > 0)
+            {
+                documentoVenta.cPE_CABECERA_BE.MDP_MOD_PAG_LIST = documentoVenta.cPE_CABECERA_FPGList.ToArray();
+            }
 
             return documentoVenta;
         }

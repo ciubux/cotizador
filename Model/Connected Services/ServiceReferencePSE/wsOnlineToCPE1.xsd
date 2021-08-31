@@ -107,6 +107,17 @@
       <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE.EMISION" minOccurs="0" name="MIE_LIST_RCT" nillable="true" type="q1:ArrayOfCPE_CABECERA_MIE" />
       <xs:element minOccurs="0" name="TIP_ORI" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="MNT_TOT_ROUNDING" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MNT_TOT_ICBPER" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TIP_CARGA" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TIP_DCTO_GLOB" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MDP_MOD_PAG" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MDP_MNT_PDT_PAG" nillable="true" type="xs:string" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/TT.EOL.Level.BE.EMISION" minOccurs="0" name="MDP_MOD_PAG_LIST" nillable="true" type="q2:ArrayOfCPE_CABECERA_FPG" />
+      <xs:element minOccurs="0" name="RET_MNT_ARET" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RET_MNT_TOT_OPE" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RET_FAC" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OBS_CPE" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NRO_INT" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CPE_CABECERA_BE" nillable="true" type="tns:CPE_CABECERA_BE" />
@@ -158,6 +169,10 @@
       <xs:element minOccurs="0" name="DET_VAL_ADIC10" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="DES_COMP" nillable="true" type="tns:ArrayOfCPE_DETALLE_COMPTA_BE" />
       <xs:element minOccurs="0" name="DET_LIST_ADIC" nillable="true" type="tns:ArrayOfCPE_DETALLE_ADIC_BE" />
+      <xs:element minOccurs="0" name="CANT_ICBPER_ITM" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="COD_UND_ICBPER_ITM" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FAC_ICBPER_ITM" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MNT_ICBPER_ITM" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CPE_DETALLE_BE" nillable="true" type="tns:CPE_DETALLE_BE" />
@@ -288,6 +303,7 @@
       <xs:element minOccurs="0" name="MARCA_AUTO_TRNSP" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="NOM_COND_TRASLADO" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="LIC_COND_TRASLADO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FLG_TIP_GRE" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CPE_FAC_GUIA_BE" nillable="true" type="tns:CPE_FAC_GUIA_BE" />

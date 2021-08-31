@@ -15,4 +15,20 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CPE_CABECERA_MIE" nillable="true" type="tns:CPE_CABECERA_MIE" />
+  <xs:complexType name="ArrayOfCPE_CABECERA_FPG">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CPE_CABECERA_FPG" nillable="true" type="tns:CPE_CABECERA_FPG" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCPE_CABECERA_FPG" nillable="true" type="tns:ArrayOfCPE_CABECERA_FPG" />
+  <xs:complexType name="CPE_CABECERA_FPG">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="LIN_CUOTA" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IDE_CUOTA" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MNT_PAG_CUOTA" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FEC_PAG_CUOTA" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DAT_ADI_CUOTA" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CPE_CABECERA_FPG" nillable="true" type="tns:CPE_CABECERA_FPG" />
 </xs:schema>

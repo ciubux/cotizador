@@ -223,7 +223,7 @@ namespace Model
         public List<CPE_FAC_GUIA_BE> cPE_FAC_GUIA_BEList;
 
         public List<CPE_DOC_ASOC_BE> cPE_DOC_ASOC_BEList;
-
+        public List<CPE_CABECERA_FPG> cPE_CABECERA_FPGList;
 
         public CPE_RESPUESTA_BE cPE_RESPUESTA_BE { get; set; }
 
