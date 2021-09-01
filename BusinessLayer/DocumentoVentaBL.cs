@@ -285,8 +285,8 @@ namespace BusinessLayer
         {
             using (var dal = new DocumentoVentaDAL())
             {
-                try
-                {
+                //try
+                //{
                     documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
                     //Se recupera el clasePedido de pago registrado
                     documentoVenta.tipoPago = (DocumentoVenta.TipoPago)Int32.Parse(documentoVenta.cPE_CABECERA_BE.TIP_PAG);
@@ -390,11 +390,11 @@ namespace BusinessLayer
 
                     return documentoVenta.cPE_RESPUESTA_BE;
 
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                //}
+                //catch (Exception ex)
+                //{
+                //    throw ex;
+                //}
             }
 
         }
