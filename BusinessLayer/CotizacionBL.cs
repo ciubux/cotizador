@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using Model;
 using System.IO;
+using System.Linq;
 
 namespace BusinessLayer
 {
@@ -97,7 +98,7 @@ namespace BusinessLayer
                     cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
                 }
             }
-            
+
 
             foreach (CotizacionDetalle cotizacionDetalle in cotizacion.cotizacionDetalleList)
             {
@@ -244,9 +245,15 @@ namespace BusinessLayer
                 {
                     if (cotizacionDetalle.cantidad > 1 && cotizacionDetalle.cantidad > cotizacionDetalle.producto.cantidadMaximaPedidoRestringido)
                     {
-                        cotizacion.seguimientoCotizacion.observacion = "El producto " + cotizacionDetalle.producto.sku + " es de venta restringida.\n";
+                        cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "El producto " + cotizacionDetalle.producto.sku + " es de venta restringida.\n";
                         cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
                     }
+                }
+
+                if (!cotizacionDetalle.producto.monedaMP.Equals(cotizacion.moneda.caracter) /*&& !cotizacion.usuario.apruebaCotizaciones*/)
+                {   
+                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion +  "El producto " + cotizacionDetalle.producto.sku + " tiene su precio registrado en " + Moneda.ListaMonedas.Where(m => m.caracter.Equals(cotizacionDetalle.producto.monedaMP)).FirstOrDefault().nombre + "\n";
+                    cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
                 }
             }
            

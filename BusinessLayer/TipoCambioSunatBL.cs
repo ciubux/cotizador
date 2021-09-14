@@ -18,9 +18,12 @@ namespace BusinessLayer
             }
         }
 
-        public void GetTipoCambioHoy()
+        public TipoCambioSunat GetTipoCambioHoy()
         {
-            
+            using (var dal = new TipoCambioSunatDAL())
+            {
+                return dal.GetTipoCambioHoy();
+            }
         }
 
         public async Task<TipoCambioSunat> ObtenerTipoCambioSunat()

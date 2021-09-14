@@ -56,12 +56,56 @@ namespace BusinessLayer
         }
 
 
-        public Producto getProducto(Guid idProducto, Boolean esProvincia, Boolean incluidoIGV, Guid idCliente, Boolean esCompra = false)
+        public Producto getProducto(Guid idProducto, Boolean esProvincia, Boolean incluidoIGV, Guid idCliente, Boolean esCompra = false, String moneda = "PEN", TipoCambioSunat tc = null)
         {
             using (var dal = new ProductoDAL())
             {
                 Producto producto = dal.getProducto(idProducto, idCliente, esCompra);
                 //Si es Provincia automaticamente se considera el precioProvincia como precioSinIGV
+
+                if (tc != null)
+                {
+                    if (moneda.Equals("USD"))
+                    {
+                        if (producto.monedaMP.Equals("S"))
+                        {
+                            producto.precioSinIgv = producto.precioOriginal / tc.valorSunatVenta;
+                            producto.precioProvinciaSinIgv = producto.precioProvinciasOriginal / tc.valorSunatVenta;
+
+                            foreach (ProductoPresentacion productoPresentacion in producto.ProductoPresentacionList)
+                            {
+                                productoPresentacion.PrecioSinIGV = productoPresentacion.PrecioLimaOriginalSinIGV / tc.valorSunatVenta;
+                                productoPresentacion.PrecioProvinciasSinIGV = productoPresentacion.PrecioProvinciasOriginalSinIGV / tc.valorSunatVenta;
+                            }
+                        }
+                        else
+                        {
+                            producto.precioSinIgv = producto.precioOriginal;
+                            producto.precioProvinciaSinIgv = producto.precioProvinciasOriginal;
+
+                            foreach (ProductoPresentacion productoPresentacion in producto.ProductoPresentacionList)
+                            {
+                                productoPresentacion.PrecioSinIGV = productoPresentacion.PrecioLimaOriginalSinIGV;
+                                productoPresentacion.PrecioProvinciasSinIGV = productoPresentacion.PrecioProvinciasOriginalSinIGV;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (producto.monedaMP.Equals("D"))
+                        {
+                            producto.precioSinIgv = tc.valorSunatVenta * producto.precioOriginal;
+                            producto.precioProvinciaSinIgv = tc.valorSunatVenta * producto.precioProvinciasOriginal;
+
+                            foreach (ProductoPresentacion productoPresentacion in producto.ProductoPresentacionList)
+                            {
+                                productoPresentacion.PrecioSinIGV = productoPresentacion.PrecioLimaOriginalSinIGV * tc.valorSunatVenta;
+                                productoPresentacion.PrecioProvinciasSinIGV = productoPresentacion.PrecioProvinciasOriginalSinIGV * tc.valorSunatVenta;
+                            }
+                        }
+                    }
+                }
+
                 if (esProvincia)
                 {
                     producto.precioSinIgv = producto.precioProvinciaSinIgv;

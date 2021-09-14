@@ -14,9 +14,11 @@ namespace Model
 
         public String nombre { get; set; }
 
+        public String caracter { get; set; }
+
         public static List<Moneda> ListaMonedas = new List<Moneda> {
-            new Moneda { codigo = "PEN", simbolo = "S/", nombre = "SOL" },
-            new Moneda { codigo = "USD", simbolo = "US$", nombre = "DÓLAR" }
+            new Moneda { codigo = "PEN", simbolo = "S/", nombre = "SOL", caracter = "S"},
+            new Moneda { codigo = "USD", simbolo = "US$", nombre = "DÓLAR", caracter = "D" }
         };
             
     }

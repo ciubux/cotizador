@@ -144,11 +144,15 @@ namespace DataLayer
                 {
                     producto.precioSinIgv = producto.costoSinIgv;
                     producto.precioProvinciaSinIgv = producto.costoSinIgv;
+                    producto.precioOriginal = producto.costoOriginal;
+                    producto.precioProvinciasOriginal = producto.costoOriginal;
                 }
                 else
                 {
                     producto.precioSinIgv = Converter.GetDecimal(row, "precio");
                     producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia");
+                    producto.precioOriginal = Converter.GetDecimal(row, "precio_original"); ;
+                    producto.precioProvinciasOriginal = Converter.GetDecimal(row, "precio_provincia_original");
                 }
 
                 producto.familia = Converter.GetString(row, "familia");
@@ -161,6 +165,7 @@ namespace DataLayer
                 producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
                 producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 producto.monedaProveedor = Converter.GetString(row, "moneda_compra");
+                producto.monedaMP = Converter.GetString(row, "moneda_venta");
                 //Costo sin IGV
 
                 producto.precioClienteProducto = new PrecioClienteProducto();

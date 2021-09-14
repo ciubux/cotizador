@@ -32,5 +32,7 @@ namespace DataLayer
             }
             return tipoCambio;
         }
+
+        
     }
 }

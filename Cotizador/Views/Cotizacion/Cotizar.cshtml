@@ -71,7 +71,7 @@
                 </div>
             </div>
 
-            @*<div class="col-sm-6 col-lg-4">
+            <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
                     @Html.LabelFor(p => cotizacion.moneda, htmlAttributes: new { @class = "control-label col-xs-4", @for = "codigoMoneda" })
                     <div class="col-xs-8">
@@ -83,7 +83,7 @@
                                     })
                     </div>
                 </div>
-            </div>*@
+            </div>
 
         </div>
 
@@ -423,15 +423,6 @@
                 </div>
                 <h5 id="lblChkAjusteCalculoPrecios" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;" class="@acpTextClass" title="Ajusta el precio asignado a los productos para que el precio de las unidades inferiores no tenga mas de 4 decimales. Por ejemplo si el precio fuera 90.29 para CAJA x 12 BOLSAS, para la BOLSA el precio seria 7.52416666. Con el ajuste el sistema reduciría el precio de la CAJA a 90.27 para que el precio de la BOLSA sea 7.5225.">Ajustar precio para unidades menores</h5>
             </div>
-            @*@if (cotizacion.ajusteCalculoPrecios)
-                {
-                    <input type="checkbox" checked class="form-check-input" id="chkAjusteCalculoPrecios">
-                }
-                else
-                {
-                    <input type="checkbox" class="form-check-input" id="chkAjusteCalculoPrecios">
-                }
-                <label class="form-check-label" for="chkAjusteCalculoPrecios">Ajustar precio para unidades menores</label>*@
         </div>
 </div>
 <table id="tableDetalleCotizacion" class="table" data-editing="true"

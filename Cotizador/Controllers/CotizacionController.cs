@@ -961,7 +961,11 @@ namespace Cotizador.Controllers
     
             //Para recuperar el producto se envia si la sede seleccionada es provincia o no
             ProductoBL bl = new ProductoBL();
-            Producto producto = bl.getProducto(idProducto, cotizacion.ciudad.esProvincia , cotizacion.incluidoIGV, cotizacion.cliente.idCliente);
+            TipoCambioSunatBL tcBl = new TipoCambioSunatBL();
+            TipoCambioSunat tc = tcBl.GetTipoCambioHoy();
+
+            Producto producto = bl.getProducto(idProducto, cotizacion.ciudad.esProvincia , cotizacion.incluidoIGV, cotizacion.cliente.idCliente, false, cotizacion.moneda.codigo, tc);
+            
 
             //Se calcula el flete
             Decimal fleteDetalle = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.costoLista * (cotizacion.flete) / 100));
@@ -1032,7 +1036,10 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             CotizacionDetalle detalle = new CotizacionDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
             ProductoBL productoBL = new ProductoBL();
-            Producto producto = productoBL.getProducto(idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, cotizacion.cliente.idCliente);
+            TipoCambioSunatBL tcBl = new TipoCambioSunatBL();
+            TipoCambioSunat tc = tcBl.GetTipoCambioHoy();
+
+            Producto producto = productoBL.getProducto(idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, cotizacion.cliente.idCliente, false, cotizacion.moneda.codigo, tc);
             detalle.producto = producto;
 
             detalle.cantidad = Int32.Parse(Request["cantidad"].ToString());
@@ -1061,8 +1068,6 @@ namespace Cotizador.Controllers
 
 
                 precioNetoAnterior = detalle.producto.precioClienteProducto.precioNetoAlternativo;
-
-
 
 
                 ProductoPresentacion productoPresentacion = producto.getProductoPresentacion(idProductoPresentacion);
@@ -1323,11 +1328,6 @@ namespace Cotizador.Controllers
             }
 
         }
-
-
-
-
-
 
 
         public String Update()

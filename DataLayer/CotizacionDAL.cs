@@ -243,13 +243,13 @@ namespace DataLayer
             //CABECERA DE COTIZACIÓN
             foreach (DataRow row in cotizacionDataTable.Rows)
             {
-                cotizacion.idCotizacion = Converter.GetGuid(row,"id_cotizacion");
+                cotizacion.idCotizacion = Converter.GetGuid(row, "id_cotizacion");
                 cotizacion.fecha = Converter.GetDateTime(row, "fecha");
                 cotizacion.fechaLimiteValidezOferta = Converter.GetDateTime(row, "fecha_limite_validez_oferta");
                 cotizacion.fechaInicioVigenciaPrecios = Converter.GetDateTimeNullable(row, "fecha_inicio_vigencia_precios");
                 cotizacion.fechaFinVigenciaPrecios = Converter.GetDateTimeNullable(row, "fecha_fin_vigencia_precios");
                 cotizacion.incluidoIGV = Converter.GetBool(row, "incluido_igv");
-                cotizacion.considerarCantidades =   (Cotizacion.OpcionesConsiderarCantidades)Converter.GetInt(row, "considera_cantidades");
+                cotizacion.considerarCantidades = (Cotizacion.OpcionesConsiderarCantidades)Converter.GetInt(row, "considera_cantidades");
                 cotizacion.mostrarValidezOfertaEnDias = Converter.GetInt(row, "mostrar_validez_oferta_dias");
                 cotizacion.flete = Converter.GetDecimal(row, "porcentaje_flete");
                 cotizacion.igv = Converter.GetDecimal(row, "igv");
@@ -257,7 +257,7 @@ namespace DataLayer
                 cotizacion.observaciones = Converter.GetString(row, "observaciones");
                 cotizacion.mostrarCodigoProveedor = Converter.GetBool(row, "mostrar_codigo_proveedor");
                 cotizacion.contacto = Converter.GetString(row, "contacto");
-                cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacion.montoTotal / (1+cotizacion.igv)));
+                cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacion.montoTotal / (1 + cotizacion.igv)));
                 cotizacion.montoIGV = cotizacion.montoTotal - cotizacion.montoSubTotal;
                 cotizacion.fechaModificacion = Converter.GetDateTime(row, "fecha_modificacion");
                 cotizacion.fechaEsModificada = Converter.GetBool(row, "fecha_Es_Modificada");
@@ -286,7 +286,7 @@ namespace DataLayer
                 cotizacion.cliente.grupoCliente.nombre = Converter.GetString(row, "cliente_nombre_grupo");
 
                 cotizacion.cliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
-                cotizacion.cliente.tipoPagoFactura =  (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
+                cotizacion.cliente.tipoPagoFactura = (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
                 if (cotizacion.cliente.sedePrincipal) {
                     ClienteDAL dalCliente = new ClienteDAL();
                     cotizacion.cliente.sedeList = dalCliente.getSedes(cotizacion.cliente.ruc);
@@ -311,6 +311,7 @@ namespace DataLayer
                 cotizacion.moneda.codigo = Converter.GetString(row, "codigo_moneda");
                 cotizacion.moneda.nombre = Converter.GetString(row, "nombre_moneda");
                 cotizacion.moneda.simbolo = Converter.GetString(row, "simbolo_moneda");
+                cotizacion.moneda.caracter = cotizacion.moneda.nombre.Substring(0, 1);
 
                 //USUARIO
                 cotizacion.usuario = new Usuario();
@@ -358,6 +359,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.cantidadMaximaPedidoRestringido = Converter.GetInt(row, "cantidad_maxima_pedido_restringido");
                 cotizacionDetalle.producto.topeDescuento = Converter.GetDecimal(row, "tope_descuento");
                 cotizacionDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
+                cotizacionDetalle.producto.monedaMP = Converter.GetString(row, "moneda_venta");
                 cotizacionDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
                 cotizacionDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
                 cotizacionDetalle.producto.image = Converter.GetBytes(row, "imagen");
@@ -381,8 +383,13 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioClienteProducto = precioClienteProducto;
 
 
+                cotizacionDetalle.producto.precioOriginal = Converter.GetDecimal(row, "precio_original");
+                cotizacionDetalle.producto.precioProvinciasOriginal = Converter.GetDecimal(row, "precio_provincia_original");
+                cotizacionDetalle.producto.costoOriginal = Converter.GetDecimal(row, "costo_original");
+                cotizacionDetalle.producto.equivalenciaAlternativa = Converter.GetInt(row, "producto_equivalencia");
+                cotizacionDetalle.producto.equivalenciaProveedor = Converter.GetInt(row, "producto_equivalencia_proveedor");
 
-                
+
                 //SI ES UNA RECOTIZACIÓN
                 if (cotizacion.esRecotizacion)
                 {
@@ -390,7 +397,6 @@ namespace DataLayer
                     cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "producto_precio");
                     cotizacionDetalle.producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "producto_precio_provincia");
                     cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "producto_costo");
-
 
                     //El precio neto ahora será el precio neto anterior                    
                     /*

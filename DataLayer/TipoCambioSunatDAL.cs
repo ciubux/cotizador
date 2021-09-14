@@ -37,8 +37,6 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("pi_tipocambiosunat");
 
-
-
             InputParameterAdd.DateTime(objCommand, "fecha", obj.fecha);
             InputParameterAdd.Varchar(objCommand, "codigoMoneda", obj.codigoMoneda);
             InputParameterAdd.Decimal(objCommand, "valorCompra", obj.valorSunatCompra);
@@ -51,6 +49,25 @@ namespace DataLayer
             obj.idTipoCambioSunat = (int)objCommand.Parameters["@newId"].Value;
 
             return obj;
+        }
+
+        public TipoCambioSunat GetTipoCambioHoy()
+        {
+            var objCommand = GetSqlCommand("ps_getLastTipoCambioSunat");
+            DataTable dataTable = Execute(objCommand);
+            TipoCambioSunat tipoCambio = null;
+            foreach (DataRow row in dataTable.Rows)
+            {
+                tipoCambio = new TipoCambioSunat
+                {
+                    idTipoCambioSunat = Converter.GetInt(row, "id_tipo_cambio_sunat"),
+                    valorSunatCompra = Converter.GetDecimal(row, "valor_sunat_compra"),
+                    valorSunatVenta = Converter.GetDecimal(row, "valor_sunat_venta"),
+                    fecha = Converter.GetDateTime(row, "fecha"),
+                    codigoMoneda = Converter.GetString(row, "codigo_moneda")
+                };
+            }
+            return tipoCambio;
         }
     }
 }

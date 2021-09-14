@@ -2300,6 +2300,16 @@ namespace Cotizador.Controllers
                 detalle.ProductoPresentacion = new ProductoPresentacion();
                 detalle.ProductoPresentacion.Equivalencia = detalle.producto.ProductoPresentacionList[0].Equivalencia;
 
+                if (detalle.ProductoPresentacion.Equivalencia > 1)
+                {
+                    detalle.ProductoPresentacion.IdProductoPresentacion = 1;
+                }
+
+                if (detalle.ProductoPresentacion.Equivalencia < 1)
+                {
+                    detalle.ProductoPresentacion.IdProductoPresentacion = 2;
+                }
+
                 //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                 //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
                 detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, precioNeto * detalle.ProductoPresentacion.Equivalencia));

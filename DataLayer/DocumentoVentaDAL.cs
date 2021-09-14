@@ -503,6 +503,7 @@ namespace DataLayer
             var columnnasDetalle = cpeDetalleBETable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
             var columnnasDatAdic = cpeDatAdicBETable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
             var columnnasDocRef = cpeDocRefBETable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
+            var columnnasCabeceraFPG = cpeCabeceraFPGTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
 
             documentoVenta.cPE_CABECERA_BE = new CPE_CABECERA_BE();
             documentoVenta.cPE_DETALLE_BEList = new List<CPE_DETALLE_BE>();
@@ -636,7 +637,7 @@ namespace DataLayer
             foreach (DataRow row in cpeCabeceraFPGTable.Rows)
             {
                 CPE_CABECERA_FPG cPE_CABECERA_FPG = new CPE_CABECERA_FPG();
-                foreach (String column in columnnasDocRef)
+                foreach (String column in columnnasCabeceraFPG)
                 {
                     if (!column.Equals("id_cpe_cabecera_fpg") && !column.Equals("id_cpe_cabecera_be"))
                     {
