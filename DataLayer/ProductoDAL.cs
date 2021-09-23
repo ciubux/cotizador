@@ -1086,6 +1086,9 @@ namespace DataLayer
 
                 item.esComercial = Converter.GetInt(row, "es_comercial");
 
+                item.costoFleteProvincias = Converter.GetDecimal(row, "costo_flete_provincias");
+                item.monedaFleteProvincias = Moneda.ListaMonedasFija.Where(m => m.codigo.Equals(Converter.GetString(row, "moneda_flete_provincias"))).First();
+
                 item.tipoCambio = Converter.GetDecimal(row, "tipo_cambio");
                 item.monedaMP = Converter.GetString(row, "moneda_venta");
                 item.monedaProveedor = Converter.GetString(row, "moneda_compra");
@@ -1304,6 +1307,9 @@ namespace DataLayer
 
                 item.esComercial = Converter.GetInt(row, "es_comercial");
 
+                item.costoFleteProvincias = Converter.GetDecimal(row, "costo_flete_provincias");
+                item.monedaFleteProvincias = Moneda.ListaMonedasFija.Where(m => m.codigo.Equals(Converter.GetString(row, "moneda_flete_provincias"))).First();
+
                 item.codigoSunat = Converter.GetString(row, "codigo_sunat");
                 item.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
 
@@ -1364,6 +1370,9 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "codigoSunat", producto.codigoSunat);
 
             InputParameterAdd.Int(objCommand, "esComercial", producto.esComercial);
+
+            InputParameterAdd.Decimal(objCommand, "costoFleteProvincias", producto.costoFleteProvincias);
+            InputParameterAdd.Varchar(objCommand, "monedaFleteProvincias", producto.monedaFleteProvincias.codigo);
 
             InputParameterAdd.Int(objCommand, "equivalenciaUnidadAlternativaUnidadConteo", producto.equivalenciaUnidadAlternativaUnidadConteo);
             InputParameterAdd.Int(objCommand, "equivalenciaUnidadEstandarUnidadConteo", producto.equivalenciaUnidadEstandarUnidadConteo);
@@ -1469,6 +1478,8 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "unidadProveedorInternacional", producto.unidadProveedorInternacional);
             InputParameterAdd.Varchar(objCommand, "codigoSunat", producto.codigoSunat);
 
+            InputParameterAdd.Decimal(objCommand, "costoFleteProvincias", producto.costoFleteProvincias);
+            InputParameterAdd.Varchar(objCommand, "monedaFleteProvincias", producto.monedaFleteProvincias.codigo);
 
             InputParameterAdd.Int(objCommand, "equivalenciaUnidadAlternativaUnidadConteo", producto.equivalenciaUnidadAlternativaUnidadConteo);
             InputParameterAdd.Int(objCommand, "equivalenciaUnidadEstandarUnidadConteo", producto.equivalenciaUnidadEstandarUnidadConteo);

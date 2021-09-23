@@ -454,10 +454,32 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <!--COSTO-->
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.monedaFleteProvincias, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verMonedaFleteProvincias"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.costoFleteProvincias, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verCostoFleteProvincias"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     }
                     <br />
                     <fieldset id="fieldSetUnidadMP">
-                        <legend>UNIDAD MP:
+                        <legend>
+                            UNIDAD MP:
                             <button id="btnStockUnidadMP" type="button" title="Consultar Stock" class="verModalStockProducto btn" sku="" idProductoPresentacion="0" idCiudad="15526227-2108-4113-b46a-1c8ab5c0e581" style="margin-bottom: 5px;">
                                 <img src="~/images/icon_stock.png" height="25" />
                             </button>
@@ -531,7 +553,8 @@
                     </fieldset>
 
                     <fieldset id="fieldSetUnidadAlternativa">
-                        <legend>UNIDAD ALTERNATIVA:
+                        <legend>
+                            UNIDAD ALTERNATIVA:
                             <button id="btnStockUnidadAlternativa" type="button" title="Consultar Stock" class="verModalStockProducto btn" sku="" idProductoPresentacion="1" idCiudad="15526227-2108-4113-b46a-1c8ab5c0e581" style="margin-bottom: 5px;">
                                 <img src="~/images/icon_stock.png" height="25" />
                             </button>
@@ -580,7 +603,8 @@
                     </fieldset>
 
                     <fieldset id="fieldSetUnidadProveedor">
-                        <legend>UNIDAD PROVEEDOR: 
+                        <legend>
+                            UNIDAD PROVEEDOR:
                             <button id="btnStockUnidadProveedor" type="button" title="Consultar Stock" class="verModalStockProducto btn" sku="" idProductoPresentacion="2" idCiudad="15526227-2108-4113-b46a-1c8ab5c0e581" style="margin-bottom: 5px;">
                                 <img src="~/images/icon_stock.png" height="25" />
                             </button>

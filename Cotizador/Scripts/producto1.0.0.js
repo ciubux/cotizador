@@ -638,7 +638,55 @@ jQuery(function ($) {
         }
 
     });
-    
+
+    $("#producto_costoFleteProvincias").change(function () {
+        changeInputDecimal("costoFleteProvincias", $("#producto_costoFleteProvincias").val());
+    });
+
+
+    $("#monedaFleteProvincias").change(function () {
+        var moneda = $("#monedaFleteProvincias").val();
+        changeMoneda("fleteProvincias", moneda);
+    });
+
+
+    function changeMoneda(tipo, valor) {
+        $.ajax({
+            url: "/Producto/ChangeMoneda",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                tipoMoneda: tipo,
+                codigoMoneda: valor
+            },
+            error: function (detalle) {
+                $.alert({
+                    title: "ERROR",
+                    type: 'red',
+                    content: 'Ocurrió un error al intentar cambiar la moneda de flete de provincias.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+                location.reload();
+            },
+            success: function (res) {
+                if (res.success == 1) {
+                    
+                } else {
+                    $.alert({
+                        title: "ERROR",
+                        type: 'red',
+                        content: res.message,
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                }
+
+            }
+        });
+    };
     
 
 
@@ -700,6 +748,9 @@ jQuery(function ($) {
                 $("#verEquivalenciaUnidadProveedorUnidadConteo").html(producto.equivalenciaUnidadProveedorUnidadConteo);
                 $("#verEquivalenciaUnidadPedidoProveedor").html(producto.equivalenciaUnidadPedidoProveedor);
 
+                $("#verCostoFleteProvincias").html(Number(producto.costoFleteProvincias).toFixed(cantidadDecimales));
+                $("#verMonedaFleteProvincias").html(producto.monedaFleteProvincias.nombre);
+
                 $("#verUnidad").html(producto.unidad);
                 $("#verUnidadProveedor").html(producto.unidadProveedor);
                 $("#verUnidadAlternativa").html(producto.unidad_alternativa);
@@ -715,17 +766,17 @@ jQuery(function ($) {
                 $("#verTipoCambio").html(Number(producto.tipoCambio).toFixed(cantidadDecimales));
 
                 if (producto.monedaMP == "D") {
-                    $("#verMonedaMP").html("DÓLARES");
+                    $("#verMonedaMP").html("DÓLAR");
                 }
                 else {
-                    $("#verMonedaMP").html("SOLES");
+                    $("#verMonedaMP").html("SOL");
                 }
 
                 if (producto.monedaProveedor == "D") {
-                    $("#verMonedaProveedor").html("DÓLARES");
+                    $("#verMonedaProveedor").html("DÓLAR");
                 }
                 else {
-                    $("#verMonedaProveedor").html("SOLES");
+                    $("#verMonedaProveedor").html("SOL");
                 }
 
                 $("#verCodigoSunat").html(producto.codigoSunat);

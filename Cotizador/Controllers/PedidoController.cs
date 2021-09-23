@@ -650,6 +650,7 @@ namespace Cotizador.Controllers
 
         }
 
+        
         public void iniciarEdicionPedidoDesdeOC ()
         {
             //try
@@ -775,6 +776,8 @@ namespace Cotizador.Controllers
 
                 pedido.tipoPedido = Pedido.tiposPedido.Venta;
                 pedido.ciudadASolicitar = new Ciudad();
+
+                pedido.moneda = Moneda.ListaMonedas.Where(m => m.codigo.Equals("PEN")).FirstOrDefault();
 
                 pedido.numeroReferenciaCliente = null;
                 pedido.direccionEntrega = new DireccionEntrega();
@@ -1246,6 +1249,18 @@ namespace Cotizador.Controllers
 
         /*Actualización de Campos*/
         #region ACTUALIZACION DE CAMPOS FORMULARIO
+
+        public string ChangeMoneda()
+        {
+            Pedido pedido = (Pedido) this.PedidoSession; 
+            string moneda = this.Request.Params["moneda"];
+
+            pedido.moneda = Moneda.ListaMonedas.Where(m => m.codigo.Equals(moneda)).FirstOrDefault();
+            this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA] = pedido;
+
+
+            return "{\"simbolo\":\"" + (pedido.moneda != null ? pedido.moneda.simbolo : "") + "\"}";
+        }
 
         public void ChangeInputString()
         {

@@ -2878,7 +2878,7 @@ jQuery(function ($) {
                 if (pedido.moneda == null) {
                     $("#verMoneda").html("No asignado");
                 } else {
-                    $("#verMoneda").html(pedido.moneda.nombre);
+                    $("#verMoneda").html(pedido.moneda.nombre + " (" + pedido.moneda.simbolo + ")");
                     $(".simbolo-moneda").html(pedido.moneda.simbolo);
                 }
 

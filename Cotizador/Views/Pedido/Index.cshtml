@@ -547,6 +547,14 @@
                             </div>
                         </div>
 
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                @Html.LabelFor(p => pedido.moneda, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verMoneda"></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
 
@@ -879,19 +887,19 @@
 
                             <div class="form-group">
                                 <div class="pull-right">
-                                    <span class="totales">Subtotal: S/ </span>
+                                    <span class="totales">Subtotal: <span class="simbolo-moneda"></span> </span>
                                     <span class="totales" id="verMontoSubTotal"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="pull-right">
-                                    <span class="totales">IGV 18%: S/ </span>
+                                    <span class="totales">IGV 18%: <span class="simbolo-moneda"></span> </span>
                                     <span class="totales" id="verMontoIGV"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="pull-right">
-                                    <span class="totales">TOTAL: S/ </span>
+                                    <span class="totales">TOTAL: <span class="simbolo-moneda"></span> </span>
                                     <span class="totales" id="verMontoTotal"></span>
                                 </div>
                             </div>

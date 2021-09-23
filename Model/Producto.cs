@@ -298,6 +298,12 @@ namespace Model
 
         public Decimal costoListaAnterior { get; set; }
 
+        [Display(Name = "Costo Flete Provincias:")]
+        public Decimal costoFleteProvincias { get; set; }
+
+        [Display(Name = "Moneda Flete Provincias:")]
+        public Moneda monedaFleteProvincias { get; set; }
+
 
         public override string ToString()
         {
@@ -563,6 +569,9 @@ namespace Model
                     case "costo_referencial": cp.nombre = Producto.nombreAtributo("costoReferencial"); break; 
                     case "costo_original_referencial": cp.nombre = Producto.nombreAtributo("costoReferencialOriginal"); break;
 
+                    case "costo_flete_provincias": cp.nombre = Producto.nombreAtributo("costoFleteProvincias"); break;
+                    case "moneda_flete_provincias": cp.nombre = Producto.nombreAtributo("monedaFleteProvincias"); break;
+
                     default: cp.nombre = "[NOT_FOUND]"; break;
 
                         /* TO DO: Evaluar si se usan
@@ -658,6 +667,10 @@ namespace Model
                         
                     case "costo_referencial": lc = instanciarLogCambio(campo); lc.valor = this.costoReferencial.ToString(); break;
                     case "costo_original_referencial": lc = instanciarLogCambio(campo); lc.valor = this.costoReferencialOriginal.ToString(); break;
+
+                    case "costo_flete_provincias": lc = instanciarLogCambio(campo); lc.valor = this.costoFleteProvincias.ToString(); break;
+                    case "moneda_flete_provincias": lc = instanciarLogCambio(campo); lc.valor =(this.monedaFleteProvincias == null ? "" : this.monedaFleteProvincias.codigo); break;
+                    
 
                     case "descripcion_larga": lc = instanciarLogCambio(campo); lc.valor = this.descripcionLarga.ToString(); break;
                     case "agregar_descripcion_cotizacion": lc = instanciarLogCambio(campo); lc.valor = this.agregarDescripcionCotizacion.ToString(); break;
@@ -1319,6 +1332,36 @@ namespace Model
                         else
                         {
                             this.esComercial = int.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "costo_flete_provincias":
+                        if (this.costoFleteProvincias == decimal.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.costoFleteProvincias = decimal.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "moneda_flete_provincias":
+                        if (this.monedaFleteProvincias.codigo == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.monedaFleteProvincias = Moneda.ListaMonedas.Where(m => m.codigo.Equals(cambio.valor)).First();
                             lista.Add(cambio);
                         }
                         break;

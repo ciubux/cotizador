@@ -62,7 +62,7 @@ namespace BusinessLayer
             {
                 Producto producto = dal.getProducto(idProducto, idCliente, esCompra);
                 //Si es Provincia automaticamente se considera el precioProvincia como precioSinIGV
-
+                /*
                 if (tc != null)
                 {
                     if (moneda.Equals("USD"))
@@ -105,7 +105,7 @@ namespace BusinessLayer
                         }
                     }
                 }
-
+                */
                 if (esProvincia)
                 {
                     producto.precioSinIgv = producto.precioProvinciaSinIgv;

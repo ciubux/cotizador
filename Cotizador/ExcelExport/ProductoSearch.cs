@@ -188,7 +188,7 @@ namespace Cotizador.ExcelExport
 
                 /*Cabecera, Sub total*/
                 int rTotal = (list.Count) + 1;
-                int cTotal = 43 + 2;
+                int cTotal = 45 + 2;
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
@@ -214,7 +214,11 @@ namespace Cotizador.ExcelExport
                 setDataValidationSINO(sheet, 1 + list.Count, 29);
                 setDataValidationSINO(sheet, 1 + list.Count, 32);
                 setDataValidationSINO(sheet, 1 + list.Count, 37);
+                setDataValidationSINO(sheet, 1 + list.Count, 39);
 
+                setDataValidationMonedas(sheet, 1 + list.Count, 12);
+                setDataValidationMonedas(sheet, 1 + list.Count, 15);
+                setDataValidationMonedas(sheet, 1 + list.Count, 43);
                 i = 2;
 
                 /*  for (int iii = 0; iii<50;iii++)
@@ -235,10 +239,10 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "K", obj.unidad_alternativa);
                     UtilesHelper.setValorCelda(sheet, i, "L", obj.equivalenciaAlternativa);
 
-                    UtilesHelper.setValorCelda(sheet, i, "M", obj.monedaProveedor);
+                    UtilesHelper.setValorCelda(sheet, i, "M", Moneda.ListaMonedasFija.Where(m => m.caracter.Equals(obj.monedaProveedor)).FirstOrDefault().nombre);
                     UtilesHelper.setValorCelda(sheet, i, "N", (double)obj.costoOriginal);
                     UtilesHelper.setValorCelda(sheet, i, "O", (double)obj.costoSinIgv, blockedCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "P", obj.monedaMP);
+                    UtilesHelper.setValorCelda(sheet, i, "P", Moneda.ListaMonedasFija.Where(m => m.caracter.Equals(obj.monedaMP)).FirstOrDefault().nombre);
                     UtilesHelper.setValorCelda(sheet, i, "Q", (double)obj.precioOriginal);
                     UtilesHelper.setValorCelda(sheet, i, "R", (double)obj.precioSinIgv, blockedCellStyle);
                     UtilesHelper.setValorCelda(sheet, i, "S", (double)obj.precioProvinciasOriginal);
@@ -256,7 +260,7 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "AC", obj.exoneradoIgv ? "SI" : "NO");
                     UtilesHelper.setValorCelda(sheet, i, "AD", obj.inafecto ? "SI" : "NO");
                     UtilesHelper.setValorCelda(sheet, i, "AE", obj.tipoProducto.ToString());
-                    UtilesHelper.setValorCelda(sheet, i, "AF", (double)obj.tipoCambio);
+                    UtilesHelper.setValorCelda(sheet, i, "AF", (double)obj.tipoCambio, blockedCellStyle);
                     UtilesHelper.setValorCelda(sheet, i, "AG", obj.Estado == 1 ? "SI" : "NO");
                     UtilesHelper.setValorCelda(sheet, i, "AH", Enum.GetName(typeof(Producto.TipoVentaRestringida), obj.ventaRestringida));
 
@@ -272,6 +276,9 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "AP", (double)obj.costoReferencial, blockedCellStyle);
 
                     UtilesHelper.setValorCelda(sheet, i, "AQ", obj.esComercial == 1 ? "X" : "", blockedCenterCellStyle);
+
+                    UtilesHelper.setValorCelda(sheet, i, "AR", obj.monedaFleteProvincias.nombre);
+                    UtilesHelper.setValorCelda(sheet, i, "AS", (double)obj.costoFleteProvincias);
                     i++;
                 }
 
@@ -328,6 +335,9 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, 1, "AP", "Costo Lista MP", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "AQ", "Item No Comercial", titleCellStyle);
 
+                UtilesHelper.setValorCelda(sheet, 1, "AR", "Moneda Costo Flete", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "AS", "Costo Flete Provincias", titleCellStyle);
+
                 MemoryStream ms = new MemoryStream();
                 using (MemoryStream tempStream = new MemoryStream())
                 {
@@ -353,6 +363,26 @@ namespace Cotizador.ExcelExport
             var markdvA = new HSSFDataValidation(markColumnA, markConstraintA);
             markdvA.EmptyCellAllowed = true;
             markdvA.CreateErrorBox("Valor Incorrecto", "Por favor seleccione un tipo de la lista");
+            sheet.AddValidationData(markdvA);
+        }
+
+        private void setDataValidationMonedas(HSSFSheet sheet, int rowLimit, int column)
+        {
+
+            string[] options = new String[Moneda.ListaMonedasFija.Count];
+
+            int i = 0;
+            foreach (Moneda mon in Moneda.ListaMonedasFija)
+            {
+                options[i] = mon.nombre;
+                i++;
+            }
+
+            var markConstraintA = DVConstraint.CreateExplicitListConstraint(options);
+            var markColumnA = new CellRangeAddressList(1, 1 + rowLimit, column, column);
+            var markdvA = new HSSFDataValidation(markColumnA, markConstraintA);
+            markdvA.EmptyCellAllowed = true;
+            markdvA.CreateErrorBox("Valor Incorrecto", "Por favor seleccione una moneda de la lista");
             sheet.AddValidationData(markdvA);
         }
     }

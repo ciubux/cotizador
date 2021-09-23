@@ -802,8 +802,12 @@ namespace Cotizador.Controllers
             pedido.moneda = Moneda.ListaMonedas.Where(m => m.codigo.Equals(moneda)).FirstOrDefault();
             this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA] = pedido;
 
+            var v = new
+            {
+                simbolo = pedido.moneda != null ? pedido.moneda.simbolo : ""
+            };
 
-            return "{\"simbolo\":\"" + (pedido.moneda != null ? pedido.moneda.simbolo : "") + "\"}";
+            return JsonConvert.SerializeObject(v);
         }
 
         public void ChangeNumeroReferenciaCliente()

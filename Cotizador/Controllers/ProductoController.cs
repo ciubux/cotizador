@@ -1457,6 +1457,7 @@ namespace Cotizador.Controllers
                         try
                         {
                             productoStaging.monedaProveedor = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            productoStaging.monedaProveedor = Moneda.ListaMonedasFija.Where(m => m.nombre.Equals(productoStaging.monedaProveedor)).FirstOrDefault().caracter;
                         }
                         catch (Exception e)
                         {
@@ -1480,6 +1481,7 @@ namespace Cotizador.Controllers
                         try
                         {
                             productoStaging.monedaMP = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            productoStaging.monedaMP = Moneda.ListaMonedasFija.Where(m => m.nombre.Equals(productoStaging.monedaMP)).FirstOrDefault().caracter;
                         }
                         catch (Exception e)
                         {
@@ -1951,6 +1953,34 @@ namespace Cotizador.Controllers
                     case Constantes.paginas.MantenimientoProductos: this.Session[Constantes.VAR_SESSION_PRODUCTO] = value; break;
                 }
             }
+        }
+
+        public String ChangeMoneda()
+        {
+            Producto producto = (Producto)this.ProductoSession;
+            string tipo = this.Request.Params["tipoMoneda"];
+            string moneda = this.Request.Params["codigoMoneda"];
+            int success = 0;
+            string message = "";
+
+            
+            switch(tipo)
+            {
+                case "fleteProvincias":
+                    success = 1;
+                    producto.monedaFleteProvincias = Moneda.ListaMonedasFija.Where(m => m.codigo.Equals(moneda)).FirstOrDefault();
+                    this.ProductoSession = producto;
+                    break;
+            }
+           
+            
+            var v = new
+            {
+                success = success,
+                message = message
+            };
+
+            return JsonConvert.SerializeObject(v);
         }
 
         public void ChangeInputString()

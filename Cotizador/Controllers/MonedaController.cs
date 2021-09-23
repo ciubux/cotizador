@@ -31,5 +31,19 @@ namespace Cotizador.Controllers
 
             return PartialView("_Moneda", model);
         }
+
+        public ActionResult SelectMonedasDisponibles(string selectId, string selectedValue = null, string disabled = null)
+        {
+
+            var model = new MonedaViewModels
+            {
+                Data = Moneda.ListaMonedasFija,
+                SelectId = selectId,
+                SelectedValue = selectedValue,
+                Disabled = disabled == null || disabled != "disabled" ? false : true
+            };
+
+            return PartialView("_Moneda", model);
+        }
     }
 }

@@ -250,11 +250,11 @@ namespace BusinessLayer
                     }
                 }
 
-                if (!cotizacionDetalle.producto.monedaMP.Equals(cotizacion.moneda.caracter) /*&& !cotizacion.usuario.apruebaCotizaciones*/)
+                /*if (!cotizacionDetalle.producto.monedaMP.Equals(cotizacion.moneda.caracter) && !cotizacion.usuario.apruebaCotizaciones)
                 {   
-                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion +  "El producto " + cotizacionDetalle.producto.sku + " tiene su precio registrado en " + Moneda.ListaMonedas.Where(m => m.caracter.Equals(cotizacionDetalle.producto.monedaMP)).FirstOrDefault().nombre + "\n";
+                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion +  "El producto " + cotizacionDetalle.producto.sku + " tiene su precio de lista registrado en " + Moneda.ListaMonedas.Where(m => m.caracter.Equals(cotizacionDetalle.producto.monedaMP)).FirstOrDefault().nombre + "\n";
                     cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
-                }
+                }*/
             }
            
             if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada)

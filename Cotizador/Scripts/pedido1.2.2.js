@@ -1527,6 +1527,26 @@ jQuery(function ($) {
     })
 
 
+    $("#codigoMoneda").change(function () {
+        var moneda = $("#codigoMoneda").val();
+
+        $.ajax({
+            url: "/Pedido/ChangeMoneda",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                moneda: moneda
+            },
+            error: function (detalle) {
+                alert('Ocurrió un error al intentar cambiar la moneda, por favor inténtelo de nuevo.');
+                location.reload();
+            },
+            success: function (res) {
+                $(".simbolo-moneda").html(res.simbolo);
+            }
+        });
+    });
+
 
 
     //////CONTROL DE BOTONES PARA AGREGAR PRODUCTO A LA GRILLA
@@ -2114,6 +2134,20 @@ jQuery(function ($) {
                     OK: function () { }
                 }
             });              
+            return false;
+        }
+
+        var codigoMoneda = $("#codigoMoneda").val();
+        if (codigoMoneda == "" || $("#codigoMoneda").val() == null) {
+            $.alert({
+                title: "Seleccionar Moneda",
+                type: 'orange',
+                content: 'Debe seleccionar una moneda.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            $("#codigoMoneda").focus();
             return false;
         }
 
@@ -3296,7 +3330,12 @@ jQuery(function ($) {
                 }
 
 
-
+                if (pedido.moneda == null) {
+                    $("#verMoneda").html("No asignado");
+                } else {
+                    $("#verMoneda").html(pedido.moneda.nombre + " (" + pedido.moneda.simbolo + ")");
+                    $(".simbolo-moneda").html(pedido.moneda.simbolo);
+                }
 
                 //APROBAR PEDIDO
                 if ((pedido.seguimientoPedido_estado == ESTADO_PENDIENTE_APROBACION ||
