@@ -1031,9 +1031,12 @@ namespace Cotizador.Controllers
                 //Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
                 this.Session["idProducto"] = idProducto.ToString();
 
+                TipoCambioSunatBL tcBl = new TipoCambioSunatBL();
+                TipoCambioSunat tc = tcBl.GetTipoCambioHoy();
+
                 //Para recuperar el producto se envia si la sede seleccionada es provincia o no
                 ProductoBL bl = new ProductoBL();
-                Producto producto = bl.getProducto(idProducto, pedido.ciudad.esProvincia, pedido.incluidoIGV, pedido.cliente.idCliente);
+                Producto producto = bl.getProducto(idProducto, pedido.ciudad.esProvincia, pedido.incluidoIGV, pedido.cliente.idCliente, false, pedido.moneda.codigo, tc);
 
                 Decimal fleteDetalle = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, producto.costoLista * (0) / 100));
                 Decimal precioUnitario = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, fleteDetalle + producto.precioLista));
