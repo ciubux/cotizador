@@ -1,0 +1,49 @@
+﻿@{
+    Model.Promocion promocion = ViewBag.promocionSelect;
+}
+
+
+@Html.Action("GetPromociones", "Promocion",
+    new
+    {
+        SelectId = "idPromocion",
+        selectedValue = promocion.idPromocion
+    })
+
+<p id="pluginPromocionText">
+    @if (promocion != null && promocion.idPromocion != Guid.Empty)
+    {
+        @promocion.textoDescripcion
+    }
+</p>
+
+
+<script type="text/javascript">
+    function funcionesPluginSelectPromocion() {
+        $(document).on('change', "select#idPromocion", function () {
+            var idPromocion = $(this).val();
+            
+            $.ajax({
+                url: "/Promocion/GetPromocion",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idPromocion: idPromocion
+                },
+                success: function (obj) {
+                    $("#pluginPromocionText").html(obj.textoDescripcion);
+                }
+            });
+        });
+    };
+
+    if (window.addEventListener) // W3C standard
+    {
+        window.addEventListener('load', funcionesPluginSelectPromocion, false);
+    }
+    else if (window.attachEvent) // Microsoft
+    {
+        window.attachEvent('onload', funcionesPluginSelectPromocion);
+    }
+
+</script>
