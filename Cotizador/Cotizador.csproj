@@ -235,6 +235,7 @@
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\ClienteLiteController.cs" />
     <Compile Include="Controllers\ReporteController.cs" />
+    <Compile Include="Controllers\PromocionController.cs" />
     <Compile Include="Controllers\StockController.cs" />
     <Compile Include="Controllers\LogCambioController.cs" />
     <Compile Include="Controllers\MonedaController.cs" />
@@ -336,6 +337,7 @@
     <Compile Include="Models\RolViewModels.cs" />
     <Compile Include="Models\ProductoMultipleViewModels.cs" />
     <Compile Include="Models\ProductoViewModels.cs" />
+    <Compile Include="Models\PromocionViewModels.cs" />
     <Compile Include="Models\RubroViewModels.cs" />
     <Compile Include="Models\SubDistribuidorViewModels.cs" />
     <Compile Include="Models\OrigenViewModels.cs" />
@@ -463,6 +465,7 @@
     <Content Include="Scripts\clienteLite1.0.0.js" />
     <Content Include="Scripts\notaCreditoCompra.js" />
     <Content Include="Scripts\reportes.js" />
+    <Content Include="Scripts\promocion.js" />
     <Content Include="Scripts\stock.js" />
     <Content Include="Scripts\tipoClienteContacto.js" />
     <Content Include="Scripts\utilesAjax.js" />
@@ -706,6 +709,10 @@
     <Content Include="Views\Stock\CargasStock.cshtml" />
     <Content Include="Views\Stock\_ModalKardexStockProducto.cshtml" />
     <Content Include="Views\Pedido\_ModalPedidoReadOnly.cshtml" />
+    <Content Include="Views\Shared\_Promocion.cshtml" />
+    <Content Include="Views\Promocion\Editar.cshtml" />
+    <Content Include="Views\Promocion\List.cshtml" />
+    <Content Include="Views\Promocion\_PluginSelect.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

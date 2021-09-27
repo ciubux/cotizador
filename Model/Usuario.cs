@@ -215,6 +215,9 @@ namespace Model
         public bool visualizaOrigenes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_ORIGENES)).FirstOrDefault() != null; } }
 
 
+        /*Promociones*/
+        public bool modificaPromocion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_PROMOCION)).FirstOrDefault() != null; } }
+
         /*Rubros*/
         public bool modificaRubro { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_RUBRO)).FirstOrDefault() != null; } }
         public bool visualizaRubros { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_RUBROS)).FirstOrDefault() != null; } }

@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "870";
+    TempData["ScriptVersion"] = "872";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -96,6 +96,9 @@
 
                         var linkBusquedaRubro = "";
                         var linkMantenimientoRubro = "";
+
+                        var linkBusquedaPromocion = "";
+                        var linkMantenimientoPromocion = "";
 
                         var linkBusquedaRol = "";
                         var linkMantenimientoRol = "";
@@ -222,6 +225,9 @@
                             case 710: linkBusquedaClienteLite = "ative"; linkMaestros = "active"; break;
 
                             case 761: linkMantenimientoTipoContactoCliente = "active"; linkMaestros = "active"; break;
+
+                            case 770: linkBusquedaPromocion = "active"; linkMaestros = "active"; break;
+                            case 771: linkMantenimientoPromocion = "active"; linkMaestros = "active"; break;
 
                             case 901: linkReporteSellOutPersonalizado = "active"; linkReportes = "active"; break;
                         }
@@ -393,7 +399,7 @@
                         if (usuario.modificaMaestroClientes || usuario.modificaMaestroProductos || usuario.modificaGrupoClientes || usuario.visualizaClientes
                             || usuario.visualizaGrupoClientes || usuario.visualizaProductos || usuario.realizaCargaMasivaProductos || usuario.esVendedor
                             || usuario.modificaOrigen || usuario.visualizaOrigenes || usuario.modificaSubDistribuidor || usuario.visualizaSubDistribuidores
-                            || usuario.modificaRubro || usuario.visualizaRubros
+                            || usuario.modificaRubro || usuario.visualizaRubros || usuario.modificaPromocion 
                             )
                         {
                             <li class="@linkMaestros">
@@ -442,6 +448,15 @@
                                     @if (usuario.realizaCargaMasivaProductos)
                                     {
                                         <li id="linkCRProducto" class="@linkCargaMasivaProducto">@Html.ActionLink("Producto - Importar ", "Index", "Producto")</li>
+                                    }
+
+                                    @if (usuario.modificaPromocion)
+                                    {
+                                        <li id="linkBusquedaPromocion" class="@linkBusquedaPromocion">@Html.ActionLink("Promociones - Búsqueda", "List", "Promocion")</li>
+                                    }
+                                    @if (usuario.modificaPromocion)
+                                    {
+                                        <li id="linkCRPromocion" class="@linkMantenimientoPromocion">@Html.ActionLink("Promociones - Crear/Modificar ", "Editar", "Promocion")</li>
                                     }
 
                                     @if (usuario.realizaCargaMasivaStock)

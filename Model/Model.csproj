@@ -55,6 +55,7 @@
     <Compile Include="CierreStock.cs" />
     <Compile Include="ClienteContactoTipo.cs" />
     <Compile Include="ClienteContacto.cs" />
+    <Compile Include="Promocion.cs" />
     <Compile Include="TipoCambioSunat.cs" />
     <Compile Include="TipoVistaDashboard.cs" />
     <Compile Include="UTILES\MovimientoKardexCabecera.cs" />

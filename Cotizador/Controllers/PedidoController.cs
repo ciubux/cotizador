@@ -497,6 +497,8 @@ namespace Cotizador.Controllers
                 }
 
                 ViewBag.pagina = (int)Constantes.paginas.MantenimientoPedido;
+                ViewBag.promocionSelect = pedido.promocion;
+
                 return View();
             }
             catch (Exception e)
@@ -773,6 +775,9 @@ namespace Cotizador.Controllers
                 pedido.ciudad = new Ciudad();
                 pedido.cliente = new Cliente();
                 pedido.esPagoContado = false;
+
+                pedido.promocion = new Promocion();
+                pedido.promocion.idPromocion = Guid.Empty;
 
                 pedido.tipoPedido = Pedido.tiposPedido.Venta;
                 pedido.ciudadASolicitar = new Ciudad();

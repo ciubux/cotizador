@@ -55,6 +55,7 @@
     <Compile Include="LogCambioDAL.cs" />
     <Compile Include="PermisoDAL.cs" />
     <Compile Include="OrigenDAL.cs" />
+    <Compile Include="PromocionDAL.cs" />
     <Compile Include="RubroDAL.cs" />
     <Compile Include="ClienteContactoDAL.cs" />
     <Compile Include="SubDistribuidorDAL.cs" />

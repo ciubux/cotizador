@@ -888,6 +888,9 @@ namespace DataLayer
                 pedido.cliente.grupoCliente = new GrupoCliente();
                 pedido.cliente.grupoCliente.nombre = Converter.GetString(row, "grupo_nombre");
 
+                pedido.promocion = new Promocion();
+                pedido.promocion.idPromocion = Converter.GetGuid(row, "id_promocion");
+
                 pedido.ciudad = new Ciudad();
                 pedido.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 pedido.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
