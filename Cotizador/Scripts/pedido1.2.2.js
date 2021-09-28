@@ -5486,6 +5486,23 @@ jQuery(function ($) {
         });
     });  
 
+    $("#idPromocion").change(function () {
+        var idPromocion = $("#idPromocion").val();
+
+        $.ajax({
+            url: "/Pedido/ChangeIdPromocion",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idPromocion: idPromocion
+            },
+            error: function (detalle) {
+                location.reload();
+            },
+            success: function (promocion) {
+            }
+        });
+    });  
 
 
     $(document).on('click', "a.verMas", function () {

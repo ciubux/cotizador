@@ -32,6 +32,11 @@ namespace DataLayer
             else
                 InputParameterAdd.Guid(objCommand, "idCotizacion", pedido.cotizacion.idCotizacion); //puede ser null
 
+            if (pedido.promocion.idPromocion == Guid.Empty)
+                InputParameterAdd.Guid(objCommand, "idPromocion", null); //puede ser null
+            else
+                InputParameterAdd.Guid(objCommand, "idPromocion", pedido.promocion.idPromocion); //puede ser null
+
             if (pedido.ordenCompracliente == null || pedido.ordenCompracliente.idOrdenCompraCliente == Guid.Empty)
                 InputParameterAdd.Guid(objCommand, "idOrdenCompraCliente", null); //puede ser null
             else
@@ -228,6 +233,11 @@ namespace DataLayer
                 InputParameterAdd.Guid(objCommand, "idCotizacion", null); //puede ser null
             else
                 InputParameterAdd.Guid(objCommand, "idCotizacion", pedido.cotizacion.idCotizacion); //puede ser null
+
+            if (pedido.promocion.idPromocion == Guid.Empty)
+                InputParameterAdd.Guid(objCommand, "idPromocion", null); //puede ser null
+            else
+                InputParameterAdd.Guid(objCommand, "idPromocion", pedido.promocion.idPromocion); //puede ser null
 
             InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);

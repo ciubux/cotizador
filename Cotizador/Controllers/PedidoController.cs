@@ -1547,6 +1547,26 @@ namespace Cotizador.Controllers
             }
         }
 
+        public String ChangeIdPromocion()
+        {
+            Pedido pedido = this.PedidoSession;
+            Guid idPromocion = Guid.Empty;
+            if (this.Request.Params["idPromocion"] != null && !this.Request.Params["idPromocion"].Equals(""))
+            {
+                idPromocion = Guid.Parse(this.Request.Params["idPromocion"]);
+                PromocionBL bL = new PromocionBL();
+                pedido.promocion = bL.getPromocion(idPromocion);
+            } else
+            {
+                pedido.promocion = new Promocion();
+                pedido.promocion.idPromocion = Guid.Empty;
+            }
+
+            this.PedidoSession = pedido;
+            return "{\"idPromocion\": \"" + idPromocion + "\"}";
+        }
+
+
         public void ChangeTipoPedido()
         {
             Char tipoPedido = Convert.ToChar(Int32.Parse(this.Request.Params["tipoPedido"]));

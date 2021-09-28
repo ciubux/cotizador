@@ -86,13 +86,15 @@ namespace Cotizador.Controllers
 
         public String GetPromocion()
         {
-            Guid idPromocion = Guid.Parse(Request["idPromocion"].ToString());
-            PromocionBL bL = new PromocionBL();
-            Promocion obj = bL.getPromocion(idPromocion);
-            
-            String resultado = JsonConvert.SerializeObject(obj);
+            Promocion obj = null;
+            if (this.Request.Params["idPromocion"] != null && !this.Request.Params["idPromocion"].Equals(""))
+            {
+                Guid idPromocion = Guid.Parse(Request["idPromocion"].ToString());
+                PromocionBL bL = new PromocionBL();
+                obj = bL.getPromocion(idPromocion);
+            }
 
-            return resultado;
+            return JsonConvert.SerializeObject(obj);
         }
 
         public ActionResult Editar(Guid? idPromocion = null)
