@@ -345,6 +345,7 @@ namespace Cotizador.Models.DTOsShow
         {
 
             PedidoDTOshow pedidoDTOshow = new PedidoDTOshow();
+            pedidoDTOshow.promocion = pedido.promocion;
             pedidoDTOshow.idPedido = pedido.idPedido;
             pedidoDTOshow.truncado = pedido.truncado;
             pedidoDTOshow.moneda = pedido.moneda;

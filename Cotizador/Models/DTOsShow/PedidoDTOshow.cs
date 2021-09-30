@@ -12,6 +12,8 @@ namespace Cotizador.Models.DTOshow
         public Guid idPedido { get; set; }
 
         public Moneda moneda { get; set; }
+
+        public Promocion promocion { get; set; }
         public DateTime? fechaEntregaDesde { get; set; }
         public DateTime? fechaEntregaHasta { get; set; }
         public String numeroPedidoString { get; set; }

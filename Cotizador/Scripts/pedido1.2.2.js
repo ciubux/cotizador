@@ -3192,6 +3192,13 @@ jQuery(function ($) {
                 $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
                 $("#verCorreoEnvioFactura").html(pedido.cliente_correoEnvioFactura);
 
+                if (pedido.promocion != null && pedido.promocion.idPromocion != null && pedido.promocion.idPromocion != '00000000-0000-0000-0000-000000000000') {
+                    $("#verNombrePromocion").html(pedido.promocion.codigo + " - " + pedido.promocion.titulo,);
+                    $("#spnPromocionTexto").html(pedido.promocion.textoDescripcion.replace(/\n/g, "<br/>"));
+                    $("#divPromoInfo").show();
+                } else {
+                    $("#divPromoInfo").hide();
+                }
 
 
                 if (pedido.tipoPedido == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
