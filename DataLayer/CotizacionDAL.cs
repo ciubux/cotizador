@@ -50,7 +50,13 @@ namespace DataLayer
                 InputParameterAdd.Int(objCommand, "idGrupoCliente", null);
                 InputParameterAdd.Guid(objCommand, "idCiudad", cotizacion.ciudad.idCiudad);
             }
-         
+
+            if (cotizacion.promocion.idPromocion == Guid.Empty)
+                InputParameterAdd.Guid(objCommand, "idPromocion", null); //puede ser null
+            else
+                InputParameterAdd.Guid(objCommand, "idPromocion", cotizacion.promocion.idPromocion); //puede ser null
+
+
             //porcentajeFlete
             InputParameterAdd.Decimal(objCommand, "porcentajeFlete", cotizacion.flete);
             InputParameterAdd.Decimal(objCommand, "igv", cotizacion.igv);
@@ -101,6 +107,12 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaModificacion", cotizacion.fechaModificacion);
             InputParameterAdd.SmallInt(objCommand, "incluidoIgv", short.Parse((cotizacion.incluidoIGV ? 1 : 0).ToString()));
             InputParameterAdd.Int(objCommand, "consideraCantidades", (int)cotizacion.considerarCantidades);
+
+            if (cotizacion.promocion.idPromocion == Guid.Empty)
+                InputParameterAdd.Guid(objCommand, "idPromocion", null); //puede ser null
+            else
+                InputParameterAdd.Guid(objCommand, "idPromocion", cotizacion.promocion.idPromocion); //puede ser null
+
 
             //Si no se cuenta con idCliente entonces se registra el grupo
             if (cotizacion.cliente.idCliente == Guid.Empty)
@@ -305,6 +317,16 @@ namespace DataLayer
                 cotizacion.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
                 cotizacion.ciudad.esProvincia = Converter.GetBool(row, "es_provincia");
                 cotizacion.grupo.ciudad = cotizacion.ciudad;
+
+                //PROMOCION
+                cotizacion.promocion = new Promocion();
+                cotizacion.promocion.idPromocion = Converter.GetGuid(row, "id_promocion");
+                cotizacion.promocion.codigo = Converter.GetString(row, "codigo_promocion");
+                cotizacion.promocion.titulo = Converter.GetString(row, "titulo_promocion");
+                cotizacion.promocion.fechaInicio = Converter.GetDateTime(row, "fecha_inicio_promocion");
+                cotizacion.promocion.fechaFin = Converter.GetDateTime(row, "fecha_fin_promocion");
+                cotizacion.promocion.descripcion = Converter.GetString(row, "descripcion_promocion");
+
 
                 //MONEDA
                 cotizacion.moneda = new Moneda();

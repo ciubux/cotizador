@@ -73,6 +73,9 @@ namespace Model
         public Ciudad ciudad { get; set; }
         public Cliente cliente { get; set; }
         public GrupoCliente grupo { get; set; }
+
+        [Display(Name = "Promoción:")]
+        public Promocion promocion { get; set; }
         public OpcionesConsiderarCantidades considerarCantidades { get; set; }
         public Boolean mostrarCodigoProveedor { get; set; }
         public Decimal montoSubTotal { get; set; }

@@ -10,6 +10,7 @@ namespace Cotizador.Models.DTOshow
     {
         public String textoCondicionesPago { get; set; }
         public Guid idCotizacion { get; set; }
+        public Promocion promocion { get; set; }
         public Guid cliente_idCliente { get; set; }
         public long codigo { get; set; }
         public long codigoAntecedente { get; set; }

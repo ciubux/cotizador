@@ -206,6 +206,9 @@ namespace Cotizador.Controllers
             cotizacionTmp.ajusteCalculoPrecios = false;
             cotizacionTmp.moneda = Moneda.ListaMonedas.Where(m => m.codigo.Equals("PEN")).FirstOrDefault();
 
+            cotizacionTmp.promocion = new Promocion();
+            cotizacionTmp.promocion.idPromocion = Guid.Empty;
+
             ParametroBL parametroBL = new ParametroBL();
             string ajusteDefecto = parametroBL.getParametro("COTIZACION_AJUSTAR_PRECIO_UNIDADES_MENORES");
             if(ajusteDefecto.Trim().Equals("SI"))
@@ -330,6 +333,7 @@ namespace Cotizador.Controllers
                 ViewBag.numero = cotizacion.codigo;
                 cotizacion.usuario = usuario;
                 ViewBag.cotizacion = cotizacion;
+                ViewBag.promocionSelect = cotizacion.promocion;
                 ViewBag.busquedaProductosIncluyeDescontinuados = 0;
                 if (this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"] != null)
                 {
@@ -427,7 +431,7 @@ namespace Cotizador.Controllers
                 ViewBag.numero = cotizacion.codigo;
 
                 ViewBag.cotizacion = cotizacion;
-
+                ViewBag.promocionSelect = cotizacion.promocion;
             }
             catch (Exception ex)
             {
@@ -791,6 +795,25 @@ namespace Cotizador.Controllers
 
 
 
+        public String ChangeIdPromocion()
+        {
+            Cotizacion cotizacion = this.CotizacionSession;
+            Guid idPromocion = Guid.Empty;
+            if (this.Request.Params["idPromocion"] != null && !this.Request.Params["idPromocion"].Equals(""))
+            {
+                idPromocion = Guid.Parse(this.Request.Params["idPromocion"]);
+                PromocionBL bL = new PromocionBL();
+                cotizacion.promocion = bL.getPromocion(idPromocion);
+            }
+            else
+            {
+                cotizacion.promocion = new Promocion();
+                cotizacion.promocion.idPromocion = Guid.Empty;
+            }
+
+            this.CotizacionSession = cotizacion;
+            return "{\"idPromocion\": \"" + idPromocion + "\"}";
+        }
 
 
         public String ChangeIdCiudad()

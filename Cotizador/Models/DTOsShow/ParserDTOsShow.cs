@@ -62,7 +62,8 @@ namespace Cotizador.Models.DTOsShow
             cotizacionDTOshow.ciudad_nombre = cotizacion.ciudad.nombre;
             cotizacionDTOshow.ciudad_idCiudad = cotizacion.ciudad.idCiudad;
             cotizacionDTOshow.cliente_razonSocial = cotizacion.cliente.razonSocial;//no se muestra
-            
+            cotizacionDTOshow.promocion = cotizacion.promocion;
+
             cotizacionDTOshow.monedaCodigo = cotizacion.moneda.codigo;
             cotizacionDTOshow.monedaSimbolo = cotizacion.moneda.simbolo;
             cotizacionDTOshow.monedaNombre = cotizacion.moneda.nombre;

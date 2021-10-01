@@ -513,6 +513,18 @@ namespace cotizadorPDF
                 sectionObervaciones.Canvas.DrawString("* Entrega sujeta a confirmación de disponibilidad luego de recibido el pedido u orden de compra.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 y = y + sepLine;
 
+                if (cot.promocion != null && cot.promocion.idPromocion != Guid.Empty)
+                {
+                    string[] linesPromocion = cot.promocion.textoDescripcion.Split(stringSeparators, StringSplitOptions.None);
+
+                    linesPromocion[0] = "* " + linesPromocion[0];
+                    foreach (string line in linesPromocion)
+                    {
+                        sectionObervaciones.Canvas.DrawString(line, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                        y = y + sepLine;
+                    }
+                }
+
 
                 foreach (string line in lines)
                 {
