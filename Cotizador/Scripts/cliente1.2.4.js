@@ -2645,6 +2645,30 @@ jQuery(function ($) {
         window.location.href = $(this).attr("actionLink");
     });
 
+    $("#lblChkEsAgenteRetencion").click(function () {
+        if ($("#chkEsAgenteRetencion").is(":checked")) {
+            $("#chkEsAgenteRetencion").prop("checked", false);
+        } else {
+            $("#chkEsAgenteRetencion").prop("checked", true);
+        }
+
+        actualizarValorChkEsAgenteRetencion();
+    });
+
+
+    $("#chkEsAgenteRetencion").change(function () {
+        actualizarValorChkEsAgenteRetencion();
+    });
+
+    function actualizarValorChkEsAgenteRetencion() {
+        var valor = 1;
+        if (!$('#chkEsAgenteRetencion').prop('checked')) {
+            valor = 0;
+        }
+        changeInputBoolean('esAgenteRetencion', valor)
+    }
+
+
     $("#lblChkConfigAgregarNombreSedeObservacionFactura").click(function () {
         if ($("#chkConfigAgregarNombreSedeObservacionFactura").is(":checked")) {
             $("#chkConfigAgregarNombreSedeObservacionFactura").prop("checked", false);
@@ -3261,6 +3285,14 @@ jQuery(function ($) {
                 } else {
                     $("#verChkConfigAgregarNombreSedeObservacionFactura_SI").hide();
                     $("#verChkConfigAgregarNombreSedeObservacionFactura_NO").show();
+                }
+
+                if (cliente.esAgenteRetencion) {
+                    $("#verChkEsAgenteRetencion_SI").show();
+                    $("#verChkEsAgenteRetencion_NO").hide();
+                } else {
+                    $("#verChkEsAgenteRetencion_SI").hide();
+                    $("#verChkEsAgenteRetencion_NO").show();
                 }
 
                 if (cliente.configuraciones.facturacionCompleja) {

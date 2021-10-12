@@ -45,7 +45,11 @@ namespace Model
 
         public String textoDescripcion
         {
-            get { return this.titulo + "\n" + this.descripcion + "\n" + "Válido desde " + this.fechaInicioDesc + " hasta " + this.fechaFinDesc; }
+            get { return this.descripcion + "\n" + "Válido desde " + this.fechaInicioDesc + " hasta " + this.fechaFinDesc + " ó agotar stock."; }
+        }
+        public String textoPresentacion
+        {
+            get { return "APLICA PROMOCIÓN: " + this.titulo + "\n" + this.descripcion + "\n" + "Promoción válida desde " + this.fechaInicioDesc + " hasta " + this.fechaFinDesc + " ó agotar stock."; }
         }
     }
 }

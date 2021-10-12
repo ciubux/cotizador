@@ -704,6 +704,27 @@
                         </div>
 
                         <div class="row">
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.kit, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verKit"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    <label class="control-label col-xs-10 col-sm-10  col-lg-10">Validar Stock:</label>
+                                    <div class="col-xs-2 col-sm-2 col-lg-2">
+                                        <p class="form-control-static" id="verValidarStock"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
                             <div class="col-sm-6 col-lg-8">
                                 <div class="form-group">
                                     @Html.LabelFor(c => producto.descripcionLarga, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-2" })

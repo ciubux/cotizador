@@ -33,6 +33,10 @@ namespace Model
 
         public static String URL_VER_PEDIDO = "http://cotizadormp.azurewebsites.net/Pedido?idPedido=";
 
+        public static int IDROLJEFEFACTURACION = 3;
+        public static int IDROLJEFECREDITOS = 11;
+
+        public static Guid IDUSUARIOZAS = new Guid("C7E67D0D-10DD-41DB-8708-132341E946A2");
 
         public static String ID_SEDE_TODOS = "78343C04-DA94-4249-B0CE-474DAB6dAD3F";
 

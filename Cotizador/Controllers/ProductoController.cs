@@ -57,6 +57,16 @@ namespace Cotizador.Controllers
 
         }
 
+        public ActionResult SelectKit(string kitSelectId, string selectedValue = null)
+        {
+            
+            ProductoBL bl = new ProductoBL();
+
+            var model = bl.ListKitText();
+
+            return PartialView("_SelectProductoKit", model);
+        }
+
         public String SearchList()
         {
             //Se indica la página con la que se va a trabajar
@@ -159,6 +169,8 @@ namespace Cotizador.Controllers
             producto.monedaMP = "S";
             producto.monedaProveedor = "S";
             producto.motivoRestriccion = String.Empty;
+            producto.kit = String.Empty;
+            producto.validaStock = 1;
             FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);
             MemoryStream storeStream = new MemoryStream();
             storeStream.SetLength(inStream.Length);
@@ -1726,6 +1738,56 @@ namespace Cotizador.Controllers
 
                         pos = posicionInicial + 42; // Costo referencial calculado
                         //UtilesHelper.setValorCelda(sheet, 1, "AC", Producto.nombreAtributo("tipoProducto"), titleCellStyle);
+
+                        
+                        pos = posicionInicial + 43;
+                        try
+                        {
+                            string mfp = sheet.GetRow(row).GetCell(pos).ToString().Trim().Replace("\"", "''");
+                            productoStaging.monedaFleteProvincias = Moneda.ListaMonedasFija.Where(m => m.nombre.Equals(mfp)).FirstOrDefault();
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.monedaFleteProvincias = Moneda.ListaMonedasFija.Where(m => m.codigo.Equals("PEN")).FirstOrDefault();
+                        }
+
+                        pos = posicionInicial + 44;
+                        try
+                        {
+                            Double? val = sheet.GetRow(row).GetCell(pos).NumericCellValue;
+                            productoStaging.costoFleteProvincias = Convert.ToDecimal(val);
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.costoFleteProvincias = 0;
+                        }
+
+                        pos = posicionInicial + 45;
+                        try
+                        {
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                productoStaging.kit = "";
+                            }
+                            else
+                            {
+                                productoStaging.kit = sheet.GetRow(row).GetCell(pos).ToString().Trim().Replace("\"", "''");
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.kit = "";
+                        }
+
+                        pos = posicionInicial + 46;
+                        try
+                        {
+                            productoStaging.validaStock = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper() == "SI" ? 1 : 0;
+                        }
+                        catch (Exception e)
+                        {
+                            productoStaging.validaStock = 0;
+                        }
 
                         productoStaging.tipoCambio = tipoCambio;
                         productoStaging.calcularCostoPrecio();

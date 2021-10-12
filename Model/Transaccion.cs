@@ -38,6 +38,9 @@ namespace Model
         [Display(Name = "Cliente:")]
         public Cliente cliente { get; set; }
 
+        [Display(Name = "Moneda:")]
+        public Moneda moneda { get; set; }
+
         [Display(Name = "Tasa IGV:")]
         public Decimal tasaIGV { get; set; }
 

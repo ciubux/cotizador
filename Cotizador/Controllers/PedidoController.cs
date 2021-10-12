@@ -526,7 +526,7 @@ namespace Cotizador.Controllers
             pedido.ciudad = cotizacion.ciudad;
             pedido.cliente = cotizacion.cliente;
             pedido.esPagoContado = cotizacion.esPagoContado;
-
+            pedido.moneda = cotizacion.moneda;
 
             if (cotizacion.cliente.horaInicioPrimerTurnoEntrega != null && !cotizacion.cliente.horaInicioPrimerTurnoEntrega.Equals("00:00:00"))
             {
