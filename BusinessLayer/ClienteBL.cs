@@ -519,6 +519,31 @@ namespace BusinessLayer
 
                 enviarNotificacionSolicitudCredito(cliente);
 
+
+                if (cliente.esAgenteRetencion)
+                {
+                    UsuarioDAL usuarioDal = new UsuarioDAL();
+                    RolDAL rolDal = new RolDAL();
+                    Mensaje notificacion = new Mensaje();
+                    notificacion.titulo = "SE REGISTRÓ CLIENTE COMO AGENTE DE RETENCIÓN";
+                    notificacion.mensaje = "El usuario " + cliente.usuario.nombre + " registró el cliente \"" + cliente.razonSocialSunat + "\" como agente de retención.";
+ 
+                    notificacion.fechaInicioMensaje = DateTime.Now;
+                    notificacion.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
+                    notificacion.user = usuarioDal.getUsuario(Constantes.IDUSUARIOZAS);
+                    notificacion.importancia = "Alta";
+
+                    List<int> idRoles = new List<int>();
+                    idRoles.Add(Constantes.IDROLJEFECREDITOS);
+                    idRoles.Add(Constantes.IDROLJEFEFACTURACION);
+
+                    notificacion.listUsuario = rolDal.getUsuariosRoles(idRoles);
+                    notificacion.listUsuario.RemoveAll(item => item.idUsuario == cliente.usuario.idUsuario);
+
+                    MensajeDAL mensajeDal = new MensajeDAL();
+                    mensajeDal.insertMensaje(notificacion);
+                }
+
                 return cliente;
             }
         }
@@ -673,6 +698,39 @@ namespace BusinessLayer
 
                     AlertaValidacionDAL alertaDal = new AlertaValidacionDAL();
                     alertaDal.insertAlertaValidacion(alerta);
+                }
+
+                if (cliente.esAgenteRetencion != clientePrev.esAgenteRetencion)
+                {
+                    UsuarioDAL usuarioDal = new UsuarioDAL();
+                    RolDAL rolDal = new RolDAL();
+                    Mensaje notificacion = new Mensaje();
+                    if (cliente.esAgenteRetencion)
+                    {
+                        notificacion.titulo = "SE REGISTRÓ CLIENTE COMO AGENTE DE RETENCIÓN";
+                        notificacion.mensaje = "El usuario " + cliente.usuario.nombre + " registró el cliente \"" + cliente.razonSocialSunat + "\" como agente de retención.";
+                    }
+                    else
+                    {
+                        notificacion.titulo = "SE RETIRÓ REGISTRÓ DE CLIENTE COMO AGENTE DE RETENCIÓN";
+                        notificacion.mensaje = "El usuario " + cliente.usuario.nombre + " retiró el registró el cliente \"" + cliente.razonSocialSunat + "\" como agente de retención.";
+                    }
+
+
+                    notificacion.fechaInicioMensaje = DateTime.Now;
+                    notificacion.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
+                    notificacion.user = usuarioDal.getUsuario(Constantes.IDUSUARIOZAS);
+                    notificacion.importancia = "Alta";
+
+                    List<int> idRoles = new List<int>();
+                    idRoles.Add(Constantes.IDROLJEFECREDITOS);
+                    idRoles.Add(Constantes.IDROLJEFEFACTURACION);
+
+                    notificacion.listUsuario = rolDal.getUsuariosRoles(idRoles);
+                    notificacion.listUsuario.RemoveAll(item => item.idUsuario == cliente.usuario.idUsuario);
+
+                    MensajeDAL mensajeDal = new MensajeDAL();
+                    mensajeDal.insertMensaje(notificacion);
                 }
 
                 /*Si existen cambios en la solicitud o aprobacion de créditos*/

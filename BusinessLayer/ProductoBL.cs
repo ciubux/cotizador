@@ -36,7 +36,13 @@ namespace BusinessLayer
             return resultado;
         }
 
-
+        public List<String> ListKitText()
+        {
+            using (ProductoDAL dal = new ProductoDAL())
+            {
+                return dal.ListKitText();
+            }
+        }
 
         public Guid getProductoId(String sku)
         {

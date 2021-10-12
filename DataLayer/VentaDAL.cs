@@ -569,6 +569,14 @@ namespace DataLayer
                 venta.total = Converter.GetDecimal(row, "total_venta");
                 venta.idVenta = Converter.GetGuid(row, "id_Venta");
 
+                venta.moneda = new Moneda();
+                venta.moneda.codigo = Converter.GetString(row, "moneda");
+
+                venta.moneda = Moneda.ListaMonedasFija.Where(m => m.codigo == venta.moneda.codigo).FirstOrDefault();
+                if(venta.moneda == null)
+                {
+                    venta.moneda = Moneda.ListaMonedasFija.Where(m => m.codigo == "PEN").FirstOrDefault();
+                }
 
                 pedido.ubigeoEntrega = new Ubigeo();
                 pedido.ubigeoEntrega.Id = Converter.GetString(row, "ubigeo_entrega");

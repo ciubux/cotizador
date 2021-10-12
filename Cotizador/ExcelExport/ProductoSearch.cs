@@ -188,7 +188,7 @@ namespace Cotizador.ExcelExport
 
                 /*Cabecera, Sub total*/
                 int rTotal = (list.Count) + 1;
-                int cTotal = 45 + 2;
+                int cTotal = 47 + 2;
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
@@ -215,6 +215,7 @@ namespace Cotizador.ExcelExport
                 setDataValidationSINO(sheet, 1 + list.Count, 32);
                 setDataValidationSINO(sheet, 1 + list.Count, 37);
                 setDataValidationSINO(sheet, 1 + list.Count, 39);
+                setDataValidationSINO(sheet, 1 + list.Count, 46);
 
                 setDataValidationMonedas(sheet, 1 + list.Count, 12);
                 setDataValidationMonedas(sheet, 1 + list.Count, 15);
@@ -279,6 +280,9 @@ namespace Cotizador.ExcelExport
 
                     UtilesHelper.setValorCelda(sheet, i, "AR", obj.monedaFleteProvincias.nombre);
                     UtilesHelper.setValorCelda(sheet, i, "AS", (double)obj.costoFleteProvincias);
+
+                    UtilesHelper.setValorCelda(sheet, i, "AT", obj.kit);
+                    UtilesHelper.setValorCelda(sheet, i, "AU", obj.validaStock == 1 ? "SI" : "NO");
                     i++;
                 }
 
@@ -337,6 +341,9 @@ namespace Cotizador.ExcelExport
 
                 UtilesHelper.setValorCelda(sheet, 1, "AR", "Moneda Costo Flete", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "AS", "Costo Flete Provincias", titleCellStyle);
+
+                UtilesHelper.setValorCelda(sheet, 1, "AT", "Kit/Combo", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "AU", "Validar Stock", titleCellStyle);
 
                 MemoryStream ms = new MemoryStream();
                 using (MemoryStream tempStream = new MemoryStream())

@@ -497,6 +497,8 @@ namespace Cotizador.Controllers
                 }
 
                 ViewBag.pagina = (int)Constantes.paginas.MantenimientoPedido;
+                ViewBag.promocionSelect = pedido.promocion;
+
                 return View();
             }
             catch (Exception e)
@@ -524,7 +526,7 @@ namespace Cotizador.Controllers
             pedido.ciudad = cotizacion.ciudad;
             pedido.cliente = cotizacion.cliente;
             pedido.esPagoContado = cotizacion.esPagoContado;
-
+            pedido.moneda = cotizacion.moneda;
 
             if (cotizacion.cliente.horaInicioPrimerTurnoEntrega != null && !cotizacion.cliente.horaInicioPrimerTurnoEntrega.Equals("00:00:00"))
             {
@@ -773,6 +775,9 @@ namespace Cotizador.Controllers
                 pedido.ciudad = new Ciudad();
                 pedido.cliente = new Cliente();
                 pedido.esPagoContado = false;
+
+                pedido.promocion = new Promocion();
+                pedido.promocion.idPromocion = Guid.Empty;
 
                 pedido.tipoPedido = Pedido.tiposPedido.Venta;
                 pedido.ciudadASolicitar = new Ciudad();
@@ -1544,6 +1549,26 @@ namespace Cotizador.Controllers
                 return "{\"idCiudad\": \"" + idCiudad + "\"}";
             }
         }
+
+        public String ChangeIdPromocion()
+        {
+            Pedido pedido = this.PedidoSession;
+            Guid idPromocion = Guid.Empty;
+            if (this.Request.Params["idPromocion"] != null && !this.Request.Params["idPromocion"].Equals(""))
+            {
+                idPromocion = Guid.Parse(this.Request.Params["idPromocion"]);
+                PromocionBL bL = new PromocionBL();
+                pedido.promocion = bL.getPromocion(idPromocion);
+            } else
+            {
+                pedido.promocion = new Promocion();
+                pedido.promocion.idPromocion = Guid.Empty;
+            }
+
+            this.PedidoSession = pedido;
+            return "{\"idPromocion\": \"" + idPromocion + "\"}";
+        }
+
 
         public void ChangeTipoPedido()
         {

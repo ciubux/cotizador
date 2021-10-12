@@ -441,6 +441,10 @@ jQuery(function ($) {
         });
     }
 
+    $("#producto_kit").change(function () {
+        changeInputString("kit", $("#producto_kit").val());
+    });
+
     $("#motivoRestriccion").change(function () {
         changeInputString("motivoRestriccion", $("#motivoRestriccion").val());
     });
@@ -599,6 +603,14 @@ jQuery(function ($) {
 
     $("#producto_costoSinIgv").change(function () {
         changeInputDecimal("costoSinIgv", $("#producto_costoSinIgv").val());
+    });
+
+    $("#chkValidarStock").change(function () {
+        var valor = 1;
+        if (!$('#chkValidarStock').prop('checked')) {
+            valor = 0;
+        }
+        changeInputInt('validaStock', valor)
     });
 
     $("#producto_inafecto").change(function () {
@@ -781,6 +793,11 @@ jQuery(function ($) {
 
                 $("#verCodigoSunat").html(producto.codigoSunat);
 
+                if (producto.kit == "") {
+                    $("#verKit").html("-");
+                } else {
+                    $("#verKit").html(producto.kit);
+                }
                 $("#verCostoOriginal").html(Number(producto.costoOriginal).toFixed(cantidadCuatroDecimales));
                 $("#verCostoReferencialOriginal").html(Number(producto.costoReferencialOriginal).toFixed(cantidadCuatroDecimales));
                 
@@ -806,6 +823,14 @@ jQuery(function ($) {
                 else {
                     $("#verExoneradoIgv").html("No");
                 }
+
+                if (producto.validaStock) {
+                    $("#verValidarStock").html("Sí");
+                }
+                else {
+                    $("#verValidarStock").html("No");
+                }
+
 
                 if (producto.inafecto) {
                     $("#verInafecto").html("Sí");

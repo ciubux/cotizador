@@ -177,13 +177,12 @@ namespace DataLayer
 
             ExecuteNonQuery(objCommand);
         }
-        /*
         
-        public List<Usuario> getUsuariosRoles(List<int?> idRol)
+        
+        public List<Usuario> getUsuariosRoles(List<int> idRol)
         {
-            var objCommand = GetSqlCommand("ps_rol_list_usuarios");
+            var objCommand = GetSqlCommand("ps_roles_usuarios");
             
-            DataTable dataTable = Execute(objCommand);
             List<Usuario> lista = new List<Usuario>();
 
             DataTable tvp = new DataTable();
@@ -195,13 +194,13 @@ namespace DataLayer
                 rowObj["ID"] = rol;
                 tvp.Rows.Add(rowObj);
             }
-            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@roles", tvp);
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idRoles", tvp);
             tvparam.SqlDbType = SqlDbType.Structured;
             tvparam.TypeName = "dbo.IntegerList";
 
 
-            DataTable dataTabler = ExecuteReader(objCommand);
-            foreach (DataRow row in dataTabler.Rows)
+            DataTable dataTable = Execute(objCommand);
+            foreach (DataRow row in dataTable.Rows)
             {
                 Usuario obj = new Usuario();
                 obj.idUsuario = Converter.GetGuid(row, "id_usuario");
@@ -212,7 +211,5 @@ namespace DataLayer
 
             return lista;
         }
-        */
-        
     }
 }

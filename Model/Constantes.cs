@@ -33,6 +33,10 @@ namespace Model
 
         public static String URL_VER_PEDIDO = "http://cotizadormp.azurewebsites.net/Pedido?idPedido=";
 
+        public static int IDROLJEFEFACTURACION = 3;
+        public static int IDROLJEFECREDITOS = 11;
+
+        public static Guid IDUSUARIOZAS = new Guid("C7E67D0D-10DD-41DB-8708-132341E946A2");
 
         public static String ID_SEDE_TODOS = "78343C04-DA94-4249-B0CE-474DAB6dAD3F";
 
@@ -164,6 +168,10 @@ namespace Model
         public static String VAR_SESSION_RUBRO_LISTA = "rubroList";
         public static String VAR_SESSION_RUBRO_VER = "rubroVer";
 
+        public static String VAR_SESSION_PROMOCION = "promocion";
+        public static String VAR_SESSION_PROMOCION_BUSQUEDA = "promocionBusqueda";
+        public static String VAR_SESSION_PROMOCION_LISTA = "promocionList";
+        public static String VAR_SESSION_PROMOCION_VER = "promocionVer";
 
         public static String VAR_SESSION_PROVEEDOR = "proveedor";
 
@@ -462,6 +470,8 @@ namespace Model
         public const String MODIFICA_RUBRO = "P750";
         public const String VISUALIZA_RUBROS = "P751";
 
+        public const String MODIFICA_PROMOCION = "P770";
+
         public const String CAMBIA_CLIENTE_FACTURA = "P581";
         public const String CREA_FACTURA_COMPLEJA = "P582";
 
@@ -660,6 +670,11 @@ namespace Model
             BusquedaRubros = 750,
             [Display(Name = "CREATE/UPDATE RUBRO")]
             MantenimientoRubro = 751,
+
+            [Display(Name = "BUSQUEDA PROMOCIONES")]
+            BusquedaPromociones = 770,
+            [Display(Name = "CREATE/UPDATE PROMOCION")]
+            MantenimientoPromocion = 771,
 
             [Display(Name = "PLANTILLA CARGA MASIVA STOCK")]
             DescargaPlantillMasivaStock = 720,

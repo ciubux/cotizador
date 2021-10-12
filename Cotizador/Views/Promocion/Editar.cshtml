@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "Crear/Modificar Promoción";
+    Model.Promocion promocion = ViewBag.promocion;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" value="@ViewBag.debug" />
+    <form class="form-horizontal">
+        <div class="row">
+            <input type="hidden" id="idPromocion" name="idPromocion" value="@promocion.idPromocion" />
+
+            <div class="row">
+                <div class="col-sm-12 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => promocion.codigo, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                        <div class="col-xs-8 col-lg-8">
+                            @Html.TextBoxFor(c => promocion.codigo, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => promocion.titulo, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-2" })
+                        <div class="col-xs-8 col-lg-10">
+                            @Html.TextBoxFor(c => promocion.titulo, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-sm-12 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => promocion.fechaInicio, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                        <div class="col-xs-8 col-lg-8">
+                            @Html.TextBoxFor(c => promocion.fechaInicioDesc, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => promocion.fechaFin, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                        <div class="col-xs-8 col-lg-8">
+                            @Html.TextBoxFor(c => promocion.fechaFinDesc, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => promocion.Estado, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        <div class="col-xs-8">
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    @if (promocion.Estado == 1)
+                                    {
+                                        <input class="radio-input" checked type="radio" name="promocion_estado" id="promocion_estado_si" value="1"><span>Activo</span>
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" type="radio" name="promocion_estado" id="promocion_estado_si" value="1"><span>Activo</span>
+                                    }
+
+                                </label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    @if (promocion.Estado == 0)
+                                    {
+                                        <input class="radio-input" checked type="radio" name="promocion_estado" id="promocion_estado_no" value="0"><span>Inactivo</span>
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" type="radio" name="promocion_estado" id="promocion_estado_no" value="0"><span>Inactivo</span>
+                                    }
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => promocion.descripcion, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-2" })
+                        <div class="col-xs-8 col-lg-10">
+                            @Html.TextAreaFor(c => promocion.descripcion, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+
+        <div class="row">
+            <div class="pull-right">
+                <button type="button" id="btnCancelarPromocion" class="btn btn-danger">Cancelar</button>
+                <button id="btnFinalizarEdicionPromocion" type="button" class="btn btn-success">Finalizar Creación</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/promocion")
+}

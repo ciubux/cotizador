@@ -1089,6 +1089,9 @@ namespace DataLayer
                 item.costoFleteProvincias = Converter.GetDecimal(row, "costo_flete_provincias");
                 item.monedaFleteProvincias = Moneda.ListaMonedasFija.Where(m => m.codigo.Equals(Converter.GetString(row, "moneda_flete_provincias"))).First();
 
+                item.kit = Converter.GetString(row, "kit");
+                item.validaStock = Converter.GetInt(row, "valida_stock");
+
                 item.tipoCambio = Converter.GetDecimal(row, "tipo_cambio");
                 item.monedaMP = Converter.GetString(row, "moneda_venta");
                 item.monedaProveedor = Converter.GetString(row, "moneda_compra");
@@ -1305,6 +1308,9 @@ namespace DataLayer
                 item.costoReferencial = Converter.GetDecimal(row, "costo_referencial");
                 item.costoReferencialOriginal = Converter.GetDecimal(row, "costo_original_referencial");
 
+                item.kit = Converter.GetString(row, "kit");
+                item.validaStock= Converter.GetInt(row, "valida_stock");
+
                 item.esComercial = Converter.GetInt(row, "es_comercial");
 
                 item.costoFleteProvincias = Converter.GetDecimal(row, "costo_flete_provincias");
@@ -1368,6 +1374,9 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "unidadConteo", producto.unidadConteo);
             InputParameterAdd.VarcharEmpty(objCommand, "unidadProveedorInternacional", producto.unidadProveedorInternacional == null ? "" : producto.unidadProveedorInternacional);
             InputParameterAdd.Varchar(objCommand, "codigoSunat", producto.codigoSunat);
+
+            InputParameterAdd.Int(objCommand, "validaStock", producto.validaStock);
+            InputParameterAdd.Varchar(objCommand, "kit", producto.kit.Trim());
 
             InputParameterAdd.Int(objCommand, "esComercial", producto.esComercial);
 
@@ -1484,6 +1493,9 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "equivalenciaUnidadAlternativaUnidadConteo", producto.equivalenciaUnidadAlternativaUnidadConteo);
             InputParameterAdd.Int(objCommand, "equivalenciaUnidadEstandarUnidadConteo", producto.equivalenciaUnidadEstandarUnidadConteo);
             InputParameterAdd.Int(objCommand, "equivalenciaUnidadProveedorUnidadConteo", producto.equivalenciaUnidadProveedorUnidadConteo);
+
+            InputParameterAdd.Int(objCommand, "validaStock", producto.validaStock);
+            InputParameterAdd.Varchar(objCommand, "kit", producto.kit == null ? "" : producto.kit.Trim());
 
             InputParameterAdd.Decimal(objCommand, "topeDescuento", producto.topeDescuento);
             InputParameterAdd.Decimal(objCommand, "costoOriginal", producto.costoOriginal);
@@ -1607,6 +1619,27 @@ namespace DataLayer
             }
 
             return productoList;
+        }
+
+        public List<String> ListKitText()
+        {
+            var objCommand = GetSqlCommand("ps_get_producto_kit_options");
+
+            DataSet dataSet = ExecuteDataSet(objCommand);
+
+
+            DataTable dataTable = dataSet.Tables[0];
+
+            List<String> list = new List<String>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                String item = Converter.GetString(row, "texto");
+
+                list.Add(item);
+            }
+
+            return list;
         }
 
         public List<RegistroCargaStock> StockProducto(string sku, Guid idUsuario)

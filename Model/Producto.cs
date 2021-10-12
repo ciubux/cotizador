@@ -422,6 +422,13 @@ namespace Model
 
         public int Stock { get; set; }
 
+        [Display(Name = "Kit/Combo:")]
+        public string kit { get; set; }
+
+        [Display(Name = "Validar Stock:")]
+        public int validaStock { get; set; }
+
+
         [Display(Name = "Venta Restringida:")]
         public TipoVentaRestringida ventaRestringida { get; set; }
 
@@ -572,6 +579,9 @@ namespace Model
                     case "costo_flete_provincias": cp.nombre = Producto.nombreAtributo("costoFleteProvincias"); break;
                     case "moneda_flete_provincias": cp.nombre = Producto.nombreAtributo("monedaFleteProvincias"); break;
 
+                    case "kit": cp.nombre = Producto.nombreAtributo("kit"); break;
+                    case "valida_stock": cp.nombre = Producto.nombreAtributo("validaStock"); break;
+
                     default: cp.nombre = "[NOT_FOUND]"; break;
 
                         /* TO DO: Evaluar si se usan
@@ -670,7 +680,9 @@ namespace Model
 
                     case "costo_flete_provincias": lc = instanciarLogCambio(campo); lc.valor = this.costoFleteProvincias.ToString(); break;
                     case "moneda_flete_provincias": lc = instanciarLogCambio(campo); lc.valor =(this.monedaFleteProvincias == null ? "" : this.monedaFleteProvincias.codigo); break;
-                    
+
+                    case "kit": lc = instanciarLogCambio(campo); lc.valor = this.kit; break;
+                    case "valida_stock": lc = instanciarLogCambio(campo); lc.valor = this.validaStock.ToString(); break;
 
                     case "descripcion_larga": lc = instanciarLogCambio(campo); lc.valor = this.descripcionLarga.ToString(); break;
                     case "agregar_descripcion_cotizacion": lc = instanciarLogCambio(campo); lc.valor = this.agregarDescripcionCotizacion.ToString(); break;
@@ -1362,6 +1374,37 @@ namespace Model
                         else
                         {
                             this.monedaFleteProvincias = Moneda.ListaMonedas.Where(m => m.codigo.Equals(cambio.valor)).First();
+                            lista.Add(cambio);
+                        }
+                        break;
+
+                    case "kit":
+                        if (this.kit == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.kit = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "valida_stock":
+                        if (this.validaStock == int.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.validaStock = int.Parse(cambio.valor);
                             lista.Add(cambio);
                         }
                         break;

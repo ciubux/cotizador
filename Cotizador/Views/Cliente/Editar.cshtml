@@ -1060,6 +1060,19 @@
                 <div class="col-sm-12 col-lg-6">
                     <div class="col-sm-12">
                         <div class="form-group">
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="onoffswitch" @(cliente.esAgenteRetencion ? "checked" : "") class="onoffswitch-checkbox" id="chkEsAgenteRetencion">
+                                <label class="onoffswitch-label" for="chkEsAgenteRetencion"></label>
+                            </div>
+                            <h5 id="lblChkEsAgenteRetencion" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Es agente de retención</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-lg-6">
+                    <div class="col-sm-12">
+                        <div class="form-group">
                             @if (cliente.usuario.activaClienteFacturaCompleja)
                             {
                                 <div class="onoffswitch">

@@ -693,6 +693,14 @@
             </div>
         </div>
 
+        <!--PROMOCIONES-->
+        <div class="form-group">
+            @Html.LabelFor(p => cotizacion.promocion, htmlAttributes: new { @class = "control-label col-xs-2" })
+            <div class="col-xs-10">
+                @Html.Partial("../Promocion/_PluginSelect")
+            </div>
+        </div>
+
         <div class="form-group">
             <label for="observaciones" class="control-label col-xs-2">Observaciones:</label>
             <div class="col-xs-10">

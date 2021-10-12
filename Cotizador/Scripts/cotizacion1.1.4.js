@@ -2333,7 +2333,14 @@ jQuery(function ($) {
                 // sleep
                 $("#tableDetalleCotizacion").append(d);
 
-                
+                if (cotizacion.promocion != null && cotizacion.promocion.idPromocion != null && cotizacion.promocion.idPromocion != '00000000-0000-0000-0000-000000000000') {
+                    $("#verNombrePromocion").html(cotizacion.promocion.codigo + " - " + cotizacion.promocion.titulo,);
+                    $("#spnPromocionTexto").html(cotizacion.promocion.textoDescripcion.replace(/\n/g, "<br/>"));
+                    $("#divPromoInfo").show();
+                } else {
+                    $("#divPromoInfo").hide();
+                }
+
 
                 /*EDITAR COTIZACIÓN*/
                 if (
@@ -4147,6 +4154,24 @@ jQuery(function ($) {
                 location.reload();
             },
             success: function (ciudad) {
+            }
+        });
+    });  
+
+    $("#idPromocion").change(function () {
+        var idPromocion = $("#idPromocion").val();
+
+        $.ajax({
+            url: "/Cotizacion/ChangeIdPromocion",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idPromocion: idPromocion
+            },
+            error: function (detalle) {
+                location.reload();
+            },
+            success: function (promocion) {
             }
         });
     });  

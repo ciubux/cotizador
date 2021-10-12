@@ -98,6 +98,10 @@ namespace Cotizador
                      "~/Scripts/producto1.0.0.js"
                      ));
 
+            bundles.Add(new ScriptBundle("~/bundles/promocion").Include(
+                     "~/Scripts/promocion.js"
+                     ));
+
             bundles.Add(new ScriptBundle("~/bundles/origen").Include(
                      "~/Scripts/origen1.0.0.js"
                      ));

@@ -143,6 +143,9 @@ namespace Model
         [Display(Name = "Observaciones Factura:")]
         public String observacionesFactura { get; set; }
 
+        [Display(Name = "Promoción:")]
+        public Promocion promocion { get; set; }
+
         [Display(Name = "Ciudad Entrega:")]
         public Ubigeo ubigeoEntrega { get; set; }
 

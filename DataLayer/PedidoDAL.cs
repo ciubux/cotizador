@@ -32,6 +32,11 @@ namespace DataLayer
             else
                 InputParameterAdd.Guid(objCommand, "idCotizacion", pedido.cotizacion.idCotizacion); //puede ser null
 
+            if (pedido.promocion == null || pedido.promocion.idPromocion == Guid.Empty)
+                InputParameterAdd.Guid(objCommand, "idPromocion", null); //puede ser null
+            else
+                InputParameterAdd.Guid(objCommand, "idPromocion", pedido.promocion.idPromocion); //puede ser null
+
             if (pedido.ordenCompracliente == null || pedido.ordenCompracliente.idOrdenCompraCliente == Guid.Empty)
                 InputParameterAdd.Guid(objCommand, "idOrdenCompraCliente", null); //puede ser null
             else
@@ -228,6 +233,11 @@ namespace DataLayer
                 InputParameterAdd.Guid(objCommand, "idCotizacion", null); //puede ser null
             else
                 InputParameterAdd.Guid(objCommand, "idCotizacion", pedido.cotizacion.idCotizacion); //puede ser null
+
+            if (pedido.promocion == null || pedido.promocion.idPromocion == Guid.Empty)
+                InputParameterAdd.Guid(objCommand, "idPromocion", null); //puede ser null
+            else
+                InputParameterAdd.Guid(objCommand, "idPromocion", pedido.promocion.idPromocion); //puede ser null
 
             InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
@@ -888,6 +898,14 @@ namespace DataLayer
                 pedido.cliente.grupoCliente = new GrupoCliente();
                 pedido.cliente.grupoCliente.nombre = Converter.GetString(row, "grupo_nombre");
 
+                pedido.promocion = new Promocion();
+                pedido.promocion.idPromocion = Converter.GetGuid(row, "id_promocion");
+                pedido.promocion.codigo = Converter.GetString(row, "codigo_promocion");
+                pedido.promocion.titulo = Converter.GetString(row, "titulo_promocion");
+                pedido.promocion.fechaInicio = Converter.GetDateTime(row, "fecha_inicio_promocion");
+                pedido.promocion.fechaFin = Converter.GetDateTime(row, "fecha_fin_promocion");
+                pedido.promocion.descripcion = Converter.GetString(row, "descripcion_promocion");
+
                 pedido.ciudad = new Ciudad();
                 pedido.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 pedido.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
@@ -1263,11 +1281,19 @@ namespace DataLayer
                 pedido.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 pedido.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
 
-             /*   pedido.usuario = new Usuario();
-                pedido.usuario.nombre = Converter.GetString(row, "nombre_usuario");
-                pedido.usuario.cargo = Converter.GetString(row, "cargo");
-                pedido.usuario.contacto = Converter.GetString(row, "contacto_usuario");
-                pedido.usuario.email = Converter.GetString(row, "email");*/
+                pedido.promocion = new Promocion();
+                pedido.promocion.idPromocion = Converter.GetGuid(row, "id_promocion");
+                pedido.promocion.codigo = Converter.GetString(row, "codigo_promocion");
+                pedido.promocion.titulo = Converter.GetString(row, "titulo_promocion");
+                pedido.promocion.fechaInicio = Converter.GetDateTime(row, "fecha_inicio_promocion");
+                pedido.promocion.fechaFin = Converter.GetDateTime(row, "fecha_fin_promocion");
+                pedido.promocion.descripcion = Converter.GetString(row, "descripcion_promocion");
+
+                /*   pedido.usuario = new Usuario();
+                   pedido.usuario.nombre = Converter.GetString(row, "nombre_usuario");
+                   pedido.usuario.cargo = Converter.GetString(row, "cargo");
+                   pedido.usuario.contacto = Converter.GetString(row, "contacto_usuario");
+                   pedido.usuario.email = Converter.GetString(row, "email");*/
 
                 pedido.seguimientoPedido = new SeguimientoPedido();
                 pedido.seguimientoPedido.estado = (SeguimientoPedido.estadosSeguimientoPedido)Converter.GetInt(row, "estado_seguimiento");

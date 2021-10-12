@@ -1,0 +1,73 @@
+﻿@{
+    Model.Promocion promocion = ViewBag.promocionSelect;
+
+    String textoTooltip = "";
+    String displayTooltip = "";
+    if (promocion != null && promocion.idPromocion != Guid.Empty)
+    {
+        textoTooltip = promocion.textoDescripcion;
+    } else
+    {
+        displayTooltip = "display: none;";
+    }
+}
+
+
+
+    <div class="row">
+        <div class="col-xs-11">
+            @Html.Action("GetPromociones", "Promocion",
+            new
+            {
+                SelectId = "idPromocion",
+                selectedValue = promocion.idPromocion
+            })
+        </div>
+        <div class="col-xs-1">
+            <label class="lblInfoDescripcionLarga tooltip-motivo-restriccion">
+                <img src="~/images/icon_info_22.png" />
+
+                <span id="spnPluginPromocionText" class="tooltip-label-text tooltip-label-text-info tooltiptext" style="width: 250px; @displayTooltip">
+                    @textoTooltip
+                </span>
+            </label>
+        </div>
+    </div>
+
+
+
+    <script type="text/javascript">
+        function funcionesPluginSelectPromocion() {
+            $(document).on('change', "select#idPromocion", function () {
+                var idPromocion = $(this).val();
+
+                $.ajax({
+                    url: "/Promocion/GetPromocion",
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: {
+                        idPromocion: idPromocion
+                    },
+                    success: function (obj) {
+                        if (obj != null) {
+                            $("#spnPluginPromocionText").show();
+                            $("#spnPluginPromocionText").html(obj.textoDescripcion.replace(/\n/g, "<br/>"));
+                        } else {
+                            $("#spnPluginPromocionText").html("");
+                            $("#spnPluginPromocionText").hide();
+                        }
+                    }
+                });
+            });
+        };
+
+        if (window.addEventListener) // W3C standard
+        {
+            window.addEventListener('load', funcionesPluginSelectPromocion, false);
+        }
+        else if (window.attachEvent) // Microsoft
+        {
+            window.attachEvent('onload', funcionesPluginSelectPromocion);
+        }
+
+    </script>
