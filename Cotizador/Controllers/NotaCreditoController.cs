@@ -54,7 +54,7 @@ namespace Cotizador.Controllers
             transaccion.documentoReferencia.fechaEmision = new DateTime(Int32.Parse(fechaEmisionArray[0]), Int32.Parse(fechaEmisionArray[1]), Int32.Parse(fechaEmisionArray[2]));
             transaccion.documentoReferencia.serie = transaccion.documentoVenta.cPE_CABECERA_BE.SERIE;
             transaccion.documentoReferencia.numero = transaccion.documentoVenta.cPE_CABECERA_BE.CORRELATIVO;
-
+            transaccion.moneda = transaccion.documentoVenta.moneda;
 
 
 
@@ -97,8 +97,7 @@ namespace Cotizador.Controllers
                 transaccion.documentoVenta.serieDocumentoElectronico = serieDocumentoElectronicoList[0];
                 transaccion.documentoVenta.serie = Constantes.PREFIJO_NOTA_CREDITO_FACTURA + transaccion.documentoVenta.serieDocumentoElectronico.serie.Substring(1);
                 transaccion.documentoVenta.numero = transaccion.documentoVenta.serieDocumentoElectronico.siguienteNumeroNotaCredito.ToString();
-
-
+                
 
                 this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = transaccion;
             }
@@ -117,12 +116,11 @@ namespace Cotizador.Controllers
             documentoVenta.idDocumentoVenta = movimientoAlmacenBL.obtenerIdDocumentoVenta(notaIngreso.guiaRemisionAExtornar);
             
 
-
-
             /*Con el id de la factura a extornar se obtiene todo del documento de pago*/
             DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
             Transaccion transaccionExtorno = new Venta();
             transaccionExtorno.documentoVenta = documentoVentaBL.GetDocumentoVenta(documentoVenta);
+            transaccionExtorno.moneda = transaccionExtorno.documentoVenta.moneda;
 
             /*Se recupera el sustento y las ovservaciones de la guía*/
             transaccionExtorno.sustento = notaIngreso.sustentoExtorno;

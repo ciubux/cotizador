@@ -29,6 +29,9 @@ namespace Model
         [Display(Name = "Condición de Pago:")]
         public TipoPago tipoPago { get; set; }
 
+        [Display(Name = "Moneda:")]
+        public Moneda moneda{ get; set; }
+
         public String tipoPagoString
         {
             get

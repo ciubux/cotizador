@@ -325,20 +325,20 @@
 
                 <div class="form-group">
                     <div class="pull-right">
-                        <span class="totales">Subtotal: S/ </span>
+                        <span class="totales">Subtotal: <span class="simbolo-moneda">@(pedido.moneda == null ? "S/" : pedido.moneda.simbolo)</span> </span>
                         <span class="totales" id="montoSubTotal">@pedido.montoSubTotal</span>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="pull-right">
-                        <span class="totales">IGV 18%: S/ </span>
+                        <span class="totales">IGV 18%: <span class="simbolo-moneda">@(pedido.moneda == null ? "S/" : pedido.moneda.simbolo)</span> </span>
                         <span class="totales" id="montoIGV">@pedido.montoIGV</span>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="pull-right">
                         <input type="hidden" id="total" value="@pedido.montoTotal" />
-                        <span class="totales">TOTAL: S/ </span>
+                        <span class="totales">TOTAL: <span class="simbolo-moneda">@(pedido.moneda == null ? "S/" : pedido.moneda.simbolo)</span> </span>
                         <span class="totales" id="montoTotal">@pedido.montoTotal</span>
                     </div>
                 </div>

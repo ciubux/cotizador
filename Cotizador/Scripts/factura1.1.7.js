@@ -1202,6 +1202,11 @@ jQuery(function ($) {
                     $('#btnIniciarNotaCredito').hide();
                 }
 
+                if (documentoVenta.moneda == null) {
+                    $(".simbolo-moneda").html("S/");
+                } else {
+                    $(".simbolo-moneda").html(documentoVenta.moneda.simbolo);
+                }
 
                 if ((documentoVenta.estadoDocumentoSunat == '102'
                     || documentoVenta.estadoDocumentoSunat == '103')

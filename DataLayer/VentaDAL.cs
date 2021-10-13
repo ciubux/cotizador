@@ -34,7 +34,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "sustento", transaccionExtorno.sustento);
             InputParameterAdd.Int(objCommand, "tipoNotaCredito", (int)transaccionExtorno.tipoNotaCredito);
             InputParameterAdd.DateTime(objCommand, "fechaEmision", transaccionExtorno.documentoVenta.fechaEmision);
-
+            InputParameterAdd.Varchar(objCommand, "moneda", transaccionExtorno.moneda == null ? null : transaccionExtorno.moneda.codigo);
 
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "idVenta");
@@ -152,7 +152,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "sustento", venta.sustento);
             InputParameterAdd.Int(objCommand, "tipoNotaDebito", (int)venta.tipoNotaDebito);
             InputParameterAdd.DateTime(objCommand, "fechaEmision", venta.documentoVenta.fechaEmision);
-
+            InputParameterAdd.Varchar(objCommand, "moneda", venta.moneda == null ? null : venta.moneda.codigo);
 
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "idVenta");

@@ -89,7 +89,7 @@ namespace DataLayer
 
         public void InsertarDocumentoVenta(DocumentoVenta documentoVenta)
         {
-            var objCommand = GetSqlCommand("pi_documentoVenta_b");
+            var objCommand = GetSqlCommand("pi_documentoVenta");
             //var objCommand = GetSqlCommand("pi_documentoVenta_vInafecto");
 
             int diasCredito = 0;
@@ -136,7 +136,7 @@ namespace DataLayer
 
         public void InsertarDocumentoVentaNotaCreditoDebito(DocumentoVenta documentoVenta)
         {
-            var objCommand = GetSqlCommand("pi_documentoVentaNotaCreditoDebito");
+            var objCommand = GetSqlCommand("pi_documentoVentaNotaCreditoDebito_b");
             InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
             InputParameterAdd.Int(objCommand, "tipoDocumento", (int)documentoVenta.tipoDocumento);
             InputParameterAdd.DateTime(objCommand, "fechaEmision", documentoVenta.fechaEmision);
@@ -581,6 +581,8 @@ namespace DataLayer
                     }
                 }
             }
+
+            documentoVenta.moneda = Moneda.ListaMonedasFija.Where(m => m.codigo == documentoVenta.cPE_CABECERA_BE.MONEDA).FirstOrDefault();
 
             foreach (DataRow row in cpeDetalleBETable.Rows)
             {

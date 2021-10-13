@@ -339,7 +339,7 @@ namespace Cotizador.Controllers
                 }*/
                 Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA];
                 Pedido pedido = venta.pedido;
-
+                pedido.moneda = venta.moneda;
 
 
                 int existeCliente = 0;

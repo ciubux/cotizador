@@ -774,7 +774,7 @@ namespace DataLayer
                 pedido.moneda = new Moneda();
                 pedido.moneda.codigo = Converter.GetString(row, "moneda");
 
-                pedido.moneda = Moneda.ListaMonedas.Where(m => m.codigo == pedido.moneda.codigo).FirstOrDefault();
+                pedido.moneda = Moneda.ListaMonedasFija.Where(m => m.codigo == pedido.moneda.codigo).FirstOrDefault();
 
                 pedido.fechaEntregaExtendida = Converter.GetDateTimeNullable(row, "fecha_entrega_extendida");
                 pedido.truncado = Converter.GetInt(row, "truncado");

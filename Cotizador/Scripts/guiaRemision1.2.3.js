@@ -1466,6 +1466,11 @@ jQuery(function ($) {
             $("#divCiudadSolicitante").hide();
         }
 
+        if (venta.moneda == null) {
+            $(".simbolo-moneda").html("S/");
+        } else {
+            $(".simbolo-moneda").html(venta.moneda.simbolo);
+        }
 
         $("#verFechaHorarioEntrega").html(pedido.fechaHorarioEntrega);
 
