@@ -1270,3 +1270,13 @@ $darkred: darken($red, 0.2);*/
     height: 28px;
     width: 28px;
 }
+
+.lbl-vigencia-corregida {
+    background-color: #3276b1;
+    border-radius: 3px;
+    color: #ffffff;
+    font-size: 10px;
+    text-align: center;
+    padding: 3px 4px 2px 4px;
+    font-weight: bold;
+}

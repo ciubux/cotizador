@@ -1157,12 +1157,16 @@ jQuery(function ($) {
                     if (numeroCotizacion == null)
                         numeroCotizacion = "No Identificado";
 
+                    var htmlVigenciaCorregida = '';
+                    if (precioListaList[i].vigenciaCorregida > 0) {
+                        htmlVigenciaCorregida = '<br/><label class="lbl-vigencia-corregida">Corregido (' + precioListaList[i].vigenciaCorregida + ')</label>';
+                    }
 
                     $("#tableMostrarPrecios").append('<tr data-expanded="true">' +
 
                         '<td>' + numeroCotizacion + '</td>' +
                         '<td>' + fechaInicioVigencia + '</td>' +
-                        '<td>' + fechaFinVigencia + '</td>' +
+                        '<td>' + fechaFinVigencia + htmlVigenciaCorregida + '</td>' +
                         '<td>' + precioListaList[i].unidad + '</td>' +
                         '<td>' + Number(precioListaList[i].precioNeto).toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
                         '<td>' + Number(precioListaList[i].flete).toFixed(cantidadDecimalesPrecioNeto) + '</td>' +

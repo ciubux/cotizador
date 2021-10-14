@@ -53,6 +53,7 @@ namespace DataLayer
                 precioLista.unidad = Converter.GetString(row, "unidad");
                 precioLista.precioNeto = Converter.GetDecimal(row, "precio_neto");
                 precioLista.flete = Converter.GetDecimal(row, "flete");
+                precioLista.vigenciaCorregida = Converter.GetInt(row, "vigencia_corregida");
                 precioLista.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
                 precioLista.tipoCotizacion = Converter.GetString(row, "tipo_cotizacion");
                 if (row["numero_cotizacion"] == DBNull.Value)
@@ -169,6 +170,7 @@ namespace DataLayer
 
                 precioLista.unidad = Converter.GetString(row, "unidad");
                 precioLista.precioNeto = Converter.GetDecimal(row, "precio_neto");
+                precioLista.vigenciaCorregida = Converter.GetInt(row, "vigencia_corregida");
                 precioLista.flete = Converter.GetDecimal(row, "flete");
                 precioLista.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
                 if (row["numero_cotizacion"] == DBNull.Value)
