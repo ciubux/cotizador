@@ -756,6 +756,7 @@ namespace DataLayer
             DataTable pedidoAdjuntoDataTable = dataSet.Tables[4];
             DataTable solicitanteDataTable = dataSet.Tables[5];
             DataTable pedidoGrupoDataTable = dataSet.Tables[6];
+            DataTable preciosEspecialesDataTable = dataSet.Tables[7];
 
             //   DataTable dataTable = Execute(objCommand);
             //Datos de la cotizacion
@@ -996,6 +997,8 @@ namespace DataLayer
                 pedidoDetalle.producto.topeDescuento = Converter.GetDecimal(row, "tope_descuento");
                 pedidoDetalle.producto.costoOriginal = Converter.GetDecimal(row, "costo_original");
                 pedidoDetalle.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+                pedidoDetalle.producto.costoFleteProvincias = Converter.GetDecimal(row, "costo_flete_provincias");
+                pedidoDetalle.producto.monedaFleteProvincias = Moneda.ListaMonedasFija.Where(m => m.codigo.Equals(Converter.GetString(row, "moneda_flete_provincias"))).First();
 
                 pedidoDetalle.producto.image = Converter.GetBytes(row, "imagen");
 
@@ -1148,6 +1151,34 @@ namespace DataLayer
                 pedidoGrupo.numero = Converter.GetInt(row, "numero_grupo");
                 pedidoGrupo.fechaSolicitud = Converter.GetDateTime(row, "fecha_solicitud");
                 pedido.pedidoGrupoList.Add(pedidoGrupo);
+            }
+
+            foreach (DataRow row in preciosEspecialesDataTable.Rows)
+            {
+                Guid idProducto = Converter.GetGuid(row, "id_producto");
+                decimal precioEspecial = Converter.GetDecimal(row, "precio_unitario");
+                int idProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion");
+
+                PedidoDetalle det = pedido.pedidoDetalleList.Where(d => d.producto.idProducto.Equals(idProducto)).First();
+                if (det != null)
+                {
+                    switch (idProductoPresentacion)
+                    {
+                        case 0:
+                            det.precioEspecial = precioEspecial;
+                            det.tienePrecioEspecial = true;
+                            break;
+                        case 1:
+                            det.precioEspecial = precioEspecial * ((decimal)det.producto.equivalenciaProveedor);
+                            det.tienePrecioEspecial = true;
+                            break;
+                        case 2:
+                            det.precioEspecial = precioEspecial / ((decimal)det.producto.equivalenciaProveedor);
+                            det.tienePrecioEspecial = true;
+                            break;
+
+                    }
+                }
             }
 
             return pedido;
