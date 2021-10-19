@@ -1280,3 +1280,8 @@ $darkred: darken($red, 0.2);*/
     padding: 3px 4px 2px 4px;
     font-weight: bold;
 }
+
+
+.spnMargenCostoFlete {
+    color: #f0ad4e;
+}

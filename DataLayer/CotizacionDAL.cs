@@ -251,6 +251,7 @@ namespace DataLayer
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable cotizacionDataTable = dataSet.Tables[0];
             DataTable cotizacionDetalleDataTable = dataSet.Tables[1];
+            DataTable preciosEspecialesDataTable = dataSet.Tables[2];
 
             //CABECERA DE COTIZACIÓN
             foreach (DataRow row in cotizacionDataTable.Rows)
@@ -384,6 +385,8 @@ namespace DataLayer
                 cotizacionDetalle.producto.monedaMP = Converter.GetString(row, "moneda_venta");
                 cotizacionDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
                 cotizacionDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
+                cotizacionDetalle.producto.costoFleteProvincias = Converter.GetDecimal(row, "costo_flete_provincias");
+                cotizacionDetalle.producto.monedaFleteProvincias = Moneda.ListaMonedasFija.Where(m => m.codigo.Equals(Converter.GetString(row, "moneda_flete_provincias"))).First();
                 cotizacionDetalle.producto.image = Converter.GetBytes(row, "imagen");
                 cotizacionDetalle.producto.Estado = Converter.GetInt(row, "estado");
                 cotizacionDetalle.porcentajeDescuento = Converter.GetDecimal(row, "porcentaje_descuento");
@@ -458,6 +461,35 @@ namespace DataLayer
 
                 cotizacion.cotizacionDetalleList.Add(cotizacionDetalle);
             }
+
+            foreach (DataRow row in preciosEspecialesDataTable.Rows)
+            {
+                Guid idProducto = Converter.GetGuid(row, "id_producto");
+                decimal precioEspecial = Converter.GetDecimal(row, "precio_unitario");
+                int idProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion");
+
+                CotizacionDetalle det = cotizacion.cotizacionDetalleList.Where(d => d.producto.idProducto.Equals(idProducto)).First();
+                if (det != null)
+                {
+                    switch (idProductoPresentacion)
+                    {
+                        case 0:
+                            det.precioEspecial = precioEspecial;
+                            det.tienePrecioEspecial = true;
+                            break;
+                        case 1:
+                            det.precioEspecial = precioEspecial * ((decimal)det.producto.equivalenciaProveedor);
+                            det.tienePrecioEspecial = true;
+                            break;
+                        case 2:
+                            det.precioEspecial = precioEspecial / ((decimal)det.producto.equivalenciaProveedor);
+                            det.tienePrecioEspecial = true;
+                            break;
+                            
+                    }
+                }
+            }
+
             return cotizacion;
         }
 

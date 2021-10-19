@@ -109,12 +109,35 @@ namespace Model
             get
             {
                 if (this.visualizaMargen)// && !this.usuario.esCliente)
-                    return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - costoLista / (precioNeto == 0 ? 1 : precioNeto)) * 100));
+                    if (tienePrecioEspecial)
+                    {
+                        return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - precioEspecial / (precioNeto == 0 ? 1 : precioNeto)) * 100));
+                    }
+                    else
+                    {
+                        return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - costoLista / (precioNeto == 0 ? 1 : precioNeto)) * 100));
+                    }
                 else
                     return 0.0M;
             }
         }
 
+        public Decimal margenCostoFlete
+        {
+            get
+            {
+                if (this.visualizaMargen)// && !this.usuario.esCliente)
+                    if (tienePrecioEspecial)
+                    {
+                        return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - (precioEspecial + (producto.costoFleteProvincias / producto.equivalenciaProveedor)) / (precioNeto == 0 ? 1 : precioNeto)) * 100));
+                    } else
+                    {
+                        return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - (costoLista + (producto.costoFleteProvincias / producto.equivalenciaProveedor)) / (precioNeto == 0 ? 1 : precioNeto)) * 100));
+                    }
+                else
+                    return 0.0M;
+            }
+        }
 
     }
 }
