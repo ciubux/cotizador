@@ -71,6 +71,9 @@ namespace Model
 
         public string cpeNro { get; set; }
         public string cpeFechaEmision { get; set; }
+        public string cpeSubTotal{ get; set; }
+        public string cpeTotal { get; set; }
+
         [Display(Name = "Transportista:")]
         public Transportista transportista { get; set; }
 

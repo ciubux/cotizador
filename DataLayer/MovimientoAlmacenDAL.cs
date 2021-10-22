@@ -965,6 +965,8 @@ namespace DataLayer
 
                 guiaRemision.cpeNro = Converter.GetString(row, "serie_factura") + "-" + Converter.GetString(row, "correlativo_factura");
                 guiaRemision.cpeFechaEmision = Converter.GetString(row, "fecha_emision_factura");
+                guiaRemision.cpeSubTotal = Converter.GetString(row, "subtotal_factura");
+                guiaRemision.cpeTotal = Converter.GetString(row, "total_factura");
 
                 //PEDIDO
                 guiaRemision.pedido = new Pedido();

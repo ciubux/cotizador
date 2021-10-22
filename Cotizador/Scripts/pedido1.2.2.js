@@ -1649,11 +1649,17 @@ jQuery(function ($) {
                     if (numeroCotizacion == null)
                         numeroCotizacion = "No Identificado";
 
+
+                    var htmlVigenciaCorregida = '';
+                    if (precioListaList[i].vigenciaCorregida > 0) {
+                        htmlVigenciaCorregida = '<br/><label class="lbl-vigencia-corregida">Corregido (' + precioListaList[i].vigenciaCorregida + ')</label>';
+                    }
+
                     $("#tableMostrarPrecios").append('<tr data-expanded="true">' +
 
                         '<td>' + numeroCotizacion + '</td>' +
                         '<td>' + fechaInicioVigencia + '</td>' +
-                        '<td>' + fechaFinVigencia + '</td>' +
+                        '<td>' + fechaFinVigencia + htmlVigenciaCorregida + '</td>' +
                         '<td>' + precioListaList[i].unidad + '</td>' +
                         '<td>' + Number(precioListaList[i].precioNeto).toFixed(cantidadCuatroDecimales) + '</td>' +
                         '<td>' + Number(precioListaList[i].flete).toFixed(cantidadDecimales) + '</td>' +
@@ -3154,6 +3160,15 @@ jQuery(function ($) {
                         tienePendienteAtencion = true;
                     }
 
+                    var htmlAdicionalMargen = "";
+                    if (lista[i].margen != lista[i].margenCostoFlete) {
+                        htmlAdicionalMargen = htmlAdicionalMargen + '<br/><span class="spnMargenCostoFlete">' + lista[i].margenCostoFlete + '%</span>';
+                    }
+
+                    if (lista[i].tienePrecioEspecial) {
+                        htmlAdicionalMargen = htmlAdicionalMargen + '<br/><label class="lbl-vigencia-corregida">Especial</label>';
+                    }
+
                     d += '<tr sku="' + lista[i].producto.sku + '" idProductoPresentacion="' + lista[i].idProductoPresentacion + '">' +
                         '<td>' + imgIndicadorAprobacion + '</td>' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
@@ -3164,7 +3179,7 @@ jQuery(function ($) {
                         '<td>' + lista[i].precioLista.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].porcentajeDescuentoMostrar.toFixed(cantidadDecimales) + ' %</td>' +
                         '<td>' + lista[i].precioNeto.toFixed(cantidadCuatroDecimales) + '</td>' +
-                        '<td>' + lista[i].margen.toFixed(cantidadDecimales) + ' %</td>' +
+                        '<td>' + lista[i].margen.toFixed(cantidadDecimales) + '%' + htmlAdicionalMargen + '</td>' +
                         '<td>' + lista[i].flete.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].precioUnitario.toFixed(cantidadCuatroDecimales) + '</td>' +
                         //       '<td>' + lista[i].precioUnitarioVenta.toFixed(cantidadCuatroDecimales) + '</td>' +

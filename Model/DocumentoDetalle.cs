@@ -17,7 +17,8 @@ namespace Model
 
         public int cantidadPorAtender { get; set; }
 
-
+        public bool tienePrecioEspecial { get; set; }
+        public decimal precioEspecial { get; set; }
         public int cantidadPorAtenderPermitida
         {
             get
