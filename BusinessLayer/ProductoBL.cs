@@ -95,6 +95,16 @@ namespace BusinessLayer
                                 productoPresentacion.PrecioProvinciasSinIGV = productoPresentacion.PrecioProvinciasOriginalSinIGV;
                             }
                         }
+
+                        if (producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
+                        {
+                            if (!producto.precioClienteProducto.moneda.codigo.Equals("USD"))
+                            {
+                                producto.precioClienteProducto.precioNeto = producto.precioClienteProducto.precioNetoOriginal / tc.valorSunatVenta;
+                                producto.precioClienteProducto.flete = producto.precioClienteProducto.fleteOriginal == 0 ? producto.precioClienteProducto.fleteOriginal : producto.precioClienteProducto.fleteOriginal / tc.valorSunatVenta;
+                                producto.precioClienteProducto.precioUnitario = producto.precioClienteProducto.precioUnitarioOriginal / tc.valorSunatVenta;
+                            }
+                        }
                     }
                     else
                     {
@@ -107,6 +117,16 @@ namespace BusinessLayer
                             {
                                 productoPresentacion.PrecioSinIGV = productoPresentacion.PrecioLimaOriginalSinIGV * tc.valorSunatVenta;
                                 productoPresentacion.PrecioProvinciasSinIGV = productoPresentacion.PrecioProvinciasOriginalSinIGV * tc.valorSunatVenta;
+                            }
+                        }
+
+                        if (producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
+                        {
+                            if (producto.precioClienteProducto.moneda.codigo.Equals("USD"))
+                            {
+                                producto.precioClienteProducto.precioNeto = producto.precioClienteProducto.precioNetoOriginal * tc.valorSunatVenta;
+                                producto.precioClienteProducto.flete = producto.precioClienteProducto.fleteOriginal * tc.valorSunatVenta;
+                                producto.precioClienteProducto.precioUnitario = producto.precioClienteProducto.precioUnitarioOriginal * tc.valorSunatVenta;
                             }
                         }
                     }

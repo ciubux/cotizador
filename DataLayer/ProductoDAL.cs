@@ -187,12 +187,16 @@ namespace DataLayer
                 if (row["precio_neto"] != DBNull.Value && !esCompra)
                 {
                     producto.precioClienteProducto.precioNeto = Converter.GetDecimal(row, "precio_neto");
+                    producto.precioClienteProducto.precioNetoOriginal = producto.precioClienteProducto.precioNeto;
                     producto.precioClienteProducto.flete = Converter.GetDecimal(row, "flete");
+                    producto.precioClienteProducto.fleteOriginal = producto.precioClienteProducto.flete;
                     producto.precioClienteProducto.equivalencia = Converter.GetDecimal(row, "precio_cliente_producto_equivalencia");
                     //                    producto.equivalencia = producto.precioClienteProducto.equivalencia;
                     producto.precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
+                    producto.precioClienteProducto.precioUnitarioOriginal = producto.precioClienteProducto.precioUnitario;
                     producto.precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
                     producto.precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+                    producto.precioClienteProducto.moneda = Moneda.ListaMonedasFija.Where(m => m.caracter.Equals(Converter.GetString(row, "moneda_precio"))).First();
 
                     if (row["fecha_fin_vigencia"] == DBNull.Value)
                     {
@@ -584,6 +588,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
                 cotizacionDetalle.producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia_sin_igv");
                 cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
+                cotizacionDetalle.producto.monedaMP = Converter.GetString(row, "moneda_producto");
 
                 //El Precio sin igv es el precio lista
                 cotizacionDetalle.producto.precioLista = cotizacionDetalle.producto.precioSinIgv;
@@ -606,6 +611,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
                 cotizacionDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
                 cotizacionDetalle.producto.precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+                cotizacionDetalle.producto.precioClienteProducto.moneda = Moneda.ListaMonedasFija.Where(m => m.caracter.Equals(Converter.GetString(row, "moneda"))).First();
 
 
                 if (row["fecha_fin_vigencia"] == DBNull.Value)
@@ -699,6 +705,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
                 cotizacionDetalle.producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia_sin_igv");
                 cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
+                cotizacionDetalle.producto.monedaMP = Converter.GetString(row, "moneda_producto");
 
                 //El Precio sin igv es el precio lista
                 cotizacionDetalle.producto.precioLista = cotizacionDetalle.producto.precioSinIgv;
@@ -720,6 +727,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
                 cotizacionDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
                 cotizacionDetalle.producto.precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+                cotizacionDetalle.producto.precioClienteProducto.moneda = Moneda.ListaMonedasFija.Where(m => m.caracter.Equals(Converter.GetString(row, "moneda"))).First();
 
 
                 if (row["fecha_fin_vigencia"] == DBNull.Value)
@@ -824,6 +832,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
                 cotizacionDetalle.producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia_sin_igv");
                 cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
+                cotizacionDetalle.producto.monedaMP = Converter.GetString(row, "moneda_producto");
 
                 //El Precio sin igv es el precio lista
                 cotizacionDetalle.producto.precioLista = cotizacionDetalle.producto.precioSinIgv;
@@ -844,6 +853,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
                 cotizacionDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
                 cotizacionDetalle.producto.precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+                cotizacionDetalle.producto.precioClienteProducto.moneda = Moneda.ListaMonedasFija.Where(m => m.caracter.Equals(Converter.GetString(row, "moneda"))).First();
 
 
                 if (row["fecha_fin_vigencia"] == DBNull.Value)
@@ -936,6 +946,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
                 cotizacionDetalle.producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "precio_provincia_sin_igv");
                 cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
+                cotizacionDetalle.producto.monedaMP = Converter.GetString(row, "moneda_producto");
 
                 //El Precio sin igv es el precio lista
                 cotizacionDetalle.producto.precioLista = cotizacionDetalle.producto.precioSinIgv;
@@ -956,6 +967,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioClienteProducto.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
                 cotizacionDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
                 cotizacionDetalle.producto.precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+                cotizacionDetalle.producto.precioClienteProducto.moneda = Moneda.ListaMonedasFija.Where(m => m.caracter.Equals(Converter.GetString(row, "moneda"))).First();
 
 
                 if (row["fecha_fin_vigencia"] == DBNull.Value)

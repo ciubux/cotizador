@@ -1947,6 +1947,9 @@ namespace Cotizador.Controllers
             Cotizacion cotizacion = this.CotizacionSession;
             List<DocumentoDetalle> canasta = new List<DocumentoDetalle>();
 
+            TipoCambioSunatBL tcBl = new TipoCambioSunatBL();
+            TipoCambioSunat tc = tcBl.GetTipoCambioHoy();
+
             Constantes.paginas pag = (Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA];
 
             switch (pag)
@@ -1977,11 +1980,11 @@ namespace Cotizador.Controllers
 
                     if (cotizacion.cliente != null)
                     {
-                        item.producto = productoBL.getProducto(prod.producto.idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, cotizacion.cliente.idCliente);
+                        item.producto = productoBL.getProducto(prod.producto.idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, cotizacion.cliente.idCliente, false, cotizacion.moneda.codigo, tc);
                     }
                     else
                     {
-                        item.producto = productoBL.getProducto(prod.producto.idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, Guid.Empty);
+                        item.producto = productoBL.getProducto(prod.producto.idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, Guid.Empty, false, cotizacion.moneda.codigo, tc);
                     }
 
 
@@ -2019,6 +2022,19 @@ namespace Cotizador.Controllers
 
                         decimal precioNetoAnterior = 0;
 
+
+                        if(!prod.producto.precioClienteProducto.moneda.codigo.Equals(cotizacion.moneda.codigo))
+                        {
+                            if (cotizacion.moneda.codigo.Equals("USD"))
+                            {
+                                prod.precioNeto = prod.precioNeto / tc.valorSunatVenta;
+                            } else
+                            {
+                                prod.precioNeto = prod.precioNeto * tc.valorSunatVenta;
+                            }
+
+                            prod.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, prod.precioNeto));
+                        }
 
                         if (item.esPrecioAlternativo)
                         {

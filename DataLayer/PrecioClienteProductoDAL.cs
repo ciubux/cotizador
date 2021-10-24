@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using Model;
 using System.IO;
+using System.Linq;
 
 namespace DataLayer
 {
@@ -49,6 +50,8 @@ namespace DataLayer
                 {
                     precioLista.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
                 }
+
+                precioLista.moneda = Moneda.ListaMonedasFija.Where(m => m.caracter.Equals(Converter.GetString(row, "moneda"))).First();
 
                 precioLista.unidad = Converter.GetString(row, "unidad");
                 precioLista.precioNeto = Converter.GetDecimal(row, "precio_neto");
@@ -167,6 +170,8 @@ namespace DataLayer
                 {
                     precioLista.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
                 }
+
+                precioLista.moneda = Moneda.ListaMonedasFija.Where(m => m.caracter.Equals(Converter.GetString(row, "moneda"))).First();
 
                 precioLista.unidad = Converter.GetString(row, "unidad");
                 precioLista.precioNeto = Converter.GetDecimal(row, "precio_neto");

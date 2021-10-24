@@ -27,11 +27,14 @@ namespace Model
 
         public String skuCliente { get; set; }
 
+        public Decimal precioNetoOriginal { get; set; }
         public Decimal precioNeto { get; set; }
         public int vigenciaCorregida { get; set; }
+        public Decimal fleteOriginal { get; set; }
         public Decimal flete { get; set; }
+        public Decimal precioUnitarioOriginal { get; set; }
         public Decimal precioUnitario { get; set; }
-
+        public Moneda moneda { get; set; }
         public Decimal precioNetoAlternativo { get {
                 if (equivalencia != 0 )
                 {
