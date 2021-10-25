@@ -1392,6 +1392,11 @@ jQuery(function ($) {
                 precioVigente = "1";
             }
 
+            var simboloMoneda = "";
+            if (preciosList[i].producto.precioClienteProducto.moneda != null) {
+                simboloMoneda = preciosList[i].producto.precioClienteProducto.moneda.simbolo;
+            }
+
             var preciosRow = '<tr data-expanded="true" precioVigente="' + precioVigente + '">' +
                 '<td>  ' + preciosList[i].producto.idProducto + '</td>' +
                 canastaText +
@@ -1405,9 +1410,9 @@ jQuery(function ($) {
                 '<td>  ' + Number(preciosList[i].precioLista).toFixed(cantidadDecimales) + '  </td>' +
                 '<td>  ' + Number(preciosList[i].porcentajeDescuentoMostrar).toFixed(1) + ' % </td>' +
 
-                '<td>  ' + Number(preciosList[i].precioNeto).toFixed(cantidadDecimales) + '  </td>' +
-                '<td>  ' + Number(preciosList[i].flete).toFixed(cantidadDecimales) + '</td>' +
-                '<td>  ' + Number(preciosList[i].producto.precioClienteProducto.precioUnitario).toFixed(cantidadDecimales) + '</td>' +
+                '<td>  ' + simboloMoneda + ' ' + Number(preciosList[i].precioNeto).toFixed(cantidadDecimales) + '  </td>' +
+                '<td>  ' + simboloMoneda + ' ' + Number(preciosList[i].flete).toFixed(cantidadDecimales) + '</td>' +
+                '<td>  ' + simboloMoneda + ' ' + Number(preciosList[i].producto.precioClienteProducto.precioUnitario).toFixed(cantidadDecimales) + '</td>' +
                 margenText +
                 '<td>' +
                 '<button type="button" idProducto="' + preciosList[i].producto.idProducto + '" class="btnMostrarPrecios btn btn-primary bouton-image botonPrecios">Ver</button>' +

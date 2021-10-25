@@ -615,12 +615,56 @@ namespace BusinessLayer
                 pedido.pedidoDetalleList = new List<PedidoDetalle>();
             }
 
+            TipoCambioSunatBL tcBl = new TipoCambioSunatBL();
+            TipoCambioSunat tc = tcBl.GetTipoCambioHoy();
+
+
             //Detalle de la cotizacion
             foreach (DocumentoDetalle documentoDetalle in documentoDetalleList)
             {
                 if (!canastaHabitual || (canastaHabitual && documentoDetalle.producto.precioClienteProducto.estadoCanasta))
                 {
                     pedido.pedidoDetalleList.Remove(pedido.pedidoDetalleList.Where(p => p.producto.idProducto == documentoDetalle.producto.idProducto).FirstOrDefault());
+
+                    if (!documentoDetalle.producto.precioClienteProducto.moneda.codigo.Equals(pedido.moneda.codigo))
+                    {
+                        if (pedido.moneda.codigo.Equals("USD"))
+                        {
+                            documentoDetalle.precioNeto = documentoDetalle.precioNeto / tc.valorSunatVenta;
+
+                            if (documentoDetalle.producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
+                            {
+                                documentoDetalle.producto.precioClienteProducto.precioNetoOriginal = documentoDetalle.producto.precioClienteProducto.precioNeto;
+                                documentoDetalle.producto.precioClienteProducto.precioUnitarioOriginal = documentoDetalle.producto.precioClienteProducto.precioUnitario;
+                                documentoDetalle.producto.precioClienteProducto.fleteOriginal = documentoDetalle.producto.precioClienteProducto.flete;
+
+                                documentoDetalle.producto.precioClienteProducto.precioNeto = documentoDetalle.producto.precioClienteProducto.precioNetoOriginal / tc.valorSunatVenta;
+                                documentoDetalle.producto.precioClienteProducto.flete = documentoDetalle.producto.precioClienteProducto.fleteOriginal / tc.valorSunatVenta;
+                                documentoDetalle.producto.precioClienteProducto.precioUnitario = documentoDetalle.producto.precioClienteProducto.precioUnitarioOriginal / tc.valorSunatVenta;
+                            }
+                        }
+                        else
+                        {
+                            documentoDetalle.precioNeto = documentoDetalle.precioNeto * tc.valorSunatVenta;
+
+                            if (documentoDetalle.producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
+                            {
+                                documentoDetalle.producto.precioClienteProducto.precioNetoOriginal = documentoDetalle.producto.precioClienteProducto.precioNeto;
+                                documentoDetalle.producto.precioClienteProducto.precioUnitarioOriginal = documentoDetalle.producto.precioClienteProducto.precioUnitario;
+                                documentoDetalle.producto.precioClienteProducto.fleteOriginal = documentoDetalle.producto.precioClienteProducto.flete;
+
+                                documentoDetalle.producto.precioClienteProducto.precioNeto = documentoDetalle.producto.precioClienteProducto.precioNetoOriginal * tc.valorSunatVenta;
+                                documentoDetalle.producto.precioClienteProducto.flete = documentoDetalle.producto.precioClienteProducto.fleteOriginal * tc.valorSunatVenta;
+                                documentoDetalle.producto.precioClienteProducto.precioUnitario = documentoDetalle.producto.precioClienteProducto.precioUnitarioOriginal * tc.valorSunatVenta;                                
+                            }
+                        }
+
+                        documentoDetalle.producto.precioClienteProducto.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, documentoDetalle.producto.precioClienteProducto.precioNeto));
+                        documentoDetalle.producto.precioClienteProducto.precioUnitario = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, documentoDetalle.producto.precioClienteProducto.precioUnitario));
+                        documentoDetalle.producto.precioClienteProducto.flete = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, documentoDetalle.producto.precioClienteProducto.flete));
+
+                        documentoDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, documentoDetalle.precioNeto));
+                    }
 
                     PedidoDetalle pedidoDetalle = new PedidoDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
                     pedidoDetalle.producto = new Producto();

@@ -2136,6 +2136,9 @@ namespace Cotizador.Controllers
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             Cotizacion cotizacion = this.CotizacionSession;
+            
+            TipoCambioSunatBL tcBl = new TipoCambioSunatBL();
+            TipoCambioSunat tc = tcBl.GetTipoCambioHoy();
 
             try
             {
@@ -2192,10 +2195,10 @@ namespace Cotizador.Controllers
 
                                 if (cotizacion.cliente != null)
                                 {
-                                    item.producto = productoBL.getProducto(item.producto.idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, cotizacion.cliente.idCliente);
+                                    item.producto = productoBL.getProducto(item.producto.idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, cotizacion.cliente.idCliente, false, cotizacion.moneda.codigo, tc);
                                 } else
                                 {
-                                    item.producto = productoBL.getProducto(item.producto.idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, Guid.Empty);
+                                    item.producto = productoBL.getProducto(item.producto.idProducto, cotizacion.ciudad.esProvincia, cotizacion.incluidoIGV, Guid.Empty, false, cotizacion.moneda.codigo, tc);
                                 }
                             }
 
