@@ -73,6 +73,23 @@ namespace BusinessLayer
                 {
                     if (moneda.Equals("USD"))
                     {
+                        if (producto.monedaProveedor.Equals("S"))
+                        {
+                            producto.costoSinIgv = (producto.costoOriginal / producto.equivalenciaProveedor) / tc.valorSunatVenta;
+
+                            foreach (ProductoPresentacion productoPresentacion in producto.ProductoPresentacionList)
+                            {
+                                productoPresentacion.CostoSinIGV = productoPresentacion.CostoOriginalSinIGV / tc.valorSunatVenta;
+                            }
+                        } else
+                        {
+                            producto.costoSinIgv = (producto.costoOriginal / producto.equivalenciaProveedor);
+                            foreach (ProductoPresentacion productoPresentacion in producto.ProductoPresentacionList)
+                            {
+                                productoPresentacion.CostoSinIGV = productoPresentacion.CostoOriginalSinIGV;
+                            }
+                        }
+
                         if (producto.monedaMP.Equals("S"))
                         {
                             producto.precioSinIgv = producto.precioOriginal / tc.valorSunatVenta;
@@ -108,6 +125,16 @@ namespace BusinessLayer
                     }
                     else
                     {
+                        if (producto.monedaProveedor.Equals("D"))
+                        {
+                            producto.costoSinIgv = (producto.costoOriginal / producto.equivalenciaProveedor) * tc.valorSunatVenta;
+
+                            foreach (ProductoPresentacion productoPresentacion in producto.ProductoPresentacionList)
+                            {
+                                productoPresentacion.CostoSinIGV = productoPresentacion.CostoOriginalSinIGV * tc.valorSunatVenta;
+                            }
+                        }
+
                         if (producto.monedaMP.Equals("D"))
                         {
                             producto.precioSinIgv = tc.valorSunatVenta * producto.precioOriginal;
