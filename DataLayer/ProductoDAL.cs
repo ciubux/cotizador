@@ -1740,12 +1740,16 @@ namespace DataLayer
             return lista;
         }
 
-        public MovimientoKardexCabecera StockProductoKardex(Guid idUsuario, Guid idCiudad, Guid idProducto)
+        public MovimientoKardexCabecera StockProductoKardex(Guid idUsuario, Guid idCiudad, Guid idProducto, DateTime? fechaInicio)
         {
             var objCommand = GetSqlCommand("ps_movimientos_stock_producto");
             InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
             InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            if (fechaInicio.HasValue)
+            {
+                InputParameterAdd.DateTime(objCommand, "fechaInicio", fechaInicio.Value);
+            }
 
             DataTable dataTable = Execute(objCommand);
 
@@ -1766,6 +1770,11 @@ namespace DataLayer
                 item.tipoMovimiento = 99;
 
                 kardex.movimientos.Add(item);
+            }
+
+            if (fechaInicio.HasValue)
+            {
+                kardex.movimientos = new List<MovimientoKardexDetalle>();
             }
 
             foreach (DataRow row in dataTableMovimientos.Rows)

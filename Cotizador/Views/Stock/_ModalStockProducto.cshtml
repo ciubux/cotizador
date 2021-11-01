@@ -111,6 +111,11 @@
             var idProductoPresentacion = $(this).attr("idProductoPresentacion");
             var idProducto = "";
 
+            $('body').loadingModal({
+                text: 'Recuperando Movimientos...'
+            });
+
+
             $.ajax({
                 url: "/Stock/ReporteStockProducto",
                 type: 'POST',
@@ -118,6 +123,9 @@
                 data: {
                     idCiudad: idCiudad,
                     sku: sku
+                },
+                error: function (detalle) {
+                    $('body').loadingModal('hide');
                 },
                 success: function (lista) {
                     var htmlStockSedes = "";
@@ -321,6 +329,8 @@
                     $("#divStockProductoOtrasSedes").html(htmlStockSedes);
 
                     $("#selectUnidadProductoStock").html(htmlOptionsUnidad);
+
+                    $('body').loadingModal('hide');
 
                     $("#modalStockProductoSedes").modal();
                 }

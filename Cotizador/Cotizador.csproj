@@ -299,6 +299,7 @@
     <Compile Include="ExcelExport\CotizacionDetalleExcel.cs" />
     <Compile Include="ExcelExport\PedidoOCExcel.cs" />
     <Compile Include="ExcelExport\ReporteCargaStock .cs" />
+    <Compile Include="ExcelExport\ReporteKardexProducto.cs" />
     <Compile Include="ExcelExport\ReporteStock .cs" />
     <Compile Include="ExcelExport\PlantillaCargaStock.cs" />
     <Compile Include="ExcelExport\RubroSearch.cs" />

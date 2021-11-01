@@ -37,8 +37,20 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            <label class="control-label col-xs-4">Fecha Inicio:</label>
+                            <div class="col-xs-8">
+                                <input type="text" id="verFechaInicioKardex" class="form-control">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <br />
+                <div id="divMensajeFechaInicio" class="row">
+                    <div class="col-sm-12 col-lg-12">
+                        <h5 class="text-danger">*Si selecciona una fecha de inicio de movimientos, no se calculará, por cada movimiento, el stock resultante del almacén.</h5>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-sm-12 col-lg-12 tableFixHead">
                         <table id="tableMovimientosStockKardex" class="table table-bordered">
@@ -48,10 +60,12 @@
                                     <th rowspan="2">Fecha Emisión</th>
                                     <th rowspan="2">Información Movimiento</th>
                                     <th rowspan="2">Unidad Movimiento</th>
-                                    <th rowspan="2">Cant. Mov.</th>
+                                    <th colspan="2">Cant. Mov.</th>
                                     <th colspan="2">Stock en:</th>
                                 </tr>
                                 <tr>
+                                    <th><span>Und. Mov.</span></th>
+                                    <th><span id="verUnidadConteoMovimientoKardex"></span></th>
                                     <th><span class="verUnidadMostrarStockKardex"></span></th>
                                     <th><span id="verUnidadConteoStockKardex"></span></th>
                                 </tr>
@@ -59,6 +73,9 @@
                             <tbody>
                             </tbody>
                         </table>
+                    </div>
+                    <div class="col-sm-12 col-lg-12 text-right">
+                        <button id="btnExportKardexExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ReporteStockProductoKardexExcel", "Stock")">Exportar</button>
                     </div>
                 </div>
             </div>
@@ -72,58 +89,116 @@
 <script type="text/javascript">
 
     function funcionesModalKardexStockProducto() {
+        $.datepicker.regional['es'] = {
+            closeText: 'Cerrar',
+            prevText: '< Ant',
+            nextText: 'Sig >',
+            currentText: 'Hoy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        $("#verFechaInicioKardex").datepicker({ dateFormat: "dd/mm/yy" });
+
         $(document).on('click', "button.verModalStockProductoKardex", function () {
-            var idCiudad = $(this).attr("idCiudad");
-            var idProducto = $(this).attr("idProducto");
-            var idProductoPresentacion = $(this).attr("idProductoPresentacion");
+            $("#divMensajeFechaInicio").hide();
+            $("#verFechaInicioKardex").val("");
 
-            $.ajax({
-                url: "/Stock/ReporteStockProductoKardex",
-                type: 'POST',
-                dataType: 'JSON',
-                data: {
-                    idCiudad: idCiudad,
-                    idProducto: idProducto,
-                    idProductoPresentacion: idProductoPresentacion
-                },
-                success: function (kardex) {
-                    $("#verNombreSedeKardexProductoStock").html(kardex.ciudad.nombre);
-                    $("#verNombreProductoStockKardex").html(kardex.producto.descripcion);
-                    $("#verCodigoProductoStockKardex").html(kardex.producto.sku);
-                    $(".verUnidadMostrarStockKardex").html(kardex.unidad);
-                    $("#verUnidadConteoStockKardex").html(kardex.unidadConteo);
+            llenarKardexMovimientos();
+        });
 
-                    var htmlMovimientos = "";
-                    var lista = kardex.movimientos;
-                    var infoMov = "";
+        $(document).on('change', "#verFechaInicioKardex", function () {
+            $("#divMensajeFechaInicio").show();
+            llenarKardexMovimientos();
+        });
 
-                    for (var i = 0; i < lista.length; i++) {
-                        htmlMovimientos = htmlMovimientos + '<tr>' +
-                            '<td>' + lista[i].TipoMovimientoDesc + '</td>' +
-                            '<td>' + lista[i].FechaDesc + '</td>';
+        $(document).on('click', "#btnExportKardexExcel", function () {
+            var idCiudad = $("button.verModalStockProductoKardex").attr("idCiudad");
+            var idProducto = $("button.verModalStockProductoKardex").attr("idProducto");
+            var idProductoPresentacion = $("#selectUnidadProductoStock").val();
+            var fechaInicio = $("#verFechaInicioKardex").val();
+            window.location.href = $(this).attr("actionLink") + "?idCiudad=" + idCiudad + "&idProducto=" + idProducto + "&idProductoPresentacion=" + idProductoPresentacion + "&fechaInicio=" + fechaInicio;
+        });
+    };
 
-                        if (lista[i].tipoMovimiento == 99) {
-                            htmlMovimientos = htmlMovimientos +
-                                '<td></td>' +
-                                '<td></td>' +
-                                '<td></td>';
+    function llenarKardexMovimientos() {
+        var idCiudad = $("button.verModalStockProductoKardex").attr("idCiudad");
+        var idProducto = $("button.verModalStockProductoKardex").attr("idProducto");
+        var idProductoPresentacion = $("#selectUnidadProductoStock").val();
+        var fechaInicio = $("#verFechaInicioKardex").val();
 
-                        } else {
-                            infoMov = "";
-                            if (lista[i].tipoMovimiento == 1) {
-                                infoMov = infoMov + "<b>Entregado a:</b> " + lista[i].razonSocialCliente + " " + lista[i].TipoDocumentoClienteDesc + ": " + lista[i].nroDocumentoCliente + "<br/>";
-                            }
+        $('body').loadingModal({
+            text: 'Recuperando Movimientos...'
+        });
 
-                            if (lista[i].tipoMovimiento == 2) {
-                                infoMov = infoMov + "<b>Recibido de:</b> " + lista[i].razonSocialCliente + " " + lista[i].TipoDocumentoClienteDesc + ": " + lista[i].nroDocumentoCliente + "<br/>";
-                            }
-                            infoMov = infoMov + "<b>N° Mov.:</b> " + lista[i].NumeroDocumentoDesc;
+        $.ajax({
+            url: "/Stock/ReporteStockProductoKardex",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCiudad: idCiudad,
+                idProducto: idProducto,
+                idProductoPresentacion: idProductoPresentacion,
+                fechaInicio: fechaInicio
+            },
+            error: function (detalle) {
+                $('body').loadingModal('hide');
+            },
+            success: function (kardex) {
 
-                            htmlMovimientos = htmlMovimientos +
-                                '<td>' + infoMov + '</td>' +
-                                '<td>' + lista[i].unidadMovimiento + '</td>' +
-                                '<td>' + lista[i].cantidadMovimiento + '</td>';
+                $("#verNombreSedeKardexProductoStock").html(kardex.ciudad.nombre);
+                $("#verNombreProductoStockKardex").html(kardex.producto.descripcion);
+                $("#verCodigoProductoStockKardex").html(kardex.producto.sku);
+                $(".verUnidadMostrarStockKardex").html(kardex.unidad);
+                $("#verUnidadConteoStockKardex").html(kardex.unidadConteo);
+                $("#verUnidadConteoMovimientoKardex").html(kardex.unidadConteo);
+                
+                var htmlMovimientos = "";
+                var lista = kardex.movimientos;
+                var infoMov = "";
+
+                for (var i = 0; i < lista.length; i++) {
+                    htmlMovimientos = htmlMovimientos + '<tr>' +
+                        '<td>' + lista[i].TipoMovimientoDesc + '</td>' +
+                        '<td>' + lista[i].FechaDesc + '</td>';
+
+                    if (lista[i].tipoMovimiento == 99) {
+                        htmlMovimientos = htmlMovimientos +
+                            '<td></td>' +
+                            '<td></td>' +
+                            '<td></td>' +
+                            '<td></td>';
+
+                    } else {
+                        infoMov = "";
+                        if (lista[i].tipoMovimiento == 1) {
+                            infoMov = infoMov + "<b>Entregado a:</b> " + lista[i].razonSocialCliente + " " + lista[i].TipoDocumentoClienteDesc + ": " + lista[i].nroDocumentoCliente + "<br/>";
                         }
+
+                        if (lista[i].tipoMovimiento == 2) {
+                            infoMov = infoMov + "<b>Recibido de:</b> " + lista[i].razonSocialCliente + " " + lista[i].TipoDocumentoClienteDesc + ": " + lista[i].nroDocumentoCliente + "<br/>";
+                        }
+                        infoMov = infoMov + "<b>N° Mov.:</b> " + lista[i].NumeroDocumentoDesc;
+
+                        htmlMovimientos = htmlMovimientos +
+                            '<td>' + infoMov + '</td>' +
+                            '<td>' + lista[i].unidadMovimiento + '</td>' +
+                            '<td>' + lista[i].cantidadMovimiento + '</td>' +
+                            '<td>' + lista[i].cantidadConteo + '</td>';
+                    }
+
+                    if (fechaInicio.trim() == "") {
+                        $("#divMensajeFechaInicio").hide();
 
                         if (lista[i].stockConteo < 0) {
                             htmlMovimientos = htmlMovimientos +
@@ -136,16 +211,23 @@
                                 '<td>' + lista[i].stockConteo + '</td>' +
                                 '</tr>';
                         }
+                    } else {
+
+                        htmlMovimientos = htmlMovimientos +
+                            '<td></td>' +
+                            '<td></td>' +
+                            '</tr>';
                     }
-
-                    $("#tableMovimientosStockKardex tbody").html(htmlMovimientos);
-
-                    $("#modalStockProductoKardex").modal();
                 }
-            });
-        });
-    };
 
+                $("#tableMovimientosStockKardex tbody").html(htmlMovimientos);
+
+                $('body').loadingModal('hide');
+                $("#modalStockProductoKardex").modal();
+            }
+        });
+
+    }
 
     if (window.addEventListener) // W3C standard
     {
