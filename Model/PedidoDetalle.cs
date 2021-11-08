@@ -110,9 +110,9 @@ namespace Model
             get
             {
                 if (this.visualizaMargen)// && !this.usuario.esCliente)
-                    if (tienePrecioEspecial)
+                    if (tieneCostoEspecial)
                     {
-                        return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - precioEspecial / (precioNeto == 0 ? 1 : precioNeto)) * 100));
+                        return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - costoEspecial / (precioNeto == 0 ? 1 : precioNeto)) * 100));
                     }
                     else
                     {
@@ -128,13 +128,13 @@ namespace Model
             get
             {
                 if (this.visualizaMargen)// && !this.usuario.esCliente)
-                    if (tienePrecioEspecial)
+                    if (tieneCostoEspecial)
                     {
-                        return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - (precioEspecial + (producto.costoFleteProvincias / producto.equivalenciaProveedor)) / (precioNeto == 0 ? 1 : precioNeto)) * 100));
+                        return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - (costoEspecial + (producto.costoFleteProvincias / (producto.equivalenciaProveedor == 0 ? 1 : producto.equivalenciaProveedor))) / (precioNeto == 0 ? 1 : precioNeto)) * 100));
                     }
                     else
                     {
-                        return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - (costoLista + (producto.costoFleteProvincias / producto.equivalenciaProveedor)) / (precioNeto == 0 ? 1 : precioNeto)) * 100));
+                        return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - (costoLista + (producto.costoFleteProvincias / (producto.equivalenciaProveedor == 0 ? 1 : producto.equivalenciaProveedor))) / (precioNeto == 0 ? 1 : precioNeto)) * 100));
                     }
                 else
                     return 0.0M;

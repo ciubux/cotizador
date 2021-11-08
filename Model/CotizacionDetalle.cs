@@ -102,6 +102,39 @@ namespace Model
             }
         }
 
+        public Decimal costoListaFleteVisible
+        {
+            get
+            {
+                if (this.visualizaCostos)
+                    return this.costoListaFlete;
+                else
+                    return 0M;
+            }
+        }
+
+        public Decimal costoEspecialVisible
+        {
+            get
+            {
+                if (this.visualizaCostos)
+                    return this.costoEspecialMostrar;
+                else
+                    return 0M;
+            }
+        }
+
+        public Decimal costoEspecialFleteVisible
+        {
+            get
+            {
+                if (this.visualizaCostos)
+                    return this.costoEspecialFlete;
+                else
+                    return 0M;
+            }
+        }
+
         public Boolean visualizaMargen { get; set; }
 
         public Decimal margen
@@ -109,9 +142,9 @@ namespace Model
             get
             {
                 if (this.visualizaMargen)// && !this.usuario.esCliente)
-                    if (tienePrecioEspecial)
+                    if (tieneCostoEspecial)
                     {
-                        return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - precioEspecial / (precioNeto == 0 ? 1 : precioNeto)) * 100));
+                        return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - costoEspecial / (precioNeto == 0 ? 1 : precioNeto)) * 100));
                     }
                     else
                     {
@@ -127,9 +160,9 @@ namespace Model
             get
             {
                 if (this.visualizaMargen)// && !this.usuario.esCliente)
-                    if (tienePrecioEspecial)
+                    if (tieneCostoEspecial)
                     {
-                        return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - (precioEspecial + (producto.costoFleteProvincias / producto.equivalenciaProveedor)) / (precioNeto == 0 ? 1 : precioNeto)) * 100));
+                        return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - (costoEspecial + (producto.costoFleteProvincias / producto.equivalenciaProveedor)) / (precioNeto == 0 ? 1 : precioNeto)) * 100));
                     } else
                     {
                         return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - (costoLista + (producto.costoFleteProvincias / producto.equivalenciaProveedor)) / (precioNeto == 0 ? 1 : precioNeto)) * 100));

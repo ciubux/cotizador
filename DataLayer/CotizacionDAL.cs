@@ -465,8 +465,8 @@ namespace DataLayer
             foreach (DataRow row in preciosEspecialesDataTable.Rows)
             {
                 Guid idProducto = Converter.GetGuid(row, "id_producto");
-                decimal precioEspecial = Converter.GetDecimal(row, "precio_unitario");
-                int idProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion");
+                decimal costoEspecial = Converter.GetDecimal(row, "costo_unitario");
+                int idProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion_costo");
 
                 CotizacionDetalle det = cotizacion.cotizacionDetalleList.Where(d => d.producto.idProducto.Equals(idProducto)).First();
                 if (det != null)
@@ -474,16 +474,16 @@ namespace DataLayer
                     switch (idProductoPresentacion)
                     {
                         case 0:
-                            det.precioEspecial = precioEspecial;
-                            det.tienePrecioEspecial = true;
+                            det.costoEspecial = costoEspecial;
+                            det.tieneCostoEspecial = true;
                             break;
                         case 1:
-                            det.precioEspecial = precioEspecial * ((decimal)det.producto.equivalenciaProveedor);
-                            det.tienePrecioEspecial = true;
+                            det.costoEspecial = costoEspecial * ((decimal)det.producto.equivalenciaAlternativa);
+                            det.tieneCostoEspecial = true;
                             break;
                         case 2:
-                            det.precioEspecial = precioEspecial / ((decimal)det.producto.equivalenciaProveedor);
-                            det.tienePrecioEspecial = true;
+                            det.costoEspecial = costoEspecial / ((decimal)det.producto.equivalenciaProveedor);
+                            det.tieneCostoEspecial = true;
                             break;
                             
                     }

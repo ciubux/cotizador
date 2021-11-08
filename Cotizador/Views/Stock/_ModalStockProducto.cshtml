@@ -4,7 +4,7 @@
 
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modalMostrarPreciosTitle"><b>Stock de producto por Sede</b></h4>
+                <h4 class="modal-title" id="modalMostrarPreciosTitle"><b>Stock de producto por Sede al @DateTime.Now.ToString("dd/MM/yyyy")</b></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -41,34 +41,28 @@
                         </div>
                     </div>
                 </div>
-
+                <br />
                 <div class="row">
-                    <div class="col-sm-12 col-lg-12">
+                    <div class="col-sm-4 col-lg-4">
                         <div class="form-group">
-                            <label for="numero" class="control-label col-xs-4">Stock en la Sede (<span id="verNombreSedeProductoStock"></span>):</label>
+                            <label for="numero" class="control-label col-xs-6"><span id="verNombreSedeProductoStock"></span>:</label>
 
-                            <div class="col-xs-8">
+                            <div class="col-xs-6">
                                 <span class="form-control-static text-center stock-sede" id="verStockSedeProducto"></span>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-sm-12 col-lg-12">
-                        <h4><b>Stock en otras sedes: </b></h4>
-                    </div>
-                </div>
-
+                <br />
                 <div class="row" id="divStockProductoOtrasSedes">
                 </div>
-                
+                <br />
                 <div class="row">
-                    <div class="col-sm-12 col-lg-12">
+                    <div class="col-sm-4 col-lg-4">
                         <div class="form-group">
-                            <label class="control-label col-xs-4">Stock en todas las sedes:</label>
+                            <label class="control-label col-xs-6">TOTAL:</label>
 
-                            <div class="col-xs-8">
+                            <div class="col-xs-6">
                                 <span class="form-control-static text-center stock-sede" id="verStockTodasSedes"></span>
                             </div>
                         </div>
@@ -112,9 +106,9 @@
             var idProducto = "";
 
             $('body').loadingModal({
-                text: 'Recuperando Movimientos...'
+                text: 'Recuperando Stock...'
             });
-
+            $('body').loadingModal('show');
 
             $.ajax({
                 url: "/Stock/ReporteStockProducto",
@@ -241,6 +235,7 @@
                             }
 
                             $("#verStockSedeProducto").html(stock);
+                            $("#verStockSedeProducto").attr("idCiudad", lista[i].ciudad.idCiudad);
                             $("#verStockSedeProducto").attr("mp", stockMP);
                             $("#verStockSedeProducto").attr("alternativa", stockAlternativo);
                             $("#verStockSedeProducto").attr("proveedor", stockProveedor);
@@ -297,17 +292,17 @@
                             atributosStockSede = ' mp="' + stockMP + '" alternativa="' + stockAlternativo + '" proveedor="' + stockProveedor + '" conteo="' + stockConteo + '" ';
 
                             htmlStockSedes = htmlStockSedes + '<div class="col-sm-4 col-lg-4"><div class="form-group"><label class="control-label col-xs-6">' +
-                                lista[i].ciudad.nombre + '</label><div class="col-xs-6"><span class="stock-sede form-control-static" ' + atributosStockSede + '>' + stock + '</span></div></div></div>';
+                                lista[i].ciudad.nombre + ':</label><div class="col-xs-6"><span class="stock-sede form-control-static" idCiudad="' + lista[i].ciudad.idCiudad + '" ' + atributosStockSede + '>' + stock + '</span></div></div></div>';
                         }
                     }
 
                     if (disponible) {
                         $("#divCiudadModalStockSedeProducto").show();
-                        $("#verStockTodasSedes").html(stockTotal + "[-" + stockTotalSeparado + "]");
-                        $("#verStockTodasSedes").attr("mp", stockTotalMP + '[-' + stockTotalSeparadoMP + ']');
-                        $("#verStockTodasSedes").attr("alternativa", stockTotalAlternativa + '[-' + stockTotalSeparadoAlternativa + ']');
-                        $("#verStockTodasSedes").attr("proveedor", stockTotalProveedor + '[-' + stockTotalSeparadoProveedor + ']');
-                        $("#verStockTodasSedes").attr("conteo", stockTotalConteo + '[-' + stockTotalSeparadoConteo + ']');
+                        $("#verStockTodasSedes").html(stockTotal.toFixed(2) + "[-" + stockTotalSeparado + "]");
+                        $("#verStockTodasSedes").attr("mp", stockTotalMP.toFixed(2) + '[-' + stockTotalSeparadoMP + ']');
+                        $("#verStockTodasSedes").attr("alternativa", stockTotalAlternativa.toFixed(2) + '[-' + stockTotalSeparadoAlternativa + ']');
+                        $("#verStockTodasSedes").attr("proveedor", stockTotalProveedor.toFixed(2) + '[-' + stockTotalSeparadoProveedor + ']');
+                        $("#verStockTodasSedes").attr("conteo", stockTotalConteo.toFixed(2) + '[-' + stockTotalSeparadoConteo + ']');
                     } else {
                         $("#divCiudadModalStockSedeProducto").hide();
                         $("#verStockTodasSedes").html("No Registrado");

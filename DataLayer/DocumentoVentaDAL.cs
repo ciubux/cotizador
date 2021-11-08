@@ -160,6 +160,31 @@ namespace DataLayer
             documentoVenta.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
         }
 
+        public void InsertarDocumentoVentaNotaCreditoAjustes(Transaccion transaccion)
+        {
+            DocumentoVenta documentoVenta = transaccion.documentoVenta;
+            var objCommand = GetSqlCommand("pi_documentoVentaNotaCreditoAjustes");
+            InputParameterAdd.DateTime(objCommand, "fechaEmision", documentoVenta.fechaEmision);
+            InputParameterAdd.DateTime(objCommand, "fechaVencimiento", documentoVenta.fechaVencimiento);
+            InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
+            InputParameterAdd.Varchar(objCommand, "serie", documentoVenta.serie);
+            InputParameterAdd.Varchar(objCommand, "serieReferencia", transaccion.documentoReferencia.serie);
+            InputParameterAdd.Varchar(objCommand, "correlativoReferencia", transaccion.documentoReferencia.numero);
+
+            InputParameterAdd.Varchar(objCommand, "codigoCliente", documentoVenta.cliente.codigo);
+            InputParameterAdd.Varchar(objCommand, "sustento", transaccion.sustento);
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idDocumentoVenta");
+            OutputParameterAdd.Int(objCommand, "tipoError");
+            OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
+
+            ExecuteNonQuery(objCommand);
+
+            documentoVenta.idDocumentoVenta = (Guid)objCommand.Parameters["@idDocumentoVenta"].Value;
+            documentoVenta.tiposErrorValidacion = (DocumentoVenta.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
+            documentoVenta.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
+        }
+
+        
 
         public void UpdateSiguienteNumeroFactura(DocumentoVenta documentoVenta)
         {

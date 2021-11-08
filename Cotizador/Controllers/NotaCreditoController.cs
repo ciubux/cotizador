@@ -106,6 +106,100 @@ namespace Cotizador.Controllers
             
         }
 
+
+        public String CrearNotaCreditoAjustes()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            VentaBL ventaBL = new VentaBL();
+            Transaccion transaccion = new Venta();
+
+            transaccion.documentoVenta = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_FACTURA_VER];
+            transaccion.documentoVenta.venta = null;
+            transaccion.documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaCrédito;
+
+            transaccion.documentoVenta.idDocumentoVenta = Guid.Parse(Request["idDocumentoVenta"].ToString());
+
+
+            transaccion.documentoReferencia = new DocumentoReferencia();
+            transaccion.documentoReferencia.tipoDocumento = (DocumentoVenta.TipoDocumento)Int32.Parse(transaccion.documentoVenta.cPE_CABECERA_BE.TIP_CPE);
+            String[] fechaEmisionArray = transaccion.documentoVenta.cPE_CABECERA_BE.FEC_EMI.Split('-');
+            transaccion.documentoReferencia.fechaEmision = new DateTime(Int32.Parse(fechaEmisionArray[0]), Int32.Parse(fechaEmisionArray[1]), Int32.Parse(fechaEmisionArray[2]));
+            transaccion.documentoReferencia.serie = transaccion.documentoVenta.cPE_CABECERA_BE.SERIE;
+            transaccion.documentoReferencia.numero = transaccion.documentoVenta.cPE_CABECERA_BE.CORRELATIVO;
+
+
+            DocumentoVenta.TiposNotaCredito tiposNotaCredito = (DocumentoVenta.TiposNotaCredito)Int32.Parse(Request["tipoNotaCredito"].ToString());
+
+            String fechaVencimiento = Request["fechaVencimiento"].ToString();
+            String sustento = Request["sustento"].ToString();
+
+            ClienteBL clienteBl = new ClienteBL();
+            transaccion.cliente = clienteBl.getCliente(transaccion.documentoVenta.cliente.idCliente);
+            transaccion.tipoNotaCredito = tiposNotaCredito;
+            transaccion.documentoVenta.fechaEmision = DateTime.Now;
+
+            /*Se obtiene la ciudad para poder cargar las series del documento de pago*/
+            Ciudad ciudad = usuario.sedesMPPedidos.Where(s => s.idCiudad == transaccion.cliente.ciudad.idCiudad).FirstOrDefault();//  Guid.Parse("39C9D42B-6D94-4AAE-93B8-D1D6A5F11A33")).FirstOrDefault();
+            List<SerieDocumentoElectronico> serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList.OrderByDescending(x => x.esPrincipal).ToList();
+            //  transaccion.cliente = new Cliente();
+            //     transaccion.cliente.ciudad = new Ciudad();
+            transaccion.cliente.ciudad.serieDocumentoElectronicoList = serieDocumentoElectronicoList;
+
+            /*Se selecciona la primera serie de la lista*/
+            transaccion.documentoVenta.serieDocumentoElectronico = serieDocumentoElectronicoList[0];
+            transaccion.documentoVenta.serie = Constantes.PREFIJO_NOTA_CREDITO_FACTURA + transaccion.documentoVenta.serieDocumentoElectronico.serie.Substring(1);
+            transaccion.documentoVenta.numero = transaccion.documentoVenta.serieDocumentoElectronico.siguienteNumeroNotaCredito.ToString();
+
+            transaccion.observaciones = "";
+            transaccion.sustento = sustento;
+
+            ////La fecha de vencimiento 
+            String[] fecha = fechaVencimiento.Split('/');
+            transaccion.documentoVenta.fechaVencimiento = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]), 0, 0, 0);
+
+            
+            transaccion.documentoVenta.usuario = usuario;
+
+            transaccion.usuario = usuario;
+
+
+            DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
+            //Se crea una venta solo para que pueda enviar 
+            transaccion.documentoVenta.cliente = transaccion.cliente;
+
+            transaccion.documentoVenta = documentoVentaBL.InsertarNotaCreditoAjustes(transaccion);
+            transaccion.documentoVenta.tipoNotaCredito = (DocumentoVenta.TiposNotaCredito)Int32.Parse(transaccion.documentoVenta.cPE_CABECERA_BE.COD_TIP_NC);
+
+            try
+            {
+                DocumentoVenta documentoVenta = new DocumentoVenta();
+                documentoVenta.venta = (Venta)transaccion;
+                documentoVenta.idDocumentoVenta = transaccion.documentoVenta.idDocumentoVenta;
+                documentoVenta.cliente = transaccion.cliente;
+                documentoVenta.usuario = usuario;
+
+                documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaCrédito;
+                CPE_RESPUESTA_BE cPE_RESPUESTA_BE = documentoVentaBL.procesarCPE(documentoVenta);
+
+                var otmp = new
+                {
+                    CPE_RESPUESTA_BE = cPE_RESPUESTA_BE,
+                    serieNumero = documentoVenta.serieNumero,
+                    idDocumentoVenta = documentoVenta.idDocumentoVenta
+                };
+
+                return JsonConvert.SerializeObject(otmp);
+            }
+            catch (Exception ex)
+            {
+                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                LogBL logBL = new LogBL();
+                logBL.insertLog(log);
+                return ex.ToString();
+            }
+        }
+
+
         public String iniciarCreacionNotaCreditoDesdeNotaIngreso()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];

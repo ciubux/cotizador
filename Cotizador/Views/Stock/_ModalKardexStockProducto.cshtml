@@ -34,6 +34,8 @@
                             <label class="control-label col-xs-2">Unidad:</label>
                             <div class="col-xs-10">
                                 <span class="form-control-static verUnidadMostrarStockKardex"></span>
+                                <br />
+                                <span class="text-danger">Stock al @DateTime.Now.ToString("dd/MM/yyyy"): <span id="verStockProductoKardex"></span></span>
                             </div>
                         </div>
                     </div>
@@ -113,6 +115,23 @@
         $(document).on('click', "button.verModalStockProductoKardex", function () {
             $("#divMensajeFechaInicio").hide();
             $("#verFechaInicioKardex").val("");
+            var idProductoPresentacion = $("#selectUnidadProductoStock").val();
+
+            if (idProductoPresentacion == 0) {
+                $("#verStockProductoKardex").html($('.stock-sede[idCiudad="' + $(this).attr("idCiudad") + '"]').attr("mp"));
+            }
+
+            if (idProductoPresentacion == 1) {
+                $("#verStockProductoKardex").html($('.stock-sede[idCiudad="' + $(this).attr("idCiudad") + '"]').attr("alternativa"));
+            }
+
+            if (idProductoPresentacion == 2) {
+                $("#verStockProductoKardex").html($('.stock-sede[idCiudad="' + $(this).attr("idCiudad") + '"]').attr("proveedor"));
+            }
+
+            if (idProductoPresentacion == 3) {
+                $("#verStockProductoKardex").html($('.stock-sede[idCiudad="' + $(this).attr("idCiudad") + '"]').attr("conteo"));
+            }
 
             llenarKardexMovimientos();
         });
@@ -140,6 +159,7 @@
         $('body').loadingModal({
             text: 'Recuperando Movimientos...'
         });
+        $('body').loadingModal('show');
 
         $.ajax({
             url: "/Stock/ReporteStockProductoKardex",

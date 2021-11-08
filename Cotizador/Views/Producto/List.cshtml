@@ -188,11 +188,18 @@
         </div>
 
         <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
+            <div class="" style="display: inline-block;">
+                <label id="labelIdCiudadStock "class="" for="idCiudadStock">
+                    Mostrar stock en:
+                </label>
+                @Html.Action("GetCiudades", "Ciudad", new { ciudadSelectId = "idCiudadStock" })
+            </div>
+
             <button id="btnLimpiarBusqueda" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
             <button id="btnBusqueda" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
         </div>
 
-        <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px; display: none;">
+        <div id="divExportButton" class="row pull-left" style="margin-bottom: 10px; margin-left: 0px;">
             <button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchExcel", "Producto")">Exportar</button>
             @if (producto.usuario.realizaCargaMasivaProductos)
             {

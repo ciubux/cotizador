@@ -77,6 +77,37 @@ namespace BusinessLayer
             }
         }
 
+        public DocumentoVenta InsertarNotaCreditoAjustes(Transaccion transaccion)
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                DocumentoVenta documentoVenta = transaccion.documentoVenta;
+
+                documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaCrédito;
+
+                //    documentoVenta.movimientoAlmacen = new MovimientoAlmacen();
+                //Se define el idMovimientoAlmacen como vacío para que tome el idventa
+                //   documentoVenta.movimientoAlmacen.idMovimientoAlmacen = Guid.Empty;
+
+                dal.InsertarDocumentoVentaNotaCreditoAjustes(transaccion);
+
+                if (documentoVenta.tiposErrorValidacion == DocumentoVenta.TiposErrorValidacion.NoExisteError)
+                {
+                    //Se recupera el documento de venta creado para poder visualizarlo
+                    documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
+                    documentoVenta.tipoPago = (DocumentoVenta.TipoPago)Int32.Parse(documentoVenta.cPE_CABECERA_BE.TIP_PAG);
+                    documentoVenta.cPE_RESPUESTA_BE = new CPE_RESPUESTA_BE();
+                    documentoVenta.cPE_RESPUESTA_BE.CODIGO = Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK;
+                }
+                else
+                {
+                    documentoVenta.cPE_RESPUESTA_BE = new CPE_RESPUESTA_BE();
+                    documentoVenta.cPE_RESPUESTA_BE.CODIGO = Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_ERROR_DATA;
+                    documentoVenta.cPE_RESPUESTA_BE.DETALLE = documentoVenta.tiposErrorValidacionString + ". " + documentoVenta.descripcionError;
+                }
+                return documentoVenta;
+            }
+        }
 
         public DocumentoVenta InsertarNotaDebito(DocumentoVenta documentoVenta)
         {

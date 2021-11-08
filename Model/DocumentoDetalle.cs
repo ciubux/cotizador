@@ -17,8 +17,11 @@ namespace Model
 
         public int cantidadPorAtender { get; set; }
 
-        public bool tienePrecioEspecial { get; set; }
-        public decimal precioEspecial { get; set; }
+        //public bool tienePrecioEspecial { get; set; }
+        //public decimal precioEspecial { get; set; }
+
+        public bool tieneCostoEspecial { get; set; }
+        public decimal costoEspecial { get; set; }
         public int cantidadPorAtenderPermitida
         {
             get
@@ -177,12 +180,58 @@ namespace Model
             get
             {
                 Decimal costoListaTmp = 0;
+
                 if (esPrecioAlternativo)
                     costoListaTmp = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.costoLista / ProductoPresentacion.Equivalencia));
                 else
                     costoListaTmp = producto.costoLista;
-
+                
                 return costoListaTmp;
+            }
+        }
+
+        public Decimal costoEspecialMostrar
+        {
+            get
+            {
+                Decimal costoTmp = 0;
+                if (tieneCostoEspecial)
+                {
+                    if (esPrecioAlternativo)
+                        costoTmp = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, this.costoEspecial / ProductoPresentacion.Equivalencia));
+                    else
+                        costoTmp = this.costoEspecial;
+                }
+
+                return costoTmp;
+            }
+        }
+
+        public Decimal costoListaFlete
+        {
+            get
+            {
+                Decimal costoTmp = 0;
+                if (esPrecioAlternativo)
+                    costoTmp = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, (producto.costoLista / ProductoPresentacion.Equivalencia) + (producto.costoFleteProvincias / (producto.equivalenciaProveedor * ProductoPresentacion.Equivalencia))));
+                else
+                    costoTmp = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.costoLista + (producto.costoFleteProvincias / producto.equivalenciaProveedor)));
+                
+                return costoTmp;
+            }
+        }
+
+        public Decimal costoEspecialFlete
+        {
+            get
+            {
+                Decimal costoTmp = 0;
+                if (esPrecioAlternativo)
+                    costoTmp = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, (this.costoEspecial / ProductoPresentacion.Equivalencia) + (producto.costoFleteProvincias / (producto.equivalenciaProveedor * ProductoPresentacion.Equivalencia))));
+                else
+                    costoTmp = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, this.costoEspecial + (producto.costoFleteProvincias / producto.equivalenciaProveedor)));
+
+                return costoTmp;
             }
         }
 

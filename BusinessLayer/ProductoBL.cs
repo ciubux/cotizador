@@ -560,7 +560,13 @@ namespace BusinessLayer
         {
             using (var productoDAL = new ProductoDAL())
             {
-                return productoDAL.StockProductosSede(idProductos, idCiudad, idUsuario);
+                if (idCiudad.Equals(Guid.Empty))
+                {
+                    return productoDAL.StockProductosTodasSedes(idProductos, idUsuario);
+                } else
+                {
+                    return productoDAL.StockProductosSede(idProductos, idCiudad, idUsuario);
+                }
             }
         }
 

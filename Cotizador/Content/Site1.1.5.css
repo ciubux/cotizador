@@ -1285,3 +1285,13 @@ $darkred: darken($red, 0.2);*/
 .spnMargenCostoFlete {
     color: #f0ad4e;
 }
+
+.selectCiudadStockProducto{
+    height: 30px;
+    margin-right: 5px;
+}
+
+.searchListStockUnidad {
+    color: #3cb371;
+    font-weight: bold;
+}

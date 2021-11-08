@@ -274,6 +274,28 @@ namespace Cotizador.Controllers
             return View();
         }
 
+        [HttpPost]
+        public String GetStockProductos(string ids, string idCiudad)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+            {
+                return "";
+            }
+
+            List<Guid> idProductos = new List<Guid>();
+            string[] idsItems = ids.Split(';');
+
+            foreach (string id in idsItems)
+            {
+                idProductos.Add(Guid.Parse(id));
+            }
+
+            ProductoBL bl = new ProductoBL();
+            List<RegistroCargaStock> stocks = bl.StockProductosSede(idProductos, Guid.Parse(idCiudad), usuario.idUsuario);
+
+            return JsonConvert.SerializeObject(stocks);
+        }
 
 
         public ActionResult Load(HttpPostedFileBase file)

@@ -2304,12 +2304,24 @@ jQuery(function ($) {
                     }
 
                     var htmlAdicionalMargen = "";
+                    var htmlAdicionalCosto = "";
                     if (lista[i].margen != lista[i].margenCostoFlete) {
-                        htmlAdicionalMargen = htmlAdicionalMargen + '<br/><span class="spnMargenCostoFlete">' + lista[i].margenCostoFlete + '%</span>';
+                        htmlAdicionalMargen = htmlAdicionalMargen + '<br/><span class="spnMargenCostoFlete">' + lista[i].margenCostoFlete.toFixed(cantidadDecimales) + '%</span>';
                     }
 
-                    if (lista[i].tienePrecioEspecial) {
-                        htmlAdicionalMargen = htmlAdicionalMargen + '<br/><label class="lbl-vigencia-corregida">Especial</label>';
+                    if (lista[i].tieneCostoEspecial) {
+                        htmlAdicionalCosto = lista[i].costoEspecialVisible.toFixed(cantidadDecimales);
+                        if (lista[i].margen != lista[i].margenCostoFlete) {
+                            htmlAdicionalCosto = htmlAdicionalCosto + '<br/><span class="spnMargenCostoFlete">' + lista[i].costoEspecialFleteVisible + '</span>';
+                        }
+
+                        htmlAdicionalCosto = htmlAdicionalCosto + '<br/><label class="lbl-vigencia-corregida">Especial</label>';
+                    } else {
+
+                        htmlAdicionalCosto = lista[i].costoListaVisible.toFixed(cantidadDecimales);
+                        if (lista[i].margen != lista[i].margenCostoFlete) {
+                            htmlAdicionalCosto = htmlAdicionalCosto + '<br/><span class="spnMargenCostoFlete">' + lista[i].costoListaFleteVisible + '</span>';
+                        }
                     }
 
                     d += '<tr class="' + inactivoClass + '" sku = "' + lista[i].producto.sku + '" idProductoPresentacion="' + lista[i].idProductoPresentacion + '" >' +
@@ -2321,7 +2333,7 @@ jQuery(function ($) {
                         '<td>' + lista[i].precioLista.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].porcentajeDescuentoMostrar.toFixed(cantidadDecimales) + ' %</td>' +
                         '<td>' + lista[i].precioNeto.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
-                        '<td>' + lista[i].costoListaVisible.toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + htmlAdicionalCosto + '</td>' +
                         '<td>' + lista[i].margen.toFixed(cantidadDecimales) + '%' + htmlAdicionalMargen + '</td>' +
                         '<td>' + lista[i].flete.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
                         '<td>' + lista[i].precioUnitario.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
