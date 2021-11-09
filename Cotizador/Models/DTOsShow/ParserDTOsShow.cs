@@ -96,6 +96,10 @@ namespace Cotizador.Models.DTOsShow
                 cotizacionDTOshow.cliente_codigoRazonSocial = cotizacionDTOshow.cliente_codigoRazonSocial + " (Grupo: " + cotizacion.cliente.grupoCliente.codigoNombre + ")";
             }
 
+            cotizacionDTOshow.utilidadVisible = cotizacion.utilidadVisible;
+            cotizacionDTOshow.utilidadFleteVisible = cotizacion.utilidadFleteVisible;
+            cotizacionDTOshow.margenVisible = cotizacion.margenVisible;
+            cotizacionDTOshow.margenFleteVisible = cotizacion.margenFleteVisible;
             cotizacionDTOshow.tipoCotizacion = (int)cotizacion.tipoCotizacion;
             cotizacionDTOshow.contacto = cotizacion.contacto;
             cotizacionDTOshow.cliente_esClienteLite = cotizacion.cliente.esClienteLite;

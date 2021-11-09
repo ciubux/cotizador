@@ -50,6 +50,10 @@ namespace Cotizador.Models.DTOshow
         public String cliente_codigoRazonSocial { get; set; }
         public int tipoCotizacion { get; set; }
 
+        public Decimal utilidadVisible { get; set; }
+        public Decimal utilidadFleteVisible { get; set; }
+        public Decimal margenFleteVisible { get; set; }
+        public Decimal margenVisible { get; set; }
         public int grupo_idGrupoCliente { get; set; }
     }
 }

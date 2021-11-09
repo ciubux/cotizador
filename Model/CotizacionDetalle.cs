@@ -135,6 +135,8 @@ namespace Model
             }
         }
 
+        
+
         public Boolean visualizaMargen { get; set; }
 
         public Decimal margen
