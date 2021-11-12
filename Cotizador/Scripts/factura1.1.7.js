@@ -1416,9 +1416,8 @@ jQuery(function ($) {
                     mostrarMensajeErrorProceso(MENSAJE_ERROR);
                     $("#btnContinuarGenerandoNotaCredito").removeAttr("disabled");
                     $("#btnCancelarNotaCredito").removeAttr("disabled");
-                    return false;
                 },
-                success: function (venta) {
+                success: function (resultado) {
 
                     $('body').loadingModal('hide')
 
@@ -1441,9 +1440,11 @@ jQuery(function ($) {
                         activarBotonesConfirmarNotasCredito();
                     }
 
-                    return false;
+                    
                 }
             });
+
+            return false;
         }
 
         

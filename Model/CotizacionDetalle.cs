@@ -53,7 +53,6 @@ namespace Model
         private Decimal _variacionPrecioListaAnterior;
         public Decimal variacionPrecioListaAnterior
         {
-
             get
             {
 

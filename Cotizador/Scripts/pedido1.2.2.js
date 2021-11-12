@@ -3161,12 +3161,30 @@ jQuery(function ($) {
                     }
 
                     var htmlAdicionalMargen = "";
+                    var htmlAdicionalCosto = "";
                     if (lista[i].margen != lista[i].margenCostoFlete) {
-                        htmlAdicionalMargen = htmlAdicionalMargen + '<br/><span class="spnMargenCostoFlete">' + lista[i].margenCostoFlete + '%</span>';
+                        htmlAdicionalMargen = htmlAdicionalMargen + '<br/><span class="spnMargenCostoFlete">' + lista[i].margenCostoFlete.toFixed(cantidadDecimales) + '%</span>';
                     }
 
                     if (lista[i].tienePrecioEspecial) {
                         htmlAdicionalMargen = htmlAdicionalMargen + '<br/><label class="lbl-vigencia-corregida">Especial</label>';
+                    }
+
+                    if (lista[i].tieneCostoEspecial) {
+                        htmlAdicionalCosto = lista[i].costoEspecialVisible.toFixed(cantidadDecimales);
+                        if (lista[i].margen != lista[i].margenCostoFlete) {
+                            tieneCostoFlete = true;
+                            htmlAdicionalCosto = htmlAdicionalCosto + '<br/><span class="spnMargenCostoFlete">' + lista[i].costoEspecialFleteVisible.toFixed(cantidadDecimales) + '</span>';
+                        }
+
+                        htmlAdicionalCosto = htmlAdicionalCosto + '<br/><label class="lbl-vigencia-corregida">Especial</label>';
+                    } else {
+
+                        htmlAdicionalCosto = lista[i].costoListaVisible.toFixed(cantidadDecimales);
+                        if (lista[i].margen != lista[i].margenCostoFlete) {
+                            tieneCostoFlete = true;
+                            htmlAdicionalCosto = htmlAdicionalCosto + '<br/><span class="spnMargenCostoFlete">' + lista[i].costoListaFleteVisible.toFixed(cantidadDecimales) + '</span>';
+                        }
                     }
 
                     d += '<tr sku="' + lista[i].producto.sku + '" idProductoPresentacion="' + lista[i].idProductoPresentacion + '">' +
@@ -3197,7 +3215,14 @@ jQuery(function ($) {
                 }
 
 
+                $("#spnUtilidad").html(pedido.utilidadVisible.toFixed(cantidadDecimales) + " (" + pedido.margenVisible.toFixed(cantidadDecimales) + "%)");
+                if (tieneCostoFlete) {
+                    $("#divUtilidadFlete").show();
+                    $("#spnUtilidadFlete").html(pedido.utilidadFleteVisible.toFixed(cantidadDecimales) + " (" + pedido.margenFleteVisible.toFixed(cantidadDecimales) + "%)");
 
+                } else {
+                    $("#divUtilidadFlete").hide();
+                }
 
                 $("#verRazonSocialSunat").html(pedido.cliente_razonSocialSunat);
                 $("#verRUC").html(pedido.cliente_ruc);
@@ -4963,6 +4988,16 @@ jQuery(function ($) {
                         "enabled": true
                     }
                 });
+
+                if (pedidoList.length > 0 && pedido_numeroGrupoPedido.trim() != "") {
+                    $("#btnAprobarPedidosGrupo").attr("idGrupo", pedido_idGrupoCliente);
+                    $("#btnLiberarPedidosGrupo").attr("idGrupo", pedido_idGrupoCliente);
+                    $("#btnAprobarPedidosGrupo").show();
+                    $("#btnLiberarPedidosGrupo").show();
+                } else {
+                    $("#btnAprobarPedidosGrupo").hide();
+                    $("#btnLiberarPedidosGrupo").hide();
+                }
 
                 for (var i = 0; i < pedidoList.length; i++) {
 

@@ -366,6 +366,14 @@
 
         <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px; display: none;">
             <button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchExcel", "Pedido")">Exportar</button>
+            @if (pedido.usuario.apruebaPedidos)
+            {
+                <button type="button" id="btnAprobarPedidosGrupo" class="btn btn-success" style="display: none;" >Aprobar Pedidos Grupo</button>
+            }
+            @if (pedido.usuario.liberaPedidos)
+            {
+                <button type="button" id="btnLiberarPedidosGrupo" class="btn btn-success" style="display: none;">Liberar Pedidos Grupo</button>
+            }
         </div>
 
         <table id="tablePedidos" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
@@ -854,20 +862,39 @@
                         <tbody></tbody>
                     </table>
 
-                    <div class="row right">
-                        <div class="col-lg-12 leyenda-box-inline">
-                            <div class="leyenda-box-title">Leyenda Stock:</div>
-                            <div class="">
-                                <div class="leyenda-box-color guia-stock-success"></div>
-                                <div>Stock Suficiente</div>
-                            </div>
-                            <div class="">
-                                <div class="leyenda-box-color guia-stock-warning"></div>
-                                <div>Stock insuficiente para este y<br />los demás pedidos ingresados</div>
-                            </div>
-                            <div class="">
-                                <div class="leyenda-box-color guia-stock-danger"></div>
-                                <div>Stock insuficiente<br />para este pedido</div>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            @if (pedido.usuario.visualizaCostos)
+                            {
+                                <div class="row left">
+                                    <div class="col-lg-12 leyenda-box-inline" style="margin-bottom: 5px;">
+                                        <div class="leyenda-box-title">Utilidad Bruta:</div>
+                                        <div><span class="mostrarSimboloMoneda"></span> <span id="spnUtilidad"></span></div>
+                                    </div>
+                                    <div id="divUtilidadFlete" class="col-lg-12 leyenda-box-inline spnMargenCostoFlete">
+                                        <div class="leyenda-box-title">Utilidad Bruta:</div>
+                                        <div><span class="mostrarSimboloMoneda"></span> <span id="spnUtilidadFlete"></span></div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="row right">
+                                <div class="col-lg-12 leyenda-box-inline">
+                                    <div class="leyenda-box-title">Leyenda Stock:</div>
+                                    <div class="">
+                                        <div class="leyenda-box-color guia-stock-success"></div>
+                                        <div>Stock Suficiente</div>
+                                    </div>
+                                    <div class="">
+                                        <div class="leyenda-box-color guia-stock-warning"></div>
+                                        <div>Stock insuficiente para atender esta<br />cotización y los pedidos ingresados</div>
+                                    </div>
+                                    <div class="">
+                                        <div class="leyenda-box-color guia-stock-danger"></div>
+                                        <div>Stock insuficiente<br />para esta cotización</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -195,6 +195,7 @@ namespace Model
             get
             {
                 Decimal costoTmp = 0;
+
                 if (tieneCostoEspecial)
                 {
                     if (esPrecioAlternativo)
@@ -212,6 +213,11 @@ namespace Model
             get
             {
                 Decimal costoTmp = 0;
+                if (producto.equivalenciaProveedor == 0)
+                {
+                    return 0;
+                }
+
                 if (esPrecioAlternativo)
                     costoTmp = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, (producto.costoLista / ProductoPresentacion.Equivalencia) + (producto.costoFleteProvincias / (producto.equivalenciaProveedor * ProductoPresentacion.Equivalencia))));
                 else
@@ -225,6 +231,11 @@ namespace Model
         {
             get
             {
+                if (producto.equivalenciaProveedor == 0)
+                {
+                    return 0;
+                }
+
                 Decimal costoTmp = 0;
                 if (esPrecioAlternativo)
                     costoTmp = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, (this.costoEspecial / ProductoPresentacion.Equivalencia) + (producto.costoFleteProvincias / (producto.equivalenciaProveedor * ProductoPresentacion.Equivalencia))));
