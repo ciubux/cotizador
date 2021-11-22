@@ -261,6 +261,8 @@ namespace DataLayer
                 cotizacion.fechaLimiteValidezOferta = Converter.GetDateTime(row, "fecha_limite_validez_oferta");
                 cotizacion.fechaInicioVigenciaPrecios = Converter.GetDateTimeNullable(row, "fecha_inicio_vigencia_precios");
                 cotizacion.fechaFinVigenciaPrecios = Converter.GetDateTimeNullable(row, "fecha_fin_vigencia_precios");
+                cotizacion.fechaFinVigenciaPreciosExtendida = Converter.GetDateTimeNullable(row, "fecha_fin_vigencia_extendida");
+                cotizacion.estadoExtendida = Converter.GetInt(row, "estado_extendida");
                 cotizacion.incluidoIGV = Converter.GetBool(row, "incluido_igv");
                 cotizacion.considerarCantidades = (Cotizacion.OpcionesConsiderarCantidades)Converter.GetInt(row, "considera_cantidades");
                 cotizacion.mostrarValidezOfertaEnDias = Converter.GetInt(row, "mostrar_validez_oferta_dias");

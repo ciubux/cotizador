@@ -23,6 +23,10 @@ namespace Cotizador.Models.DTOshow
         public DateTime? fechaLimiteValidezOferta { get; set; }
         public DateTime? fechaInicioVigenciaPrecios { get; set; }
         public DateTime? fechaFinVigenciaPrecios { get; set; }
+
+        public DateTime? fechaFinVigenciaPreciosExtendida { get; set; }
+        public int estadoExtendida { get; set; }
+        
         public String seguimientoCotizacion_estadoString { get; set; }
         public String seguimientoCotizacion_usuario_nombre { get; set; }
 

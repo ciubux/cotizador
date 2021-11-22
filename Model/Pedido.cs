@@ -575,7 +575,7 @@ namespace Model
             {
                 decimal utilidad = 0;
 
-                foreach (CotizacionDetalle det in this.documentoDetalle)
+                foreach (PedidoDetalle det in this.documentoDetalle)
                 {
                     if (det.tieneCostoEspecial)
                     {
@@ -597,7 +597,7 @@ namespace Model
             get
             {
                 decimal utilidad = 0;
-                foreach (CotizacionDetalle det in this.documentoDetalle)
+                foreach (PedidoDetalle det in this.documentoDetalle)
                 {
                     if (det.tieneCostoEspecial)
                     {
@@ -620,7 +620,7 @@ namespace Model
                 decimal utilidad = this.utilidadVisible;
                 decimal total = 0;
 
-                foreach (CotizacionDetalle det in this.documentoDetalle)
+                foreach (PedidoDetalle det in this.documentoDetalle)
                 {
                     total = total + (det.precioNeto * det.cantidad);
                 }
@@ -641,7 +641,7 @@ namespace Model
                 decimal utilidad = this.utilidadFleteVisible;
                 decimal total = 0;
 
-                foreach (CotizacionDetalle det in this.documentoDetalle)
+                foreach (PedidoDetalle det in this.documentoDetalle)
                 {
                     total = total + (det.precioNeto * det.cantidad);
                 }

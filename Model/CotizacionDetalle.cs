@@ -88,6 +88,8 @@ namespace Model
 
         }
 
+        public Boolean esUltimoPrecio { get; set; }
+
         public Boolean visualizaCostos { get; set; }
 
         public Decimal costoListaVisible

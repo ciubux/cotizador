@@ -2099,6 +2099,89 @@ namespace Cotizador.Controllers
             //return pedidoList.Count();
         }
 
+        public String SearchGrupo()
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPedidos;
+            //Se recupera el pedido Búsqueda de la session
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
+
+            if (this.Request.Params["numeroGrupo"] == null || this.Request.Params["numeroGrupo"].Trim().Length == 0)
+            {
+                pedido.numeroGrupoPedido = 0;
+            }
+            else
+            {
+                pedido.numeroGrupoPedido = long.Parse(this.Request.Params["numeroGrupo"]);
+            }
+
+            int tipoOrdenamiento = int.Parse(this.Request.Params["tipoOrdenamiento"]);
+
+            PedidoBL pedidoBL = new PedidoBL();
+            List<Pedido> pedidoList = pedidoBL.GetPedidosGrupo(pedido, tipoOrdenamiento);
+            
+            String pedidoListString = JsonConvert.SerializeObject(ParserDTOsSearch.PedidoVentaToPedidoVentaDTO(pedidoList));
+            return pedidoListString;
+        }
+
+        public String LiberarPedidosGrupo()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPedidos;
+            long nroGrupoPedido = 0;
+            if (this.Request.Params["numeroGrupo"] == null || this.Request.Params["numeroGrupo"].Trim().Length == 0)
+            {
+                nroGrupoPedido = 0;
+            }
+            else
+            {
+                nroGrupoPedido = long.Parse(this.Request.Params["numeroGrupo"]);
+            }
+
+            int success = 0;
+
+            if (usuario.liberaPedidos)
+            {
+                PedidoBL pedidoBL = new PedidoBL();
+                pedidoBL.LiberarPedidosGrupo(nroGrupoPedido, usuario.idUsuario);
+                success = 1;
+            }
+
+            var v = new { success = success };
+            String resultado = JsonConvert.SerializeObject(v);
+
+            return resultado;
+        }
+
+        public String AprobarPedidosGrupo()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPedidos;
+            long nroGrupoPedido = 0;
+            if (this.Request.Params["numeroGrupo"] == null || this.Request.Params["numeroGrupo"].Trim().Length == 0)
+            {
+                nroGrupoPedido = 0;
+            }
+            else
+            {
+                nroGrupoPedido = long.Parse(this.Request.Params["numeroGrupo"]);
+            }
+
+            int success = 0;
+
+            if (usuario.liberaPedidos)
+            {
+                PedidoBL pedidoBL = new PedidoBL();
+                pedidoBL.AprobarPedidosgrupo(nroGrupoPedido, usuario.idUsuario);
+                success = 1;
+            }
+
+            var v = new { success = success };
+            String resultado = JsonConvert.SerializeObject(v);
+
+            return resultado;
+        }
 
         public String ConsultarSiExistePedido()
         {

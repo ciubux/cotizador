@@ -1550,6 +1550,49 @@ namespace Cotizador.Controllers
             return json;
         }
 
+        public String PreciosExtenderVigencia()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            CotizacionBL cotizacionBL = new CotizacionBL();
+            Cotizacion cotizacion = new Cotizacion();
+            cotizacion.codigo = Int64.Parse(Request["codigo"].ToString());
+            cotizacion = cotizacionBL.GetCotizacion(cotizacion, usuario);
+            cotizacion.usuarioBusqueda = usuario;
+
+            List<DocumentoDetalle> listaPrecios = new List<DocumentoDetalle>();
+
+            if (cotizacion.cliente.idCliente != Guid.Empty)
+            {
+                ClienteBL bl = new ClienteBL();
+                listaPrecios = bl.getPreciosHistoricoCliente(cotizacion.cliente.idCliente);
+            } else
+            {
+                GrupoClienteBL bl = new GrupoClienteBL();
+                listaPrecios =  bl.getPreciosHistoricoGrupoCliente(cotizacion.grupo.idGrupoCliente);
+            }
+
+            foreach (CotizacionDetalle det in cotizacion.cotizacionDetalleList)
+            {
+                det.esUltimoPrecio = false;
+                DocumentoDetalle precio = listaPrecios.Where(p => (p.producto != null && p.producto.idProducto == det.producto.idProducto)).FirstOrDefault();
+                if (precio != null)
+                {
+                    if (long.Parse(precio.producto.precioClienteProducto.numeroCotizacion) == cotizacion.codigo)
+                    {
+                        det.esUltimoPrecio = true;
+                    }
+                }
+            }
+
+            string jsonUsuario = JsonConvert.SerializeObject(usuario);
+
+            string jsonCotizacion = JsonConvert.SerializeObject(ParserDTOsShow.CotizaciontoCotizacionDTO(cotizacion));
+
+            String json = "{\"usuario\":" + jsonUsuario + ", \"cotizacion\":" + jsonCotizacion + "}";
+
+            return json;
+        }
+
         [HttpPost]
         public String GetStockProductos()
         {
@@ -1572,6 +1615,33 @@ namespace Cotizador.Controllers
 
             return JsonConvert.SerializeObject(stocks);
         }
+
+        public void RegistrarSolicitudExtensionVigencia()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            Int64 codigo = Int64.Parse(Request["codigo"].ToString());
+            string fechaFin = Request["fechaFin"].ToString();
+
+            DateTime? fechaFinVigencia = null;
+            if (fechaFin.Trim().Equals(""))
+            {
+                fechaFinVigencia = null;
+            } else
+            {
+
+            }
+
+            if (usuario.apruebaCotizaciones)
+            {
+                SeguimientoCotizacion.estadosSeguimientoCotizacion estadosSeguimientoCotizacion = SeguimientoCotizacion.estadosSeguimientoCotizacion.Aceptada;
+                String observacion = Request["observacion"].ToString();
+                observacion = "[" + DateTime.Now.ToString("dd.MM.yyyy") + " Extensión de vigencia solicitada por " + usuario.nombre + 
+                              ". Nuevo fin de vigencia: " + (fechaFin.Trim().Equals("") ? "Indefeinida" : fechaFinVigencia.Value.ToString("dd/MM/yyyy")) + "] " + observacion;
+                updateEstadoSeguimientoCotizacion(codigo, estadosSeguimientoCotizacion, observacion);
+            }
+        }
+
 
         public void updateEstadoCotizacion()
         {

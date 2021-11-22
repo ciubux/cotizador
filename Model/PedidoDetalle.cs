@@ -144,6 +144,7 @@ namespace Model
         {
             get
             {
+                producto.equivalenciaProveedor = producto.equivalenciaProveedor > 0 ? producto.equivalenciaProveedor : 1;
                 if (this.visualizaMargen)// && !this.usuario.esCliente)
                     if (tieneCostoEspecial)
                     {
@@ -162,6 +163,7 @@ namespace Model
         {
             get
             {
+                producto.equivalenciaProveedor = producto.equivalenciaProveedor > 0 ? producto.equivalenciaProveedor : 1;
                 if (this.visualizaMargen)// && !this.usuario.esCliente)
                     if (tieneCostoEspecial)
                     {

@@ -714,6 +714,8 @@
     <Content Include="Views\Promocion\Editar.cshtml" />
     <Content Include="Views\Promocion\List.cshtml" />
     <Content Include="Views\Promocion\_PluginSelect.cshtml" />
+    <Content Include="Views\Pedido\_ModalAprobarLiberarGrupo.cshtml" />
+    <Content Include="Views\Cotizacion\_ModalExtenderVigencia.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

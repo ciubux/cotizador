@@ -3090,6 +3090,8 @@ jQuery(function ($) {
                 var lista = pedido.pedidoDetalleList;
                 var tieneProductoRestringido = false;
                 var tienePendienteAtencion = false;
+                var tieneCostoFlete = false;
+
                 for (var i = 0; i < lista.length; i++) {
 
                     var imgIndicadorAprobacion = '<div class="circle-price-status-success"></div>';
@@ -3166,9 +3168,6 @@ jQuery(function ($) {
                         htmlAdicionalMargen = htmlAdicionalMargen + '<br/><span class="spnMargenCostoFlete">' + lista[i].margenCostoFlete.toFixed(cantidadDecimales) + '%</span>';
                     }
 
-                    if (lista[i].tienePrecioEspecial) {
-                        htmlAdicionalMargen = htmlAdicionalMargen + '<br/><label class="lbl-vigencia-corregida">Especial</label>';
-                    }
 
                     if (lista[i].tieneCostoEspecial) {
                         htmlAdicionalCosto = lista[i].costoEspecialVisible.toFixed(cantidadDecimales);
@@ -4990,8 +4989,8 @@ jQuery(function ($) {
                 });
 
                 if (pedidoList.length > 0 && pedido_numeroGrupoPedido.trim() != "") {
-                    $("#btnAprobarPedidosGrupo").attr("idGrupo", pedido_idGrupoCliente);
-                    $("#btnLiberarPedidosGrupo").attr("idGrupo", pedido_idGrupoCliente);
+                    $("#btnAprobarPedidosGrupo").attr("idGrupo", pedido_numeroGrupoPedido);
+                    $("#btnLiberarPedidosGrupo").attr("idGrupo", pedido_numeroGrupoPedido);
                     $("#btnAprobarPedidosGrupo").show();
                     $("#btnLiberarPedidosGrupo").show();
                 } else {

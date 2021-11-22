@@ -721,6 +721,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
                 cotizacionDetalle.producto.precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
 
+                cotizacionDetalle.producto.precioClienteProducto.numeroCotizacion = Converter.GetLong(row, "codigo_cotizacion").ToString();
 
                 if (row["fecha_fin_vigencia"] == DBNull.Value)
                     cotizacionDetalle.producto.precioClienteProducto.fechaFinVigencia = null;
@@ -957,6 +958,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Converter.GetGuid(row, "id_precio_cliente_producto");
                 cotizacionDetalle.producto.precioClienteProducto.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
 
+                cotizacionDetalle.producto.precioClienteProducto.numeroCotizacion = Converter.GetLong(row, "codigo_cotizacion").ToString();
 
                 if (row["fecha_fin_vigencia"] == DBNull.Value)
                     cotizacionDetalle.producto.precioClienteProducto.fechaFinVigencia = null;

@@ -56,6 +56,9 @@ namespace Model
         public DateTime? fechaFinVigenciaPrecios { get; set; }
         public DateTime? fechaInicioVigenciaPrecios { get; set; }
 
+        public int estadoExtendida { get; set; }
+        public DateTime? fechaFinVigenciaPreciosExtendida { get; set; }
+
         public DateTime fechaModificacion { get; set; }
 
         public Usuario usuario { get; set; }

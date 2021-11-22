@@ -76,6 +76,11 @@ textarea {
 
 @media screen and (min-width: 768px) {
 
+    #modalAprobarGrupoPedido .modal-dialog {
+        width: 700px;
+    }
+
+
     #modalStockProductoKardex .modal-dialog {
         width: 800px;
     }
@@ -1294,4 +1299,9 @@ $darkred: darken($red, 0.2);*/
 .searchListStockUnidad {
     color: #3cb371;
     font-weight: bold;
+}
+
+.btn_icon_16 {
+    width: 16px;
+    cursor: pointer;
 }

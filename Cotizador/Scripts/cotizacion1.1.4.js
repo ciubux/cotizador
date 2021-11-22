@@ -2225,6 +2225,14 @@ jQuery(function ($) {
                     $("#esTrivial").show();
                 }
 
+                if (cotizacion.estadoExtendida == 1) {
+                    $("#btnValidarExtension").show();
+                    $("#btnValidarExtension").attr("codigo", cotizacion.codigo);
+                } else {
+                    $("#btnValidarExtension").hide();
+                }
+                
+
                 $("#verFechaCreacion").html(invertirFormatoFecha(cotizacion.fecha.substr(0, 10)));
                 $("#verValidezOferta").html(invertirFormatoFecha(cotizacion.fechaLimiteValidezOferta.substr(0, 10)));
 
@@ -2431,7 +2439,7 @@ jQuery(function ($) {
                     $("#btnReCotizacion").hide();
                 }
 
-
+                
                 
 
                 /*APROBAR DENEGAR COTIZACIÓN*/
@@ -2524,6 +2532,19 @@ jQuery(function ($) {
                 }
 
 
+                if (
+                    (cotizacion.seguimientoCotizacion_estado == ESTADO_ACEPTADA && cotizacion.tipoCotizacion == 0)
+                ) {
+
+                    $("#btnEditarFechaFinVigencia").show();
+                    $("#btnEditarFechaFinVigencia").attr("codigo", cotizacion.codigo);
+                }
+                else {
+                    $("#btnEditarFechaFinVigencia").hide();
+                }
+
+
+                
                 /*PDF*/
                 if (
                     (cotizacion.seguimientoCotizacion_estado == ESTADO_APROBADA ||

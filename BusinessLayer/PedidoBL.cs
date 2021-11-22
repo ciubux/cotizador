@@ -324,6 +324,32 @@ namespace BusinessLayer
             return pedidoList;
         }
 
+        public List<Pedido> GetPedidosGrupo(Pedido pedido, int tipoOrdenamiento)
+        {
+            List<Pedido> pedidoList = null;
+            using (var dal = new PedidoDAL())
+            {
+                pedidoList = dal.SelectPedidosGrupo(pedido, tipoOrdenamiento);
+            }
+            return pedidoList;
+        }
+
+
+        public void AprobarPedidosgrupo(long nroGrupo, Guid idUsuario)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                dal.AprobarPedidosGrupo(nroGrupo, idUsuario);
+            }
+        }
+
+        public void LiberarPedidosGrupo(long nroGrupo, Guid idUsuario)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                dal.LiberarPedidosGrupo(nroGrupo, idUsuario);
+            }
+        }
 
         #endregion
 
