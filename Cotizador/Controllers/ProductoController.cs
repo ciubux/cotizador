@@ -819,7 +819,7 @@ namespace Cotizador.Controllers
                         }
                         else
                         {
-                            productoStaging.equivalenciaUnidadPedidoProveedor = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
+                            productoStaging.equivalenciaUnidadPedidoProveedor = Decimal.Parse(sheet.GetRow(row).GetCell(pos).ToString());
                         }
 
                         pos = posicionInicial + 10;
@@ -1442,7 +1442,7 @@ namespace Cotizador.Controllers
                         }
                         else
                         {
-                            productoStaging.equivalenciaUnidadPedidoProveedor = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
+                            productoStaging.equivalenciaUnidadPedidoProveedor = Decimal.Parse(sheet.GetRow(row).GetCell(pos).ToString());
                         }
 
                         pos = posicionInicial + 10;

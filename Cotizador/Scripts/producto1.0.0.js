@@ -596,7 +596,7 @@ jQuery(function ($) {
     });
 
     $("#producto_equivalenciaUnidadPedidoProveedor").change(function () {
-        changeInputInt("equivalenciaUnidadPedidoProveedor", $("#producto_equivalenciaUnidadPedidoProveedor").val());
+        changeInputDecimal("equivalenciaUnidadPedidoProveedor", $("#producto_equivalenciaUnidadPedidoProveedor").val());
     });
 
     $("#producto_cantidadMaximaPedidoRestringido").change(function () {

@@ -2377,6 +2377,7 @@ namespace Cotizador.Controllers
         [HttpGet]
         public ActionResult Load()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
             {
@@ -2384,13 +2385,76 @@ namespace Cotizador.Controllers
             }
             else
             {
-                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 if (!usuario.realizaCargaMasivaPedidos)
                 {
                     return RedirectToAction("Login", "Account");
                 }
             }
             ViewBag.numerosPedido = String.Empty;
+
+
+
+            ProductoBL productoBl = new ProductoBL();
+
+            List<Guid> idsProducto = new List<Guid>();
+            List<PedidoDetalle> detalles = new List<PedidoDetalle>();
+
+            PedidoDetalle detExists = new PedidoDetalle(false, false);
+            detExists.producto = productoBl.getProductoById(Guid.Parse("419b9c7e-614f-4a7d-8a05-0acde15dd05d"));
+            idsProducto.Add(detExists.producto.idProducto);
+            detExists.ProductoPresentacion = new ProductoPresentacion();
+            detExists.ProductoPresentacion.IdProductoPresentacion = 0;
+            detExists.cantidad = 14;
+            detalles.Add(detExists);
+
+            detExists = new PedidoDetalle(false, false);
+            detExists.producto = productoBl.getProductoById(Guid.Parse("bb25e5a6-dc6d-4eea-929a-0efb0f180b37"));
+            idsProducto.Add(detExists.producto.idProducto);
+            detExists.ProductoPresentacion = new ProductoPresentacion();
+            detExists.ProductoPresentacion.IdProductoPresentacion = 0;
+            detExists.cantidad = 14;
+            detalles.Add(detExists);
+
+
+            
+            List<RegistroCargaStock> stocks = productoBl.StockProductosCadaSede(idsProducto, usuario.idUsuario);
+
+            List<Ciudad> sedes = new List<Ciudad>();
+            List<List<String>> matrizDatos = new List<List<String>>();
+            List<String> fila = null;
+            PedidoDetalle detActual = null;
+
+            RegistroCargaStock anterior = null;
+            foreach (RegistroCargaStock reg in stocks)
+            {
+                if (stocks.ElementAt(0).producto.idProducto.Equals(reg.producto.idProducto))
+                {
+                    sedes.Add(reg.ciudad);
+                }
+
+                if (anterior == null || !anterior.producto.idProducto.Equals(reg.producto.idProducto))
+                {
+                    fila = new List<String>();
+                    fila.Add(reg.producto.sku + "-" + reg.producto.descripcion);
+                    detActual = detalles.Where(d => d.producto.idProducto.Equals(reg.producto.idProducto)).FirstOrDefault();
+                }
+
+                switch(detActual.idProductoPresentacion)
+                {
+                    case 0: fila.Add(reg.cantidadMpCalc.ToString());  break;
+                    case 1: fila.Add(reg.cantidadAlternativaCalc.ToString()); break;
+                    case 2: fila.Add(reg.cantidadProveedorCalc.ToString()); break;
+                    case 3: fila.Add(reg.cantidadConteo.ToString()); break;
+                } 
+                
+            }
+
+            ViewBag.numerosPedido = 24;
+            ViewBag.numeroGrupo = 24;
+            ViewBag.stocks = stocks;
+            ViewBag.sedes = sedes;
+
+
             return View();
         }
 
@@ -2705,6 +2769,9 @@ namespace Cotizador.Controllers
                 String numerosPedido = String.Empty;
                 int contadorPedidos = 0;
 
+                List<Guid> idsProducto = new List<Guid>();
+                List<PedidoDetalle> detalles = new List<PedidoDetalle>; 
+                
                 foreach (Pedido pedido in pedidoList)
                 {
                     pedidoBL.InsertPedido(pedido);
@@ -2714,14 +2781,50 @@ namespace Cotizador.Controllers
                         numerosPedido = numerosPedido + "[Diferencia subtotal] ";
                     }
 
+                    foreach (PedidoDetalle det in pedido.pedidoDetalleList)
+                    {
+                        PedidoDetalle detExists = detalles.Where(d => d.producto.idProducto.Equals(det.producto.idProducto)).FirstOrDefault();
+                        if (detExists == null)
+                        {
+                            detExists = new PedidoDetalle(false, false);
+                            detExists.producto = det.producto;
+                            idsProducto.Add(det.producto.idProducto);
+                            detExists.cantidad = det.cantidad;
+                            detalles.Add(detExists);
+                        } else
+                        {
+                            detExists.cantidad = detExists.cantidad + det.cantidad;
+                        }
+                    }
+
                     numerosPedido = numerosPedido + ",";
 
                     contadorPedidos++;
 
                 }
 
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+                
+                ProductoBL productoBl = new ProductoBL();
+                List<RegistroCargaStock> stocks = productoBl.StockProductosCadaSede(idsProducto, usuario.idUsuario);
+
+                List<Ciudad> sedes = new List<Ciudad>();
+                foreach (RegistroCargaStock reg in stocks)
+                {
+                    if (stocks.ElementAt(0).producto.idProducto.Equals(reg.producto.idProducto))
+                    {
+                        sedes.Add(reg.ciudad);
+                    } else
+                    {
+                        break;
+                    }
+                }
+
                 ViewBag.numerosPedido = numerosPedido.Substring(0, numerosPedido.Length - 1);
                 ViewBag.numeroGrupo = numeroGrupo;
+                ViewBag.stocks = stocks;
+                ViewBag.sedes = sedes;
             /*}
             catch (Exception ex)
             {

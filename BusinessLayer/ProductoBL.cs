@@ -570,6 +570,14 @@ namespace BusinessLayer
             }
         }
 
+        public List<RegistroCargaStock> StockProductosCadaSede(List<Guid> idProductos, Guid idUsuario)
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                return productoDAL.StockProductosCadaSede(idProductos, idUsuario);  
+            }
+        }
+
         public List<CierreStock> CargasStock(Guid idUsuario, Guid idCiudad)
         {
             using (var productoDAL = new ProductoDAL())
