@@ -37,6 +37,8 @@ namespace DataLayer
             DataTable tvp = new DataTable();
             tvp.Columns.Add(new DataColumn("ID", typeof(int)));
 
+            if(obj.roles == null) obj.roles = new List<Rol>();
+
             foreach (Rol item in obj.roles)
             {
                 DataRow rowObj = tvp.NewRow();
@@ -51,6 +53,7 @@ namespace DataLayer
             DataTable tmpuser = new DataTable();
             tmpuser.Columns.Add(new DataColumn("ID", typeof(Guid)));
 
+            if (obj.listUsuario == null) obj.listUsuario = new List<Usuario>();
             foreach (Usuario item in obj.listUsuario)
             {
                 DataRow rowObj = tmpuser.NewRow();

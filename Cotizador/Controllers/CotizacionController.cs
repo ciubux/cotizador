@@ -1670,7 +1670,6 @@ namespace Cotizador.Controllers
             notificacion.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
             notificacion.user = cot.usuario;
             notificacion.importancia = "Alta";
-
             notificacion.roles = recep;
 
             MensajeBL mensajeBl = new MensajeBL();
@@ -1749,6 +1748,34 @@ namespace Cotizador.Controllers
                 //MensajeBL mensajeBl = new MensajeBL();
                 //mensajeBl.insertMensaje(notificacion);
 
+                success = 1;
+            }
+            var res = new
+            {
+                success = success
+            };
+
+            return JsonConvert.SerializeObject(res);
+        }
+
+        public String RechazarSolicitudExtensionVigencia()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            Int64 codigo = Int64.Parse(Request["codigo"].ToString());
+            string comentario = Request["comentario"].ToString();
+            int success = 0;
+
+            if (usuario.apruebaCotizaciones)
+            {
+                Cotizacion cot = new Cotizacion();
+                cot.codigo = codigo;
+                cot.usuario = usuario;
+                cot.seguimientoCotizacion = new SeguimientoCotizacion();
+                cot.seguimientoCotizacion.observacion = comentario;
+             
+                CotizacionBL bl = new CotizacionBL();
+                bl.RechazarSolicitudExtensionVigencia(cot);
                 success = 1;
             }
             var res = new

@@ -337,7 +337,7 @@
                                 <label for="idCiudad" class="control-label col-xs-4">Fin Vigencia Precios: </label>
                                 <div class="col-xs-8">
                                     <p class="form-control-static"><span id="verFechaFinVigenciaPrecios"></span> <img id="btnEditarFechaFinVigencia" src="~/images/edit_icon_32.png" class="btn_icon_16" /></p>
-                                    <br /><button type="button" id="btnValidarExtension" class="btn btn-warning">Validar Extensión</button>
+                                    <br /><button type="button" id="btnAprobarExtensionVigencia" class="btn btn-warning">Aprobar Extensión</button>
                                 </div>
                             </div>
                         </div>
@@ -853,6 +853,7 @@
 
 @Html.Partial("../Stock/_ModalStockProducto")
 
+@Html.Partial("../Cotizacion/_ModalExtenderVigencia")
 
 <span id="spnProductoDescontinuado" style="display: none;">
     @Html.Partial("../Producto/_LabelRestringido")

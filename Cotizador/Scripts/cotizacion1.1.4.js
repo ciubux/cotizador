@@ -2225,11 +2225,11 @@ jQuery(function ($) {
                     $("#esTrivial").show();
                 }
 
-                if (cotizacion.estadoExtendida == 1) {
-                    $("#btnValidarExtension").show();
-                    $("#btnValidarExtension").attr("codigo", cotizacion.codigo);
+                if (cotizacion.estadoExtendida == 1 && usuario.apruebaCotizaciones) {
+                    $("#btnAprobarExtensionVigencia").show();
+                    $("#btnAprobarExtensionVigencia").attr("codigo", cotizacion.codigo);
                 } else {
-                    $("#btnValidarExtension").hide();
+                    $("#btnAprobarExtensionVigencia").hide();
                 }
                 
 
@@ -2533,7 +2533,7 @@ jQuery(function ($) {
 
 
                 if (
-                    (cotizacion.seguimientoCotizacion_estado == ESTADO_ACEPTADA && cotizacion.tipoCotizacion == 0)
+                    (cotizacion.seguimientoCotizacion_estado == ESTADO_ACEPTADA && cotizacion.tipoCotizacion == 0 && cotizacion.estadoExtendida != 1)
                 ) {
 
                     $("#btnEditarFechaFinVigencia").show();

@@ -638,6 +638,16 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
 
+        public void RechazarSolicitudExtensionVigencia(Cotizacion cotizacion)
+        {
+            var objCommand = GetSqlCommand("pi_rechazar_extension_vigencia_cotizacion");
+
+            InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
+            InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
+            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion);
+            ExecuteNonQuery(objCommand);
+        }
+
         public void RechazarCotizaciones()
         {
             var objCommand = GetSqlCommand("pu_rechazarCotizaciones");

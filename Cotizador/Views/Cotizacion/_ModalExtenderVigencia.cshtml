@@ -12,21 +12,21 @@
 
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-sm-8 col-lg-8">
+                    <div class="col-sm-9 col-lg-9">
                         <div class="form-group">
-                            <label class="control-label col-xs-6">Fecha Extendida:</label>
-                            <div class="col-xs-6">
-                                <input type="text" id="nuevaFechaExtenderVigenciaCotizacion" class="form-control">
+                            <label class="control-label col-xs-4">Fecha Extendida:</label>
+                            <div class="col-xs-4">
+                                <input type="text" id="nuevaFechaExtenderVigenciaCotizacion" placeholder="Indefinida" class="form-control">
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-4 col-lg-4 text-right">
-                        <button id="btnRegistrarVigenciaCotizacion" type="button" class="btn btn-primary">Solicitar Extensión</button>
+                    <div class="col-sm-3 col-lg-3 text-right">
+                        <button id="btnRegistrarVigenciaCotizacion" type="button" class="btn btn-success">Solicitar</button>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-12 col-lg-12">
+                    <div class="col-sm-9 col-lg-9">
                         <div class="form-group">
                             <label class="control-label col-xs-4">Comentario:</label>
                             <div class="col-xs-8">
@@ -34,6 +34,10 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-sm-3 col-lg-3 text-right">
+                        <button id="btnRechazarVigenciaCotizacion" type="button" class="btn btn-danger">Rechazar</button>
+                    </div>
+
                 </div>
 
                 <div id="divMensajePreciosNoAfectados" class="row">
@@ -43,7 +47,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-lg-12 tableFixHead">
-                        <table id="tableExtenderVigenciaCotizacionPrecios" class="table table-bordered" style="margin-top: 0px;">
+                        <table id="tableExtenderVigenciaCotizacionPrecios" class="table table-bordered" style="margin-top: 10px;">
                             <thead class="thead-dark">
                                 <tr>
                                     <th>Prov.</th>
@@ -71,6 +75,7 @@
 
     var evcNroCoti = 0;
     var evcModo = 0; //1: Solicitar, 2:Aprobar
+    var ecvFechaAnterior = "";
 
     function funcionesModalExtenderVigenciaCotizacion() {
         $.datepicker.regional['es'] = {
@@ -98,16 +103,104 @@
             evcNroCoti = $(this).attr("codigo");
             evcModo = 1;
             $("#titleModalExtenderVigenciaCotizacion").html("Extender Vigencia Cotización N° " + evcNroCoti);
+            $("#btnRegistrarVigenciaCotizacion").html("Solicitar");
+            $("#btnRechazarVigenciaCotizacion").hide();
             llenarExtenderVigenciaCotizacionPrecios();
         });
 
-        $(document).on('click', "#btnAprobarFechaFinVigencia", function () {
+        $(document).on('click', "#btnAprobarExtensionVigencia", function () {
             evcNroCoti = $(this).attr("codigo");
             evcModo = 2;
             $("#titleModalExtenderVigenciaCotizacion").html("Aprobar Extensión Vigencia Cotización N° " + evcNroCoti);
+            $("#btnRegistrarVigenciaCotizacion").html("Aprobar");
+            $("#btnRechazarVigenciaCotizacion").show();
             llenarExtenderVigenciaCotizacionPrecios();
         });
 
+        $(document).on('click', "#btnRechazarVigenciaCotizacion", function () {
+            if (evcModo == 2) {
+                var urlAction = "RechazarSolicitudExtensionVigencia";
+                var questionText = "¿Está seguro que desea rechazar la solicitud de extensión de fecha de fin de vigencia?";
+            }
+
+            $.confirm({
+                title: 'CONFIRMACIÓN',
+                content: questionText,
+                type: 'orange',
+                buttons: {
+                    confirm: {
+                        text: 'SÍ',
+                        btnClass: 'btn-red',
+                        action: function () {
+                            $('body').loadingModal({
+                                text: "Registrando..."
+                            });
+                            $('body').loadingModal('show');
+
+                            $.ajax({
+                                url: "/Cotizacion/" + urlAction,
+                                type: 'POST',
+                                dataType: 'JSON',
+                                data: {
+                                    codigo: evcNroCoti,
+                                    comentario: $("#comenarioExtenderVigenciaCotizacion").val()
+                                },
+                                error: function (lista) {
+                                    $('body').loadingModal('hide');
+
+                                    $.alert({
+                                        title: "ERROR",
+                                        content: "Ocurrió un error. Si persiste contacte con TI.",
+                                        type: "red",
+                                        buttons: {
+                                            OK: function () {
+                                            }
+                                        }
+                                    });
+                                },
+                                success: function (result) {
+
+
+                                    if (result.success == 1) {
+                                        $.alert({
+                                            title: "Operación Exitosa",
+                                            content: "Se registró la solicitud dede extensión de fecha de fin de vigencia como rechazada.",
+                                            type: "green",
+                                            buttons: {
+                                                OK: function () {
+                                                    $("#modalExtenderVigenciaCotizacion").modal('hide');
+                                                    location.reload();
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        $.alert({
+                                            title: "ERROR",
+                                            content: "No se pudo registrar el rechazo de la solicitud de extensión de fecha de fin de vigencia.",
+                                            type: "red",
+                                            buttons: {
+                                                OK: function () {
+                                                }
+                                            }
+                                        });
+                                    }
+
+                                    $('body').loadingModal('hide');
+                                }
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: 'NO',
+                        btnClass: 'btn-green',
+                        action: function () {
+
+                        }
+                    }
+                },
+
+            });
+        });
 
         $(document).on('click', "#btnRegistrarVigenciaCotizacion", function () {
             var nuevaFecha = $("#nuevaFechaExtenderVigenciaCotizacion").val();
@@ -129,6 +222,19 @@
                 textAction = "aprobación";
             }
 
+            if (ecvFechaAnterior == nuevaFecha) {
+                $.alert({
+                    title: "Error de validación",
+                    content: "La nueva fecha de fin de vigencia debe ser diferente a la fecha actual.",
+                    type: "orange",
+                    buttons: {
+                        OK: function () {
+                        }
+                    }
+                });
+                return;
+            }
+
             $.confirm({
                 title: 'CONFIRMACIÓN',
                 content: questionText,
@@ -139,7 +245,7 @@
                         btnClass: 'btn-red',
                         action: function () {
                             $('body').loadingModal({
-                                text: loadingText + "Registrando " + textAction + "..."
+                                text: "Registrando " + textAction + "..."
                             });
                             $('body').loadingModal('show');
 
@@ -172,7 +278,7 @@
                                     if (result.success == 1) {
                                         $.alert({
                                             title: "Operación Exitosa",
-                                            content: "Se registró la " + evcModo + " de extensión de fecha de fin de vigencia correctamente.",
+                                            content: "Se registró la " + textAction + " de extensión de fecha de fin de vigencia correctamente.",
                                             type: "green",
                                             buttons: {
                                                 OK: function () {
@@ -184,7 +290,7 @@
                                     } else {
                                         $.alert({
                                             title: "ERROR",
-                                            content: "No se pudo registrar la " + evcModo + " de extensión de fecha de fin de vigencia.",
+                                            content: "No se pudo registrar la " + textAction + " de extensión de fecha de fin de vigencia.",
                                             type: "red",
                                             buttons: {
                                                 OK: function () {
@@ -240,10 +346,7 @@
                     }
                 });
 
-                if (cotizacion.fechaFinVigenciaPrecios == null)
-                    $("#nuevaFechaExtenderVigenciaCotizacion").val("");
-                else
-                    $("#nuevaFechaExtenderVigenciaCotizacion").val(invertirFormatoFecha(cotizacion.fechaFinVigenciaPrecios.substr(0, 10)));
+
 
                 for (var i = 0; i < lista.length; i++) {
                     var styleDet = "";
@@ -263,6 +366,24 @@
 
                     $("#tableExtenderVigenciaCotizacionPrecios").append(det);
                 }
+
+                if (evcModo == 2) {
+                    if (cotizacion.fechaFinVigenciaPreciosExtendida == null)
+                        $("#nuevaFechaExtenderVigenciaCotizacion").val("");
+                    else
+                        $("#nuevaFechaExtenderVigenciaCotizacion").val(invertirFormatoFecha(cotizacion.fechaFinVigenciaPreciosExtendida.substr(0, 10)));
+                } else {
+                    if (cotizacion.fechaFinVigenciaPrecios == null)
+                        $("#nuevaFechaExtenderVigenciaCotizacion").val("");
+                    else
+                        $("#nuevaFechaExtenderVigenciaCotizacion").val(invertirFormatoFecha(cotizacion.fechaFinVigenciaPrecios.substr(0, 10)));
+                }
+
+                ecvFechaAnterior = "";
+                if (cotizacion.fechaFinVigenciaPrecios != null) {
+                    ecvFechaAnterior = invertirFormatoFecha(cotizacion.fechaFinVigenciaPrecios.substr(0, 10));
+                }
+
 
                 if (preciosNoAfectados) {
                     $("#divMensajePreciosNoAfectados").show();

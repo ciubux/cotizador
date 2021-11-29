@@ -568,12 +568,23 @@ namespace BusinessLayer
         {
             using (var dal = new CotizacionDAL())
             {
-                cotizacion.seguimientoCotizacion.observacion = "[" + DateTime.Now.ToString("dd.MM.yyyy") + " Vigencia extendida solicitada por " + cotizacion.usuario.nombre
+                cotizacion.seguimientoCotizacion.observacion = "[" + DateTime.Now.ToString("dd.MM.yyyy") + " Vigencia extendida por " + cotizacion.usuario.nombre
                            + ". Nueva vigencia: " + (cotizacion.fechaFinVigenciaPreciosExtendida == null ? "Indefinida" : cotizacion.fechaFinVigenciaPreciosExtendida.Value.ToString("dd.MM.yyyy"))
                            + "] " + cotizacion.seguimientoCotizacion.observacion;
-                dal.RegistroSolicitudExtensionVigencia(cotizacion);
+                dal.AprobarSolicitudExtensionVigencia(cotizacion);
             }
         }
+
+        public void RechazarSolicitudExtensionVigencia(Cotizacion cotizacion)
+        {
+            using (var dal = new CotizacionDAL())
+            {
+                cotizacion.seguimientoCotizacion.observacion = "[" + DateTime.Now.ToString("dd.MM.yyyy") + " Solicitud extensión de vigencia rechazada por " + cotizacion.usuario.nombre
+                           + "] " + cotizacion.seguimientoCotizacion.observacion;
+                dal.RechazarSolicitudExtensionVigencia(cotizacion);
+            }
+        }
+
 
 
         public List<Cotizacion> GetCotizaciones(Cotizacion cotizacion)
