@@ -1616,12 +1616,14 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(stocks);
         }
 
-        public void RegistrarSolicitudExtensionVigencia()
+        public String RegistrarSolicitudExtensionVigencia()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             Int64 codigo = Int64.Parse(Request["codigo"].ToString());
+            string comentario = Request["comentario"].ToString();
             string fechaFin = Request["fechaFin"].ToString();
+            int success = 0;
 
             DateTime? fechaFinVigencia = null;
             if (fechaFin.Trim().Equals(""))
@@ -1629,19 +1631,133 @@ namespace Cotizador.Controllers
                 fechaFinVigencia = null;
             } else
             {
-
+                String[] fecha = fechaFin.Split('/');
+                fechaFinVigencia = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
             }
+
+
+            
+            Cotizacion cot = new Cotizacion();
+            cot.codigo = codigo;
+            cot.usuario = usuario;
+            cot.seguimientoCotizacion = new SeguimientoCotizacion();
+            cot.seguimientoCotizacion.observacion = comentario;
+            cot.fechaFinVigenciaPreciosExtendida = fechaFinVigencia;
+
+            CotizacionBL bl = new CotizacionBL();
+            bl.RegistroSolicitudExtensionVigencia(cot);
+
+            ParametroBL parametroBL = new ParametroBL();
+            string codigoRol = parametroBL.getParametro("ROL_RECIBE_NOTIFACIONES_EXTENSION_COTIZACION");
+
+            List<Rol> recep = new List<Rol>();
+            RolBL rolBl = new RolBL();
+            Rol rolReceptor = rolBl.getRolByCodigo(codigoRol);
+
+            recep.Add(rolReceptor);
+
+            Mensaje notificacion = new Mensaje();
+            notificacion.titulo = "SOLICITUD DE EXTENSIÓN DE VIGENCIA";
+            notificacion.mensaje = "Solicíto la extensión de vigencia de la cotización " + cot.codigo.ToString() + ". Nueva fecha de fin de vigencia: " + 
+                        (fechaFinVigencia == null ? "Indefinida" : fechaFinVigencia.Value.ToString("dd/MM/yyyy")) + ".";
+
+            if (!comentario.Trim().Equals(""))
+            {
+                notificacion.mensaje = notificacion.mensaje + "<br/><br/><b>Comentario:</b> " + comentario;
+            }
+
+            notificacion.fechaInicioMensaje = DateTime.Now;
+            notificacion.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
+            notificacion.user = cot.usuario;
+            notificacion.importancia = "Alta";
+
+            notificacion.roles = recep;
+
+            MensajeBL mensajeBl = new MensajeBL();
+            mensajeBl.insertMensaje(notificacion);
+
+            success = 1;
+
+            var res = new
+            {
+                success = success
+            };
+
+            return JsonConvert.SerializeObject(res);
+        }
+
+        public String AprobarSolicitudExtensionVigencia()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            Int64 codigo = Int64.Parse(Request["codigo"].ToString());
+            string comentario = Request["comentario"].ToString();
+            string fechaFin = Request["fechaFin"].ToString();
+            int success = 0;
 
             if (usuario.apruebaCotizaciones)
             {
-                SeguimientoCotizacion.estadosSeguimientoCotizacion estadosSeguimientoCotizacion = SeguimientoCotizacion.estadosSeguimientoCotizacion.Aceptada;
-                String observacion = Request["observacion"].ToString();
-                observacion = "[" + DateTime.Now.ToString("dd.MM.yyyy") + " Extensión de vigencia solicitada por " + usuario.nombre + 
-                              ". Nuevo fin de vigencia: " + (fechaFin.Trim().Equals("") ? "Indefeinida" : fechaFinVigencia.Value.ToString("dd/MM/yyyy")) + "] " + observacion;
-                updateEstadoSeguimientoCotizacion(codigo, estadosSeguimientoCotizacion, observacion);
-            }
-        }
+                DateTime? fechaFinVigencia = null;
+                if (fechaFin.Trim().Equals(""))
+                {
+                    fechaFinVigencia = null;
+                }
+                else
+                {
+                    String[] fecha = fechaFin.Split('/');
+                    fechaFinVigencia = new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0]));
+                }
 
+
+
+                Cotizacion cot = new Cotizacion();
+                cot.codigo = codigo;
+                cot.usuario = usuario;
+                cot.seguimientoCotizacion = new SeguimientoCotizacion();
+                cot.seguimientoCotizacion.observacion = comentario;
+                cot.fechaFinVigenciaPreciosExtendida = fechaFinVigencia;
+
+                CotizacionBL bl = new CotizacionBL();
+                bl.AprobarSolicitudExtensionVigencia(cot);
+
+                //ParametroBL parametroBL = new ParametroBL();
+                //string codigoRol = parametroBL.getParametro("ROL_RECIBE_NOTIFACIONES_EXTENSION_COTIZACION");
+
+                //List<Rol> recep = new List<Rol>();
+                //RolBL rolBl = new RolBL();
+                //Rol rolReceptor = rolBl.getRolByCodigo(codigoRol);
+
+                //recep.Add(rolReceptor);
+
+                //Mensaje notificacion = new Mensaje();
+                //notificacion.titulo = "SOLICITUD DE EXTENSIÓN DE VIGENCIA";
+                //notificacion.mensaje = "Solicíto la extensión de vigencia de la cotización " + cot.codigo.ToString() + ". Nueva fecha de fin de vigencia: " +
+                //            (fechaFinVigencia == null ? "Indefinida" : fechaFinVigencia.Value.ToString("dd/MM/yyyy")) + ".";
+
+                //if (!comentario.Trim().Equals(""))
+                //{
+                //    notificacion.mensaje = notificacion.mensaje + "<br/><br/><b>Comentario:</b> " + comentario;
+                //}
+
+                //notificacion.fechaInicioMensaje = DateTime.Now;
+                //notificacion.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
+                //notificacion.user = cot.usuario;
+                //notificacion.importancia = "Alta";
+
+                //notificacion.roles = recep;
+
+                //MensajeBL mensajeBl = new MensajeBL();
+                //mensajeBl.insertMensaje(notificacion);
+
+                success = 1;
+            }
+            var res = new
+            {
+                success = success
+            };
+
+            return JsonConvert.SerializeObject(res);
+        }
 
         public void updateEstadoCotizacion()
         {

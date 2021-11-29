@@ -552,10 +552,28 @@ namespace BusinessLayer
 
 
 
+        public void RegistroSolicitudExtensionVigencia(Cotizacion cotizacion)
+        {
+            using (var dal = new CotizacionDAL())
+            {
+                cotizacion.seguimientoCotizacion.observacion = "[" + DateTime.Now.ToString("dd.MM.yyyy") + " Extensión de vigencia solicitada por " + cotizacion.usuario.nombre
+                           + ". Nueva vigencia: " + (cotizacion.fechaFinVigenciaPreciosExtendida == null ? "Indefinida" : cotizacion.fechaFinVigenciaPreciosExtendida.Value.ToString("dd.MM.yyyy")) 
+                           + "] " + cotizacion.seguimientoCotizacion.observacion;
+                dal.RegistroSolicitudExtensionVigencia(cotizacion);
+            }
+        }
 
 
-
-
+        public void AprobarSolicitudExtensionVigencia(Cotizacion cotizacion)
+        {
+            using (var dal = new CotizacionDAL())
+            {
+                cotizacion.seguimientoCotizacion.observacion = "[" + DateTime.Now.ToString("dd.MM.yyyy") + " Vigencia extendida solicitada por " + cotizacion.usuario.nombre
+                           + ". Nueva vigencia: " + (cotizacion.fechaFinVigenciaPreciosExtendida == null ? "Indefinida" : cotizacion.fechaFinVigenciaPreciosExtendida.Value.ToString("dd.MM.yyyy"))
+                           + "] " + cotizacion.seguimientoCotizacion.observacion;
+                dal.RegistroSolicitudExtensionVigencia(cotizacion);
+            }
+        }
 
 
         public List<Cotizacion> GetCotizaciones(Cotizacion cotizacion)

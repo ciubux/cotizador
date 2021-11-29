@@ -627,7 +627,16 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "nuevaFechaFin", cotizacion.fechaFinVigenciaPreciosExtendida);
             ExecuteNonQuery(objCommand);
         }
+        public void AprobarSolicitudExtensionVigencia(Cotizacion cotizacion)
+        {
+            var objCommand = GetSqlCommand("pi_aprobar_extension_vigencia_cotizacion");
 
+            InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
+            InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
+            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion);
+            InputParameterAdd.DateTime(objCommand, "nuevaFechaFin", cotizacion.fechaFinVigenciaPreciosExtendida);
+            ExecuteNonQuery(objCommand);
+        }
 
         public void RechazarCotizaciones()
         {

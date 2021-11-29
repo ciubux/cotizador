@@ -1,6 +1,9 @@
 ﻿jQuery(function ($) {
-
     
+    $(document).ready(function () {
+        FooTable.init('#tableDetalleStockPedidos');
+    });
+
     $("#btnCargarPedidos").click(function () {
         $("#btnCargarPedidos").attr("disabled", true);
         $('body').loadingModal({

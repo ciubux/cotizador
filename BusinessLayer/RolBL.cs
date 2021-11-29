@@ -19,6 +19,17 @@ namespace BusinessLayer
             }
         }
 
+        public Rol getRolByCodigo(string codigo)
+        {
+            using (var dal = new RolDAL())
+            {
+                Rol obj = dal.getRolByCodigo(codigo);
+
+                return obj;
+            }
+        }
+
+
         public List<Rol> getRoles(Rol obj)
         {
             using (var dal = new RolDAL())

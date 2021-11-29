@@ -322,6 +322,7 @@
     <Compile Include="Models\DTOsSearch\PedidoCompraDTO.cs" />
     <Compile Include="Models\DTOsSearch\OrdenCompraClienteDTO.cs" />
     <Compile Include="Models\DTOsSearch\PedidoDTO.cs" />
+    <Compile Include="Models\DTOsShow\StockPedidoShow.cs" />
     <Compile Include="Models\DTOsShow\ClienteDTOshow.cs" />
     <Compile Include="Models\DTOsShow\CotizacionDTOshow.cs" />
     <Compile Include="Models\DTOsShow\FacturaDTOshow.cs" />

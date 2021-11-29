@@ -69,7 +69,8 @@
 
 <script type="text/javascript">
 
-    var nroCoti = 0;
+    var evcNroCoti = 0;
+    var evcModo = 0; //1: Solicitar, 2:Aprobar
 
     function funcionesModalExtenderVigenciaCotizacion() {
         $.datepicker.regional['es'] = {
@@ -94,31 +95,39 @@
         $("#nuevaFechaExtenderVigenciaCotizacion").datepicker({ dateFormat: "dd/mm/yy", minDate: 0 });
 
         $(document).on('click', "#btnEditarFechaFinVigencia", function () {
-            nroCoti = $(this).attr("codigo");
-            $("#titleModalExtenderVigenciaCotizacion").html("Extender Vigencia Cotización N° " + nroCoti);
+            evcNroCoti = $(this).attr("codigo");
+            evcModo = 1;
+            $("#titleModalExtenderVigenciaCotizacion").html("Extender Vigencia Cotización N° " + evcNroCoti);
+            llenarExtenderVigenciaCotizacionPrecios();
+        });
+
+        $(document).on('click', "#btnAprobarFechaFinVigencia", function () {
+            evcNroCoti = $(this).attr("codigo");
+            evcModo = 2;
+            $("#titleModalExtenderVigenciaCotizacion").html("Aprobar Extensión Vigencia Cotización N° " + evcNroCoti);
             llenarExtenderVigenciaCotizacionPrecios();
         });
 
 
         $(document).on('click', "#btnRegistrarVigenciaCotizacion", function () {
-            var urlAction = "";
-            var questionText = "";
-            var loadingText = "";
-            var resultText = "";
-            if (tipoAprobarGrupoPedido == 1) {
-                urlAction = "AprobarPedidosGrupo";
-                loadingText = "Aprobando";
-                questionText = '¿Está seguro que desea APROBAR los pedidos del grupo? Solo se aprobaran los pedidos en estado "Pendiente Aprobación de Ingreso"';
-                resultText = "Aprobaron";
+            var nuevaFecha = $("#nuevaFechaExtenderVigenciaCotizacion").val();
+            nuevaFecha = nuevaFecha.trim();
+            var urlAction = "RegistrarSolicitudExtensionVigencia";
+            var nuevaFechaDesc = nuevaFecha;
+            if (nuevaFecha == "") {
+                nuevaFechaDesc = "Indefinida";
+            }
+            var questionText = "¿Está seguro que desea solicitar el cambio de fecha de fin de vigencia a: " + nuevaFechaDesc + " ?";
+
+            if (evcModo == 2) {
+                questionText = "¿Está seguro que desea APROBAR el cambio de fecha de fin de vigencia a: " + nuevaFechaDesc + " ?";
+                urlAction = "AprobarSolicitudExtensionVigencia";
             }
 
-            if (tipoAprobarGrupoPedido == 2) {
-                urlAction = "LiberarPedidosGrupo";
-                loadingText = "Liberando";
-                questionText = '¿Está seguro que desea LIBERAR los pedidos del grupo? Solo se liberaran los pedidos en estado "Pendiente Liberación"';
-                resultText = "Liberaron";
+            var textAction = "solicitud";
+            if (evcModo == 2) {
+                textAction = "aprobación";
             }
-
 
             $.confirm({
                 title: 'CONFIRMACIÓN',
@@ -130,17 +139,19 @@
                         btnClass: 'btn-red',
                         action: function () {
                             $('body').loadingModal({
-                                text: loadingText + ' Pedidos...'
+                                text: loadingText + "Registrando " + textAction + "..."
                             });
                             $('body').loadingModal('show');
 
 
                             $.ajax({
-                                url: "/Pedido/" + urlAction,
+                                url: "/Cotizacion/" + urlAction,
                                 type: 'POST',
                                 dataType: 'JSON',
                                 data: {
-                                    numeroGrupo: nroGrupoAprobarGrupoPedido
+                                    codigo: evcNroCoti,
+                                    fechaFin: nuevaFecha,
+                                    comentario: $("#comenarioExtenderVigenciaCotizacion").val()
                                 },
                                 error: function (lista) {
                                     $('body').loadingModal('hide');
@@ -156,22 +167,24 @@
                                     });
                                 },
                                 success: function (result) {
+                                   
 
                                     if (result.success == 1) {
                                         $.alert({
                                             title: "Operación Exitosa",
-                                            content: "Se " + resultText + " los pedidos correctamente.",
+                                            content: "Se registró la " + evcModo + " de extensión de fecha de fin de vigencia correctamente.",
                                             type: "green",
                                             buttons: {
                                                 OK: function () {
-                                                    $("#modalAprobarGrupoPedido").modal('hide');
+                                                    $("#modalExtenderVigenciaCotizacion").modal('hide');
+                                                    location.reload();
                                                 }
                                             }
                                         });
                                     } else {
                                         $.alert({
                                             title: "ERROR",
-                                            content: "No se " + resultText + " los pedidos.",
+                                            content: "No se pudo registrar la " + evcModo + " de extensión de fecha de fin de vigencia.",
                                             type: "red",
                                             buttons: {
                                                 OK: function () {
@@ -209,7 +222,7 @@
             type: 'POST',
             dataType: 'JSON',
             data: {
-                codigo: nroCoti
+                codigo: evcNroCoti
             },
             error: function (resultado) {
                 $('body').loadingModal('hide');
