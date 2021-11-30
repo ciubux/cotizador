@@ -294,6 +294,9 @@ namespace Model
 
         public static List<Producto> DESCUENTOS_LIST;
         public static List<Producto> CARGOS_LIST;
+        
+
+        public static List<MetaDataZAS> TIPO_CAMBIO_VIGENCIA_PRECIO_LIST;
 
         public static String USER_EOL
         {

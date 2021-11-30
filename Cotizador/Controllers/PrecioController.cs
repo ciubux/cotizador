@@ -92,6 +92,8 @@ namespace Cotizador.Controllers
                 {
                     precio.numeroCotizacion = precio.numeroCotizacion + " (Grupal)";
                 }
+
+                
             }
 
             String jsonPrecioLista = JsonConvert.SerializeObject(precioGrupoClienteProductoList);
