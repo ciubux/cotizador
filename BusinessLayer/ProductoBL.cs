@@ -607,7 +607,21 @@ namespace BusinessLayer
         {
             using (var productoDAL = new ProductoDAL())
             {
-                return productoDAL.StockProductosSede(idProductos, idCiudad, idUsuario);
+                if (idCiudad.Equals(Guid.Empty))
+                {
+                    return productoDAL.StockProductosTodasSedes(idProductos, idUsuario);
+                } else
+                {
+                    return productoDAL.StockProductosSede(idProductos, idCiudad, idUsuario);
+                }
+            }
+        }
+
+        public List<RegistroCargaStock> StockProductosCadaSede(List<Guid> idProductos, Guid idUsuario)
+        {
+            using (var productoDAL = new ProductoDAL())
+            {
+                return productoDAL.StockProductosCadaSede(idProductos, idUsuario);  
             }
         }
 
@@ -619,13 +633,13 @@ namespace BusinessLayer
             }
         }
 
-        public MovimientoKardexCabecera StockProductoKardex(Guid idUsuario, Guid idCiudad, Guid idProducto, int idProductoPresentacion)
+        public MovimientoKardexCabecera StockProductoKardex(Guid idUsuario, Guid idCiudad, Guid idProducto, int idProductoPresentacion, DateTime? fechaInicio)
         {
             using (var productoDAL = new ProductoDAL())
             {
                 CiudadDAL ciudadDal = new CiudadDAL();
                 
-                MovimientoKardexCabecera kardex = productoDAL.StockProductoKardex(idUsuario, idCiudad, idProducto);
+                MovimientoKardexCabecera kardex = productoDAL.StockProductoKardex(idUsuario, idCiudad, idProducto, fechaInicio);
                 kardex.producto = productoDAL.GetProductoById(idProducto);
                 kardex.unidadConteo = kardex.producto.unidadConteo;
                 kardex.ciudad = ciudadDal.getCiudad(idCiudad);

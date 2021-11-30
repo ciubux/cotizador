@@ -2190,7 +2190,7 @@ jQuery(function ($) {
 
                 var numeroCot = '<span id="codigoCotizacionShow">' + cotizacion.codigo + '</span>';
                 if (cotizacion.codigoAntecedente) {
-                    numeroCot = numeroCot + " (Recotizado desde " + cotizacion.codigoAntecedente  + ")";
+                    numeroCot = numeroCot + " (Recotizado desde " + cotizacion.codigoAntecedente + ")";
                 }
 
                 $("#verIdGrupoCliente").val(cotizacion.grupo_idGrupoCliente);
@@ -2209,7 +2209,7 @@ jQuery(function ($) {
                     $("#labelGrupo").hide();
                     $("#spnTitleGrupo").hide();
                     $("#verClienteGrupo").html(cotizacion.cliente_codigoRazonSocial);
-                }     
+                }
 
                 if (cotizacion.tipoCotizacion == 0) {
                     $("#esNormal").show();
@@ -2226,6 +2226,14 @@ jQuery(function ($) {
                     $("#esTransitoria").hide();
                     $("#esTrivial").show();
                 }
+
+                if (cotizacion.estadoExtendida == 1 && usuario.apruebaCotizaciones) {
+                    $("#btnAprobarExtensionVigencia").show();
+                    $("#btnAprobarExtensionVigencia").attr("codigo", cotizacion.codigo);
+                } else {
+                    $("#btnAprobarExtensionVigencia").hide();
+                }
+                
 
                 $("#verFechaCreacion").html(invertirFormatoFecha(cotizacion.fecha.substr(0, 10)));
                 $("#verValidezOferta").html(invertirFormatoFecha(cotizacion.fechaLimiteValidezOferta.substr(0, 10)));
@@ -2244,7 +2252,7 @@ jQuery(function ($) {
                 $("#verModificadoPor").html(cotizacion.seguimientoCotizacion_usuario_nombre);
                 $("#verObservacionEstado").html(cotizacion.seguimientoCotizacion_observacion);
 
-                
+
                 $("#verObservaciones").html(cotizacion.observaciones);
                 if (cotizacion.aplicaSedes === true) {
                     $("#verSedesAplica").html("Esta cotización aplicará también para las sedes: " + cotizacion.cliente_sedeListWebString.replace(new RegExp('<br>', 'g'), ', '));
@@ -2265,6 +2273,7 @@ jQuery(function ($) {
                 var lista = cotizacion.cotizacionDetalleList;
                 var tieneProductoRestringido = false;
                 var tieneDescuentoMayorATope = false;
+                var tieneCostoFlete = false;
 
                 for (var i = 0; i < cotizacion.cotizacionDetalleList.length; i++) {
 
@@ -2282,7 +2291,7 @@ jQuery(function ($) {
                         if (lista[i].cantidad > 1 && lista[i].cantidad > lista[i].producto.cantidadMaximaPedidoRestringido) {
                             tieneProductoRestringido = true;
                         }
-                        
+
                         descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
 
                         if (lista[i].producto.motivoRestriccion != null) {
@@ -2306,12 +2315,28 @@ jQuery(function ($) {
                     }
 
                     var htmlAdicionalMargen = "";
+                    var htmlAdicionalCosto = "";
                     if (lista[i].margen != lista[i].margenCostoFlete) {
-                        htmlAdicionalMargen = htmlAdicionalMargen + '<br/><span class="spnMargenCostoFlete">' + lista[i].margenCostoFlete + '%</span>';
+                        htmlAdicionalMargen = htmlAdicionalMargen + '<br/><span class="spnMargenCostoFlete">' + lista[i].margenCostoFlete.toFixed(cantidadDecimales) + '%</span>';
                     }
 
-                    if (lista[i].tienePrecioEspecial) {
-                        htmlAdicionalMargen = htmlAdicionalMargen + '<br/><label class="lbl-vigencia-corregida">Especial</label>';
+
+
+                    if (lista[i].tieneCostoEspecial) {
+                        htmlAdicionalCosto = lista[i].costoEspecialVisible.toFixed(cantidadDecimales);
+                        if (lista[i].margen != lista[i].margenCostoFlete) {
+                            tieneCostoFlete = true;
+                            htmlAdicionalCosto = htmlAdicionalCosto + '<br/><span class="spnMargenCostoFlete">' + lista[i].costoEspecialFleteVisible.toFixed(cantidadDecimales) + '</span>';
+                        }
+
+                        htmlAdicionalCosto = htmlAdicionalCosto + '<br/><label class="lbl-vigencia-corregida">Especial</label>';
+                    } else {
+
+                        htmlAdicionalCosto = lista[i].costoListaVisible.toFixed(cantidadDecimales);
+                        if (lista[i].margen != lista[i].margenCostoFlete) {
+                            tieneCostoFlete = true;
+                            htmlAdicionalCosto = htmlAdicionalCosto + '<br/><span class="spnMargenCostoFlete">' + lista[i].costoListaFleteVisible.toFixed(cantidadDecimales) + '</span>';
+                        }
                     }
 
                     d += '<tr class="' + inactivoClass + '" sku = "' + lista[i].producto.sku + '" idProductoPresentacion="' + lista[i].idProductoPresentacion + '" >' +
@@ -2323,7 +2348,7 @@ jQuery(function ($) {
                         '<td>' + lista[i].precioLista.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].porcentajeDescuentoMostrar.toFixed(cantidadDecimales) + ' %</td>' +
                         '<td>' + lista[i].precioNeto.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
-                        '<td>' + lista[i].costoListaVisible.toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + htmlAdicionalCosto + '</td>' +
                         '<td>' + lista[i].margen.toFixed(cantidadDecimales) + '%' + htmlAdicionalMargen + '</td>' +
                         '<td>' + lista[i].flete.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
                         '<td>' + lista[i].precioUnitario.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
@@ -2344,6 +2369,16 @@ jQuery(function ($) {
                         '</tr>';
 
                 }
+
+                $("#spnUtilidad").html(cotizacion.utilidadVisible.toFixed(cantidadDecimales) + " (" + cotizacion.margenVisible.toFixed(cantidadDecimales) + "%)");
+                if (tieneCostoFlete) {
+                    $("#divUtilidadFlete").show();
+                    $("#spnUtilidadFlete").html(cotizacion.utilidadFleteVisible.toFixed(cantidadDecimales) + " (" + cotizacion.margenFleteVisible.toFixed(cantidadDecimales) + "%)");
+
+                } else {
+                    $("#divUtilidadFlete").hide();
+                }
+
                 //  
                 // sleep
                 $("#tableDetalleCotizacion").append(d);
@@ -2406,7 +2441,7 @@ jQuery(function ($) {
                     $("#btnReCotizacion").hide();
                 }
 
-
+                
                 
 
                 /*APROBAR DENEGAR COTIZACIÓN*/
@@ -2499,6 +2534,19 @@ jQuery(function ($) {
                 }
 
 
+                if (
+                    (cotizacion.seguimientoCotizacion_estado == ESTADO_ACEPTADA && cotizacion.tipoCotizacion == 0 && cotizacion.estadoExtendida != 1)
+                ) {
+
+                    $("#btnEditarFechaFinVigencia").show();
+                    $("#btnEditarFechaFinVigencia").attr("codigo", cotizacion.codigo);
+                }
+                else {
+                    $("#btnEditarFechaFinVigencia").hide();
+                }
+
+
+                
                 /*PDF*/
                 if (
                     (cotizacion.seguimientoCotizacion_estado == ESTADO_APROBADA ||

@@ -63,6 +63,8 @@ namespace Cotizador.Models.DTOsShow
             cotizacionDTOshow.ciudad_idCiudad = cotizacion.ciudad.idCiudad;
             cotizacionDTOshow.cliente_razonSocial = cotizacion.cliente.razonSocial;//no se muestra
             cotizacionDTOshow.promocion = cotizacion.promocion;
+            cotizacionDTOshow.fechaFinVigenciaPreciosExtendida = cotizacion.fechaFinVigenciaPreciosExtendida;
+            cotizacionDTOshow.estadoExtendida = cotizacion.estadoExtendida;
 
             cotizacionDTOshow.monedaCodigo = cotizacion.moneda.codigo;
             cotizacionDTOshow.monedaSimbolo = cotizacion.moneda.simbolo;
@@ -96,6 +98,10 @@ namespace Cotizador.Models.DTOsShow
                 cotizacionDTOshow.cliente_codigoRazonSocial = cotizacionDTOshow.cliente_codigoRazonSocial + " (Grupo: " + cotizacion.cliente.grupoCliente.codigoNombre + ")";
             }
 
+            cotizacionDTOshow.utilidadVisible = cotizacion.utilidadVisible;
+            cotizacionDTOshow.utilidadFleteVisible = cotizacion.utilidadFleteVisible;
+            cotizacionDTOshow.margenVisible = cotizacion.margenVisible;
+            cotizacionDTOshow.margenFleteVisible = cotizacion.margenFleteVisible;
             cotizacionDTOshow.tipoCotizacion = (int)cotizacion.tipoCotizacion;
             cotizacionDTOshow.contacto = cotizacion.contacto;
             cotizacionDTOshow.cliente_esClienteLite = cotizacion.cliente.esClienteLite;
@@ -412,6 +418,12 @@ namespace Cotizador.Models.DTOsShow
             pedidoDTOshow.cotizacion_tipoCotizacion = (int)pedido.cotizacion.tipoCotizacion;
             pedidoDTOshow.numeroRequerimiento = pedido.numeroRequerimiento;
             pedidoDTOshow.grupoCliente_nombre = pedido.cliente.grupoCliente.nombre;
+
+            pedidoDTOshow.utilidadVisible = pedido.utilidadVisible;
+            pedidoDTOshow.utilidadFleteVisible = pedido.utilidadFleteVisible;
+            pedidoDTOshow.margenVisible = pedido.margenVisible;
+            pedidoDTOshow.margenFleteVisible = pedido.margenFleteVisible;
+
             return pedidoDTOshow;
         }
     }

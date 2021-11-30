@@ -793,7 +793,7 @@ jQuery(function ($) {
             success: function (cliente) {
                 limpiarFormulario();
                 
-                $('body').loadingModal('hide')
+                $('body').loadingModal('hide');
 
                 $("#cliente_codigo").val(cliente.codigo);
                 $("#cliente_ruc").val(cliente.ruc);

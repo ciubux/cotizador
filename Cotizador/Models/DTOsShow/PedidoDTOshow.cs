@@ -77,5 +77,10 @@ namespace Cotizador.Models.DTOshow
         public int truncado { get; set; }
         public String grupoCliente_nombre { get; set; }
 
+        public Decimal utilidadVisible { get; set; }
+        public Decimal utilidadFleteVisible { get; set; }
+        public Decimal margenFleteVisible { get; set; }
+        public Decimal margenVisible { get; set; }
+
     }
 }

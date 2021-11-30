@@ -1,4 +1,4 @@
-ï»¿using Framework.DAL;
+using Framework.DAL;
 using Framework.DAL.Settings.Implementations;
 using System;
 using System.Collections.Generic;
@@ -164,7 +164,7 @@ namespace DataLayer
             int result = DateTime.Compare(date1, date2);
             if (result != 0)
             {
-                //No se puede actualizar la cotizaciÃ³n si las fechas son distintas
+                //No se puede actualizar la cotización si las fechas son distintas
                 //throw new Exception("CotizacionDesactualizada");
             }
             else
@@ -253,7 +253,7 @@ namespace DataLayer
             DataTable cotizacionDetalleDataTable = dataSet.Tables[1];
             DataTable preciosEspecialesDataTable = dataSet.Tables[2];
 
-            //CABECERA DE COTIZACIÃ“N
+            //CABECERA DE COTIZACIÓN
             foreach (DataRow row in cotizacionDataTable.Rows)
             {
                 cotizacion.idCotizacion = Converter.GetGuid(row, "id_cotizacion");
@@ -261,6 +261,8 @@ namespace DataLayer
                 cotizacion.fechaLimiteValidezOferta = Converter.GetDateTime(row, "fecha_limite_validez_oferta");
                 cotizacion.fechaInicioVigenciaPrecios = Converter.GetDateTimeNullable(row, "fecha_inicio_vigencia_precios");
                 cotizacion.fechaFinVigenciaPrecios = Converter.GetDateTimeNullable(row, "fecha_fin_vigencia_precios");
+                cotizacion.fechaFinVigenciaPreciosExtendida = Converter.GetDateTimeNullable(row, "fecha_fin_vigencia_extendida");
+                cotizacion.estadoExtendida = Converter.GetInt(row, "estado_extendida");
                 cotizacion.incluidoIGV = Converter.GetBool(row, "incluido_igv");
                 cotizacion.considerarCantidades = (Cotizacion.OpcionesConsiderarCantidades)Converter.GetInt(row, "considera_cantidades");
                 cotizacion.mostrarValidezOfertaEnDias = Converter.GetInt(row, "mostrar_validez_oferta_dias");
@@ -356,7 +358,7 @@ namespace DataLayer
 
 
             cotizacion.cotizacionDetalleList = new List<CotizacionDetalle>();
-            //DETALLE DE COTIZACIÃ“N
+            //DETALLE DE COTIZACIÓN
             foreach (DataRow row in cotizacionDetalleDataTable.Rows)
             {
                 CotizacionDetalle cotizacionDetalle = new CotizacionDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
@@ -366,7 +368,7 @@ namespace DataLayer
                 cotizacionDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
                 cotizacionDetalle.flete = Converter.GetDecimal(row, "flete");
                 cotizacionDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
-                ///En caso corresponda a una presentaciÃ³n que no es la estandar se debe instanciar el objeto ProductoPresentacion
+                ///En caso corresponda a una presentación que no es la estandar se debe instanciar el objeto ProductoPresentacion
                 if (cotizacionDetalle.esPrecioAlternativo)
                 {
                     cotizacionDetalle.ProductoPresentacion = new ProductoPresentacion();
@@ -415,7 +417,7 @@ namespace DataLayer
                 cotizacionDetalle.producto.equivalenciaProveedor = Converter.GetInt(row, "producto_equivalencia_proveedor");
 
 
-                //SI ES UNA RECOTIZACIÃ“N
+                //SI ES UNA RECOTIZACIÓN
                 if (cotizacion.esRecotizacion)
                 {
                     //Si es recotizacion entonces el precio Lista, precio lista provincia y el costo  Lista son los tomados desde el producto
@@ -423,7 +425,7 @@ namespace DataLayer
                     cotizacionDetalle.producto.precioProvinciaSinIgv = Converter.GetDecimal(row, "producto_precio_provincia");
                     cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "producto_costo");
 
-                    //El precio neto ahora serÃ¡ el precio neto anterior                    
+                    //El precio neto ahora será el precio neto anterior                    
                     /*
                     cotizacionDetalle.precioNetoAnterior = Converter.GetDecimal(row, "precio_neto");
                     cotizacionDetalle.producto.precioListaAnterior = Converter.GetDecimal(row, "precio_sin_igv_anterior");
@@ -436,7 +438,7 @@ namespace DataLayer
                 }
                 else
                 {
-                    //Si NO es recotizacion se considera el precio lista y el costo lista registrado en la cotizaciÃ³n
+                    //Si NO es recotizacion se considera el precio lista y el costo lista registrado en la cotización
                     cotizacionDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
                     cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
                     
@@ -446,8 +448,8 @@ namespace DataLayer
                     cotizacionDetalle.producto.precioListaAnterior = Converter.GetDecimal(row, "precio_sin_igv_anterior");
 
 
-                    //Si la unidad es alternativa se mÃºltiplica por la equivalencia, dado que la capa de negocio se encarga de hacer los calculos y espera siempre el precio estÃ¡ndar
-                    //En el caso de recotizaciÃ³n el precioNeto es obtenido de la cotizaciÃ³n origen
+                    //Si la unidad es alternativa se múltiplica por la equivalencia, dado que la capa de negocio se encarga de hacer los calculos y espera siempre el precio estándar
+                    //En el caso de recotización el precioNeto es obtenido de la cotización origen
                     if (cotizacionDetalle.esPrecioAlternativo)
                     {
                         cotizacionDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * cotizacionDetalle.ProductoPresentacion.Equivalencia;
@@ -465,8 +467,8 @@ namespace DataLayer
             foreach (DataRow row in preciosEspecialesDataTable.Rows)
             {
                 Guid idProducto = Converter.GetGuid(row, "id_producto");
-                decimal precioEspecial = Converter.GetDecimal(row, "precio_unitario");
-                int idProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion");
+                decimal costoEspecial = Converter.GetDecimal(row, "costo_unitario");
+                int idProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion_costo");
 
                 CotizacionDetalle det = cotizacion.cotizacionDetalleList.Where(d => d.producto.idProducto.Equals(idProducto)).First();
                 if (det != null)
@@ -474,16 +476,16 @@ namespace DataLayer
                     switch (idProductoPresentacion)
                     {
                         case 0:
-                            det.precioEspecial = precioEspecial;
-                            det.tienePrecioEspecial = true;
+                            det.costoEspecial = costoEspecial;
+                            det.tieneCostoEspecial = true;
                             break;
                         case 1:
-                            det.precioEspecial = precioEspecial * ((decimal)det.producto.equivalenciaProveedor);
-                            det.tienePrecioEspecial = true;
+                            det.costoEspecial = costoEspecial * ((decimal)det.producto.equivalenciaAlternativa);
+                            det.tieneCostoEspecial = true;
                             break;
                         case 2:
-                            det.precioEspecial = precioEspecial / ((decimal)det.producto.equivalenciaProveedor);
-                            det.tienePrecioEspecial = true;
+                            det.costoEspecial = costoEspecial / ((decimal)det.producto.equivalenciaProveedor);
+                            det.tieneCostoEspecial = true;
                             break;
                             
                     }
@@ -607,13 +609,44 @@ namespace DataLayer
             int result = DateTime.Compare(date1, date2);
             if (result != 0)
             {
-                //No se puede actualizar la cotizaciÃ³n si las fechas son distintas
+                //No se puede actualizar la cotización si las fechas son distintas
                 throw new Exception("CotizacionDesactualizada");
             }
 
     */
         }
 
+
+        public void RegistroSolicitudExtensionVigencia(Cotizacion cotizacion)
+        {
+            var objCommand = GetSqlCommand("pi_solicitud_extension_vigencia_cotizacion");
+
+            InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
+            InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
+            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion);
+            InputParameterAdd.DateTime(objCommand, "nuevaFechaFin", cotizacion.fechaFinVigenciaPreciosExtendida);
+            ExecuteNonQuery(objCommand);
+        }
+        public void AprobarSolicitudExtensionVigencia(Cotizacion cotizacion)
+        {
+            var objCommand = GetSqlCommand("pi_aprobar_extension_vigencia_cotizacion");
+
+            InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
+            InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
+            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion);
+            InputParameterAdd.DateTime(objCommand, "nuevaFechaFin", cotizacion.fechaFinVigenciaPreciosExtendida);
+            ExecuteNonQuery(objCommand);
+        }
+
+        public void RechazarSolicitudExtensionVigencia(Cotizacion cotizacion)
+        {
+            var objCommand = GetSqlCommand("pi_rechazar_extension_vigencia_cotizacion");
+
+            InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
+            InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
+            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion);
+            ExecuteNonQuery(objCommand);
+        }
 
         public void RechazarCotizaciones()
         {

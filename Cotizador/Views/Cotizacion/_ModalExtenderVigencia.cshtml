@@ -1,0 +1,413 @@
+﻿
+<div class="modal fade" tabindex="-1" id="modalExtenderVigenciaCotizacion">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalExtenderVigenciaCotizacionTitle"><b><span id="titleModalExtenderVigenciaCotizacion"></span></b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-9 col-lg-9">
+                        <div class="form-group">
+                            <label class="control-label col-xs-4">Fecha Extendida:</label>
+                            <div class="col-xs-4">
+                                <input type="text" id="nuevaFechaExtenderVigenciaCotizacion" placeholder="Indefinida" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-lg-3 text-right">
+                        <button id="btnRegistrarVigenciaCotizacion" type="button" class="btn btn-success">Solicitar</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-9 col-lg-9">
+                        <div class="form-group">
+                            <label class="control-label col-xs-4">Comentario:</label>
+                            <div class="col-xs-8">
+                                <textarea type="text" id="comenarioExtenderVigenciaCotizacion" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-lg-3 text-right">
+                        <button id="btnRechazarVigenciaCotizacion" type="button" class="btn btn-danger">Rechazar</button>
+                    </div>
+
+                </div>
+
+                <div id="divMensajePreciosNoAfectados" class="row">
+                    <div class="col-sm-12 col-lg-12">
+                        <h5 class="text-danger">Los SKUs sombreados NO se verán afectados por la ampliación de vigencia ya que existen cotizaciones aceptadas para dichos productos con inicio de vigencia posterior a la de la cotización en cuestión.</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12 tableFixHead">
+                        <table id="tableExtenderVigenciaCotizacionPrecios" class="table table-bordered" style="margin-top: 10px;">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Prov.</th>
+                                    <th>Código</th>
+                                    <th>Producto</th>
+                                    <th>Unidad</th>
+                                    <th>Precio Lista</th>
+                                    <th>Precio Neto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    var evcNroCoti = 0;
+    var evcModo = 0; //1: Solicitar, 2:Aprobar
+    var ecvFechaAnterior = "";
+
+    function funcionesModalExtenderVigenciaCotizacion() {
+        $.datepicker.regional['es'] = {
+            closeText: 'Cerrar',
+            prevText: '< Ant',
+            nextText: 'Sig >',
+            currentText: 'Hoy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        $("#nuevaFechaExtenderVigenciaCotizacion").datepicker({ dateFormat: "dd/mm/yy", minDate: 0 });
+
+        $(document).on('click', "#btnEditarFechaFinVigencia", function () {
+            evcNroCoti = $(this).attr("codigo");
+            evcModo = 1;
+            $("#titleModalExtenderVigenciaCotizacion").html("Extender Vigencia Cotización N° " + evcNroCoti);
+            $("#btnRegistrarVigenciaCotizacion").html("Solicitar");
+            $("#btnRechazarVigenciaCotizacion").hide();
+            llenarExtenderVigenciaCotizacionPrecios();
+        });
+
+        $(document).on('click', "#btnAprobarExtensionVigencia", function () {
+            evcNroCoti = $(this).attr("codigo");
+            evcModo = 2;
+            $("#titleModalExtenderVigenciaCotizacion").html("Aprobar Extensión Vigencia Cotización N° " + evcNroCoti);
+            $("#btnRegistrarVigenciaCotizacion").html("Aprobar");
+            $("#btnRechazarVigenciaCotizacion").show();
+            llenarExtenderVigenciaCotizacionPrecios();
+        });
+
+        $(document).on('click', "#btnRechazarVigenciaCotizacion", function () {
+            if (evcModo == 2) {
+                var urlAction = "RechazarSolicitudExtensionVigencia";
+                var questionText = "¿Está seguro que desea rechazar la solicitud de extensión de fecha de fin de vigencia?";
+            }
+
+            $.confirm({
+                title: 'CONFIRMACIÓN',
+                content: questionText,
+                type: 'orange',
+                buttons: {
+                    confirm: {
+                        text: 'SÍ',
+                        btnClass: 'btn-red',
+                        action: function () {
+                            $('body').loadingModal({
+                                text: "Registrando..."
+                            });
+                            $('body').loadingModal('show');
+
+                            $.ajax({
+                                url: "/Cotizacion/" + urlAction,
+                                type: 'POST',
+                                dataType: 'JSON',
+                                data: {
+                                    codigo: evcNroCoti,
+                                    comentario: $("#comenarioExtenderVigenciaCotizacion").val()
+                                },
+                                error: function (lista) {
+                                    $('body').loadingModal('hide');
+
+                                    $.alert({
+                                        title: "ERROR",
+                                        content: "Ocurrió un error. Si persiste contacte con TI.",
+                                        type: "red",
+                                        buttons: {
+                                            OK: function () {
+                                            }
+                                        }
+                                    });
+                                },
+                                success: function (result) {
+
+
+                                    if (result.success == 1) {
+                                        $.alert({
+                                            title: "Operación Exitosa",
+                                            content: "Se registró la solicitud dede extensión de fecha de fin de vigencia como rechazada.",
+                                            type: "green",
+                                            buttons: {
+                                                OK: function () {
+                                                    $("#modalExtenderVigenciaCotizacion").modal('hide');
+                                                    location.reload();
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        $.alert({
+                                            title: "ERROR",
+                                            content: "No se pudo registrar el rechazo de la solicitud de extensión de fecha de fin de vigencia.",
+                                            type: "red",
+                                            buttons: {
+                                                OK: function () {
+                                                }
+                                            }
+                                        });
+                                    }
+
+                                    $('body').loadingModal('hide');
+                                }
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: 'NO',
+                        btnClass: 'btn-green',
+                        action: function () {
+
+                        }
+                    }
+                },
+
+            });
+        });
+
+        $(document).on('click', "#btnRegistrarVigenciaCotizacion", function () {
+            var nuevaFecha = $("#nuevaFechaExtenderVigenciaCotizacion").val();
+            nuevaFecha = nuevaFecha.trim();
+            var urlAction = "RegistrarSolicitudExtensionVigencia";
+            var nuevaFechaDesc = nuevaFecha;
+            if (nuevaFecha == "") {
+                nuevaFechaDesc = "Indefinida";
+            }
+            var questionText = "¿Está seguro que desea solicitar el cambio de fecha de fin de vigencia a: " + nuevaFechaDesc + " ?";
+
+            if (evcModo == 2) {
+                questionText = "¿Está seguro que desea APROBAR el cambio de fecha de fin de vigencia a: " + nuevaFechaDesc + " ?";
+                urlAction = "AprobarSolicitudExtensionVigencia";
+            }
+
+            var textAction = "solicitud";
+            if (evcModo == 2) {
+                textAction = "aprobación";
+            }
+
+            if (ecvFechaAnterior == nuevaFecha) {
+                $.alert({
+                    title: "Error de validación",
+                    content: "La nueva fecha de fin de vigencia debe ser diferente a la fecha actual.",
+                    type: "orange",
+                    buttons: {
+                        OK: function () {
+                        }
+                    }
+                });
+                return;
+            }
+
+            $.confirm({
+                title: 'CONFIRMACIÓN',
+                content: questionText,
+                type: 'orange',
+                buttons: {
+                    confirm: {
+                        text: 'SÍ',
+                        btnClass: 'btn-red',
+                        action: function () {
+                            $('body').loadingModal({
+                                text: "Registrando " + textAction + "..."
+                            });
+                            $('body').loadingModal('show');
+
+
+                            $.ajax({
+                                url: "/Cotizacion/" + urlAction,
+                                type: 'POST',
+                                dataType: 'JSON',
+                                data: {
+                                    codigo: evcNroCoti,
+                                    fechaFin: nuevaFecha,
+                                    comentario: $("#comenarioExtenderVigenciaCotizacion").val()
+                                },
+                                error: function (lista) {
+                                    $('body').loadingModal('hide');
+
+                                    $.alert({
+                                        title: "ERROR",
+                                        content: "Ocurrió un error. Si persiste contacte con TI.",
+                                        type: "red",
+                                        buttons: {
+                                            OK: function () {
+                                            }
+                                        }
+                                    });
+                                },
+                                success: function (result) {
+                                   
+
+                                    if (result.success == 1) {
+                                        $.alert({
+                                            title: "Operación Exitosa",
+                                            content: "Se registró la " + textAction + " de extensión de fecha de fin de vigencia correctamente.",
+                                            type: "green",
+                                            buttons: {
+                                                OK: function () {
+                                                    $("#modalExtenderVigenciaCotizacion").modal('hide');
+                                                    location.reload();
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        $.alert({
+                                            title: "ERROR",
+                                            content: "No se pudo registrar la " + textAction + " de extensión de fecha de fin de vigencia.",
+                                            type: "red",
+                                            buttons: {
+                                                OK: function () {
+                                                }
+                                            }
+                                        });
+                                    }
+
+                                    $('body').loadingModal('hide');
+                                }
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: 'NO',
+                        btnClass: 'btn-green',
+                        action: function () {
+
+                        }
+                    }
+                },
+
+            });
+        });
+    };
+
+    function llenarExtenderVigenciaCotizacionPrecios() {
+        $('body').loadingModal({
+            text: 'Recuperando Precios...'
+        });
+        $('body').loadingModal('show');
+
+        $.ajax({
+            url: "/Cotizacion/PreciosExtenderVigencia",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                codigo: evcNroCoti
+            },
+            error: function (resultado) {
+                $('body').loadingModal('hide');
+            },
+            success: function (resultado) {
+                var cotizacion = resultado.cotizacion;
+                var preciosNoAfectados = false;
+                var lista = cotizacion.cotizacionDetalleList;
+
+                $("#tableExtenderVigenciaCotizacionPrecios > tbody").empty();
+
+                $("#tableExtenderVigenciaCotizacionPrecios").footable({
+                    "paging": {
+                        "enabled": false
+                    }
+                });
+
+
+
+                for (var i = 0; i < lista.length; i++) {
+                    var styleDet = "";
+                    if (!lista[i].esUltimoPrecio) {
+                        styleDet = 'style="background-color: #eeeeee;"';
+                        preciosNoAfectados = true;
+                    }
+
+                    var det = '<tr data-expanded="true">' +
+                        '<td>' + lista[i].producto.proveedor + '</td>' +
+                        '<td  ' + styleDet + '>' + lista[i].producto.sku + '</td>' +
+                        '<td>' + lista[i].producto.descripcion + '</td>' +
+                        '<td>' + lista[i].unidad + '</td>' +
+                        '<td>' + lista[i].precioLista.toFixed(2) + '</td>' +
+                        '<td>' + lista[i].precioNeto.toFixed(2) + '</td>' +
+                        '</tr>';
+
+                    $("#tableExtenderVigenciaCotizacionPrecios").append(det);
+                }
+
+                if (evcModo == 2) {
+                    if (cotizacion.fechaFinVigenciaPreciosExtendida == null)
+                        $("#nuevaFechaExtenderVigenciaCotizacion").val("");
+                    else
+                        $("#nuevaFechaExtenderVigenciaCotizacion").val(invertirFormatoFecha(cotizacion.fechaFinVigenciaPreciosExtendida.substr(0, 10)));
+                } else {
+                    if (cotizacion.fechaFinVigenciaPrecios == null)
+                        $("#nuevaFechaExtenderVigenciaCotizacion").val("");
+                    else
+                        $("#nuevaFechaExtenderVigenciaCotizacion").val(invertirFormatoFecha(cotizacion.fechaFinVigenciaPrecios.substr(0, 10)));
+                }
+
+                ecvFechaAnterior = "";
+                if (cotizacion.fechaFinVigenciaPrecios != null) {
+                    ecvFechaAnterior = invertirFormatoFecha(cotizacion.fechaFinVigenciaPrecios.substr(0, 10));
+                }
+
+
+                if (preciosNoAfectados) {
+                    $("#divMensajePreciosNoAfectados").show();
+                } else {
+                    $("#divMensajePreciosNoAfectados").hide();
+                }
+
+                $('body').loadingModal('hide');
+                $("#modalExtenderVigenciaCotizacion").modal();
+            }
+        });
+
+    }
+
+    if (window.addEventListener) // W3C standard
+    {
+        window.addEventListener('load', funcionesModalExtenderVigenciaCotizacion, false); // NB **not** 'onload'
+    }
+    else if (window.attachEvent) // Microsoft
+    {
+        window.attachEvent('onload', funcionesModalExtenderVigenciaCotizacion);
+    }
+
+    
+
+   
+</script>

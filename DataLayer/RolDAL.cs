@@ -16,7 +16,44 @@ namespace DataLayer
         public RolDAL() : this(new CotizadorSettings())
         {
         }
-        
+
+        public Rol getRolByCodigo(string codigo)
+        {
+            var objCommand = GetSqlCommand("ps_rol_by_codigo");
+            InputParameterAdd.Varchar(objCommand, "codigo", codigo);
+            DataSet dataSet = ExecuteDataSet(objCommand);
+            DataTable rol = dataSet.Tables[0];
+            DataTable permisos = dataSet.Tables[1];
+
+            Rol obj = new Rol();
+
+            foreach (DataRow row in rol.Rows)
+            {
+                obj.idRol = Converter.GetInt(row, "id_rol");
+                obj.codigo = Converter.GetString(row, "codigo");
+                obj.nombre = Converter.GetString(row, "nombre");
+                obj.Estado = Converter.GetInt(row, "estado");
+            }
+
+            obj.permisos = new List<Permiso>();
+            foreach (DataRow row in permisos.Rows)
+            {
+                Permiso permiso = new Permiso();
+                permiso.idPermiso = Converter.GetInt(row, "id_permiso");
+                permiso.codigo = Converter.GetString(row, "codigo");
+                permiso.descripcion_corta = Converter.GetString(row, "descripcion_corta");
+                permiso.descripcion_larga = Converter.GetString(row, "descripcion_larga");
+                permiso.categoriaPermiso = new CategoriaPermiso();
+                permiso.categoriaPermiso.idCategoriaPermiso = Converter.GetInt(row, "id_categoria_permiso");
+                permiso.categoriaPermiso.descripcion = Converter.GetString(row, "descripcion_categoria");
+
+                obj.permisos.Add(permiso);
+            }
+
+            return obj;
+        }
+
+
 
         public Rol getRol(int idRol)
         {

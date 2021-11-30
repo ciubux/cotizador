@@ -225,15 +225,42 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(stocks); 
         }
 
-        public String ReporteStockProductoKardex(Guid idCiudad, Guid idProducto, int idProductoPresentacion)
+        public String ReporteStockProductoKardex(Guid idCiudad, Guid idProducto, int idProductoPresentacion, string fechaInicio)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             ProductoBL bl = new ProductoBL();
-            MovimientoKardexCabecera kardex = bl.StockProductoKardex(usuario.idUsuario, idCiudad, idProducto, idProductoPresentacion);
+            DateTime? dateFechaInicio = null;
+            if (!fechaInicio.Trim().Equals(""))
+            {
+                String[] fiv = fechaInicio.Split('/');
+                dateFechaInicio = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
+            }
+            MovimientoKardexCabecera kardex = bl.StockProductoKardex(usuario.idUsuario, idCiudad, idProducto, idProductoPresentacion, dateFechaInicio);
 
             return JsonConvert.SerializeObject(kardex);
         }
+
+        [HttpGet]
+        public ActionResult ReporteStockProductoKardexExcel(Guid idCiudad, Guid idProducto, int idProductoPresentacion, string fechaInicio)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            ProductoBL bl = new ProductoBL();
+            DateTime? dateFechaInicio = null;
+            if (!fechaInicio.Trim().Equals(""))
+            {
+                String[] fiv = fechaInicio.Split('/');
+                dateFechaInicio = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
+            }
+            MovimientoKardexCabecera kardex = bl.StockProductoKardex(usuario.idUsuario, idCiudad, idProducto, idProductoPresentacion, dateFechaInicio);
+
+            ReporteKardexProducto excel = new ReporteKardexProducto();
+
+            return excel.generateExcel(kardex, dateFechaInicio);
+        }
+
+
 
         public ActionResult CargasStock()
         {
@@ -247,6 +274,28 @@ namespace Cotizador.Controllers
             return View();
         }
 
+        [HttpPost]
+        public String GetStockProductos(string ids, string idCiudad)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+            {
+                return "";
+            }
+
+            List<Guid> idProductos = new List<Guid>();
+            string[] idsItems = ids.Split(';');
+
+            foreach (string id in idsItems)
+            {
+                idProductos.Add(Guid.Parse(id));
+            }
+
+            ProductoBL bl = new ProductoBL();
+            List<RegistroCargaStock> stocks = bl.StockProductosSede(idProductos, Guid.Parse(idCiudad), usuario.idUsuario);
+
+            return JsonConvert.SerializeObject(stocks);
+        }
 
 
         public ActionResult Load(HttpPostedFileBase file)

@@ -56,6 +56,9 @@ namespace Model
         public DateTime? fechaFinVigenciaPrecios { get; set; }
         public DateTime? fechaInicioVigenciaPrecios { get; set; }
 
+        public int estadoExtendida { get; set; }
+        public DateTime? fechaFinVigenciaPreciosExtendida { get; set; }
+
         public DateTime fechaModificacion { get; set; }
 
         public Usuario usuario { get; set; }
@@ -196,6 +199,90 @@ namespace Model
          
         }
 
+        public Decimal utilidadVisible
+        {
+            get
+            {
+                decimal utilidad = 0;
+                
+                foreach(CotizacionDetalle det in this.documentoDetalle)
+                {
+                    if (det.tieneCostoEspecial)
+                    {
+                        utilidad = utilidad + ((det.precioNeto - det.costoEspecialVisible) * det.cantidad);
+                    } else
+                    {
+                        utilidad = utilidad + ((det.precioNeto - det.costoListaVisible) * det.cantidad);
+                    }
+                    
+                }
+
+                return utilidad;
+            }
+        }
+
+        public Decimal utilidadFleteVisible
+        {
+            get
+            {
+                decimal utilidad = 0;
+                foreach (CotizacionDetalle det in this.documentoDetalle)
+                {
+                    if (det.tieneCostoEspecial)
+                    {
+                        utilidad = utilidad + ((det.precioNeto - det.costoEspecialFleteVisible) * det.cantidad);
+                    }
+                    else
+                    {
+                        utilidad = utilidad + ((det.precioNeto - det.costoListaFleteVisible) * det.cantidad);
+                    }
+                }
+
+                return utilidad;
+            }
+        }
+
+        public Decimal margenVisible
+        {
+            get
+            {
+                decimal utilidad = this.utilidadVisible;
+                decimal total = 0;
+
+                foreach (CotizacionDetalle det in this.documentoDetalle)
+                {
+                    total = total + (det.precioNeto * det.cantidad);
+                }
+
+                if (total == 0)
+                {
+                    return 0;
+                }
+
+                return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (utilidad / total) * 100));
+            }
+        }
+
+        public Decimal margenFleteVisible
+        {
+            get
+            {
+                decimal utilidad = this.utilidadFleteVisible;
+                decimal total = 0;
+
+                foreach (CotizacionDetalle det in this.documentoDetalle)
+                {
+                    total = total + (det.precioNeto * det.cantidad);
+                }
+
+                if (total == 0)
+                {
+                    return 0;
+                }
+                
+                return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (utilidad / total) * 100));
+            }
+        }
 
         /**
          * Utilizado para búsqueda

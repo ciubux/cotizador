@@ -1,0 +1,239 @@
+﻿
+<div class="modal fade" tabindex="-1" id="modalAprobarGrupoPedido">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalStockProductoKardexTitle"><b><span id="titleModalAprobarGrupoPedido"></span></b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12 text-right">
+                        <button id="btnAprobarGrupoPedidoAction" type="button" class="btn btn-primary"></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12 tableFixHead">
+                        <table id="tablePedidosAprobarGrupoPedido" class="table table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>N°</th>
+                                    <th>Sede MP</th>
+                                    @*<th>Cod. Cliente</th>*@
+                                    <th>Cliente</th>
+                                    <th>Fecha Registro</th>
+                                    @*<th>Total</th>*@
+                                    <th>Estado Atención</th>
+                                    <th>Estado Crediticio</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    var tipoAprobarGrupoPedido = 0;
+    var nroGrupoAprobarGrupoPedido = 0;
+    var cantidadPedidosAfectadosAprobarGrupoPedido = 0;
+
+    function funcionesModalAprobarGrupoPedido() {
+        $(document).on('click', "#btnLiberarPedidosGrupo", function () {
+            var nroGrupo = $(this).attr("idGrupo");
+            nroGrupoAprobarGrupoPedido = nroGrupo;
+            $("#titleModalAprobarGrupoPedido").html("Liberar Pedidos del Grupo N° " + nroGrupo);
+            $("#btnAprobarGrupoPedidoAction").html("Liberar Pedidos");
+            tipoAprobarGrupoPedido = 2;
+            llenarAprobarGrupoPedidoPedidos();
+        });
+
+        $(document).on('click', "#btnAprobarPedidosGrupo", function () {
+            var nroGrupo = $(this).attr("idGrupo");
+            nroGrupoAprobarGrupoPedido = nroGrupo;
+            $("#titleModalAprobarGrupoPedido").html("Aprobar Pedidos del Grupo N° " + nroGrupo);
+            $("#btnAprobarGrupoPedidoAction").html("Aprobar Pedidos");
+            tipoAprobarGrupoPedido = 1;
+            llenarAprobarGrupoPedidoPedidos();
+        });
+
+
+        $(document).on('click', "#btnAprobarGrupoPedidoAction", function () {
+            var urlAction = "";
+            var questionText = "";
+            var loadingText = "";
+            var resultText = "";
+            if (tipoAprobarGrupoPedido == 1) {
+                urlAction = "AprobarPedidosGrupo";
+                loadingText = "Aprobando";
+                questionText = '¿Está seguro que desea APROBAR los pedidos del grupo? Solo se aprobaran los pedidos en estado "Pendiente Aprobación de Ingreso"';
+                resultText = "Aprobaron";
+            }
+
+            if (tipoAprobarGrupoPedido == 2) {
+                urlAction = "LiberarPedidosGrupo";
+                loadingText = "Liberando";
+                questionText = '¿Está seguro que desea LIBERAR los pedidos del grupo? Solo se liberaran los pedidos en estado "Pendiente Liberación"';
+                resultText = "Liberaron";
+            }
+
+
+            $.confirm({
+                title: 'CONFIRMACIÓN',
+                content: questionText,
+                type: 'orange',
+                buttons: {
+                    confirm: {
+                        text: 'SÍ',
+                        btnClass: 'btn-red',
+                        action: function () {
+                            $('body').loadingModal({
+                                text: loadingText + ' Pedidos...'
+                            });
+                            $('body').loadingModal('show');
+
+
+                            $.ajax({
+                                url: "/Pedido/" + urlAction,
+                                type: 'POST',
+                                dataType: 'JSON',
+                                data: {
+                                    numeroGrupo: nroGrupoAprobarGrupoPedido
+                                },
+                                error: function (lista) {
+                                    $('body').loadingModal('hide');
+
+                                    $.alert({
+                                        title: "ERROR",
+                                        content: "Ocurrió un error. Si persiste contacte con TI.",
+                                        type: "red",
+                                        buttons: {
+                                            OK: function () {
+                                            }
+                                        }
+                                    });
+                                },
+                                success: function (result) {
+
+                                    if (result.success == 1) {
+                                        $.alert({
+                                            title: "Operación Exitosa",
+                                            content: "Se " + resultText + " los pedidos correctamente.",
+                                            type: "green",
+                                            buttons: {
+                                                OK: function () {
+                                                    $("#modalAprobarGrupoPedido").modal('hide');
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        $.alert({
+                                            title: "ERROR",
+                                            content: "No se " + resultText + " los pedidos.",
+                                            type: "red",
+                                            buttons: {
+                                                OK: function () {
+                                                }
+                                            }
+                                        });
+                                    }
+
+                                    $('body').loadingModal('hide');
+                                }
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: 'NO',
+                        btnClass: 'btn-green',
+                        action: function () {
+
+                        }
+                    }
+                },
+
+            });
+        });
+    };
+
+    function llenarAprobarGrupoPedidoPedidos() {
+        $('body').loadingModal({
+            text: 'Recuperando Pedidos...'
+        });
+        $('body').loadingModal('show');
+
+        $.ajax({
+            url: "/Pedido/SearchGrupo",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                numeroGrupo: nroGrupoAprobarGrupoPedido,
+                tipoOrdenamiento: tipoAprobarGrupoPedido
+            },
+            error: function (lista) {
+                $('body').loadingModal('hide');
+            },
+            success: function (lista) {
+                $("#tablePedidosAprobarGrupoPedido > tbody").empty();
+
+                $("#tablePedidosAprobarGrupoPedido").footable({
+                    "paging": {
+                        "enabled": false
+                    }
+                });
+
+                for (var i = 0; i < lista.length; i++) {
+                    var truncado = '';
+
+
+                    if (lista[i].truncado == 1) {
+                        truncado = '<br/><span style="color:red; font-weight: bold;">TRUNCADO</span>'
+                    }
+
+                    var pedido = '<tr data-expanded="true">' +
+                        '<td>  ' + lista[i].numeroPedido + '  </td>' +
+                        '<td>  ' + lista[i].ciudad_nombre + '  </td>' +
+                        //'<td>  ' + lista[i].cliente_codigo + ' </td>' +
+                        '<td>  ' + lista[i].cliente_codigo + ' - ' + lista[i].cliente_razonSocial + '</td>' +
+                        '<td>  ' + lista[i].fechaHoraRegistro + '</td>' +
+                        //'<td>  ' + lista[i].montoTotal + '  </td>' +
+                        '<td>  ' + lista[i].seguimientoPedido_estadoString + truncado + '</td>' +
+                        '<td>  ' + lista[i].seguimientoCrediticioPedido_estadoString + '</td>' +
+                        '</tr>';
+
+                    $("#tablePedidosAprobarGrupoPedido").append(pedido);
+                }
+
+                
+                $('body').loadingModal('hide');
+                $("#modalAprobarGrupoPedido").modal();
+            }
+        });
+
+    }
+
+    if (window.addEventListener) // W3C standard
+    {
+        window.addEventListener('load', funcionesModalAprobarGrupoPedido, false); // NB **not** 'onload'
+    }
+    else if (window.attachEvent) // Microsoft
+    {
+        window.attachEvent('onload', funcionesModalAprobarGrupoPedido);
+    }
+
+    
+
+   
+</script>

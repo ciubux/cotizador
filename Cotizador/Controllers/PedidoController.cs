@@ -2102,6 +2102,89 @@ namespace Cotizador.Controllers
             //return pedidoList.Count();
         }
 
+        public String SearchGrupo()
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPedidos;
+            //Se recupera el pedido Búsqueda de la session
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
+
+            if (this.Request.Params["numeroGrupo"] == null || this.Request.Params["numeroGrupo"].Trim().Length == 0)
+            {
+                pedido.numeroGrupoPedido = 0;
+            }
+            else
+            {
+                pedido.numeroGrupoPedido = long.Parse(this.Request.Params["numeroGrupo"]);
+            }
+
+            int tipoOrdenamiento = int.Parse(this.Request.Params["tipoOrdenamiento"]);
+
+            PedidoBL pedidoBL = new PedidoBL();
+            List<Pedido> pedidoList = pedidoBL.GetPedidosGrupo(pedido, tipoOrdenamiento);
+            
+            String pedidoListString = JsonConvert.SerializeObject(ParserDTOsSearch.PedidoVentaToPedidoVentaDTO(pedidoList));
+            return pedidoListString;
+        }
+
+        public String LiberarPedidosGrupo()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPedidos;
+            long nroGrupoPedido = 0;
+            if (this.Request.Params["numeroGrupo"] == null || this.Request.Params["numeroGrupo"].Trim().Length == 0)
+            {
+                nroGrupoPedido = 0;
+            }
+            else
+            {
+                nroGrupoPedido = long.Parse(this.Request.Params["numeroGrupo"]);
+            }
+
+            int success = 0;
+
+            if (usuario.liberaPedidos)
+            {
+                PedidoBL pedidoBL = new PedidoBL();
+                pedidoBL.LiberarPedidosGrupo(nroGrupoPedido, usuario.idUsuario);
+                success = 1;
+            }
+
+            var v = new { success = success };
+            String resultado = JsonConvert.SerializeObject(v);
+
+            return resultado;
+        }
+
+        public String AprobarPedidosGrupo()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPedidos;
+            long nroGrupoPedido = 0;
+            if (this.Request.Params["numeroGrupo"] == null || this.Request.Params["numeroGrupo"].Trim().Length == 0)
+            {
+                nroGrupoPedido = 0;
+            }
+            else
+            {
+                nroGrupoPedido = long.Parse(this.Request.Params["numeroGrupo"]);
+            }
+
+            int success = 0;
+
+            if (usuario.liberaPedidos)
+            {
+                PedidoBL pedidoBL = new PedidoBL();
+                pedidoBL.AprobarPedidosgrupo(nroGrupoPedido, usuario.idUsuario);
+                success = 1;
+            }
+
+            var v = new { success = success };
+            String resultado = JsonConvert.SerializeObject(v);
+
+            return resultado;
+        }
 
         public String ConsultarSiExistePedido()
         {
@@ -2297,6 +2380,7 @@ namespace Cotizador.Controllers
         [HttpGet]
         public ActionResult Load()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
             {
@@ -2304,13 +2388,231 @@ namespace Cotizador.Controllers
             }
             else
             {
-                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 if (!usuario.realizaCargaMasivaPedidos)
                 {
                     return RedirectToAction("Login", "Account");
                 }
             }
             ViewBag.numerosPedido = String.Empty;
+
+
+            //List<Guid> idsProducto = new List<Guid>();
+            //List<Pedido> pedidosSede = new List<Pedido>();
+            //List<Pedido> pedidoList = new List<Pedido>();
+            //PedidoBL bl = new PedidoBL();
+
+            //Pedido ped = new Pedido();
+            
+            //ped.idPedido = Guid.Parse("CA45607A-9BD3-4BEF-9D09-06CD300B42A6");
+            //pedidoList.Add(bl.GetPedido(ped, usuario));
+
+            //ped = new Pedido();
+            //ped.idPedido = Guid.Parse("F5661003-0FCE-43A4-8E31-1181D64B666C");
+            //pedidoList.Add(bl.GetPedido(ped, usuario));
+
+            //ped = new Pedido();
+            //ped.idPedido = Guid.Parse("843FB29D-902C-4946-8590-1A3D826F9C63");
+            //pedidoList.Add(bl.GetPedido(ped, usuario));
+
+            //ped = new Pedido();
+            //ped.idPedido = Guid.Parse("2F65C2C9-BC1A-4179-A8AB-2451DB352EE2");
+            //pedidoList.Add(bl.GetPedido(ped, usuario));
+
+            //ped = new Pedido();
+            //ped.idPedido = Guid.Parse("1A1C3D4B-7C59-4DCD-997A-25AC1A2C37B9");
+            //pedidoList.Add(bl.GetPedido(ped, usuario));
+
+            //ped = new Pedido();
+            //ped.idPedido = Guid.Parse("86972B6B-FB92-41C2-91AE-2C1064C9CFC5");
+            //pedidoList.Add(bl.GetPedido(ped, usuario));
+
+            //ped = new Pedido();
+            //ped.idPedido = Guid.Parse("6EA83190-8462-448E-8D52-72391EFFC9E4");
+            //pedidoList.Add(bl.GetPedido(ped, usuario));
+
+            //ped = new Pedido();
+            //ped.idPedido = Guid.Parse("036A1918-5902-4B92-B2F2-770BCDE29817");
+            //pedidoList.Add(bl.GetPedido(ped, usuario));
+
+            //ped = new Pedido();
+            //ped.idPedido = Guid.Parse("311A9DB5-E172-4D6A-ADCF-852F024D6B11");
+            //pedidoList.Add(bl.GetPedido(ped, usuario));
+
+            //ped = new Pedido();
+            //ped.idPedido = Guid.Parse("9A035C68-9F2A-488A-B3B0-E40E439C6632");
+            //pedidoList.Add(bl.GetPedido(ped, usuario));
+
+            //ped = new Pedido();
+            //ped.idPedido = Guid.Parse("AF794817-E1F9-4FF9-8FA5-E630EEC22584");
+            //pedidoList.Add(bl.GetPedido(ped, usuario));
+
+            //ped = new Pedido();
+            //ped.idPedido = Guid.Parse("E35FA87B-AF6B-4401-A5BB-E8023AD8A91C");
+            //pedidoList.Add(bl.GetPedido(ped, usuario));
+
+            //ped = new Pedido();
+            //ped.idPedido = Guid.Parse("7EC025C9-F069-4718-AF94-ED5BA2CB0D69");
+            //pedidoList.Add(bl.GetPedido(ped, usuario));
+
+            //ped = new Pedido();
+            //ped.idPedido = Guid.Parse("E39A3CDD-0498-441D-81A4-FBE7AD3C3698");
+            //pedidoList.Add(bl.GetPedido(ped, usuario));
+
+            //ped = new Pedido();
+            //ped.idPedido = Guid.Parse("72C5E8E8-7CEB-42FF-9AE3-B46C5F8D0162");
+            //pedidoList.Add(bl.GetPedido(ped, usuario));
+
+
+            //foreach (Pedido pedido in pedidoList)
+            //{
+            //    Pedido pedExists = pedidosSede.Where(p => p.ciudad.idCiudad.Equals(pedido.ciudad.idCiudad)).FirstOrDefault();
+            //    if (pedExists == null)
+            //    {
+            //        pedidosSede.Add(pedido);
+            //        foreach (PedidoDetalle det in pedido.pedidoDetalleList)
+            //        {
+            //            idsProducto.Add(det.producto.idProducto);
+            //        }
+            //    }
+            //    else
+            //    {
+
+            //        foreach (PedidoDetalle det in pedido.pedidoDetalleList)
+            //        {
+            //            PedidoDetalle detExists = pedExists.pedidoDetalleList.Where(d => d.producto.idProducto.Equals(det.producto.idProducto)).FirstOrDefault();
+            //            if (detExists == null)
+            //            {
+            //                detExists = det;
+            //                pedExists.pedidoDetalleList.Add(det);
+            //                idsProducto.Add(det.producto.idProducto);
+            //            }
+            //            else
+            //            {
+            //                detExists.cantidad = detExists.cantidad + det.cantidad;
+            //            }
+            //        }
+            //    }
+            //}
+
+            //idsProducto = idsProducto.Distinct().ToList();
+
+            //ProductoBL productoBl = new ProductoBL();
+            //List<RegistroCargaStock> stocks = productoBl.StockProductosCadaSede(idsProducto, usuario.idUsuario);
+
+            //List<Ciudad> sedes = new List<Ciudad>();
+            //List<List<StockPedidoShow>> tableStocks = new List<List<StockPedidoShow>>();
+            //List<StockPedidoShow> rowStocks = null;
+            //RegistroCargaStock anterior = null;
+            //StockPedidoShow cabezaFila = null;
+            //string unidadFila = "";
+
+            //foreach (RegistroCargaStock reg in stocks)
+            //{
+            //    if (stocks.ElementAt(0).producto.idProducto.Equals(reg.producto.idProducto))
+            //    {
+            //        sedes.Add(reg.ciudad);
+            //    }
+
+            //    if (anterior == null || !anterior.producto.idProducto.Equals(reg.producto.idProducto))
+            //    {
+            //        if (rowStocks != null)
+            //        {
+            //            cabezaFila.texto = cabezaFila.texto + " - " + unidadFila;
+            //            tableStocks.Add(rowStocks);
+            //        }
+            //        rowStocks = new List<StockPedidoShow>();
+            //        cabezaFila = new StockPedidoShow { texto = reg.producto.sku + " - " + reg.producto.descripcion, esStock = false };
+            //        rowStocks.Add(cabezaFila);
+            //    }
+
+
+            //    Pedido pedi = pedidosSede.Where(p => p.ciudad.idCiudad.Equals(reg.ciudad.idCiudad)).FirstOrDefault();
+            //    PedidoDetalle det = null;
+            //    if (pedi != null)
+            //    {
+            //        det = pedi.pedidoDetalleList.Where(d => d.producto.idProducto.Equals(reg.producto.idProducto)).FirstOrDefault();
+            //    }
+
+            //    int semaforoStock = 0;
+
+            //    string stockNro = "";
+
+            //    if (det != null)
+            //    {
+            //        unidadFila = det.unidad;
+            //        if (reg.stockNoDisponible)
+            //        {
+            //            stockNro = "No Registrado";
+            //        }
+            //        else
+            //        {
+            //            decimal stockPresentacion = 0;
+            //            decimal separadaPresentacion = 0;
+            //            decimal stockSeparado = 0;
+            //            switch (det.idProductoPresentacion)
+            //            {
+            //                case 0:
+            //                    stockPresentacion = reg.cantidadMpCalc;
+            //                    separadaPresentacion = reg.cantidadSeparadaMpCalc;
+            //                    break;
+            //                case 1:
+            //                    stockPresentacion = reg.cantidadAlternativaCalc;
+            //                    separadaPresentacion = reg.cantidadSeparadaAlternativaCalc;
+            //                    break;
+            //                case 2:
+            //                    stockPresentacion = reg.cantidadProveedorCalc;
+            //                    separadaPresentacion = reg.cantidadSeparadaProveedorCalc;
+            //                    break;
+            //            }
+
+            //            stockNro = stockPresentacion.ToString();
+            //            stockSeparado = separadaPresentacion - det.cantidad;
+            //            if (stockSeparado > 0)
+            //            {
+            //                stockNro = stockNro + " [" + stockSeparado.ToString() + "]";
+            //            }
+
+            //            if (stockPresentacion >= det.cantidad)
+            //            {
+            //                if (stockPresentacion >= separadaPresentacion)
+            //                {
+            //                    semaforoStock = 1;
+            //                }
+            //                else
+            //                {
+            //                    semaforoStock = 2;
+            //                }
+            //            }
+            //            else
+            //            {
+            //                semaforoStock = 3;
+            //            }
+            //        }
+
+            //    }
+
+            //    rowStocks.Add(new StockPedidoShow
+            //    {
+            //        texto = det != null ? det.cantidad.ToString() : "-",
+            //        esStock = det != null ? true : false,
+            //        textoStock = "STOCK: " + stockNro,
+            //        semaforoStock = semaforoStock
+            //    });
+
+            //    anterior = reg;
+            //}
+
+            //if (rowStocks != null)
+            //{
+            //    cabezaFila.texto = cabezaFila.texto + " - " + unidadFila;
+            //    tableStocks.Add(rowStocks);
+            //}
+
+            //ViewBag.numerosPedido = "423";
+            //ViewBag.numeroGrupo = 24;
+            //ViewBag.tableStocks = tableStocks;
+            //ViewBag.sedes = sedes;
+
             return View();
         }
 
@@ -2625,6 +2927,9 @@ namespace Cotizador.Controllers
                 String numerosPedido = String.Empty;
                 int contadorPedidos = 0;
 
+                List<Guid> idsProducto = new List<Guid>();
+                List<Pedido> pedidosSede = new List<Pedido>();
+                
                 foreach (Pedido pedido in pedidoList)
                 {
                     pedidoBL.InsertPedido(pedido);
@@ -2634,14 +2939,159 @@ namespace Cotizador.Controllers
                         numerosPedido = numerosPedido + "[Diferencia subtotal] ";
                     }
 
+                    Pedido pedExists = pedidosSede.Where(p => p.ciudad.idCiudad.Equals(pedido.ciudad.idCiudad)).FirstOrDefault();
+                    if (pedExists == null)
+                    {
+                        pedidosSede.Add(pedido);
+                        foreach (PedidoDetalle det in pedido.pedidoDetalleList)
+                        {
+                            idsProducto.Add(det.producto.idProducto);
+                        }
+                    }
+                    else
+                    {
+
+                        foreach (PedidoDetalle det in pedido.pedidoDetalleList)
+                        {
+                            PedidoDetalle detExists = pedExists.pedidoDetalleList.Where(d => d.producto.idProducto.Equals(det.producto.idProducto)).FirstOrDefault();
+                            if (detExists == null)
+                            {
+                                detExists = det;
+                                pedExists.pedidoDetalleList.Add(det);
+                                idsProducto.Add(det.producto.idProducto);
+                            }
+                            else
+                            {
+                                detExists.cantidad = detExists.cantidad + det.cantidad;
+                            }
+                        }
+                    }
                     numerosPedido = numerosPedido + ",";
 
                     contadorPedidos++;
 
                 }
 
-                ViewBag.numerosPedido = numerosPedido.Substring(0, numerosPedido.Length - 1);
+                idsProducto = idsProducto.Distinct().ToList();
+
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                
+                ProductoBL productoBl = new ProductoBL();
+                List<RegistroCargaStock> stocks = productoBl.StockProductosCadaSede(idsProducto, usuario.idUsuario);
+
+            List<Ciudad> sedes = new List<Ciudad>();
+            List<List<StockPedidoShow>> tableStocks = new List<List<StockPedidoShow>>();
+            List<StockPedidoShow> rowStocks = null;
+            RegistroCargaStock anterior = null;
+            StockPedidoShow cabezaFila = null;
+            string unidadFila = "";
+
+            foreach (RegistroCargaStock reg in stocks)
+            {
+                if (stocks.ElementAt(0).producto.idProducto.Equals(reg.producto.idProducto))
+                {
+                    sedes.Add(reg.ciudad);
+                }
+
+                if (anterior == null || !anterior.producto.idProducto.Equals(reg.producto.idProducto))
+                {
+                    if (rowStocks != null)
+                    {
+                        cabezaFila.texto = cabezaFila.texto + " - " + unidadFila;
+                        tableStocks.Add(rowStocks);
+                    }
+                    rowStocks = new List<StockPedidoShow>();
+                    cabezaFila = new StockPedidoShow { texto = reg.producto.sku + " - " + reg.producto.descripcion, esStock = false };
+                    rowStocks.Add(cabezaFila);
+                }
+
+
+                Pedido pedi = pedidosSede.Where(p => p.ciudad.idCiudad.Equals(reg.ciudad.idCiudad)).FirstOrDefault();
+                PedidoDetalle det = null;
+                if (pedi != null)
+                {
+                    det = pedi.pedidoDetalleList.Where(d => d.producto.idProducto.Equals(reg.producto.idProducto)).FirstOrDefault();
+                }
+
+                int semaforoStock = 0;
+
+                string stockNro = "";
+
+                if (det != null)
+                {
+                    unidadFila = det.unidad;
+                    if (reg.stockNoDisponible)
+                    {
+                        stockNro = "No Registrado";
+                    }
+                    else
+                    {
+                        decimal stockPresentacion = 0;
+                        decimal separadaPresentacion = 0;
+                        decimal stockSeparado = 0;
+                        switch (det.idProductoPresentacion)
+                        {
+                            case 0:
+                                stockPresentacion = reg.cantidadMpCalc;
+                                separadaPresentacion = reg.cantidadSeparadaMpCalc;
+                                break;
+                            case 1:
+                                stockPresentacion = reg.cantidadAlternativaCalc;
+                                separadaPresentacion = reg.cantidadSeparadaAlternativaCalc;
+                                break;
+                            case 2:
+                                stockPresentacion = reg.cantidadProveedorCalc;
+                                separadaPresentacion = reg.cantidadSeparadaProveedorCalc;
+                                break;
+                        }
+
+                        stockNro = stockPresentacion.ToString();
+                        stockSeparado = separadaPresentacion - det.cantidad;
+                        if (stockSeparado > 0)
+                        {
+                            stockNro = stockNro + " [" + stockSeparado.ToString() + "]";
+                        }
+
+                        if (stockPresentacion >= det.cantidad)
+                        {
+                            if (stockPresentacion >= separadaPresentacion)
+                            {
+                                semaforoStock = 1;
+                            }
+                            else
+                            {
+                                semaforoStock = 2;
+                            }
+                        }
+                        else
+                        {
+                            semaforoStock = 3;
+                        }
+                    }
+
+                }
+
+                rowStocks.Add(new StockPedidoShow
+                {
+                    texto = det != null ? det.cantidad.ToString() : "-",
+                    esStock = det != null ? true : false,
+                    textoStock = "STOCK: " + stockNro,
+                    semaforoStock = semaforoStock
+                });
+
+                anterior = reg;
+            }
+
+            if (rowStocks != null)
+            {
+                cabezaFila.texto = cabezaFila.texto + " - " + unidadFila;
+                tableStocks.Add(rowStocks);
+            }
+
+            ViewBag.numerosPedido = numerosPedido.Substring(0, numerosPedido.Length - 1);
                 ViewBag.numeroGrupo = numeroGrupo;
+                ViewBag.tableStocks = tableStocks;
+                ViewBag.sedes = sedes;
             /*}
             catch (Exception ex)
             {

@@ -4,7 +4,7 @@ jQuery(function ($) {
     var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la creación/edición; no se guardarán los cambios?';
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
     var TITLE_EXITO = 'Operación Realizada';
-
+    var ID_SEDE_TODOS = "00000000-0000-0000-0000-000000000000";
 
     /**
         * ######################## INICIO CONTROLES DE FECHAS
@@ -41,10 +41,22 @@ jQuery(function ($) {
 
     $(document).ready(function () {
 
+        if ($("#pagina").val() == 27) {
+            if ($('#idCiudadStock option').length > 3) {
+                $('#idCiudadStock').append('<option value = "' + ID_SEDE_TODOS + '" >TOTAL</option>');
+            }
+
+            $('#idCiudadStock').removeClass("form-control");
+            $('#idCiudadStock').addClass("selectCiudadStockProducto");  
+        }
+
         $("#btnBusqueda").click();
         //cargarChosenCliente();
         verificarSiExisteCliente();
     });
+
+    
+
 
     function verificarSiExisteCliente() {
         var id = $("#idProducto").val();
@@ -202,6 +214,91 @@ jQuery(function ($) {
     });
 
 
+    $('#idCiudadStock').change(function () {
+        mostrarStockProductosPagina();
+    });
+
+    function mostrarStockProductosPagina() {
+        var idCiudad = $('#idCiudadStock').val();
+        var idsProductos = "";
+
+
+        $("#tableProductos tbody tr[idProducto]").each(function () {
+            if (idsProductos != "") {
+                idsProductos = idsProductos + ";";
+            }
+            idsProductos = idsProductos + $(this).attr("idProducto");
+        });
+
+        if (idCiudad == "" || idsProductos == "") {
+            $("#tableProductos tbody tr .searchListStockUnidad").html("");
+            return;
+        }
+        $("#labelIdCiudadStock").prop("disabled", true);
+        $("#idCiudadStock").prop("disabled", true);
+        $.ajax({
+            url: "/Stock/GetStockProductos",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCiudad: idCiudad,
+                ids: idsProductos
+            },
+            error: function () {
+                
+                $("#labelIdCiudadStock").prop("disabled", false);
+                $("#idCiudadStock").prop("disabled", false);
+            },
+            success: function (lista) {
+                $("#labelIdCiudadStock").prop("disabled", false);
+                $("#idCiudadStock").prop("disabled", false);
+                var stock = 0;
+                var stockSeparado = 0;
+                var noDisponible = 0;
+                for (var i = 0; i < lista.length; i++) {
+                    idProductoPresentacion = $("#tableDetallePedido tr[sku='" + lista[i].producto.sku + "']").attr("idProductoPresentacion");
+
+                    $("#tableProductos tbody tr[idProducto='" + lista[i].producto.idProducto + "'] .searchListStockUnidad").each(function () {
+                        idProductoPresentacion = $(this).attr("idPresentacion");
+
+                        stock = 0;
+                        stockSeparado = 0;
+
+                        if (lista[i].stockNoDisponible) {
+                            $(this).html("Stock No Disponible");
+                        } else {
+                            if (idProductoPresentacion == "0") {
+                                stock = lista[i].cantidadMpCalc;
+                                stockSeparado = lista[i].cantidadSeparadaMpCalc;
+                            }
+                            if (idProductoPresentacion == "1") {
+                                stock = lista[i].cantidadAlternativaCalc;
+                                stockSeparado = lista[i].cantidadSeparadaAlternativaCalc;
+                            }
+                            if (idProductoPresentacion == "2") {
+                                stock = lista[i].cantidadProveedorCalc;
+                                stockSeparado = lista[i].cantidadSeparadaProveedorCalc;
+                            }
+
+                            if (stockSeparado > 0) {
+                                $(this).html("STOCK: " + stock + " [-" + stockSeparado + "]");
+                            } else {
+                                $(this).html("STOCK: " + stock);
+                            }
+                        }
+                    });
+                }
+
+
+            }
+        });
+    }
+
+    $(document).on('click', "#tableProductos a.footable-page-link", function () {
+        setTimeout(function () {
+            mostrarStockProductosPagina();
+        }, 500);
+    });
 
     function crearProducto() {
         if (!validacionDatosProducto())
@@ -499,7 +596,7 @@ jQuery(function ($) {
     });
 
     $("#producto_equivalenciaUnidadPedidoProveedor").change(function () {
-        changeInputInt("equivalenciaUnidadPedidoProveedor", $("#producto_equivalenciaUnidadPedidoProveedor").val());
+        changeInputDecimal("equivalenciaUnidadPedidoProveedor", $("#producto_equivalenciaUnidadPedidoProveedor").val());
     });
 
     $("#producto_cantidadMaximaPedidoRestringido").change(function () {
@@ -864,7 +961,6 @@ jQuery(function ($) {
                 $("#verCantidadMaximaPedidoRestringido").html(producto.cantidadMaximaPedidoRestringido);
 
                 $(".verModalStockProducto").attr("sku", producto.sku);
-                
 
                 $("#modalVerProducto").modal('show');        
             }
@@ -1134,7 +1230,7 @@ jQuery(function ($) {
                         }
                     }
 
-                    var ItemRow = '<tr data-expanded="true">' +
+                    var ItemRow = '<tr data-expanded="true" idProducto="' + list[i].idProducto + '">' +
                         '<td>  ' + list[i].idProducto + '</td>' +
                         '<td>  ' + list[i].sku + descontinuadoHTML + '  </td>' +
                         '<td>  ' + list[i].skuProveedor + '  </td>' +
@@ -1142,10 +1238,10 @@ jQuery(function ($) {
                         '<td>  ' + list[i].familia + '</td>' +
                         '<td>  ' + list[i].tipoProductoToString + '</td>' +
                         '<td>  ' + list[i].descripcion + '  </td>' +
-                        '<td>  ' + list[i].unidad + '  </td>' +
-                        '<td>  ' + list[i].unidad_alternativa + '  </td>' +
+                        '<td>  ' + list[i].unidad + '<br><span class="searchListStockUnidad" idPresentacion="0"></span>' +'  </td>' +
+                        '<td>  ' + list[i].unidad_alternativa + '<br><span class="searchListStockUnidad" idPresentacion="1"></span>' + '  </td>' +
                         '<td>  ' + list[i].equivalenciaAlternativa + '</td>' +
-                        '<td>  ' + list[i].unidadProveedor + '</td>' +
+                        '<td>  ' + list[i].unidadProveedor + '<br><span class="searchListStockUnidad" idPresentacion="2"></span>' + '</td>' +
                         '<td>  ' + list[i].equivalenciaProveedor + '</td>' +
                         '<td>  ' + Number(list[i].precioSinIgv).toFixed(cantidadCuatroDecimales) + '  </td>' +
                         '<td>  ' + Number(list[i].precioProvinciaSinIgv).toFixed(cantidadCuatroDecimales) + '  </td>' +
@@ -1159,7 +1255,7 @@ jQuery(function ($) {
                         '</tr>';
 
                     $("#tableProductos").append(ItemRow);
-
+                    $("#idCiudadStock").val("");
                 }
 
                 /*

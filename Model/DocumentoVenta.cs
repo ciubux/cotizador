@@ -348,10 +348,13 @@ namespace Model
             [Display(Name = "BONIFICACIÓN")]
             Bonificacion = 8,*/
             [Display(Name = "DISMINUCIÓN EN EL VALOR")]
-            DisminucionValor = 9
+            DisminucionValor = 9,
                 /*,
             [Display(Name = "OTROS CONCEPTOS")]
             OtrosConceptos = 10,*/
+
+            [Display(Name = "CORRECCIÓN DE FECHA DE PAGO")]
+            CorreccionFechaPago = 13
         };
         /*01 – Intereses por mora 02 – Aumento de valor 03 – Penalidades*/
 

@@ -21,7 +21,9 @@ jQuery(function ($) {
         obtenerConstantes();
         cargarChosenCliente();
         $("#btnBusqueda").click();
+
         calcularFechaVencimiento();
+
     });
 
     window.onafterprint = function () {
@@ -223,6 +225,7 @@ jQuery(function ($) {
     var fechaEmisionHasta = $("#fechaEmisionHastatmp").val();
     $("#documentoVenta_fechaEmisionHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEmisionHasta);
 
+    $("#txtNCAjustesFecha").datepicker({ dateFormat: "dd/mm/yy", minDate: 0 });
 
     var documentoVenta_fechaEmision = $("#documentoVenta_fechaEmisiontmp").val();
     $("#documentoVenta_fechaEmision").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", documentoVenta_fechaEmision);
@@ -581,6 +584,7 @@ jQuery(function ($) {
         $("#serieNumeroFacturaParaNotaCredito").val($("#vpSERIE_CORRELATIVO").html());
         $("#modalGenerarNotaCredito").modal();
         $("#divProductoDescuento").hide();
+        $("#divNCAJustes").hide();
         //modalAnulacion.modal();
     });
 
@@ -1348,7 +1352,15 @@ jQuery(function ($) {
         else {
             $("#divProductoDescuento").hide();
         }
+
+        if (tipoNotaCredito == TIPO_NOTA_CREDITO_AJUSTES) {
+            $("#divNCAJustes").show();
+        }
+        else {
+            $("#divNCAJustes").hide();
+        }
     });
+
 
 
     $("#btnContinuarGenerandoNotaCredito").click(function () {
@@ -1371,6 +1383,76 @@ jQuery(function ($) {
             return false;
         }
 
+        if (tipoNotaCredito == TIPO_NOTA_CREDITO_AJUSTES) {
+            var sustento = $("#txtNCAjustesSustento").val().trim();
+            var fecha = $("#txtNCAjustesFecha").val();
+
+            if (sustento.length  < 25) {
+                mostrarMensajeErrorProceso("El sustento debe contener al menos 25 caracteres.");
+                $("#btnContinuarGenerandoNotaCredito").removeAttr("disabled");
+                $("#btnCancelarNotaCredito").removeAttr("disabled");
+                return false;
+            }
+
+            if (fecha == "") {
+                mostrarMensajeErrorProceso("Debe indicar una fecha.");
+                $("#btnContinuarGenerandoNotaCredito").removeAttr("disabled");
+                $("#btnCancelarNotaCredito").removeAttr("disabled");
+                return false;
+            }
+
+            $('body').loadingModal({
+                text: 'Creando Nota de Crédito...'
+            });
+            $('body').loadingModal('show');
+
+
+            $.ajax({
+                url: "/NotaCredito/CrearNotaCreditoAjustes",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idDocumentoVenta: idDocumentoVenta,
+                    tipoNotaCredito: tipoNotaCredito,
+                    fechaVencimiento: fecha,
+                    sustento: sustento
+                },
+                error: function (error) {
+                    mostrarMensajeErrorProceso(MENSAJE_ERROR);
+                    $("#btnContinuarGenerandoNotaCredito").removeAttr("disabled");
+                    $("#btnCancelarNotaCredito").removeAttr("disabled");
+                },
+                success: function (resultado) {
+
+                    $('body').loadingModal('hide')
+
+                    if (resultado.CPE_RESPUESTA_BE.CODIGO == "001") {
+                        $.alert({
+                            //icon: 'fa fa-warning',
+                            title: TITLE_EXITO,
+                            content: 'Se generó la Nota de Crédito ' + resultado.serieNumero + '.',
+                            type: 'green',
+                            buttons: {
+                                OK: function () {
+                                    window.location = '/Factura/Index';
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        mostrarMensajeErrorProceso(MENSAJE_ERROR + ".\n" + "Detalle Error: " + resultado.CPE_RESPUESTA_BE.DETALLE);
+                        //$("#btnAceptarFacturarPedido").removeAttr("disabled");
+                        activarBotonesConfirmarNotasCredito();
+                    }
+
+                    
+                }
+            });
+
+            return false;
+        }
+
+        
         var yourWindow;
         $.ajax({
             url: "/NotaCredito/iniciarCreacionNotaCredito",

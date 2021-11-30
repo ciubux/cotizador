@@ -132,7 +132,7 @@ namespace Model
         public int equivalenciaProveedor { get; set; }
 
         [Display(Name = "Equivalencia UP/UFP:")]
-        public int equivalenciaUnidadPedidoProveedor { get; set; }
+        public decimal equivalenciaUnidadPedidoProveedor { get; set; }
 
         [Display(Name = "Equivalencia Und. Alt. / Und. Conteo:")]
         ///<summary>
