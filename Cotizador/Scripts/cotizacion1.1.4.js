@@ -1159,7 +1159,11 @@ jQuery(function ($) {
 
                     var htmlVigenciaCorregida = '';
                     if (precioListaList[i].vigenciaCorregida > 0) {
-                        htmlVigenciaCorregida = '<br/><label class="lbl-vigencia-corregida">Corregido (' + precioListaList[i].vigenciaCorregida + ')</label>';
+                        var tooltipVigenciaCorregida = "";
+                        if (precioListaList[i].metaDataVigenciaCorregida != null) {
+                            tooltipVigenciaCorregida = precioListaList[i].metaDataVigenciaCorregida.descripcionCorta;
+                        }
+                        htmlVigenciaCorregida = '<br/><label class="lbl-vigencia-corregida" title="' + tooltipVigenciaCorregida + '">Corregido (' + precioListaList[i].vigenciaCorregida + ')</label>';
                     }
 
                     var simboloMoneda = precioListaList[i].moneda.simbolo;

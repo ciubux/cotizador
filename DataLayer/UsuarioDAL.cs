@@ -531,6 +531,25 @@ namespace DataLayer
                 }
             }
 
+
+            if (usuario.idUsuario != null && usuario.idUsuario != Guid.Empty)
+            {
+                DataTable dataTableProductosCargos = dataSet.Tables[11];
+                Constantes.TIPO_CAMBIO_VIGENCIA_PRECIO_LIST = new List<MetaDataZAS>();
+
+                foreach (DataRow row in dataTableProductosCargos.Rows)
+                {
+                    MetaDataZAS obj = new MetaDataZAS();
+                    obj.codigo = Converter.GetString(row, "codigo");
+                    obj.valor = Converter.GetString(row, "valor");
+                    obj.descripcionCorta = Converter.GetString(row, "descripcion_corta");
+                    Constantes.TIPO_CAMBIO_VIGENCIA_PRECIO_LIST.Add(obj);
+                }
+            }
+
+            
+
+
             AlertaValidacionDAL alertaDal = new AlertaValidacionDAL();
             usuario.alertasList = alertaDal.getAlertasPorUsuario(usuario);
 

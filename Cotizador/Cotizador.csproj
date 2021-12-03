@@ -417,6 +417,7 @@
     <Content Include="images\clean.png" />
     <Content Include="images\deshabilitado_label.png" />
     <Content Include="images\download.png" />
+    <Content Include="images\edit_icon_32.png" />
     <Content Include="images\equis.png" />
     <Content Include="images\etiqueta-de-precio-en-dolares.png" />
     <Content Include="images\excel.png" />

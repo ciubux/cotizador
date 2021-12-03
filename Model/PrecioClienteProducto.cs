@@ -61,6 +61,12 @@ namespace Model
         public bool estadoCanasta { get; set; }
 
         public GrupoCliente grupoCliente { get; set; }
+
+        public MetaDataZAS metaDataVigenciaCorregida { 
+            get {
+                return Constantes.TIPO_CAMBIO_VIGENCIA_PRECIO_LIST != null ? Constantes.TIPO_CAMBIO_VIGENCIA_PRECIO_LIST.Where(t => t.valor.Equals(this.vigenciaCorregida.ToString())).FirstOrDefault() : null;
+            } 
+        }
         /*    public String nombreVista
             {
                 get { return codigo + "(" + nombre + ")"; }

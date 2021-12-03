@@ -174,7 +174,7 @@ namespace cotizadorPDF
                     String presentacion = det.unidad; //Se muestra la unidad seleccionada y que se encuentra en el detalle
                     String imagen = "";
                     String precioUnitarioAnterior = "";
-                    String precioUnitarioNuevo = Constantes.SIMBOLO_SOL + " " + String.Format(Constantes.formatoDecimalesPrecioNeto, det.precioUnitario);
+                    String precioUnitarioNuevo = cot.moneda.simbolo + " " + String.Format(Constantes.formatoDecimalesPrecioNeto, det.precioUnitario);
 
 
                     String cantidad = "";
@@ -183,7 +183,7 @@ namespace cotizadorPDF
                     if (cot.considerarCantidades != Cotizacion.OpcionesConsiderarCantidades.Observaciones)
                     {
                         cantidad = det.cantidad.ToString();
-                        subtotal = Constantes.SIMBOLO_SOL + " " + String.Format(Constantes.formatoDosDecimales, det.subTotal);
+                        subtotal = cot.moneda.simbolo + " " + String.Format(Constantes.formatoDosDecimales, det.subTotal);
 
                         if(cot.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Ambos)
                         {
@@ -199,7 +199,7 @@ namespace cotizadorPDF
 
                         observacionesDetalle = observacionesDetalle + cantidad;
 
-                        subtotal = Constantes.SIMBOLO_SOL + " " + String.Format(Constantes.formatoDosDecimales, det.subTotal);
+                        subtotal = cot.moneda.simbolo + " " + String.Format(Constantes.formatoDosDecimales, det.subTotal);
                     }
 
 
@@ -385,15 +385,15 @@ namespace cotizadorPDF
                     dataTable2.Columns.Add("Descripcion");
                     dataTable2.Columns.Add("monto");
 
-                    String subtotal = "Subtotal: " + Constantes.SIMBOLO_SOL + ": ";
+                    String subtotal = "Subtotal: " + cot.moneda.simbolo + ": ";
                     String montoSubtotal = String.Format(Constantes.formatoDosDecimales, cot.montoSubTotal);
                     dataTable2.Rows.Add(new object[] { subtotal, montoSubtotal });
 
-                    String igv = "IGV 18%: " + Constantes.SIMBOLO_SOL + ": ";
+                    String igv = "IGV 18%: " + cot.moneda.simbolo + ": ";
                     String montoIGV = String.Format(Constantes.formatoDosDecimales, cot.montoIGV);
                     dataTable2.Rows.Add(new object[] { igv, montoIGV });
 
-                    String total = "Total: " + Constantes.SIMBOLO_SOL + ": ";
+                    String total = "Total: " + cot.moneda.simbolo + ": ";
                     String montoTotal = String.Format(Constantes.formatoDosDecimales, cot.montoTotal);
                     dataTable2.Rows.Add(new object[] { total, montoTotal });
 
