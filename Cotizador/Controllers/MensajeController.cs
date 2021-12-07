@@ -323,12 +323,29 @@ namespace Cotizador.Controllers
 
        
 
-            public String ShowMensaje()
+        public String ShowMensaje()
         {
             Guid idUsuario;
             idUsuario = Guid.Parse(Request["idUsuario"].ToString());
             MensajeBL bL = new MensajeBL();
             List<Mensaje> list = bL.getMensajes(idUsuario);
+
+            if (!idUsuario.Equals(Guid.Empty))
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                DateTime fechaLastGet = (DateTime) this.Session["lastget_alertavalidacion"];
+
+                TimeSpan ts = DateTime.Now - fechaLastGet;
+
+                if (ts.TotalMinutes > 10)
+                {
+                    AlertaValidacionBL alertaBl = new AlertaValidacionBL();
+                    usuario.alertasList = alertaBl.getAlertasUsuario(usuario);
+                    this.Session[Constantes.VAR_SESSION_USUARIO] = usuario;
+                    this.Session["lastget_alertavalidacion"] = DateTime.Now;
+                }
+            }
+
             return JsonConvert.SerializeObject(list);
         }
 

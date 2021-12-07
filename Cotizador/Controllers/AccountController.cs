@@ -92,6 +92,7 @@ namespace Cotizador.Controllers
             if (result)
                 signInStatus = SignInStatus.Success;
 
+            this.Session["lastget_alertavalidacion"] = DateTime.Now;
             switch (signInStatus)
             {
                 case SignInStatus.Success:
