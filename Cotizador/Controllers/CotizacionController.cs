@@ -67,7 +67,7 @@ namespace Cotizador.Controllers
             cotizacionTmp.usuario = (Usuario)this.Session["usuario"];
             cotizacionTmp.usuarioBusqueda = new Usuario { idUsuario = Guid.Empty };
             cotizacionTmp.aplicaSedes = false;
-            cotizacionTmp.observacionesFijas = "* Entrega sujeta a confirmación de disponibilidad luego de recibido el pedido u orden de compra.";
+            cotizacionTmp.observacionesFijas = "";
             this.CotizacionSession = cotizacionTmp;
             this.Session[Constantes.VAR_SESSION_COTIZACION_LISTA] = new List<Cotizacion>();
         }
@@ -211,7 +211,12 @@ namespace Cotizador.Controllers
 
             ParametroBL parametroBL = new ParametroBL();
             string ajusteDefecto = parametroBL.getParametro("COTIZACION_AJUSTAR_PRECIO_UNIDADES_MENORES");
-            if(ajusteDefecto.Trim().Equals("SI"))
+            
+            string obsProductosNoStockeables = parametroBL.getParametro("COTIZACION_OBSERVACION_PRODUCTOS_NO_STOCKEABLES");
+            string obsProductosEntrega = parametroBL.getParametro("COTIZACION_OBSERVACION_DISPONIBILIDAD_ENTREGA");
+
+            cotizacionTmp.observacionesFijas = "* " + obsProductosEntrega + "\n" + "* " + obsProductosNoStockeables;
+            if (ajusteDefecto.Trim().Equals("SI"))
             {
                 cotizacionTmp.ajusteCalculoPrecios = true;
             }
@@ -220,7 +225,7 @@ namespace Cotizador.Controllers
             cotizacionTmp.considerarCantidades = Cotizacion.OpcionesConsiderarCantidades.Observaciones;
             Usuario usuario = (Usuario)this.Session["usuario"];
             cotizacionTmp.usuario = usuario;
-            cotizacionTmp.observaciones = Constantes.OBSERVACION_COTIZACION_D;
+            cotizacionTmp.observaciones = "";
             cotizacionTmp.incluidoIGV = false;
             cotizacionTmp.aplicaSedes = false;
             cotizacionTmp.seguimientoCotizacion = new SeguimientoCotizacion();
@@ -550,6 +555,15 @@ namespace Cotizador.Controllers
         {
             Cotizacion cotizacion = this.CotizacionSession;
             cotizacion.observaciones = this.Request.Params["observaciones"];
+            this.CotizacionSession = cotizacion;
+        }
+        public void updateObservacionesFijas()
+        {
+            Cotizacion cotizacion = this.CotizacionSession;
+            if (cotizacion.usuario.apruebaCotizaciones)
+            {
+                cotizacion.observacionesFijas = this.Request.Params["observaciones"];
+            }
             this.CotizacionSession = cotizacion;
         }
 

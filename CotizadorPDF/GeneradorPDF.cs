@@ -433,7 +433,8 @@ namespace cotizadorPDF
                     xPage2 = margenLeft;
                 }
 
-                String observaciones = cot.observaciones == null ? String.Empty : cot.observaciones;
+                String observaciones = cot.observacionesFijas == null ? String.Empty : cot.observacionesFijas;
+                observaciones = observaciones + "\n" + (cot.observaciones == null ? String.Empty : cot.observaciones);
                 string[] stringSeparators = new string[] { "\n" };
                 string[] lines = observaciones.Split(stringSeparators, StringSplitOptions.None);
 
@@ -509,10 +510,6 @@ namespace cotizadorPDF
                 }
 
                 y = y + sepLine;
-
-                sectionObervaciones.Canvas.DrawString("* Entrega sujeta a confirmación de disponibilidad luego de recibido el pedido u orden de compra.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
-                y = y + sepLine;
-
                
                 foreach (string line in lines)
                 {

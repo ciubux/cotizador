@@ -3380,6 +3380,19 @@ jQuery(function ($) {
         });
     });
 
+    $("#observacionesFijas").change(function () {
+
+        $.ajax({
+            url: "/Cotizacion/updateObservacionesFijas",
+            type: 'POST',
+            data: {
+                observaciones: $("#observacionesFijas").val()
+            },
+            success: function () { }
+        });
+    });
+
+    
     
 
     //Mantener en Session cambio de Seleccion de Mostrar Proveedor

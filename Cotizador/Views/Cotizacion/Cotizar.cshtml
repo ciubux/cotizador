@@ -689,7 +689,14 @@
         <div class="form-group">
             <label for="observacionesFijas" class="control-label col-xs-2">Observaciones Fijas:</label>
             <div class="col-xs-10">
-                <textarea rows="4" cols="100" style="min-width: 100%; margin-bottom: 10px;" id="observacionesFijas" readonly name="observacionesFijas">@cotizacion.observacionesFijas</textarea>
+                @if (cotizacion.usuario.apruebaCotizaciones)
+                {
+                    <textarea rows="4" cols="100" maxlength="500" style="min-width: 100%; margin-bottom: 10px;" id="observacionesFijas" name="observacionesFijas">@cotizacion.observacionesFijas</textarea>
+                }
+                else
+                {
+                    <textarea rows="4" cols="100" maxlength="500" style="min-width: 100%; margin-bottom: 10px;" id="observacionesFijas" readonly name="observacionesFijas">@cotizacion.observacionesFijas</textarea>
+                }
             </div>
         </div>
 

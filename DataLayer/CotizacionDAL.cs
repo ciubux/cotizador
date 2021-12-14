@@ -62,6 +62,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "igv", cotizacion.igv);
             InputParameterAdd.Decimal(objCommand, "total", cotizacion.montoTotal);
             InputParameterAdd.Varchar(objCommand, "observaciones", cotizacion.observaciones);
+            InputParameterAdd.Varchar(objCommand, "observacionesFijas", cotizacion.observacionesFijas);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "contacto", cotizacion.contacto);
             InputParameterAdd.Bit(objCommand, "esPagoContado", cotizacion.esPagoContado);
@@ -132,6 +133,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "igv", cotizacion.igv);
             InputParameterAdd.Decimal(objCommand, "total", cotizacion.montoTotal);
             InputParameterAdd.Varchar(objCommand, "observaciones", cotizacion.observaciones);
+            InputParameterAdd.Varchar(objCommand, "observacionesFijas", cotizacion.observacionesFijas);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "contacto", cotizacion.contacto);
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
@@ -270,6 +272,7 @@ namespace DataLayer
                 cotizacion.igv = Converter.GetDecimal(row, "igv");
                 cotizacion.montoTotal = Converter.GetDecimal(row, "total");
                 cotizacion.observaciones = Converter.GetString(row, "observaciones");
+                cotizacion.observacionesFijas = Converter.GetString(row, "observaciones_fijas");
                 cotizacion.mostrarCodigoProveedor = Converter.GetBool(row, "mostrar_codigo_proveedor");
                 cotizacion.contacto = Converter.GetString(row, "contacto");
                 cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacion.montoTotal / (1 + cotizacion.igv)));
