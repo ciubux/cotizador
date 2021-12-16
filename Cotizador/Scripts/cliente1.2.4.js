@@ -237,7 +237,18 @@ jQuery(function ($) {
         }
 
 
-                        
+        if (emailRecepcionFacturas.trim().length > 0 && emailRecepcionFacturas.trim().length < 5) {
+            $.alert({
+                title: "Validación",
+                type: 'orange',
+                content: "Debe ingresar un email de recepción de facturas válido o dejar el campo vacío.",
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            $("#direccionEntrega_emailRecepcionFacturas").focus();
+            return;
+        }         
 
         var row = $modal.data('row'),
             values = {
@@ -973,19 +984,9 @@ jQuery(function ($) {
                     }
                 });
             }
-            /*
-            if ($("#cliente_correoEnvioFactura").val().trim().length < 8) {
-                $.alert({
-                    title: "Correo Electrónico Inválido",
-                    type: 'orange',
-                    content: 'Se debe agregar el correo electrónico para el envío de factura',
-                    buttons: {
-                        OK: function () { $('#cliente_correoEnvioFactura').focus(); }
-                    }
-                });
 
-                return false;
-            }*/
+
+            
 
             if ($("#cliente_direccionDomicilioLegalSunat").val().length > 120) {
                 $.alert({
@@ -1036,6 +1037,22 @@ jQuery(function ($) {
                 return false;
             }
         }
+
+
+
+        if ($("#cliente_correoEnvioFactura").val().trim().length > 0 && $("#cliente_correoEnvioFactura").val().trim().length < 5) {
+            $.alert({
+                title: "Correo Electrónico Inválido",
+                type: 'orange',
+                content: 'Debe ingresar un correo electrónico válido el envío de factura o deje el campo vacío.',
+                buttons: {
+                    OK: function () { $('#cliente_correoEnvioFactura').focus(); }
+                }
+            });
+
+            return false;
+        }
+
 
         if ($("#plazoCreditoSolicitado").is(':enabled')) {
 

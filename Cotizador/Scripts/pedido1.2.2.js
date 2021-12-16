@@ -3083,7 +3083,7 @@ jQuery(function ($) {
 
                 $("#tableDetallePedido > tbody").empty();
 
-                FooTable.init('#tableDetallePedido');
+                
 
                 $("#formVerGuiasRemision").html("");
                 $("#formVerNotasIngreso").html("");
@@ -3215,6 +3215,7 @@ jQuery(function ($) {
                         '</tr>';
                 }
 
+                FooTable.init('#tableDetallePedido');
 
                 $("#spnUtilidad").html(pedido.utilidadVisible.toFixed(cantidadDecimales) + " (" + pedido.margenVisible.toFixed(cantidadDecimales) + "%)");
                 if (tieneCostoFlete) {
