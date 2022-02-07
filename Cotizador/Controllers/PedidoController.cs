@@ -958,9 +958,11 @@ namespace Cotizador.Controllers
             try
             {
                 String data = this.Request.Params["data[q]"];
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
                 ClienteBL clienteBL = new ClienteBL();
                 Pedido pedido = this.PedidoSession;
-                return clienteBL.getCLientesBusqueda(data, pedido.ciudad.idCiudad, true);
+                return clienteBL.getCLientesBusqueda(data, pedido.ciudad.idCiudad, usuario.idUsuario, true);
             }
             catch (Exception e)
             {
@@ -1005,6 +1007,7 @@ namespace Cotizador.Controllers
                     pedido.ubigeoEntrega = new Ubigeo();
                     pedido.ubigeoEntrega.Id = Constantes.UBIGEO_VACIO;
 
+                    pedido.facturaUnica = pedido.cliente.facturaUnica;
                 
                 }
                 this.PedidoSession = pedido;
@@ -1635,6 +1638,21 @@ namespace Cotizador.Controllers
             return "{\"textoCondicionesPago\":\"" + pedido.textoCondicionesPago + "\"}";
         }
 
+        public String ChangeFacturaUnica()
+        {
+            Pedido pedido = this.PedidoSession;
+            try
+            {
+                pedido.facturaUnica = Int32.Parse(this.Request.Params["facturaUnica"]) == 1;
+            }
+            catch (Exception ex)
+            {
+            }
+            this.PedidoSession = pedido;
+
+            return "{\"success\":\" 1\"}";
+        }
+
 
         #endregion
 
@@ -1685,6 +1703,8 @@ namespace Cotizador.Controllers
             pedido.observacionesGuiaRemision = this.Request.Params["observacionesGuiaRemision"];
             pedido.observacionesFactura = this.Request.Params["observacionesFactura"];
             pedido.numeroGrupoPedido = Int32.Parse(this.Request.Params["pedidoNumeroGrupo"]);
+            pedido.facturaUnica = Int32.Parse(this.Request.Params["facturaUnica"]) == 1 ? true : false;
+
             if (Logueado.modificaPedidoFechaEntregaExtendida) { 
                 if (this.Request.Params["fechaEntregaExtendida"] == null || this.Request.Params["fechaEntregaExtendida"].Equals(""))
                 {
@@ -2132,6 +2152,7 @@ namespace Cotizador.Controllers
 
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPedidos;
             long nroGrupoPedido = 0;
+            
             if (this.Request.Params["numeroGrupo"] == null || this.Request.Params["numeroGrupo"].Trim().Length == 0)
             {
                 nroGrupoPedido = 0;
@@ -2142,15 +2163,19 @@ namespace Cotizador.Controllers
             }
 
             int success = 0;
+            int cantidadGrupo = 0;
+            int cantidadAplicados = 0;
 
             if (usuario.liberaPedidos)
             {
                 PedidoBL pedidoBL = new PedidoBL();
-                pedidoBL.LiberarPedidosGrupo(nroGrupoPedido, usuario.idUsuario);
+                List<int> results = pedidoBL.LiberarPedidosGrupo(nroGrupoPedido, usuario.idUsuario);
+                cantidadGrupo = results.ElementAt(0);
+                cantidadAplicados = results.ElementAt(1);
                 success = 1;
             }
 
-            var v = new { success = success };
+            var v = new { success = success, cantidadGrupo = cantidadGrupo, cantidadAplicados = cantidadAplicados };
             String resultado = JsonConvert.SerializeObject(v);
 
             return resultado;
@@ -2172,15 +2197,19 @@ namespace Cotizador.Controllers
             }
 
             int success = 0;
+            int cantidadGrupo = 0;
+            int cantidadAplicados = 0;
 
             if (usuario.liberaPedidos)
             {
                 PedidoBL pedidoBL = new PedidoBL();
-                pedidoBL.AprobarPedidosgrupo(nroGrupoPedido, usuario.idUsuario);
+                List<int> results = pedidoBL.AprobarPedidosgrupo(nroGrupoPedido, usuario.idUsuario);
+                cantidadGrupo = results.ElementAt(0);
+                cantidadAplicados = results.ElementAt(1);
                 success = 1;
             }
 
-            var v = new { success = success };
+            var v = new { success = success, cantidadGrupo = cantidadGrupo, cantidadAplicados = cantidadAplicados };
             String resultado = JsonConvert.SerializeObject(v);
 
             return resultado;

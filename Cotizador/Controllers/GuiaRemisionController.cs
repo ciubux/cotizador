@@ -54,7 +54,9 @@ namespace Cotizador.Controllers
             String data = this.Request.Params["data[q]"];
             ClienteBL clienteBL = new ClienteBL();
             GuiaRemision guiaRemision = this.GuiaRemisionSession;
-            return clienteBL.getCLientesBusqueda(data, guiaRemision.ciudadOrigen.idCiudad);
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            return clienteBL.getCLientesBusqueda(data, guiaRemision.ciudadOrigen.idCiudad, usuario.idUsuario);
         }
 
         public String SearchClientesFactura()
@@ -62,7 +64,9 @@ namespace Cotizador.Controllers
             String data = this.Request.Params["data[q]"];
             ClienteBL clienteBL = new ClienteBL();
             Ciudad ciudad = (Ciudad)this.Session["s_cambioclientefactura_ciudad"];
-            return clienteBL.getCLientesBusqueda(data, ciudad.idCiudad);
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            return clienteBL.getCLientesBusqueda(data, ciudad.idCiudad, usuario.idUsuario);
         }
 
 

@@ -79,12 +79,14 @@ namespace DataLayer
         }
 
 
-        public List<GrupoCliente> getGruposCliente()
+        public List<GrupoCliente> getGruposCliente(Guid idUsuario)
         {
             var objCommand = GetSqlCommand("ps_gruposCliente");
             //InputParameterAdd.Guid(objCommand, "idGrupo", idGrupo);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             DataTable dataTable = Execute(objCommand);
             List<GrupoCliente> grupoClienteList = new List<GrupoCliente>();
+            
 
             foreach (DataRow row in dataTable.Rows)
             {
@@ -109,6 +111,7 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_findGruposCliente");
             InputParameterAdd.VarcharEmpty(objCommand, "codigo", objSearch.codigo);
             InputParameterAdd.Guid(objCommand, "idCiudad", objSearch.ciudad.idCiudad);
+            InputParameterAdd.Guid(objCommand, "idUsuario", objSearch.usuario.idUsuario);
             InputParameterAdd.VarcharEmpty(objCommand, "grupo", objSearch.nombre);
             InputParameterAdd.Int(objCommand, "sinPlazoCreditoAprobado", objSearch.sinPlazoCreditoAprobado ? 1 : 0);
             InputParameterAdd.Int(objCommand, "estado", objSearch.Estado);

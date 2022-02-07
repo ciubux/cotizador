@@ -14,6 +14,11 @@ namespace Model
             this.permisoList = new List<Permiso>();
         }
 
+        public string codigoEmpresa { get; set; }
+        public string razonSocialEmpresa { get; set; }
+        public string urlEmpresa { get; set; }
+
+
         public Guid idUsuario { get; set; }
         /*DATOS*/
         [Display(Name = "Email:")]
@@ -96,7 +101,8 @@ namespace Model
         {
             try
             {
-                return this.permisoList.Where(item => item.idPermiso.Equals(idPermiso)).FirstOrDefault().byRol;
+                Permiso p = this.permisoList.Where(item => item.idPermiso.Equals(idPermiso)).FirstOrDefault();
+                return p == null ? false : p.byRol;
             }
             catch (Exception ex)
             {

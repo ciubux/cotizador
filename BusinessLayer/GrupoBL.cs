@@ -116,11 +116,11 @@ namespace BusinessLayer
             }
         }
 
-        public List<GrupoCliente> getGruposCliente()
+        public List<GrupoCliente> getGruposCliente(Guid idUsuario)
         {
             using (var grupoDAL = new GrupoClienteDAL())
             {
-                return grupoDAL.getGruposCliente();
+                return grupoDAL.getGruposCliente(idUsuario);
             }
         }
 

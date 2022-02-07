@@ -110,7 +110,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             GrupoClienteBL grupoClienteBL = new GrupoClienteBL();
-            List<GrupoCliente> grupoClienteList = grupoClienteBL.getGruposCliente();
+            List<GrupoCliente> grupoClienteList = grupoClienteBL.getGruposCliente(usuario.idUsuario);
 
 
             var model = new GrupoClienteViewModels

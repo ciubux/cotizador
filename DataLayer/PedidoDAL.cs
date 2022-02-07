@@ -103,6 +103,8 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta.Value);
             InputParameterAdd.Bit(objCommand, "esPagoContado", pedido.esPagoContado);
 
+            InputParameterAdd.Int(objCommand, "facturaUnica", pedido.facturaUnica ? 1 : 0);
+
             DateTime dtTmp = DateTime.Now;
             String[] horaEntregaDesdeArray = pedido.horaEntregaDesde.Split(':');
             DateTime horaEntregaDesde = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaDesdeArray[0]), Int32.Parse(horaEntregaDesdeArray[1]),0);
@@ -299,6 +301,7 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta.Value);
 
             InputParameterAdd.Bit(objCommand, "esPagoContado", pedido.esPagoContado);
+            InputParameterAdd.Int(objCommand, "facturaUnica", pedido.facturaUnica ? 1 : 0);
 
             DateTime dtTmp = DateTime.Now;
             String[] horaEntregaDesdeArray = pedido.horaEntregaDesde.Split(':');
@@ -428,6 +431,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observacionesFactura", pedido.observacionesFactura);
             InputParameterAdd.BigInt(objCommand, "numeroGrupoPedido", pedido.numeroGrupoPedido);
             InputParameterAdd.Varchar(objCommand, "numeroRequerimiento", pedido.numeroRequerimiento);
+            InputParameterAdd.Int(objCommand, "facturaUnica", pedido.facturaUnica ? 1 : 0);
 
             ExecuteNonQuery(objCommand);
 
@@ -748,6 +752,7 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("ps_pedido");
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
+            InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable pedidoDataTable = dataSet.Tables[0];
             DataTable pedidoDetalleDataTable = dataSet.Tables[1];
@@ -807,6 +812,8 @@ namespace DataLayer
                 pedido.correoContactoPedido = Converter.GetString(row, "correo_contacto_pedido");
 
                 pedido.numeroRequerimiento = Converter.GetString(row, "numero_requerimiento");
+
+                pedido.facturaUnica = Converter.GetInt(row, "factura_unica") == 1 ? true : false;
 
                 pedido.solicitante.nombre = pedido.contactoPedido;
                 pedido.solicitante.telefono = pedido.telefonoContactoPedido;
@@ -1246,6 +1253,7 @@ namespace DataLayer
                 pedido.correoContactoPedido = Converter.GetString(row, "correo_contacto_pedido");
                 pedido.numeroRequerimiento = Converter.GetString(row, "numero_requerimiento");
                 pedido.esPagoContado = Converter.GetBool(row, "es_pago_contado");
+                pedido.facturaUnica = Converter.GetInt(row, "factura_unica") == 1 ? true : false;
 
                 pedido.solicitante.nombre = pedido.contactoPedido;
                 pedido.solicitante.telefono = pedido.telefonoContactoPedido;
@@ -1994,22 +2002,47 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             return true;
         }
 
-        public bool AprobarPedidosGrupo(long nroGrupo, Guid idUsuario) 
+        public List<int> AprobarPedidosGrupo(long nroGrupo, Guid idUsuario) 
         {
             var objCommand = GetSqlCommand("pu_aprobar_pedidos_grupo");
+            List<int> resultados = new List<int>();
+
             InputParameterAdd.BigInt(objCommand, "numeroGrupo", nroGrupo);
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            OutputParameterAdd.BigInt(objCommand, "cantidadGrupo");
+            OutputParameterAdd.BigInt(objCommand, "cantidadoAprobados");
             ExecuteNonQuery(objCommand);
-            return true;
+
+            Int64 cantidadGrupo = (Int64)objCommand.Parameters["@cantidadGrupo"].Value;
+            Int64 cantidadAplicados = (Int64)objCommand.Parameters["@cantidadoAprobados"].Value;
+
+
+
+            resultados.Add((Int32)cantidadGrupo);
+            resultados.Add((Int32)cantidadAplicados);
+
+            return resultados;
         }
 
-        public bool LiberarPedidosGrupo(long nroGrupo, Guid idUsuario)
+        public List<int> LiberarPedidosGrupo(long nroGrupo, Guid idUsuario)
         {
             var objCommand = GetSqlCommand("pu_liberar_pedidos_grupo");
+            List<int> resultados = new List<int>();
             InputParameterAdd.BigInt(objCommand, "numeroGrupo", nroGrupo);
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            OutputParameterAdd.BigInt(objCommand, "cantidadGrupo");
+            OutputParameterAdd.BigInt(objCommand, "cantidadoLiberados");
             ExecuteNonQuery(objCommand);
-            return true;
+
+            Int64 cantidadGrupo = (Int64)objCommand.Parameters["@cantidadGrupo"].Value;
+            Int64 cantidadAplicados = (Int64)objCommand.Parameters["@cantidadoLiberados"].Value;
+
+            resultados.Add((Int32)cantidadGrupo);
+            resultados.Add((Int32)cantidadAplicados);
+
+            return resultados;
         }
 
         public List<Pedido> SelectPedidosGrupo(Pedido ped, int tipoOrdenamiento)

@@ -464,8 +464,10 @@ namespace Cotizador.Controllers
         {
             String data = this.Request.Params["data[q]"];
             ClienteBL clienteBL = new ClienteBL();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
             DocumentoCompra factura = (DocumentoCompra)this.Session[Constantes.VAR_SESSION_DOCUMENTO_COMPRA_BUSQUEDA];
-            return clienteBL.getCLientesBusqueda(data, factura.ciudad.idCiudad);
+            return clienteBL.getCLientesBusqueda(data, factura.ciudad.idCiudad, usuario.idUsuario);
         }
 
         public void CleanBusqueda()

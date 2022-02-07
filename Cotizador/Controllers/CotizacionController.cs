@@ -912,8 +912,10 @@ namespace Cotizador.Controllers
 
             ClienteBL clienteBL = new ClienteBL();
             Cotizacion cotizacion = this.CotizacionSession;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            List<Cliente> clienteList = clienteBL.getCLientesBusquedaCotizacion(data, cotizacion.ciudad.idCiudad);
+            List<Cliente> clienteList = clienteBL.getCLientesBusquedaCotizacion(data, cotizacion.ciudad.idCiudad, usuario.idUsuario, true);
+            
 
             GrupoClienteBL grupoBL = new GrupoClienteBL();
             List<GrupoCliente> grupoList = grupoBL.getGruposBusqueda(data);

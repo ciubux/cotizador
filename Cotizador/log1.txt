@@ -143,3 +143,6 @@ The statement has been terminated.
 2021-10-12 10:34:31.9455|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Intento de dividir por cero.
 2021-10-12 10:36:49.3533|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Intento de dividir por cero.
 2021-10-12 10:37:12.6571|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Intento de dividir por cero.
+2022-01-20 23:22:44.6297|ERROR|Cotizador.Controllers.ParentController|tecnica@tecnica.com / Cannot insert duplicate key row in object 'dbo.CLIENTE' with unique index 'IDX_RUC_SEDE_ESTADO'. The duplicate key value is (10461243679, 15526227-2108-4113-b46a-1c8ab5c0e581, 1).
+The statement has been terminated.
+2022-01-20 23:25:42.0055|ERROR|Cotizador.Controllers.ParentController|tecnica@tecnica.com / Referencia a objeto no establecida como instancia de un objeto.

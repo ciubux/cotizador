@@ -196,11 +196,11 @@ namespace BusinessLayer
         }
 
 
-        public String getCLientesBusqueda(String textoBusqueda, Guid idCiudad, bool excluirLites = false)
+        public String getCLientesBusqueda(String textoBusqueda, Guid idCiudad, Guid idUsuario, bool excluirLites = false)
         {
             using (var clienteDAL = new ClienteDAL())
             {
-                List<Cliente> clienteList = clienteDAL.getClientesBusqueda(textoBusqueda, idCiudad, excluirLites);
+                List<Cliente> clienteList = clienteDAL.getClientesBusqueda(textoBusqueda, idCiudad, idUsuario, excluirLites);
                 String resultado = "{\"q\":\"" + textoBusqueda + "\",\"results\":[";
                 Boolean existeCliente = false;
                 foreach (Cliente cliente in clienteList)
@@ -256,11 +256,11 @@ namespace BusinessLayer
             }
         }
 
-        public List<Cliente> getCLientesBusquedaCotizacion(String textoBusqueda, Guid idCiudad)
+        public List<Cliente> getCLientesBusquedaCotizacion(String textoBusqueda, Guid idCiudad, Guid idUsuario, bool excluirLites = false)
         {
             using (var clienteDAL = new ClienteDAL())
             {
-                return clienteDAL.getClientesBusqueda(textoBusqueda, idCiudad);
+                return clienteDAL.getClientesBusqueda(textoBusqueda, idCiudad, idUsuario, excluirLites);
             }
         }
 

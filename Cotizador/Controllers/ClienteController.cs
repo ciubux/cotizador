@@ -265,7 +265,7 @@ namespace Cotizador.Controllers
                 cliente.IdUsuarioRegistro = usuario.idUsuario;
                 cliente.usuario = usuario;
                 GrupoClienteBL grupoClienteBL = new GrupoClienteBL();
-                grupoClienteList = grupoClienteBL.getGruposCliente();
+                grupoClienteList = grupoClienteBL.getGruposCliente(usuario.idUsuario);
                 this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
             }
 
@@ -425,7 +425,9 @@ namespace Cotizador.Controllers
         {
             String data = this.Request.Params["data[q]"];
             ClienteBL clienteBL = new ClienteBL();
-            return clienteBL.getCLientesBusqueda(data, this.ClienteSession.ciudad.idCiudad);
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            return clienteBL.getCLientesBusqueda(data, this.ClienteSession.ciudad.idCiudad, usuario.idUsuario);
         }
 
         public String Search()
@@ -770,13 +772,14 @@ namespace Cotizador.Controllers
         public String ChangeIdGrupoCliente()
         {
             Cliente cliente = this.ClienteSession;
+            Usuario usuario = ((Usuario)this.Session[Constantes.VAR_SESSION_USUARIO]);
 
             Int32 idGrupoCliente = 0;
             if (this.Request.Params["idGrupoCliente"] != null && !this.Request.Params["idGrupoCliente"].Equals(""))
             {
                 idGrupoCliente = Int32.Parse(this.Request.Params["idGrupoCliente"]);
                 GrupoClienteBL grupoClienteBL = new GrupoClienteBL();
-                List<GrupoCliente> grupoClientList = grupoClienteBL.getGruposCliente();
+                List<GrupoCliente> grupoClientList = grupoClienteBL.getGruposCliente(usuario.idUsuario);
                 cliente.grupoCliente = grupoClientList.Where(g => g.idGrupoCliente == idGrupoCliente).FirstOrDefault();
 
             }
@@ -1260,7 +1263,7 @@ namespace Cotizador.Controllers
                 //sheet.LastRowNum
 
                 GrupoClienteBL grupoClienteBL = new GrupoClienteBL();
-                List<GrupoCliente> grupoClienteList = grupoClienteBL.getGruposCliente();
+                List<GrupoCliente> grupoClienteList = grupoClienteBL.getGruposCliente(usuario.idUsuario);
 
                 OrigenBL origenBl = new OrigenBL();
                 Origen origenSearch = new Origen();

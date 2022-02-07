@@ -547,9 +547,11 @@ namespace Cotizador.Controllers
             Pedido pedido = this.PedidoSession;
            return proveedorBL.getProveedoresBusqueda(data, pedido.ciudad.idCiudad);*/
 
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
             ClienteBL clienteBL = new ClienteBL();
             Pedido pedido = this.PedidoSession;
-            return clienteBL.getCLientesBusqueda(data, pedido.ciudad.idCiudad);
+            return clienteBL.getCLientesBusqueda(data, pedido.ciudad.idCiudad, usuario.idUsuario);
         }
 
 

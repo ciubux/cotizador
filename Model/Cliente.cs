@@ -75,6 +75,7 @@ namespace Model
         public Boolean sinMontoCreditoAprobado { get; set; }
 
         public Boolean esAgenteRetencion { get; set; }
+        public Boolean facturaUnica { get; set; }
 
         public Boolean esClienteLite { get; set; }
         public int  clienteLiteValue { get { return esClienteLite ? 1 : 0; } }

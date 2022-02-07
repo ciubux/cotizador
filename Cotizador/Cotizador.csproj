@@ -428,6 +428,8 @@
     <Content Include="images\icon_stock.png" />
     <Content Include="images\icon_warning.png" />
     <Content Include="images\icon_warning_18.png" />
+    <Content Include="images\logos\logo_MP.png" />
+    <Content Include="images\logos\logo_TC.png" />
     <Content Include="images\logo_sunat.svg" />
     <Content Include="images\map.png" />
     <Content Include="images\pdf-icon.png" />

@@ -173,13 +173,14 @@ namespace DataLayer
 
 
 
-        public List<Cliente> getClientesBusqueda(String textoBusqueda, Guid idCiudad, bool excluirLites = false)
+        public List<Cliente> getClientesBusqueda(String textoBusqueda, Guid idCiudad, Guid idUsuario, bool excluirLites = false)
         {
             var objCommand = GetSqlCommand("ps_getclientes_search");
             InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
             InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
 
-            if(excluirLites) {
+            if (excluirLites) {
                 InputParameterAdd.Int(objCommand, "excluirLites", 1);
             }
 
@@ -407,6 +408,7 @@ namespace DataLayer
                 cliente.esClienteLite = Converter.GetInt(row, "cliente_lite") == 1 ? true : false;
 
                 cliente.esAgenteRetencion = Converter.GetInt(row, "es_agente_retencion") == 1 ? true : false;
+                cliente.facturaUnica = Converter.GetInt(row, "factura_unica") == 1 ? true : false;
 
                 cliente.habilitadoNegociacionGrupal = Converter.GetBool(row, "habilitado_negociacion_grupal");
                 cliente.sedePrincipal = Converter.GetBool(row, "sede_principal");
@@ -674,6 +676,7 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_clientes");
             InputParameterAdd.Varchar(objCommand, "codigo", cliente.codigo);
             InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);
+            InputParameterAdd.Guid(objCommand, "idUsuario", cliente.usuario.idUsuario);
             InputParameterAdd.VarcharEmpty(objCommand, "textoBusqueda", cliente.textoBusqueda);
             InputParameterAdd.Int(objCommand, "idResponsableComercial", cliente.responsableComercial.idVendedor);
             InputParameterAdd.Int(objCommand, "idSupervisorComercial", cliente.supervisorComercial.idVendedor);
@@ -780,6 +783,7 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_clientes_lite");
             InputParameterAdd.Varchar(objCommand, "codigo", cliente.codigo);
             InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);
+            InputParameterAdd.Guid(objCommand, "idUsuario", cliente.usuario.idUsuario);
             InputParameterAdd.VarcharEmpty(objCommand, "textoBusqueda", cliente.textoBusqueda);
 
             DataTable dataTable = Execute(objCommand);
@@ -928,6 +932,7 @@ namespace DataLayer
 
             InputParameterAdd.SmallInt(objCommand, "esCargaMasiva", (short)(cliente.CargaMasiva ? 1 : 0));
             InputParameterAdd.Int(objCommand, "esAgenteRetencion", (int)(cliente.esAgenteRetencion ? 1 : 0));
+            InputParameterAdd.Int(objCommand, "facturaUnica", (int)(cliente.facturaUnica ? 1 : 0));
 
             InputParameterAdd.Int(objCommand, "idOrigen", cliente.origen == null ? 0 : cliente.origen.idOrigen);
             InputParameterAdd.Int(objCommand, "idSubDistribuidor", (!cliente.esSubDistribuidor) ? 0 : cliente.subDistribuidor.idSubDistribuidor);
@@ -1049,6 +1054,7 @@ namespace DataLayer
 
             InputParameterAdd.SmallInt(objCommand, "esCargaMasiva", (short)(cliente.CargaMasiva ? 1 : 0));
             InputParameterAdd.Int(objCommand, "esAgenteRetencion", (int)(cliente.esAgenteRetencion ? 1 : 0));
+            InputParameterAdd.Int(objCommand, "facturaUnica", (int)(cliente.facturaUnica ? 1 : 0));
 
             InputParameterAdd.Bit(objCommand, "sedePrincipal", cliente.sedePrincipal);
             InputParameterAdd.Bit(objCommand, "negociacionMultiregional", cliente.negociacionMultiregional);

@@ -424,6 +424,8 @@ namespace Cotizador.Models.DTOsShow
             pedidoDTOshow.margenVisible = pedido.margenVisible;
             pedidoDTOshow.margenFleteVisible = pedido.margenFleteVisible;
 
+            pedidoDTOshow.facturaUnica = pedido.facturaUnica;
+
             return pedidoDTOshow;
         }
     }

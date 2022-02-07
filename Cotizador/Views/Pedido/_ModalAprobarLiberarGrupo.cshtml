@@ -79,14 +79,14 @@
                 urlAction = "AprobarPedidosGrupo";
                 loadingText = "Aprobando";
                 questionText = '¿Está seguro que desea APROBAR los pedidos del grupo? Solo se aprobaran los pedidos en estado "Pendiente Aprobación de Ingreso"';
-                resultText = "Aprobaron";
+                resultText = "APROBARON";
             }
 
             if (tipoAprobarGrupoPedido == 2) {
                 urlAction = "LiberarPedidosGrupo";
                 loadingText = "Liberando";
                 questionText = '¿Está seguro que desea LIBERAR los pedidos del grupo? Solo se liberaran los pedidos en estado "Pendiente Liberación"';
-                resultText = "Liberaron";
+                resultText = "LIBERARON";
             }
 
 
@@ -130,7 +130,7 @@
                                     if (result.success == 1) {
                                         $.alert({
                                             title: "Operación Exitosa",
-                                            content: "Se " + resultText + " los pedidos correctamente.",
+                                            content: 'Se identificó "' + result.cantidadGrupo + '" pedidos y se ' + resultText + ' "' + result.cantidadAplicados + '" pedidos.',
                                             type: "green",
                                             buttons: {
                                                 OK: function () {

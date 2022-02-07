@@ -1073,6 +1073,19 @@
                 <div class="col-sm-12 col-lg-6">
                     <div class="col-sm-12">
                         <div class="form-group">
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="onoffswitch" @(cliente.facturaUnica ? "checked" : "") class="onoffswitch-checkbox" id="chkFacturaUnica">
+                                <label class="onoffswitch-label" for="chkFacturaUnica"></label>
+                            </div>
+                            <h5 id="lblChkFacturaUnica" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Facturación única</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-lg-6">
+                    <div class="col-sm-12">
+                        <div class="form-group">
                             @if (cliente.usuario.activaClienteFacturaCompleja)
                             {
                                 <div class="onoffswitch">

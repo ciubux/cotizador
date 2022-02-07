@@ -82,5 +82,7 @@ namespace Cotizador.Models.DTOshow
         public Decimal margenFleteVisible { get; set; }
         public Decimal margenVisible { get; set; }
 
+        public Boolean facturaUnica { get; set; }
+
     }
 }

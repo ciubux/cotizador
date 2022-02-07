@@ -2686,6 +2686,31 @@ jQuery(function ($) {
     }
 
 
+    $("#lblChkFacturaUnica").click(function () {
+        if ($("#chkFacturaUnica").is(":checked")) {
+            $("#chkFacturaUnica").prop("checked", false);
+        } else {
+            $("#chkFacturaUnica").prop("checked", true);
+        }
+
+        actualizarValorChkFacturaUnica();
+    });
+
+
+    $("#chkFacturaUnica").change(function () {
+        actualizarValorChkFacturaUnica();
+    });
+
+    function actualizarValorChkFacturaUnica() {
+        var valor = 1;
+        if (!$('#chkFacturaUnica').prop('checked')) {
+            valor = 0;
+        }
+        changeInputBoolean('facturaUnica', valor)
+    }
+
+
+
     $("#lblChkConfigAgregarNombreSedeObservacionFactura").click(function () {
         if ($("#chkConfigAgregarNombreSedeObservacionFactura").is(":checked")) {
             $("#chkConfigAgregarNombreSedeObservacionFactura").prop("checked", false);
@@ -3311,6 +3336,15 @@ jQuery(function ($) {
                     $("#verChkEsAgenteRetencion_SI").hide();
                     $("#verChkEsAgenteRetencion_NO").show();
                 }
+
+                if (cliente.facturaUnica) {
+                    $("#verChkFacturaUnica_SI").show();
+                    $("#verChkFacturaUnica_NO").hide();
+                } else {
+                    $("#verChkFacturaUnica_SI").hide();
+                    $("#verChkFacturaUnica_NO").show();
+                }
+
 
                 if (cliente.configuraciones.facturacionCompleja) {
                     $("#verChkConfigFacturacionCompleja_SI").show();

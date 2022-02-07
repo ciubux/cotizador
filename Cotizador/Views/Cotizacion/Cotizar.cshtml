@@ -718,8 +718,8 @@
         @if (cotizacion.aplicaSedes)
         {
             <div class="form-group">
-                <div class="col-xs-12">
-                    <p class="form-control-static text-danger" id="verSedesAplica">
+                <div class="">
+                    <p class=" text-danger" id="verSedesAplica">
                         Esta cotización aplicará también para las sedes:  @cotizacion.cliente.sedeListWebString.Replace("<br>", ", ")
                     </p>
                 </div>
@@ -1202,7 +1202,7 @@
                                         <p class="form-control-static text-center"><b>Costo: </b> S/ <span id="verCostoMP"></span></p>
                                     }
                                     <p class="form-control-static text-center">
-                                        <button id="lnkMostrarLogPrecioProducto" type="button" class="btn btn-link lnkAction lnkActionLabel" data-toggle="modal" data-target="#modalLogPrecioProducto">Ver Histórico</button>
+                                        <button id="lnkMostrarLogPrecioProducto" type="button" class="btn btn-link lnkAction lnkActionLabel" data-toggle="modal" data-target="#modalLogPrecioProducto">Ver Historial de Precios</button>
                                     </p>
                                 </div>
                             </div>

@@ -47,7 +47,9 @@ namespace Cotizador.Controllers
             String data = this.Request.Params["data[q]"];
             ClienteBL clienteBL = new ClienteBL();
             NotaIngreso notaIngreso = this.NotaIngresoSession;
-            return clienteBL.getCLientesBusqueda(data, notaIngreso.ciudadDestino.idCiudad);
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            return clienteBL.getCLientesBusqueda(data, notaIngreso.ciudadDestino.idCiudad, usuario.idUsuario);
         }
 
         public String GetCliente()

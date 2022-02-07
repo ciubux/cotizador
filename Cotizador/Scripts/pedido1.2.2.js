@@ -313,6 +313,12 @@ jQuery(function ($) {
                     });
                     return false;
                 }
+
+                if (cliente.facturaUnica) {
+                    $("#chkFacturaUnica").prop("checked", true);
+                } else {
+                    $("#chkFacturaUnica").prop("checked", false);
+                }
              
                 
                 if ($("#pagina").val() == PAGINA_MANTENIMIENTO_PEDIDO_VENTA)
@@ -948,6 +954,25 @@ jQuery(function ($) {
     });
 
 
+    $("#chkFacturaUnica").change(function () {
+        var valor = 1;
+        if (!$('#chkFacturaUnica').prop('checked')) {
+            valor = 0;
+        }
+        $.ajax({
+            url: "/Pedido/ChangeFacturaUnica",
+            type: 'POST',
+            data: {
+                facturaUnica: valor
+            },
+            dataType: 'JSON',
+            success: function (result) {
+                 
+            }
+        });
+    });
+
+    
 
     $('#pedido_solicitante').change(function () {
         toggleControlesSolicitante();
@@ -2985,7 +3010,13 @@ jQuery(function ($) {
                     $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString + " (Trivial)");
                 }
 
-
+                if (pedido.facturaUnica) {
+                    $("#verFacturaUnica").html("SI");
+                    $("#pedido_chkFacturaUnica").prop("checked", true);
+                } else {
+                    $("#verFacturaUnica").html("NO");
+                    $("#pedido_chkFacturaUnica").prop("checked", false);
+                }
 
                 $("#verTipoPedido").html(pedido.tiposPedidoString);
 
@@ -3779,7 +3810,11 @@ jQuery(function ($) {
 
         var pedidoNumeroGrupo = $("#pedido_numeroGrupo").val();
         
+        var facturaUnica = 1;
 
+        if (!$('#pedido_chkFacturaUnica').prop('checked')) {
+            facturaUnica = 0;
+        }
 
         $.ajax({
             url: "/Pedido/UpdatePost",
@@ -3796,7 +3831,8 @@ jQuery(function ($) {
                 observacionesAlmacen: observacionesAlmacen,
                 observacionesGuiaRemision: observacionesGuiaRemision,
                 observacionesFactura: observacionesFactura,
-                pedidoNumeroGrupo: pedidoNumeroGrupo
+                pedidoNumeroGrupo: pedidoNumeroGrupo,
+                facturaUnica: facturaUnica
             },
             dataType: 'JSON',
             error: function (detalle) {

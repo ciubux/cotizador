@@ -335,19 +335,19 @@ namespace BusinessLayer
         }
 
 
-        public void AprobarPedidosgrupo(long nroGrupo, Guid idUsuario)
+        public List<int> AprobarPedidosgrupo(long nroGrupo, Guid idUsuario)
         {
             using (var dal = new PedidoDAL())
             {
-                dal.AprobarPedidosGrupo(nroGrupo, idUsuario);
+                return dal.AprobarPedidosGrupo(nroGrupo, idUsuario);
             }
         }
 
-        public void LiberarPedidosGrupo(long nroGrupo, Guid idUsuario)
+        public List<int> LiberarPedidosGrupo(long nroGrupo, Guid idUsuario)
         {
             using (var dal = new PedidoDAL())
             {
-                dal.LiberarPedidosGrupo(nroGrupo, idUsuario);
+                return dal.LiberarPedidosGrupo(nroGrupo, idUsuario);
             }
         }
 

@@ -47,6 +47,8 @@ namespace Model
         [Display(Name = "Truncado:")]
         public int truncado { get; set; }
 
+        [Display(Name = "Restringir a factura única:")]
+        public Boolean facturaUnica { get; set; }
         public bool accion_truncar { get; set; }
         public bool accion_alertarNoAtendido { get; set; }
         public Guid idPedido { get; set; }

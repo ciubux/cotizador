@@ -195,7 +195,7 @@ namespace Cotizador.ExcelExport
 
                 IWorkbook newWorkbook = wb;
 
-                byte[] data = File.ReadAllBytes(AppDomain.CurrentDomain.BaseDirectory + "\\images\\logo.png");
+                byte[] data = File.ReadAllBytes(AppDomain.CurrentDomain.BaseDirectory + "\\images\\logos\\logo_" + obj.usuario.codigoEmpresa + ".png");
                 int picInd = newWorkbook.AddPicture(data, PictureType.PNG);
                 HSSFCreationHelper helper = newWorkbook.GetCreationHelper() as HSSFCreationHelper;
                 IDrawing drawing = sheet.CreateDrawingPatriarch();

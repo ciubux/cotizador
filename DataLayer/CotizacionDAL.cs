@@ -250,6 +250,7 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("ps_cotizacion");
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
+            InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable cotizacionDataTable = dataSet.Tables[0];
             DataTable cotizacionDetalleDataTable = dataSet.Tables[1];
@@ -348,7 +349,11 @@ namespace DataLayer
                 cotizacion.usuario.cargo = Converter.GetString(row, "cargo");
                 cotizacion.usuario.contacto = Converter.GetString(row, "contacto_usuario"); 
                 cotizacion.usuario.firmaImagen = Converter.GetBytes(row, "usuario_firma_imagen");
-                cotizacion.usuario.email = Converter.GetString(row, "email");           
+                cotizacion.usuario.email = Converter.GetString(row, "email");
+                cotizacion.usuario.codigoEmpresa = Converter.GetString(row, "codigo_empresa");
+                cotizacion.usuario.razonSocialEmpresa = Converter.GetString(row, "razon_social_empresa");
+                cotizacion.usuario.urlEmpresa = Converter.GetString(row, "url_web_empresa");
+
                 //ESTADO
                 cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
                 cotizacion.seguimientoCotizacion.estado = (SeguimientoCotizacion.estadosSeguimientoCotizacion)Converter.GetInt(row, "estado_seguimiento");
@@ -518,6 +523,7 @@ namespace DataLayer
             }*/
 
             InputParameterAdd.Guid(objCommand, "id_usuario", cotizacion.usuarioBusqueda.idUsuario);
+            InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fechaDesde", new DateTime(cotizacion.fechaDesde.Year, cotizacion.fechaDesde.Month, cotizacion.fechaDesde.Day, 0, 0, 0));
             InputParameterAdd.DateTime(objCommand, "fechaHasta", new DateTime(cotizacion.fechaHasta.Year, cotizacion.fechaHasta.Month, cotizacion.fechaHasta.Day, 23, 59, 59));
             InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);

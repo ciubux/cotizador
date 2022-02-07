@@ -626,7 +626,9 @@ namespace Cotizador.Controllers
             String data = this.Request.Params["data[q]"];
             ClienteBL clienteBL = new ClienteBL();
             Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_BUSQUEDA];
-            return clienteBL.getCLientesBusqueda(data, venta.guiaRemision.ciudadOrigen.idCiudad);
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            return clienteBL.getCLientesBusqueda(data, venta.guiaRemision.ciudadOrigen.idCiudad, usuario.idUsuario);
         }
 
         public String ShowList()

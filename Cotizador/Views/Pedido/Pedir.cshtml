@@ -179,6 +179,24 @@
                 </div>
             </div>
         </div>
+
+        <!--Factura Unica-->
+        <div class="col-sm-6 col-lg-4" id="divFacturaUnica">
+            <div class="form-group">
+                <label for="chkFacturaUnica" class="control-label col-xs-8 col-lg-8">Restringir a factura única:<br />(Aplica a pedidos con el mismo número de grupo)</label>
+
+                <div class="col-xs-4">
+                    @if (pedido.facturaUnica)
+                    {
+                        <input checked type="checkbox" id="chkFacturaUnica" name="facturaUnica" />
+                    }
+                    else
+                    {
+                        <input type="checkbox" id="chkFacturaUnica" name="facturaUnica" />
+                    }
+                </div>
+            </div>
+        </div>
     </div>
 
 
@@ -1404,7 +1422,7 @@
                                         <p class="form-control-static text-center"><b>Costo: </b> S/ <span id="verCostoMP"></span></p>
                                     }
                                     <p class="form-control-static text-center">
-                                        <button id="lnkMostrarLogPrecioProducto" type="button" class="btn btn-link lnkAction lnkActionLabel" data-toggle="modal" data-target="#modalLogPrecioProducto">Ver Histórico</button>
+                                        <button id="lnkMostrarLogPrecioProducto" type="button" class="btn btn-link lnkAction lnkActionLabel" data-toggle="modal" data-target="#modalLogPrecioProducto">Ver Historial de Precios</button>
                                     </p>
                                 </div>
                             </div>
