@@ -13,6 +13,7 @@ namespace Model
 
         public int cantidad { get; set; }
 
+        public int cantidadTotalAtencion { get; set; }
         public decimal cantidadDecimal { get; set; }
 
         public int cantidadPorAtender { get; set; }

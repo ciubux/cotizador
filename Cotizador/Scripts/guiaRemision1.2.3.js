@@ -913,6 +913,8 @@ jQuery(function ($) {
                 $("#facturarver_guiaRemision_fechaEmision").html(invertirFormatoFecha(guiaRemision.fechaEmision.substr(0, 10)));
                 $("#facturarver_guiaRemision_serieNumeroDocumento").html(guiaRemision.serieNumeroGuia);
 
+                $("#ver_guiaRemision_facturaUnica").html(guiaRemision.pedido_facturaUnica);
+                $("#ver_guiaRemision_numeroGrupo").html(guiaRemision.pedido_numeroGrupo);
 
                 //   $("#ver_guiaRemision_numeroDocumento").html(guiaRemision.numeroDocumentoString);
                 $("#ver_guiaRemision_pedido_numeroPedido").html(guiaRemision.pedido_numeroPedidoString);
@@ -1369,7 +1371,46 @@ jQuery(function ($) {
     }
 
     $("#btnFacturarGuiaRemision").click(function () {
+        var facturaUnica = parseInt($("#ver_guiaRemision_facturaUnica").val());
+        var numeroGrupo = parseInt($("#ver_guiaRemision_numeroGrupo").val());
+        var guiaAtiendePedido = parseInt($("#ver_guiaRemision_guiaAtiendePedido").val());
+        
+        if (facturaUnica == 1) {
+            if (numeroGrupo > 0) {
+                $.alert({
+                    //icon: 'fa fa-warning',
+                    title: "BLOQUEADO",
+                    content: "No se puede facturar ya que el pedido al que pertenece la guía tiene restricción de factura única.",
+                    type: 'orange',
+                    buttons: {
+                        OK: function () {
 
+                        }
+                    }
+                });
+            } else {
+                if (guiaAtiendePedido) {
+                    facturarGuia();
+                } else {
+                    $.alert({
+                        //icon: 'fa fa-warning',
+                        title: "BLOQUEADO",
+                        content: "No se puede facturar ya que el pedido al que pertenece la guía tiene restricción de factura única.",
+                        type: 'orange',
+                        buttons: {
+                            OK: function () {
+
+                            }
+                        }
+                    });
+                }
+            }
+        } else {
+            facturarGuia();
+        }
+    });
+
+    function facturarGuia() {
         var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
         $.ajax({
             url: "/Venta/Show",
@@ -1385,8 +1426,7 @@ jQuery(function ($) {
                 mostrarModalFacturar(resultado);
             }
         });
-
-    });
+    }
 
     $("#btnCambiarASerieDiferida").click(function () {
         $.ajax({

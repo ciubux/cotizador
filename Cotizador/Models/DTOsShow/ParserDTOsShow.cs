@@ -161,6 +161,9 @@ namespace Cotizador.Models.DTOsShow
             guiaRemisionDTOshow.pedido_numeroPedidoString = guiaRemision.pedido.numeroPedidoString;
             guiaRemisionDTOshow.pedido_cliente_razonSocial = guiaRemision.pedido.cliente.razonSocial;
             guiaRemisionDTOshow.pedido_numeroReferenciaCliente = guiaRemision.pedido.numeroReferenciaCliente;
+            guiaRemisionDTOshow.pedido_numeroGrupo = guiaRemision.pedido.numeroGrupoPedido == null ? 0 : guiaRemision.pedido.numeroGrupoPedido.Value;
+            guiaRemisionDTOshow.pedido_facturaUnica = guiaRemision.pedido.facturaUnica ? 1 : 0;
+            guiaRemisionDTOshow.guiaAtiendePedido = guiaRemision.guiaAtiendePedido ? 1 : 0;
             guiaRemisionDTOshow.pedido_cliente_razonSocial = guiaRemision.pedido.cliente.razonSocial;
             guiaRemisionDTOshow.pedido_cliente_configuraciones = guiaRemision.pedido.cliente.configuraciones;
             guiaRemisionDTOshow.pedido_numeroReferenciaCliente = guiaRemision.pedido.numeroReferenciaCliente;

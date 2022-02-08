@@ -3816,12 +3816,48 @@ jQuery(function ($) {
             facturaUnica = 0;
         }
 
+        if (parseInt(pedidoNumeroGrupo) > 0) {
+            $.confirm({
+                title: 'Confirmación',
+                content: 'El valor de "Restringir a factura Única" se aplicará a todos los pedidos con el mismo número de grupo. ¿Desea continuar?',
+                type: 'orange',
+                buttons: {
+                    confirm: {
+                        text: 'Sí',
+                        btnClass: 'btn-red',
+                        action: function () {
+                            actualizarPedidoPost(numeroReferenciaCliente, numeroReferenciaAdicional, fechaEntregaExtendida, observaciones, observacionesAlmacen,
+                                observacionesGuiaRemision, observacionesFactura, pedidoNumeroGrupo, facturaUnica); 
+                        }
+                    },
+                    cancel: {
+                        text: 'No',
+                        //btnClass: 'btn-blue',
+                        //                        keys: ['enter', 'shift'],
+                        action: function () {
+
+                        }
+                    }
+                },
+
+            });
+        } else {
+            actualizarPedidoPost(numeroReferenciaCliente, numeroReferenciaAdicional, fechaEntregaExtendida, observaciones, observacionesAlmacen,
+                observacionesGuiaRemision, observacionesFactura, pedidoNumeroGrupo, facturaUnica); 
+        }
+
+        
+    });
+    
+
+    function actualizarPedidoPost(numeroReferenciaCliente, numeroReferenciaAdicional, fechaEntregaExtendida, observaciones, observacionesAlmacen,
+        observacionesGuiaRemision, observacionesFactura, pedidoNumeroGrupo, facturaUnica) {
         $.ajax({
             url: "/Pedido/UpdatePost",
-         /*   data: {
-                idPedido: idPedido
-            },
-           */
+            /*   data: {
+                   idPedido: idPedido
+               },
+              */
             type: 'POST',
             data: {
                 numeroReferenciaCliente: numeroReferenciaCliente,
@@ -3855,10 +3891,8 @@ jQuery(function ($) {
 
 
             }
-        })
-    });
-    
-
+        });
+    }
 
 
     $("#btnActualizarPedido").click(function () {

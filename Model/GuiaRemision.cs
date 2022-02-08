@@ -188,6 +188,25 @@ namespace Model
 
         }
 
+        public Boolean guiaAtiendePedido { get {
+                Boolean resultado = true;
+                if (this.documentoDetalle == null)
+                {
+                    resultado = false;
+                }
+                else
+                {
+                    foreach (DocumentoDetalle det in this.documentoDetalle)
+                    {
+                        if (det.cantidad < det.cantidadTotalAtencion)
+                        {
+                            resultado = false;
+                        }
+                    }
+                }
+                return resultado;
+            } 
+        }
 
         [Display(Name = "Estado:")]
         public EstadoFiltro estadoFiltro { get; set; }

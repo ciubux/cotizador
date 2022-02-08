@@ -770,6 +770,8 @@ namespace DataLayer
                 guiaRemision.pedido.direccionEntrega = new DireccionEntrega();
                 guiaRemision.pedido.direccionEntrega.descripcion = Converter.GetString(row, "direccion_entrega");  
                 guiaRemision.pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
+                guiaRemision.pedido.facturaUnica = Converter.GetInt(row, "factura_unica") == 1 ? true : false;
+                guiaRemision.pedido.numeroGrupoPedido = Converter.GetLong(row, "numero_grupo");
                 //UBIGEO
                 guiaRemision.pedido.ubigeoEntrega = new Ubigeo();
                 guiaRemision.pedido.ubigeoEntrega.Departamento = Converter.GetString(row, "departamento");
@@ -845,6 +847,7 @@ namespace DataLayer
                 DocumentoDetalle documentoDetalle = new DocumentoDetalle();
                 documentoDetalle.idDocumentoDetalle = Converter.GetGuid(row, "id_movimiento_almacen_detalle");
                 documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+                documentoDetalle.cantidadTotalAtencion = Converter.GetInt(row, "cantidad_pedido");
                 documentoDetalle.unidad = Converter.GetString(row, "unidad");
                 documentoDetalle.producto = new Producto();
                 documentoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
