@@ -1941,6 +1941,16 @@ namespace Cotizador.Controllers
                 List<String> comentarios = (List<String>)this.Session["pedidoDRComentarios"];
 
                 pedidoBL.UpdateDetallesRestriccion(idPedido, idDetalles, cantidades, comentarios, usuario.idUsuario);
+
+                Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
+                pedido.idPedido = idPedido;
+                pedido = pedidoBL.GetPedido(pedido, usuario);
+                pedido.usuario = usuario;
+
+                if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado)
+                {
+                    pedidoBL.EnviarMailTecnica(pedido);
+                }
             }
         }
 

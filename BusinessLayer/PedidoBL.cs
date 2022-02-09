@@ -263,6 +263,11 @@ namespace BusinessLayer
 
                 validarPedidoVenta(pedido);
                 dal.InsertPedido(pedido);
+
+                if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado)
+                {
+                    EnviarMailTecnica(pedido);
+                }
             }
         }
 
@@ -277,6 +282,11 @@ namespace BusinessLayer
 
                 validarPedidoVenta(pedido);
                 dal.UpdatePedido(pedido);
+
+                if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado)
+                {
+                    EnviarMailTecnica(pedido);
+                }
             }
         }
 
@@ -918,6 +928,77 @@ namespace BusinessLayer
             {
                 return dal.TruncarPedidos(idPedidos);
             }
+        }
+
+        public void EnviarMailTecnica(Pedido pedido) 
+        {
+            MailService mail = new MailService();
+            try
+            {
+
+                PedidoBL pedidoBL = new PedidoBL();
+                ParametroBL parametroBL = new ParametroBL();
+                string emailsNotificar = parametroBL.getParametro("TC_EMAILS_PEDIDO_ATENDER");
+
+                if (pedido.cliente != null)
+                {
+                    var urlVerPedido = "http://zasmp.azurewebsites.net/Pedido?idPedido=" + pedido.idPedido.ToString();
+
+                    List<String> destinatarios = new List<String>();
+
+                    Boolean seEnvioCorreo = false;
+                    //if (pedido.cliente.asistenteServicioCliente != null && pedido.cliente.asistenteServicioCliente.usuario != null
+                    //    && pedido.cliente.asistenteServicioCliente.usuario.email != null && !pedido.cliente.asistenteServicioCliente.usuario.email.Equals(String.Empty))
+                    //{
+                    //    destinatarios.Add(pedido.cliente.asistenteServicioCliente.usuario.email);
+                    //    seEnvioCorreo = true;
+                    //}
+                    //if (pedido.cliente.responsableComercial != null && pedido.cliente.responsableComercial.usuario != null
+                    //    && pedido.cliente.responsableComercial.usuario.email != null && !pedido.cliente.responsableComercial.usuario.email.Equals(String.Empty))
+                    //{
+                    //    destinatarios.Add(pedido.cliente.responsableComercial.usuario.email);
+                    //    seEnvioCorreo = true;
+                    //}
+                    //if (pedido.cliente.supervisorComercial != null && pedido.cliente.supervisorComercial.usuario != null
+                    //    && pedido.cliente.supervisorComercial.usuario.email != null && !pedido.cliente.supervisorComercial.usuario.email.Equals(String.Empty))
+                    //{
+                    //    destinatarios.Add(pedido.cliente.supervisorComercial.usuario.email);
+                    //    seEnvioCorreo = true;
+                    //}
+                    //if (!pedido.usuario.email.Equals(String.Empty))
+                    //{
+                    //    destinatarios.Add(pedido.usuario.email);
+                    //    seEnvioCorreo = true;
+                    //}
+
+                    string[] emails = emailsNotificar.Split(';');
+
+                    foreach (string email in emails)
+                    {
+                        destinatarios.Add(email);
+                        seEnvioCorreo = true;
+                    }
+                    
+                    if (destinatarios.Count > 0)
+                    {
+                        String asunto = "Nuevo Pedido Ingresado N° " + pedido.numeroPedidoString;
+
+                        String template = "";
+
+                        PedidoTecnica emailTemplate = new PedidoTecnica();
+                        emailTemplate.urlVerPedido = urlVerPedido;
+                        template = emailTemplate.BuildTemplate(pedido);
+                            
+                        mail.enviar(destinatarios, asunto, template, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                mail.enviar(new List<string> { "ti@mpinstitucional.com" }, "ERROR al enviar pedido " + pedido.numeroPedidoString + " a ténica", ex.Message + ex.InnerException, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
+            }
+
         }
     }
 }

@@ -129,6 +129,23 @@ namespace Cotizador.Controllers
             logCambioBL.aplicarLogCambios();
         }
 
+        public void EnviarMailTecnica()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            PedidoBL bl = new PedidoBL();
+            
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
+            pedido.idPedido = Guid.Parse("1504840A-9AA8-4253-9067-6DB904FEA7B8");
+            pedido = bl.GetPedido(pedido, usuario);
+            pedido.usuario = usuario;
+
+            if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado)
+            {
+                bl.EnviarMailTecnica(pedido);
+            }
+        }
+
         public async Task<String> TipoCambioSunat()
         {
             TipoCambioSunatBL tipoCambioBL = new TipoCambioSunatBL();

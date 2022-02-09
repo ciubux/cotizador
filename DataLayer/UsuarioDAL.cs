@@ -172,6 +172,9 @@ namespace DataLayer
                 usuario.nombre = Converter.GetString(row, "nombre");
                 usuario.contacto = Converter.GetString(row, "contacto");
 
+                usuario.codigoEmpresa = Converter.GetString(row, "codigo_empresa");
+                usuario.razonSocialEmpresa = Converter.GetString(row, "nombre_empresa");
+                
                 usuario.firmaImagen = Converter.GetBytes(row, "firma_imagen");
 
                 //Cotizaciones
