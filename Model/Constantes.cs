@@ -252,6 +252,7 @@ namespace Model
         public static String VAR_SESSION_USUARIO_LISTA_MANTENEDOR = "usuarioMantenedorList";
         public static String VAR_SESSION_USUARIO_VER = "usuarioVer";
 
+        public static String VAR_SESSION_EMPRESA_LISTA = "empresaList";
 
         public static String VAR_SESSION_PERMISO_LISTA = "permisoList";
 
@@ -463,6 +464,8 @@ namespace Model
 
         public const String MODIFICA_PARAMETRO = "P890";
         public const String VER_ARCHIVO = "P870";
+
+        public const String MULTI_EMPRESA = "P160";
 
         public const String EXPORTAR_VENTAS_CONTABILIDAD = "P590";
         public const String VISUALIZA_VENTAS = "P730";

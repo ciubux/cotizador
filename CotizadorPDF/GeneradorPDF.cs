@@ -81,8 +81,32 @@ namespace cotizadorPDF
                 {
                     if (cot.cliente.razonSocial != null && !cot.cliente.razonSocial.Trim().Equals(""))
                     {
-                        page.Canvas.DrawString(cot.cliente.razonSocial, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Blue), 0, y);
-                        y = y + sepLine;
+                        String textRS = "";
+                        String[] palabrasRS = cot.cliente.razonSocial.Trim().Split(' ');
+
+                        foreach(String palab in palabrasRS)
+                        {
+                            if (!textRS.Equals(""))
+                            {
+                                textRS = textRS + " ";
+                            }
+
+                            textRS = textRS + palab;
+
+                            if (textRS.Length > 45)
+                            {
+                                page.Canvas.DrawString(textRS, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Blue), 0, y);
+                                y = y + sepLine;
+                                textRS = "";
+                            }
+                        }
+
+                        if (!textRS.Equals(""))
+                        {
+                            page.Canvas.DrawString(textRS, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Blue), 0, y);
+                            y = y + sepLine;
+                        }
+
                         if (!cot.cliente.esClienteLite)
                         {
                             page.Canvas.DrawString("RUC: " + cot.cliente.ruc, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Blue), 0, y);
@@ -517,6 +541,20 @@ namespace cotizadorPDF
                     y = y + sepLine;
                 }
 
+                if (y > 600)
+                {
+                    SizeF size = page.Size;
+                    PdfPageBase newPage = doc.Pages.Add(size, new PdfMargins(0));
+
+                    sectionObervaciones = doc.Pages[countPages];
+                    sectionFirma = doc.Pages[countPages];
+                    page = doc.Pages[countPages];
+                    //Si es una nueva pagina se inicia en el margen top
+                    //Y se agrega 150 porque en la siguiente instrucción se restán 150 para que no haya mucho margen entre
+                    //el fin de la tabla y la observación.
+                    y = margenTop;
+                }
+
                 if (cot.promocion != null && cot.promocion.idPromocion != Guid.Empty)
                 {
                     string[] linesPromocion = cot.promocion.textoPresentacion.Split(stringSeparators, StringSplitOptions.None);
@@ -525,7 +563,7 @@ namespace cotizadorPDF
                     int boxPromoHeight = 0;
                     int boxPromoWidth = 375;
 
-                    Point boxPromoInitPoint = new Point(xPage2 - 44, ((int)y) - 41);
+                    Point boxPromoInitPoint = new Point(xPage2 - 4, ((int)y) - 1);
 
                     foreach (string line in linesPromocion)
                     {
@@ -534,10 +572,25 @@ namespace cotizadorPDF
                         boxPromoHeight += sepLine;
                     }
 
-                    page.Canvas.DrawRectangle(promoPen, new Rectangle(boxPromoInitPoint, new Size(boxPromoWidth, boxPromoHeight)));
+                    sectionObervaciones.Canvas.DrawRectangle(promoPen, new Rectangle(boxPromoInitPoint, new Size(boxPromoWidth, boxPromoHeight)));
                 }
 
                 y = y + sepLine;
+
+
+                if (y > 600)
+                {
+                    SizeF size = page.Size;
+                    PdfPageBase newPage = doc.Pages.Add(size, new PdfMargins(0));
+
+                    sectionObervaciones = doc.Pages[countPages];
+                    sectionFirma = doc.Pages[countPages];
+                    page = doc.Pages[countPages];
+                    //Si es una nueva pagina se inicia en el margen top
+                    //Y se agrega 150 porque en la siguiente instrucción se restán 150 para que no haya mucho margen entre
+                    //el fin de la tabla y la observación.
+                    y = margenTop;
+                }
 
                 sectionObervaciones.Canvas.DrawString("Sin otro particular, quedamos de ustedes.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 y = y + sepLine * 2;
@@ -587,7 +640,7 @@ namespace cotizadorPDF
                 String pathrootsave = AppDomain.CurrentDomain.BaseDirectory + "\\pdf\\";
 
                 String fechaCotizacion = cot.fecha.Year + "-" + cot.fecha.Month.ToString().PadLeft(2, '0')  + "-" + cot.fecha.Day.ToString().PadLeft(2, '0');// + "-" + DateTime.Now.Hour + "_" + DateTime.Now.Minute + "_" + DateTime.Now.Second;
-                String nombreArchivo = cot.cliente.razonSocial + " " + fechaCotizacion + " N° " + cot.codigo.ToString().PadLeft(10,'0') + ".pdf";
+                String nombreArchivo = cot.cliente.razonSocial.Substring(0, 50).Replace("#", "") + " " + fechaCotizacion + " N° " + cot.codigo.ToString().PadLeft(10,'0') + ".pdf";
 
                 nombreArchivo = nombreArchivo.Replace('&', 'Y');
                 nombreArchivo = nombreArchivo.Replace(':', '.');

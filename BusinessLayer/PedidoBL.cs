@@ -933,8 +933,8 @@ namespace BusinessLayer
         public void EnviarMailTecnica(Pedido pedido) 
         {
             MailService mail = new MailService();
-            try
-            {
+            //try
+            //{
 
                 PedidoBL pedidoBL = new PedidoBL();
                 ParametroBL parametroBL = new ParametroBL();
@@ -975,13 +975,13 @@ namespace BusinessLayer
 
                     foreach (string email in emails)
                     {
-                        destinatarios.Add(email);
+                        destinatarios.Add(email.Trim());
                         seEnvioCorreo = true;
                     }
                     
                     if (destinatarios.Count > 0)
                     {
-                        String asunto = "Nuevo Pedido Ingresado N° " + pedido.numeroPedidoString;
+                        String asunto = "Nuevo Pedido Ingresado Nro " + pedido.numeroPedidoString;
 
                         String template = "";
 
@@ -993,11 +993,11 @@ namespace BusinessLayer
                     }
                 }
 
-            }
-            catch (Exception ex)
-            {
-                mail.enviar(new List<string> { "ti@mpinstitucional.com" }, "ERROR al enviar pedido " + pedido.numeroPedidoString + " a ténica", ex.Message + ex.InnerException, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    mail.enviar(new List<string> { "ti@mpinstitucional.com" }, "ERROR al enviar pedido " + pedido.numeroPedidoString + " a ténica", ex.Message + ex.InnerException, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
+            //}
 
         }
     }

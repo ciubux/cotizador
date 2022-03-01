@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "918";
+    TempData["ScriptVersion"] = "921";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -21,6 +21,7 @@
     @RenderPage("ModalMensaje.cshtml")
     @RenderPage("CambiarPassword.cshtml")
     @RenderPage("CambiarFirmaUsuario.cshtml")
+    @RenderPage("CambiarEmpresa.cshtml")
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -33,8 +34,14 @@
 
                 @Html.HiddenFor(model => usuario.idUsuario)
 
-                <img src="~/images/logo_ind.jpg" id="imagenMP" height="42" style="margin:3px; margin-right: 10px;" />
-
+                @if (usuario.idUsuario == Guid.Empty)
+                {
+                    <img src="~/images/logo_ind.jpg" id="imagenMP" height="42" style="margin:3px; margin-right: 10px;" />
+                }
+                else
+                {
+                    <img src="~/images/logos/logo_@(usuario.codigoEmpresa).png" id="imagenMP" height="42" style="margin:3px; margin-right: 10px;" />
+                }
 
             </div>
 
@@ -174,55 +181,55 @@
                             case 15: linkMantenimientoNotaDebito = "ative"; linkDocumentosVenta = "active"; break;
                             */
 
-                            case 17: linkBusquedaCliente = "ative"; linkMaestros = "active"; break;
-                            case 18: linkMantenimientoCliente = "ative"; linkMaestros = "active"; break;
-                            case 27: linkBusquedaProducto = "ative"; linkMaestros = "active"; break;
-                            case 28: linkCargaMasivaProducto = "ative"; linkMaestros = "active"; break;
-                            case 29: linkMantenimientoProducto = "ative"; linkMaestros = "active"; break;
+                            case 17: linkBusquedaCliente = "active"; linkMaestros = "active"; break;
+                            case 18: linkMantenimientoCliente = "active"; linkMaestros = "active"; break;
+                            case 27: linkBusquedaProducto = "active"; linkMaestros = "active"; break;
+                            case 28: linkCargaMasivaProducto = "active"; linkMaestros = "active"; break;
+                            case 29: linkMantenimientoProducto = "active"; linkMaestros = "active"; break;
 
-                            case 720: linkPlantillaStock = "ative"; linkMaestros = "active"; break;
-                            case 721: linkCargaMasivaStock = "ative"; linkMaestros = "active"; break;
-                            case 722: linkReporteStock = "ative"; linkMaestros = "active"; break;
+                            case 720: linkPlantillaStock = "active"; linkMaestros = "active"; break;
+                            case 721: linkCargaMasivaStock = "active"; linkMaestros = "active"; break;
+                            case 722: linkReporteStock = "active"; linkMaestros = "active"; break;
 
-                            case 30: linkBusquedaOrigen = "ative"; linkMaestros = "active"; break;
-                            case 31: linkMantenimientoOrigen = "ative"; linkMaestros = "active"; break;
+                            case 30: linkBusquedaOrigen = "active"; linkMaestros = "active"; break;
+                            case 31: linkMantenimientoOrigen = "active"; linkMaestros = "active"; break;
 
-                            case 32: linkBusquedaSubDistribuidor = "ative"; linkMaestros = "active"; break;
-                            case 33: linkMantenimientoSubDistribuidor = "ative"; linkMaestros = "active"; break;
+                            case 32: linkBusquedaSubDistribuidor = "active"; linkMaestros = "active"; break;
+                            case 33: linkMantenimientoSubDistribuidor = "active"; linkMaestros = "active"; break;
 
-                            case 750: linkBusquedaRubro = "ative"; linkMaestros = "active"; break;
-                            case 751: linkMantenimientoRubro = "ative"; linkMaestros = "active"; break;
+                            case 750: linkBusquedaRubro = "active"; linkMaestros = "active"; break;
+                            case 751: linkMantenimientoRubro = "active"; linkMaestros = "active"; break;
 
-                            case 20: linkBusquedaNotasIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
-                            case 21: linkMantenimientoNotaIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
-                            case 22: linkMantenimientoNotaIngreso = "ative"; linkMovimientosAlmacen = "active"; break;
-                            case 23: linkBusquedaPedidosCompra = "ative"; linkPedidos = "active"; break;
-                            case 24: linkMantenimientoPedidoCompra = "ative"; linkPedidos = "active"; break;
-                            case 25: linkBusquedaPedidosAlmacen = "ative"; linkPedidos = "active"; break;
-                            case 26: linkMantenimientoPedidoAlmacen = "ative"; linkPedidos = "active"; break;
+                            case 20: linkBusquedaNotasIngreso = "active"; linkMovimientosAlmacen = "active"; break;
+                            case 21: linkMantenimientoNotaIngreso = "active"; linkMovimientosAlmacen = "active"; break;
+                            case 22: linkMantenimientoNotaIngreso = "active"; linkMovimientosAlmacen = "active"; break;
+                            case 23: linkBusquedaPedidosCompra = "active"; linkPedidos = "active"; break;
+                            case 24: linkMantenimientoPedidoCompra = "active"; linkPedidos = "active"; break;
+                            case 25: linkBusquedaPedidosAlmacen = "active"; linkPedidos = "active"; break;
+                            case 26: linkMantenimientoPedidoAlmacen = "active"; linkPedidos = "active"; break;
 
 
-                            case 35: linkMantenimientoCotizacionGrupal = "ative"; linkCotizaciones = "active"; break;
+                            case 35: linkMantenimientoCotizacionGrupal = "active"; linkCotizaciones = "active"; break;
 
-                            case 36: linkBusquedaGrupoCliente = "ative"; linkMaestros = "active"; break;
-                            case 37: linkMantenimientoGrupoCliente = "ative"; linkMaestros = "active"; break;
+                            case 36: linkBusquedaGrupoCliente = "active"; linkMaestros = "active"; break;
+                            case 37: linkMantenimientoGrupoCliente = "active"; linkMaestros = "active"; break;
 
-                            case 38: linkAsignacionPermisos = "ative"; linkSistema = "active"; break;
+                            case 38: linkAsignacionPermisos = "active"; linkSistema = "active"; break;
 
-                            case 41: linkBusquedaVendedor = "ative"; linkSistema = "active"; break;
-                            case 42: linkMantenimientoVendedor = "ative"; linkSistema = "active"; break;
+                            case 41: linkBusquedaVendedor = "active"; linkSistema = "active"; break;
+                            case 42: linkMantenimientoVendedor = "active"; linkSistema = "active"; break;
 
-                            case 43: linkMantenimientoLogCampo = "ative"; linkSistema = "active"; break;
+                            case 43: linkMantenimientoLogCampo = "active"; linkSistema = "active"; break;
 
-                            case 45: linkCrearMensaje = "ative"; linkMaestros = "active"; break;
-                            case 46: linkBusquedaVentas = "ative"; linkMaestros = "active"; break;
+                            case 45: linkCrearMensaje = "active"; linkMaestros = "active"; break;
+                            case 46: linkBusquedaVentas = "active"; linkMaestros = "active"; break;
 
-                            case 101: linkBusquedaRol = "ative"; linkSistema = "active"; break;
-                            case 102: linkMantenimientoRol = "ative"; linkSistema = "active"; break;
-                            case 103: linkBusquedaUsuario = "ative"; linkSistema = "active"; break;
-                            case 104: linkMantenimientoUsuario = "ative"; linkSistema = "active"; break;
+                            case 101: linkBusquedaRol = "active"; linkSistema = "active"; break;
+                            case 102: linkMantenimientoRol = "active"; linkSistema = "active"; break;
+                            case 103: linkBusquedaUsuario = "active"; linkSistema = "active"; break;
+                            case 104: linkMantenimientoUsuario = "active"; linkSistema = "active"; break;
 
-                            case 710: linkBusquedaClienteLite = "ative"; linkMaestros = "active"; break;
+                            case 710: linkBusquedaClienteLite = "active"; linkMaestros = "active"; break;
 
                             case 761: linkMantenimientoTipoContactoCliente = "active"; linkMaestros = "active"; break;
 
@@ -309,7 +316,7 @@
 
                                     @if (usuario.apruebaPedidos || usuario.apruebaPedidosCompra || usuario.apruebaPedidosAlmacen)
                                     {
-                                        <li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Aprobar Pedidos", "AprobarPedidos", "Pedido")</li>
+                                        @*<li id="linkBusquedaPedidos" class="@linkBusquedaPedidos">@Html.ActionLink("Aprobar Pedidos", "AprobarPedidos", "Pedido")</li>*@
                                     }
                                 </ul>
                             </li>
@@ -374,9 +381,9 @@
                                     }
 
                                     @*@if (usuario.visualizaDocumentoVentaNotificacion)
-                        {
-                            <li id="linkBusquedaDocumentoVentaNotificacion" class="@linkBusquedaDocumentoVentaNotificacion">@Html.ActionLink("Documentos de Venta - Notificaciones pendientes", "ValidarNotificacionAnulacion", "DocumentoVenta")</li>
-                        }*@
+                                        {
+                                            <li id="linkBusquedaDocumentoVentaNotificacion" class="@linkBusquedaDocumentoVentaNotificacion">@Html.ActionLink("Documentos de Venta - Notificaciones pendientes", "ValidarNotificacionAnulacion", "DocumentoVenta")</li>
+                                        }*@
 
 
                                     @if (usuario.exportarVentasContabilidad)
@@ -399,7 +406,7 @@
                         if (usuario.modificaMaestroClientes || usuario.modificaMaestroProductos || usuario.modificaGrupoClientes || usuario.visualizaClientes
                             || usuario.visualizaGrupoClientes || usuario.visualizaProductos || usuario.realizaCargaMasivaProductos || usuario.esVendedor
                             || usuario.modificaOrigen || usuario.visualizaOrigenes || usuario.modificaSubDistribuidor || usuario.visualizaSubDistribuidores
-                            || usuario.modificaRubro || usuario.visualizaRubros || usuario.modificaPromocion 
+                            || usuario.modificaRubro || usuario.visualizaRubros || usuario.modificaPromocion
                             )
                         {
                             <li class="@linkMaestros">
@@ -561,9 +568,9 @@
                                     }
 
                                     @*if (usuario.modificaMensaje)
-                        {
-                            <li id="linkCrearMensaje" class="@linkCrearMensaje">@Html.ActionLink("Mensaje - Crear/Modificar", "Editar", "Mensaje")</li>
-                        }
+                                        {
+                                            <li id="linkCrearMensaje" class="@linkCrearMensaje">@Html.ActionLink("Mensaje - Crear/Modificar", "Editar", "Mensaje")</li>
+                                        }
                                     *@
 
                                     @if (usuario.modificaParametro)

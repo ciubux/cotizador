@@ -15,10 +15,15 @@
             <ul class="dropdown-menu" role="menu">
                 @if (usuario.enviaMensaje || usuario.modificaMensaje)
                 {
-                    <li><a id="MensajeRapidoMenu">Enviar mensaje</a></li> 
+                    <li><a id="MensajeRapidoMenu">Enviar mensaje</a></li>
+
                 }
-                <li><a id="linkModalCambiarFirma" href="#ModalCambiarFirmaUsuario " data-toggle="modal">Cambiar Firma</a></li>
+                <li><a id="linkModalCambiarFirma" href="#ModalCambiarFirmaUsuario" data-toggle="modal">Cambiar Firma</a></li>
                 <li><a href="#ModalcambiarPassword" data-toggle="modal">Cambiar contraseña</a></li>
+                @if (usuario.multiEmpresa)
+                {
+                    <li><a id="linkModalCambiarEmpresa" href="#ModalCambiarEmpresa" data-toggle="modal">Cambiar Empresa</a></li>
+                }
                 <li>  @Html.ActionLink("Salir", "Exit", "General")</li>
             </ul>
         </li>

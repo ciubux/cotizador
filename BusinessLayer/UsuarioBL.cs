@@ -202,5 +202,21 @@ namespace BusinessLayer
                 usuarioDAL.updateUsuarioCambiarImagenFirma(imagen, idUsuario);
             }
         }
+
+        public void UpdateEmpresaVisualizacionUsuario(int idEmpresa, Guid idUsuario)
+        {
+            using (var usuarioDAL = new UsuarioDAL())
+            {
+                usuarioDAL.UpdateEmpresaVisualizacionUsuario(idEmpresa, idUsuario);
+            }
+        }
+
+        public List<Empresa> GetEmpresas(Guid idUsuario, int estado)
+        {
+            using (var usuarioDAL = new UsuarioDAL())
+            {
+                return usuarioDAL.GetEmpresas(idUsuario, estado);
+            }
+        }
     }
 }

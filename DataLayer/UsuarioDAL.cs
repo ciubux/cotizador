@@ -172,6 +172,7 @@ namespace DataLayer
                 usuario.nombre = Converter.GetString(row, "nombre");
                 usuario.contacto = Converter.GetString(row, "contacto");
 
+                usuario.idEmpresa = Converter.GetInt(row, "id_empresa");
                 usuario.codigoEmpresa = Converter.GetString(row, "codigo_empresa");
                 usuario.razonSocialEmpresa = Converter.GetString(row, "nombre_empresa");
                 
@@ -777,6 +778,37 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "id_usuario", idUsuario);
             InputParameterAdd.Binary(objCommand, "imagen", imagen);
             ExecuteNonQuery(objCommand);
+        }
+
+        public void UpdateEmpresaVisualizacionUsuario(int idEmpresa, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pu_empresa_visualizacion_usuario");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Int(objCommand, "idEmpresa", idEmpresa);
+            ExecuteNonQuery(objCommand);
+        }
+
+        public List<Empresa> GetEmpresas(Guid idUsuario, int estado)
+        {
+            var objCommand = GetSqlCommand("ps_empresas");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Int(objCommand, "estado", estado);
+            DataTable dataTable = Execute(objCommand);
+            List<Empresa> list = new List<Empresa>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Empresa obj = new Empresa();
+                obj.idEmpresa = Converter.GetInt(row, "id_empresa");
+                obj.codigo = Converter.GetString(row, "codigo");
+                obj.nombre = Converter.GetString(row, "nombre");
+                obj.razonSocial = Converter.GetString(row, "razon_social");
+                obj.urlWeb = Converter.GetString(row, "url_web");
+                obj.Estado = Converter.GetInt(row, "estado");
+                list.Add(obj);
+            }
+
+            return list;
         }
     }
 }

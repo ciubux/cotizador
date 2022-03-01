@@ -2217,6 +2217,7 @@ jQuery(function ($) {
 
         var numeroDocumento = $("#guiaRemision_numeroDocumento").val();
         var numeroPedido = $("#guiaRemision_pedido_numeroPedido").val();
+        var numeroGrupoPedido = $("#guiaRemision_pedido_numeroGrupoPedido").val();
         var fechaTrasladoDesde = $("#guiaRemision_fechaTrasladoDesde").val();
         var fechaTrasladoHasta = $("#guiaRemision_fechaTrasladoHasta").val();
         //var estado = $("#estado").val();
@@ -2232,6 +2233,7 @@ jQuery(function ($) {
                 idGrupoCliente: idGrupoCliente,
                 numeroDocumento: numeroDocumento,
                 numeroPedido: numeroPedido,
+                numeroGrupoPedido: numeroGrupoPedido,
                 fechaTrasladoDesde: fechaTrasladoDesde,
                 fechaTrasladoHasta: fechaTrasladoHasta
 
@@ -3623,14 +3625,13 @@ jQuery(function ($) {
         changeInputStringPedido("numeroReferenciaCliente", $("#guiaRemision_pedido_numeroReferenciaCliente").val())
     });
 
-    $("#guiaRemision_pedido_numeroGrupoPedido").change(function () {
-        ChangeInputIntPedido("numeroGrupoPedido", $("#guiaRemision_pedido_numeroGrupoPedido").val())
-    });
-
     $("#guiaRemision_pedido_numeroPedido").change(function () {
         ChangeInputIntPedido("numeroPedido", $("#guiaRemision_pedido_numeroPedido").val())
     });
 
+    $("#guiaRemision_pedido_numeroGrupoPedido").change(function () {
+        ChangeInputIntPedido("numeroGrupoPedido", $("#guiaRemision_pedido_numeroGrupoPedido").val())
+    });
 
 
 

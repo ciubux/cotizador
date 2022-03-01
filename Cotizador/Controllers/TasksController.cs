@@ -153,5 +153,12 @@ namespace Cotizador.Controllers
 
             return "";
         }
+
+        public void JobDiario()
+        {
+            DocumentoVentaBL bl= new DocumentoVentaBL();
+
+            bl.JobDiario();
+        }
     }
 }

@@ -14,6 +14,7 @@ namespace Model
             this.permisoList = new List<Permiso>();
         }
 
+        public int idEmpresa { get; set; }
         public string codigoEmpresa { get; set; }
         public string razonSocialEmpresa { get; set; }
         public string urlEmpresa { get; set; }
@@ -271,6 +272,8 @@ namespace Model
         public bool administraPermisos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_PERMISOS)).FirstOrDefault() != null; } }
 
         public bool modificaDireccionEntrega { get; set; }
+
+        public bool multiEmpresa { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MULTI_EMPRESA)).FirstOrDefault() != null; } }
 
         /*Roles*/
         public bool modificaRol { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_ROL)).FirstOrDefault() != null; } }

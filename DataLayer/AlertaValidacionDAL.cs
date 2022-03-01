@@ -49,6 +49,8 @@ namespace DataLayer
         public List<AlertaValidacion> getAlertasPorUsuario(Usuario usuario)
         {
             var objCommand = GetSqlCommand("ps_alertasPendientesTipo");
+            InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
+
             DataTable tvp = new DataTable();
             tvp.Columns.Add(new DataColumn("tipoList", typeof(string)));
 

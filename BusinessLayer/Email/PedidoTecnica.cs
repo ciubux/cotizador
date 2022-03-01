@@ -27,7 +27,7 @@ namespace BusinessLayer.Email
 												<table style=""height: 100%;"" border=""0"" cellspacing=""0"" cellpadding=""0"" align=""right"">
 													<tbody>
 														<tr>
-															<td valign=""center""><img style=""max-height: 50px;"" src=""https://www.mpinstitucional.com/images/logos/logo_TC.png"" align=""abscenter"" /></td>
+															<td valign=""center""></td>
 														</tr>
 													</tbody>
 												</table>

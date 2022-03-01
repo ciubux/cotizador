@@ -860,8 +860,15 @@ namespace DataLayer
 
         }
 
+        public bool JobDiario()
+        {
+            var objCommand = GetSqlCommand("pu_jobDiario");
+            ExecuteNonQuery(objCommand);
 
-      
+            return true;
+        }
+
+
         public List<List<String>> getExportStarsoft(DateTime fechaInicio, DateTime fechaFin) 
         {
             List<List<String>> cpes = new List<List<String>>();

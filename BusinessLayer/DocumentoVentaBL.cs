@@ -826,5 +826,13 @@ namespace BusinessLayer
                 return dal.getVentasContabilidadReporte(fechaInicio, fechaFin, mes);
             }
         }
+
+        public bool JobDiario()
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                return dal.JobDiario();
+            }
+        }
     }
 }

@@ -294,7 +294,37 @@ namespace Cotizador.Controllers
         }
 
 
-        
+        public String CambiarEmpresaVisualizacion()
+        {
+            UsuarioBL bl = new UsuarioBL();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            int idEmpresa = int.Parse(this.Request.Params["idEmpresa"].ToString());
+
+            if (!usuario.multiEmpresa || usuario == null || usuario.idUsuario == Guid.Empty)
+            {
+                return JsonConvert.SerializeObject(new { success = 0 });
+            }
+
+            
+            bl.UpdateEmpresaVisualizacionUsuario(idEmpresa, usuario.idUsuario);
+
+            List<Empresa> empresas = (List<Empresa>)this.Session[Constantes.VAR_SESSION_EMPRESA_LISTA];
+
+            Empresa obj = empresas.Where(e => (e.idEmpresa == idEmpresa)).FirstOrDefault();
+
+            if (obj != null)
+            {
+                usuario.idEmpresa = obj.idEmpresa;
+                usuario.codigoEmpresa = obj.codigo;
+                usuario.razonSocialEmpresa= obj.nombre;
+                usuario.urlEmpresa = obj.urlWeb;
+
+                this.Session[Constantes.VAR_SESSION_USUARIO] = usuario;
+            }
+
+            return JsonConvert.SerializeObject(new {success = 1});
+        }
 
         public void ChangeInputString()
         {

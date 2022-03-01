@@ -272,6 +272,15 @@ namespace Cotizador.Controllers
                 guiaRemision.pedido.numeroPedido = int.Parse(this.Request.Params["numeroPedido"]);
             }
 
+            if (this.Request.Params["numeroGrupoPedido"] == null || this.Request.Params["numeroGrupoPedido"].Trim().Length == 0)
+            {
+                guiaRemision.pedido.numeroGrupoPedido = 0;
+            }
+            else
+            {
+                guiaRemision.pedido.numeroGrupoPedido = int.Parse(this.Request.Params["numeroGrupoPedido"]);
+            }
+
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
 
 
@@ -1479,7 +1488,10 @@ namespace Cotizador.Controllers
             PropertyInfo propertyInfo = guiaRemision.pedido.GetType().GetProperty(this.Request.Params["propiedad"]);
             try
             {
-                propertyInfo.SetValue(guiaRemision.pedido, Int64.Parse(this.Request.Params["valor"]));
+                string valor = this.Request.Params["valor"].ToString();
+                if (valor.Equals("")) valor = "0";
+
+                propertyInfo.SetValue(guiaRemision.pedido, Int64.Parse(valor));
             }
             catch (Exception e)
             {

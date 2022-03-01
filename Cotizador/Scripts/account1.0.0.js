@@ -207,6 +207,43 @@
             });
         } 
     });
+
+    $('body').on('click', "button#cambio_empresa_modal_save", function () {
+        var idEmpresa = $("#idEmpresaVisualizar").val();
+
+        $.ajax({
+            url: "/Usuario/CambiarEmpresaVisualizacion",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idEmpresa: idEmpresa
+            },
+            success: function (res) {
+                if (res.success == 1) {
+                    $.alert({
+                        title: "Registro Exitoso",
+                        type: 'green',
+                        content: 'Se cambio la empresa de visualización.',
+                        buttons: {
+                            OK: function () {
+                                location.reload();
+                            }
+                        }
+                    });
+                }
+                else {
+                    $.alert({
+                        title: "ERROR",
+                        type: 'red',
+                        content: 'Ocurrio un error al cambiar la empresa de visualización.',
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                }
+            }
+        });
+    }); 
 });
 
 

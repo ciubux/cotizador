@@ -943,6 +943,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "anulado", guiaRemision.estaAnulado ? 1 : 0);
             InputParameterAdd.Int(objCommand, "facturado", guiaRemision.estaFacturado ? 1 : 0);
             InputParameterAdd.BigInt(objCommand, "numeroPedido", guiaRemision.pedido.numeroPedido);
+            InputParameterAdd.BigInt(objCommand, "numeroGrupoPedido", guiaRemision.pedido.numeroGrupoPedido);
             InputParameterAdd.Int(objCommand, "estadoFiltro", (int)guiaRemision.estadoFiltro);
             InputParameterAdd.Char(objCommand, "motivoTraslado", ((Char)guiaRemision.motivoTrasladoBusqueda).ToString());
             InputParameterAdd.Varchar(objCommand, "sku", guiaRemision.sku);
