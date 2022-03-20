@@ -265,6 +265,21 @@ namespace DataLayer
             return idCliente;
         }
 
+        public Guid getClienteEmpresa(int idEmpresa, Guid idCiudad)
+        {
+            var objCommand = GetSqlCommand("ps_cliente_empresa");
+            //InputParameterAdd.Guid(objCommand, "idPedido", pedidoAdjunto.idPedido);
+            InputParameterAdd.Int(objCommand, "idEmpresa", idEmpresa);
+            InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
+
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idCliente");
+
+            ExecuteNonQuery(objCommand);
+
+            Guid idCliente = (Guid)objCommand.Parameters["@idCliente"].Value;
+
+            return idCliente;
+        }
 
         public Cliente getCliente(Guid idCliente)
         {

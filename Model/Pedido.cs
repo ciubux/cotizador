@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Model
 {
-    public class Pedido : Auditoria, IDocumento
+    public class Pedido : Auditoria, IDocumento, ICloneable
     {
         public Pedido(ClasesPedido tipo)
         {
@@ -663,6 +663,14 @@ namespace Model
          */
         [Display(Name = "SKU:")]
         public String sku { get; set; }
+
+
+
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
 
     }
 }

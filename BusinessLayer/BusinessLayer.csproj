@@ -61,6 +61,7 @@
     <Compile Include="Email\PedidoTruncado.cs" />
     <Compile Include="MensajeBL.cs" />
     <Compile Include="OrdenCompraClienteBL.cs" />
+    <Compile Include="KpiBL.cs" />
     <Compile Include="RolBL.cs" />
     <Compile Include="ParametroBL.cs" />
     <Compile Include="DocumentoVentaBL.cs" />

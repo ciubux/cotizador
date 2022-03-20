@@ -149,6 +149,10 @@ namespace DataLayer
                 obj.nombre = Converter.GetString(row, "nombre");
                 obj.email = Converter.GetString(row, "email");
                 obj.contacto = Converter.GetString(row, "contacto");
+                obj.idEmpresa = Converter.GetInt(row, "id_empresa");
+                obj.codigoEmpresa = Converter.GetString(row, "codigo_empresa");
+                obj.razonSocialEmpresa = Converter.GetString(row, "nombre_empresa");
+                obj.factorEmpresa = Converter.GetDecimal(row, "factor_costo");
             }
 
             return obj;

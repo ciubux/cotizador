@@ -140,10 +140,9 @@ namespace Cotizador.Controllers
             pedido = bl.GetPedido(pedido, usuario);
             pedido.usuario = usuario;
 
-            if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado)
-            {
-                bl.EnviarMailTecnica(pedido);
-            }
+         
+            bl.ReplicarPedidoEntornoMP(pedido);
+            
         }
 
         public async Task<String> TipoCambioSunat()

@@ -18,8 +18,9 @@ namespace Model
         public string codigoEmpresa { get; set; }
         public string razonSocialEmpresa { get; set; }
         public string urlEmpresa { get; set; }
+        public decimal factorEmpresa { get; set; }
 
-
+        public Area area { get; set; }
         public Guid idUsuario { get; set; }
         /*DATOS*/
         [Display(Name = "Email:")]

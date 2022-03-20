@@ -928,6 +928,7 @@ namespace DataLayer
                 pedido.usuario.firmaImagen = Converter.GetBytes(row, "usuario_firma_imagen");
                 pedido.usuario.contacto = Converter.GetString(row, "contacto_usuario");
                 pedido.usuario.email = Converter.GetString(row, "email");
+                pedido.IdUsuarioRegistro = Converter.GetGuid(row, "id_usuario_creacion");
 
                 pedido.seguimientoPedido = new SeguimientoPedido();
                 pedido.seguimientoPedido.estado = (SeguimientoPedido.estadosSeguimientoPedido)Converter.GetInt(row, "estado_seguimiento");

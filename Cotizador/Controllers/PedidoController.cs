@@ -1947,9 +1947,11 @@ namespace Cotizador.Controllers
                 pedido = pedidoBL.GetPedido(pedido, usuario);
                 pedido.usuario = usuario;
 
-                if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado)
+                if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && 
+                    pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado && 
+                    pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
                 {
-                    pedidoBL.EnviarMailTecnica(pedido);
+                    pedidoBL.ProcesarPedidoAprobadoTecnica(pedido);
                 }
             }
         }
@@ -1960,6 +1962,23 @@ namespace Cotizador.Controllers
             SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido estadosSeguimientoCrediticioPedido = (SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido)Int32.Parse(Request["estado"].ToString());
             String observacion = Request["observacion"].ToString();
             updateEstadoSeguimientoCrediticioPedido(idPedido, estadosSeguimientoCrediticioPedido, observacion);
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            PedidoBL pedidoBL = new PedidoBL();
+
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
+            pedido.idPedido = idPedido;
+            pedido = pedidoBL.GetPedido(pedido, usuario);
+            pedido.usuario = usuario;
+
+            if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) &&
+                pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
+                pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
+            {
+                pedidoBL.ProcesarPedidoAprobadoTecnica(pedido);
+            }
+            
         }
 
 

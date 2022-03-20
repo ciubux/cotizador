@@ -264,9 +264,11 @@ namespace BusinessLayer
                 validarPedidoVenta(pedido);
                 dal.InsertPedido(pedido);
 
-                if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado)
+                if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && 
+                    pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
+                pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
                 {
-                    EnviarMailTecnica(pedido);
+                    ProcesarPedidoAprobadoTecnica(pedido);
                 }
             }
         }
@@ -283,9 +285,11 @@ namespace BusinessLayer
                 validarPedidoVenta(pedido);
                 dal.UpdatePedido(pedido);
 
-                if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado)
+                if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && 
+                    pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
+                    pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
                 {
-                    EnviarMailTecnica(pedido);
+                    ProcesarPedidoAprobadoTecnica(pedido);
                 }
             }
         }
@@ -928,6 +932,44 @@ namespace BusinessLayer
             {
                 return dal.TruncarPedidos(idPedidos);
             }
+        }
+
+        public void ProcesarPedidoAprobadoTecnica(Pedido pedido)
+        {   
+            this.EnviarMailTecnica(pedido);
+            this.ReplicarPedidoEntornoMP(pedido);
+        }
+
+        public void ReplicarPedidoEntornoMP(Pedido pedido)
+        {
+            Pedido pMP = (Pedido)pedido.Clone();
+            pedido.idPedido = Guid.Empty;
+
+            ClienteDAL clienteDal = new ClienteDAL();
+            
+            Guid idCliente = clienteDal.getClienteEmpresa(pedido.usuario.idEmpresa, pedido.ciudad.idCiudad);
+            Cliente clienteEmp = clienteDal.getCliente(idCliente);
+            pMP.cliente = clienteEmp;
+
+            UsuarioDAL usuarioDal = new UsuarioDAL();
+            Usuario usuarioEmpresa = usuarioDal.getUsuario(pedido.IdUsuarioRegistro);
+
+            Usuario usuarioZAS = usuarioDal.getUsuario(Constantes.IDUSUARIOZAS);
+            pMP.usuario = usuarioZAS;
+            pMP.IdUsuarioRegistro = usuarioZAS.idUsuario;
+            
+
+            foreach(PedidoDetalle det in pMP.pedidoDetalleList)
+            {
+                det.precioNeto = det.producto.costoLista * usuarioEmpresa.factorEmpresa;
+            }
+
+            this.calcularMontosTotales(pMP);
+
+            pMP.observacionesGuiaRemision = pMP.observacionesGuiaRemision + " // Dejar en " + pedido.cliente.razonSocial;
+
+            this.InsertPedido(pMP);
+
         }
 
         public void EnviarMailTecnica(Pedido pedido) 

@@ -31,8 +31,8 @@ namespace cotizadorPDF
     {
         public String generarPDFExtended(Cotizacion cot)
         {
-            try
-            {
+            //try
+            //{
                 char pad = '0';
                 int cantidadPad = 10;
 
@@ -77,10 +77,13 @@ namespace cotizadorPDF
                 page.Canvas.DrawString("Señores: ", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), 0, y);
                 y = y + sepLine;
 
+                String nombreCliente = "";
+
                 if (cot.cliente.idCliente != Guid.Empty)
                 {
                     if (cot.cliente.razonSocial != null && !cot.cliente.razonSocial.Trim().Equals(""))
                     {
+                        nombreCliente = cot.cliente.razonSocial.Substring(0, cot.cliente.razonSocial.Length > 50 ? 50 : cot.cliente.razonSocial.Length).Replace("#", "");
                         String textRS = "";
                         String[] palabrasRS = cot.cliente.razonSocial.Trim().Split(' ');
 
@@ -116,6 +119,8 @@ namespace cotizadorPDF
                 }
                 else
                 {
+                    nombreCliente = cot.grupo.nombre.Substring(0, cot.grupo.nombre.Length > 50 ? 50 : cot.grupo.nombre.Length).Replace("#", "");
+
                     page.Canvas.DrawString(cot.grupo.nombre, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Blue), 0, y);
                     y = y + sepLine;
                 }
@@ -639,8 +644,9 @@ namespace cotizadorPDF
 
                 String pathrootsave = AppDomain.CurrentDomain.BaseDirectory + "\\pdf\\";
 
+            
                 String fechaCotizacion = cot.fecha.Year + "-" + cot.fecha.Month.ToString().PadLeft(2, '0')  + "-" + cot.fecha.Day.ToString().PadLeft(2, '0');// + "-" + DateTime.Now.Hour + "_" + DateTime.Now.Minute + "_" + DateTime.Now.Second;
-                String nombreArchivo = cot.cliente.razonSocial.Substring(0, 50).Replace("#", "") + " " + fechaCotizacion + " N° " + cot.codigo.ToString().PadLeft(10,'0') + ".pdf";
+                String nombreArchivo = nombreCliente + " " + fechaCotizacion + " N° " + cot.codigo.ToString().PadLeft(10,'0') + ".pdf";
 
                 nombreArchivo = nombreArchivo.Replace('&', 'Y');
                 nombreArchivo = nombreArchivo.Replace(':', '.');
@@ -650,14 +656,14 @@ namespace cotizadorPDF
                 PDFDocumentViewer(pathrootsave+nombreArchivo);
                 doc.Close();
                 return nombreArchivo;
-            }
-            catch (Exception ex)
-            {
-                Log log = new Log(ex.ToString(), TipoLog.Error, cot.usuario);
-                LogBL logBL = new LogBL();
-                logBL.insertLog(log);
-                return ex.ToString();
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Log log = new Log(ex.ToString(), TipoLog.Error, cot.usuario);
+            //    LogBL logBL = new LogBL();
+            //    logBL.insertLog(log);
+            //    return ex.ToString();
+            //}
         }
 
 

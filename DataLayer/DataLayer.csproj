@@ -45,6 +45,7 @@
     <Compile Include="ClienteContactoTipoDAL.cs" />
     <Compile Include="MensajeDAL.cs" />
     <Compile Include="OrdenCompraClienteDAL.cs" />
+    <Compile Include="KpiDAL.cs" />
     <Compile Include="RolDAL.cs" />
     <Compile Include="ParametroDAL.cs" />
     <Compile Include="DALConverter\UbigeoConvertTo.cs" />
