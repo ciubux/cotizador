@@ -1,0 +1,34 @@
+﻿
+
+<div id="ModalCambiarEmpresa" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" id="cambiarEmpresa">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h3 class="control-label">Cambiar Empresa</h3>
+            </div>
+            
+
+            <div class="modal-body form-horizontal container">
+                <div class="col-sm-6 col-lg-12">
+                    <div class="form-group">
+                        <label class="control-label col-xs-5">Empresa:</label>
+                        <div class="col-xs-7">
+                            @Html.Action("GetEmpresasVisualizacion", "Empresa",
+                            new
+                            {
+                                empresaSelectId = "idEmpresaVisualizar",
+                                selectedValue = ""
+                            })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+                <button class="btn btn-primary" id="cambio_empresa_modal_save">Guardar</button>
+            </div>
+            <!--</form>-->
+        </div>
+    </div>
+</div>

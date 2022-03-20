@@ -1,0 +1,24 @@
+﻿@model Cotizador.Models.EmpresaViewModels
+
+@if (Model.incluirSeleccione)
+{
+@Html.DropDownList(
+            Model.EmpresaSelectId,
+            Model.Empresas, "Seleccione la Empresa",
+            new
+            {
+                id = Model.EmpresaSelectId,
+                @class = "form-control"
+            })
+}
+else
+{
+@Html.DropDownList(
+        Model.EmpresaSelectId,
+        Model.Empresas,
+        new
+        {
+            id = Model.EmpresaSelectId,
+            @class = "form-control"
+        })
+}
