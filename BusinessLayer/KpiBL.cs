@@ -9,80 +9,43 @@ namespace BusinessLayer
 {
     public class KpiBL
     {
-        public Kpi getRol(int idRol)
+        public List<KpiMeta> getKPIResultados(Guid idUsuario, Guid idKpiPeriodo, Guid idKpi)
         {
-            using (var dal = new RolDAL())
+            using (var dal = new KpiDAL())
             {
-                Rol obj = dal.getRol(idRol);
+                List<KpiMeta> list = dal.getKPIResultados(idUsuario, idKpiPeriodo, idKpi);
                 
-                return obj;
+                return list;
             }
         }
 
-        public Rol getRolByCodigo(string codigo)
+        public List<KpiPeriodo> getPeriodos(Usuario usuario)
         {
-            using (var dal = new RolDAL())
+            using (var dal = new KpiDAL())
             {
-                Rol obj = dal.getRolByCodigo(codigo);
+                List<KpiPeriodo> list = dal.getPeriodos(usuario);
 
-                return obj;
+                return list;
             }
         }
 
-
-        public List<Rol> getRoles(Rol obj)
+        public List<Kpi> getPeriodoKPIs(Usuario usuario, Guid idKpiPeriodo)
         {
-            using (var dal = new RolDAL())
+            using (var dal = new KpiDAL())
             {
-                return dal.getRoles(obj);
+                List<Kpi> list = dal.getPeriodoKPIs(usuario, idKpiPeriodo);
+
+                return list;
             }
         }
 
-        public Rol insertRol(Rol obj)
+        public List<Usuario> getKPIPeriodoUsuarios(Usuario usuario, Guid idKpiPeriodo, Guid idKpi)
         {
-            using (var dal = new RolDAL())
+            using (var dal = new KpiDAL())
             {
-                return dal.insertRol(obj);
-            }
-        }
+                List<Usuario> list = dal.getKPIPeriodoUsuarios(usuario, idKpiPeriodo, idKpi);
 
-        public Rol updateRol(Rol obj)
-        {
-            using (var dal = new RolDAL())
-            {
-                return dal.updateRol(obj);
-            }
-        }
-
-        public List<Usuario> getUsuarios(int idRol)
-        {
-            using (var dal = new RolDAL())
-            {
-                return dal.getUsuarios(idRol);
-            }
-        }
-
-        public void agregarUsuarioRol(int idRol, Guid idUsuario, Guid idUsuarioModifica)
-        {
-            using (var dal = new RolDAL())
-            {
-                dal.agregarUsuarioRol(idRol, idUsuario, idUsuarioModifica);
-            }
-        }
-
-        public void quitarUsuarioRol(int idRol, Guid idUsuario)
-        {
-            using (var dal = new RolDAL())
-            {
-                dal.quitarUsuarioRol(idRol, idUsuario);
-            }
-        }
-        
-        public List<Usuario> getUsuariosRoles(List<int> idRol)
-        {
-            using (var dal = new RolDAL())
-            {
-                return dal.getUsuariosRoles(idRol);
+                return list;
             }
         }
     }

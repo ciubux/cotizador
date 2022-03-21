@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Reporte Resultados KPI";
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+
+
+
+
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-xs-6 col-lg-4">
+            <!--Fecha Inicio Vigencia-->
+            <label class="control-label col-xs-3" for="skuProducto">PERIODO:</label>
+            <div class="col-xs-9">
+                <select class="form-control" id="kpiPeriodos" name="kpiPeriodos">
+                    @foreach (Model.KpiPeriodo item in ViewBag.periodos)
+                    {
+                        <option value="@item.idKpiPeriodo">@item.periodo</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row pull-right" style="margin-top: 20px; margin-bottom: 10px; margin-right: 0px">
+        <button id="btnLimpiarFormulario" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
+        <button id="btnActualizarVista" type="button" class="btn btn-success">Actualizar Vista</button>
+    </div>
+
+</div>
+
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/kpi")
+}

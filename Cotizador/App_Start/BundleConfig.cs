@@ -204,7 +204,9 @@ namespace Cotizador
                       "~/Scripts/respond.js"));
 
 
-
+            bundles.Add(new ScriptBundle("~/bundles/kpi").Include(
+                     "~/Scripts/kpi.js"
+                     ));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",

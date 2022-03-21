@@ -235,6 +235,7 @@
     <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\ClienteLiteController.cs" />
+    <Compile Include="Controllers\KpiController.cs" />
     <Compile Include="Controllers\ReporteController.cs" />
     <Compile Include="Controllers\PromocionController.cs" />
     <Compile Include="Controllers\StockController.cs" />
@@ -471,6 +472,7 @@
     <Content Include="Scripts\account1.0.0.js" />
     <Content Include="Scripts\clienteLite1.0.0.js" />
     <Content Include="Scripts\notaCreditoCompra.js" />
+    <Content Include="Scripts\kpi.js" />
     <Content Include="Scripts\reportes.js" />
     <Content Include="Scripts\promocion.js" />
     <Content Include="Scripts\stock.js" />
@@ -724,6 +726,7 @@
     <Content Include="Views\Cotizacion\_ModalExtenderVigencia.cshtml" />
     <Content Include="Views\Shared\CambiarEmpresa.cshtml" />
     <Content Include="Views\Shared\_Empresa.cshtml" />
+    <Content Include="Views\Kpi\ResultadosKpi.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

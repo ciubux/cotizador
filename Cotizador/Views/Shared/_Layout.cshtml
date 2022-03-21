@@ -146,6 +146,8 @@
                         var linkReportes = "";
 
                         var linkReporteSellOutPersonalizado = "";
+
+                        var linkResultadosKPI = "";
                     }
                     @if (this.Session["pagina"] != null)
                     {
@@ -237,6 +239,7 @@
                             case 771: linkMantenimientoPromocion = "active"; linkMaestros = "active"; break;
 
                             case 901: linkReporteSellOutPersonalizado = "active"; linkReportes = "active"; break;
+                            case 920: linkResultadosKPI = "active"; linkReportes = "active"; break;
                         }
 
                         if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
@@ -599,7 +602,7 @@
                             </li>
                         }
 
-                        if (usuario.visualizaReporteSellOutPersonalizado)
+                        if (true)
                         {
                             <li class="@linkReportes">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
@@ -609,8 +612,9 @@
                                 <ul class="dropdown-menu" role="menu">
                                     @if (usuario.visualizaReporteSellOutPersonalizado)
                                     {
-                                        <li id="linkAsignaPermisos" class="@linkReporteSellOutPersonalizado">@Html.ActionLink("Reporte SellOut Personalizado", "SellOutPersonalizado", "Reporte")</li>
+                                        <li id="linkReporteSellOutPersonalizado" class="@linkReporteSellOutPersonalizado">@Html.ActionLink("Reporte SellOut Personalizado", "SellOutPersonalizado", "Reporte")</li>
                                     }
+                                    <li id="linkResultadosKPI" class="@linkResultadosKPI">@Html.ActionLink("Reporte Resultados KPI", "ResultadosKpi", "KPI")</li>
                                 </ul>
                             </li>
                         }

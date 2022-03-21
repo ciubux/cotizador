@@ -694,6 +694,10 @@ namespace Model
             [Display(Name = "REPORTE SELLOUT PERSONALIZADO")]
             ReporteSellOutPersonalizado = 901,
 
+            [Display(Name = "RESULTADOS KPI")]
+            ResultadosKPI = 920,
+
+
             /*PARAMETRO*/
             [Display(Name = "TIPO CLIENTE CONTACTO")]
             MantenimientoClienteContactoTipo = 761
