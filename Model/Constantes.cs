@@ -99,7 +99,7 @@ namespace Model
         public static String VAR_SESSION_CLIENTE_VER = "clienteVer";
         public static String VAR_SESSION_CLIENTE_VER_CONTACTOS = "clienteVerContactos";
         public static String VAR_SESSION_CLIENTE_BUSQUEDA_FECHA_PRECIOS_VER = "clienteVeFechaPreciosVer";
-
+        public static String VAR_SESSION_CLIENTE_REASIGNACION_CARTERA = "clienteReasignacionCartera";
 
         public static String VAR_SESSION_GRUPO_CLIENTE = "grupoCliente";
         public static String VAR_SESSION_GRUPO_CLIENTE_MIEMBROS = "grupoClienteMiembros";
@@ -498,8 +498,13 @@ namespace Model
 
         public const String VISUALIZA_REPORTE_SELLOUT_PERSONALIZADO = "R001";
 
+        public const String NIVEL_KPI_MULTI_USUARIO = "P920";
+        public const String NIVEL_KPI_MULTI_AREA = "P921";
+
         public const String REVIERTE_TRUNCADO_PEDIDOS = "P341";
         public const String PEDIDO_REGISTRA_OBSERVACION_ALMACEN = "P311";
+
+        public const String REASIGNA_CARTERA_CLIENTE = "P630";
 
         public enum paginas
         {
@@ -696,6 +701,9 @@ namespace Model
 
             [Display(Name = "RESULTADOS KPI")]
             ResultadosKPI = 920,
+
+            [Display(Name = "REASIGNACION CARTERA")]
+            ReasignacionCartera = 630,
 
 
             /*PARAMETRO*/

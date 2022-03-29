@@ -3,6 +3,7 @@ using Framework.DAL.Settings.Implementations;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using Model;
 using Newtonsoft.Json;
 using Model.CONFIGCLASSES;
@@ -1191,6 +1192,94 @@ namespace DataLayer
             }
 
             return list;
+        }
+
+
+        public List<Cliente> BusquedaClientesCartera(Cliente cliente)
+        {
+            var objCommand = GetSqlCommand("ps_clientes_cartera");
+            InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);
+            InputParameterAdd.Guid(objCommand, "idUsuario", cliente.usuario.idUsuario);
+            InputParameterAdd.Int(objCommand, "idResponsableComercial", cliente.responsableComercial.idVendedor);
+            InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente.idGrupoCliente);
+            InputParameterAdd.Int(objCommand, "perteneceCanalLima", cliente.perteneceCanalLima ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "perteneceCanalProvincias", cliente.perteneceCanalProvincias ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "perteneceCanalMultiregional", cliente.perteneceCanalMultiregional ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "perteneceCanalPCP", cliente.perteneceCanalPCP ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "esSubdistribuidor", cliente.esSubDistribuidor ? 1 : 0);
+
+            DataTable dataTable = Execute(objCommand);
+
+            List<Cliente> clienteList = new List<Cliente>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Cliente ClienteResultado = new Cliente();
+                ClienteResultado.idCliente = Converter.GetGuid(row, "id_cliente");
+                ClienteResultado.codigo = Converter.GetString(row, "codigo");
+                ClienteResultado.ciudad = new Ciudad();
+                ClienteResultado.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                ClienteResultado.ciudad.nombre = Converter.GetString(row, "ciudad_nombre");
+
+                ClienteResultado.razonSocialSunat = Converter.GetString(row, "razon_social_sunat");
+                ClienteResultado.nombreComercial = Converter.GetString(row, "nombre_comercial");
+                ClienteResultado.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento");
+                ClienteResultado.ruc = Converter.GetString(row, "ruc");
+
+                /*Vendedores*/
+                ClienteResultado.responsableComercial = new Vendedor();
+                ClienteResultado.responsableComercial.idVendedor = Converter.GetInt(row, "id_responsable_comercial");
+                ClienteResultado.responsableComercial.codigo = Converter.GetString(row, "codigo_vendedor");
+                ClienteResultado.responsableComercial.descripcion = Converter.GetString(row, "nombre_vendedor");
+
+                ClienteResultado.perteneceCanalMultiregional = Converter.GetBool(row, "pertenece_canal_multiregional");
+                ClienteResultado.perteneceCanalLima = Converter.GetBool(row, "pertenece_canal_lima");
+                ClienteResultado.perteneceCanalProvincias = Converter.GetBool(row, "pertenece_canal_provincia");
+                ClienteResultado.perteneceCanalPCP = Converter.GetBool(row, "pertenece_canal_pcp");
+                ClienteResultado.esSubDistribuidor = Converter.GetBool(row, "es_sub_distribuidor");
+
+                clienteList.Add(ClienteResultado);
+            }
+
+            return clienteList;
+        }
+
+        public void UpdateReasignarCartera(List<Guid> idsCliente, List<int> idsVendedor, DateTime fechaInicioVigencia, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pi_cliente_historial_reasignacion");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Date(objCommand, "fechaInicioVigencia", fechaInicioVigencia);
+
+            DataTable dtClientes = new DataTable();
+            dtClientes.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            foreach (Guid item in idsCliente)
+            {
+                DataRow rowObj = dtClientes.NewRow();
+                rowObj["ID"] = item;
+                dtClientes.Rows.Add(rowObj);
+            }
+
+            SqlParameter dtParamCl = objCommand.Parameters.AddWithValue("@idsCliente", dtClientes);
+            dtParamCl.SqlDbType = SqlDbType.Structured;
+            dtParamCl.TypeName = "dbo.UniqueIdentifierList";
+
+
+            DataTable dtVendedores = new DataTable();
+            dtVendedores.Columns.Add(new DataColumn("ID", typeof(int)));
+
+            foreach (int item in idsVendedor)
+            {
+                DataRow rowObj = dtVendedores.NewRow();
+                rowObj["ID"] = item;
+                dtVendedores.Rows.Add(rowObj);
+            }
+
+            SqlParameter dtParamVen = objCommand.Parameters.AddWithValue("@idsVendedor", dtVendedores);
+            dtParamVen.SqlDbType = SqlDbType.Structured;
+            dtParamVen.TypeName = "dbo.IntegerList";
+
+
+            ExecuteNonQuery(objCommand);
         }
     }
 }

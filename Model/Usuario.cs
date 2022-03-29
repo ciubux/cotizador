@@ -204,6 +204,8 @@ namespace Model
         public bool modificaCanastaCliente { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_CANASTA_CLIENTE)).FirstOrDefault() != null; } }
         public bool activaClienteFacturaCompleja { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ACTIVA_CLIENTE_FACTURA_COMPLEJA)).FirstOrDefault() != null; } }
 
+        public bool reasignaCarteraCliente { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REASIGNA_CARTERA_CLIENTE)).FirstOrDefault() != null; } }
+
 
         /*Productos*/
         public bool visualizaProductos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_PRODUCTOS)).FirstOrDefault() != null; } }
@@ -268,6 +270,9 @@ namespace Model
         public bool visualizaVentas { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_VENTAS)).FirstOrDefault() != null; } }
         public bool rectificarVenta { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.RECTIFICAR_VENTA)).FirstOrDefault() != null; } }
 
+        /*KPI*/
+        public bool NivelKpiMultiUsuario { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.NIVEL_KPI_MULTI_USUARIO)).FirstOrDefault() != null; } }
+        public bool NivelKpiMultiArea { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.NIVEL_KPI_MULTI_AREA)).FirstOrDefault() != null; } }
 
         /*Administra Permisos*/
         public bool administraPermisos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_PERMISOS)).FirstOrDefault() != null; } }

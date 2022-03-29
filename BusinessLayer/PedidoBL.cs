@@ -1020,7 +1020,13 @@ namespace BusinessLayer
                         destinatarios.Add(email.Trim());
                         seEnvioCorreo = true;
                     }
-                    
+
+                    if (!pedido.usuario.email.Equals(String.Empty))
+                    {
+                        destinatarios.Add(pedido.usuario.email);
+                        seEnvioCorreo = true;
+                    }
+
                     if (destinatarios.Count > 0)
                     {
                         String asunto = "Nuevo Pedido Ingresado Nro " + pedido.numeroPedidoString;

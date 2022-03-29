@@ -19,16 +19,32 @@ namespace DataLayer
         }
 
 
-        public List<KpiMeta> getKPIResultados(Guid idUsuario, Guid idKpiPeriodo, Guid idKpi)
+        public List<KpiMeta> getKPIResultados(Guid[] idsUsuario, Guid idKpiPeriodo, Guid idKpi)
         {
             var objCommand = GetSqlCommand("ps_kpi_meta_periodo");
-            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             InputParameterAdd.Guid(objCommand, "idKpi", idKpi);
             InputParameterAdd.Guid(objCommand, "idKpiPeriodo", idKpiPeriodo);
+
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            foreach (Guid item in idsUsuario)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = item;
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idsUsuario", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+
             DataSet dataSet = ExecuteDataSet(objCommand);
 
             DataTable dataTableResultados = dataSet.Tables[0];
-            DataTable dataTableUsuarios = dataSet.Tables[0];
+            DataTable dataTableUsuarios = dataSet.Tables[1];
 
             List<KpiMeta> lista = new List<KpiMeta>();
 
@@ -84,8 +100,8 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_periodo_kpis");
             InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
             InputParameterAdd.Int(objCommand, "idArea", usuario.area.idArea);
-            InputParameterAdd.Int(objCommand, "multiUsuario", 1);
-            InputParameterAdd.Int(objCommand, "multiArea", 1);
+            InputParameterAdd.Int(objCommand, "multiUsuario", (usuario.NivelKpiMultiUsuario ? 1 : 0));
+            InputParameterAdd.Int(objCommand, "multiArea", (usuario.NivelKpiMultiArea ? 1 : 0));
             InputParameterAdd.Guid(objCommand, "idKpiPeriodo", idKpiPeriodo);
 
             DataTable dataTable = Execute(objCommand);
@@ -108,8 +124,8 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_kpi_usuarios");
             InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
             InputParameterAdd.Int(objCommand, "idArea", usuario.area.idArea);
-            InputParameterAdd.Int(objCommand, "multiUsuario", 1);
-            InputParameterAdd.Int(objCommand, "multiArea", 1);
+            InputParameterAdd.Int(objCommand, "multiUsuario", (usuario.NivelKpiMultiUsuario ? 1: 0));
+            InputParameterAdd.Int(objCommand, "multiArea", (usuario.NivelKpiMultiArea ? 1 : 0));
             InputParameterAdd.Guid(objCommand, "idKpiPeriodo", idKpiPeriodo);
             InputParameterAdd.Guid(objCommand, "idKpi", idKpi);
 

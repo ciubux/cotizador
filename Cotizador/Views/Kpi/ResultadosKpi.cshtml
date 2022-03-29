@@ -14,23 +14,86 @@
     <div class="row" style="margin-top: 10px;">
         <div class="col-xs-6 col-lg-4">
             <!--Fecha Inicio Vigencia-->
-            <label class="control-label col-xs-3" for="skuProducto">PERIODO:</label>
+            <label class="control-label col-xs-3" for="kpiPeriodos">PERIODO:</label>
             <div class="col-xs-9">
                 <select class="form-control" id="kpiPeriodos" name="kpiPeriodos">
+                    <option>Seleccione</option>
                     @foreach (Model.KpiPeriodo item in ViewBag.periodos)
                     {
-                        <option value="@item.idKpiPeriodo">@item.periodo</option>
+                        if (item.idKpiPeriodo == ViewBag.idKpiPeriodo)
+                        {
+                            <option selected value="@item.idKpiPeriodo">@item.periodo</option>
+                        }
+                        else
+                        {
+                            <option value="@item.idKpiPeriodo">@item.periodo</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="col-xs-6 col-lg-4">
+            <!--Fecha Inicio Vigencia-->
+            <label class="control-label col-xs-3" for="kpiKpis">KPI:</label>
+            <div class="col-xs-9">
+                <select class="form-control" id="kpiKpis" name="kpiKpis">
+                    <option value=""></option>
+                    @foreach (Model.Kpi item in ViewBag.kpis)
+                    {
+                        if (item.idKpi == ViewBag.idKpi)
+                        {
+                            <option selected value="@item.idKpi">@item.kpi</option>
+                        }
+                        else
+                        {
+                            <option value="@item.idKpi">@item.kpi</option>
+                        }                        
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-6 col-lg-4">
+            <!--Fecha Inicio Vigencia-->
+            <label class="control-label col-xs-3" for="kpiUsuarios">USUARIO:</label>
+            <div class="col-xs-9">
+                <select class="form-control" id="kpiUsuarios" name="kpiUsuarios">
+                    <option value=""></option>
+                    @if (ViewBag.usuarios.Count > 1)
+                    {
+                        <option value="@Guid.Empty">TODOS</option>
+                    }
+
+                    @foreach (Model.Usuario item in ViewBag.usuarios)
+                    {
+                        <option value="@item.idUsuario">@item.nombre (@item.email) </option>
                     }
                 </select>
             </div>
         </div>
     </div>
 
-    <div class="row pull-right" style="margin-top: 20px; margin-bottom: 10px; margin-right: 0px">
-        <button id="btnLimpiarFormulario" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
-        <button id="btnActualizarVista" type="button" class="btn btn-success">Actualizar Vista</button>
-    </div>
 
+    <div class="row">
+        <div class="col-sm-12 col-lg-12">
+            <table id="tableResultadosKPI" class="table" data-editing="false"
+                   data-editing-allow-add="false"
+                   data-editing-allow-delete="false"
+                   data-editing-allow-edit="false"
+                   data-show-toggle="false">
+                <thead>
+                    <tr>
+                        <th data-name="usuario" data-visible="true" data-sortable="true" data-sorted="true" data-direction="DESC">Usuario</th>
+                        <th data-name="meta" data-visible="true" data-sortable="true">Meta</th>
+                        <th data-name="resultado" data-sortable="true" data-breakpoints="xs">Resultado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 

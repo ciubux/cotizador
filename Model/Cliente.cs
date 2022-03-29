@@ -136,7 +136,9 @@ namespace Model
 
                 if (this.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC)
                 {
-                    textNombre = this.razonSocial + " (" + this.nombreComercial + ")";
+                    textNombre = this.razonSocialSunat.Trim().Equals("") ? this.razonSocial : this.razonSocialSunat;
+                    
+                    //textNombre = this.razonSocial + " (" + this.nombreComercial + ")";
                 }
 
                 if (this.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.DNI)

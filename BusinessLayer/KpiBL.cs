@@ -9,7 +9,7 @@ namespace BusinessLayer
 {
     public class KpiBL
     {
-        public List<KpiMeta> getKPIResultados(Guid idUsuario, Guid idKpiPeriodo, Guid idKpi)
+        public List<KpiMeta> getKPIResultados(Guid[] idUsuario, Guid idKpiPeriodo, Guid idKpi)
         {
             using (var dal = new KpiDAL())
             {

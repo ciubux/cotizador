@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "921";
+    TempData["ScriptVersion"] = "938";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -87,7 +87,9 @@
                         var linkMantenimientoCliente = "";
                         var linkBusquedaGrupoCliente = "";
                         var linkMantenimientoGrupoCliente = "";
+                        var linkReasignarCarteraCliente = "";
 
+                        
                         var linkBusquedaProducto = "";
                         var linkCargaMasivaProducto = "";
                         var linkCargaMasivaStock = "";
@@ -215,6 +217,9 @@
 
                             case 36: linkBusquedaGrupoCliente = "active"; linkMaestros = "active"; break;
                             case 37: linkMantenimientoGrupoCliente = "active"; linkMaestros = "active"; break;
+
+                            case 630: linkReasignarCarteraCliente = "active"; linkMaestros = "active"; break;
+
 
                             case 38: linkAsignacionPermisos = "active"; linkSistema = "active"; break;
 
@@ -437,6 +442,11 @@
                                         <li id="linkModificaClienteContactoTipo" class="@linkMantenimientoTipoContactoCliente">@Html.ActionLink("Tipo Contacto Cliente", "Lista", "TipoClienteContacto")</li>
                                     }
 
+                                    @if (usuario.reasignaCarteraCliente)
+                                    {
+                                        <li id="linkReasignaCarteraCliente" class="@linkReasignarCarteraCliente">@Html.ActionLink("Cliente - Reasignación de Cartera", "ReasignacionCartera", "Cliente")</li>
+                                    }
+
                                     @if (usuario.modificaGrupoClientes || usuario.visualizaGrupoClientes || usuario.esVendedor)
                                     {
                                         <li id="linkBusquedaGrupoCliente" class="@linkMantenimientoGrupoCliente">@Html.ActionLink("Grupo Cliente - Búsqueda", "Index", "GrupoCliente")</li>
@@ -602,7 +612,7 @@
                             </li>
                         }
 
-                        if (true)
+                        if (usuario.visualizaReporteSellOutPersonalizado || usuario.NivelKpiMultiUsuario || usuario.NivelKpiMultiArea)
                         {
                             <li class="@linkReportes">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
@@ -614,7 +624,10 @@
                                     {
                                         <li id="linkReporteSellOutPersonalizado" class="@linkReporteSellOutPersonalizado">@Html.ActionLink("Reporte SellOut Personalizado", "SellOutPersonalizado", "Reporte")</li>
                                     }
+                                    @if (usuario.NivelKpiMultiUsuario || usuario.NivelKpiMultiArea)
+                                    {
                                     <li id="linkResultadosKPI" class="@linkResultadosKPI">@Html.ActionLink("Reporte Resultados KPI", "ResultadosKpi", "KPI")</li>
+                                    }
                                 </ul>
                             </li>
                         }

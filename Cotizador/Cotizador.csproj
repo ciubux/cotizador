@@ -727,6 +727,7 @@
     <Content Include="Views\Shared\CambiarEmpresa.cshtml" />
     <Content Include="Views\Shared\_Empresa.cshtml" />
     <Content Include="Views\Kpi\ResultadosKpi.cshtml" />
+    <Content Include="Views\Cliente\ReasignacionCartera.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

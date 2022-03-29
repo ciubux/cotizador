@@ -27,6 +27,7 @@ namespace Cotizador.Controllers
                 {
                     case Constantes.paginas.BusquedaClientes: cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA]; break;
                     case Constantes.paginas.MantenimientoCliente: cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE]; break;
+                    case Constantes.paginas.ReasignacionCartera: cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_REASIGNACION_CARTERA]; break;
                 }
                 return cliente;
             }
@@ -36,6 +37,7 @@ namespace Cotizador.Controllers
                 {
                     case Constantes.paginas.BusquedaClientes: this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA] = value; break;
                     case Constantes.paginas.MantenimientoCliente: this.Session[Constantes.VAR_SESSION_CLIENTE] = value; break;
+                    case Constantes.paginas.ReasignacionCartera: this.Session[Constantes.VAR_SESSION_CLIENTE_REASIGNACION_CARTERA] = value; break;
                 }
             }
         }
@@ -79,7 +81,7 @@ namespace Cotizador.Controllers
         public String GetDatosSunat()
         {
             try
-            { 
+            {
                 this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoCliente;
 
                 if (this.Session[Constantes.VAR_SESSION_CLIENTE] == null)
@@ -220,6 +222,18 @@ namespace Cotizador.Controllers
             cliente.perteneceCanalPCP = true;
             cliente.textoBusqueda = "";
             cliente.sku = "";
+            return cliente;
+        }
+
+        private Cliente instanciarClienteBusquedaReasignarCartera()
+        {
+            Cliente cliente = instanciarClienteBusquedaBasic();
+            cliente.perteneceCanalLima = false;
+            cliente.perteneceCanalProvincias = false;
+            cliente.perteneceCanalMultiregional = false;
+            cliente.perteneceCanalPCP = false;
+            cliente.esSubDistribuidor = false;
+
             return cliente;
         }
 
@@ -1529,6 +1543,45 @@ namespace Cotizador.Controllers
 
                 return "{\"success\":\"false\",\"message\":\"Error al cargar el fichero.\"}";
             }
+        }
+
+
+        public ActionResult ReasignacionCartera()
+        {
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (!usuario.reasignaCarteraCliente)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.ReasignacionCartera;
+
+            if (this.Session[Constantes.VAR_SESSION_CLIENTE_REASIGNACION_CARTERA] == null)
+            {
+                this.Session[Constantes.VAR_SESSION_CLIENTE_REASIGNACION_CARTERA] = instanciarClienteBusquedaReasignarCartera();
+            }
+
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_REASIGNACION_CARTERA];
+
+            ClienteBL bl = new ClienteBL();
+            List<Cliente> clientes = new List<Cliente>();
+            if (cliente.responsableComercial != null && cliente.responsableComercial.idVendedor > 0)
+            {
+                clientes = bl.BusquedaClientesCartera(cliente);
+            }
+
+            ViewBag.cliente = cliente;
+            ViewBag.clientes = clientes;
+            ViewBag.pagina = (int) this.Session[Constantes.VAR_SESSION_PAGINA];
+
+            
+            return View();
         }
 
 

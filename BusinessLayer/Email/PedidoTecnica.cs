@@ -49,35 +49,47 @@ namespace BusinessLayer.Email
 															<td><span style=""font-size: 15px; font-family: Arial; color: #777777;"">&nbsp;</span></td>
 														</tr>
 														<tr>
-															<td colspan=""3"" align=""left"" style=""font-size: 14px;"">
+															<td colspan=""3"" align=""left"" style=""font-size: 14px; padding-bottom: 10px;"">
 																<span style=""font-family: Arial; font-weight: bold;"">Número de Pedido: </span>
 																<span style=""font-family: Arial; color: #777575;""><a href=""{{url_pedido}}"">{{nro_pedido}}</a></span>
 															</td>
 														</tr>
                                                         <tr>
-															<td colspan=""3"" align=""left"" style=""font-size: 14px;"">
+															<td colspan=""3"" align=""left"" style=""font-size: 14px; padding-bottom: 10px;"">
 																<span style=""font-family: Arial; font-weight: bold;"">Estado: </span>
 																<span style=""font-family: Arial; color: #777575;"">{{estado_pedido}}</span>
 															</td>
 														</tr>
 														<tr>
-															<td colspan=""3"" align=""left"" style=""font-size: 14px;"">
+															<td colspan=""3"" align=""left"" style=""font-size: 14px; padding-bottom: 10px;"">
 																  <span style=""font-family: Arial; font-weight: bold;"">Código Cliente: </span>
 																  <span style=""font-family: Arial; color: #777575;"">{{codigo_cliente}}</span>
 															</td>
 														</tr>
 														<tr>
-															<td colspan=""3"" align=""left"" style=""font-size: 14px;"">
+															<td colspan=""3"" align=""left"" style=""font-size: 14px; padding-bottom: 10px;"">
+																<span style=""font-family: Arial; font-weight: bold;"">{{tipo_documento}}: </span>
+																<span style=""font-family: Arial; color: #777575;"">{{nro_documento}}</span>
+															</td>
+														</tr>
+														<tr>
+															<td colspan=""3"" align=""left"" style=""font-size: 14px; padding-bottom: 10px;"">
 																<span style=""font-family: Arial; font-weight: bold;"">Nombre Cliente: </span>
 																<span style=""font-family: Arial; color: #777575;"">{{nombre_cliente}}</span>
+															</td>
+														</tr>
+														<tr>
+															<td colspan=""3"" align=""left"" style=""font-size: 14px;"">
+																<span style=""font-family: Arial; font-weight: bold;"">Dirección Fiscal: </span>
+																<span style=""font-family: Arial; color: #777575;"">{{direccion_fiscal}}</span>
 															</td>
 														</tr>
 														<tr>
 															<td>
 																<table style=""width: 100%; padding: 30px 0px 30px 0px;"" border=""0"" cellspacing=""0"" cellpadding=""3"">
 																	<tr>
-																		<td colspan=""4"" style=""font-weight: bold; font-size: 16px; background-color: #cccccc; text-align: center; padding: 10px;"">
-																			<span style=""font-family: Arial;"">Productos pendientes de atención</span>
+																		<td colspan=""6"" style=""font-weight: bold; font-size: 16px; background-color: #cccccc; text-align: center; padding: 10px;"">
+																			<span style=""font-family: Arial;"">Productos</span>
 																		</td>
 																	</tr>
 																	<tr>
@@ -88,11 +100,52 @@ namespace BusinessLayer.Email
 																			<span style=""font-family: Arial;"">Descripción</span>
 																		</th>
 																		<th style=""font-weight: bold; font-size: 14px;"">
-																			<span style=""font-family: Arial;"">Cantidad <br/> Total</span>
+																			<span style=""font-family: Arial;"">Unidad</span>
+																		</th>
+																		<th style=""font-weight: bold; font-size: 14px;"">
+																			<span style=""font-family: Arial;"">Precio Unitario</span>
+																		</th>
+																		<th style=""font-weight: bold; font-size: 14px;"">
+																			<span style=""font-family: Arial;"">Cantidad</span>
+																		</th>
+																		<th style=""font-weight: bold; font-size: 14px;"">
+																			<span style=""font-family: Arial;"">Total<br/> Item</span>
 																		</th>
 																	</tr>
 																	{{detalle_pedido}}
 																</table>
+															</td>
+														</tr>
+														<tr>
+														</tr>
+														<tr>
+															<td colspan=""3"" align=""left"" style=""font-size: 14px; padding-bottom: 10px;"">
+																<span style=""font-family: Arial; font-weight: bold;"">Dirección Entrega: </span>
+																<span style=""font-family: Arial; color: #777575;"">{{direccion_entrega}}</span>
+															</td>
+														</tr>
+                                                        <tr>
+															<td colspan=""3"" align=""left"" style=""font-size: 14px; padding-bottom: 10px;"">
+																<span style=""font-family: Arial; font-weight: bold;"">Contacto Entrega: </span>
+																<span style=""font-family: Arial; color: #777575;"">{{contacto_entrega}}</span>
+															</td>
+														</tr>
+														<tr>
+															<td colspan=""3"" align=""left"" style=""font-size: 14px; padding-bottom: 10px;"">
+																  <span style=""font-family: Arial; font-weight: bold;"">Observaciones Pedido: </span>
+																  <span style=""font-family: Arial; color: #777575;"">{{observaciones_pedido}}</span>
+															</td>
+														</tr>
+														<tr>
+															<td colspan=""3"" align=""left"" style=""font-size: 14px; padding-bottom: 10px;"">
+																<span style=""font-family: Arial; font-weight: bold;"">Observaciones Guía: </span>
+																<span style=""font-family: Arial; color: #777575;"">{{observaciones_guia}}</span>
+															</td>
+														</tr>
+														<tr>
+															<td colspan=""3"" align=""left"" style=""font-size: 14px;"">
+																<span style=""font-family: Arial; font-weight: bold;"">Observaciones Factura: </span>
+																<span style=""font-family: Arial; color: #777575;"">{{observaciones_factura}}</span>
 															</td>
 														</tr>
 													</tbody>
@@ -113,15 +166,24 @@ namespace BusinessLayer.Email
 	</tbody>
 </table>";
 
-        private String detallePedido = @"<tr>
-											<td align=""left"" style=""font-size: 14px;"">
+		private String detallePedido = @"<tr>
+											<td align=""left"" style=""font-size: 14px; padding-bottom: 5px;"">
 												<span style=""font-family: Arial; color: #777575;"">{{codigo_producto}}</span>
 											</td>
-											<td align=""left"" style=""font-size: 14px;"">
+											<td align=""left"" style=""font-size: 14px; padding-bottom: 5px;"">
 												<span style=""font-family: Arial; color: #777575;"">{{nombre_producto}}</span>
 											</td>
+											<td align=""center"" style=""font-size: 14px; padding-bottom: 5px;"">
+												<span style=""font-family: Arial; color: #777575;"">{{unidad_producto}}</span>
+											</td>
 											<td align=""right"" style=""font-size: 14px; padding-bottom: 5px;"">
+												<span style=""font-family: Arial; color: #777575;"">{{precio_unitario}}</span>
+											</td>
+											<td align=""center"" style=""font-size: 14px; padding-bottom: 5px;"">
 												<span style=""font-family: Arial; color: #777575;"">{{cantidad_producto}}</span>
+											</td>
+											<td align=""right"" style=""font-size: 14px;"">
+												<span style=""font-family: Arial; color: #777575;"">{{total_item}}</span>
 											</td>
 										</tr>";
 
@@ -133,20 +195,30 @@ namespace BusinessLayer.Email
             template = template.Replace("{{estado_pedido}}", pedido.seguimientoPedido.estadoString);
             
             template = template.Replace("{{codigo_cliente}}", pedido.cliente.codigo);
-            template = template.Replace("{{nombre_cliente}}", pedido.cliente.razonSocial);
+			template = template.Replace("{{tipo_documento}}", pedido.cliente.tipoDocumentoIdentidadToString);
+			template = template.Replace("{{nro_documento}}", pedido.cliente.ruc);
+			template = template.Replace("{{nombre_cliente}}", pedido.cliente.razonSocial);
             template = template.Replace("{{url_pedido}}", this.urlVerPedido);
-            
+			template = template.Replace("{{direccion_fiscal}}", pedido.cliente.direccionDomicilioLegalSunat);
 
-            String detalles = "";
+			template = template.Replace("{{direccion_entrega}}", pedido.direccionEntrega.descripcion);
+			template = template.Replace("{{contacto_entrega}}", pedido.direccionEntrega.contacto + " (Telf.: " + pedido.direccionEntrega.telefono + ")");
+			template = template.Replace("{{observaciones_pedido}}", pedido.observaciones);
+			template = template.Replace("{{observaciones_guia}}", pedido.observacionesGuiaRemision);
+			template = template.Replace("{{observaciones_factura}}", pedido.observacionesFactura);
+			String detalles = "";
             
             foreach (PedidoDetalle det in pedido.pedidoDetalleList)
             {
                 String detalle = detallePedido;
                 detalle = detalle.Replace("{{codigo_producto}}", det.producto.skuProveedor);
                 detalle = detalle.Replace("{{nombre_producto}}", det.producto.descripcion);
-                detalle = detalle.Replace("{{cantidad_producto}}", det.cantidad.ToString());
+				detalle = detalle.Replace("{{unidad_producto}}", det.unidad);
+				detalle = detalle.Replace("{{precio_unitario}}", det.precioUnitario.ToString());
+				detalle = detalle.Replace("{{cantidad_producto}}", det.cantidad.ToString());
+				detalle = detalle.Replace("{{total_item}}", det.subTotal.ToString());
 
-                detalles = detalles + detalle;
+				detalles = detalles + detalle;
             }
 
             template = template.Replace("{{detalle_pedido}}", detalles);

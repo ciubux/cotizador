@@ -896,5 +896,22 @@ namespace BusinessLayer
                 return true;
             }
         }
+
+
+        public List<Cliente> BusquedaClientesCartera(Cliente cliente)
+        {
+            using (var dal = new ClienteDAL())
+            {
+                return dal.BusquedaClientesCartera(cliente);
+            }
+        }
+
+        public void UpdateReasignarCartera(List<Guid> idsCliente, List<int> idsVendedor, DateTime fechaInicioVigencia, Guid idUsuario)
+        {
+            using (var dal = new ClienteDAL())
+            {
+                dal.UpdateReasignarCartera(idsCliente, idsVendedor, fechaInicioVigencia, idUsuario);
+            }
+        }
     }
 }

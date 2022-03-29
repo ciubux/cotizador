@@ -76,6 +76,7 @@ var PAGINA_BusquedaVentas = 15;
 var PAGINA_MantenimientoVenta = 16;
 var PAGINA_BusquedaClientes = 17;
 var PAGINA_MantenimientoCliente = 18;
+var PAGINA_ReasignacionCarteraCliente = 630;
 var PAGINA_BusquedaGuiasRemisionConsolidarFactura = 19;
 var PAGINA_BusquedaNotasIngreso = 20;
 var PAGINA_MantenimientoNotaIngreso = 21;

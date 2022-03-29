@@ -373,6 +373,11 @@ jQuery(function ($) {
 
 
     $(document).ready(function () {
+
+        if ($("#pagina").val() == PAGINA_ReasignacionCarteraCliente) {
+            FooTable.init('#tableClientesReasignar');
+        }
+
         $("#btnBusqueda").click();
         //cargarChosenCliente();
         verificiarSiFechaVentasEsModificada();
