@@ -1,0 +1,143 @@
+﻿@{
+    ViewBag.Title = "Reasignar Cartera de Clientes";
+    Model.Cliente cliente = ViewBag.cliente;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-xs-6 col-lg-4">
+            <!--Fecha Inicio Vigencia-->
+            <label class="control-label col-xs-3" for="kpiPeriodos">Responsable Comercial:</label>
+            <div class="col-xs-9">
+                @Html.Action("GetResponsablesComerciales", "Vendedor",
+                new
+                {
+                    vendedorSelectId = "idResponsableComercial",
+                    selectedValue = cliente.responsableComercial.idVendedor
+                })
+            </div>
+        </div>
+
+        <div class="col-xs-6 col-lg-4">
+            <!--Fecha Inicio Vigencia-->
+            <label class="control-label col-xs-3" for="kpiKpis">Sede:</label>
+            <div class="col-xs-9">
+                @Html.Action("GetCiudades", "Ciudad",
+                new
+                {
+                    ciudadSelectId = "idCiudad",
+                    selectedValue = cliente.ciudad.idCiudad
+                })
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <div class="col-xs-4">
+                    <label class="control-label">Canales:</label>
+                </div>
+                <div class="col-xs-8">
+                    <div class="row">
+                        @if (cliente.perteneceCanalLima)
+                        {
+                            <input class="radio-input" checked type="checkbox" name="cliente_perteneceCanalLima" id="cliente_CanalLima" value="1">
+                        }
+                        else
+                        {
+                            <input class="radio-input" type="checkbox" name="cliente_perteneceCanalLima" id="cliente_CanalLima" value="1">
+                        }
+                        <label for="cliente_perteneceCanalLima" class="control-label">Lima</label>
+                    </div>
+                    <div class="row">
+                        @if (cliente.perteneceCanalProvincias)
+                        {
+                            <input class="radio-input" checked type="checkbox" name="cliente_perteneceCanalProvincias" id="cliente_CanalProvincias" value="1">
+                        }
+                        else
+                        {
+                            <input class="radio-input" type="checkbox" name="cliente_perteneceCanalProvincias" id="cliente_CanalProvincias" value="1">
+                        }
+                        <label for="cliente_perteneceCanalProvincias" class="control-label">Provincias</label>
+                    </div>
+                    <div class="row">
+                        @if (cliente.perteneceCanalMultiregional)
+                        {
+                            <input class="radio-input" checked type="checkbox" name="cliente_perteneceCanalMultiregional" id="cliente_CanalMultireginal" value="1">
+                        }
+                        else
+                        {
+                            <input class="radio-input" type="checkbox" name="cliente_perteneceCanalMultiregional" id="cliente_CanalMultireginal" value="1">
+                        }
+                        <label for="cliente_perteneceCanalMultiregional" class="control-label">Multiregional</label>
+                    </div>
+                    <div class="row">
+                        @if (cliente.perteneceCanalPCP)
+                        {
+                            <input class="radio-input" checked type="checkbox" name="cliente_perteneceCanalPCP" id="cliente_CanalPCP" value="1">
+                        }
+                        else
+                        {
+                            <input class="radio-input" type="checkbox" name="cliente_perteneceCanalPCP" id="cliente_CanalPCP" value="1">
+                        }
+                        <label for="cliente_perteneceCanalPCP" class="control-label">PCP</label>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
+        <button id="btnLimpiarBusqueda" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
+        <button id="btnBusquedaReasignacion" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-12 col-lg-12">
+            <table id="tableClientesReasignar" class="table" data-editing="false"
+                   data-editing-allow-add="false"
+                   data-editing-allow-delete="false"
+                   data-editing-allow-edit="false"
+                   data-show-toggle="false">
+                <thead>
+                    <tr>
+                        <th data-name="nombre" data-visible="true" data-sortable="true" data-sorted="true" data-direction="DESC">Razon Social / Nombre</th>
+                        <th data-name="ruc" data-visible="true" data-sortable="true">Nro. Documento</th>
+                        <th data-name="ciudad" data-visible="true" data-sortable="true">Sede</th>
+                        <th data-name="reasignar" data-sortable="true" data-breakpoints="xs">Reasignar A:</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(Model.Cliente item in ViewBag.clientes)
+                    {
+                    <tr>
+                        <td>(@item.codigo) @item.nombreCliente</td>
+                        <td>@item.ruc</td>
+                        <td>@item.ciudad.nombre</td>
+                        <td>
+                            @Html.Action("GetResponsablesComerciales", "Vendedor",
+                                    new
+                                    {
+                                        vendedorSelectId = "idResignar_" + item.idCliente.ToString()
+                                    })
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/cliente")
+}
