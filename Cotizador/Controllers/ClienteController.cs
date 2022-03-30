@@ -233,7 +233,7 @@ namespace Cotizador.Controllers
             cliente.perteneceCanalMultiregional = false;
             cliente.perteneceCanalPCP = false;
             cliente.esSubDistribuidor = false;
-
+            cliente.fechaInicioVigencia = DateTime.Now;
             return cliente;
         }
 
@@ -1560,7 +1560,7 @@ namespace Cotizador.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.ReasignacionCartera;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.ReasignacionCartera;
 
             if (this.Session[Constantes.VAR_SESSION_CLIENTE_REASIGNACION_CARTERA] == null)
             {
@@ -1580,10 +1580,46 @@ namespace Cotizador.Controllers
             ViewBag.clientes = clientes;
             ViewBag.pagina = (int) this.Session[Constantes.VAR_SESSION_PAGINA];
 
-            
+            this.Session["s_reasignacion_cartera_clientes"] = clientes;
+
+
             return View();
         }
 
+        public String ReasignarCartera()
+        {
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_REASIGNACION_CARTERA];
+            List<Cliente> clientes = (List<Cliente>) this.Session["s_reasignacion_cartera_clientes"];
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            List<int> idsVendedores = new List<int>();
+            List<Guid> idsClientes = new List<Guid>();
+            DateTime fechaInicioVigencia = DateTime.Now;
+
+            if (usuario.reasignaCarteraCliente)
+            {
+                String[] fiv = this.Request.Params["fechaInicioVigencia"].Split('/');
+                fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]), 0, 0, 0);
+
+                foreach (Cliente item in clientes)
+                {
+                    if (this.Request.Params["idResignar_" + item.idCliente.ToString()] != null)
+                    {
+                        int nuevoVendedor = Int32.Parse(this.Request.Params["idResignar_" + item.idCliente.ToString()].ToString());
+                        if (nuevoVendedor > 0 && nuevoVendedor != cliente.responsableComercial.idVendedor)
+                        {
+                            idsClientes.Add(item.idCliente);
+                            idsVendedores.Add(nuevoVendedor);
+                        }
+                    }
+                }
+
+                ClienteBL bl = new ClienteBL();
+                bl.UpdateReasignarCartera(idsClientes, idsVendedores, fechaInicioVigencia, usuario.idUsuario);
+            }
+            
+            return "";
+        }
 
         #region carga de imagenes
 

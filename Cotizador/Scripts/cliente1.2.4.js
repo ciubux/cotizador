@@ -375,7 +375,12 @@ jQuery(function ($) {
     $(document).ready(function () {
 
         if ($("#pagina").val() == PAGINA_ReasignacionCarteraCliente) {
-            FooTable.init('#tableClientesReasignar');
+            //FooTable.init('#tableClientesReasignar');
+            $("#tableClientesReasignar").footable({
+                "paging": {
+                    "enabled": true
+                }
+            })
         }
 
         $("#btnBusqueda").click();

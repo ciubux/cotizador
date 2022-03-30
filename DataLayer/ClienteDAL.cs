@@ -1245,9 +1245,9 @@ namespace DataLayer
 
         public void UpdateReasignarCartera(List<Guid> idsCliente, List<int> idsVendedor, DateTime fechaInicioVigencia, Guid idUsuario)
         {
-            var objCommand = GetSqlCommand("pi_cliente_historial_reasignacion");
+            var objCommand = GetSqlCommand("pu_reasignar_cartera_comercial");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
-            InputParameterAdd.Date(objCommand, "fechaInicioVigencia", fechaInicioVigencia);
+            InputParameterAdd.DateTime(objCommand, "fechaInicioVigencia", fechaInicioVigencia);
 
             DataTable dtClientes = new DataTable();
             dtClientes.Columns.Add(new DataColumn("ID", typeof(Guid)));
