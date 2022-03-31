@@ -113,6 +113,10 @@ textarea {
         width: 1200px;
     }
 
+    #modalConfirmarReasignacionClientes .modal-dialog {
+        width: 800px;
+    }
+
     #modalComentarioPendienteIngreso .modal-dialog {
         width: 100%;
         height: 100%;

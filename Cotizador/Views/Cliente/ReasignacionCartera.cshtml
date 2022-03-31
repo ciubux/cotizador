@@ -14,7 +14,8 @@
         <input type="hidden" id="fechaInicioVigencia" name="fechaInicioVigencia" value="@cliente.FechaInicioVigenciaDesc" />
         @foreach (Model.Cliente item in clientes)
         {
-            <input type="hidden" id="idResignar_@item.idCliente.ToString()" name="idResignar_@item.idCliente.ToString()" class="input-reasignar-asesor" value="" />
+            <input type="hidden" id="idResignar_@item.idCliente.ToString()" name="idResignar_@item.idCliente.ToString()" class="input-reasignar-asesor" value=""
+                   nombreCliente="(@item.codigo) @item.nombreCliente" rucCliente="@item.ruc" ciudadCliente="@item.ciudad.nombre" nombreNuevoAsesor="" />
         }
     </form>
     <div class="row" style="margin-top: 10px;">
@@ -110,10 +111,10 @@
     <div class="row">
         <div class="col-sm-12 col-lg-12">
             <table id="tableClientesReasignar" class="table" data-editing="false"
-                    data-editing-allow-add="false"
-                    data-editing-allow-delete="false"
-                    data-editing-allow-edit="false"
-                    data-show-toggle="false">
+                   data-editing-allow-add="false"
+                   data-editing-allow-delete="false"
+                   data-editing-allow-edit="false"
+                   data-show-toggle="false">
                 <thead>
                     <tr>
                         <th data-name="nombre" data-visible="true" data-sortable="true" data-sorted="true" data-direction="DESC">Razon Social / Nombre</th>
@@ -154,30 +155,125 @@
     </div>
 
     <div class="row text-right" style="margin-bottom:10px; margin-right:0px">
-        <button id="btnReasignarCartera" type="button" class="btn btn-success">Reasignar Clientes Cambiados</button>
+        <button id="btnReasignarCartera" type="button" class="btn btn-success" data-toggle="modal" data-target="#modalConfirmarReasignacionClientes">Reasignar Clientes Cambiados</button>
     </div>
 </div>
+
+<div class="modal fade" id="modalConfirmarReasignacionClientes" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalConfirmarReasignacionClientesTitle"><b>Confirmar Reasignación de Responsable Comercial de Clientes</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6 col-lg-6">
+                        <div class="form-group">
+                            <label for="nuevoPrecio" class="control-label col-xs-6">Fecha Inicio Vigencia:</label>
+                            <div class="col-xs-6">
+                                <input class="form-control" type="text" id="fechaVigenciaSel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="padding: 10px 20px;">
+                <div class="col-sm-12 col-lg-12" style="height: 450px;  overflow-y: scroll; ">
+                    <table id="tableClientesConfirmarReasignar" class="table" data-editing="false"
+                           data-editing-allow-add="false"
+                           data-editing-allow-delete="false"
+                           data-editing-allow-edit="false"
+                           data-show-toggle="false">
+                        <thead>
+                            <tr>
+                                <th data-name="nombre" data-visible="true" data-sortable="true" data-sorted="true" data-direction="DESC">Razon Social / Nombre</th>
+                                <th data-name="ruc" data-visible="true" data-sortable="true">Nro. Documento</th>
+                                <th data-name="ciudad" data-visible="true" data-sortable="true">Sede</th>
+                                <th data-name="reasignar" data-sortable="true" data-breakpoints="xs">Reasignar A:</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelConfirmarReasginarCartera" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnSaveConfirmarReasginarCartera" class="btn btn-primary">Registrar Reasignación Cartera</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <script type="text/javascript">
 
     function funcionesPruebaReasignarCartera() {
+
+        $("#fechaVigenciaSel").datepicker();
+
         setTimeout(function () {
             $("#idResignarGlobal").change(function () {
                 //alert($("#idResignarGlobal").val());
                 $(".td-reasignar-cartera-a select.form-control").val($("#idResignarGlobal").val());
                 $(".input-reasignar-asesor").val($("#idResignarGlobal").val());
+                $(".input-reasignar-asesor").attr("nombreNuevoAsesor", $("#idResignarGlobal option:selected").text());
             });
 
         }, 1000);
 
         $('body').on('change', ".td-reasignar-cartera-a select.form-control", function () {
             var uuid = $(this).attr("name").replace("idResignarSel_", "");
-            alert(uuid);
             $("#idResignar_" + uuid).val($(this).val());
+            $("#idResignar_" + uuid).attr("nombreNuevoAsesor", $("#idResignarSel_" + uuid + " option:selected").text());
         });
 
         $("#btnBusquedaReasignacion").click(function () {
             location.reload();
+        });
+
+        $("#btnReasignarCartera").click(function () {
+            $("#fechaVigenciaSel").val($("#fechaInicioVigencia").val());
+            $("#tableClientesConfirmarReasignar > tbody").empty();
+
+            $('.input-reasignar-asesor').each(function () {
+                var idAsesor = parseInt($(this).val());
+
+                if (idAsesor > 0) {
+                    var itemRow = "<tr>" +
+                        "<td>" + $(this).attr("nombreCliente") + "</td>" +
+                        "<td>" + $(this).attr("rucCliente") + "</td>" +
+                        "<td>" + $(this).attr("ciudadCliente") + "</td>" +
+                        "<td>" + $(this).attr("nombreNuevoAsesor") + "</td>" +
+                        "</tr>";
+
+                    $("#tableClientesConfirmarReasignar").append(itemRow);
+                }
+            });
+
+            FooTable.init('#tableClientesConfirmarReasignar');
+        });
+
+        $("#fechaVigenciaSel").change(function () {
+            $("#fechaInicioVigencia").val($(this).val());
+        });
+
+        $(document).on('click', "#tableClientesReasignar a.footable-page-link", function () {
+            setTimeout(function () {
+                $(".td-reasignar-cartera-a select.form-control").each(function () {
+                    var uuid = $(this).attr("name").replace("idResignarSel_", "");
+                    $(this).val($("#idResignar_" + uuid).val());
+                });
+            }, 500);
         });
 
         $("#btnLimpiarBusquedaReasignacion").click(function () {
@@ -201,7 +297,7 @@
         });
 
 
-        $("#btnReasignarCartera").click(function () {
+        $("#btnSaveConfirmarReasginarCartera").click(function () {
             var form = $("#formReasignarCarteraClientes");
             var actionUrl = form.attr('action');
 
@@ -223,7 +319,7 @@
                 }
             });
         });
-        
+
     }
     if (window.addEventListener) // W3C standard
     {
@@ -235,7 +331,7 @@
     }
 
 
-    
+
 </script>
 
 
