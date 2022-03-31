@@ -1603,7 +1603,7 @@ namespace Cotizador.Controllers
 
                 foreach (Cliente item in clientes)
                 {
-                    if (this.Request.Params["idResignar_" + item.idCliente.ToString()] != null)
+                    if (this.Request.Params["idResignar_" + item.idCliente.ToString()] != null && !this.Request.Params["idResignar_" + item.idCliente.ToString()].ToString().Equals(""))
                     {
                         int nuevoVendedor = Int32.Parse(this.Request.Params["idResignar_" + item.idCliente.ToString()].ToString());
                         if (nuevoVendedor > 0 && nuevoVendedor != cliente.responsableComercial.idVendedor)
