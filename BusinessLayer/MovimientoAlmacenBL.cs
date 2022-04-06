@@ -150,6 +150,22 @@ namespace BusinessLayer
             }
         }
 
+        public void InsertAjusteAlmacen(GuiaRemision guia)
+        {
+            using (var dal = new MovimientoALmacenDAL())
+            {
+                dal.InsertAjusteAlmacen(guia);
+            }
+        }
+
+        public void CambiarAprobacionAjuste(GuiaRemision guia)
+        {
+            using (var dal = new MovimientoALmacenDAL())
+            {
+                dal.CambiarAprobacionAjuste(guia);
+            }
+        }
+
         public List<GuiaRemision> GetGuiasRemision(GuiaRemision guiaRemision)
         {
             List<GuiaRemision> guiaRemisionList = null;

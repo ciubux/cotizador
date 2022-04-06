@@ -118,6 +118,7 @@ namespace Model
 
         public static String VAR_SESSION_STOCK_PRODUCTO_BUSQUEDA = "stockProductoBusqueda";
         public static String VAR_SESSION_STOCK_PRODUCTO_REPORTE = "stockProductoReporte";
+        public static String VAR_SESSION_AJUSTE_STOCK_REGISTRO = "ajusteStockRegistro";
 
         public static String VAR_SESSION_ORIGEN = "origen";
         public static String VAR_SESSION_ORIGEN_BUSQUEDA = "origenBusqueda";
@@ -469,9 +470,12 @@ namespace Model
 
         public const String EXPORTAR_VENTAS_CONTABILIDAD = "P590";
         public const String VISUALIZA_VENTAS = "P730";
-
+<
         public const String CARGA_MASIVA_STOCK = "P721";
         public const String VISUALIZA_REPORTE_GLOBAL_STOCK = "P722";
+
+        public const String REGISTRA_AJUSTE_STOCK = "P725";
+        public const String APRUEBA_AJUSTE_STOCK = "P726";
 
         public const String RECTIFICAR_VENTA = "P731";
 

@@ -957,9 +957,11 @@ namespace BusinessLayer
             Usuario usuarioZAS = usuarioDal.getUsuario(Constantes.IDUSUARIOZAS);
             pMP.usuario = usuarioZAS;
             pMP.IdUsuarioRegistro = usuarioZAS.idUsuario;
-            
+            pMP.numeroRequerimiento = "";
+            pMP.numeroReferenciaAdicional = "";
+            pMP.numeroReferenciaCliente = "";
 
-            foreach(PedidoDetalle det in pMP.pedidoDetalleList)
+            foreach (PedidoDetalle det in pMP.pedidoDetalleList)
             {
                 det.precioNeto = det.producto.costoLista * usuarioEmpresa.factorEmpresa;
             }

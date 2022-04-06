@@ -1,0 +1,24 @@
+﻿@model Cotizador.Models.MotivoAjusteAlmacenViewModels
+
+@if (Model.incluirSeleccione)
+{
+@Html.DropDownList(
+            Model.MotivoAjusteAlmacenSelectId,
+            Model.Motivos, "Seleccione el motivo",
+            new
+            {
+                id = Model.MotivoAjusteAlmacenSelectId,
+                @class = "form-control"
+            })
+}
+else
+{
+@Html.DropDownList(
+        Model.MotivoAjusteAlmacenSelectId,
+        Model.Motivos,
+        new
+        {
+            id = Model.MotivoAjusteAlmacenSelectId,
+            @class = "form-control"
+        })
+}

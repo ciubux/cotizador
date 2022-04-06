@@ -1,0 +1,274 @@
+﻿@{
+    ViewBag.Title = "Registro/Edición de Ajuste de Almacén";
+    Model.GuiaRemision ajuste = ViewBag.ajuste;
+    List<Model.MotivoAjusteAlmacen> motivos = ViewBag.motivos;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+
+    <div class="row">
+        <!--SEDE-->
+        <div class="col-xs-12 col-sm-6 col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(p => ajuste.ciudadOrigen, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
+                <div class="col-xs-8">
+                    @Html.Action("GetCiudades", "Ciudad",
+                     new
+                     {
+                         ciudadSelectId = "idCiudad",
+                         selectedValue = ajuste.ciudadOrigen.idCiudad
+                     })
+                </div>
+            </div>
+        </div>
+
+        <!--TIPO MOVIMIENTO-->
+        <div class="col-xs-12 col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="tipoMovimiento" class="control-label col-xs-4">Tipo Ajuste:</label>
+                <div class="col-xs-8">
+                    <select id="tipoMovimiento" class="control-label">
+                        <option>Seleccione</option>
+                        <option @(ajuste.tipoMovimiento == Model.MovimientoAlmacen.tiposMovimiento.Salida ? "selected" : "") value="S">Pérdida</option>
+                        <option @(ajuste.tipoMovimiento == Model.MovimientoAlmacen.tiposMovimiento.Entrada ? "selected" : "") value="E">Sobrante</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    
+        <!--MOTIVO AJUSTE-->
+        <div class="col-xs-12 col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="motivoAjuste" class="control-label col-xs-4">Tipo Ajuste:</label>
+                <div class="col-xs-8">
+                    <select id="motivoAjuste" class="control-label">
+                        <option>Seleccione</option>
+                        @foreach(Model.MotivoAjusteAlmacen item in motivos)
+                        {
+                            <option @(ajuste.motivoAjuste.idMotivoAjusteAlmacen == item.idMotivoAjusteAlmacen ? "selected" : "") value="@item.idMotivoAjusteAlmacen" tipo="@item.tipo">@item.descripcion</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <!--FECHA EMISION-->
+        <div class="col-xs-12 col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="fechaEmision" class="control-label col-xs-4">Fecha:</label>
+                <div class="col-xs-8">
+                    <input class="form-control" type="text" value="@ajuste.fechaEmision" id="fechaEmision" name="fechaEmision">
+                </div>
+            </div>
+        </div>
+
+        <!--OBSERVACIONES-->
+        <div class="col-xs-12 col-sm-6 col-lg-8">
+            <div class="form-group">
+                <label for="observaciones" class="control-label col-xs-4">Observaciones:</label>
+                <div class="col-xs-8">
+                    <textarea class="form-control" id="observaciones" name="observaciones">@ajuste.observaciones</textarea>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
+        <button id="btnVerAgregarProducto" type="button" class="btn btn-primary">Agregar Producto</button>
+    </div>
+
+
+    <table id="tableProductosAjusteAlmacen" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
+           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+           data-editing-allow-add="false"
+           data-editing-allow-delete="false"
+           data-editing-allow-edit="false"
+           data-sorting="true"
+           data-show-toggle="false"
+           data-editing-hide-text="Finalizar edición"
+           data-editing-add-text="Descartar cambios">
+        <thead>
+            <tr>
+                <th data-name="producto" data-visible="true" data-sortable="true">Producto</th>
+                <th data-name="unidad" data-visible="true" data-sortable="true">Unidad</th>
+                <th data-name="cantidad" data-visible="true" data-sortable="true">Cantidad</th>
+                <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(Model.DocumentoDetalle item in ajuste.documentoDetalle)
+            {
+            <tr>
+                <td>@item.producto.sku - @item.producto.descripcion</td>
+                <td>@item.unidad</td>
+                <td>@item.cantidad</td>
+                <td>
+                    <button type="button" class="btn btn-primary btnEditarAjusteDetalle" idProducto="@item.producto.idProducto">Editar</button>&nbsp;&nbsp;
+                    <button type="button" class="btn btn-danger btnEliminarAjusteDetalle" idProducto="@item.producto.idProducto">Eliminar</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+    <script type="text/javascript">
+        function funcionesPruebaRegistroAjuste() {
+
+            $.datepicker.regional['es'] = {
+                closeText: 'Cerrar',
+                prevText: '< Ant',
+                nextText: 'Sig >',
+                currentText: 'Hoy',
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+                dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+                weekHeader: 'Sm',
+                dateFormat: 'dd/mm/yy',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: ''
+            };
+            $.datepicker.setDefaults($.datepicker.regional['es']);
+
+            $("#fechaEmision").datepicker();
+
+            setTimeout(function () {
+                
+            }, 1000);
+
+            $('body').on('change', ".td-reasignar-cartera-a select.form-control", function () {
+                var uuid = $(this).attr("name").replace("idResignarSel_", "");
+                $("#idResignar_" + uuid).val($(this).val());
+                $("#idResignar_" + uuid).attr("nombreNuevoAsesor", $("#idResignarSel_" + uuid + " option:selected").text());
+            });
+
+            
+
+            $("#tipoMovimiento").change(function () {
+                $("#motivoAjuste").val("");
+                $('#motivoAjuste option').show();
+                if ($(this).val() == "S") {
+                    $('#motivoAjuste option[tipo="2"]').hide();
+                } else {
+                    $('#motivoAjuste option[tipo="1"]').hide();
+                }
+            });
+
+
+            $("#btnVerAgregarProducto").click(function () {
+                
+            });
+
+            $("#btnAgregarDetalle").click(function () {
+                $("#fechaVigenciaSel").val($("#fechaInicioVigencia").val());
+                $("#tableClientesConfirmarReasignar > tbody").empty();
+                var reasignaciones = 0;
+                $('.input-reasignar-asesor').each(function () {
+                    var idAsesor = parseInt($(this).val());
+
+                    if (idAsesor > 0) {
+                        reasignaciones = reasignaciones + 1;
+                        var itemRow = "<tr>" +
+                            "<td>" + $(this).attr("nombreCliente") + "</td>" +
+                            "<td>" + $(this).attr("rucCliente") + "</td>" +
+                            "<td>" + $(this).attr("ciudadCliente") + "</td>" +
+                            "<td>" + $(this).attr("nombreNuevoAsesor") + "</td>" +
+                            "</tr>";
+
+                        $("#tableClientesConfirmarReasignar").append(itemRow);
+                    }
+                });
+
+                FooTable.init('#tableClientesConfirmarReasignar');
+
+                $("#nroReasignacionesClientes").html(reasignaciones);
+
+                if (reasignaciones <= 0) {
+                    setTimeout(function () {
+                        $("#btnCancelConfirmarReasginarCartera").click();
+
+                        $.alert({
+                            title: 'Error de Validación',
+                            content: "No se ha realizado la reasginación comercial de ningún cliente.",
+                            type: 'orange',
+                            buttons: {
+                                OK: function () {
+                                }
+                            }
+                        });
+                    }, 1000);
+                }
+            });
+
+
+            $(document).on('click', "#tableClientesReasignar a.footable-page-link", function () {
+                setTimeout(function () {
+                    $(".td-reasignar-cartera-a select.form-control").each(function () {
+                        var uuid = $(this).attr("name").replace("idResignarSel_", "");
+                        $(this).val($("#idResignar_" + uuid).val());
+                    });
+                }, 500);
+            });
+
+            $("#btnSaveConfirmarReasginarCartera").click(function () {
+                var form = $("#formReasignarCarteraClientes");
+                var actionUrl = form.attr('action');
+
+                $('body').loadingModal({
+                    text: 'Registrando reasignaciones...'
+                });
+                $('body').loadingModal('show');
+
+
+                $.ajax({
+                    type: "POST",
+                    url: actionUrl,
+                    data: form.serialize(), // serializes the form's elements.
+                    error: function (detalle) {
+                        $('body').loadingModal('hide');
+                    },
+                    success: function (data) {
+                        $('body').loadingModal('hide');
+                        $.alert({
+                            title: 'Reasignación Exitosa',
+                            content: "Se reasignaron los clientes correctamente.",
+                            type: 'green',
+                            buttons: {
+                                OK: function () {
+                                    location.reload();
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+        }
+        if (window.addEventListener) // W3C standard
+        {
+            window.addEventListener('load', funcionesPruebaRegistroAjuste, false); // NB **not** 'onload'
+        }
+        else if (window.attachEvent) // Microsoft
+        {
+            window.attachEvent('onload', funcionesPruebaRegistroAjuste);
+        }
+
+    </script>
+
+</div>
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/archivoAdjunto")
+}

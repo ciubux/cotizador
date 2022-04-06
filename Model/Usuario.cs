@@ -216,6 +216,9 @@ namespace Model
         public bool realizaCargaMasivaStock { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CARGA_MASIVA_STOCK)).FirstOrDefault() != null; } }
         public bool visualizaReporteGlobalStock { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_REPORTE_GLOBAL_STOCK)).FirstOrDefault() != null; } }
 
+        public bool registraAjusteStock { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REGISTRA_AJUSTE_STOCK)).FirstOrDefault() != null; } }
+        public bool apruebaAjusteStock { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_AJUSTE_STOCK)).FirstOrDefault() != null; } }
+
         /*SubDistribuidores*/
         public bool modificaSubDistribuidor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_SUBDISTRIBUIDOR)).FirstOrDefault() != null; } }
         public bool visualizaSubDistribuidores { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_SUBDISTRIBUIDORES)).FirstOrDefault() != null; } }

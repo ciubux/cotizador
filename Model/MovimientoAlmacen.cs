@@ -46,6 +46,10 @@ namespace Model
         public SeguimientoMovimientoAlmacenEntrada seguimientoMovimientoAlmacenEntrada { get; set; }
 
         
+        public int ajusteAprobado { get; set; }
+        
+        public MotivoAjusteAlmacen motivoAjuste { get; set; }
+
 
         public enum estadosMovimiento {
             [Display(Name = "Anulado")]

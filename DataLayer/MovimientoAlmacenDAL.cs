@@ -517,6 +517,79 @@ namespace DataLayer
             }
         }
 
+        public void InsertAjusteAlmacenDetalle(MovimientoAlmacen movimientoAlmacen)
+        {
+            foreach (DocumentoDetalle documentoDetalle in movimientoAlmacen.documentoDetalle)
+            {
+                
+                var objCommand = GetSqlCommand("pi_ajusteAlmacenDetalle");
+                InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", movimientoAlmacen.idMovimientoAlmacen);
+                InputParameterAdd.Guid(objCommand, "idUsuario", movimientoAlmacen.usuario.idUsuario);
+                InputParameterAdd.Guid(objCommand, "idProducto", documentoDetalle.producto.idProducto);
+                InputParameterAdd.Int(objCommand, "cantidad", documentoDetalle.cantidad);
+                InputParameterAdd.Int(objCommand, "esUnidadAlternativa", documentoDetalle.esPrecioAlternativo ? 1 : 0);
+                InputParameterAdd.Decimal(objCommand, "equivalencia", documentoDetalle.ProductoPresentacion.Equivalencia);
+
+                int cantidadConteo = documentoDetalle.cantidad * documentoDetalle.producto.equivalenciaUnidadEstandarUnidadConteo;
+                if (documentoDetalle.ProductoPresentacion.IdProductoPresentacion == 1)
+                {
+                    cantidadConteo = cantidadConteo / documentoDetalle.producto.equivalenciaAlternativa;
+                }
+                if (documentoDetalle.ProductoPresentacion.IdProductoPresentacion == 2)
+                {
+                    cantidadConteo = cantidadConteo * documentoDetalle.producto.equivalenciaProveedor;
+                }
+
+                InputParameterAdd.Int(objCommand, "cantidadUnidadConteo", cantidadConteo);
+                InputParameterAdd.Int(objCommand, "idProductoPresentacion", documentoDetalle.ProductoPresentacion.IdProductoPresentacion);
+                InputParameterAdd.Varchar(objCommand, "observaciones", documentoDetalle.observacion);
+                InputParameterAdd.Varchar(objCommand, "unidad", documentoDetalle.unidad);
+                InputParameterAdd.Varchar(objCommand, "unidadConteo", documentoDetalle.producto.unidadConteo);
+                InputParameterAdd.Int(objCommand, "tipoProducto", (int)documentoDetalle.producto.tipoProducto);
+                OutputParameterAdd.UniqueIdentifier(objCommand, "idMovimientoAlmacenDetalle");
+                ExecuteNonQuery(objCommand);
+                Guid idMovimientoAlmacenDetalle = (Guid)objCommand.Parameters["@idMovimientoAlmacenDetalle"].Value;
+            }
+        }
+
+        public void InsertAjusteAlmacen(GuiaRemision obj)
+        {
+
+            this.BeginTransaction(IsolationLevel.ReadCommitted);
+            var objCommand = GetSqlCommand("pi_ajusteAlmacen");
+            InputParameterAdd.DateTime(objCommand, "fechaEmision", obj.fechaEmision);
+            InputParameterAdd.DateTime(objCommand, "fechaTraslado", obj.fechaTraslado);
+            InputParameterAdd.Guid(objCommand, "idUsuario", obj.usuario.idUsuario);
+            InputParameterAdd.Int(objCommand, "estado", obj.Estado);
+            InputParameterAdd.Varchar(objCommand, "observaciones", obj.observaciones);
+
+            InputParameterAdd.Guid(objCommand, "idSedeOrigen", obj.ciudadOrigen.idCiudad);
+            InputParameterAdd.Char(objCommand, "motivoTraslado", ((char)obj.motivoTraslado).ToString());
+            InputParameterAdd.Char(objCommand, "tipoMovimiento", ((char)obj.tipoMovimiento).ToString());
+            InputParameterAdd.Int(objCommand, "idMotivoAjuste", obj.motivoAjuste.idMotivoAjusteAlmacen);
+            InputParameterAdd.Int(objCommand, "ajusteAprobado", obj.ajusteAprobado);
+
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idMovimientoAlmacen");
+
+            ExecuteNonQuery(objCommand);
+
+            obj.idMovimientoAlmacen = (Guid)objCommand.Parameters["@idMovimientoAlmacen"].Value;
+
+            this.InsertAjusteAlmacenDetalle(obj);
+
+            this.Commit();
+        }
+
+
+        public void CambiarAprobacionAjuste(GuiaRemision obj)
+        {
+            var objCommand = GetSqlCommand("pi_ajusteAlmacen");
+            InputParameterAdd.Guid(objCommand, "idUsuario", obj.usuario.idUsuario);
+            InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", obj.ciudadOrigen.idCiudad);
+            InputParameterAdd.Int(objCommand, "ajusteAprobado", obj.ajusteAprobado);
+
+            ExecuteNonQuery(objCommand);
+        }
 
 
         public void AnularMovimientoAlmacen(MovimientoAlmacen movimientoAlmacen)

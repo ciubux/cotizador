@@ -55,6 +55,7 @@
     <Compile Include="CierreStock.cs" />
     <Compile Include="ClienteContactoTipo.cs" />
     <Compile Include="ClienteContacto.cs" />
+    <Compile Include="MotivoAjusteAlmacen.cs" />
     <Compile Include="KpiMeta.cs" />
     <Compile Include="Area.cs" />
     <Compile Include="KpiPeriodo.cs" />

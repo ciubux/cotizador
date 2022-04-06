@@ -183,6 +183,12 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="row">
+                <div class="col-sm-12 col-lg-12" style="padding: 5px 35px;">
+                    <h5 class="text-info">Se reasignarán los responsables comerciales de <span id="nroReasignacionesClientes"></span> clientes:</h5>
+                </div>
+            </div>
 
             <div class="row" style="padding: 10px 20px;">
                 <div class="col-sm-12 col-lg-12" style="height: 450px;  overflow-y: scroll; ">
@@ -244,11 +250,12 @@
         $("#btnReasignarCartera").click(function () {
             $("#fechaVigenciaSel").val($("#fechaInicioVigencia").val());
             $("#tableClientesConfirmarReasignar > tbody").empty();
-
+            var reasignaciones = 0;
             $('.input-reasignar-asesor').each(function () {
                 var idAsesor = parseInt($(this).val());
 
                 if (idAsesor > 0) {
+                    reasignaciones = reasignaciones + 1;
                     var itemRow = "<tr>" +
                         "<td>" + $(this).attr("nombreCliente") + "</td>" +
                         "<td>" + $(this).attr("rucCliente") + "</td>" +
@@ -261,6 +268,24 @@
             });
 
             FooTable.init('#tableClientesConfirmarReasignar');
+
+            $("#nroReasignacionesClientes").html(reasignaciones);
+            
+            if (reasignaciones <= 0) {
+                setTimeout(function () {
+                    $("#btnCancelConfirmarReasginarCartera").click();
+
+                    $.alert({
+                        title: 'Error de Validación',
+                        content: "No se ha realizado la reasginación comercial de ningún cliente.",
+                        type: 'orange',
+                        buttons: {
+                            OK: function () {
+                            }
+                        }
+                    });
+                }, 1000);
+            }
         });
 
         $("#fechaVigenciaSel").change(function () {
@@ -301,11 +326,21 @@
             var form = $("#formReasignarCarteraClientes");
             var actionUrl = form.attr('action');
 
+            $('body').loadingModal({
+                text: 'Registrando reasignaciones...'
+            });
+            $('body').loadingModal('show');
+
+
             $.ajax({
                 type: "POST",
                 url: actionUrl,
                 data: form.serialize(), // serializes the form's elements.
+                error: function (detalle) {
+                    $('body').loadingModal('hide');
+                },
                 success: function (data) {
+                    $('body').loadingModal('hide');
                     $.alert({
                         title: 'Reasignación Exitosa',
                         content: "Se reasignaron los clientes correctamente.",

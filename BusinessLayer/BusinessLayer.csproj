@@ -62,6 +62,7 @@
     <Compile Include="MensajeBL.cs" />
     <Compile Include="OrdenCompraClienteBL.cs" />
     <Compile Include="KpiBL.cs" />
+    <Compile Include="MotivoAjusteAlmacenBL.cs" />
     <Compile Include="RolBL.cs" />
     <Compile Include="ParametroBL.cs" />
     <Compile Include="DocumentoVentaBL.cs" />
