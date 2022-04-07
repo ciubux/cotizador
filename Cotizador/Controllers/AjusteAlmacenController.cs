@@ -90,42 +90,49 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
-        public ActionResult Editar(Guid? idMovimientoAlmacen = null)
+        public ActionResult Editar(Guid? idAjusteAlmacen = null)
         {
-            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoRol;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.RegistrarAjusteAlmacen;
+
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            if (!usuario.modificaRol)
+            if (usuario == null || !usuario.registraAjusteStock)
             {
-                return RedirectToAction("List", "Rol");
+                return RedirectToAction("Login", "Account");
             }
 
+            MotivoAjusteAlmacen mot = new MotivoAjusteAlmacen();
+            mot.Estado = 1;
 
-            PermisoBL permisobl = new PermisoBL();
-            List<Permiso> permisos = new List<Permiso>();
-            permisos = permisobl.getPermisos();
-            this.Session[Constantes.VAR_SESSION_PERMISO_LISTA] = permisos;
+            MotivoAjusteAlmacenBL maBl = new MotivoAjusteAlmacenBL();
+            List<MotivoAjusteAlmacen> motivos = new List<MotivoAjusteAlmacen>();
+            motivos = maBl.getMotivos(mot);
 
-            if (this.Session[Constantes.VAR_SESSION_ROL] == null && idRol == null)
+
+            if (this.Session[Constantes.VAR_SESSION_AJUSTE_ALMACEN] == null && idAjusteAlmacen == null)
             {
-                instanciarRol();
+                instanciarAjusteAlmacen();
             }
 
-            Rol obj = (Rol)this.Session[Constantes.VAR_SESSION_ROL];
+            GuiaRemision obj = (GuiaRemision)this.Session[Constantes.VAR_SESSION_AJUSTE_ALMACEN];
 
-            if (idRol != null)
+            if (idAjusteAlmacen != null)
             {
-                RolBL bL = new RolBL();
-                obj = bL.getRol(idRol.Value);
+                MovimientoAlmacenBL bl = new MovimientoAlmacenBL();
+                //obj = bl.GetGuiaRemision(idAjusteAlmacen);
                 obj.IdUsuarioRegistro = usuario.idUsuario;
                 obj.usuario = usuario;
 
-                this.Session[Constantes.VAR_SESSION_ROL] = obj;
+                this.Session[Constantes.VAR_SESSION_AJUSTE_ALMACEN] = obj;
             }
 
+            this.Session["familia"] = null;
+            this.Session["proveedor"] = null;
 
-            ViewBag.rol = obj;
-            ViewBag.permisos = permisos;
+            ViewBag.ajuste = obj;
+            ViewBag.motivos = motivos;
+            ViewBag.pagina = (int)this.Session[Constantes.VAR_SESSION_PAGINA];
+           
 
             return View();
         }
@@ -133,16 +140,20 @@ namespace Cotizador.Controllers
         private void instanciarAjusteAlmacen()
         {
             GuiaRemision obj = new GuiaRemision();
-            obj.idRol = 0;
+            obj.idMovimientoAlmacen = Guid.Empty;
             obj.Estado = 1;
-            obj.codigo = String.Empty;
-            obj.nombre = String.Empty;
+            obj.motivoAjuste = new MotivoAjusteAlmacen();
+            obj.motivoTraslado = GuiaRemision.motivosTraslado.AjusteAlmacen;
+            obj.ajusteAprobado = 0;
+            obj.ciudadOrigen = new Ciudad();
+            obj.ciudadOrigen.idCiudad = Guid.Empty;
+            obj.documentoDetalle = new List<DocumentoDetalle>();
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             obj.IdUsuarioRegistro = usuario.idUsuario;
             obj.usuario = usuario;
 
-            this.Session[Constantes.VAR_SESSION_ROL] = obj;
+            this.Session[Constantes.VAR_SESSION_AJUSTE_ALMACEN] = obj;
         }
 
         private void instanciarRolBusqueda()

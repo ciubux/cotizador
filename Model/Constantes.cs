@@ -242,6 +242,10 @@ namespace Model
         public static String VAR_SESSION_ROL_LISTA = "rolList";
         public static String VAR_SESSION_ROL_VER = "rolVer";
 
+        public static String VAR_SESSION_AJUSTE_ALMACEN = "ajusteAlmacen";
+        public static String VAR_SESSION_AJUSTE_ALMACEN_BUSQUEDA = "ajusteAlmacenBusqueda";
+        public static String VAR_SESSION_AJUSTE_ALMACEN_LISTA = "ajusteAlmacenList";
+        public static String VAR_SESSION_AJUSTE_ALMACEN_VER = "ajusteAlmacenVer";
 
         public static String VAR_SESSION_PAGINA = "pagina";
 
@@ -470,7 +474,7 @@ namespace Model
 
         public const String EXPORTAR_VENTAS_CONTABILIDAD = "P590";
         public const String VISUALIZA_VENTAS = "P730";
-<
+
         public const String CARGA_MASIVA_STOCK = "P721";
         public const String VISUALIZA_REPORTE_GLOBAL_STOCK = "P722";
 
@@ -699,6 +703,10 @@ namespace Model
             CargaMasivaStock = 721,
             [Display(Name = "REPORTE STOCK")]
             ReporteStock = 722,
+            [Display(Name = "REGISTRAR AJUSTE STOCK")]
+            RegistrarAjusteAlmacen = 725,
+            [Display(Name = "BÚSQUEDA AJUSTE STOCK")]
+            BusquedaAjusteAlmacen = 726,
 
             [Display(Name = "REPORTE SELLOUT PERSONALIZADO")]
             ReporteSellOutPersonalizado = 901,

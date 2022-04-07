@@ -160,31 +160,6 @@ namespace Cotizador.Controllers
             return excel.generateExcel(lista, usuario);
         }
 
-        [HttpGet]
-        public ActionResult RegistrarAjusteStock()
-        {
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-
-            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.registraAjusteStock)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            MovimientoAlmacen obj = (MovimientoAlmacen)this.Session[Constantes.VAR_SESSION_AJUSTE_STOCK_REGISTRO];
-
-
-            obj.familia = this.Session["familia"].ToString();
-            obj.proveedor = this.Session["proveedor"].ToString();
-
-            PlantillaCargaStock excel = new PlantillaCargaStock();
-            ProductoBL bl = new ProductoBL();
-            List<Producto> lista = bl.getProductosPlantillaStock(obj);
-
-
-            return excel.generateExcel(lista, usuario);
-        }
-
-
 
         public ActionResult ReporteStock(string grupoClienteSelectId, string selectedValue = null)
         {

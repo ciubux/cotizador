@@ -10,9 +10,9 @@
 <div class="container">
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
 
-    <div class="row">
+    <div class="row" style="min-height: 40px;">
         <!--SEDE-->
-        <div class="col-xs-12 col-sm-6 col-lg-4">
+        <div class="col-sm-6 col-lg-4 col-xs-12">
             <div class="form-group">
                 @Html.LabelFor(p => ajuste.ciudadOrigen, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
                 <div class="col-xs-8">
@@ -27,27 +27,27 @@
         </div>
 
         <!--TIPO MOVIMIENTO-->
-        <div class="col-xs-12 col-sm-6 col-lg-4">
+        <div class="col-sm-6 col-lg-4 col-xs-12">
             <div class="form-group">
                 <label for="tipoMovimiento" class="control-label col-xs-4">Tipo Ajuste:</label>
                 <div class="col-xs-8">
-                    <select id="tipoMovimiento" class="control-label">
+                    <select id="tipoMovimiento" class="form-control">
                         <option>Seleccione</option>
-                        <option @(ajuste.tipoMovimiento == Model.MovimientoAlmacen.tiposMovimiento.Salida ? "selected" : "") value="S">Pérdida</option>
-                        <option @(ajuste.tipoMovimiento == Model.MovimientoAlmacen.tiposMovimiento.Entrada ? "selected" : "") value="E">Sobrante</option>
+                        <option @(((char)ajuste.tipoMovimiento).ToString() == "S" ? "selected" : "") value="S">Pérdida</option>
+                        <option @(((char)ajuste.tipoMovimiento).ToString() == "E" ? "selected" : "") value="E">Sobrante</option>
                     </select>
                 </div>
             </div>
         </div>
-    
+
         <!--MOTIVO AJUSTE-->
-        <div class="col-xs-12 col-sm-6 col-lg-4">
+        <div class="col-sm-6 col-lg-4 col-xs-12">
             <div class="form-group">
                 <label for="motivoAjuste" class="control-label col-xs-4">Tipo Ajuste:</label>
                 <div class="col-xs-8">
-                    <select id="motivoAjuste" class="control-label">
+                    <select id="motivoAjuste" class="form-control">
                         <option>Seleccione</option>
-                        @foreach(Model.MotivoAjusteAlmacen item in motivos)
+                        @foreach (Model.MotivoAjusteAlmacen item in motivos)
                         {
                             <option @(ajuste.motivoAjuste.idMotivoAjusteAlmacen == item.idMotivoAjusteAlmacen ? "selected" : "") value="@item.idMotivoAjusteAlmacen" tipo="@item.tipo">@item.descripcion</option>
                         }
@@ -58,13 +58,20 @@
 
     </div>
 
-    <div class="row">
+    <div class="row" style="margin-bottom: 20px;">
         <!--FECHA EMISION-->
         <div class="col-xs-12 col-sm-6 col-lg-4">
             <div class="form-group">
                 <label for="fechaEmision" class="control-label col-xs-4">Fecha:</label>
                 <div class="col-xs-8">
-                    <input class="form-control" type="text" value="@ajuste.fechaEmision" id="fechaEmision" name="fechaEmision">
+                    @if (DateTime.Compare(ajuste.fechaEmision, DateTime.Now.AddYears(-5)) < 0)
+                    {
+                        <input class="form-control" type="text" value="" id="fechaEmision" name="fechaEmision">
+                    }
+                    else
+                    {
+                        <input class="form-control" type="text" value="@ajuste.fechaEmision.ToString("dd/MM/yyyy")" id="fechaEmision" name="fechaEmision">
+                    }
                 </div>
             </div>
         </div>
@@ -72,8 +79,8 @@
         <!--OBSERVACIONES-->
         <div class="col-xs-12 col-sm-6 col-lg-8">
             <div class="form-group">
-                <label for="observaciones" class="control-label col-xs-4">Observaciones:</label>
-                <div class="col-xs-8">
+                <label for="observaciones" class="control-label col-xs-4 col-sm-4 col-lg-2">Observaciones:</label>
+                <div class="col-xs-8 col-sm-8 col-lg-10">
                     <textarea class="form-control" id="observaciones" name="observaciones">@ajuste.observaciones</textarea>
                 </div>
             </div>
@@ -82,7 +89,7 @@
     </div>
 
     <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
-        <button id="btnVerAgregarProducto" type="button" class="btn btn-primary">Agregar Producto</button>
+        <button id="btnVerAgregarProducto" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
     </div>
 
 
@@ -104,20 +111,109 @@
             </tr>
         </thead>
         <tbody>
-            @foreach(Model.DocumentoDetalle item in ajuste.documentoDetalle)
+            @foreach (Model.DocumentoDetalle item in ajuste.documentoDetalle)
             {
-            <tr>
-                <td>@item.producto.sku - @item.producto.descripcion</td>
-                <td>@item.unidad</td>
-                <td>@item.cantidad</td>
-                <td>
-                    <button type="button" class="btn btn-primary btnEditarAjusteDetalle" idProducto="@item.producto.idProducto">Editar</button>&nbsp;&nbsp;
-                    <button type="button" class="btn btn-danger btnEliminarAjusteDetalle" idProducto="@item.producto.idProducto">Eliminar</button>
-                </td>
-            </tr>
+                <tr>
+                    <td>@item.producto.sku - @item.producto.descripcion</td>
+                    <td>@item.unidad</td>
+                    <td>@item.cantidad</td>
+                    <td>
+                        <button type="button" class="btn btn-primary btnEditarAjusteDetalle" idProducto="@item.producto.idProducto">Editar</button>&nbsp;&nbsp;
+                        <button type="button" class="btn btn-danger btnEliminarAjusteDetalle" idProducto="@item.producto.idProducto">Eliminar</button>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
+
+
+    <!-- MODAL AGREGAR PRODUCTO -->
+    <div class="modal fade" id="modalAgregarProducto" tabindex="-1">
+        <!-- <div class="modal fade" id="modalAgregarProducto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+           -->
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!--CABECERA-->
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalAgregarProductoTitle"><b>Agregar Producto</b></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <p></p>
+                </div>
+
+
+                <!--CUERPO-->
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-6">
+                                <!--PRODUCTO-->
+                                <div class="form-group">
+                                    <label for="producto" class="control-label col-xs-3">Producto:</label>
+                                    <div class="col-xs-9">
+                                        <select class="form-control" id="producto" name="producto">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <!--PRESENTACIÓN-->
+                                <div class="form-group">
+                                    <label for="unidad" class="control-label col-xs-3">Presentación:</label>
+                                    <div class="col-xs-7">
+                                        <select class="form-control" id="unidad" name="unidad"></select>
+                                    </div>
+                                    <div class="col-xs-2" style="margin-top: -2px;">
+                                        <button id="btnStockUnidadAddProduct" type="button" title="Consultar Stock" class="verModalStockProducto btn" style="margin-bottom: 5px;">
+                                            <img src="~/images/icon_stock.png" height="25" />
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="cantidad" class="control-label col-xs-3">Cantidad:</label>
+                                    <div class="col-xs-9">
+                                        <input class="form-control" type="number" value="" min="1" step="1" id="cantidad" name="cantidad">
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group" id="observacionProductoDiv">
+                                    <label for="observacionProducto" class="control-label col-xs-3">Observaciones:</label>
+                                    <div class="col-xs-9">
+                                        <textarea rows="5" cols="35" id="observacionProducto" name="observacionProducto"> </textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!--IMAGEN-->
+                            <div class="col-sm-6 col-lg-6 ">
+                                <div class="form-group modal-add-image" style="height:180px">
+                                    <img id="imgProducto" src="/images/NoDisponible.gif">
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </form>
+
+                    <div class="row pull-right">
+                        <span style="margin-right: 20px; color: red; font-weight: bold " class="has-error" id="resultadoAgregarProducto"></span>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnCancelAddProduct" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnAddProduct" class="btn btn-primary">Agregar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <script type="text/javascript">
         function funcionesPruebaRegistroAjuste() {
@@ -143,8 +239,50 @@
 
             $("#fechaEmision").datepicker();
 
-            setTimeout(function () {
+            $("#tableProductosAjusteAlmacen").footable({
+                "paging": {
+                    "enabled": true
+                }
+            });
+
+
+            $('#btnVerAgregarProducto').click(function () {
+                $("#btnStockUnidadAddProduct").attr('disabled', 'disabled');
                 
+                //Se limpia el mensaje de resultado de agregar producto
+                $("#resultadoAgregarProducto").html("");
+
+                //Se desactiva el boton de agregar producto
+                desactivarBtnAddProduct();
+
+                //Se limpian los campos
+                limpiarCamposAgregarProductos();
+
+                //Se agrega chosen al campo PRODUCTO
+                $("#producto").chosen({ placeholder_text_single: "Seleccione el producto", no_results_text: "No se encontró Producto" });
+
+                $("#producto").ajaxChosen({
+                    dataType: "json",
+                    type: "GET",
+                    minTermLength: 5,
+                    afterTypeDelay: 300,
+                    allow_single_deselect: true,
+                    cache: false,
+                    url: "/Producto/Search"
+                }, {
+                    loadingImg: "Content/chosen/images/loading.gif"
+                }, { placeholder_text_single: "Seleccione el producto", no_results_text: "No se encontró Producto" });
+
+                $('#producto').val('').trigger('chosen:updated');
+                $('#producto').val('').trigger('liszt:updated');
+
+                $('#producto')
+                    .find('option:first-child').prop('selected', true)
+                    .end().trigger('chosen:updated');
+            });
+
+            setTimeout(function () {
+
             }, 1000);
 
             $('body').on('change', ".td-reasignar-cartera-a select.form-control", function () {
@@ -153,7 +291,22 @@
                 $("#idResignar_" + uuid).attr("nombreNuevoAsesor", $("#idResignarSel_" + uuid + " option:selected").text());
             });
 
-            
+            function activarBtnAddProduct() {
+                $('#btnAddProduct').removeAttr('disabled');
+            }
+
+            function desactivarBtnAddProduct() {
+                $("#btnAddProduct").attr('disabled', 'disabled');
+            }
+
+            function limpiarCamposAgregarProductos() {
+                $("#unidad").html("");
+                $("#imgProducto").attr("src", "/images/NoDisponible.gif");
+                $('#observacionProducto').val("");
+                $('#cantidad').val(1);
+
+                //$("#tableMostrarPrecios > tbody").empty();
+            }
 
             $("#tipoMovimiento").change(function () {
                 $("#motivoAjuste").val("");
@@ -166,9 +319,6 @@
             });
 
 
-            $("#btnVerAgregarProducto").click(function () {
-                
-            });
 
             $("#btnAgregarDetalle").click(function () {
                 $("#fechaVigenciaSel").val($("#fechaInicioVigencia").val());

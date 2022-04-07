@@ -380,7 +380,7 @@ jQuery(function ($) {
                 "paging": {
                     "enabled": true
                 }
-            })
+            });
         }
 
         $("#btnBusqueda").click();

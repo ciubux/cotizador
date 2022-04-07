@@ -89,7 +89,7 @@
                         var linkMantenimientoGrupoCliente = "";
                         var linkReasignarCarteraCliente = "";
 
-                        
+
                         var linkBusquedaProducto = "";
                         var linkCargaMasivaProducto = "";
                         var linkCargaMasivaStock = "";
@@ -150,6 +150,10 @@
                         var linkReporteSellOutPersonalizado = "";
 
                         var linkResultadosKPI = "";
+
+                        var linkRegistrarAjusteStock = "";
+                        var linkBusquedaAjusteStock = "";
+
                     }
                     @if (this.Session["pagina"] != null)
                     {
@@ -194,6 +198,8 @@
                             case 720: linkPlantillaStock = "active"; linkMaestros = "active"; break;
                             case 721: linkCargaMasivaStock = "active"; linkMaestros = "active"; break;
                             case 722: linkReporteStock = "active"; linkMaestros = "active"; break;
+                            case 725: linkRegistrarAjusteStock = "active"; linkMaestros = "active"; break;
+                            case 726: linkBusquedaAjusteStock = "active"; linkMaestros = "active"; break;
 
                             case 30: linkBusquedaOrigen = "active"; linkMaestros = "active"; break;
                             case 31: linkMantenimientoOrigen = "active"; linkMaestros = "active"; break;
@@ -330,7 +336,7 @@
                             </li>
                         }
 
-                        if (usuario.creaGuias || usuario.administraGuias || usuario.visualizaGuias)
+                        if (usuario.creaGuias || usuario.administraGuias || usuario.visualizaGuias || usuario.registraAjusteStock)
                         {
 
                             <li class="@linkMovimientosAlmacen">
@@ -359,6 +365,15 @@
                                     {
                                         <li id="linkMantenimientoNotaIngreso" class="@linkMantenimientoNotaIngreso">@Html.ActionLink("Nota de Ingreso - Crear/Modificar", "Ingresar", "NotaIngreso")</li>
                                     }
+                                    @if (usuario.registraAjusteStock)
+                                    {
+                                        <li id="linkBusquedaAjusteStock" class="@linkBusquedaAjusteStock">@Html.ActionLink("Almacén - Búsqueda Ajuste Stock", "Editar", "AjusteAlmacen")</li>
+                                    }
+                                    @if (usuario.registraAjusteStock)
+                                    {
+                                        <li id="linkRegistraAjusteStock" class="@linkRegistrarAjusteStock">@Html.ActionLink("Almacén - Registrar Ajuste Stock", "Editar", "AjusteAlmacen")</li>
+                                    }
+
                                 </ul>
                             </li>
                         }
@@ -492,6 +507,7 @@
                                     {
                                         <li id="linkCRStock" class="@linkReporteStock">@Html.ActionLink("Stock - Reporte Stock", "ReporteStock", "Stock")</li>
                                     }
+
 
                                     @if (usuario.modificaOrigen || usuario.visualizaOrigenes)
                                     {

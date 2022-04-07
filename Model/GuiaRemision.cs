@@ -137,6 +137,9 @@ namespace Model
             [Display(Name = "Extorno de Transferencia Gratuita Recibida")]
             DevolucionTransferenciaGratuitaRecibida = 'H', /*PEDIDO DE COMPRA*/
 
+            [Display(Name = "Ajuste Almacén")]
+            AjusteAlmacen = 'J', /*SIN PEDIDO*/
+
 
             /*
 
