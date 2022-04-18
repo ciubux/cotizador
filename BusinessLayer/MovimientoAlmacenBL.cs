@@ -177,8 +177,24 @@ namespace BusinessLayer
             return guiaRemisionList;
         }
 
-       
-        
+        public List<GuiaRemision> BuscarAjustesAlmacen(GuiaRemision guiaRemision)
+        {
+            List<GuiaRemision> guiaRemisionList = null;
+            using (var dal = new MovimientoALmacenDAL())
+            {
+                guiaRemisionList = dal.SelectAjustesAlmacen(guiaRemision);
+            }
+            return guiaRemisionList;
+        }
+
+        public GuiaRemision GetAjusteAlmacen(GuiaRemision guiaRemision)
+        {
+            using (var dal = new MovimientoALmacenDAL())
+            {
+                guiaRemision = dal.SelectAjusteAlmacen(guiaRemision);
+            }
+            return guiaRemision;
+        }
 
         public List<NotaIngreso> GetNotasIngreso(NotaIngreso notaIngreso)
         {

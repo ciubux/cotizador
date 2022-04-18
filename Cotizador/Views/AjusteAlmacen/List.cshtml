@@ -1,0 +1,132 @@
+﻿@{
+    ViewBag.Title = "AJustes Almacén";
+    Model.GuiaRemision ajuste = ViewBag.objSearch;
+    List<Model.MotivoAjusteAlmacen> motivos = ViewBag.motivos;
+
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="idUsuario" value="" />
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+
+    <form class="form-horizontal">
+
+        <div class="row" style="min-height: 40px;">
+            <!--SEDE-->
+            <div class="col-sm-6 col-lg-4 col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(p => ajuste.ciudadOrigen, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
+                    <div class="col-xs-8">
+                        @Html.Action("GetCiudades", "Ciudad",
+                         new
+                         {
+                             ciudadSelectId = "idCiudad",
+                             selectedValue = ajuste.ciudadOrigen.idCiudad
+                         })
+                    </div>
+                </div>
+            </div>
+
+            <!--TIPO MOVIMIENTO-->
+            <div class="col-sm-6 col-lg-4 col-xs-12">
+                <div class="form-group">
+                    <label for="tipoMovimiento" class="control-label col-xs-4">Tipo Ajuste:</label>
+                    <div class="col-xs-8">
+                        <select id="tipoMovimiento" class="form-control">
+                            <option value="">Seleccione</option>
+                            <option @(((char)ajuste.tipoMovimiento).ToString() == "S" ? "selected" : "") value="S">Pérdida</option>
+                            <option @(((char)ajuste.tipoMovimiento).ToString() == "E" ? "selected" : "") value="E">Sobrante</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!--MOTIVO AJUSTE-->
+            <div class="col-sm-6 col-lg-4 col-xs-12">
+                <div class="form-group">
+                    <label for="motivoAjuste" class="control-label col-xs-4">Motivo Ajuste:</label>
+                    <div class="col-xs-8">
+                        <select id="motivoAjuste" class="form-control">
+                            <option value="">Seleccione</option>
+                            @foreach (Model.MotivoAjusteAlmacen item in motivos)
+                            {
+                                string style = "";
+                                if (((char)ajuste.tipoMovimiento).ToString() == "S" && item.tipo == 2)
+                                {
+                                    style = "display: none;";
+                                }
+                                if (((char)ajuste.tipoMovimiento).ToString() == "E" && item.tipo == 1)
+                                {
+                                    style = "display: none;";
+                                }
+                                <option @(ajuste.motivoAjuste.idMotivoAjusteAlmacen == item.idMotivoAjusteAlmacen ? "selected" : "") style="@style" value="@item.idMotivoAjusteAlmacen" tipo="@item.tipo">@item.descripcion</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row" style="margin-bottom: 20px;">
+            <!--FECHA EMISION DESDE-->
+            <div class="col-xs-12 col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label for="fechaEmisionDesde" class="control-label col-xs-4">Fecha Desde:</label>
+                    <div class="col-xs-8">
+                        <input class="form-control" type="text" value="@ajuste.fechaEmisionDesde.ToString("dd/MM/yyyy")" id="fechaEmisionDesde" >
+                    </div>
+                </div>
+            </div>
+
+            <!--FECHA EMISION HASTA-->
+            <div class="col-xs-12 col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label for="fechaEmisionHasta" class="control-label col-xs-4">Fecha Hasta:</label>
+                    <div class="col-xs-8">
+                        <input class="form-control" type="text" value="@ajuste.fechaEmisionHasta.ToString("dd/MM/yyyy")" id="fechaEmisionHasta" >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
+            <button id="btnLimpiarBusqueda" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
+            <button id="btnBusqueda" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
+        </div>
+
+        @*<div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px; display: none;">
+            <button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ExportLastSearchExcel", "Usuario")">Exportar</button>
+        </div>*@
+
+        <table id="tableAjustesAlmacen" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
+               data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+               data-editing-allow-add="false"
+               data-editing-allow-delete="false"
+               data-editing-allow-edit="false"
+               data-sorting="true"
+               data-show-toggle="false"
+               data-editing-hide-text="Finalizar edición"
+               data-editing-add-text="Descartar cambios">
+            <thead>
+                <tr>
+                    <th data-name="sede" data-visible="true">Sede</th>
+                    <th data-name="fecha" data-visible="true">Fecha</th>
+                    <th data-name="fechaRegistro" data-visible="true" data-sortable="true">Fecha Registro</th>
+                    <th data-name="usuarioRegistro" data-visible="true" data-sortable="true">Registrado Por</th>
+                    <th data-name="motivo" data-visible="true">Motivo</th>
+                    <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </form>
+</div>
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/ajusteAlmacen")
+}

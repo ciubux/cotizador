@@ -478,6 +478,7 @@
     <Content Include="Scripts\kpi.js" />
     <Content Include="Scripts\reportes.js" />
     <Content Include="Scripts\promocion.js" />
+    <Content Include="Scripts\ajusteAlmacen.js" />
     <Content Include="Scripts\stock.js" />
     <Content Include="Scripts\tipoClienteContacto.js" />
     <Content Include="Scripts\utilesAjax.js" />
@@ -733,6 +734,7 @@
     <Content Include="Views\Cliente\ReasignacionCartera.cshtml" />
     <Content Include="Views\AjusteAlmacen\Editar.cshtml" />
     <Content Include="Views\Shared\_MotivoAjusteAlmacen.cshtml" />
+    <Content Include="Views\AjusteAlmacen\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

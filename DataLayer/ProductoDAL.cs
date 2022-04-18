@@ -161,6 +161,7 @@ namespace DataLayer
                 producto.unidad = Converter.GetString(row, "unidad");
                 producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
                 producto.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
+                producto.unidadConteo = Converter.GetString(row, "unidad_conteo");
                 producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
                 producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
                 producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
@@ -179,6 +180,7 @@ namespace DataLayer
                 producto.compraRestringida = Converter.GetInt(row, "compra_restringida");
                 producto.exoneradoIgv = Converter.GetInt(row, "exonerado_igv") == 1 ? true : false;
                 producto.inafecto = Converter.GetInt(row, "inafecto") == 1 ? true : false;
+                producto.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_estandar_unidad_conteo");
 
                 producto.Stock = Converter.GetInt(row, "stock");
                 producto.topeDescuento = Converter.GetDecimal(row, "tope_descuento");

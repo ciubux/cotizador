@@ -528,20 +528,29 @@ namespace DataLayer
                 InputParameterAdd.Guid(objCommand, "idProducto", documentoDetalle.producto.idProducto);
                 InputParameterAdd.Int(objCommand, "cantidad", documentoDetalle.cantidad);
                 InputParameterAdd.Int(objCommand, "esUnidadAlternativa", documentoDetalle.esPrecioAlternativo ? 1 : 0);
-                InputParameterAdd.Decimal(objCommand, "equivalencia", documentoDetalle.ProductoPresentacion.Equivalencia);
 
                 int cantidadConteo = documentoDetalle.cantidad * documentoDetalle.producto.equivalenciaUnidadEstandarUnidadConteo;
-                if (documentoDetalle.ProductoPresentacion.IdProductoPresentacion == 1)
+                if (documentoDetalle.ProductoPresentacion != null)
                 {
-                    cantidadConteo = cantidadConteo / documentoDetalle.producto.equivalenciaAlternativa;
-                }
-                if (documentoDetalle.ProductoPresentacion.IdProductoPresentacion == 2)
+                    if (documentoDetalle.ProductoPresentacion.IdProductoPresentacion == 1)
+                    {
+                        cantidadConteo = cantidadConteo / documentoDetalle.producto.equivalenciaAlternativa;
+                    }
+                    if (documentoDetalle.ProductoPresentacion.IdProductoPresentacion == 2)
+                    {
+                        cantidadConteo = cantidadConteo * documentoDetalle.producto.equivalenciaProveedor;
+                    }
+                    InputParameterAdd.Decimal(objCommand, "equivalencia", documentoDetalle.ProductoPresentacion.Equivalencia);
+                    InputParameterAdd.Int(objCommand, "idProductoPresentacion", documentoDetalle.ProductoPresentacion.IdProductoPresentacion);
+                } else
                 {
-                    cantidadConteo = cantidadConteo * documentoDetalle.producto.equivalenciaProveedor;
+                    InputParameterAdd.Decimal(objCommand, "equivalencia", 0);
+                    InputParameterAdd.Int(objCommand, "idProductoPresentacion", 0);
                 }
+                
 
                 InputParameterAdd.Int(objCommand, "cantidadUnidadConteo", cantidadConteo);
-                InputParameterAdd.Int(objCommand, "idProductoPresentacion", documentoDetalle.ProductoPresentacion.IdProductoPresentacion);
+                
                 InputParameterAdd.Varchar(objCommand, "observaciones", documentoDetalle.observacion);
                 InputParameterAdd.Varchar(objCommand, "unidad", documentoDetalle.unidad);
                 InputParameterAdd.Varchar(objCommand, "unidadConteo", documentoDetalle.producto.unidadConteo);
@@ -1186,6 +1195,138 @@ namespace DataLayer
         }
 
 
+        public GuiaRemision SelectAjusteAlmacen(GuiaRemision guiaRemision)
+        {
+
+            var objCommand = GetSqlCommand("ps_ajusteAlmacen");
+            InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", guiaRemision.idMovimientoAlmacen);
+            InputParameterAdd.Guid(objCommand, "idUsuario", guiaRemision.usuario.idUsuario);
+            DataSet dataSet = ExecuteDataSet(objCommand);
+
+            DataTable guiaRemisionDataTable = dataSet.Tables[0];
+            DataTable guiaRemisionDetalleDataTable = dataSet.Tables[1];
+
+            DataTable transaccionListDataTable = dataSet.Tables[2];
+
+            //Datos de la cotizacion
+            foreach (DataRow row in guiaRemisionDataTable.Rows)
+            {
+                //DATOS DE LA GUIA
+                guiaRemision.serieDocumento = Converter.GetString(row, "serie_documento");
+                guiaRemision.numeroDocumento = Converter.GetLong(row, "numero_documento");
+                guiaRemision.idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
+                guiaRemision.fechaTraslado = Converter.GetDateTime(row, "fecha_traslado");
+                guiaRemision.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
+                guiaRemision.observaciones = Converter.GetString(row, "observaciones");
+                guiaRemision.estaAnulado = Converter.GetBool(row, "anulado");
+                guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)Char.Parse(Converter.GetString(row, "motivo_traslado"));
+                guiaRemision.tipoMovimiento = (GuiaRemision.tiposMovimiento)Char.Parse(Converter.GetString(row, "tipo_movimiento"));
+                guiaRemision.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
+                guiaRemision.ajusteAprobado = Converter.GetInt(row, "ajuste_aprobado");
+
+                guiaRemision.motivoAjuste = new MotivoAjusteAlmacen();
+                guiaRemision.motivoAjuste.idMotivoAjusteAlmacen = Converter.GetInt(row, "id_motivo_ajuste_stock");
+                guiaRemision.motivoAjuste.descripcion = Converter.GetString(row, "descripcion_motivo");
+                guiaRemision.motivoAjuste.tipo = Converter.GetInt(row, "tipo_motivo");
+
+                //USUARIO
+                guiaRemision.usuario = new Usuario();
+                guiaRemision.usuario.idUsuario = Converter.GetGuid(row, "usuario_creacion");
+                guiaRemision.usuario.nombre = Converter.GetString(row, "nombre_usuario");
+                guiaRemision.usuario.email = Converter.GetString(row, "email_usuario");
+                //SEDE
+                guiaRemision.ciudadOrigen = new Ciudad();
+                guiaRemision.ciudadOrigen.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                guiaRemision.ciudadOrigen.nombre = Converter.GetString(row, "nombre_ciudad"); 
+            }
+
+
+            guiaRemision.documentoDetalle = new List<DocumentoDetalle>();
+            //Detalle de la cotizacion
+            foreach (DataRow row in guiaRemisionDetalleDataTable.Rows)
+            {
+                DocumentoDetalle documentoDetalle = new DocumentoDetalle();
+                documentoDetalle.idDocumentoDetalle = Converter.GetGuid(row, "id_movimiento_almacen_detalle");
+                documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+                documentoDetalle.unidad = Converter.GetString(row, "unidad");
+                documentoDetalle.observacion = Converter.GetString(row, "observaciones");
+
+                documentoDetalle.ProductoPresentacion = new ProductoPresentacion();
+                documentoDetalle.ProductoPresentacion.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion");
+                documentoDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+
+                documentoDetalle.producto = new Producto();
+                documentoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                documentoDetalle.producto.sku = Converter.GetString(row, "sku");
+                documentoDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
+                documentoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
+                documentoDetalle.producto.descripcionLarga = Converter.GetString(row, "descripcion_larga");
+                documentoDetalle.producto.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_estandar_unidad_conteo");
+                documentoDetalle.producto.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");
+                documentoDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
+                guiaRemision.documentoDetalle.Add(documentoDetalle);
+            }
+
+            
+            return guiaRemision;
+        }
+
+        public List<GuiaRemision> SelectAjustesAlmacen(GuiaRemision guiaRemision)
+        {
+            List<GuiaRemision> guiaRemisionList = new List<GuiaRemision>();
+
+            var objCommand = GetSqlCommand("ps_ajustesAlmacen");
+            InputParameterAdd.Guid(objCommand, "idUsuario", guiaRemision.usuario.idUsuario);
+            InputParameterAdd.DateTime(objCommand, "fechaEmisionDesde", guiaRemision.fechaEmisionDesde);
+            InputParameterAdd.DateTime(objCommand, "fechaEmisionHasta", guiaRemision.fechaEmisionHasta);
+            //InputParameterAdd.Int(objCommand, "estado", guiaRemision.Estado);
+
+            InputParameterAdd.Guid(objCommand, "idSedeOrigen", guiaRemision.ciudadOrigen.idCiudad);
+            //InputParameterAdd.Char(objCommand, "motivoTraslado", ((char)guiaRemision.motivoTraslado).ToString());
+            InputParameterAdd.Char(objCommand, "tipoMovimiento", ((char)guiaRemision.tipoMovimiento).ToString());
+            InputParameterAdd.Int(objCommand, "idMotivoAjuste", guiaRemision.motivoAjuste.idMotivoAjusteAlmacen);
+            InputParameterAdd.Int(objCommand, "ajusteAprobado", guiaRemision.ajusteAprobado);
+
+
+            DataTable dataTable = Execute(objCommand);
+
+            //Datos de la cotizacion
+            foreach (DataRow row in dataTable.Rows)
+            {
+                guiaRemision = new GuiaRemision();
+                //DATOS DE LA GUIA
+                guiaRemision.serieDocumento = Converter.GetString(row, "serie_documento");
+                guiaRemision.numeroDocumento = Converter.GetLong(row, "numero_documento");
+                guiaRemision.idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
+                guiaRemision.fechaTraslado = Converter.GetDateTime(row, "fecha_traslado");
+                guiaRemision.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
+                guiaRemision.observaciones = Converter.GetString(row, "observaciones");
+                guiaRemision.estaAnulado = Converter.GetBool(row, "anulado");
+                //guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)Char.Parse(Converter.GetString(row, "motivo_traslado"));
+                guiaRemision.tipoMovimiento = (GuiaRemision.tiposMovimiento)Char.Parse(Converter.GetString(row, "tipo_movimiento"));
+                guiaRemision.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
+                guiaRemision.ajusteAprobado = Converter.GetInt(row, "ajuste_aprobado");
+
+                guiaRemision.motivoAjuste = new MotivoAjusteAlmacen();
+                guiaRemision.motivoAjuste.idMotivoAjusteAlmacen = Converter.GetInt(row, "id_motivo_ajuste_stock");
+                guiaRemision.motivoAjuste.descripcion = Converter.GetString(row, "descripcion_motivo");
+                guiaRemision.motivoAjuste.tipo = Converter.GetInt(row, "tipo_motivo");
+
+                //USUARIO
+                guiaRemision.usuario = new Usuario();
+                guiaRemision.usuario.idUsuario = Converter.GetGuid(row, "usuario_creacion");
+                guiaRemision.usuario.nombre = Converter.GetString(row, "nombre_usuario");
+                guiaRemision.usuario.email = Converter.GetString(row, "email_usuario");
+                //SEDE
+                guiaRemision.ciudadOrigen = new Ciudad();
+                guiaRemision.ciudadOrigen.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                guiaRemision.ciudadOrigen.nombre = Converter.GetString(row, "nombre_ciudad");
+
+                guiaRemisionList.Add(guiaRemision);
+            }
+
+            return guiaRemisionList;
+        }
 
 
 

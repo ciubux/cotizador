@@ -32,7 +32,7 @@
                 <label for="tipoMovimiento" class="control-label col-xs-4">Tipo Ajuste:</label>
                 <div class="col-xs-8">
                     <select id="tipoMovimiento" class="form-control">
-                        <option>Seleccione</option>
+                        <option value="">Seleccione</option>
                         <option @(((char)ajuste.tipoMovimiento).ToString() == "S" ? "selected" : "") value="S">Pérdida</option>
                         <option @(((char)ajuste.tipoMovimiento).ToString() == "E" ? "selected" : "") value="E">Sobrante</option>
                     </select>
@@ -43,13 +43,21 @@
         <!--MOTIVO AJUSTE-->
         <div class="col-sm-6 col-lg-4 col-xs-12">
             <div class="form-group">
-                <label for="motivoAjuste" class="control-label col-xs-4">Tipo Ajuste:</label>
+                <label for="motivoAjuste" class="control-label col-xs-4">Motivo Ajuste:</label>
                 <div class="col-xs-8">
                     <select id="motivoAjuste" class="form-control">
-                        <option>Seleccione</option>
+                        <option value="">Seleccione</option>
                         @foreach (Model.MotivoAjusteAlmacen item in motivos)
                         {
-                            <option @(ajuste.motivoAjuste.idMotivoAjusteAlmacen == item.idMotivoAjusteAlmacen ? "selected" : "") value="@item.idMotivoAjusteAlmacen" tipo="@item.tipo">@item.descripcion</option>
+                            string style = "";
+                            if (((char)ajuste.tipoMovimiento).ToString() == "S" && item.tipo == 2) {
+                                style = "display: none;";
+                            }
+                            if (((char)ajuste.tipoMovimiento).ToString() == "E" && item.tipo == 1)
+                            {
+                                style = "display: none;";
+                            }
+                            <option @(ajuste.motivoAjuste.idMotivoAjusteAlmacen == item.idMotivoAjusteAlmacen ? "selected" : "") style="@style" value="@item.idMotivoAjusteAlmacen" tipo="@item.tipo">@item.descripcion</option>
                         }
                     </select>
                 </div>
@@ -118,14 +126,17 @@
                     <td>@item.unidad</td>
                     <td>@item.cantidad</td>
                     <td>
-                        <button type="button" class="btn btn-primary btnEditarAjusteDetalle" idProducto="@item.producto.idProducto">Editar</button>&nbsp;&nbsp;
-                        <button type="button" class="btn btn-danger btnEliminarAjusteDetalle" idProducto="@item.producto.idProducto">Eliminar</button>
+                        <button type="button" class="btn btn-danger btnEliminarAjusteDetalle" idProducto="@item.producto.idProducto">Quitar</button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 
+    <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
+        <button id="btnCancelAjusteAlmacen" type="button" class="btn btn-danger">Cancelar</button>
+        <button id="btnSaveAjusteAlmacen" type="button" class="btn btn-success">Guardar y Finalizar</button>
+    </div>
 
     <!-- MODAL AGREGAR PRODUCTO -->
     <div class="modal fade" id="modalAgregarProducto" tabindex="-1">
@@ -241,14 +252,30 @@
 
             $("#tableProductosAjusteAlmacen").footable({
                 "paging": {
-                    "enabled": true
+                    "enabled": false
                 }
             });
 
 
             $('#btnVerAgregarProducto').click(function () {
+                var idCiudad = $("#idCiudad").val();
+
+                if (idCiudad == "") {
+                    $.alert({
+                        title: "ERROR DE VALIDACIÓN",
+                        content: 'Debe seleccionar una sede.',
+                        type: 'orange',
+                        buttons: {
+                            OK: function () {
+                                $("#btnCancelAddProduct").click();
+                            }
+                        }
+                    });
+                    return;
+                }
+
                 $("#btnStockUnidadAddProduct").attr('disabled', 'disabled');
-                
+
                 //Se limpia el mensaje de resultado de agregar producto
                 $("#resultadoAgregarProducto").html("");
 
@@ -281,15 +308,98 @@
                     .end().trigger('chosen:updated');
             });
 
+
+            $("#btnAddProduct").click(function () {
+                //Se desactiva el boton mientras se agrega el producto
+                desactivarBtnAddProduct();
+
+                var cantidad = parseInt($("#cantidad").val());
+                var idProductoPresentacion = Number($("#unidad").val());
+                var esPrecioAlternativo = 0;
+                if (idProductoPresentacion > 0)
+                    esPrecioAlternativo = 1;
+
+                var observacion = $("#observacionProducto").val();
+
+                $.ajax({
+                    url: "/AjusteAlmacen/AddProducto",
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: {
+                        cantidad: cantidad,
+                        esPrecioAlternativo: esPrecioAlternativo,
+                        idProductoPresentacion: idProductoPresentacion,
+                        observacion: observacion
+                    },
+                    success: function (detalle) {
+                        location.reload();
+                    }, error: function (detalle) {
+                        $("#resultadoAgregarProducto").html("Producto ya se encuentra en el detalle de la cotización.");
+                    }
+                });
+            });
+
+            $("#producto").change(function () {
+                $("#resultadoAgregarProducto").html("");
+                desactivarBtnAddProduct();
+                $.ajax({
+                    url: "/AjusteAlmacen/GetProducto",
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: {
+                        idProducto: $(this).val()
+                    },
+                    success: function (producto) {
+                        $("#imgProducto").attr("src", "data:image/png;base64," + producto.image);
+                        /*Temporalmente se permitirá trabajar en ambos modos hasta que se compruebe que no se presentan errores*/
+                        var options = '<option value="0" selected>' + producto.unidad + '</option>';
+
+                        for (var i = 0; i < producto.productoPresentacionList.length; i++) {
+                            var reg = producto.productoPresentacionList[i];
+                            options = options + "<option value='" + reg.IdProductoPresentacion + "'  precioUnitarioAlternativoSinIGV='" + reg.PrecioSinIGV + "' costoAlternativoSinIGV='" + reg.CostoSinIGV + "' >" + reg.Presentacion + "</option>";
+                        }
+
+
+                        $("#btnStockUnidadAddProduct").removeAttr("disabled");
+
+                        //Limpieza de campos
+                        $("#unidad").html(options);
+
+                        var idCiudad = $("#ciudadOrigen").val();
+                        $("#btnStockUnidadAddProduct").attr("sku", producto.sku);
+                        $("#btnStockUnidadAddProduct").attr("idCiudad", idCiudad);
+                        $("#btnStockUnidadAddProduct").attr("idProductoPresentacion", "0");
+
+                        $("#cantidad").val(1);
+
+                        //Activar Botón para agregar producto a la grilla
+                        activarBtnAddProduct();
+                    }
+                });
+            });
+
+            $("#idCiudad").change(function () {
+                var idCiudad = $("#idCiudad").val();
+
+                $.ajax({
+                    url: "/AjusteAlmacen/ChangeIdCiudad",
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: {
+                        idCiudad: idCiudad
+                    },
+                    error: function (detalle) {
+                        alert('Debe eliminar los productos agregados antes de cambiar de Sede.');
+                        location.reload();
+                    },
+                    success: function (ciudad) {
+                    }
+                });
+            });
             setTimeout(function () {
 
             }, 1000);
 
-            $('body').on('change', ".td-reasignar-cartera-a select.form-control", function () {
-                var uuid = $(this).attr("name").replace("idResignarSel_", "");
-                $("#idResignar_" + uuid).val($(this).val());
-                $("#idResignar_" + uuid).attr("nombreNuevoAsesor", $("#idResignarSel_" + uuid + " option:selected").text());
-            });
 
             function activarBtnAddProduct() {
                 $('#btnAddProduct').removeAttr('disabled');
@@ -316,87 +426,177 @@
                 } else {
                     $('#motivoAjuste option[tipo="1"]').hide();
                 }
+
+                $.ajax({
+                    url: "/AjusteAlmacen/ChangeTipoAjuste",
+                    type: 'POST',
+                    data: {
+                        tipoMovimiento: $(this).val()
+                    },
+                    success: function () { }
+                });
+            });
+
+            $("#motivoAjuste").change(function () {
+                $.ajax({
+                    url: "/AjusteAlmacen/ChangeIdMotivoAjuste",
+                    type: 'POST',
+                    data: {
+                        idMotivoAjuste: $(this).val()
+                    },
+                    success: function () { }
+                });
             });
 
 
+            
+            $("#observaciones").change(function () {
+                changeInputString("observaciones", $(this).val());
+            });
 
-            $("#btnAgregarDetalle").click(function () {
-                $("#fechaVigenciaSel").val($("#fechaInicioVigencia").val());
-                $("#tableClientesConfirmarReasignar > tbody").empty();
-                var reasignaciones = 0;
-                $('.input-reasignar-asesor').each(function () {
-                    var idAsesor = parseInt($(this).val());
+            $("#fechaEmision").change(function () {
+                changeInputDate("fechaEmision", $(this).val());
+            });
 
-                    if (idAsesor > 0) {
-                        reasignaciones = reasignaciones + 1;
-                        var itemRow = "<tr>" +
-                            "<td>" + $(this).attr("nombreCliente") + "</td>" +
-                            "<td>" + $(this).attr("rucCliente") + "</td>" +
-                            "<td>" + $(this).attr("ciudadCliente") + "</td>" +
-                            "<td>" + $(this).attr("nombreNuevoAsesor") + "</td>" +
-                            "</tr>";
+            function changeInputString(propiedad, valor) {
+                $.ajax({
+                    url: "/AjusteAlmacen/ChangeInputString",
+                    type: 'POST',
+                    data: {
+                        propiedad: propiedad,
+                        valor: valor
+                    },
+                    success: function () { }
+                });
+            }
 
-                        $("#tableClientesConfirmarReasignar").append(itemRow);
+            function changeInputInt(propiedad, valor) {
+                $.ajax({
+                    url: "/AjusteAlmacen/ChangeInputInt",
+                    type: 'POST',
+                    data: {
+                        propiedad: propiedad,
+                        valor: valor
+                    },
+                    success: function () { }
+                });
+            }
+
+            function changeInputDate(propiedad, valor) {
+                $.ajax({
+                    url: "/AjusteAlmacen/ChangeInputDate",
+                    type: 'POST',
+                    data: {
+                        propiedad: propiedad,
+                        valor: valor
+                    },
+                    success: function () { }
+                });
+            }
+
+
+            $(document).on('click', "#tableProductosAjusteAlmacen .btnEliminarAjusteDetalle", function () {
+                var idProducto = $(this).attr("idProducto");
+
+                $.ajax({
+                    url: "/AjusteAlmacen/RemoverProducto",
+                    type: 'POST',
+                    data: {
+                        idProducto: idProducto
+                    },
+                    success: function () {
+                        location.reload();
                     }
                 });
+            });
 
-                FooTable.init('#tableClientesConfirmarReasignar');
 
-                $("#nroReasignacionesClientes").html(reasignaciones);
+            $("#btnSaveAjusteAlmacen").click(function () {
+                var idCiudad = $("#idCiudad").val();
+                if (idCiudad == "") {
+                    $.alert({
+                        title: "ERROR DE VALIDACIÓN",
+                        content: 'Debe seleccionar una sede.',
+                        type: 'orange',
+                        buttons: {
+                            OK: function () {
+                            }
+                        }
+                    });
+                    return;
+                }
 
-                if (reasignaciones <= 0) {
-                    setTimeout(function () {
-                        $("#btnCancelConfirmarReasginarCartera").click();
+                var tipoMovimiento = $("#tipoMovimiento").val();
+                if (tipoMovimiento == "") {
+                    $.alert({
+                        title: "ERROR DE VALIDACIÓN",
+                        content: 'Debe seleccionar el tipo de ajuste.',
+                        type: 'orange',
+                        buttons: {
+                            OK: function () {
+                            }
+                        }
+                    });
+                    return;
+                }
 
+                var motivoAjuste = $("#motivoAjuste").val();
+                if (motivoAjuste == "") {
+                    $.alert({
+                        title: "ERROR DE VALIDACIÓN",
+                        content: 'Debe seleccionar el motivo de ajuste.',
+                        type: 'orange',
+                        buttons: {
+                            OK: function () {
+                            }
+                        }
+                    });
+                    return;
+                }
+
+                var fechaEmision = $("#fechaEmision").val();
+                if (fechaEmision == "") {
+                    $.alert({
+                        title: "ERROR DE VALIDACIÓN",
+                        content: 'Debe seleccionar una fecha de emisión.',
+                        type: 'orange',
+                        buttons: {
+                            OK: function () {
+                            }
+                        }
+                    });
+                    return;
+                }
+
+                $('body').loadingModal({
+                    text: 'Registrando Ajuste Almacén...'
+                });
+                $('body').loadingModal('show');
+
+                $.ajax({
+                    url: "/AjusteAlmacen/Create",
+                    type: 'POST',
+                    error: function (detalle) {
+                        $('body').loadingModal('hide');
                         $.alert({
-                            title: 'Error de Validación',
-                            content: "No se ha realizado la reasginación comercial de ningún cliente.",
-                            type: 'orange',
+                            title: "ERROR",
+                            content: 'Ocurrió un error al registrar el Ajuste.',
+                            type: 'red',
                             buttons: {
                                 OK: function () {
                                 }
                             }
                         });
-                    }, 1000);
-                }
-            });
-
-
-            $(document).on('click', "#tableClientesReasignar a.footable-page-link", function () {
-                setTimeout(function () {
-                    $(".td-reasignar-cartera-a select.form-control").each(function () {
-                        var uuid = $(this).attr("name").replace("idResignarSel_", "");
-                        $(this).val($("#idResignar_" + uuid).val());
-                    });
-                }, 500);
-            });
-
-            $("#btnSaveConfirmarReasginarCartera").click(function () {
-                var form = $("#formReasignarCarteraClientes");
-                var actionUrl = form.attr('action');
-
-                $('body').loadingModal({
-                    text: 'Registrando reasignaciones...'
-                });
-                $('body').loadingModal('show');
-
-
-                $.ajax({
-                    type: "POST",
-                    url: actionUrl,
-                    data: form.serialize(), // serializes the form's elements.
-                    error: function (detalle) {
-                        $('body').loadingModal('hide');
                     },
-                    success: function (data) {
+                    success: function (resultado) {
                         $('body').loadingModal('hide');
                         $.alert({
-                            title: 'Reasignación Exitosa',
-                            content: "Se reasignaron los clientes correctamente.",
+                            title: "REGISTRO EXITOSO",
+                            content: 'El Ajuste se registró correctamente.',
                             type: 'green',
                             buttons: {
                                 OK: function () {
-                                    location.reload();
+                                    window.location = '/AjusteAlmacen/Index';
                                 }
                             }
                         });
