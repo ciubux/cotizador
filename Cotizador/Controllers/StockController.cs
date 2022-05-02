@@ -13,6 +13,8 @@ using Cotizador.ExcelExport;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using System.IO;
+using Cotizador.Models.DTOshow;
+using Cotizador.Models.DTOsShow;
 
 namespace Cotizador.Controllers
 {
@@ -297,6 +299,41 @@ namespace Cotizador.Controllers
         }
 
 
+        [HttpPost]
+        public String GetCierreStock(Guid idCierreStock)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+            {
+                return "";
+            }
+
+            
+            CierreStockBL bl = new CierreStockBL();
+            CierreStock cierre = bl.SelectCierreStock(usuario.idUsuario, idCierreStock);
+            string jsonCotizacion = JsonConvert.SerializeObject(ParserDTOsShow.CierreStockDTO(cierre));
+
+            return jsonCotizacion;
+        }
+
+        [HttpPost]
+        public String EjecutarReporteValidacionStock(Guid idCierreStock)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+            {
+                return "";
+            }
+
+
+            CierreStockBL bl = new CierreStockBL();
+            bl.GenerarReporteValidacionStock(usuario.idUsuario, idCierreStock);
+
+            var obj = new { success = 1 };
+        
+            return JsonConvert.SerializeObject(obj);
+        }
+
         public ActionResult Load(HttpPostedFileBase file)
         {
 
@@ -307,7 +344,8 @@ namespace Cotizador.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            
+
+            int tipoCarga = int.Parse(this.Request.Params["tipoCarga"].ToString());
             Guid idSede = Guid.Parse(this.Request.Params["idCiudad"].ToString());
             String[] fiv = this.Request.Params["fechaCierre"].Split('/');
             DateTime fechaCierre = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
@@ -459,7 +497,7 @@ namespace Cotizador.Controllers
             }
 
             
-            productoBL.RegistroCierreStock(listaStock, fechaCierre, idSede, usuario.idUsuario, arAd.idArchivoAdjunto);
+            productoBL.RegistroCierreStock(listaStock, fechaCierre, idSede, usuario.idUsuario, arAd.idArchivoAdjunto, tipoCarga);
 
             ViewBag.tipoCarga = "archivo";
 

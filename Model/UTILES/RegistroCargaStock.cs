@@ -48,5 +48,11 @@ namespace Model.UTILES
         public decimal cantidadTrasladosSumarAlternativaCalc { get; set; }
 
         public int cantidadConTrasladosConteo { get { return cantidadConteo + cantidadTrasladosSumarConteo; } }
+
+
+        public int estado { get; set; }
+        public int diferenciaCantidadValidacion { get; set; }
+
+        public int stockValidable { get; set; }
     }
 }

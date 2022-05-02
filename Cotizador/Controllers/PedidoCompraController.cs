@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using cotizadorPDF;
 using Cotizador.ExcelExport;
+using Model.UTILES;
 
 namespace Cotizador.Controllers
 {
@@ -1559,6 +1560,29 @@ namespace Cotizador.Controllers
           
             String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"pedido\":" + jsonPedido + ", \"usuario\":" + jsonUsuario + "}";
             return json;
+        }
+
+        [HttpPost]
+        public String GetStockProductos()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA_VER];
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || pedido == null)
+            {
+                return "";
+            }
+
+            List<Guid> idProductos = new List<Guid>();
+
+            foreach (DocumentoDetalle det in pedido.documentoDetalle)
+            {
+                idProductos.Add(det.producto.idProducto);
+            }
+
+            ProductoBL bl = new ProductoBL();
+            List<RegistroCargaStock> stocks = bl.StockProductosSede(idProductos, pedido.ciudad.idCiudad, usuario.idUsuario);
+
+            return JsonConvert.SerializeObject(stocks);
         }
 
         public void autoGuardarPedido()

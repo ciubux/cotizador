@@ -384,6 +384,19 @@ namespace Cotizador.Controllers
 
         }
 
+        [HttpPost]
+        public void AprobarAjusteAlmacen()
+        {
+            GuiaRemision obj = new GuiaRemision();
+            obj.idMovimientoAlmacen = Guid.Parse(Request["idAjusteAlmacen"].ToString());
+            obj.ajusteAprobado = 1;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            obj.usuario = usuario;
+
+            MovimientoAlmacenBL bl = new MovimientoAlmacenBL();
+            bl.UpdateAjusteEstadoAprobado(obj);
+        }
+
 
         //[HttpGet]
         //public ActionResult ExportLastSearchExcel()

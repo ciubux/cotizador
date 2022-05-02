@@ -1,5 +1,6 @@
 ﻿using Cotizador.Models.DTOshow;
 using Model;
+using Model.UTILES;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -430,6 +431,32 @@ namespace Cotizador.Models.DTOsShow
             pedidoDTOshow.facturaUnica = pedido.facturaUnica;
 
             return pedidoDTOshow;
+        }
+
+        public static CierreStockDTOshow CierreStockDTO(CierreStock obj)
+        {
+
+            CierreStockDTOshow dto = new CierreStockDTOshow();
+            dto.idArchivoAdjunto = obj.archivo.idArchivoAdjunto;
+            dto.usuario = obj.usuario == null ? "-" : obj.usuario.nombre;
+            dto.usuarioRVS = obj.UsuarioReporteValidacion.idUsuario == null ? "-" : obj.UsuarioReporteValidacion.nombre;
+            dto.fechaRVSDesc = obj.UsuarioReporteValidacion.idUsuario == null ? "-" : obj.fechaReporteValidacionDesc;
+            dto.fechaDesc = obj.fechaDesc;
+            dto.sede = obj.ciudad.nombre;
+
+            dto.detalles = new List<CierreStockDetalleDTOshow>();
+            foreach (RegistroCargaStock det in obj.detalles) {
+                CierreStockDetalleDTOshow item = new CierreStockDetalleDTOshow();
+                item.producto_descripcion = det.producto.descripcion;
+                item.producto_sku = det.producto.sku;
+                item.unidadConteo = det.producto.unidadConteo;
+                item.cantidadConteo = det.cantidadConteo;
+                item.stockValidable = det.stockValidable;
+                item.diferenciaCantidadValidacion = det.diferenciaCantidadValidacion;
+                dto.detalles.Add(item);
+            }
+
+            return dto;
         }
     }
 }

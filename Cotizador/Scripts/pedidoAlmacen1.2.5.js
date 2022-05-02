@@ -2706,7 +2706,7 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
                         descripcionLargaLabel = descripcionLargaLabel.replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
                     }
 
-                    d += '<tr>' +
+                    d +='<tr sku="' + lista[i].producto.sku + '" idProductoPresentacion="' + lista[i].idProductoPresentacion + '">' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
                         '<td>' + lista[i].producto.sku + descontinuadoLabel + '</td>' +
                         '<td>' + lista[i].producto.descripcion + descripcionLargaLabel + '</td>' +
@@ -2719,11 +2719,16 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
                         '<td>' + lista[i].flete.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].precioUnitario.toFixed(cantidadCuatroDecimales) + '</td>' +
                  //       '<td>' + lista[i].precioUnitarioVenta.toFixed(cantidadCuatroDecimales) + '</td>' +
-                        '<td>' + lista[i].cantidad + '</td>' +
+                        '<td class="cantidadPendienteAtencion">' + lista[i].cantidad + '</td>' +
                         '<td>' + lista[i].cantidadPendienteAtencion + '</td>' +
                         '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + observacion + '</td>' +
-                        '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>' +
+                        '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button>' +
+                        '<br/><button type="button" title="Consultar Stock" class="verModalStockProducto btn" sku="' + lista[i].producto.sku + '" idProductoPresentacion="' +
+                        lista[i].idProductoPresentacion + '" idCiudad="' + pedido.ciudad.idCiudad + '" style="margin-top: 7px;">' +
+                        '<img src="/images/icon_stock.png" height="25" />' +
+                        '</button>' +
+                        '</td>' +
                         '</tr>';
                 }
 
@@ -3042,8 +3047,7 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
                 }
 
 
-            
-                
+                setTimeout(function () { cargarStockProductos(); }, 500);
                 
 
                 /*PDF
@@ -3069,6 +3073,67 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
         });
     });
 
+
+
+    function cargarStockProductos() {
+        $.ajax({
+            url: "/PedidoAlmacen/GetStockProductos",
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (lista) {
+                var stock = 0;
+                var stockLibre = 0;
+                var noDisponible = 0;
+                var idProductoPresentacion = 1;
+                for (var i = 0; i < lista.length; i++) {
+                    idProductoPresentacion = $("#tableDetallePedido tr[sku='" + lista[i].producto.sku + "']").attr("idProductoPresentacion");
+                    stock = 0;
+                    stockLibre = 0;
+                    noDisponible = 0;
+
+                    var atender = Number($("#tableDetallePedido tr[sku='" + lista[i].producto.sku + "'] .cantidadPendienteAtencion").html());
+
+                    htmlCantidadPendienteAtencion = $("#tableDetallePedido tr[sku='" + lista[i].producto.sku + "'] .cantidadPendienteAtencion").html() + "<br/>";
+
+                    if (lista[i].stockNoDisponible) {
+                        htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-no-registrado">STOCK NO REGISTRADO</label>';
+                        noDisponible = 1;
+                    } else {
+                        if (idProductoPresentacion == "0") {
+                            stock = lista[i].cantidadMpCalc;
+                            stockLibre = lista[i].cantidadMpCalc - lista[i].cantidadSeparadaMpCalc;
+                        }
+                        if (idProductoPresentacion == "1") {
+                            stock = lista[i].cantidadAlternativaCalc;
+                            stockLibre = lista[i].cantidadAlternativaCalc - lista[i].cantidadSeparadaAlternativaCalc;
+                        }
+                        if (idProductoPresentacion == "2") {
+                            stock = lista[i].cantidadProveedorCalc;
+                            stockLibre = lista[i].cantidadProveedorCalc - lista[i].cantidadSeparadaProveedorCalc;
+                        }
+
+
+                        if (stock < atender) {
+                            htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-danger">';
+                        } else {
+                            if (stockLibre < 0) {
+                                htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-warning">';
+                            } else {
+                                htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-success">';
+                            }
+                        }
+
+                        htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + 'STOCK: ' + stock + '</label>';
+                    }
+
+
+                    $("#tableDetallePedido tr[sku='" + lista[i].producto.sku + "'] .cantidadPendienteAtencion").html(htmlCantidadPendienteAtencion);
+                }
+
+
+            }
+        });
+    }
 
 
    

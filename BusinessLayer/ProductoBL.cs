@@ -579,11 +579,11 @@ namespace BusinessLayer
             return Producto.esCampoCalculado(campo);
         }
 
-        public bool RegistroCierreStock(List<RegistroCargaStock> stock, DateTime fechaCierre, Guid idCiudad, Guid idUsuario, Guid idArchivoAdjunto)
+        public bool RegistroCierreStock(List<RegistroCargaStock> stock, DateTime fechaCierre, Guid idCiudad, Guid idUsuario, Guid idArchivoAdjunto, int tipoCarga)
         {
             using (ProductoDAL dal = new ProductoDAL())
             {
-                return dal.RegistroCierreStock(stock, fechaCierre, idCiudad, idUsuario, idArchivoAdjunto);
+                return dal.RegistroCierreStock(stock, fechaCierre, idCiudad, idUsuario, idArchivoAdjunto, tipoCarga);
             }
         }
 

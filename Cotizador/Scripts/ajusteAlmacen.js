@@ -161,21 +161,175 @@ jQuery(function ($) {
         });
     });
 
-    $("#fechaEmisionDesde").click(function () {
+    $("#tipoMovimiento").change(function () {
+        $("#motivoAjuste").val("");
+        $('#motivoAjuste option').show();
+        if ($(this).val() == "S") {
+            $('#motivoAjuste option[tipo="2"]').hide();
+        } else {
+            $('#motivoAjuste option[tipo="1"]').hide();
+        }
+
+        $.ajax({
+            url: "/AjusteAlmacen/ChangeTipoAjuste",
+            type: 'POST',
+            data: {
+                tipoMovimiento: $(this).val()
+            },
+            success: function () { }
+        });
+    });
+
+    $("#fechaEmisionDesde").change(function () {
         changeInputDate("fechaEmisionDesde", $(this).val());
     });
 
-    $("#fechaEmisionHasta").click(function () {
+    $("#fechaEmisionHasta").change(function () {
         changeInputDate("fechaEmisionHasta", $(this).val());
     });
 
-
+    $("#ajusteAprobado").change(function () {
+        changeInputInt("ajusteAprobado", $(this).val());
+    });
     
     $("body").on('click', ".btnVerAjusteAlmacen", function () {
         
     });
 
 
+    $("#btnAprobarAjusteAlmacen").click(function () {
+        $('body').loadingModal({
+            text: 'Registrando Aprobación...'
+        });
+        $('body').loadingModal('show');
+
+        var idAjusteAlmacen = $(this).attr("idAjusteAlmacen");
+        $.ajax({
+            url: "/AjusteAlmacen/AprobarAjusteAlmacen",
+            type: 'POST',
+            data: {
+                idAjusteAlmacen: idAjusteAlmacen
+            },
+            error: function () {
+                $('body').loadingModal('hide');
+                $.alert({
+                    title: "ERROR",
+                    content: 'Ocurrió un error.',
+                    type: 'green',
+                    buttons: {
+                        OK: function () {
+                        }
+                    }
+                });
+            },
+            success: function () {
+                $('body').loadingModal('hide');
+                $.alert({
+                    title: "REGISTRO EXITOSO",
+                    content: 'Se registro la aprobación del Ajuste de almacén.',
+                    type: 'green',
+                    buttons: {
+                        OK: function () {
+                            location.reload();
+                        }
+                    }
+                });
+                
+            }
+        });
+    });
+    
+
+
+    $(document).on('click', "button.btnVerAjusteAlmacen", function () {
+        var idAjuste = $(this).attr("idAjuste");
+
+        showMovimientoAlmacen(idAjuste);
+    });
+
+    function showMovimientoAlmacen(idAjuste) {
+        $('body').loadingModal({
+            text: 'Abriendo Ajuste Almacén...'
+        });
+        $('body').loadingModal('show');
+
+
+        $.ajax({
+            url: "/AjusteAlmacen/Show",
+            data: {
+                idAjuste: idAjuste
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) {
+                $('body').loadingModal('hide');
+                $.alert({
+                    title: "ERROR",
+                    content: 'Ocurrió un error al intentar visualizar el Ajuste de Almacén.',
+                    type: 'red',
+                    buttons: {
+                        OK: function () {
+                        }
+                    }
+                });
+            },
+            success: function (resultado) {
+                $('body').loadingModal('hide');
+
+
+                var obj = resultado;
+                var usuario = resultado.usuario;
+
+
+
+                $("#btnAprobarAjusteAlmacen").attr("idAjusteAlmacen",obj.idMovimientoAlmacen);
+                $("#ver_ajusteAlmacen_ciudadOrigen_nombre").html(obj.ciudadOrigen_nombre);
+
+                $("#ver_ajusteAlmacen_fechaEmision").html(invertirFormatoFecha(obj.fechaEmision.substr(0, 10)));
+
+
+                $("#ver_ajusteAlmacen_fechaRegistro").html(obj.FechaRegistroDesc);
+                $("#ver_ajusteAlmacen_tipo").html(obj.tipoMovimientoAjusteDesc);
+                $("#ver_ajusteAlmacen_motivo").html(obj.motivoAjuste.descripcion);
+                $("#ver_ajusteAlmacen_estadoDescripcion").html(obj.ajusteAprobadoDesc);
+                $("#ver_ajusteAlmacen_registradoPor").html(obj.usuario.nombre);
+                $("#ver_ajusteAlmacen_observaciones").html(obj.observaciones);
+
+
+                if (obj.ajusteAprobado == 1) {
+                    $("#btnAprobarAjusteAlmacen").hide();
+                }
+                else {
+                    if (usuario.apruebaAjusteStock) {
+                        $("#btnAprobarAjusteAlmacen").show();
+                    }
+                }
+
+
+
+                $("#tableDetalleAjusteAlmacen > tbody").empty();
+
+                FooTable.init('#tableDetalleAjusteAlmacen');
+
+
+                var d = '';
+                var lista = obj.documentoDetalle;
+                for (var i = 0; i < lista.length; i++) {
+
+                    d += '<tr>' +
+                        '<td>' + lista[i].producto.sku + ' - ' + lista[i].producto.descripcion + '</td>' +
+                        '<td>' + lista[i].unidad + '</td>' +
+                        '<td>' + lista[i].cantidad + '</td>' +
+                        '<td></td>' +
+                        '</tr>';
+
+                }
+                $("#tableDetalleAjusteAlmacen").append(d);
+
+                $("#modalVerAjusteAlmacen").modal('show');
+            }
+        });
+    }
 
     
 
@@ -211,6 +365,7 @@ jQuery(function ($) {
                     var ItemRow = '<tr data-expanded="true">' +
                         '<td>  ' + list[i].ciudadOrigen.nombre + '</td>' +
                         '<td>  ' + list[i].fechaEmisionFormatoImpresion + '  </td>' +
+                        '<td>  ' + list[i].ajusteAprobadoDesc + '  </td>' +
                         '<td>  ' + list[i].FechaRegistroDesc + '  </td>' +
                         '<td>  ' + list[i].usuario.nombre + '  </td>' +
                         '<td>  ' + list[i].motivoAjuste.descripcion  + '  </td>' +

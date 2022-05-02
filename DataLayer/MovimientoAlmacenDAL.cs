@@ -259,6 +259,16 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
 
+        public void UpdateAjusteEstadoAprobado(GuiaRemision guiaRemision)
+        {
+            var objCommand = GetSqlCommand("pu_CambiarAprobarAjusteAlmacen");
+            InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", guiaRemision.idMovimientoAlmacen);
+            InputParameterAdd.Int(objCommand, "ajusteAprobado", guiaRemision.ajusteAprobado);
+            InputParameterAdd.Guid(objCommand, "idUsuario", guiaRemision.usuario.idUsuario);
+            ExecuteNonQuery(objCommand);
+        }
+
+        
         public void InsertMovimientoAlmacenSalida(GuiaRemision guiaRemision)
         {
 
@@ -590,17 +600,6 @@ namespace DataLayer
         }
 
 
-        public void CambiarAprobacionAjuste(GuiaRemision obj)
-        {
-            var objCommand = GetSqlCommand("pi_ajusteAlmacen");
-            InputParameterAdd.Guid(objCommand, "idUsuario", obj.usuario.idUsuario);
-            InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", obj.ciudadOrigen.idCiudad);
-            InputParameterAdd.Int(objCommand, "ajusteAprobado", obj.ajusteAprobado);
-
-            ExecuteNonQuery(objCommand);
-        }
-
-
         public void AnularMovimientoAlmacen(MovimientoAlmacen movimientoAlmacen)
         {
             var objCommand = GetSqlCommand("pu_anularMovimientoAlmacen");
@@ -610,13 +609,6 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
 
         }
-
-
-
-
-
-
-
 
 
 
@@ -1206,8 +1198,6 @@ namespace DataLayer
             DataTable guiaRemisionDataTable = dataSet.Tables[0];
             DataTable guiaRemisionDetalleDataTable = dataSet.Tables[1];
 
-            DataTable transaccionListDataTable = dataSet.Tables[2];
-
             //Datos de la cotizacion
             foreach (DataRow row in guiaRemisionDataTable.Rows)
             {
@@ -1219,7 +1209,7 @@ namespace DataLayer
                 guiaRemision.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
                 guiaRemision.observaciones = Converter.GetString(row, "observaciones");
                 guiaRemision.estaAnulado = Converter.GetBool(row, "anulado");
-                guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)Char.Parse(Converter.GetString(row, "motivo_traslado"));
+                //guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)Char.Parse(Converter.GetString(row, "motivo_traslado"));
                 guiaRemision.tipoMovimiento = (GuiaRemision.tiposMovimiento)Char.Parse(Converter.GetString(row, "tipo_movimiento"));
                 guiaRemision.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
                 guiaRemision.ajusteAprobado = Converter.GetInt(row, "ajuste_aprobado");

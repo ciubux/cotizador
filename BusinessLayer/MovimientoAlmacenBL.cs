@@ -158,11 +158,11 @@ namespace BusinessLayer
             }
         }
 
-        public void CambiarAprobacionAjuste(GuiaRemision guia)
+        public void UpdateAjusteEstadoAprobado(GuiaRemision guia)
         {
             using (var dal = new MovimientoALmacenDAL())
             {
-                dal.CambiarAprobacionAjuste(guia);
+                dal.UpdateAjusteEstadoAprobado(guia);
             }
         }
 

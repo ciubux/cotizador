@@ -47,7 +47,33 @@ namespace Model
 
         
         public int ajusteAprobado { get; set; }
-        
+
+        public String ajusteAprobadoDesc { get
+            {
+                String desc = "";
+                switch (this.ajusteAprobado)
+                {
+                    case 0: desc = "Pendiente Aprobación"; break;
+                    case 1: desc = "Aprobado"; break;
+                }
+                return desc;
+            }
+        }
+
+        public String tipoMovimientoAjusteDesc
+        {
+            get
+            {
+                String desc = "";
+                switch (this.tipoMovimiento)
+                {
+                    case tiposMovimiento.Entrada: desc = "Sobrante"; break;
+                    case tiposMovimiento.Salida: desc = "Pérdida"; break;
+                }
+                return desc;
+            }
+        }
+
         public MotivoAjusteAlmacen motivoAjuste { get; set; }
 
 

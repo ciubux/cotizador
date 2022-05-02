@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col-sm-12 col-lg-6">
                 <p>
-                    <b>INSTRUCCIONES DE USO - ARCHIVO DE CARGA DE STOCK:</b>
+                    <b>INSTRUCCIONES DE USO - ARCHIVO DE CARGA DE STOCK/INVENTARIO:</b>
                     <ol>
                         <li>
                             Descargar la plantilla de archivo de carga de stock <a target="_blank" href="@Url.Action("PlantillaStock", "Stock")">ingresando aquí.</a>
@@ -56,6 +56,24 @@
                         <label class="control-label col-xs-4" for="fechaCierre">Fecha Inventario:</label>
                         <div class="col-xs-4">
                             <input class="form-control" type="text" id="fechaCierre" name="fechaCierre" value="@DateTime.Now.ToString("dd/MM/yyyy")">
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <!--TIPO INVENTARIO-->
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label for="tipoCarga" class="control-label col-xs-4">Tipo Inventario:</label>
+                            <div class="col-xs-4">
+                                <select id="tipoCarga" name="tipoCarga" class="form-control">
+                                    <option value="">Seleccione</option>
+                                    <option value="1">Total</option>
+                                    <option value="0">Parcial</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>

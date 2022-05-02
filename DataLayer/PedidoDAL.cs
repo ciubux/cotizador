@@ -836,8 +836,7 @@ namespace DataLayer
                 pedido.numeroReferenciaAdicional = Converter.GetString(row, "numero_referencia_adicional");
 
                 pedido.FechaRegistro = Converter.GetDateTime(row, "fecha_registro");
-                pedido.FechaRegistro = pedido.FechaRegistro.AddHours(-5);
-
+                
                 /* pedido.venta = new Venta();
                    pedido.venta.igv = Converter.GetDecimal(row, "igv_venta");
                    pedido.venta.subTotal = Converter.GetDecimal(row, "sub_total_venta");

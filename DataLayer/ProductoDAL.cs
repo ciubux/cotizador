@@ -1537,16 +1537,16 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaInicioVigencia", fechaInicioVigencia);
 
             ExecuteNonQuery(objCommand);
-
         }
 
-        public bool RegistroCierreStock(List<RegistroCargaStock> stock, DateTime fechaCierre, Guid idCiudad, Guid idUsuario, Guid idArchivoAdjunto)
+        public bool RegistroCierreStock(List<RegistroCargaStock> stock, DateTime fechaCierre, Guid idCiudad, Guid idUsuario, Guid idArchivoAdjunto, int tipoCarga)
         {
             var objCommand = GetSqlCommand("pi_cierre_stock");
 
             InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
             InputParameterAdd.DateTime(objCommand, "fechaCierre", fechaCierre);
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Int(objCommand, "inventarioTotal", tipoCarga);
             InputParameterAdd.Guid(objCommand, "idArchivoAdjunto", idArchivoAdjunto);
 
             DataTable tvp = new DataTable();

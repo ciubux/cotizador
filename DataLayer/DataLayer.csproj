@@ -44,6 +44,7 @@
     <Compile Include="Anotations\Columna.cs" />
     <Compile Include="ClienteContactoTipoDAL.cs" />
     <Compile Include="MensajeDAL.cs" />
+    <Compile Include="CierreStockDAL.cs" />
     <Compile Include="OrdenCompraClienteDAL.cs" />
     <Compile Include="KpiDAL.cs" />
     <Compile Include="MotivoAjusteAlmacenDAL.cs" />

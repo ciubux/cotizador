@@ -36,6 +36,12 @@ jQuery(function ($) {
             }
         }
 
+        $('#tableRVS').footable({
+            "paging": {
+                "size": 50
+            }
+        });
+
         FooTable.init('#tableCargasStock');
     });
 
@@ -160,6 +166,7 @@ jQuery(function ($) {
         var sede = $("#idCiudad option:selected").text();
         var fecha = $("#fechaCierre").val();
 
+        var tipoCarga = $("#tipoCarga").val();
         var valido = true;
 
         if (fecha.trim() == "") {
@@ -169,6 +176,11 @@ jQuery(function ($) {
 
         if (idCiudad.trim() == "") {
             alert("Debe seleccionar la sede");
+            valido = false;
+        }
+
+        if (tipoCarga.trim() == "") {
+            alert("Debe seleccionar un tipo de inventario.");
             valido = false;
         }
 
@@ -185,6 +197,7 @@ jQuery(function ($) {
                             $('body').loadingModal({
                                 text: 'Leyendo Archivo...'
                             });
+                            $('body').loadingModal('show');
                             $("#formCargarStock").submit();
                         }
                     },
@@ -199,7 +212,7 @@ jQuery(function ($) {
         }
 
     });
-
+    
 
     $('body').on('click', ".btnDescargarArchivoAdjunto", function () {
 
@@ -220,6 +233,152 @@ jQuery(function ($) {
         });
     });
 
+    $('body').on('click', ".btnVerRVS", function () {
+        var idCierreStock = $(this).attr('idCierreStock');
+
+        verRporteCierreStock(idCierreStock);
+    });
+
+
+    $("#btnEjecutarRVS").click(function () {
+        var idCierreStock = $(this).attr('idCierreStock');
+
+        ejecutarReporteValidacionStock(idCierreStock);
+    });
+
+    function verRporteCierreStock(idCierreStock) {
+        $('body').loadingModal({
+            text: 'Cargando Reporte Validación Stock...'
+        });
+        $('body').loadingModal('show');
+
+        $.ajax({
+            url: "/Stock/GetCierreStock",
+            type: 'POST',
+            dataType: 'JSON',
+            data: { idCierreStock: idCierreStock },
+            error: function () {
+                $('body').loadingModal('hide');
+                $.alert({
+                    title: "ERROR",
+                    type: 'red',
+                    content: 'Ocurrio un error.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            },
+            success: function (obj) {
+
+                $("#verSedeRVS").html(obj.sede);
+                $("#verFechaRVS").html(obj.fechaDesc);
+                $("#verUsuarioValidacionRVS").attr("idArchivoAdjunto", obj.idArchivoAdjunto);
+                $("#verUsuarioValidacionRVS").html(obj.usuarioRVS);
+                $("#verFechaValidacionRVS").html(obj.fechaRVSDesc);
+
+                $("#btnEjecutarRVS").attr("idCierreStock", idCierreStock);
+
+                var d = "";
+                var diferencia;
+                var stockZAS;
+                var lista = obj.detalles;
+
+
+                
+                $("#tableRVS > tbody").empty();
+                FooTable.init('#tableRVS');
+
+                for (var i = 0; i < lista.length; i++) {
+
+                    diferencia = 0;
+                    stockZAS = 0;
+
+                    if (lista[i].stockValidable == 1) {
+                        stockZAS = lista[i].cantidadConteo + lista[i].diferenciaCantidadValidacion;
+
+                        if (lista[i].diferenciaCantidadValidacion > 0) {
+                            diferencia = "+" + lista[i].diferenciaCantidadValidacion;
+                        }
+
+                        if (lista[i].diferenciaCantidadValidacion < 0) {
+                            diferencia = lista[i].diferenciaCantidadValidacion;
+                        }
+
+                        if (lista[i].diferenciaCantidadValidacion == 0) {
+                            diferencia = 0;
+                        }
+                    } else {
+                        diferencia = "No Validable";
+                        stockZAS = "No Disponible";
+                    }
+
+                    d += '<tr>' +
+                        '<td>' + lista[i].producto_sku + " " + lista[i].producto_descripcion + '</td>' +
+                        '<td>' + lista[i].unidadConteo + '</td>' +
+                        '<td>' + lista[i].cantidadConteo + '</td>' +
+                        '<td>' + stockZAS + '</td>' +
+                        '<td data-sort-value="' + lista[i].diferenciaCantidadValidacion + '"><h4>' + diferencia + '<h4></td>' +
+                        '</tr>';
+
+                }
+
+                
+                $("#tableRVS").append(d);
+
+                $("#modalReporteValidacionStock").modal('show');
+
+                $('body').loadingModal('hide');
+            }
+        });
+    }
+
+    function ejecutarReporteValidacionStock(idCierreStock) {
+        $('body').loadingModal({
+            text: 'Ejecutando Validación Stock...'
+        });
+
+        setTimeout(function () {
+            $('body').loadingModal('show');
+        }, 300);
+
+        $.ajax({
+            url: "/Stock/EjecutarReporteValidacionStock",
+            type: 'POST',
+            dataType: 'JSON',
+            data: { idCierreStock: idCierreStock },
+            error: function () {
+                $('body').loadingModal('hide');
+
+                $.alert({
+                    title: "ERROR",
+                    type: 'red',
+                    content: 'Ocurrio un error.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            },
+            success: function (result) {
+                if (result.success == 1) {
+                    $('body').loadingModal('hide');
+
+                    $.alert({
+                        title: "Ejecución Exitosa",
+                        type: 'green',
+                        content: 'Se ejecuto el reporte de validación de stock de forma correcta.',
+                        buttons: {
+                            OK: function () {            
+                                verRporteCierreStock(idCierreStock);
+                                //volver a cargar vista de reporte de stock
+                            }
+                        }
+                    });
+                } else {
+                    $('body').loadingModal('hide');
+                }
+            }
+        });
+    }
 });
 
 

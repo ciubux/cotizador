@@ -316,6 +316,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\DTOsShow\CierreStockDetalleDTOshow.cs" />
+    <Compile Include="Models\DTOsShow\CierreStockDTOshow.cs" />
     <Compile Include="Models\MotivoAjusteAlmacenViewModels.cs" />
     <Compile Include="Models\EmpresaViewModels.cs" />
     <Compile Include="Models\DTOsSearch\ClienteDTO.cs" />
