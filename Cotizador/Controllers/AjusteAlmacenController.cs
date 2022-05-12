@@ -12,6 +12,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using Model.UTILES;
 
 namespace Cotizador.Controllers
 {
@@ -407,6 +408,86 @@ namespace Cotizador.Controllers
         //    return excel.generateExcel(list, (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO]);
         //}
 
+
+        [HttpGet]
+        public ActionResult PrepararAjusteAlmacen(Guid idCierreStock, string tipoAjuste)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            CierreStockBL bl = new CierreStockBL();
+            CierreStock cierre = bl.SelectCierreStock(usuario.idUsuario, idCierreStock);
+
+            GuiaRemision obj = new GuiaRemision();
+            obj.idMovimientoAlmacen = Guid.Empty;
+            obj.Estado = 1;
+            obj.motivoAjuste = new MotivoAjusteAlmacen();
+            obj.motivoTraslado = GuiaRemision.motivosTraslado.AjusteAlmacen;
+            obj.ciudadOrigen = cierre.ciudad;
+            obj.fechaEmision = cierre.fecha;
+            obj.fechaTraslado = cierre.fecha;
+
+            if (tipoAjuste.Equals("excedente"))
+            {
+                obj.tipoMovimiento = MovimientoAlmacen.tiposMovimiento.Entrada;
+                obj.motivoAjuste = new MotivoAjusteAlmacen();
+                obj.motivoAjuste.idMotivoAjusteAlmacen = Constantes.ID_MOTIVO_AJUSTE_EXCEDENTE_CIERRE_STOCK;
+            }
+
+            if (tipoAjuste.Equals("faltante"))
+            {
+                obj.tipoMovimiento = MovimientoAlmacen.tiposMovimiento.Salida;
+                obj.motivoAjuste = new MotivoAjusteAlmacen();
+                obj.motivoAjuste.idMotivoAjusteAlmacen = Constantes.ID_MOTIVO_AJUSTE_FALTANTE_CIERRE_STOCK;
+            }
+
+            obj.ajusteAprobado = 0;
+            obj.documentoDetalle = new List<DocumentoDetalle>();
+            obj.idCierreStock = idCierreStock;
+
+            ProductoBL productoBL = new ProductoBL();
+
+            foreach (RegistroCargaStock det in cierre.detalles)
+            {
+                if (det.stockValidable == 1 && det.diferenciaCantidadValidacion != 0)
+                {
+                    DocumentoDetalle detalle = new DocumentoDetalle();
+                    detalle.producto = productoBL.getProducto(det.producto.idProducto, false, false, Guid.Empty); ;
+
+                    detalle.esPrecioAlternativo = true;
+
+                    detalle.ProductoPresentacion = new ProductoPresentacion();
+                    detalle.ProductoPresentacion.IdProductoPresentacion = 3;
+                    detalle.ProductoPresentacion.Equivalencia = det.producto.equivalenciaUnidadEstandarUnidadConteo;
+                    detalle.ProductoPresentacion.Presentacion = det.producto.unidadConteo;
+
+                    detalle.unidad = det.producto.unidadConteo;
+
+                    if (det.diferenciaCantidadValidacion > 0 && obj.tipoMovimiento == MovimientoAlmacen.tiposMovimiento.Entrada)
+                    {
+                        detalle.cantidad = det.diferenciaCantidadValidacion;
+                        obj.documentoDetalle.Add(detalle);
+                    }
+
+                    if (det.diferenciaCantidadValidacion < 0 && obj.tipoMovimiento == MovimientoAlmacen.tiposMovimiento.Salida)
+                    {
+                        detalle.cantidad = -1 * det.diferenciaCantidadValidacion;
+                        obj.documentoDetalle.Add(detalle);
+                    }
+                }
+            }
+
+            obj.IdUsuarioRegistro = usuario.idUsuario;
+            obj.usuario = usuario;
+
+            this.Session[Constantes.VAR_SESSION_AJUSTE_ALMACEN] = obj;
+
+
+            return RedirectToAction("Editar", "AjusteAlmacen");
+        }
 
 
         // GET: 

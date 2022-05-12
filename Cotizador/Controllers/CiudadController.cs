@@ -26,7 +26,7 @@ namespace Cotizador.Controllers
         }
 
 
-        public ActionResult GetCiudades(string ciudadSelectId, string selectedValue = null)
+        public ActionResult GetCiudades(string ciudadSelectId, string selectedValue = null, string disabled = "")
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
@@ -68,16 +68,17 @@ namespace Cotizador.Controllers
                 ciudades = usuario.sedesMPPedidos;
             }
 
-           /* if (ciudades.Count == 1)
-            {
-                selectedValue = ciudades[0].idCiudad.ToString();
-            }*/
+            /* if (ciudades.Count == 1)
+             {
+                 selectedValue = ciudades[0].idCiudad.ToString();
+             }*/
 
             var model = new CiudadViewModels
             {
                 Data = ciudades,
                 CiudadSelectId = ciudadSelectId,
-                incluirSeleccione = verSeleccione, 
+                incluirSeleccione = verSeleccione,
+                disabled = disabled,
                 SelectedValue = selectedValue
             };
 

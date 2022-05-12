@@ -19,7 +19,8 @@ namespace Model
         }
 
 
-
+        
+        
         [Display(Name = "Sede MP:")]
         public Ciudad ciudadOrigen { get; set; }
 
@@ -274,5 +275,6 @@ namespace Model
 
         public Boolean ingresado { get; set; }
 
+        public Guid idCierreStock { get; set; }
     }
 }

@@ -278,7 +278,7 @@ namespace Cotizador.Controllers
         [HttpPost]
         public String GetStockProductos(string ids, string idCiudad)
         {
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Usuario usuario = (Usuario)this.Session[Constantes. VAR_SESSION_USUARIO];
             if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
             {
                 return "";
@@ -298,6 +298,7 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(stocks);
         }
 
+        
 
         [HttpPost]
         public String GetCierreStock(Guid idCierreStock)

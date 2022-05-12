@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "Cargas Stock";
     Model.Rol rol = ViewBag.rol;
+
 }
 
 <div class="page-header">
@@ -71,7 +72,6 @@
 
 <div class="modal fade" tabindex="-1" id="modalReporteValidacionStock">
     <div class="modal-dialog">
-
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="modalReporteValidacionStockTitle"><b>Reporte Validación Stock</b></h4>
@@ -129,21 +129,27 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 col-lg-12 text-right">
+                    <div class="col-sm-12 col-lg-6 text-left">
+                        <button id="btnRegistrarASF" type="button" class="btn btn-info">Registrar Ajuste Stock Falante</button>
+                        <br />
+                        <br />
+                        <button id="btnRegistrarASE" type="button" class="btn btn-info">Registrar Ajuste Stock Excedente</button>
+                    </div>
+                    <div class="col-sm-12 col-lg-6 text-right">
                         <button id="btnEjecutarRVS" type="button" class="btn btn-warning">Ejecutar Validación Stock</button>
                     </div>
 
                 </div>
                 <br />
                 <table id="tableRVS" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
-                        data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
-                        data-editing-allow-add="false"
-                        data-editing-allow-delete="false"
-                        data-editing-allow-edit="false"
-                        data-sorting="true"
-                        data-show-toggle="false"
-                        data-editing-hide-text="Finalizar edición"
-                        data-editing-add-text="Descartar cambios">
+                       data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                       data-editing-allow-add="false"
+                       data-editing-allow-delete="false"
+                       data-editing-allow-edit="false"
+                       data-sorting="true"
+                       data-show-toggle="false"
+                       data-editing-hide-text="Finalizar edición"
+                       data-editing-add-text="Descartar cambios">
                     <thead>
                         <tr>
                             <th>Producto</th>
@@ -156,11 +162,11 @@
                     <tbody>
                     </tbody>
                 </table>
-                    @*<div class="col-sm-12 col-lg-12 text-right">
-                <button id="btnExportKardexExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ReporteStockProductoKardexExcel", "Stock")">Exportar</button>
-            </div>*@
-              
+                @*<div class="col-sm-12 col-lg-12 text-right">
+            <button id="btnExportKardexExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ReporteStockProductoKardexExcel", "Stock")">Exportar</button>
+        </div>*@
 
+            </div>
         </div>
     </div>
 </div>

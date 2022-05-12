@@ -2,7 +2,21 @@
 
 @if (Model.incluirSeleccione)
 {
-@Html.DropDownList(
+    if (Model.disabled.Equals("disabled"))
+    {
+        @Html.DropDownList(
+            Model.CiudadSelectId,
+            Model.Ciudades, "Seleccione la sede",
+            new
+            {
+                id = Model.CiudadSelectId,
+                @class = "form-control",
+                @disabled = Model.disabled
+            })
+    }
+    else
+    {
+        @Html.DropDownList(
             Model.CiudadSelectId,
             Model.Ciudades, "Seleccione la sede",
             new
@@ -10,15 +24,32 @@
                 id = Model.CiudadSelectId,
                 @class = "form-control"
             })
+    }
+
 }
 else
 {
-@Html.DropDownList(
-        Model.CiudadSelectId,
-        Model.Ciudades,
-        new
-        {
-            id = Model.CiudadSelectId,
-            @class = "form-control"
-        })
+    if (Model.disabled.Equals("disabled"))
+    {
+        @Html.DropDownList(
+                        Model.CiudadSelectId,
+                        Model.Ciudades,
+                        new
+                        {
+                            id = Model.CiudadSelectId,
+                            @class = "form-control",
+                            @disabled = Model.disabled
+                        })
+    }
+    else
+    {
+        @Html.DropDownList(
+                    Model.CiudadSelectId,
+                    Model.Ciudades,
+                    new
+                    {
+                        id = Model.CiudadSelectId,
+                        @class = "form-control"
+                    })
+    }
 }

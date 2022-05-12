@@ -444,6 +444,9 @@ namespace Cotizador.Models.DTOsShow
             dto.fechaDesc = obj.fechaDesc;
             dto.sede = obj.ciudad.nombre;
 
+            dto.aplicaAjusteFaltante = false;
+            dto.aplicaAjusteExcedente = false;
+
             dto.detalles = new List<CierreStockDetalleDTOshow>();
             foreach (RegistroCargaStock det in obj.detalles) {
                 CierreStockDetalleDTOshow item = new CierreStockDetalleDTOshow();
@@ -454,6 +457,17 @@ namespace Cotizador.Models.DTOsShow
                 item.stockValidable = det.stockValidable;
                 item.diferenciaCantidadValidacion = det.diferenciaCantidadValidacion;
                 dto.detalles.Add(item);
+
+                if (det.stockValidable == 1 && det.diferenciaCantidadValidacion > 0)
+                {
+                    dto.aplicaAjusteFaltante = true;
+                }
+
+                if (det.stockValidable == 1 && det.diferenciaCantidadValidacion < 0)
+                {
+                    dto.aplicaAjusteExcedente = true;
+                }
+
             }
 
             return dto;

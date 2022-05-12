@@ -17,6 +17,8 @@ namespace Cotizador.Models.DTOshow
         public String usuarioRVS { get; set; }
         public String fechaRVSDesc { get; set; }
 
+        public Boolean aplicaAjusteExcedente { get; set; }
+        public Boolean aplicaAjusteFaltante { get; set; }
         public List<CierreStockDetalleDTOshow> detalles { get; set; }
 
     }

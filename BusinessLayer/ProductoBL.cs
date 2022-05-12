@@ -206,7 +206,7 @@ namespace BusinessLayer
                 producto.costoLista = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, producto.costoLista));
                 producto.precioLista = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, producto.precioLista));
                 //Se aplica formato al precioUnitario obtenido desde precioRegistrados
-                if (producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
+                if (producto.precioClienteProducto != null && producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
                 {
                     producto.precioClienteProducto.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, producto.precioClienteProducto.precioNeto));
                 }

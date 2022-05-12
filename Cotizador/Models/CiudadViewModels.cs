@@ -16,6 +16,7 @@ namespace Cotizador.Models
         public bool incluirSeleccione { get; set; }
         public List<Ciudad> Data { get; set; }
 
+        public string disabled { get; set; }
         public IEnumerable<SelectListItem> Ciudades
         {
             get

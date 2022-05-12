@@ -579,6 +579,7 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaEmision", obj.fechaEmision);
             InputParameterAdd.DateTime(objCommand, "fechaTraslado", obj.fechaTraslado);
             InputParameterAdd.Guid(objCommand, "idUsuario", obj.usuario.idUsuario);
+            InputParameterAdd.Guid(objCommand, "idCierreStock", obj.idCierreStock);
             InputParameterAdd.Int(objCommand, "estado", obj.Estado);
             InputParameterAdd.Varchar(objCommand, "observaciones", obj.observaciones);
 

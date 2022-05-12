@@ -246,6 +246,21 @@ jQuery(function ($) {
         ejecutarReporteValidacionStock(idCierreStock);
     });
 
+    $("#btnRegistrarASF").click(function () {
+        var idCierreStock = $(this).attr('idCierreStock');
+        var tipoAjuste = "faltante";
+
+        document.location.href = "/AjusteAlmacen/PrepararAjusteAlmacen?idCierreStock=" + idCierreStock + "&tipoAjuste=" + tipoAjuste;
+    });
+
+    $("#btnRegistrarASE").click(function () {
+        var idCierreStock = $(this).attr('idCierreStock');
+        var tipoAjuste = "excedente";
+
+        document.location.href = "/AjusteAlmacen/PrepararAjusteAlmacen?idCierreStock=" + idCierreStock + "&tipoAjuste=" + tipoAjuste;
+    });
+    
+
     function verRporteCierreStock(idCierreStock) {
         $('body').loadingModal({
             text: 'Cargando Reporte Validación Stock...'
@@ -283,8 +298,20 @@ jQuery(function ($) {
                 var stockZAS;
                 var lista = obj.detalles;
 
+                if (obj.aplicaAjusteFaltante) {
+                    $("#btnRegistrarASF").attr("idCierreStock", idCierreStock);
+                    $("#btnRegistrarASF").show();
+                } else {
+                    $("#btnRegistrarASF").hide();
+                }
 
-                
+                if (obj.aplicaAjusteExcedente) {
+                    $("#btnRegistrarASE").attr("idCierreStock", idCierreStock);
+                    $("#btnRegistrarASE").show();
+                } else {
+                    $("#btnRegistrarASE").hide();
+                }
+
                 $("#tableRVS > tbody").empty();
                 FooTable.init('#tableRVS');
 

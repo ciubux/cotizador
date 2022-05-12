@@ -57,6 +57,8 @@ namespace Model
         public static int MOTIVO_EXTORNO_DEVOLUCION_TOTAL = 6;
         public static int MOTIVO_EXTORNO_DEVOLUCION_PARCIAL = 7;
 
+        public static int ID_MOTIVO_AJUSTE_FALTANTE_CIERRE_STOCK = 4;
+        public static int ID_MOTIVO_AJUSTE_EXCEDENTE_CIERRE_STOCK = 5;
 
         /*CONSTANTES PARA VARIABLES DE SESION*/
 

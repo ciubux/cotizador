@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "969";
+    TempData["ScriptVersion"] = "970";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -383,7 +383,7 @@
 
                             <li class="@linkDocumentosVenta">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
-                                    Documentos de Venta/Compra
+                                    Docs. de Venta/Compra
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
