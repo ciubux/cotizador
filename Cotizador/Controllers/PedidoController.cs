@@ -1835,6 +1835,7 @@ namespace Cotizador.Controllers
             int continuarLuego = int.Parse(Request["continuarLuego"].ToString());
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             pedido.usuario = usuario;
+            pedido.UsuarioRegistro = usuario;
             PedidoBL pedidoBL = new PedidoBL();
 
             if (pedido.idPedido != Guid.Empty || pedido.numeroPedido > 0)
@@ -1880,6 +1881,7 @@ namespace Cotizador.Controllers
             int continuarLuego = int.Parse(Request["continuarLuego"].ToString());
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
             pedido.usuario = usuario;
+            pedido.UsuarioRegistro = usuario;
             PedidoBL bl = new PedidoBL();
             bl.UpdatePedido(pedido);
             long numeroPedido = pedido.numeroPedido;

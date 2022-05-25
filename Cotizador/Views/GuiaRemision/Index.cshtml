@@ -732,6 +732,9 @@
             </div>
 
             <div class="modal-footer">
+                <div class="pull-left">
+                    <button type="button" id="btnVerGuiasPedido" class="btn btn-primary verModalGuiasPedido">Ver Guías del Pedido</button>
+                </div>
 
                 <div class="pull-right">
                     <button type="button" id="btnCancelarVerGuiaRemision" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -760,32 +763,6 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1141,7 +1118,7 @@
                                     <div class="form-group right col-xs-12">
                                         @if (guiaRemision.usuario.cambiaClienteFactura)
                                         {
-                                        <button type="button" id="btnCambiarClienteFactura" class="btn btn-success">Cambiar Cliente</button>
+                                            <button type="button" id="btnCambiarClienteFactura" class="btn btn-success">Cambiar Cliente</button>
                                         }
                                     </div>
                                 </div>
@@ -1920,7 +1897,7 @@
         </div>
     </div>
 
-    
+
     <table id="tableDetalleNotaIngreso" class="table" data-editing="false">
         <thead>
             <tr>
@@ -1942,6 +1919,8 @@
 <span id="spnDescripcionLargaInfo" style="display: none;">
     @Html.Partial("../Producto/_LabelDescripcionLarga")
 </span>
+
+@Html.Partial("../Pedido/_ModalVerGuias")
 
 @section Scripts {
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/guiaRemision")

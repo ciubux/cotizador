@@ -233,6 +233,14 @@ namespace Cotizador.Controllers
             cliente.perteneceCanalMultiregional = false;
             cliente.perteneceCanalPCP = false;
             cliente.esSubDistribuidor = false;
+            cliente.rubro = new Rubro();
+            cliente.rubro.idRubro = 0;
+            cliente.rubro.padre = new Rubro();
+            cliente.rubro.padre.idRubro = 0;
+
+            cliente.grupoCliente = new GrupoCliente();
+            cliente.grupoCliente.idGrupoCliente = 0;
+
             cliente.fechaInicioVigencia = DateTime.Now;
             return cliente;
         }
@@ -1149,23 +1157,36 @@ namespace Cotizador.Controllers
 
         public void ChangeIdRubro()
         {
+            Cliente cliente = this.ClienteSession;
             if (this.Request.Params["idRubro"] == null || this.Request.Params["idRubro"] == String.Empty)
-                ClienteSession.rubro.idRubro = 0;
+                cliente.rubro.idRubro = 0;
             else
-                ClienteSession.rubro.idRubro = Int32.Parse(this.Request.Params["idRubro"]);
+                cliente.rubro.idRubro = Int32.Parse(this.Request.Params["idRubro"]);
+
+            this.ClienteSession = cliente;
         }
 
         public String ChangeIdRubroPadre()
         {
+            Cliente cliente = this.ClienteSession;
             RubroBL bl = new RubroBL();
             List<Rubro> rubros = new List<Rubro>();
             Rubro busq = new Rubro();
             busq.Estado = 1;
 
             if (this.Request.Params["idRubro"] != null && this.Request.Params["idRubro"] != String.Empty)
+            {
                 rubros = bl.getRubros(busq, Int32.Parse(this.Request.Params["idRubro"]));
 
-            ClienteSession.rubro.idRubro = 0;
+                cliente.rubro.padre.idRubro = Int32.Parse(this.Request.Params["idRubro"]);
+            } else
+            {
+                cliente.rubro.padre.idRubro = 0;
+            }
+
+            cliente.rubro.idRubro = 0;
+            this.ClienteSession = cliente;
+
             return JsonConvert.SerializeObject(rubros);
         }
 

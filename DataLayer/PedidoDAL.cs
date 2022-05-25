@@ -929,6 +929,8 @@ namespace DataLayer
                 pedido.usuario.email = Converter.GetString(row, "email");
                 pedido.IdUsuarioRegistro = Converter.GetGuid(row, "id_usuario_creacion");
 
+                pedido.UsuarioRegistro = usuario;
+
                 pedido.seguimientoPedido = new SeguimientoPedido();
                 pedido.seguimientoPedido.estado = (SeguimientoPedido.estadosSeguimientoPedido)Converter.GetInt(row, "estado_seguimiento");
                 pedido.seguimientoPedido.observacion = Converter.GetString(row, "observacion_seguimiento");
@@ -2103,6 +2105,158 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
                 pedidoList.Add(pedido);
             }
             return pedidoList;
+        }
+
+        public List<Guid> soloPedidosALiberar(List<Guid> idPedidos, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_idsPedidosParaLiberar");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            for (int i = 0; i < idPedidos.Count; i++)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = idPedidos[i];
+
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idPedidos", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+            DataTable dataTable = Execute(objCommand);
+
+            List<Guid> idPedidosList = new List<Guid>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Guid idItem = Converter.GetGuid(row, "id_pedido");
+            }
+
+            return idPedidosList;
+        }
+
+        public List<Guid> soloPedidosAApropbar(List<Guid> idPedidos, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_idsPedidosParaAprobar");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            for (int i = 0; i < idPedidos.Count; i++)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = idPedidos[i];
+
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idPedidos", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+            DataTable dataTable = Execute(objCommand);
+
+            List<Guid> idPedidosList = new List<Guid>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Guid idItem = Converter.GetGuid(row, "id_pedido");
+            }
+
+            return idPedidosList;
+        }
+
+
+        public List<List<String>> totalesRazonSocial(List<Guid> idPedidos, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_totales_clientes_pedidos");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            for (int i = 0; i < idPedidos.Count; i++)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = idPedidos[i];
+
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idPedidos", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+            DataTable dataTable = Execute(objCommand);
+
+            List<List<String>> resultados = new List<List<String>>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                List<String> item = new List<String>();
+
+                item.Add(Converter.GetGuid(row, "id_cliente").ToString());
+                item.Add(Converter.GetGuid(row, "id_ciudad").ToString());
+                item.Add(Converter.GetString(row, "razon_social_sunat"));
+                item.Add(Converter.GetString(row, "nombre_ciudad"));
+
+                Decimal subtotal = Converter.GetDecimal(row, "subtotal");
+                Decimal total = Converter.GetDecimal(row, "total");
+
+                item.Add(String.Format(Constantes.formatoDosDecimales, subtotal));
+                item.Add(String.Format(Constantes.formatoDosDecimales, total));
+            }
+
+            return resultados;
+        }
+
+        public List<List<String>> totalesProductos(List<Guid> idPedidos, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_totales_productos_pedidos");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            for (int i = 0; i < idPedidos.Count; i++)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = idPedidos[i];
+
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idPedidos", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+            DataTable dataTable = Execute(objCommand);
+
+            List<List<String>> resultados = new List<List<String>>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                List<String> item = new List<String>();
+
+                item.Add(Converter.GetString(row, "sku"));
+                item.Add(Converter.GetString(row, "descripcion"));
+                item.Add(Converter.GetString(row, "unidad"));
+
+                Decimal cantidad = Converter.GetDecimal(row, "cantidad_unidad_mp");
+                Decimal subtotal = Converter.GetDecimal(row, "subtotal");
+                Decimal precioUnitario = subtotal / cantidad;
+                
+                item.Add(String.Format(Constantes.formatoDosDecimales, precioUnitario));
+                item.Add(String.Format(Constantes.formatoDosDecimales, cantidad));
+                item.Add(String.Format(Constantes.formatoDosDecimales, subtotal));
+            }
+
+            return resultados;
         }
     }
 }

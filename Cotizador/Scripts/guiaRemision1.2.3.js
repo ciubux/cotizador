@@ -899,7 +899,7 @@ jQuery(function ($) {
                 var usuario = resultado.usuario;
 
 
-
+                $("#btnVerGuiasPedido").attr("idPedido", guiaRemision.pedido_idPedido);
                 $("#idPedido").val(guiaRemision.pedido_idPedido);
                 $("#idMovimientoAlmacen").val(guiaRemision.idMovimientoAlmacen);
                 $("#ver_guiaRemision_ciudadOrigen_nombre").html(guiaRemision.ciudadOrigen_nombre);

@@ -22,7 +22,7 @@ namespace Model
             }
         }
 
-
+        public int idRubroPadre { get; set; }
         public override string ToString()
         {
             return "Rubro: " + this.nombre + " - Cod: " + this.codigo;

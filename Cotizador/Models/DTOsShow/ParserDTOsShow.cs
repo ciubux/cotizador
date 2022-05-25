@@ -458,16 +458,26 @@ namespace Cotizador.Models.DTOsShow
                 item.diferenciaCantidadValidacion = det.diferenciaCantidadValidacion;
                 dto.detalles.Add(item);
 
-                if (det.stockValidable == 1 && det.diferenciaCantidadValidacion > 0)
+                if (det.stockValidable == 1 && det.diferenciaCantidadValidacion < 0)
                 {
                     dto.aplicaAjusteFaltante = true;
                 }
 
-                if (det.stockValidable == 1 && det.diferenciaCantidadValidacion < 0)
+                if (det.stockValidable == 1 && det.diferenciaCantidadValidacion > 0)
                 {
                     dto.aplicaAjusteExcedente = true;
                 }
 
+            }
+
+            if (obj.ajusteExcedente != null)
+            {
+                dto.aplicaAjusteExcedente = false;
+            }
+
+            if (obj.ajusteFaltante != null)
+            {
+                dto.aplicaAjusteFaltante = false;
             }
 
             return dto;

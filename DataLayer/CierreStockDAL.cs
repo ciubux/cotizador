@@ -58,6 +58,22 @@ namespace DataLayer
                 obj.archivo.nombre = Converter.GetString(row, "nombre_archivo");
 
                 obj.Estado = Converter.GetInt(row, "estado");
+
+                Guid idAjustaFaltante = Converter.GetGuid(row, "id_ajuste_faltante");
+                Guid idAjusteExcedente = Converter.GetGuid(row, "id_ajuste_excedente");
+
+                if (idAjustaFaltante != null && idAjustaFaltante != Guid.Empty)
+                {
+                    obj.ajusteFaltante = new GuiaRemision();
+                    obj.ajusteFaltante.idMovimientoAlmacen = idAjustaFaltante;
+                }
+
+                if (idAjusteExcedente != null && idAjusteExcedente != Guid.Empty)
+                {
+                    obj.ajusteExcedente = new GuiaRemision();
+                    obj.ajusteExcedente.idMovimientoAlmacen = idAjusteExcedente;
+                }
+
             }
 
             foreach (DataRow row in dataTableDetalles.Rows)

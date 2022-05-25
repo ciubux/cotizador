@@ -24,7 +24,7 @@ namespace Model
         public String fechaDesc { get { return fechaReporteValidacion.ToString("dd/MM/yyyy"); } }
 
         public String fechaReporteValidacionDesc { get { return fechaReporteValidacion.ToString("dd/MM/yyyy HH:mm:ss"); } }
-        public MovimientoAlmacen ajusteFaltante { get; set; }
-        public MovimientoAlmacen ajusteExcedente { get; set; }
+        public GuiaRemision ajusteFaltante { get; set; }
+        public GuiaRemision ajusteExcedente { get; set; }
     }
 }

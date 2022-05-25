@@ -1,0 +1,166 @@
+﻿
+<div class="modal fade" id="modalVerGuiasRemisionPedido" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerGuiasRemisionTitle"><b>Guías de Remisión</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal" id="formVerGuiasRemisionPedido" style="margin-top: -35px;"></form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarVerGuiasRemisionPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="plantillaVerGuiasRemisionPedido" style="display:none;">
+    <div class="row" style="margin-top: 40px">
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+
+                <div class="col-xs-12" style="text-align: center;">
+                    <label for="verSerieNumeroGuia" name="verSerieNumeroGuia" class="control-label col-xs-10">N° Guía: #serieNumero</label>
+                    @*<p class="form-control-static" name="verSerieNumeroGuia">#serieNumero</p>*@
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verFechaGuia" class="control-label col-xs-4">Fecha Emisión Guía Remisión:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verFechaGuia">#fechaEmisionGuia</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verSerieNumeroGuia" class="control-label col-xs-4">Número Factura:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verSerieNumeroGuia">#serieNumeroFactura</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label for="verFechaGuia" class="control-label col-xs-4">Fecha Emisión Factura:</label>
+                <div class="col-xs-8">
+                    <p class="form-control-static" name="verFechaGuia">#fechaEmisionFactura</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <table id="mvgpTableDetalleGuia" class="table" data-editing="false">
+        <thead>
+            <tr>
+                <th data-name="sku" data-sortable="false">Código</th>
+                <th data-name="cantidad" data-sortable="false" data-visible="true" data-breakpoints="xs sm" style="width: 70px">Cantidad</th>
+                <th data-name="presentacion" data-sortable="false" data-breakpoints="xs">Unidad</th>
+                <th data-name="producto" data-sortable="false">Producto</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+
+<script type="text/javascript">
+
+    function funcionesModalVerGuiasRemisionPedido() {
+        $(document).on('click', ".verModalGuiasPedido", function () {
+            var idPedido = $(this).attr("idPedido");
+
+            $.ajax({
+                url: "/Pedido/Show",
+                data: {
+                    idPedido: idPedido,
+                    soloLectura: 1
+                },
+                type: 'POST',
+                dataType: 'JSON',
+                error: function (detalle) {
+                    //alert("Ocurrió un problema al obtener el detalle del Pedido N° " + numeroPedido + ".");
+                    $('body').loadingModal('hide');
+
+                },
+                success: function (resultado) {
+                    $('body').loadingModal('hide');
+                    //var cotizacion = $.parseJSON(respuesta);
+                    var pedido = resultado.pedido;
+                    CargarGuiasRemision(pedido);
+
+                    $("#modalVerGuiasRemisionPedido").modal('show');
+                }
+            });
+        });
+    }
+     
+    function CargarGuiasRemision(pedido) {
+
+        $("#formVerGuiasRemisionPedido").html("");
+
+        var guiaRemisionList = pedido.guiaRemisionList;
+        for (var j = 0; j < guiaRemisionList.length; j++) {
+            $("#mvgpTableDetalleGuia > tbody").empty();
+            var plantilla = $("#plantillaVerGuiasRemisionPedido").html();
+            var dGuia = '';
+            var documentoDetalleList = guiaRemisionList[j].documentoDetalle;
+            for (var k = 0; k < documentoDetalleList.length; k++) {
+
+                dGuia += '<tr>' +
+                    '<td>' + documentoDetalleList[k].producto.sku + '</td>' +
+                    '<td>' + documentoDetalleList[k].cantidad + '</td>' +
+                    '<td>' + documentoDetalleList[k].unidad + '</td>' +
+                    '<td>' + documentoDetalleList[k].producto.descripcion + '</td>' +
+                    '</tr>';
+            }
+
+            $("#mvgpTableDetalleGuia").append(dGuia);
+
+            plantilla = $("#plantillaVerGuiasRemisionPedido").html();
+
+            plantilla = plantilla.replace("#serieNumero", guiaRemisionList[j].serieNumeroGuia);
+            plantilla = plantilla.replace("#fechaEmisionGuia", invertirFormatoFecha(guiaRemisionList[j].fechaEmision.substr(0, 10)));
+
+            plantilla = plantilla.replace("#serieNumeroFactura", guiaRemisionList[j].documentoVenta.serieNumero);
+            if (guiaRemisionList[j].documentoVenta.fechaEmision != null) {
+                plantilla = plantilla.replace("#fechaEmisionFactura", invertirFormatoFecha(guiaRemisionList[j].documentoVenta.fechaEmision.substr(0, 10)));
+            }
+            else
+                plantilla = plantilla.replace("#fechaEmisionFactura", "");
+
+
+            plantilla = plantilla.replace("mvgpTableDetalleGuia", "mvgpTableDetalleGuia" + j);
+
+            $("#formVerGuiasRemisionPedido").append(plantilla);
+
+            /*   var tmp = $("#formVerGuiasRemision").html();
+               tmp = tmp+"asas";*/
+        }
+    }
+
+    if (window.addEventListener) // W3C standard
+    {
+        window.addEventListener('load', funcionesModalVerGuiasRemisionPedido, false); // NB **not** 'onload'
+    }
+    else if (window.attachEvent) // Microsoft
+    {
+        window.attachEvent('onload', funcionesModalVerGuiasRemisionPedido);
+    }
+
+
+
+
+</script>

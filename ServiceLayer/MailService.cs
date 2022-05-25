@@ -49,8 +49,11 @@ namespace ServiceLayer
 
             
             System.Net.Mail.MailMessage mmsg = new System.Net.Mail.MailMessage();
-            foreach(String destinatario in destinatarios)
+            foreach (String destinatario in destinatarios)
+            {
                 mmsg.To.Add(destinatario);
+            }
+
             mmsg.Subject = asunto;
             mmsg.SubjectEncoding = System.Text.Encoding.UTF8;
             mmsg.Body = mensaje;

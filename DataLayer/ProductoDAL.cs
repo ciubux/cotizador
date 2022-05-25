@@ -117,6 +117,7 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_getproducto");
             InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
             InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
+            InputParameterAdd.Int(objCommand, "soloActivos", soloActivos ? 1 : 0);
             DataSet dataSet = ExecuteDataSet(objCommand);
 
             DataTable productoDataSet = dataSet.Tables[0];

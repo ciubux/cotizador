@@ -1023,9 +1023,10 @@ namespace BusinessLayer
                         seEnvioCorreo = true;
                     }
 
-                    if (!pedido.usuario.email.Equals(String.Empty))
+
+                    if (!pedido.UsuarioRegistro.email.Equals(String.Empty))
                     {
-                        destinatarios.Add(pedido.usuario.email);
+                        destinatarios.Add(pedido.UsuarioRegistro.email);
                         seEnvioCorreo = true;
                     }
 
@@ -1049,6 +1050,38 @@ namespace BusinessLayer
             //    mail.enviar(new List<string> { "ti@mpinstitucional.com" }, "ERROR al enviar pedido " + pedido.numeroPedidoString + " a ténica", ex.Message + ex.InnerException, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
             //}
 
+        }
+
+        public List<Guid> soloPedidosALiberar(List<Guid> idPedidos, Guid idUsuario)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                return dal.soloPedidosALiberar(idPedidos, idUsuario);
+            }
+        }
+
+        public List<Guid> soloPedidosAApropbar(List<Guid> idPedidos, Guid idUsuario)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                return dal.soloPedidosAApropbar(idPedidos, idUsuario);
+            }
+        }
+
+        public List<List<String>> totalesRazonSocial(List<Guid> idPedidos, Guid idUsuario)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                return dal.totalesRazonSocial(idPedidos, idUsuario);
+            }
+        }
+
+        public List<List<String>> totalesProductos(List<Guid> idPedidos, Guid idUsuario)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                return dal.totalesProductos(idPedidos, idUsuario);
+            }
         }
     }
 }

@@ -51,7 +51,11 @@ namespace Model.UTILES
 
 
         public int estado { get; set; }
+        
         public int diferenciaCantidadValidacion { get; set; }
+        /* Mayor a  0: Stock Cargado es mayor al stock ZAS - EXCEDENTE
+         * Menor a  0: Stock Cargado es menor al stock ZAS - FALTANTE
+         */
 
         public int stockValidable { get; set; }
     }

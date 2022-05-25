@@ -283,7 +283,7 @@ jQuery(function ($) {
 
 
                 $("#btnAprobarAjusteAlmacen").attr("idAjusteAlmacen",obj.idMovimientoAlmacen);
-                $("#ver_ajusteAlmacen_ciudadOrigen_nombre").html(obj.ciudadOrigen_nombre);
+                $("#ver_ajusteAlmacen_ciudadOrigen_nombre").html(obj.ciudadOrigen.nombre);
 
                 $("#ver_ajusteAlmacen_fechaEmision").html(invertirFormatoFecha(obj.fechaEmision.substr(0, 10)));
 
@@ -336,7 +336,7 @@ jQuery(function ($) {
     $("#btnBusqueda").click(function () {
 
         $('body').loadingModal({
-            text: 'Registrando Ajuste Almacén...'
+            text: 'Buscando Ajuste Almacén...'
         });
         $('body').loadingModal('show');
 

@@ -181,6 +181,12 @@ textarea {
         width: 1200px;
     }
 
+
+    #modalVerGuiasRemisionPedido .modal-dialog {
+        width: 1200px;
+    }
+
+
     #modalIngresarDatosVentaConsolidada .modal-dialog {
         width: 1100px;
     }

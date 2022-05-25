@@ -455,7 +455,7 @@ namespace Cotizador.Controllers
                 if (det.stockValidable == 1 && det.diferenciaCantidadValidacion != 0)
                 {
                     DocumentoDetalle detalle = new DocumentoDetalle();
-                    detalle.producto = productoBL.getProducto(det.producto.idProducto, false, false, Guid.Empty); ;
+                    detalle.producto = productoBL.getProducto(det.producto.idProducto, false, false, Guid.Empty, false, "PEN", null, false); 
 
                     detalle.esPrecioAlternativo = true;
 

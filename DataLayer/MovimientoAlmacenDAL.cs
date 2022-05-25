@@ -550,6 +550,11 @@ namespace DataLayer
                     {
                         cantidadConteo = cantidadConteo * documentoDetalle.producto.equivalenciaProveedor;
                     }
+
+                    if (documentoDetalle.ProductoPresentacion.IdProductoPresentacion == 3)
+                    {
+                        cantidadConteo = documentoDetalle.cantidad;
+                    }
                     InputParameterAdd.Decimal(objCommand, "equivalencia", documentoDetalle.ProductoPresentacion.Equivalencia);
                     InputParameterAdd.Int(objCommand, "idProductoPresentacion", documentoDetalle.ProductoPresentacion.IdProductoPresentacion);
                 } else

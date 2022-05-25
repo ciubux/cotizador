@@ -45,6 +45,64 @@
             </div>
         </div>
 
+
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <div class="col-xs-4">
+                    <label class="control-label">Es Subdistribuidor:</label>
+                </div>
+                <div class="col-xs-8">
+                    <div class="row">
+                        @if (cliente.esSubDistribuidor)
+                        {
+                            <input class="radio-input" checked type="checkbox" name="cliente_esSubDistribuidor" id="cliente_esSubdistribuidor" value="1">
+                        }
+                        else
+                        {
+                            <input class="radio-input" type="checkbox" name="cliente_esSubDistribuidor" id="cliente_esSubdistribuidor" value="1">
+                        }
+                        <label for="cliente_esSubdistribuidor" class="control-label">SI</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(c => cliente.grupoCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                <div class="col-xs-8">
+                    @Html.Action("GetGruposCliente", "GrupoCliente",
+                                new
+                                {
+                                    grupoClienteSelectId = "idGrupoCliente",
+                                    selectedValue = cliente.grupoCliente.idGrupoCliente
+                                })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(c => cliente.rubro, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4", @for = "idRubroPadre" })
+                <div class="col-xs-8 col-sm-8 col-lg-8">
+                    @Html.Action("GetRubros", "Rubro",
+                        new
+                        {
+                            rubroSelectId = "idRubroPadre",
+                            selectedValue = cliente.rubro.padre == null ? 0 : cliente.rubro.padre.idRubro
+                        })
+
+                    @Html.Action("GetRubros", "Rubro",
+                        new
+                        {
+                            rubroSelectId = "idRubro",
+                            selectedValue = cliente.rubro.idRubro,
+                            idPadre = cliente.rubro.padre == null ? -2 : cliente.rubro.padre.idRubro
+                        })
+                </div>
+            </div>
+        </div>
+
         <div class="col-sm-6 col-lg-4">
             <div class="form-group">
                 <div class="col-xs-4">
@@ -60,7 +118,7 @@
                         {
                             <input class="radio-input" type="checkbox" name="cliente_perteneceCanalLima" id="cliente_CanalLima" value="1">
                         }
-                        <label for="cliente_perteneceCanalLima" class="control-label">Lima</label>
+                        <label for="cliente_CanalLima" class="control-label">Lima</label>
                     </div>
                     <div class="row">
                         @if (cliente.perteneceCanalProvincias)
@@ -71,7 +129,7 @@
                         {
                             <input class="radio-input" type="checkbox" name="cliente_perteneceCanalProvincias" id="cliente_CanalProvincias" value="1">
                         }
-                        <label for="cliente_perteneceCanalProvincias" class="control-label">Provincias</label>
+                        <label for="cliente_CanalProvincias" class="control-label">Provincias</label>
                     </div>
                     <div class="row">
                         @if (cliente.perteneceCanalMultiregional)
@@ -82,7 +140,7 @@
                         {
                             <input class="radio-input" type="checkbox" name="cliente_perteneceCanalMultiregional" id="cliente_CanalMultireginal" value="1">
                         }
-                        <label for="cliente_perteneceCanalMultiregional" class="control-label">Multiregional</label>
+                        <label for="cliente_CanalMultireginal" class="control-label">Multiregional</label>
                     </div>
                     <div class="row">
                         @if (cliente.perteneceCanalPCP)
@@ -93,7 +151,7 @@
                         {
                             <input class="radio-input" type="checkbox" name="cliente_perteneceCanalPCP" id="cliente_CanalPCP" value="1">
                         }
-                        <label for="cliente_perteneceCanalPCP" class="control-label">PCP</label>
+                        <label for="cliente_CanalPCP" class="control-label">PCP</label>
                     </div>
 
                 </div>
@@ -120,6 +178,9 @@
                         <th data-name="nombre" data-visible="true" data-sortable="true" data-sorted="true" data-direction="DESC">Razon Social / Nombre</th>
                         <th data-name="ruc" data-visible="true" data-sortable="true">Nro. Documento</th>
                         <th data-name="ciudad" data-visible="true" data-sortable="true">Sede</th>
+                        <th data-name="rubro" data-visible="true" data-sortable="true">Rubro</th>
+                        <th data-name="grupo" data-visible="true" data-sortable="true">Grupo</th>
+                        <th data-name="subdistribuidor" data-visible="true" data-sortable="true">SubDistribuidor</th>
                         <th data-name="reasignar" data-sortable="true" data-breakpoints="xs">
                             Reasignar A:
                             @if (clientes.Count > 0)
@@ -136,18 +197,48 @@
                 <tbody>
                     @foreach (Model.Cliente item in clientes)
                     {
-                        <tr>
-                            <td>(@item.codigo) @item.nombreCliente</td>
-                            <td>@item.ruc</td>
-                            <td>@item.ciudad.nombre</td>
-                            <td class="td-reasignar-cartera-a">
-                                @Html.Action("GetResponsablesComerciales", "Vendedor",
-                                        new
-                                        {
-                                            vendedorSelectId = "idResignarSel_" + item.idCliente.ToString()
-                                        })
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>(@item.codigo) @item.nombreCliente</td>
+                        <td>@item.ruc</td>
+                        <td>@item.ciudad.nombre</td>
+                        <td>
+                            @if (item.rubro.idRubro > 0)
+                            {
+                                @item.rubro.nombre
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.grupoCliente.idGrupoCliente > 0)
+                            {
+                              <span>@item.grupoCliente.codigo - @item.grupoCliente.nombre</span>
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.esSubDistribuidor)
+                            {
+                                <span>SI</span>
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+                        <td class="td-reasignar-cartera-a">
+                            @Html.Action("GetResponsablesComerciales", "Vendedor",
+                                    new
+                                    {
+                                        vendedorSelectId = "idResignarSel_" + item.idCliente.ToString()
+                                    })
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>
@@ -233,6 +324,7 @@
                 $(".td-reasignar-cartera-a select.form-control").val($("#idResignarGlobal").val());
                 $(".input-reasignar-asesor").val($("#idResignarGlobal").val());
                 $(".input-reasignar-asesor").attr("nombreNuevoAsesor", $("#idResignarGlobal option:selected").text());
+                $("#idResignarGlobal").val("");
             });
 
         }, 1000);

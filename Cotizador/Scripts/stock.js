@@ -321,7 +321,7 @@ jQuery(function ($) {
                     stockZAS = 0;
 
                     if (lista[i].stockValidable == 1) {
-                        stockZAS = lista[i].cantidadConteo + lista[i].diferenciaCantidadValidacion;
+                        stockZAS = lista[i].cantidadConteo + (-1*lista[i].diferenciaCantidadValidacion);
 
                         if (lista[i].diferenciaCantidadValidacion > 0) {
                             diferencia = "+" + lista[i].diferenciaCantidadValidacion;

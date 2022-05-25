@@ -1207,6 +1207,9 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "perteneceCanalMultiregional", cliente.perteneceCanalMultiregional ? 1 : 0);
             InputParameterAdd.Int(objCommand, "perteneceCanalPCP", cliente.perteneceCanalPCP ? 1 : 0);
             InputParameterAdd.Int(objCommand, "esSubdistribuidor", cliente.esSubDistribuidor ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "idRubro", cliente.rubro.idRubro);
+            InputParameterAdd.Int(objCommand, "idRubroPadre", cliente.rubro.padre.idRubro);
+
 
             DataTable dataTable = Execute(objCommand);
 
@@ -1224,6 +1227,16 @@ namespace DataLayer
                 ClienteResultado.nombreComercial = Converter.GetString(row, "nombre_comercial");
                 ClienteResultado.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento");
                 ClienteResultado.ruc = Converter.GetString(row, "ruc");
+
+
+                ClienteResultado.rubro = new Rubro();
+                ClienteResultado.rubro.idRubro = Converter.GetInt(row, "id_rubro");
+                ClienteResultado.rubro.nombre = Converter.GetString(row, "nombre_rubro_padre") + " - " + Converter.GetString(row, "nombre_rubro");
+
+                ClienteResultado.grupoCliente = new GrupoCliente();
+                ClienteResultado.grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_rubro");
+                ClienteResultado.grupoCliente.codigo = Converter.GetString(row, "codigo_grupo");
+                ClienteResultado.grupoCliente.nombre = Converter.GetString(row, "nombre_grupo");
 
                 /*Vendedores*/
                 ClienteResultado.responsableComercial = new Vendedor();
