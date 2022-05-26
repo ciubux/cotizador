@@ -61,6 +61,15 @@ namespace BusinessLayer
             }
         }
 
+        public void actualizarRestriccionVenta(Guid idUsuario, Guid idProducto, int descontinuado, string comentario)
+        {
+            using (var dal = new ProductoDAL())
+            {
+                dal.actualizarRestriccionVenta(idUsuario, idProducto, descontinuado, comentario);
+            }
+        }
+
+
 
         public Producto getProducto(Guid idProducto, Boolean esProvincia, Boolean incluidoIGV, Guid idCliente, Boolean esCompra = false, String moneda = "PEN", TipoCambioSunat tc = null, Boolean soloActivos = true)
         {

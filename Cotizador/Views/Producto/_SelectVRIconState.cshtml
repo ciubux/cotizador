@@ -1,10 +1,64 @@
 ﻿<div id="divSelectVRState" srcFree="/images/checkstate_d.png" srcRes="/images/icon_warning_18.png" style="display: none;">
-    <div class="dropdown-select-stock-state" style="right:0; width: 215px; max-width: 215px;" >
-        <a class="sss-vr-sin-restriccion" href="#" state="0"><img src="~/images/checkstate_d.png" /> Sin Restricción</a>
-        <a class="sss-vr-descontinuado" href="#" state="1"><img src="~/images/icon_warning_18.png" /> Descontinuado</a>
-        <a class="sss-vr-inestabilidad-precios" href="#" state="2"> <img src="~/images/icon_warning_18.png" /> Inestabilidad de precios</a>
-        <a class="sss-vr-stock-limitado" href="#" state="3"> <img src="~/images/icon_warning_18.png" /> Stock limitado</a>
-        <a class="sss-vr-venta-controlada" href="#" state="4"> <img src="~/images/icon_warning_18.png" /> Venta controlada</a>
+    <div class="dropdown-select-stock-state" style="right:0; width: 215px; max-width: 215px;">
+        <a class="sss-vr-sin-restriccion" href="#" state="0" textState="Sin Restricción"><img src="~/images/checkstate_d.png" /> Sin Restricción</a>
+        <a class="sss-vr-descontinuado" href="#" state="1" textState="Descontinuado"><img src="~/images/icon_warning_18.png" /> Descontinuado</a>
+        <a class="sss-vr-inestabilidad-precios" href="#" state="2" textState="Inestabilidad de precios"> <img src="~/images/icon_warning_18.png" /> Inestabilidad de precios</a>
+        <a class="sss-vr-stock-limitado" href="#" state="3" textState="Stock limitado"> <img src="~/images/icon_warning_18.png" /> Stock limitado</a>
+        <a class="sss-vr-venta-controlada" href="#" state="4" textState="Venta controlada"> <img src="~/images/icon_warning_18.png" /> Venta controlada</a>
     </div>
 </div>
 
+
+
+<div class="modal fade" id="modalCambiarEstadoVentaRestrigidaProducto" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalCambiarEstadoVentaRestrigidaProductoTitle"><b>Cambiar estado de Venta Restringida <span id="skuCEVR"></span></b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <input type="hidden" id="descontinuadoCEVR" value="" />
+                    <input type="hidden" id="idProductoCEVR" value="" />
+                    
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="comentarioCEVR" class="control-label col-xs-3">Restricción Venta:</label>
+
+                                <div class="col-xs-9">
+                                    <p id="descontinuadoDescCEVR"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="comentarioCEVR" class="control-label col-xs-3">Comentario Restricción:</label>
+
+                                <div class="col-xs-9">
+                                    <textarea class="form-control" rows="5" id="comentarioCEVR"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarCEVR" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnAceptarCEVR" class="btn btn-primary">Registrar</button>
+            </div>
+        </div>
+    </div>
+</div>

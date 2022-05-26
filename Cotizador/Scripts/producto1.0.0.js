@@ -298,58 +298,18 @@ jQuery(function ($) {
     $(document).on('click', ".dropdown-select-stock-state a", function () {
         var idProducto= $(this).closest(".dropdown-icons-select").attr("idProducto");
         var restriccion = $(this).attr("state");
-        var that = this;
-        var imgIcon = $(this).closest(".dropdown-icons-select").find(".sss-icon");
-        $.ajax({
-            url: "/Producto/UpdateStockConfirmado",
-            data: {
-                idProducto: idProducto,
-                restriccion: restriccion
-            },
-            type: 'POST',
-            dataType: 'JSON',
-            error: function (detalle) {
-                mostrarMensajeErrorProceso(MENSAJE_ERROR);
-            },
-            success: function (resultado) {
+        var restriccionText = $(this).attr("textState");
+        var comentario = $(this).closest(".dropdown-icons-select").attr("comentario");
+        var sku = $(this).closest(".dropdown-icons-select").attr("sku");;
 
-                if (resultado.success == 1) {
-                    if (restriccion == 1) {
-                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectVRState").attr("srcRes"));
-                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Descontinuado");
-                    }
-                    if (restriccion == 2) {
-                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectVRState").attr("srcRes"));
-                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Inestabilidad de precios");;
-                    }
-                    if (restriccion == 3) {
-                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectVRState").attr("srcRes"));
-                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Stock limitado");
-                    }
-                    if (restriccion == 4) {
-                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectVRState").attr("srcRes"));
-                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Venta controlada");
-                    }
-                    if (restriccion == 0) {
-                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectVRState").attr("srcFree"));
-                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Sin Restricción");
-                    }
-                } else {
-                    $.alert({
-                        title: "ERROR",
-                        content: resultado.message,
-                        type: "red",
-                        buttons: {
-                            OK: function () {
-                            }
-                        }
-                    });
-                }
-
-                $(that).closest(".dropdown-select-stock-state").hide();
-
-            }
-        });
+        $("#idProductoCEVR").val(idProducto);
+        $("#descontinuadoCEVR").val(restriccion);
+        $("#comentarioCEVR").val(comentario);
+        $("#descontinuadoDescCEVR").html(restriccionText);
+        $("#skuCEVR").html(sku);
+        
+        $(this).closest(".dropdown-select-stock-state").hide();
+        $("#modalCambiarEstadoVentaRestrigidaProducto").modal("show");
     });
 
     $(document).on('click', ".dropdown-icons-select .sss-icon", function () {
@@ -361,6 +321,40 @@ jQuery(function ($) {
         }
     });
 
+    $('#btnAceptarCEVR').click(function () {
+        var idProducto = $("#idProductoCEVR").val();
+        var restriccion = $("#descontinuadoCEVR").val();
+        var comentario = $("#comentarioCEVR").val();
+
+        $.ajax({
+            url: "/Producto/UpdateRestriccionVenta",
+            data: {
+                idProducto: idProducto,
+                restriccion: restriccion,
+                comentario: comentario
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) {
+                mostrarMensajeErrorProceso(MENSAJE_ERROR);
+            },
+            success: function (resultado) {
+                if (resultado.success == 1) {
+                    location.reload();
+                } else {
+                    $.alert({
+                        title: "ERROR",
+                        content: resultado.message,
+                        type: "red",
+                        buttons: {
+                            OK: function () {
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    });
 
 
     $(document).on('click', "#tableProductos a.footable-page-link", function () {
@@ -1329,7 +1323,8 @@ jQuery(function ($) {
                         }
 
 
-                        vrConfirmado = '<br/><div class="dropdown-icons-select" style="position: relative;" idProducto="' + list[i].idProducto + '">' + vrConfirmadoLectura + htmlDDSSS + '</div>'
+                        vrConfirmado = '<br/><div class="dropdown-icons-select" style="position: relative;" comentario="' + list[i].motivoRestriccion + '" sku="' + list[i].sku + '"' 
+                                       + ' idProducto = "' + list[i].idProducto + '" > ' + vrConfirmadoLectura + htmlDDSSS + '</div > '
                     }
 
                     var ItemRow = '<tr data-expanded="true" idProducto="' + list[i].idProducto + '">' +

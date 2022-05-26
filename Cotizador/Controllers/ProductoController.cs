@@ -248,6 +248,27 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+        public string UpdateRestriccionVenta()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            string success = "0";
+            string message = "";
+
+            if (usuario.modificaRestriccionVentaProducto)
+            {
+                Guid idProducto = Guid.Parse(this.Request.Params["idProducto"]);
+                int descontinuado = Int32.Parse(this.Request.Params["restriccion"]);
+                string comentario = this.Request.Params["comentario"].ToString();
+                
+                ProductoBL bl = new ProductoBL();
+                bl.actualizarRestriccionVenta(usuario.idUsuario, idProducto, descontinuado, comentario);
+                success = "1";
+            }
+
+            return "{\"success\": " + success + ",\"message\":\"" + message + "\"}";
+        }
+
 
         public void SetSearchParam()
         {

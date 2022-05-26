@@ -1540,6 +1540,18 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
 
+        public void actualizarRestriccionVenta(Guid idUsuario, Guid idProducto, int descontinuado, string comentario)
+        {
+            var objCommand = GetSqlCommand("pu_restriccion_venta_producto");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
+            InputParameterAdd.Int(objCommand, "descontinuado", descontinuado);
+            InputParameterAdd.Varchar(objCommand, "comentario", comentario);
+
+            ExecuteNonQuery(objCommand);
+        }
+
+
         public bool RegistroCierreStock(List<RegistroCargaStock> stock, DateTime fechaCierre, Guid idCiudad, Guid idUsuario, Guid idArchivoAdjunto, int tipoCarga)
         {
             var objCommand = GetSqlCommand("pi_cierre_stock");
