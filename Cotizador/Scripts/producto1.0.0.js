@@ -294,6 +294,75 @@ jQuery(function ($) {
         });
     }
 
+
+    $(document).on('click', ".dropdown-select-stock-state a", function () {
+        var idProducto= $(this).closest(".dropdown-icons-select").attr("idProducto");
+        var restriccion = $(this).attr("state");
+        var that = this;
+        var imgIcon = $(this).closest(".dropdown-icons-select").find(".sss-icon");
+        $.ajax({
+            url: "/Producto/UpdateStockConfirmado",
+            data: {
+                idProducto: idProducto,
+                restriccion: restriccion
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) {
+                mostrarMensajeErrorProceso(MENSAJE_ERROR);
+            },
+            success: function (resultado) {
+
+                if (resultado.success == 1) {
+                    if (restriccion == 1) {
+                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectVRState").attr("srcRes"));
+                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Descontinuado");
+                    }
+                    if (restriccion == 2) {
+                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectVRState").attr("srcRes"));
+                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Inestabilidad de precios");;
+                    }
+                    if (restriccion == 3) {
+                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectVRState").attr("srcRes"));
+                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Stock limitado");
+                    }
+                    if (restriccion == 4) {
+                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectVRState").attr("srcRes"));
+                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Venta controlada");
+                    }
+                    if (restriccion == 0) {
+                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("src", $("#divSelectVRState").attr("srcFree"));
+                        $(that).closest(".dropdown-icons-select").find(".sss-icon").attr("title", "Sin Restricción");
+                    }
+                } else {
+                    $.alert({
+                        title: "ERROR",
+                        content: resultado.message,
+                        type: "red",
+                        buttons: {
+                            OK: function () {
+                            }
+                        }
+                    });
+                }
+
+                $(that).closest(".dropdown-select-stock-state").hide();
+
+            }
+        });
+    });
+
+    $(document).on('click', ".dropdown-icons-select .sss-icon", function () {
+
+        if ($(this).closest(".dropdown-icons-select").find(".dropdown-select-stock-state").is(":visible")) {
+            $(this).closest(".dropdown-icons-select").find(".dropdown-select-stock-state").hide();
+        } else {
+            $(this).closest(".dropdown-icons-select").find(".dropdown-select-stock-state").show();
+        }
+    });
+
+
+
     $(document).on('click', "#tableProductos a.footable-page-link", function () {
         setTimeout(function () {
             mostrarStockProductosPagina();
@@ -871,7 +940,7 @@ jQuery(function ($) {
                 $("#verUnidadEstandarInternacional").html(producto.unidadEstandarInternacional);
                 $("#verTipo").html(producto.tipoProductoToString);
 
-
+               
                 $("#verTipoCambio").html(Number(producto.tipoCambio).toFixed(cantidadDecimales));
 
                 if (producto.monedaMP == "D") {
@@ -1230,9 +1299,42 @@ jQuery(function ($) {
                         }
                     }
 
+
+                    
+                    var vrConfirmadoLectura = '';
+                    var vrConfirmado = '';
+
+                    if ($("#divSelectVRState").length) {
+                        var htmlDDSSS = $("#divSelectVRState").html();
+
+                        if (list[i].descontinuado == 1) {
+                            vrConfirmadoLectura = '<img class="sss-icon" src="' + $("#divSelectVRState").attr("srcRes") + '" title="Descontinuado" />';
+                        }
+
+                        if (list[i].descontinuado == 2) {
+                            vrConfirmadoLectura = '<img class="sss-icon" src="' + $("#divSelectVRState").attr("srcRes") + '" title="Inestabilidad de precios"/>';
+                        }
+
+                        if (list[i].descontinuado == 3) {
+                            vrConfirmadoLectura = '<img class="sss-icon" src="' + $("#divSelectVRState").attr("srcRes") + '" title="Stock limitado"/>';
+                        }
+
+                        if (list[i].descontinuado == 4) {
+                            vrConfirmadoLectura = '<img class="sss-icon" src="' + $("#divSelectVRState").attr("srcRes") + '" title="Venta controlada"/>';
+                        }
+
+
+                        if (list[i].stockConfirmado == 0) {
+                            vrConfirmadoLectura = '<img class="sss-icon" src="' + $("#divSelectVRState").attr("srcFree") + '" title="Sin Restricción"/>';
+                        }
+
+
+                        vrConfirmado = '<br/><div class="dropdown-icons-select" style="position: relative;" idProducto="' + list[i].idProducto + '">' + vrConfirmadoLectura + htmlDDSSS + '</div>'
+                    }
+
                     var ItemRow = '<tr data-expanded="true" idProducto="' + list[i].idProducto + '">' +
                         '<td>  ' + list[i].idProducto + '</td>' +
-                        '<td>  ' + list[i].sku + descontinuadoHTML + '  </td>' +
+                        '<td>  ' + list[i].sku + descontinuadoHTML + vrConfirmado + '  </td>' +
                         '<td>  ' + list[i].skuProveedor + '  </td>' +
                         '<td>  ' + list[i].proveedor + ' </td>' +
                         '<td>  ' + list[i].familia + '</td>' +

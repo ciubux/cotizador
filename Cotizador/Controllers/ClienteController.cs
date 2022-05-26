@@ -1177,8 +1177,10 @@ namespace Cotizador.Controllers
             if (this.Request.Params["idRubro"] != null && this.Request.Params["idRubro"] != String.Empty)
             {
                 rubros = bl.getRubros(busq, Int32.Parse(this.Request.Params["idRubro"]));
-
-                cliente.rubro.padre.idRubro = Int32.Parse(this.Request.Params["idRubro"]);
+                if (cliente.rubro.padre != null)
+                {
+                    cliente.rubro.padre.idRubro = Int32.Parse(this.Request.Params["idRubro"]);
+                }
             } else
             {
                 cliente.rubro.padre.idRubro = 0;
@@ -1592,7 +1594,7 @@ namespace Cotizador.Controllers
 
             ClienteBL bl = new ClienteBL();
             List<Cliente> clientes = new List<Cliente>();
-            if (cliente.responsableComercial != null && cliente.responsableComercial.idVendedor > 0)
+            if ((cliente.responsableComercial != null && cliente.responsableComercial.idVendedor > 0) || (cliente.esSubDistribuidor) || (cliente.grupoCliente.idGrupoCliente > 0))
             {
                 clientes = bl.BusquedaClientesCartera(cliente);
             }

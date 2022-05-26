@@ -189,7 +189,7 @@
 
         <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
             <div class="" style="display: inline-block;">
-                <label id="labelIdCiudadStock "class="" for="idCiudadStock">
+                <label id="labelIdCiudadStock " class="" for="idCiudadStock">
                     Mostrar stock en:
                 </label>
                 @Html.Action("GetCiudades", "Ciudad", new { ciudadSelectId = "idCiudadStock" })
@@ -815,6 +815,12 @@
 
 
 @Html.Partial("../Stock/_ModalStockProducto")
+
+@if (producto.usuario.modificaRestriccionVentaProducto)
+{
+    @Html.Partial("../Producto/_SelectVRIconState")
+}
+
 
 @section Scripts {
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/producto")

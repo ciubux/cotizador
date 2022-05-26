@@ -210,6 +210,9 @@ namespace Model
         /*Productos*/
         public bool visualizaProductos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_PRODUCTOS)).FirstOrDefault() != null; } }
         public bool modificaMaestroProductos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_MAESTRO_PRODUCTOS)).FirstOrDefault() != null; } }
+
+        public bool modificaRestriccionVentaProducto { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_RESTRICCION_VENTA_PRODUCTO)).FirstOrDefault() != null; } }
+        
         //public bool modificaProducto { get; set; }
         public bool realizaCargaMasivaProductos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REALIZA_CARGA_MASIVA_PRODUCTOS)).FirstOrDefault() != null; } }
 

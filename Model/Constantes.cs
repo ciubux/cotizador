@@ -456,6 +456,9 @@ namespace Model
         public const String MODIFICA_USUARIO = "P812";
         public const String VISUALIZA_USUARIOS = "P813";
 
+
+        public const String MODIFICA_RESTRICCION_VENTA_PRODUCTO = "P711";
+
         public const String MODIFICA_VENDEDORES = "P821";
         public const String VISUALIZA_VENDEDORES = "P822";
         public const String MODIFICA_LOGCAMPO = "P823";
