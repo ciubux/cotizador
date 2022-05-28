@@ -365,6 +365,7 @@ namespace Cotizador.Models.DTOsShow
             pedidoDTOshow.numeroPedidoString = pedido.numeroPedidoString;
             pedidoDTOshow.numeroGrupoPedidoString = pedido.numeroGrupoPedidoString;
             pedidoDTOshow.cotizacion_numeroCotizacionString = pedido.cotizacion.numeroCotizacionString;
+            pedidoDTOshow.cotizacion_codigoCotizacion = pedido.cotizacion.codigo;
             pedidoDTOshow.tiposPedidoString = pedido.tiposPedidoString;
             pedidoDTOshow.cliente_responsableComercial_codigoDescripcion = pedido.cliente.responsableComercial.codigoDescripcion;
             pedidoDTOshow.cliente_responsableComercial_usuario_email = pedido.cliente.responsableComercial.usuario.email;

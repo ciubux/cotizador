@@ -1318,7 +1318,7 @@ jQuery(function ($) {
                         }
 
 
-                        if (list[i].stockConfirmado == 0) {
+                        if (list[i].descontinuado == 0) {
                             vrConfirmadoLectura = '<img class="sss-icon" src="' + $("#divSelectVRState").attr("srcFree") + '" title="Sin Restricción"/>';
                         }
 

@@ -929,7 +929,13 @@ namespace DataLayer
                 pedido.usuario.email = Converter.GetString(row, "email");
                 pedido.IdUsuarioRegistro = Converter.GetGuid(row, "id_usuario_creacion");
 
-                pedido.UsuarioRegistro = usuario;
+                pedido.UsuarioRegistro = new Usuario();
+                pedido.UsuarioRegistro.idUsuario = Converter.GetGuid(row, "id_usuario_creacion");
+                pedido.UsuarioRegistro.nombre = Converter.GetString(row, "nombre_usuario");
+                pedido.UsuarioRegistro.cargo = Converter.GetString(row, "cargo");
+                pedido.UsuarioRegistro.firmaImagen = Converter.GetBytes(row, "usuario_firma_imagen");
+                pedido.UsuarioRegistro.contacto = Converter.GetString(row, "contacto_usuario");
+                pedido.UsuarioRegistro.email = Converter.GetString(row, "email");
 
                 pedido.seguimientoPedido = new SeguimientoPedido();
                 pedido.seguimientoPedido.estado = (SeguimientoPedido.estadosSeguimientoPedido)Converter.GetInt(row, "estado_seguimiento");

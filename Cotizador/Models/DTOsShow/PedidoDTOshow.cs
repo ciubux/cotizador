@@ -19,6 +19,8 @@ namespace Cotizador.Models.DTOshow
         public String numeroPedidoString { get; set; }
         public String numeroGrupoPedidoString { get; set; }
         public String cotizacion_numeroCotizacionString { get; set; }
+        public long cotizacion_codigoCotizacion { get; set; }
+        
         public String tiposPedidoString { get; set; }
         public String cliente_responsableComercial_codigoDescripcion { get; set; }
         public String cliente_responsableComercial_usuario_email { get; set; }

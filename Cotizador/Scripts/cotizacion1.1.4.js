@@ -2707,7 +2707,7 @@ jQuery(function ($) {
                 window.location = '/Cotizacion/CancelarCreacionCotizacion';
             }
         });
-}
+    }
 
 
 

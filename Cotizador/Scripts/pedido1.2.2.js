@@ -3000,6 +3000,9 @@ jQuery(function ($) {
 
                 $("#verNumero").html(numeroPedido);
 
+
+                $("#verLnkDFCotizacion").hide();
+
                 if (pedido.cotizacion_tipoCotizacion == 0) {
                     $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString);
                 }
@@ -3009,6 +3012,12 @@ jQuery(function ($) {
                 else if (pedido.cotizacion_tipoCotizacion == 2) {
                     $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString + " (Trivial)");
                 }
+
+                if (pedido.cotizacion_numeroCotizacionString != "") {
+                    $("#verLnkDFCotizacion").attr("codigo", pedido.cotizacion_codigoCotizacion);
+                    $("#verLnkDFCotizacion").show();
+                }
+
 
                 if (pedido.facturaUnica) {
                     $("#verFacturaUnica").html("SI");
@@ -5232,6 +5241,25 @@ jQuery(function ($) {
             }
         });
     });
+
+    $(".lnkDFCotizacion").click(function () {
+        //$(document).on('click', "button.btnReCotizacion", function () {
+        // var codigo = event.target.getAttribute("class").split(" ")[0];
+        //   desactivarBotonesVer();
+        var numero = $(this).attr("codigo");
+        $.ajax({
+            url: "/Cotizacion/GenerarPDFdesdeIdCotizacion",
+            data: {
+                codigo: numero
+            },
+            type: 'POST',
+            error: function (detalle) { alert("Ocurrió un problema al descargar la cotización en formato PDF."); },
+            success: function (fileName) {
+                window.location = '/General/DownLoadFile?fileName=' + fileName;
+            }
+        });
+    });
+
 
     $(document).on('click', ".dropdown-icons-select .sss-icon", function () {
 
