@@ -1624,6 +1624,8 @@ namespace Cotizador.Controllers
                 String[] fiv = this.Request.Params["fechaInicioVigencia"].Split('/');
                 fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]), 0, 0, 0);
 
+                String dataReasignacionCartera = this.Request.Params["dataReasignaciones"].ToString();
+
                 foreach (Cliente item in clientes)
                 {
                     if (this.Request.Params["idResignar_" + item.idCliente.ToString()] != null && !this.Request.Params["idResignar_" + item.idCliente.ToString()].ToString().Equals(""))
@@ -1639,10 +1641,40 @@ namespace Cotizador.Controllers
 
                 ClienteBL bl = new ClienteBL();
                 bl.UpdateReasignarCartera(idsClientes, idsVendedores, fechaInicioVigencia, usuario.idUsuario);
+
+                List<List<String>> reporteReasignaciones = new List<List<string>>();
+
+                String[] rowsReasginaciones = dataReasignacionCartera.Split(new string[] { "|-*-|" }, StringSplitOptions.None);
+
+                foreach (String rowRes in rowsReasginaciones)
+                {
+                    String[] itemsRow = rowRes.Split(new string[] { "|*|" }, StringSplitOptions.None);
+                    List<String> itemsData = new List<string>();
+                    foreach (String itemData in itemsRow)
+                    {
+                        itemsData.Add(itemData);
+                    }
+
+                    if(itemsData.Count > 1) {
+                        reporteReasignaciones.Add(itemsData);
+                    }
+                }
+
+                this.Session["s_last_cliente_reasginacion_cartera"] = reporteReasignaciones;
             }
             
             return "";
         }
+
+        [HttpGet]
+        public ActionResult ExportLastReasginacionCartera()
+        {
+            List<List<String>> list = (List<List<String>>)this.Session["s_last_cliente_reasginacion_cartera"];
+
+            ReasignacionCarteraCliente excel = new ReasignacionCarteraCliente();
+            return excel.generateExcel(list);
+        }
+
 
         #region carga de imagenes
 

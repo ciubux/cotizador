@@ -365,6 +365,22 @@ namespace BusinessLayer
             }
         }
 
+        public List<int> AprobarPedidos(List<Guid> idsPedido, Guid idUsuario)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                return dal.AprobarPedidos(idsPedido, idUsuario);
+            }
+        }
+
+        public List<int> LiberarPedidos(List<Guid> idsPedido, Guid idUsuario)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                return dal.LiberarPedidos(idsPedido, idUsuario);
+            }
+        }
+
         #endregion
 
         #region Pedidos de COMPRA
@@ -1083,5 +1099,14 @@ namespace BusinessLayer
                 return dal.totalesProductos(idPedidos, idUsuario);
             }
         }
+
+        public List<Pedido> SelectPedidosByIds(List<Guid> idPedidos, int tipoOrdenamiento)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                return dal.SelectPedidosByIds(idPedidos, tipoOrdenamiento);
+            }
+        }
+
     }
 }

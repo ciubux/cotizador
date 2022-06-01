@@ -11,11 +11,12 @@
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
 
     <form action="/Cliente/ReasignarCartera" method="post" id="formReasignarCarteraClientes">
+        <input id="inputDataReasignaciones" name="dataReasignaciones" type="hidden" value="" />
         <input type="hidden" id="fechaInicioVigencia" name="fechaInicioVigencia" value="@cliente.FechaInicioVigenciaDesc" />
         @foreach (Model.Cliente item in clientes)
         {
             <input type="hidden" id="idResignar_@item.idCliente.ToString()" name="idResignar_@item.idCliente.ToString()" class="input-reasignar-asesor" value=""
-                   nombreCliente="(@item.codigo) @item.nombreCliente" rucCliente="@item.ruc" ciudadCliente="@item.ciudad.nombre" nombreNuevoAsesor="" />
+                   nombreCliente="(@item.codigo) @item.nombreCliente" nombreAsesor="@item.responsableComercial.codigoDescripcion" rucCliente="@item.ruc" ciudadCliente="@item.ciudad.nombre" nombreNuevoAsesor="" />
         }
     </form>
     <div class="row" style="margin-top: 10px;">
@@ -183,7 +184,7 @@
                         <th data-name="grupo" data-visible="true" data-sortable="true">Grupo</th>
                         <th data-name="subdistribuidor" data-visible="true" data-sortable="true">Sub<br />Distribuidor</th>
                         <th data-name="responsable" data-visible="true" data-sortable="true">Responsable<br />Comercial</th>
-                        <th data-name="reasignar" data-sortable="true" data-breakpoints="xs">
+                        <th data-name="reasignar" data-sortable="false" data-breakpoints="xs">
                             Reasignar A:
                             @if (clientes.Count > 0)
                             {
@@ -286,6 +287,7 @@
 
             <div class="row" style="padding: 10px 20px;">
                 <div class="col-sm-12 col-lg-12" style="height: 450px;  overflow-y: scroll; ">
+                    <input id="modalDataReasignaciones" type="hidden" value="" />
                     <table id="tableClientesConfirmarReasignar" class="table" data-editing="false"
                            data-editing-allow-add="false"
                            data-editing-allow-delete="false"
@@ -346,22 +348,26 @@
             $("#fechaVigenciaSel").val($("#fechaInicioVigencia").val());
             $("#tableClientesConfirmarReasignar > tbody").empty();
             var reasignaciones = 0;
+            var dataReasignaciones = "";
             $('.input-reasignar-asesor').each(function () {
                 var idAsesor = parseInt($(this).val());
 
                 if (idAsesor > 0) {
                     reasignaciones = reasignaciones + 1;
+                    var dataRow = "|-*-|" + $(this).attr("nombreCliente") + "|*|" + $(this).attr("rucCliente") + "|*|" + $(this).attr("ciudadCliente")
+                            + "|*|" + $(this).attr("nombreAsesor") + "|*|" + $(this).attr("nombreNuevoAsesor"); 
                     var itemRow = "<tr>" +
                         "<td>" + $(this).attr("nombreCliente") + "</td>" +
                         "<td>" + $(this).attr("rucCliente") + "</td>" +
                         "<td>" + $(this).attr("ciudadCliente") + "</td>" +
                         "<td>" + $(this).attr("nombreNuevoAsesor") + "</td>" +
                         "</tr>";
-
+                    dataReasignaciones = dataReasignaciones + dataRow;
                     $("#tableClientesConfirmarReasignar").append(itemRow);
                 }
             });
 
+            $("#inputDataReasignaciones").val(dataReasignaciones);
             FooTable.init('#tableClientesConfirmarReasignar');
 
             $("#nroReasignacionesClientes").html(reasignaciones);
@@ -387,7 +393,7 @@
             $("#fechaInicioVigencia").val($(this).val());
         });
 
-        $(document).on('click', "#tableClientesReasignar a.footable-page-link", function () {
+        $(document).on('click', "#tableClientesReasignar a.footable-page-link, #tableClientesReasignar th[data-sortable='true']", function () {
             setTimeout(function () {
                 $(".td-reasignar-cartera-a select.form-control").each(function () {
                     var uuid = $(this).attr("name").replace("idResignarSel_", "");
@@ -396,6 +402,8 @@
             }, 500);
         });
 
+
+        /*
         $("#btnLimpiarBusquedaReasignacion").click(function () {
             $.ajax({
                 type: "POST",
@@ -415,7 +423,7 @@
                 }
             });
         });
-
+        */
 
         $("#btnSaveConfirmarReasginarCartera").click(function () {
             var form = $("#formReasignarCarteraClientes");
@@ -436,9 +444,10 @@
                 },
                 success: function (data) {
                     $('body').loadingModal('hide');
+
                     $.alert({
                         title: 'Reasignación Exitosa',
-                        content: "Se reasignaron los clientes correctamente.",
+                        content: "Se reasignaron los clientes correctamente. Se descargó un excel con las reasignaciones realizadas.",
                         type: 'green',
                         buttons: {
                             OK: function () {
@@ -446,6 +455,8 @@
                             }
                         }
                     });
+
+                    window.location.href = "/Cliente/ExportLastReasginacionCartera";
                 }
             });
         });
