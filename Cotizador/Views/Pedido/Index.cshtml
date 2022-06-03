@@ -374,6 +374,14 @@
             {
                 <button type="button" id="btnLiberarPedidosGrupo" class="btn btn-success" style="display: none;">Liberar Pedidos Grupo</button>
             }
+            @if (pedido.usuario.apruebaPedidos)
+            {
+                <button type="button" id="btnAprobarPedidosColectivo" class="btn btn-success" style="display: none;">Aprobar Pedidos</button>
+            }
+            @if (pedido.usuario.liberaPedidos)
+            {
+                <button type="button" id="btnLiberarPedidosColectivo" class="btn btn-success" style="display: none;">Liberar Pedidos</button>
+            }
         </div>
 
         <table id="tablePedidos" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
@@ -2299,7 +2307,7 @@
     <div class="row" style="margin-top: 40px">
         <div class="col-sm-6 col-lg-4">
             <div class="form-group">
-                
+
                 <div class="col-xs-12" style="text-align: center;">
                     <label for="verSerieNumeroGuia" name="verSerieNumeroGuia" class="control-label col-xs-10">N° Guía: #serieNumero</label>
                     @*<p class="form-control-static" name="verSerieNumeroGuia">#serieNumero</p>*@
@@ -2517,6 +2525,8 @@
 @Html.Partial("../Pedido/_SelectStockIconState")
 
 @Html.Partial("../Pedido/_ModalAprobarLiberarGrupo")
+
+@Html.Partial("../Pedido/_ModalAprobarLiberarColectivo")
 
 @Html.Partial("../Stock/_ModalStockProducto")
 

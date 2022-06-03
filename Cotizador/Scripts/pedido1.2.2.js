@@ -5036,6 +5036,10 @@ jQuery(function ($) {
         var estado = $("#estado").val();
         var estadoCrediticio = $("#estadoCrediticio").val();
         $("#btnBusquedaPedidos").attr("disabled", "disabled");
+
+        $("#btnAprobarPedidosColectivo").hide();
+        $("#btnLiberarPedidosColectivo").hide();
+
         $.ajax({
             url: "/Pedido/Search",
             type: 'POST',
@@ -5070,6 +5074,7 @@ jQuery(function ($) {
                     }
                 });
 
+
                 if (pedidoList.length > 0 && pedido_numeroGrupoPedido.trim() != "") {
                     $("#btnAprobarPedidosGrupo").attr("idGrupo", pedido_numeroGrupoPedido);
                     $("#btnLiberarPedidosGrupo").attr("idGrupo", pedido_numeroGrupoPedido);
@@ -5078,7 +5083,19 @@ jQuery(function ($) {
                 } else {
                     $("#btnAprobarPedidosGrupo").hide();
                     $("#btnLiberarPedidosGrupo").hide();
+
+                    if (idCliente != "" || pedido_idGrupoCliente != "") {
+                        if (estado == 0 && estadoCrediticio == -1) {
+                            $("#btnAprobarPedidosColectivo").show();
+                        }
+
+                        if (estadoCrediticio == 0 && estado == -1) {
+                            $("#btnLiberarPedidosColectivo").show();
+                        }
+                    }
                 }
+
+
 
                 for (var i = 0; i < pedidoList.length; i++) {
 
@@ -5145,7 +5162,7 @@ jQuery(function ($) {
                     }
                     
                     var grupoCliente = pedidoList[i].grupoCliente_nombre == null ? "" : pedidoList[i].grupoCliente_nombre;
-                    var pedido = '<tr data-expanded="true">' +
+                    var pedido = '<tr data-expanded="true" class="pedido-data" idPedido="' + pedidoList[i].idPedido + '">' +
                         '<td>  ' + pedidoList[i].idPedido+'</td>' +
                         '<td>  ' + pedidoList[i].numeroPedidoNumeroGrupoString + '  </td>' +
                         '<td>  ' + pedidoList[i].ciudad_nombre + '  </td>' +

@@ -740,6 +740,7 @@
     <Content Include="Views\AjusteAlmacen\List.cshtml" />
     <Content Include="Views\Pedido\_ModalVerGuias.cshtml" />
     <Content Include="Views\Producto\_SelectVRIconState.cshtml" />
+    <Content Include="Views\Pedido\_ModalAprobarLiberarColectivo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

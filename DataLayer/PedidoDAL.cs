@@ -2287,6 +2287,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             foreach (DataRow row in dataTable.Rows)
             {
                 Guid idItem = Converter.GetGuid(row, "id_pedido");
+                idPedidosList.Add(idItem);
             }
 
             return idPedidosList;
@@ -2319,6 +2320,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             foreach (DataRow row in dataTable.Rows)
             {
                 Guid idItem = Converter.GetGuid(row, "id_pedido");
+                idPedidosList.Add(idItem);
             }
 
             return idPedidosList;
@@ -2363,6 +2365,8 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
 
                 item.Add(String.Format(Constantes.formatoDosDecimales, subtotal));
                 item.Add(String.Format(Constantes.formatoDosDecimales, total));
+
+                resultados.Add(item);
             }
 
             return resultados;
@@ -2407,6 +2411,8 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
                 item.Add(String.Format(Constantes.formatoDosDecimales, precioUnitario));
                 item.Add(String.Format(Constantes.formatoDosDecimales, cantidad));
                 item.Add(String.Format(Constantes.formatoDosDecimales, subtotal));
+
+                resultados.Add(item);
             }
 
             return resultados;

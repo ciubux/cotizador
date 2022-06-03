@@ -2177,6 +2177,42 @@ namespace Cotizador.Controllers
             return pedidoListString;
         }
 
+        public String SearchColectivo(Guid[] idsPedido, int tipoOrdenamiento /* 1:aprobar, 2:liberar*/)
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPedidos;
+            //Se recupera el pedido Búsqueda de la session
+            
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            List<Guid> idsPedidoList = new List<Guid>(idsPedido);
+
+            PedidoBL pedidoBL = new PedidoBL();
+
+            if (tipoOrdenamiento == 1)
+            {
+                idsPedidoList = pedidoBL.soloPedidosAApropbar(idsPedidoList, usuario.idUsuario);
+            }
+
+            if (tipoOrdenamiento == 2)
+            {
+                idsPedidoList = pedidoBL.soloPedidosALiberar(idsPedidoList, usuario.idUsuario);
+            }
+
+            List<Pedido> pedidoList = pedidoBL.SelectPedidosByIds(idsPedidoList, tipoOrdenamiento);
+            List<List<String>> resumenVentaCliente = pedidoBL.totalesRazonSocial(idsPedidoList, usuario.idUsuario);
+            List<List<String>> resumenVentaProducto = pedidoBL.totalesProductos(idsPedidoList, usuario.idUsuario);
+
+            var resultado = new
+            {
+                pedidos  = ParserDTOsSearch.PedidoVentaToPedidoVentaDTO(pedidoList),
+                resumenVentaCliente = resumenVentaCliente, 
+                resumenVentaProducto = resumenVentaProducto,
+                idsPedidos = idsPedidoList
+            };
+
+            return JsonConvert.SerializeObject(resultado);
+        }
+
         public String LiberarPedidosGrupo()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];

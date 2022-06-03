@@ -90,6 +90,9 @@ textarea {
         width: 700px;
     }
 
+    #modalAprobarPedidoColectivo .modal-dialog {
+        width: 700px;
+    }
 
     #modalStockProductoKardex .modal-dialog {
         width: 800px;

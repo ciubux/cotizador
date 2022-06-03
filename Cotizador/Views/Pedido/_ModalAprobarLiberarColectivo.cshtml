@@ -1,0 +1,353 @@
+﻿
+<div class="modal fade" tabindex="-1" id="modalAprobarPedidoColectivo">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalAprobarPedidoColectivoTitle"><b><span id="titleModalAprobarPedidoColectivo"></span></b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12 text-right">
+                        <button id="btnAprobarPedidoColectivoAction" type="button" class="btn btn-primary"></button>
+                    </div>
+                </div>
+                <fieldset id="fsLPPC">
+                    <legend>Lista de Pedidos</legend>
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12 tableFixHead">
+                            <table id="tablePedidosAprobarColectivo" class="table table-bordered">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>N°</th>
+                                        <th>Sede MP</th>
+                                        @*<th>Cod. Cliente</th>*@
+                                        <th>Cliente</th>
+                                        <th>Fecha Registro</th>
+                                        @*<th>Total</th>*@
+                                        <th>Estado Atención</th>
+                                        <th>Estado Crediticio</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </fieldset>
+
+
+                <fieldset id="fsRVCPC">
+                    <legend>Resumen de Venta Por Cliente</legend>
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12 tableFixHead">
+                            <table id="tableResumenVentaClientePedidoColectivo" class="table table-bordered">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>RAZON SOCIAL</th>
+                                        <th>Sede MP</th>
+                                        <th id="headerMontoVentaClientePedidoColectivo">Monto Venta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset id="fsRVPPC">
+                    <legend>Resumen Venta Por Producto (Sin IGV)</legend>
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12 tableFixHead">
+                            <table id="tableResumenVentaProductoPedidoColectivo" class="table table-bordered">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>SKU</th>
+                                        <th>Descripción</th>
+                                        <th>Unidad</th>
+                                        <th>Precio Unitario</th>
+                                        <th>Cantidad</th>
+                                        <th>Sub Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    var tipoAprobarGrupoPedido = 0;
+    var nroGrupoAprobarGrupoPedido = 0;
+    var cantidadPedidosAfectadosAprobarGrupoPedido = 0;
+    var idsPedidoProcesar = [];
+
+
+    function funcionesModalAprobarPedidoColectivo() {
+        $(document).on('click', "#btnLiberarPedidosColectivo", function () {
+            var nroGrupo = $(this).attr("idGrupo");
+            nroGrupoAprobarGrupoPedido = nroGrupo;
+            $("#titleModalAprobarGrupoPedido").html("Liberar Pedidos");
+            $("#btnAprobarGrupoPedidoAction").html("Liberar Pedidos");
+            tipoAprobarGrupoPedido = 2;
+            llenarAprobarPedidosColectivo();
+        });
+
+        $(document).on('click', "#btnAprobarPedidosColectivo", function () {
+            var nroGrupo = $(this).attr("idGrupo");
+            nroGrupoAprobarGrupoPedido = nroGrupo;
+            $("#titleModalAprobarGrupoPedido").html("Aprobar Pedidos");
+            $("#btnAprobarGrupoPedidoAction").html("Aprobar Pedidos");
+            tipoAprobarGrupoPedido = 1;
+            llenarAprobarPedidosColectivo();
+        });
+
+
+        $(document).on('click', "#btnAprobarPedidoColectivoAction", function () {
+            var urlAction = "";
+            var questionText = "";
+            var loadingText = "";
+            var resultText = "";
+            if (tipoAprobarGrupoPedido == 1) {
+                urlAction = "AprobarPedidosGrupo";
+                loadingText = "Aprobando";
+                questionText = '¿Está seguro que desea APROBAR los pedidos del grupo? Solo se aprobaran los pedidos en estado "Pendiente Aprobación de Ingreso"';
+                resultText = "APROBARON";
+            }
+
+            if (tipoAprobarGrupoPedido == 2) {
+                urlAction = "LiberarPedidosGrupo";
+                loadingText = "Liberando";
+                questionText = '¿Está seguro que desea LIBERAR los pedidos del grupo? Solo se liberaran los pedidos en estado "Pendiente Liberación"';
+                resultText = "LIBERARON";
+            }
+
+
+            $.confirm({
+                title: 'CONFIRMACIÓN',
+                content: questionText,
+                type: 'orange',
+                buttons: {
+                    confirm: {
+                        text: 'SÍ',
+                        btnClass: 'btn-red',
+                        action: function () {
+                            $('body').loadingModal({
+                                text: loadingText + ' Pedidos...'
+                            });
+                            $('body').loadingModal('show');
+
+
+                            $.ajax({
+                                url: "/Pedido/" + urlAction,
+                                type: 'POST',
+                                dataType: 'JSON',
+                                data: {
+                                    numeroGrupo: nroGrupoAprobarGrupoPedido
+                                },
+                                error: function (lista) {
+                                    $('body').loadingModal('hide');
+
+                                    $.alert({
+                                        title: "ERROR",
+                                        content: "Ocurrió un error. Si persiste contacte con TI.",
+                                        type: "red",
+                                        buttons: {
+                                            OK: function () {
+                                            }
+                                        }
+                                    });
+                                },
+                                success: function (result) {
+
+                                    if (result.success == 1) {
+                                        $.alert({
+                                            title: "Operación Exitosa",
+                                            content: 'Se identificaron "' + result.cantidadGrupo + '" pedidos y se ' + resultText + ' "' + result.cantidadAplicados + '" pedidos.',
+                                            type: "green",
+                                            buttons: {
+                                                OK: function () {
+                                                    $("#modalAprobarGrupoPedido").modal('hide');
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        $.alert({
+                                            title: "ERROR",
+                                            content: "No se " + resultText + " los pedidos.",
+                                            type: "red",
+                                            buttons: {
+                                                OK: function () {
+                                                }
+                                            }
+                                        });
+                                    }
+
+                                    $('body').loadingModal('hide');
+                                }
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: 'NO',
+                        btnClass: 'btn-green',
+                        action: function () {
+
+                        }
+                    }
+                },
+
+            });
+        });
+    };
+
+    function llenarAprobarPedidosColectivo() {
+        $('body').loadingModal({
+            text: 'Recuperando Pedidos...'
+        });
+        $('body').loadingModal('show');
+
+        var idsPedido = [];
+        var idx = 0;
+
+        $("tr.pedido-data").each(function () {
+            idsPedido[idx] = $(this).attr("idPedido");
+            idx = idx + 1;
+        });
+
+
+        $.ajax({
+            url: "/Pedido/SearchColectivo",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idsPedido: idsPedido,
+                tipoOrdenamiento: tipoAprobarGrupoPedido
+            },
+            error: function (lista) {
+                $('body').loadingModal('hide');
+            },
+            success: function (res) {
+                lista = res.pedidos;
+                resumenCliente = res.resumenVentaCliente;
+                resumenProducto = res.resumenVentaProducto;
+                idsPedidoProcesar = res.idsPedidos;
+
+                $("#tablePedidosAprobarColectivo > tbody").empty();
+
+                $("#tablePedidosAprobarColectivo").footable({
+                    "paging": {
+                        "enabled": false
+                    }
+                });
+
+                for (var i = 0; i < lista.length; i++) {
+                    var truncado = '';
+
+
+                    if (lista[i].truncado == 1) {
+                        truncado = '<br/><span style="color:red; font-weight: bold;">TRUNCADO</span>'
+                    }
+
+                    var pedido = '<tr idPedido="' + lista[i].idPedido + '" data-expanded="true">' +
+                        '<td>  ' + lista[i].numeroPedido + '  </td>' +
+                        '<td>  ' + lista[i].ciudad_nombre + '  </td>' +
+                        //'<td>  ' + lista[i].cliente_codigo + ' </td>' +
+                        '<td>  ' + lista[i].cliente_codigo + ' - ' + lista[i].cliente_razonSocial + '</td>' +
+                        '<td>  ' + lista[i].fechaHoraRegistro + '</td>' +
+                        //'<td>  ' + lista[i].montoTotal + '  </td>' +
+                        '<td>  ' + lista[i].seguimientoPedido_estadoString + truncado + '</td>' +
+                        '<td>  ' + lista[i].seguimientoCrediticioPedido_estadoString + '</td>' +
+                        '</tr>';
+
+                    $("#tablePedidosAprobarColectivo").append(pedido);
+                }
+
+
+                $("#tableResumenVentaClientePedidoColectivo > tbody").empty();
+
+                $("#tableResumenVentaClientePedidoColectivo").footable({
+                    "paging": {
+                        "enabled": false
+                    }
+                });
+                for (var i = 0; i < resumenCliente.length; i++) {
+
+                    var total = resumenCliente[i][4];
+                    if (tipoAprobarGrupoPedido == 2) {
+                        total = resumenCliente[i][5];
+                    }
+
+
+                    var cliente = '<tr data-expanded="true">' +
+                        '<td>  ' + resumenCliente[i][2] + '  </td>' +
+                        '<td>  ' + resumenCliente[i][3] + '  </td>' +
+                        '<td>  ' + total + '  </td>' +
+                        '</tr>';
+
+                    $("#tableResumenVentaClientePedidoColectivo").append(cliente);
+                }
+
+
+                $("#tableResumenVentaProductoPedidoColectivo > tbody").empty();
+
+                $("#tableResumenVentaProductoPedidoColectivo").footable({
+                    "paging": {
+                        "enabled": false
+                    }
+                });
+                for (var i = 0; i < resumenProducto.length; i++) {
+
+                    var total = resumenProducto[i][4];
+                    if (tipoAprobarGrupoPedido == 2) {
+                        total = resumenProducto[i][5];
+                    }
+
+
+                    var cliente = '<tr data-expanded="true">' +
+                        '<td>  ' + resumenProducto[i][0] + '  </td>' +
+                        '<td>  ' + resumenProducto[i][1] + '  </td>' +
+                        '<td>  ' + resumenProducto[i][2] + '  </td>' +
+                        '<td>  ' + resumenProducto[i][3] + '  </td>' +
+                        '<td>  ' + resumenProducto[i][4] + '  </td>' +
+                        '<td>  ' + resumenProducto[i][5] + '  </td>' +
+                        '</tr>';
+
+                    $("#tableResumenVentaProductoPedidoColectivo").append(cliente);
+                }
+
+
+                $('body').loadingModal('hide');
+                $("#modalAprobarPedidoColectivo").modal();
+            }
+        });
+
+    }
+
+    if (window.addEventListener) // W3C standard
+    {
+        window.addEventListener('load', funcionesModalAprobarPedidoColectivo, false); // NB **not** 'onload'
+    }
+    else if (window.attachEvent) // Microsoft
+    {
+        window.attachEvent('onload', funcionesModalAprobarPedidoColectivo);
+    }
+
+
+
+
+</script>
