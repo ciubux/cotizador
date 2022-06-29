@@ -452,6 +452,7 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
 
             transaccionExtorno.idCompra = (Guid)objCommand.Parameters["@idVenta"].Value;
+            transaccionExtorno.idVenta = (Guid)objCommand.Parameters["@idVenta"].Value;
             transaccionExtorno.numero = (Int64)objCommand.Parameters["@numeroVenta"].Value;
             transaccionExtorno.documentoReferencia.idDocumentoReferenciaVenta = (Guid)objCommand.Parameters["@idDocumentoReferenciaVenta"].Value;
 

@@ -53,6 +53,7 @@
     <Compile Include="Auditoria.cs" />
     <Compile Include="CampoPersistir.cs" />
     <Compile Include="CierreStock.cs" />
+    <Compile Include="Almacen.cs" />
     <Compile Include="ClienteContactoTipo.cs" />
     <Compile Include="ClienteContacto.cs" />
     <Compile Include="MotivoAjusteAlmacen.cs" />

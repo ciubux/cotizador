@@ -1317,6 +1317,10 @@ jQuery(function ($) {
                             vrConfirmadoLectura = '<img class="sss-icon" src="' + $("#divSelectVRState").attr("srcRes") + '" title="Venta controlada"/>';
                         }
 
+                        if (list[i].descontinuado == 5) {
+                            vrConfirmadoLectura = '<img class="sss-icon" src="' + $("#divSelectVRState").attr("srcRes") + '" title="Producto NO Stockeable"/>';
+                        }
+
 
                         if (list[i].descontinuado == 0) {
                             vrConfirmadoLectura = '<img class="sss-icon" src="' + $("#divSelectVRState").attr("srcFree") + '" title="Sin Restricción"/>';

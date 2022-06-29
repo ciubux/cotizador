@@ -2055,7 +2055,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
 
         public List<int> AprobarPedidos(List<Guid> idsPedido, Guid idUsuario)
         {
-            var objCommand = GetSqlCommand("pu_aprobar_pedidos_grupo");
+            var objCommand = GetSqlCommand("pu_aprobar_pedidos");
             List<int> resultados = new List<int>();
 
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
@@ -2093,7 +2093,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
 
         public List<int> LiberarPedidos(List<Guid> idsPedido, Guid idUsuario)
         {
-            var objCommand = GetSqlCommand("pu_liberar_pedidos_grupo");
+            var objCommand = GetSqlCommand("pu_liberar_pedidos");
             List<int> resultados = new List<int>();
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
 

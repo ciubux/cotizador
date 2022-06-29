@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CierreStockBL.cs" />
+    <Compile Include="AlmacenBL.cs" />
     <Compile Include="ClienteContactoTipoBL.cs" />
     <Compile Include="Email\PedidoTecnica.cs" />
     <Compile Include="Email\PedidoTruncado.cs" />

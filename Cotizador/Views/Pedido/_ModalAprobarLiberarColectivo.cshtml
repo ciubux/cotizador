@@ -16,73 +16,96 @@
                         <button id="btnAprobarPedidoColectivoAction" type="button" class="btn btn-primary"></button>
                     </div>
                 </div>
-                <fieldset id="fsLPPC">
-                    <legend>Lista de Pedidos</legend>
-                    <div class="row">
-                        <div class="col-sm-12 col-lg-12 tableFixHead">
-                            <table id="tablePedidosAprobarColectivo" class="table table-bordered">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th>N°</th>
-                                        <th>Sede MP</th>
-                                        @*<th>Cod. Cliente</th>*@
-                                        <th>Cliente</th>
-                                        <th>Fecha Registro</th>
-                                        @*<th>Total</th>*@
-                                        <th>Estado Atención</th>
-                                        <th>Estado Crediticio</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+
+                <div class="panel-group" id="accordion" style="margin-top: 10px;">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                    Listado de Pedidos
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse ">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-12 tableFixHead">
+                                        <table id="tablePedidosAprobarColectivo" class="table table-bordered">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th>N°</th>
+                                                    <th>Sede MP</th>
+                                                    @*<th>Cod. Cliente</th>*@
+                                                    <th>Cliente</th>
+                                                    <th>Fecha Registro</th>
+                                                    @*<th>Total</th>*@
+                                                    <th>Estado Atención</th>
+                                                    <th>Estado Crediticio</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </fieldset>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                    Resumen
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <fieldset id="fsRVCPC">
+                                    <legend>Resumen de Venta Por Cliente <span id="spnTotalVenta" class="right"></span></legend>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-lg-12 tableFixHead">
+                                            <table id="tableResumenVentaClientePedidoColectivo" class="table table-bordered">
+                                                <thead class="thead-dark">
+                                                    <tr>
+                                                        <th>RAZON SOCIAL</th>
+                                                        <th>Sede MP</th>
+                                                        <th id="headerMontoVentaClientePedidoColectivo">Monto Venta</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </fieldset>
 
-
-                <fieldset id="fsRVCPC">
-                    <legend>Resumen de Venta Por Cliente</legend>
-                    <div class="row">
-                        <div class="col-sm-12 col-lg-12 tableFixHead">
-                            <table id="tableResumenVentaClientePedidoColectivo" class="table table-bordered">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th>RAZON SOCIAL</th>
-                                        <th>Sede MP</th>
-                                        <th id="headerMontoVentaClientePedidoColectivo">Monto Venta</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                                <fieldset id="fsRVPPC">
+                                    <legend>Resumen Venta Por Producto (Sin IGV)</legend>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-lg-12 tableFixHead">
+                                            <table id="tableResumenVentaProductoPedidoColectivo" class="table table-bordered">
+                                                <thead class="thead-dark">
+                                                    <tr>
+                                                        <th>SKU</th>
+                                                        <th>Descripción</th>
+                                                        <th>Unidad</th>
+                                                        <th>Precio Unitario</th>
+                                                        <th>Cantidad</th>
+                                                        <th>Sub Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
                         </div>
                     </div>
-                </fieldset>
-
-                <fieldset id="fsRVPPC">
-                    <legend>Resumen Venta Por Producto (Sin IGV)</legend>
-                    <div class="row">
-                        <div class="col-sm-12 col-lg-12 tableFixHead">
-                            <table id="tableResumenVentaProductoPedidoColectivo" class="table table-bordered">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th>SKU</th>
-                                        <th>Descripción</th>
-                                        <th>Unidad</th>
-                                        <th>Precio Unitario</th>
-                                        <th>Cantidad</th>
-                                        <th>Sub Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </fieldset>
+                </div>
             </div>
-
         </div>
     </div>
 </div>
@@ -101,18 +124,24 @@
         $(document).on('click', "#btnLiberarPedidosColectivo", function () {
             var nroGrupo = $(this).attr("idGrupo");
             nroGrupoAprobarGrupoPedido = nroGrupo;
-            $("#titleModalAprobarGrupoPedido").html("Liberar Pedidos");
-            $("#btnAprobarGrupoPedidoAction").html("Liberar Pedidos");
+            $("#titleModalAprobarPedidoColectivo").html("Liberar Pedidos");
+            $("#btnAprobarPedidoColectivoAction").html("Liberar Pedidos");
             tipoAprobarGrupoPedido = 2;
+            $("#fsRVPPC").hide();
+            $("#headerMontoVentaClientePedidoColectivo").html("Monto Venta <br/> Inc. IGV");
+            
             llenarAprobarPedidosColectivo();
         });
 
         $(document).on('click', "#btnAprobarPedidosColectivo", function () {
             var nroGrupo = $(this).attr("idGrupo");
             nroGrupoAprobarGrupoPedido = nroGrupo;
-            $("#titleModalAprobarGrupoPedido").html("Aprobar Pedidos");
-            $("#btnAprobarGrupoPedidoAction").html("Aprobar Pedidos");
+            $("#titleModalAprobarPedidoColectivo").html("Aprobar Pedidos");
+            $("#btnAprobarPedidoColectivoAction").html("Aprobar Pedidos");
             tipoAprobarGrupoPedido = 1;
+            $("#fsRVPPC").show();
+            $("#headerMontoVentaClientePedidoColectivo").html("Monto Venta <br/> Sin IGV");
+
             llenarAprobarPedidosColectivo();
         });
 
@@ -123,16 +152,16 @@
             var loadingText = "";
             var resultText = "";
             if (tipoAprobarGrupoPedido == 1) {
-                urlAction = "AprobarPedidosGrupo";
+                urlAction = "AprobarPedidosColectivo";
                 loadingText = "Aprobando";
-                questionText = '¿Está seguro que desea APROBAR los pedidos del grupo? Solo se aprobaran los pedidos en estado "Pendiente Aprobación de Ingreso"';
+                questionText = '¿Está seguro que desea APROBAR los pedidos?';
                 resultText = "APROBARON";
             }
 
             if (tipoAprobarGrupoPedido == 2) {
-                urlAction = "LiberarPedidosGrupo";
+                urlAction = "LiberarPedidosColectivo";
                 loadingText = "Liberando";
-                questionText = '¿Está seguro que desea LIBERAR los pedidos del grupo? Solo se liberaran los pedidos en estado "Pendiente Liberación"';
+                questionText = '¿Está seguro que desea LIBERAR los pedidos?';
                 resultText = "LIBERARON";
             }
 
@@ -157,7 +186,7 @@
                                 type: 'POST',
                                 dataType: 'JSON',
                                 data: {
-                                    numeroGrupo: nroGrupoAprobarGrupoPedido
+                                    idsPedido: idsPedidoProcesar
                                 },
                                 error: function (lista) {
                                     $('body').loadingModal('hide');
@@ -177,11 +206,11 @@
                                     if (result.success == 1) {
                                         $.alert({
                                             title: "Operación Exitosa",
-                                            content: 'Se identificaron "' + result.cantidadGrupo + '" pedidos y se ' + resultText + ' "' + result.cantidadAplicados + '" pedidos.',
+                                            content: 'Se ' + resultText + ' ' + result.cantidadAplicados + '" pedido(s).',
                                             type: "green",
                                             buttons: {
                                                 OK: function () {
-                                                    $("#modalAprobarGrupoPedido").modal('hide');
+                                                    $("#modalAprobarPedidoColectivo").modal('hide');
                                                 }
                                             }
                                         });
@@ -285,6 +314,8 @@
                         "enabled": false
                     }
                 });
+
+                var totalPedidos = 0;
                 for (var i = 0; i < resumenCliente.length; i++) {
 
                     var total = resumenCliente[i][4];
@@ -292,6 +323,7 @@
                         total = resumenCliente[i][5];
                     }
 
+                    totalPedidos = totalPedidos + parseFloat(total);
 
                     var cliente = '<tr data-expanded="true">' +
                         '<td>  ' + resumenCliente[i][2] + '  </td>' +
@@ -302,6 +334,7 @@
                     $("#tableResumenVentaClientePedidoColectivo").append(cliente);
                 }
 
+                $("#spnTotalVenta").html("<b>TOTAL: </b>" + totalPedidos.toFixed(2));
 
                 $("#tableResumenVentaProductoPedidoColectivo > tbody").empty();
 

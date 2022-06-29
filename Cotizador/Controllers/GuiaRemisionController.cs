@@ -1079,8 +1079,29 @@ namespace Cotizador.Controllers
 
                 ViewBag.fechaTrasladotmp = guiaRemision.fechaTraslado.ToString(Constantes.formatoFecha);
                 ViewBag.fechaEmisiontmp = guiaRemision.fechaEmision.ToString(Constantes.formatoFecha);
-                
+
+                if (guiaRemision.almacenes == null || guiaRemision.almacenes.Count == 0)
+                {
+                    AlmacenBL almacenBl = new AlmacenBL();
+                    List<Almacen> almacenes = almacenBl.getAlmacenesSedes(guiaRemision.ciudadOrigen.idCiudad);
+                    guiaRemision.almacenes = almacenes;
+                }
+
+                if (guiaRemision.idAlmacen == null || guiaRemision.idAlmacen == Guid.Empty)
+                {
+                    foreach (Almacen item in guiaRemision.almacenes)
+                    {
+                        if (item.esPrincipal)
+                        {
+                            guiaRemision.idAlmacen = item.idAlmacen;
+                            guiaRemision.direccionOrigen = item.direccion;
+                        }
+                    }
+                }
+
+
                 ViewBag.guiaRemision = guiaRemision;
+
 
                 this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
             }

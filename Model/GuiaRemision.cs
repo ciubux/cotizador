@@ -276,5 +276,9 @@ namespace Model
         public Boolean ingresado { get; set; }
 
         public Guid idCierreStock { get; set; }
+
+        public List<Almacen> almacenes { get; set; }
+
+        public Guid idAlmacen { get; set; }
     }
 }

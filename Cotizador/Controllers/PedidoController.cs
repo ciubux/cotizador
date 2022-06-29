@@ -2248,6 +2248,59 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+        public String AprobarPedidosColectivo(Guid[] idsPedido)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPedidos;
+
+            List<Guid> idsPedidoList = new List<Guid>(idsPedido);
+
+            int success = 0;
+            int cantidadGrupo = 0;
+            int cantidadAplicados = 0;
+
+            if (usuario.apruebaPedidos)
+            {
+                PedidoBL pedidoBL = new PedidoBL();
+                List<int> results = pedidoBL.AprobarPedidos(idsPedidoList, usuario.idUsuario);
+                cantidadGrupo = results.ElementAt(0);
+                cantidadAplicados = results.ElementAt(1);
+                success = 1;
+            }
+
+            var v = new { success = success, cantidadGrupo = cantidadGrupo, cantidadAplicados = cantidadAplicados };
+            String resultado = JsonConvert.SerializeObject(v);
+
+            return resultado;
+        }
+
+        public String LiberarPedidosColectivo(Guid[] idsPedido)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPedidos;
+            List<Guid> idsPedidoList = new List<Guid>(idsPedido);
+
+            int success = 0;
+            int cantidadGrupo = 0;
+            int cantidadAplicados = 0;
+
+            if (usuario.liberaPedidos)
+            {
+                PedidoBL pedidoBL = new PedidoBL();
+                List<int> results = pedidoBL.LiberarPedidos(idsPedidoList, usuario.idUsuario);
+                cantidadGrupo = results.ElementAt(0);
+                cantidadAplicados = results.ElementAt(1);
+                success = 1;
+            }
+
+            var v = new { success = success, cantidadGrupo = cantidadGrupo, cantidadAplicados = cantidadAplicados };
+            String resultado = JsonConvert.SerializeObject(v);
+
+            return resultado;
+        }
+
         public String AprobarPedidosGrupo()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -2267,7 +2320,7 @@ namespace Cotizador.Controllers
             int cantidadGrupo = 0;
             int cantidadAplicados = 0;
 
-            if (usuario.liberaPedidos)
+            if (usuario.apruebaPedidos)
             {
                 PedidoBL pedidoBL = new PedidoBL();
                 List<int> results = pedidoBL.AprobarPedidosgrupo(nroGrupoPedido, usuario.idUsuario);
@@ -2281,6 +2334,8 @@ namespace Cotizador.Controllers
 
             return resultado;
         }
+
+
 
         public String ConsultarSiExistePedido()
         {

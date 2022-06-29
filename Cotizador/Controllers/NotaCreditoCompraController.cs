@@ -215,7 +215,7 @@ namespace Cotizador.Controllers
         {
             Compra transaccionExtorno = (Compra)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO_COMPRA];
             PropertyInfo propertyInfo = transaccionExtorno.documentoCompra.GetType().GetProperty(this.Request.Params["propiedad"]);
-            propertyInfo.SetValue(transaccionExtorno, this.Request.Params["valor"]);
+            propertyInfo.SetValue(transaccionExtorno.documentoCompra, this.Request.Params["valor"]);
             this.Session[Constantes.VAR_SESSION_NOTA_CREDITO_COMPRA] = transaccionExtorno;
         }
 
@@ -270,7 +270,10 @@ namespace Cotizador.Controllers
 
                 String[] fecha = this.Request.Params["fechaEmision"].Split('/');
 
+                transaccion.documentoCompra.serie = this.Request.Params["serie"];
+                transaccion.documentoCompra.numero = this.Request.Params["numero"];
                 transaccion.observaciones = this.Request.Params["observaciones"];
+                transaccion.documentoCompra.cPE_CABECERA_COMPRA.DES_MTVO_NC_ND = this.Request.Params["sustento"];
                 transaccion.sustento = this.Request.Params["sustento"];
 
                 

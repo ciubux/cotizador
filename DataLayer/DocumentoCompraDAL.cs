@@ -334,6 +334,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "formaPago", (int)documentoCompra.formaPago);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoCompra.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "serie", documentoCompra.serie);
+            InputParameterAdd.Varchar(objCommand, "correlativo", documentoCompra.numero);
             InputParameterAdd.Guid(objCommand, "idDocumentoReferenciaVenta", documentoCompra.compra.documentoReferencia.idDocumentoReferenciaVenta);
             InputParameterAdd.Varchar(objCommand, "observaciones", documentoCompra.observaciones==null?"": documentoCompra.observaciones);
             InputParameterAdd.Varchar(objCommand, "codigoCliente", documentoCompra.proveedor.codigo);

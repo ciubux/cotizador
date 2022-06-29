@@ -359,7 +359,9 @@ namespace Model
             [Display(Name = "Stock limitado")]
             StockLimitado = 3,
             [Display(Name = "Venta controlada")]
-            VentaControlada = 4
+            VentaControlada = 4,
+            [Display(Name = "Producto NO Stockeable")]
+            NoStockeable = 5
         }
 
 
@@ -385,6 +387,7 @@ namespace Model
                 case TipoVentaRestringida.InestabilidadPrecios: if (validador.apruebaCotizacionesVentaRestringida) { return true; } break;
                 case TipoVentaRestringida.StockLimitado: if (validador.apruebaCotizacionesVentaRestringida) { return true; } break;
                 case TipoVentaRestringida.VentaControlada: if (validador.apruebaCotizacionesVentaRestringida) { return true; } break;
+                case TipoVentaRestringida.NoStockeable: if (validador.apruebaCotizacionesVentaRestringida) { return true; } break;
 
             }
 
@@ -405,6 +408,7 @@ namespace Model
                 case TipoVentaRestringida.InestabilidadPrecios: if (validador.apruebaPedidosVentaRestringida) { return true; } break;
                 case TipoVentaRestringida.StockLimitado: if (validador.apruebaPedidosVentaRestringida) { return true; } break;
                 case TipoVentaRestringida.VentaControlada: if (validador.apruebaPedidosVentaRestringida) { return true; } break;
+                case TipoVentaRestringida.NoStockeable: if (validador.apruebaPedidosVentaRestringida) { return true; } break;
             }
 
             return false;

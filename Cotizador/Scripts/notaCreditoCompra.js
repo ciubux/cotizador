@@ -245,8 +245,19 @@ jQuery(function ($) {
 
 
 
-
     
+    function changeInputStringDocumentoCompra(propiedad, valor) {
+        $.ajax({
+            url: "/NotaCreditoCompra/ChangeInputStringDocumentoCompra",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
     function changeInputString(propiedad, valor) {
         $.ajax({
             url: "/NotaCreditoCompra/ChangeInputString",
@@ -259,14 +270,21 @@ jQuery(function ($) {
         });
     }
     
-    $("#venta_sustento").change(function () {
-        changeInputString("sustento", $("#venta_sustento").val())
+    $("#compra_sustento").change(function () {
+        changeInputString("sustento", $("#compra_sustento").val())
     });
 
-    $("#venta_observaciones").change(function () {
-        changeInputString("observaciones", $("#venta_observaciones").val())
+    $("#compra_observaciones").change(function () {
+        changeInputString("observaciones", $("#compra_observaciones").val())
     });
-    
+
+    $("#compra_documentoCompra_serie").change(function () {
+        changeInputStringDocumentoCompra("serie", $("#compra_documentoCompra_serie").val());
+    });
+
+    $("#compra_documentoCompra_numero").change(function () {
+        changeInputStringDocumentoCompra("numero", $("#compra_documentoCompra_numero").val());
+    });
     
 
     $(document).on('click', "button.btnMostrarPrecios", function () {
@@ -579,8 +597,8 @@ jQuery(function ($) {
                 if (documentoCompra.cPE_RESPUESTA_COMPRA.CODIGO == "001") {
                     $("#idDocumentoCompra").val(documentoCompra.idDocumentoCompra);
                     /*FECHA HORA EMISIÓN -  SERIE CORRELATIVO*/
-                    $("#vpFEC_EMI_HOR_EMI").html(documentoCompra.cPE_RESPUESTA_COMPRA.FEC_EMI + ' ' + documentoCompra.cPE_RESPUESTA_COMPRA.HOR_EMI)
-                    $("#vpSERIE_CORRELATIVO").html(documentoCompra.cPE_RESPUESTA_COMPRA.SERIE + ' ' + documentoCompra.cPE_RESPUESTA_COMPRA.CORRELATIVO);
+                    $("#vpFEC_EMI_HOR_EMI").html(documentoCompra.fechaEmision.substring(0, 10));
+                    $("#vpSERIE_CORRELATIVO").html(documentoCompra.serieNumero);
 
                     /*NOMBRE COMERCIAL CLIENTE*/
                     $("#vpNOM_RCT").html(documentoCompra.cPE_RESPUESTA_COMPRA.NOM_RCT);
@@ -599,20 +617,20 @@ jQuery(function ($) {
 
 
                     $("#vpCOND_PAGO").html(documentoCompra.tipoPagoString);
-                    $("#vpFEC_VCTO").html(documentoCompra.cPE_RESPUESTA_COMPRA.FEC_VCTO);
+                    $("#vpFEC_VCTO").html(documentoCompra.cPE_CABECERA_COMPRA.FEC_VCTO);
 
 
-                    $("#vpMNT_TOT_GRV").html(documentoCompra.cPE_RESPUESTA_COMPRA.MNT_TOT_GRV);
-                    $("#vpMNT_TOT_GRV_NAC").html(documentoCompra.cPE_RESPUESTA_COMPRA.MNT_TOT_GRV_NAC);
-                    $("#vpMNT_TOT_INF").html(documentoCompra.cPE_RESPUESTA_COMPRA.MNT_TOT_INF);
-                    $("#vpMNT_TOT_EXR").html(documentoCompra.cPE_RESPUESTA_COMPRA.MNT_TOT_EXR);
-                    $("#vpMNT_TOT_GRT").html(documentoCompra.cPE_RESPUESTA_COMPRA.MNT_TOT_GRT);
-                    $("#vpMNT_TOT_VAL_VTA").html(documentoCompra.cPE_RESPUESTA_COMPRA.MNT_TOT_VAL_VTA);
-                    $("#vpMNT_TOT_TRB_IGV").html(documentoCompra.cPE_RESPUESTA_COMPRA.MNT_TOT_TRB_IGV);
-                    $("#pvMNT_TOT_PRC_VTA").html(documentoCompra.cPE_RESPUESTA_COMPRA.MNT_TOT_PRC_VTA);
+                    $("#vpMNT_TOT_GRV").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_GRV);
+                    $("#vpMNT_TOT_GRV_NAC").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_GRV_NAC);
+                    $("#vpMNT_TOT_INF").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_INF);
+                    $("#vpMNT_TOT_EXR").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_EXR);
+                    $("#vpMNT_TOT_GRT").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_GRT);
+                    $("#vpMNT_TOT_VAL_VTA").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_VAL_VTA);
+                    $("#vpMNT_TOT_TRB_IGV").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_TRB_IGV);
+                    $("#pvMNT_TOT_PRC_VTA").html(documentoCompra.cPE_CABECERA_COMPRA.MNT_TOT_PRC_VTA);
 
                     $("#pvMOTIVO").html(documentoCompra.tipoNotaCreditoString);
-                    $("#pvDES_MTVO_NC_ND").html(documentoCompra.cPE_RESPUESTA_COMPRA.DES_MTVO_NC_ND);
+                    $("#pvDES_MTVO_NC_ND").html(documentoCompra.cPE_CABECERA_COMPRA.DES_MTVO_NC_ND);
 
                     
 
@@ -729,7 +747,7 @@ jQuery(function ($) {
             success: function (resultado) {
                 $('body').loadingModal('hide')
 
-                if (resultado.CPE_RESPUESTA_BE.CODIGO == "001") {
+                if (resultado.CPE_RESPUESTA_COMPRA.CODIGO == "001") {
                     $.alert({
                         //icon: 'fa fa-warning',
                         title: TITLE_EXITO,
