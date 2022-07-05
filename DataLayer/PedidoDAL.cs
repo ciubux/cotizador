@@ -32,6 +32,16 @@ namespace DataLayer
             else
                 InputParameterAdd.Guid(objCommand, "idCotizacion", pedido.cotizacion.idCotizacion); //puede ser null
 
+            if (pedido.almacenOrigen == null || pedido.almacenOrigen.idAlmacen == Guid.Empty)
+                InputParameterAdd.Guid(objCommand, "idAlmacenOrigen", null); //puede ser null
+            else
+                InputParameterAdd.Guid(objCommand, "idAlmacenOrigen", pedido.almacenOrigen.idAlmacen); //puede ser null
+
+            if (pedido.almacenDestino == null || pedido.almacenDestino.idAlmacen == Guid.Empty)
+                InputParameterAdd.Guid(objCommand, "idAlmacenDestino", null); //puede ser null
+            else
+                InputParameterAdd.Guid(objCommand, "idAlmacenDestino", pedido.almacenDestino.idAlmacen); //puede ser null
+
             if (pedido.promocion == null || pedido.promocion.idPromocion == Guid.Empty)
                 InputParameterAdd.Guid(objCommand, "idPromocion", null); //puede ser null
             else
@@ -43,6 +53,7 @@ namespace DataLayer
                 InputParameterAdd.Guid(objCommand, "idOrdenCompraCliente", pedido.ordenCompracliente.idOrdenCompraCliente); //puede ser null
 
             InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
+
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
 
@@ -104,6 +115,7 @@ namespace DataLayer
             InputParameterAdd.Bit(objCommand, "esPagoContado", pedido.esPagoContado);
 
             InputParameterAdd.Int(objCommand, "facturaUnica", pedido.facturaUnica ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "usaSerieTI", pedido.usaSerieTI);
 
             DateTime dtTmp = DateTime.Now;
             String[] horaEntregaDesdeArray = pedido.horaEntregaDesde.Split(':');

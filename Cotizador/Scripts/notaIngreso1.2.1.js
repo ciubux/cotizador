@@ -234,6 +234,24 @@ jQuery(function ($) {
 
     });
 
+    $("#notaIngreso_idAlmacen").change(function () {
+        var valor = $("#notaIngreso_idAlmacen").val();
+
+        $.ajax({
+            url: "/NotaIngreso/ChangeIdAlmacen",
+            type: 'POST',
+            data: {
+                valor: valor
+            },
+            error: function (detalle) {
+                alert('Ocurrió un error.');
+            },
+            success: function () {
+
+            }
+        });
+    });
+
 
     $("#buscarSedesGrupoCliente").change(function () {
         var valor = $("input[name=buscarSedesGrupoCliente]:checked").val();
@@ -808,7 +826,7 @@ jQuery(function ($) {
                 $("#idPedido").val(notaIngreso.pedido_idPedido);
                 $("#idMovimientoAlmacen").val(notaIngreso.idMovimientoAlmacen);
                 $("#ver_notaIngreso_ciudadDestino_nombre").html(notaIngreso.ciudadDestino_nombre);
-                $("#ver_notaIngreso_ciudadDestino_direccionPuntoLlegada").html(notaIngreso.ciudadDestino_direccionPuntoLlegada);
+                $("#ver_notaIngreso_ciudadDestino_direccionPuntoLlegada").html(notaIngreso.direccionPuntoLlegada);
 
                 $("#ver_notaIngreso_fechaTraslado").html(invertirFormatoFecha(notaIngreso.fechaTraslado.substr(0, 10)));
                 $("#ver_notaIngreso_fechaEmision").html(invertirFormatoFecha(notaIngreso.fechaEmision.substr(0, 10)));

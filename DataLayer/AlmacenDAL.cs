@@ -35,6 +35,8 @@ namespace DataLayer
                 obj.direccion = Converter.GetString(row, "direccion");
                 obj.esPrincipal = Converter.GetBool(row, "es_principal");
                 obj.Estado = 1;
+
+                lista.Add(obj);
             }
 
             return lista;

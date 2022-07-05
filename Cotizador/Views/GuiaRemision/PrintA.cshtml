@@ -24,7 +24,7 @@
         </div>
         <div class="row row_tres">
             <div class="col_uno">&nbsp;</div>
-            <div class="col_dos">@guiaRemision.ciudadOrigen.direccionPuntoPartida</div>
+            <div class="col_dos">@(guiaRemision.almacen != null && guiaRemision.almacen.direccion != null && !guiaRemision.almacen.direccion.Equals(string.Empty) ? guiaRemision.almacen.direccion : guiaRemision.ciudadOrigen.direccionPuntoPartida) </div>
             <div class="col_tres">@guiaRemision.serieNumeroGuia</div>
         </div>
         <div class="row row_cuatro">

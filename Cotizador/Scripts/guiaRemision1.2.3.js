@@ -903,7 +903,7 @@ jQuery(function ($) {
                 $("#idPedido").val(guiaRemision.pedido_idPedido);
                 $("#idMovimientoAlmacen").val(guiaRemision.idMovimientoAlmacen);
                 $("#ver_guiaRemision_ciudadOrigen_nombre").html(guiaRemision.ciudadOrigen_nombre);
-                $("#ver_guiaRemision_ciudadOrigen_direccionPuntoPartida").html(guiaRemision.ciudadOrigen_direccionPuntoPartida);
+                $("#ver_guiaRemision_ciudadOrigen_direccionPuntoPartida").html(guiaRemision.direccionPuntoPartida);
 
                 $("#ver_guiaRemision_fechaTraslado").html(invertirFormatoFecha(guiaRemision.fechaTraslado.substr(0, 10)));
                 $("#ver_guiaRemision_fechaEmision").html(invertirFormatoFecha(guiaRemision.fechaEmision.substr(0, 10)));
@@ -2482,6 +2482,26 @@ jQuery(function ($) {
 
         $.ajax({
             url: "/GuiaRemision/ChangeDomicilioLegalFactura",
+            type: 'POST',
+            data: {
+                valor: valor
+            },
+            error: function (detalle) {
+                alert('Ocurrió un error.');
+            },
+            success: function () {
+
+            }
+        });
+    });
+
+    
+
+    $("#guiaRemision_idAlmacen").change(function () {
+        var valor = $("#guiaRemision_idAlmacen").val();
+
+        $.ajax({
+            url: "/GuiaRemision/ChangeIdAlmacen",
             type: 'POST',
             data: {
                 valor: valor

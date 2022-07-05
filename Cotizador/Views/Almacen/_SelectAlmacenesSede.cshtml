@@ -1,0 +1,68 @@
+﻿<div class="row">
+    <div class="col-sm-12 col-lg-12">
+        <select id="@ViewBag.selectASId" class="form-control">
+        </select>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function funcionesSelectAlmacenesSede() {
+        $(document).on('change', "#@ViewBag.ciudadASId", function () {
+            var idCiudad = $(this).val();
+
+            $.ajax({
+                url: "/Almacen/GetAlmacenesSede",
+                data: {
+                    idCiudad: idCiudad
+                },
+                type: 'POST',
+                dataType: 'JSON',
+                error: function (detalle) {
+                    //alert("Ocurrió un problema al obtener el detalle del Pedido N° " + numeroPedido + ".");
+
+
+                },
+                success: function (lista) {
+                    var optionsHtml = "";
+                    for (var i = 0; i < lista.length; i++) {
+                        if (lista[i].esPrincipal) {
+                            optionsHtml = optionsHtml + '<option value="' + lista[i].idAlmacen + '" selected>';
+                        } else {
+                            optionsHtml = optionsHtml + '<option value="' + lista[i].idAlmacen + '">';
+                        }
+
+                        if ("@ViewBag.tipoTextoAS" == "nombre") {
+                            optionsHtml = optionsHtml + lista[i].nombre;
+                        }
+
+                        if ("@ViewBag.tipoTextoAS" == "nombreDireccion") {
+                            optionsHtml = optionsHtml + lista[i].nombre + " - " + lista[i].direccion;
+                        }
+
+                        if ("@ViewBag.tipoTextoAS" == "direccion") {
+                            optionsHtml = optionsHtml + lista[i].direccion;
+                        }
+
+                        optionsHtml = optionsHtml + '</option>';
+
+                        $("#@ViewBag.selectASId").html(optionsHtml);
+                    }
+                }
+            });
+        });
+    }
+
+    if (window.addEventListener) // W3C standard
+    {
+        window.addEventListener('load', funcionesSelectAlmacenesSede, false); // NB **not** 'onload'
+    }
+    else if (window.attachEvent) // Microsoft
+    {
+        window.attachEvent('onload', funcionesSelectAlmacenesSede);
+    }
+
+
+
+
+</script>

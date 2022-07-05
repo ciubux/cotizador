@@ -472,7 +472,7 @@ namespace BusinessLayer
         private void validarPedidoAlmacen(Pedido pedido)
         {
             pedido.seguimientoPedido.observacion = String.Empty;
-            pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
+            pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
             pedido.seguimientoCrediticioPedido.observacion = String.Empty;
             //Cambio Temporal
             pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado;
@@ -499,14 +499,17 @@ namespace BusinessLayer
                 }
             }
 
+            if(pedido.usuario.apruebaPedidosAlmacen)
+            {
+                pedido.seguimientoPedido.observacion = "";
+                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
+            }
 
             foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
             {
                 pedidoAdjunto.usuario = pedido.usuario;
                 pedidoAdjunto.idCliente = pedido.cliente.idCliente;
             }
-
-
         }
 
         public void InsertPedidoAlmacen(Pedido pedido)

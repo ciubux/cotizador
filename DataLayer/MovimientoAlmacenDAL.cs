@@ -273,7 +273,7 @@ namespace DataLayer
         {
 
             this.BeginTransaction(IsolationLevel.ReadCommitted);
-            var objCommand = GetSqlCommand("pi_movimientoAlmacenSalida");
+            var objCommand = GetSqlCommand("pi_movimientoAlmacenSalida_b");
             InputParameterAdd.DateTime(objCommand, "fechaEmision", guiaRemision.fechaEmision);
             InputParameterAdd.DateTime(objCommand, "fechaTraslado", guiaRemision.fechaTraslado);
             InputParameterAdd.Varchar(objCommand, "serieDocumento", guiaRemision.serieDocumento); //puede ser null
@@ -303,6 +303,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observaciones", guiaRemision.observaciones);
             InputParameterAdd.Varchar(objCommand, "certificadoInscripcion", guiaRemision.certificadoInscripcion);
             InputParameterAdd.Guid(objCommand, "idUsuario", guiaRemision.usuario.idUsuario);
+            InputParameterAdd.Guid(objCommand, "idAlmacen", guiaRemision.idAlmacen);
             InputParameterAdd.Int(objCommand, "estado", (int)guiaRemision.seguimientoMovimientoAlmacenSalida.estado);
             InputParameterAdd.Varchar(objCommand, "observacionSeguimiento", guiaRemision.seguimientoMovimientoAlmacenSalida.observacion);
 
@@ -410,7 +411,7 @@ namespace DataLayer
         public void InsertMovimientoAlmacenEntrada(NotaIngreso notaIngreso)
         {
             this.BeginTransaction(IsolationLevel.ReadCommitted);
-            var objCommand = GetSqlCommand("pi_movimientoAlmacenEntrada");
+            var objCommand = GetSqlCommand("pi_movimientoAlmacenEntrada_b");
             InputParameterAdd.DateTime(objCommand, "fechaEmision", notaIngreso.fechaEmision);
             InputParameterAdd.DateTime(objCommand, "fechaTraslado", notaIngreso.fechaTraslado);
             InputParameterAdd.Varchar(objCommand, "serieDocumento", notaIngreso.serieDocumento); //puede ser null
@@ -429,6 +430,7 @@ namespace DataLayer
 
             InputParameterAdd.Int(objCommand, "atencionParcial", notaIngreso.atencionParcial ? 1 : 0);
             InputParameterAdd.Int(objCommand, "ultimaAtencionParcial", notaIngreso.ultimaAtencionParcial ? 1 : 0);
+            InputParameterAdd.Guid(objCommand, "idAlmacen", notaIngreso.idAlmacen);
             InputParameterAdd.Guid(objCommand, "idSedeDestino", notaIngreso.ciudadDestino.idCiudad);
             InputParameterAdd.Char(objCommand, "ubigeoEntrega", notaIngreso.pedido.ubigeoEntrega.Id);
             InputParameterAdd.Varchar(objCommand, "direccionEntrega", notaIngreso.pedido.direccionEntrega.descripcion);
@@ -890,6 +892,11 @@ namespace DataLayer
                 guiaRemision.ciudadOrigen.direccionPuntoPartida = Converter.GetString(row, "direccion_punto_partida");
                 guiaRemision.ciudadOrigen.esProvincia = Converter.GetBool(row, "es_provincia");
                 guiaRemision.ciudadOrigen.sede = Converter.GetString(row, "sede");
+                //ALMACEN
+                guiaRemision.almacen = new Almacen();
+                guiaRemision.almacen.idAlmacen = Converter.GetGuid(row, "id_almacen");
+                guiaRemision.almacen.direccion = Converter.GetString(row, "direccion_almacen");
+
                 //TRANSPORTISTA
                 guiaRemision.transportista = new Transportista();
                 guiaRemision.transportista.brevete = Converter.GetString(row, "brevete_transportista");
@@ -1393,6 +1400,11 @@ namespace DataLayer
                 notaIngreso.ciudadDestino.direccionPuntoLlegada = Converter.GetString(row, "direccion_punto_llegada");
                 notaIngreso.ciudadDestino.esProvincia = Converter.GetBool(row, "es_provincia");
                 notaIngreso.ciudadDestino.sede = Converter.GetString(row, "sede");
+                //ALMACEN
+                notaIngreso.almacen = new Almacen();
+                notaIngreso.almacen.idAlmacen = Converter.GetGuid(row, "id_almacen");
+                notaIngreso.almacen.direccion = Converter.GetString(row, "direccion_almacen");
+
                 //TRANSPORTISTA
                 notaIngreso.transportista = new Transportista();
                 notaIngreso.transportista.brevete = Converter.GetString(row, "brevete_transportista");

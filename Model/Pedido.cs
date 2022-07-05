@@ -317,6 +317,10 @@ namespace Model
         public String comentarioProgramacion { get; set; }
 
 
+        public Almacen almacenOrigen { get; set; }
+        public Almacen almacenDestino { get; set; }
+        public int usaSerieTI { get; set; }
+
         public DateTime fechaPrecios { get; set; }
 
         public Boolean esPagoContado { get; set; }

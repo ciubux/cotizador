@@ -250,5 +250,11 @@ namespace Model
         public GuiaRemision guiaRemisionAExtornar { get; set; }
 
         public GuiaRemision guiaRemisionAIngresar { get; set; }
+
+        public List<Almacen> almacenes { get; set; }
+
+        public Almacen almacen { get; set; }
+
+        public Guid idAlmacen { get; set; }
     }
 }

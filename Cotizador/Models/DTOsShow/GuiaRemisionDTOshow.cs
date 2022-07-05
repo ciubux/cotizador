@@ -12,6 +12,9 @@ namespace Cotizador.Models.DTOshow
         public Guid idMovimientoAlmacen { get; set; }
         public String ciudadOrigen_nombre { get; set; }
         public String ciudadOrigen_direccionPuntoPartida { get; set; }
+
+        public String direccionPuntoPartida { get; set; }
+        
         public DateTime? fechaTraslado { get; set; }
         public DateTime? fechaEmision { get; set; }
         public String serieNumeroGuia { get; set; }     

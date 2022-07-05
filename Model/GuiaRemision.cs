@@ -279,6 +279,8 @@ namespace Model
 
         public List<Almacen> almacenes { get; set; }
 
+        public Almacen almacen { get; set; }
+
         public Guid idAlmacen { get; set; }
     }
 }

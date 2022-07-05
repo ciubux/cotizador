@@ -232,6 +232,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ArchivoAdjuntoController.cs" />
+    <Compile Include="Controllers\AlmacenController.cs" />
     <Compile Include="Controllers\MotivoAjusteController.cs" />
     <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
@@ -741,6 +742,7 @@
     <Content Include="Views\Pedido\_ModalVerGuias.cshtml" />
     <Content Include="Views\Producto\_SelectVRIconState.cshtml" />
     <Content Include="Views\Pedido\_ModalAprobarLiberarColectivo.cshtml" />
+    <Content Include="Views\Almacen\_SelectAlmacenesSede.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

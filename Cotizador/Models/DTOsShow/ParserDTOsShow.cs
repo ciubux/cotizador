@@ -156,6 +156,7 @@ namespace Cotizador.Models.DTOsShow
             guiaRemisionDTOshow.idMovimientoAlmacen = guiaRemision.idMovimientoAlmacen;
             guiaRemisionDTOshow.ciudadOrigen_nombre = guiaRemision.ciudadOrigen.nombre;
             guiaRemisionDTOshow.ciudadOrigen_direccionPuntoPartida = guiaRemision.ciudadOrigen.direccionPuntoPartida;
+            guiaRemisionDTOshow.direccionPuntoPartida = guiaRemision.almacen != null && guiaRemision.almacen.direccion != null && !guiaRemision.almacen.direccion.Equals(string.Empty) ? guiaRemision.almacen.direccion : guiaRemision.ciudadOrigen.direccionPuntoPartida;
             guiaRemisionDTOshow.fechaTraslado = guiaRemision.fechaTraslado;
             guiaRemisionDTOshow.fechaEmision = guiaRemision.fechaEmision;
             guiaRemisionDTOshow.serieNumeroGuia = guiaRemision.serieNumeroGuia;
@@ -202,6 +203,7 @@ namespace Cotizador.Models.DTOsShow
             notaingresoDTOshow.idMovimientoAlmacen = notaIngreso.idMovimientoAlmacen;
             notaingresoDTOshow.ciudadDestino_nombre = notaIngreso.ciudadDestino.nombre;
             notaingresoDTOshow.ciudadDestino_direccionPuntoLlegada = notaIngreso.ciudadDestino.direccionPuntoLlegada;
+            notaingresoDTOshow.direccionPuntoLlegada = notaIngreso.almacen != null && notaIngreso.almacen.direccion != null && !notaIngreso.almacen.direccion.Equals(string.Empty) ? notaIngreso.almacen.direccion : notaIngreso.ciudadDestino.direccionPuntoPartida;
             notaingresoDTOshow.fechaTraslado = notaIngreso.fechaTraslado;
             notaingresoDTOshow.fechaEmision = notaIngreso.fechaEmision;
             notaingresoDTOshow.serieNumeroNotaIngreso = notaIngreso.serieNumeroNotaIngreso;

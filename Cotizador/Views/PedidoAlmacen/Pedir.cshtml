@@ -85,6 +85,11 @@
                                                          selectedValue = pedido.ciudad.idCiudad
                                                      })
                     </div>
+                    @Html.Partial("../Almacen/_SelectAlmacenesSede", new
+                       {
+                           selectASId = "selectAlmacenOrigen",
+                           ciudadASId = "idCiudad"
+                       });
                 </div>
             </div>
             <!--CLIENTE-->

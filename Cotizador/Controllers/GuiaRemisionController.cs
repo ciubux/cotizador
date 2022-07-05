@@ -1390,6 +1390,28 @@ namespace Cotizador.Controllers
             this.GuiaRemisionSession.fechaTrasladoHasta = new DateTime(Int32.Parse(movHasta[2]), Int32.Parse(movHasta[1]), Int32.Parse(movHasta[0]), 23, 59, 59);
         }
 
+        
+
+        public String ChangeIdAlmacen()
+        {
+            GuiaRemision guiaRemision = this.GuiaRemisionSession;
+            Guid idAlmacen = Guid.Empty;
+            if (this.Request.Params["valor"] != null && !this.Request.Params["valor"].Equals(""))
+            {
+                idAlmacen = Guid.Parse(this.Request.Params["valor"]);
+            }
+
+            Almacen selected = new Almacen();
+            foreach(Almacen item in guiaRemision.almacenes)
+            {
+                guiaRemision.idAlmacen = item.idAlmacen;
+                guiaRemision.direccionOrigen = item.direccion;
+                selected = item;
+            }
+
+            this.GuiaRemisionSession = guiaRemision;
+            return JsonConvert.SerializeObject(selected);
+        }
 
         public String ChangeIdCiudad()
         {

@@ -547,8 +547,29 @@ namespace Cotizador.Controllers
 
                 ViewBag.fechaTrasladotmp = notaIngreso.fechaTraslado.ToString(Constantes.formatoFecha);
                 ViewBag.fechaEmisiontmp = notaIngreso.fechaEmision.ToString(Constantes.formatoFecha);
+
+                if (notaIngreso.almacenes == null || notaIngreso.almacenes.Count == 0)
+                {
+                    AlmacenBL almacenBl = new AlmacenBL();
+                    List<Almacen> almacenes = almacenBl.getAlmacenesSedes(notaIngreso.ciudadDestino.idCiudad);
+                    notaIngreso.almacenes = almacenes;
+                }
+
+                if (notaIngreso.idAlmacen == null || notaIngreso.idAlmacen == Guid.Empty)
+                {
+                    foreach (Almacen item in notaIngreso.almacenes)
+                    {
+                        if (item.esPrincipal)
+                        {
+                            notaIngreso.idAlmacen = item.idAlmacen;
+                            notaIngreso.direccionLlegada = item.direccion;
+                        }
+                    }
+                }
+
                 ViewBag.notaIngreso = notaIngreso;
 
+                this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] = notaIngreso;
                 //   ViewBag.serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList;
 
             }
@@ -563,7 +584,6 @@ namespace Cotizador.Controllers
             ViewBag.pagina = (int)Constantes.paginas.MantenimientoNotaIngreso;
             return View();
         }
-
 
         public String Create()
         {
@@ -651,6 +671,26 @@ namespace Cotizador.Controllers
         }
         #endregion
 
+        public String ChangeIdAlmacen()
+        {
+            NotaIngreso notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO];
+            Guid idAlmacen = Guid.Empty;
+            if (this.Request.Params["valor"] != null && !this.Request.Params["valor"].Equals(""))
+            {
+                idAlmacen = Guid.Parse(this.Request.Params["valor"]);
+            }
+
+            Almacen selected = new Almacen();
+            foreach (Almacen item in notaIngreso.almacenes)
+            {
+                notaIngreso.idAlmacen = item.idAlmacen;
+                notaIngreso.direccionLlegada = item.direccion;
+                selected = item;
+            }
+
+            this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] = notaIngreso;
+            return JsonConvert.SerializeObject(selected);
+        }
 
         #region Acciones en Guia
 

@@ -37,7 +37,13 @@
                     <div class="col-xs-10">
                         @if (notaIngreso.pedido.numeroPedido > 0)
                         {
-                            @Html.TextBoxFor(g => notaIngreso.ciudadDestino.direccionPuntoLlegada, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                            <select id="notaIngreso_idAlmacen" name="notaIngreso_idAlmacen" class="form-control">
+                                @foreach (Model.Almacen item in notaIngreso.almacenes)
+                                {
+                                    <option value="@item.idAlmacen" @(item.idAlmacen.Equals(notaIngreso.idAlmacen) ? "selected" : "")>@item.nombre - @item.direccion</option>
+                                }
+                            </select>
+                            @*@Html.TextBoxFor(g => notaIngreso.ciudadDestino.direccionPuntoLlegada, htmlAttributes: new { @class = "form-control", disabled = "disabled" })*@
                         }
                         else
                         {

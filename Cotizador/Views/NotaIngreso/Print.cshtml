@@ -18,7 +18,7 @@
         </div>
         <div>
             @Html.LabelFor(g => notaIngreso.ciudadDestino.direccionPuntoLlegada)
-            <span class="form-control-static" id="ver_notaIngreso_ciudadDestino_direccionPuntoLlegada">@notaIngreso.ciudadDestino.direccionPuntoLlegada</span>
+            <span class="form-control-static" id="ver_notaIngreso_ciudadDestino_direccionPuntoLlegada">@(notaIngreso.almacen != null && notaIngreso.almacen.direccion != null && !notaIngreso.almacen.direccion.Equals(string.Empty) ? notaIngreso.almacen.direccion : notaIngreso.ciudadDestino.direccionPuntoPartida)</span>
         </div>
     </div>
     <div class="row">
