@@ -1,6 +1,13 @@
-﻿<div class="row">
+﻿@{
+    string selectIdAS = this.ViewData.ContainsKey("selectIdAS") ? this.ViewData["selectIdAS"].ToString() : string.Empty;
+    string ciudadIdAS = this.ViewData.ContainsKey("ciudadIdAS") ? this.ViewData["ciudadIdAS"].ToString() : string.Empty;
+    string selectedValueAS = this.ViewData.ContainsKey("selectedValueAS") ? this.ViewData["selectedValueAS"].ToString() : string.Empty;
+    string tipoTextoAS = this.ViewData.ContainsKey("tipoTextoAS") ? this.ViewData["tipoTextoAS"].ToString() : string.Empty;
+}
+
+<div class="row">
     <div class="col-sm-12 col-lg-12">
-        <select id="@ViewBag.selectASId" class="form-control">
+        <select id="@selectIdAS" class="form-control">
         </select>
     </div>
 </div>
@@ -8,10 +15,20 @@
 <script type="text/javascript">
 
     function funcionesSelectAlmacenesSede() {
-        $(document).on('change', "#@ViewBag.ciudadASId", function () {
-            var idCiudad = $(this).val();
+        var selectedValueAS = "@selectedValueAS";
+        setTimeout(function () {
+            var idCiudad = $("#@ciudadIdAS").val();
+            funcionesSelectAlmacenesSede(idCiudad)
+        }
+        , 300);
 
-            $.ajax({
+        $(document).on('change', "#@ciudadIdAS", function () {
+            var idCiudad = $(this).val();
+            funcionesSelectAlmacenesSede(idCiudad);
+        });
+
+        function funcionesSelectAlmacenesSede(idCiudad) {
+             $.ajax({
                 url: "/Almacen/GetAlmacenesSede",
                 data: {
                     idCiudad: idCiudad
@@ -25,32 +42,46 @@
                 },
                 success: function (lista) {
                     var optionsHtml = "";
+
+                    var existeSelectedValue = false;
                     for (var i = 0; i < lista.length; i++) {
-                        if (lista[i].esPrincipal) {
+                        if (lista[i].esPrincipal && selectedValueAS == "@Guid.Empty") {
                             optionsHtml = optionsHtml + '<option value="' + lista[i].idAlmacen + '" selected>';
                         } else {
-                            optionsHtml = optionsHtml + '<option value="' + lista[i].idAlmacen + '">';
+                            if (selectedValueAS == lista[i].idAlmacen) {
+                                optionsHtml = optionsHtml + '<option value="' + lista[i].idAlmacen + '" selected>';
+                                existeSelectedValue = true;
+                            } else {
+                                optionsHtml = optionsHtml + '<option value="' + lista[i].idAlmacen + '">';
+                            }
                         }
 
-                        if ("@ViewBag.tipoTextoAS" == "nombre") {
+                        if ("@tipoTextoAS" == "nombre") {
                             optionsHtml = optionsHtml + lista[i].nombre;
                         }
 
-                        if ("@ViewBag.tipoTextoAS" == "nombreDireccion") {
+                        if ("@tipoTextoAS" == "nombreDireccion") {
                             optionsHtml = optionsHtml + lista[i].nombre + " - " + lista[i].direccion;
                         }
 
-                        if ("@ViewBag.tipoTextoAS" == "direccion") {
+                        if ("@tipoTextoAS" == "direccion") {
                             optionsHtml = optionsHtml + lista[i].direccion;
                         }
 
                         optionsHtml = optionsHtml + '</option>';
 
-                        $("#@ViewBag.selectASId").html(optionsHtml);
+                        $("#@selectIdAS").html(optionsHtml);
+
+                    }
+
+                    setTimeout(function () { $("#@selectIdAS").change(); }, 300);
+
+                    if (existeSelectedValue) {
+                        selectedValueAS = "@Guid.Empty.ToString()";
                     }
                 }
             });
-        });
+        }
     }
 
     if (window.addEventListener) // W3C standard

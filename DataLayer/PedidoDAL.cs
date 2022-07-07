@@ -253,6 +253,16 @@ namespace DataLayer
             else
                 InputParameterAdd.Guid(objCommand, "idPromocion", pedido.promocion.idPromocion); //puede ser null
 
+            if (pedido.almacenOrigen == null || pedido.almacenOrigen.idAlmacen == Guid.Empty)
+                InputParameterAdd.Guid(objCommand, "idAlmacenOrigen", null); //puede ser null
+            else
+                InputParameterAdd.Guid(objCommand, "idAlmacenOrigen", pedido.almacenOrigen.idAlmacen); //puede ser null
+
+            if (pedido.almacenDestino == null || pedido.almacenDestino.idAlmacen == Guid.Empty)
+                InputParameterAdd.Guid(objCommand, "idAlmacenDestino", null); //puede ser null
+            else
+                InputParameterAdd.Guid(objCommand, "idAlmacenDestino", pedido.almacenDestino.idAlmacen); //puede ser null
+
             InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
@@ -314,6 +324,7 @@ namespace DataLayer
 
             InputParameterAdd.Bit(objCommand, "esPagoContado", pedido.esPagoContado);
             InputParameterAdd.Int(objCommand, "facturaUnica", pedido.facturaUnica ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "usaSerieTI", pedido.usaSerieTI);
 
             DateTime dtTmp = DateTime.Now;
             String[] horaEntregaDesdeArray = pedido.horaEntregaDesde.Split(':');
@@ -846,6 +857,7 @@ namespace DataLayer
 
                 pedido.otrosCargos = Converter.GetDecimal(row, "otros_cargos");
                 pedido.numeroReferenciaAdicional = Converter.GetString(row, "numero_referencia_adicional");
+                pedido.usaSerieTI = Converter.GetInt(row, "usa_serie_ti");
 
                 pedido.FechaRegistro = Converter.GetDateTime(row, "fecha_registro");
                 
@@ -931,6 +943,18 @@ namespace DataLayer
                 pedido.ciudad.direccionPuntoLlegada = Converter.GetString(row, "direccion_establecimiento");
                 pedido.ciudad.esProvincia = Converter.GetBool(row, "es_provincia");
                 pedido.ciudad.sede = Converter.GetString(row, "codigo_sede");
+
+                pedido.almacenOrigen = new Almacen();
+                pedido.almacenOrigen.idAlmacen = Converter.GetGuid(row, "id_almacen_origen");
+                pedido.almacenOrigen.nombre = Converter.GetString(row, "nombre_almacen_origen");
+                pedido.almacenOrigen.direccion = Converter.GetString(row, "direccion_almacen_origen");
+                pedido.almacenOrigen.codigo = Converter.GetString(row, "codigo_almacen_origen");
+
+                pedido.almacenDestino = new Almacen();
+                pedido.almacenDestino.idAlmacen = Converter.GetGuid(row, "id_almacen_destino");
+                pedido.almacenDestino.nombre = Converter.GetString(row, "nombre_almacen_destino");
+                pedido.almacenDestino.direccion = Converter.GetString(row, "direccion_almacen_destino");
+                pedido.almacenDestino.codigo = Converter.GetString(row, "codigo_almacen_destino");
 
                 pedido.usuario = new Usuario();
                 pedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_creacion");

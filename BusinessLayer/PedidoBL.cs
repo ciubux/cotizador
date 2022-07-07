@@ -482,7 +482,12 @@ namespace BusinessLayer
             pedido.montoSubTotal = 0;
 
             if (pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.TrasladoInterno)
-            {
+            { 
+                if (pedido.ciudad.idCiudad.Equals(pedido.ciudadASolicitar.idCiudad))
+                {
+                    pedido.usaSerieTI = 1;
+                }
+
                 pedido.ciudad = pedido.ciudadASolicitar;
             }
 

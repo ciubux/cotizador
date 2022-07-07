@@ -822,6 +822,29 @@ namespace Cotizador.Controllers
         }
 
 
+        public String ChangeIdAlmacen()
+        {
+            Pedido pedido = this.PedidoSession;
+            Guid idAlmacen = Guid.Empty;
+            if (this.Request.Params["idAlmacen"] != null && !this.Request.Params["idAlmacen"].Equals(""))
+            {
+                idAlmacen = Guid.Parse(this.Request.Params["idAlmacen"]);
+            }
+
+
+            Almacen selected = new Almacen();
+            selected.idAlmacen = idAlmacen;
+
+            string tipo = this.Request.Params["tipo"].ToString();
+            switch (tipo)
+            {
+                case "origen": pedido.almacenOrigen = selected; break;
+                case "destino": pedido.almacenDestino = selected; break;
+            }
+
+            this.PedidoSession = pedido;
+            return JsonConvert.SerializeObject(selected);
+        }
 
         public string ChangeSolicitante()
         {

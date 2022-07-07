@@ -2525,12 +2525,28 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
     }
 
 
+    function changeIdAlmacen(idAlmacen, tipo) {
+        $.ajax({
+            url: "/PedidoAlmacen/ChangeIdAlmacen",
+            type: 'POST',
+            data: {
+                idAlmacen: idAlmacen,
+                tipo: tipo
+            },
+            success: function () { }
+        });
+    }
 
 
+    $("#selectAlmacenOrigen").change(function () {
+        var idAlmacen = $(this).val();
+        changeIdAlmacen(idAlmacen, "origen");
+    });
 
-
-
-
+    $("#selectAlmacenDestino").change(function () {
+        var idAlmacen = $(this).val();
+        changeIdAlmacen(idAlmacen, "destino");
+    });
 
     /*VER PEDIDO*/
     $(document).on('click', "button.btnVerPedido", function () {
