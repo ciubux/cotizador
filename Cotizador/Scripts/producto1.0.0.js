@@ -1231,16 +1231,20 @@ jQuery(function ($) {
             $("#producto_descripcion").val().length < 2 &&
             $("#familia").val() == 'Todas' && $("#proveedor").val() == 'Todos'
             ) {
-            $.alert({
-                title: 'Ingresar texto a buscar',
-                content: 'Debe ingresar el texto a buscar utilizando 2 o más caracteres en los campos Código, Código Proveedor y Descripión"',
-                type: 'orange',
-                buttons: {
-                    OK: function () {
-                        $("#producto_sku").focus();
-                    }
-                }
-            });
+            $("#alertWrongSearch").show();
+
+            $("#producto_sku").focus();
+
+            //$.alert({
+            //    title: 'Ingresar texto a buscar',
+            //    content: 'Debe ingresar el texto a buscar utilizando 2 o más caracteres en los campos Código, Código Proveedor y Descripión"',
+            //    type: 'orange',
+            //    buttons: {
+            //        OK: function () {
+            //            $("#producto_sku").focus();
+            //        }
+            //    }
+            //});
             $("#tableProductos > tbody").empty();
             $("#tableProductos").footable({
                 "paging": {
@@ -1251,6 +1255,8 @@ jQuery(function ($) {
             
             return false;
         }
+
+        $("#alertWrongSearch").hide();
 
         $("#btnBusqueda").attr("disabled", "disabled");
         $.ajax({

@@ -298,6 +298,7 @@ namespace DataLayer
                 cotizacion.cliente.ruc = Converter.GetString(row, "ruc");
                 cotizacion.cliente.sedePrincipal = Converter.GetBool(row, "sede_principal");
                 cotizacion.cliente.esClienteLite = Converter.GetInt(row, "cliente_lite") == 1 ? true : false;
+                cotizacion.cliente.esSubDistribuidor = Converter.GetBool(row, "cliente_es_sub_distribuidor");
 
                 cotizacion.cliente.grupoCliente = new GrupoCliente();
                 cotizacion.cliente.grupoCliente.idGrupoCliente = Converter.GetInt(row, "cliente_id_grupo_cliente");

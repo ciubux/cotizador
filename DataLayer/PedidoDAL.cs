@@ -1359,6 +1359,7 @@ namespace DataLayer
                 pedido.cliente.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
                 pedido.cliente.habilitadoModificarDireccionEntrega = Converter.GetBool(row, "habilitado_modificar_direccion_entrega");
                 pedido.cliente.tipoLiberacionCrediticia = (Persona.TipoLiberacionCrediticia)Converter.GetInt(row, "estado_liberacion_creditica");
+                pedido.cliente.esSubDistribuidor = Converter.GetBool(row, "cliente_es_sub_distribuidor");
 
                 pedido.ciudad = new Ciudad();
                 pedido.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");

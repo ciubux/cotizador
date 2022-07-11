@@ -546,6 +546,10 @@ namespace Cotizador.Controllers
                 pedido.horaEntregaAdicionalHasta = cotizacion.cliente.horaFinSegundoTurnoEntregaFormat;
             }
 
+            if(cotizacion.promocion != null && !cotizacion.promocion.idPromocion.Equals(Guid.Empty))
+            {
+                pedido.promocion = cotizacion.promocion;
+            }
 
             SolicitanteBL solicitanteBL = new SolicitanteBL();
             pedido.cliente.solicitanteList = solicitanteBL.getSolicitantes(cotizacion.cliente.idCliente);
@@ -1046,6 +1050,15 @@ namespace Cotizador.Controllers
                 ProductoBL bl = new ProductoBL();
                 Producto producto = bl.getProducto(idProducto, pedido.ciudad.esProvincia, pedido.incluidoIGV, pedido.cliente.idCliente, false, pedido.moneda.codigo, tc);
 
+                ParametroBL parametroBL = new ParametroBL();
+                string activaUnidProvSub = parametroBL.getParametro("PEDIDO_UNID_PROV_SUBDISTRIBUIDOR");
+
+                int selectUnidadProv = 0;
+                if (pedido.cliente != null && pedido.cliente.esSubDistribuidor && activaUnidProvSub.ToUpper().Equals("SI"))
+                {
+                    selectUnidadProv = 1;
+                }
+
                 Decimal fleteDetalle = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, producto.costoLista * (0) / 100));
                 Decimal precioUnitario = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, fleteDetalle + producto.precioLista));
 
@@ -1076,6 +1089,7 @@ namespace Cotizador.Controllers
                     "\"image\":\"data:image/png;base64, " + Convert.ToBase64String(producto.image) + "\"," +
                     "\"unidad\":\"" + producto.unidad + "\"," +
                     "\"unidad_alternativa\":\"" + producto.unidad_alternativa + "\"," +
+                    "\"selectUnidadProv\":" + selectUnidadProv + "," +
                     "\"proveedor\":\"" + producto.proveedor + "\"," +
                     "\"familia\":\"" + producto.familia + "\"," +
                     "\"precioUnitarioSinIGV\":\"" + producto.precioSinIgv + "\"," +

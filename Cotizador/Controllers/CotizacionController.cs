@@ -1004,7 +1004,15 @@ namespace Cotizador.Controllers
             TipoCambioSunat tc = tcBl.GetTipoCambioHoy();
 
             Producto producto = bl.getProducto(idProducto, cotizacion.ciudad.esProvincia , cotizacion.incluidoIGV, cotizacion.cliente.idCliente, false, cotizacion.moneda.codigo, tc);
-            
+
+            ParametroBL parametroBL = new ParametroBL();
+            string activaUnidProvSub = parametroBL.getParametro("COTIZACION_UNID_PROV_SUBDISTRIBUIDOR");
+
+            int selectUnidadProv = 0;
+            if (cotizacion.cliente != null && cotizacion.cliente.esSubDistribuidor && activaUnidProvSub.ToUpper().Equals("SI"))
+            {
+                selectUnidadProv = 1;
+            }
 
             //Se calcula el flete
             Decimal fleteDetalle = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, producto.costoLista * (cotizacion.flete) / 100));
@@ -1038,6 +1046,7 @@ namespace Cotizador.Controllers
                 "\"observaciones\":\"" + observaciones + "\"," +
                 "\"familia\":\"" + producto.familia.Trim() + "\"," +
                 "\"descontinuado\":" + producto.descontinuado + "," +
+                "\"selectUnidadProv\":" + selectUnidadProv + "," + 
                 "\"motivoRestriccion\":\"" + producto.motivoRestriccion + "\"," +
                 "\"agregarDescripcionCotizacion\":\"" + producto.agregarDescripcionCotizacion + "\"," +
                 "\"descripcionLarga\":\"" + producto.descripcionLarga + "\"," +

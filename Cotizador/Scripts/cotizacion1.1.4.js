@@ -790,6 +790,14 @@ jQuery(function ($) {
                 if (TRABAJAR_CON_UNIDADES) {
                     for (var i = 0; i < producto.productoPresentacionList.length; i++) {
                         var reg = producto.productoPresentacionList[i];
+                        if (reg.IdProductoPresentacion == 2 && producto.selectUnidadProv == 1) {
+                            setTimeout(function () {
+                                $("#unidad").val("2");
+                                setTimeout(function () {
+                                    $("#unidad").change();
+                                }, 300);
+                            }, 500);
+                        }
                         options = options + "<option value='" + reg.IdProductoPresentacion + "'  precioUnitarioAlternativoSinIGV='" + reg.PrecioSinIGV + "' costoAlternativoSinIGV='" + reg.CostoSinIGV + "' >" + reg.Presentacion + "</option>";
                     }
                 }

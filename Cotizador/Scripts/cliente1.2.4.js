@@ -2780,18 +2780,21 @@ jQuery(function ($) {
             $("#sinAsesorValidado").is(":checked") == 0 &&
             $("#cliente_codigo").val().trim().length == 0 &&
             $("#idGrupoCliente").val() == 0
-            ) {
-            $.alert({
-                title: 'Ingresar texto a buscar',
-                content: 'Debe ingresar el texto a buscar utilizando 3 o más caracteres en el campo "N° Doc / Razón Social / Nombre"',
-                type: 'orange',
-                buttons: {
-                    OK: function () {
+        ) {
 
-                        $("#cliente_textoBusqueda").focus();
-                    }
-                }
-            });
+            $("#alertWrongSearch").show();
+            $("#cliente_textoBusqueda").focus();
+            //$.alert({
+            //    title: 'Ingresar texto a buscar',
+            //    content: 'Debe ingresar el texto a buscar utilizando 3 o más caracteres en el campo "N° Doc / Razón Social / Nombre"',
+            //    type: 'orange',
+            //    buttons: {
+            //        OK: function () {
+
+            //            $("#cliente_textoBusqueda").focus();
+            //        }
+            //    }
+            //});
             $("#tableClientes > tbody").empty();
             $("#tableClientes").footable({
                 "paging": {
@@ -2803,6 +2806,7 @@ jQuery(function ($) {
             return false;
         }
 
+        $("#alertWrongSearch").hide();
 
         $("#btnBusqueda").attr("disabled", "disabled");
         $.ajax({
