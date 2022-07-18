@@ -255,6 +255,15 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i, "F", "ENVÍE A", titleCellStyle);
 
                 UtilesHelper.setValorCelda(sheet, i + 1, "F", "MP " + obj.ciudad.nombre);
+
+                if (obj.almacenOrigen != null && !obj.almacenOrigen.idAlmacen.Equals(Guid.Empty))
+                {
+                    UtilesHelper.setValorCelda(sheet, i + 2, "F", textInfo.ToTitleCase(obj.almacenOrigen.direccion.ToLower()));
+                } else
+                {
+                    UtilesHelper.setValorCelda(sheet, i + 2, "F", textInfo.ToTitleCase(obj.ciudad.direccionPuntoLlegada.ToLower()));
+                }
+
                 UtilesHelper.setValorCelda(sheet, i + 2, "F", "", addressTextCellStyle);
                 UtilesHelper.setValorCelda(sheet, i + 3, "F", "", addressTextCellStyle);
                 UtilesHelper.setValorCelda(sheet, i + 2, "F", textInfo.ToTitleCase(obj.ciudad.direccionPuntoLlegada.ToLower()));

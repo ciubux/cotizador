@@ -3152,15 +3152,15 @@ jQuery(function ($) {
                         }
 
 
-                        if (stock < atender) {
+                        /*if (stock < atender) {
                             htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-danger">';
-                        } else {
+                        } else {*/
                             if (stockLibre < 0) {
                                 htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-warning">';
                             } else {
                                 htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-success">';
                             }
-                        }
+                        //}
 
                         htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + 'STOCK: ' + stock + '</label>';
                     }
@@ -4308,6 +4308,23 @@ jQuery(function ($) {
     });
 
 
+    function changeIdAlmacen(idAlmacen, tipo) {
+        $.ajax({
+            url: "/PedidoCompra/ChangeIdAlmacen",
+            type: 'POST',
+            data: {
+                idAlmacen: idAlmacen,
+                tipo: tipo
+            },
+            success: function () { }
+        });
+    }
+
+
+    $("#selectAlmacenOrigen").change(function () {
+        var idAlmacen = $(this).val();
+        changeIdAlmacen(idAlmacen, "origen");
+    });
 
     $("#pedido_numeroPedido").change(function () {
         var numero = $("#pedido_numeroPedido").val();

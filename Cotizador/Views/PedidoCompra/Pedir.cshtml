@@ -65,6 +65,14 @@
                                                            ciudadSelectId = "idCiudad",
                                                            selectedValue = pedido.ciudad.idCiudad
                                                        })
+                        @Html.Partial("../Almacen/_SelectAlmacenesSede",
+                                        null,
+                                        new ViewDataDictionary {
+                                            { "selectIdAS", "selectAlmacenOrigen" },
+                                            { "ciudadIdAS", "idCiudad" },
+                                            { "tipoTextoAS", "nombre" },
+                                            { "selectedValueAS", pedido.almacenOrigen != null ? pedido.almacenOrigen.idAlmacen : Guid.Empty }
+                                        })
                     </div>
                 </div>
             </div>

@@ -835,6 +835,12 @@ namespace Cotizador.Controllers
                 else if ((Pedido.ClasesPedido)Char.Parse(tipo) == Pedido.ClasesPedido.Almacen)
                 {
                     guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)(char)pedido.tipoPedidoAlmacen;
+
+                    if (pedido.almacenOrigen != null && !pedido.almacenOrigen.idAlmacen.Equals(Guid.Empty))
+                    {
+                        guiaRemision.idAlmacen = pedido.almacenOrigen.idAlmacen;
+                        guiaRemision.direccionOrigen = pedido.almacenOrigen.direccion;
+                    }
                 }
 
 
@@ -922,6 +928,12 @@ namespace Cotizador.Controllers
                 guiaRemision.notaIngresoAExtornar = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_VER];
 
                 guiaRemision.pedido = guiaRemision.notaIngresoAExtornar.pedido;
+
+                if (guiaRemision.notaIngresoAExtornar.almacen.idAlmacen != null && !guiaRemision.notaIngresoAExtornar.almacen.idAlmacen.Equals(Guid.Empty))
+                {
+                    guiaRemision.idAlmacen = guiaRemision.notaIngresoAExtornar.almacen.idAlmacen;
+                    guiaRemision.direccionOrigen = guiaRemision.notaIngresoAExtornar.almacen.direccion;
+                }
 
                 ClienteBL clienteBL = new ClienteBL();
                 //Revisar si es necesario recuperar el cliente

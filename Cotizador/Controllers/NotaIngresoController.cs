@@ -310,6 +310,12 @@ namespace Cotizador.Controllers
                 else if ((Pedido.ClasesPedido)Char.Parse(Request.Params["tipo"]) == Pedido.ClasesPedido.Compra)
                 {
                     notaIngreso.motivoTraslado = (NotaIngreso.motivosTraslado)(char)pedido.tipoPedidoCompra;
+
+                    if (pedido.almacenOrigen != null && !pedido.almacenOrigen.idAlmacen.Equals(Guid.Empty))
+                    {
+                        notaIngreso.idAlmacen = pedido.almacenOrigen.idAlmacen;
+                        notaIngreso.direccionLlegada = pedido.almacenOrigen.direccion;
+                    }
                 }
                 else if ((Pedido.ClasesPedido)Char.Parse(Request.Params["tipo"]) == Pedido.ClasesPedido.Almacen)
                 {
@@ -370,6 +376,12 @@ namespace Cotizador.Controllers
 
                 notaIngreso.motivoExtornoGuiaRemision = (NotaIngreso.MotivosExtornoGuiaRemision)Int32.Parse(Request.Params["motivoExtornoGuiaRemision"]);
                 notaIngreso.guiaRemisionAExtornar = guiaRemisionAExtornar;
+
+                if (guiaRemisionAExtornar.almacen != null && !guiaRemisionAExtornar.almacen.idAlmacen.Equals(Guid.Empty))
+                {
+                    notaIngreso.idAlmacen = guiaRemisionAExtornar.almacen.idAlmacen;
+                    notaIngreso.direccionLlegada = guiaRemisionAExtornar.almacen.direccion;
+                }
 
                 /*Si el motivo del extorno es devolución parcial se activa atención parcial para poder editar el detalle*/
                 notaIngreso.documentoDetalle = notaIngreso.guiaRemisionAExtornar.documentoDetalle;
@@ -490,8 +502,16 @@ namespace Cotizador.Controllers
 
                 notaIngreso.pedido = notaIngreso.guiaRemisionAIngresar.pedido;
 
+                PedidoBL pedidoBL = new PedidoBL();
 
-                
+                notaIngreso.pedido = pedidoBL.GetPedido(notaIngreso.pedido, usuario);
+
+                if (notaIngreso.pedido.almacenDestino != null && !notaIngreso.pedido.almacenDestino.idAlmacen.Equals(Guid.Empty))
+                {
+                    notaIngreso.idAlmacen = notaIngreso.pedido.almacenDestino.idAlmacen;
+                    notaIngreso.direccionLlegada = notaIngreso.pedido.almacenDestino.direccion;
+                }
+
                 notaIngreso.pedido.clasePedido = Pedido.ClasesPedido.Almacen;
                 notaIngreso.pedido.tipoPedidoAlmacen = Pedido.tiposPedidoAlmacen.TrasladoInterno;
                 notaIngreso.motivoTraslado = NotaIngreso.motivosTraslado.TrasladoInterno;
