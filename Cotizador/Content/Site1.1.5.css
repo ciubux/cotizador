@@ -73,6 +73,10 @@ textarea {
     color: brown;
 }
 
+.spn-nombre-comercial {
+    color: #3276b1;
+    font-size: 12px;
+}
 
 @media screen and (min-width: 768px) {
 

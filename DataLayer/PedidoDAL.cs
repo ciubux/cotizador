@@ -730,6 +730,8 @@ namespace DataLayer
                 pedido.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                 pedido.cliente.razonSocial = Converter.GetString(row, "razon_social");
                 pedido.cliente.ruc = Converter.GetString(row, "ruc");
+                pedido.cliente.nombreComercial = Converter.GetString(row, "nombre_comercial_cliente");
+                pedido.cliente.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento_cliente");
 
                 //pedido.cliente.tipoLiberacionCrediticia = (Persona.TipoLiberacionCrediticia)Converter.GetInt(row, "estado_liberacion_creditica"); 
 
@@ -906,6 +908,8 @@ namespace DataLayer
                 pedido.cliente.plazoCreditoSolicitado = (DocumentoVenta.TipoPago)Converter.GetInt(row, "plazo_credito_solicitado");
                 pedido.cliente.tipoPagoFactura = (DocumentoVenta.TipoPago)Converter.GetInt(row, "tipo_pago_factura");
                 pedido.cliente.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
+                pedido.cliente.nombreComercial = Converter.GetString(row, "nombre_comercial_cliente");
+                pedido.cliente.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento_cliente");
 
                 /*Vendedores*/
                 pedido.cliente.responsableComercial = new Vendedor();

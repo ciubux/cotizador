@@ -26,7 +26,8 @@ namespace Cotizador.Models.DTOs
         public String grupo_nombre { get; set; }
         public Guid cliente_idCliente { get; set; }
 
-
+        public String cliente_nombreComercial { get; set; }
+        public String cliente_tipoDocumento { get; set; }
 
 
 

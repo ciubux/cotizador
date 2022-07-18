@@ -295,6 +295,8 @@ namespace DataLayer
                 cotizacion.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                 cotizacion.cliente.habilitadoModificarDireccionEntrega = Converter.GetBool(row, "habilitado_modificar_direccion_entrega");
                 cotizacion.cliente.razonSocial = Converter.GetString(row, "razon_social");
+                cotizacion.cliente.nombreComercial = Converter.GetString(row, "nombre_comercial_cliente");
+                cotizacion.cliente.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento_cliente");
                 cotizacion.cliente.ruc = Converter.GetString(row, "ruc");
                 cotizacion.cliente.sedePrincipal = Converter.GetBool(row, "sede_principal");
                 cotizacion.cliente.esClienteLite = Converter.GetInt(row, "cliente_lite") == 1 ? true : false;
@@ -566,6 +568,8 @@ namespace DataLayer
                 cotizacion.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                 cotizacion.cliente.razonSocial = Converter.GetString(row, "razon_social");
                 cotizacion.cliente.ruc = Converter.GetString(row, "ruc");
+                cotizacion.cliente.nombreComercial = Converter.GetString(row, "nombre_comercial_cliente");
+                cotizacion.cliente.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento_cliente");
 
                 cotizacion.grupo = new GrupoCliente();
                 cotizacion.grupo.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");

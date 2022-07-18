@@ -52,6 +52,8 @@ namespace Cotizador.Models.DTOshow
         public Decimal maximoPorcentajeDescuentoPermitido { get; set; }
         public String grupo_codigoNombre { get; set; }
         public String cliente_codigoRazonSocial { get; set; }
+        public String cliente_nombreComercial { get; set; }
+        public String cliente_tipoDocumento { get; set; }
         public int tipoCotizacion { get; set; }
 
         public Decimal utilidadVisible { get; set; }

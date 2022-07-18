@@ -14,6 +14,8 @@ namespace Cotizador.Models.DTOs
         public String ciudad_nombre { get; set; }
         public String cliente_codigo { get; set; }
         public String cliente_razonSocial { get; set; }
+        public String cliente_nombreComercial { get; set; }
+        public String cliente_tipoDocumento { get; set; }
         public String numeroReferenciaCliente { get; set; }
         public String usuario_nombre { get; set; }
         public String fechaHoraRegistro { get; set; }

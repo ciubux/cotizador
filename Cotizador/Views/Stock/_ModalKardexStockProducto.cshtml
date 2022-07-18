@@ -182,14 +182,26 @@
                 $(".verUnidadMostrarStockKardex").html(kardex.unidad);
                 $("#verUnidadConteoStockKardex").html(kardex.unidadConteo);
                 $("#verUnidadConteoMovimientoKardex").html(kardex.unidadConteo);
-                
+
                 var htmlMovimientos = "";
                 var lista = kardex.movimientos;
                 var infoMov = "";
 
+                
                 for (var i = 0; i < lista.length; i++) {
+                    var iconMov = "";
+                    if (lista[i].TipoMovimientoDesc == "Entrada") {
+                        iconMov = '<img src="/images/greenuparrow.png" height="15" style="margin-top: -4px;" />&nbsp;';
+                    }  
+                    if (lista[i].TipoMovimientoDesc == "Salida") {
+                        iconMov = '<img src="/images/reddownarrow.png" height="15" style="margin-top: -4px;"/>&nbsp;';
+                    }  
+                    if (lista[i].TipoMovimientoDesc == "Toma de Inventario") {
+                        iconMov = '<img src="/images/icon_stock.png" height="15" style="margin-top: -4px;"/>&nbsp;';
+                    }  
+
                     htmlMovimientos = htmlMovimientos + '<tr>' +
-                        '<td>' + lista[i].TipoMovimientoDesc + '</td>' +
+                        '<td>' + iconMov + lista[i].TipoMovimientoDesc + '</td>' +
                         '<td>' + lista[i].FechaDesc + '</td>';
 
                     if (lista[i].tipoMovimiento == 99) {
@@ -258,7 +270,7 @@
         window.attachEvent('onload', funcionesModalKardexStockProducto);
     }
 
-    
 
-   
+
+
 </script>

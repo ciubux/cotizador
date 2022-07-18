@@ -93,6 +93,9 @@ namespace Cotizador.Models.DTOsShow
             cotizacionDTOshow.maximoPorcentajeDescuentoPermitido = cotizacion.maximoPorcentajeDescuentoPermitido;
             cotizacionDTOshow.grupo_codigoNombre = cotizacion.grupo.codigoNombre;
             cotizacionDTOshow.cliente_codigoRazonSocial = cotizacion.cliente.codigoRazonSocial;
+            cotizacionDTOshow.cliente_nombreComercial = cotizacion.cliente.nombreComercial == null ? "" : cotizacion.cliente.nombreComercial;
+            cotizacionDTOshow.cliente_tipoDocumento = cotizacion.cliente.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC ? "RUC" : "DNI";
+
 
             if (cotizacion.cliente.grupoCliente != null && cotizacion.cliente.grupoCliente.idGrupoCliente > 0)
             {
@@ -376,6 +379,9 @@ namespace Cotizador.Models.DTOsShow
             pedidoDTOshow.cliente_supervisorComercial_codigoDescripcion = pedido.cliente.supervisorComercial.codigoDescripcion;
             pedidoDTOshow.cliente_asistenteServicioCliente_codigoDescripcion = pedido.cliente.asistenteServicioCliente.codigoDescripcion;
             pedidoDTOshow.cliente_asistenteServicioCliente_usuario_email = pedido.cliente.asistenteServicioCliente.usuario.email;
+            pedidoDTOshow.cliente_nombreComercial = pedido.cliente.nombreComercial == null ? "" : pedido.cliente.nombreComercial;
+            pedidoDTOshow.cliente_tipoDocumento = pedido.cliente.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC ? "RUC" : "DNI";
+
             pedidoDTOshow.textoCondicionesPago = pedido.textoCondicionesPago;
             pedidoDTOshow.fechaHorarioEntrega = pedido.fechaHorarioEntrega;
             pedidoDTOshow.ciudad_nombre = pedido.ciudad.nombre;

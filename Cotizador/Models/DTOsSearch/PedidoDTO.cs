@@ -42,8 +42,9 @@ namespace Cotizador.Models.DTOsSearch
         public String seguimientoCrediticioPedido_estadoString { get; set; }
 
         public String grupoCliente_nombre { get; set; }
-        
 
+        public String cliente_nombreComercial { get; set; }
+        public String cliente_tipoDocumento { get; set; }
         public int truncado { get; set; }
 
     }

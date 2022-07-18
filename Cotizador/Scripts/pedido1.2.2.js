@@ -3059,8 +3059,13 @@ jQuery(function ($) {
 
                 $("#verCiudad").html(pedido.ciudad_nombre);
                 $("#verIdCliente").val(pedido.cliente_idCliente);
-                $("#verCliente").html(pedido.cliente_codigoRazonSocial);
 
+                if (pedido.cliente_tipoDocumento == "RUC" && pedido.cliente_nombreComercial != "" && pedido.cliente_nombreComercial != "null") {
+                    $("#verCliente").html(pedido.cliente_codigoRazonSocial + '<br/><span class="spn-nombre-comercial">' + pedido.cliente_nombreComercial + '</span>');
+                }
+                else {
+                    $("#verCliente").html(pedido.cliente_codigoRazonSocial);
+                }
 
                 $("#verGrupoCliente").html(pedido.grupoCliente_nombre == null ? "" : pedido.grupoCliente_nombre);
                 
@@ -5170,14 +5175,22 @@ jQuery(function ($) {
                             '<p><a id="' + idVerMas + '" class="' + pedidoList[i].idPedido + ' verMas" href="javascript:mostrar();" style="display:block">Ver Más</a></p>' +
                             '<p><a id="' + idVermenos + '" class="' + pedidoList[i].idPedido + ' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
                     }
-                    
+
+                    var clienteRazonSocial;
+                    if (pedidoList[i].cliente_tipoDocumento == "RUC" && pedidoList[i].cliente_nombreComercial != "" && pedidoList[i].cliente_nombreComercial != "null") {
+                        clienteRazonSocial = pedidoList[i].cliente_razonSocial + '<br/><span class="spn-nombre-comercial">' + pedidoList[i].cliente_nombreComercial + '</span>';
+                    }
+                    else {
+                        clienteRazonSocial = pedidoList[i].cliente_razonSocial;
+                    }
+
                     var grupoCliente = pedidoList[i].grupoCliente_nombre == null ? "" : pedidoList[i].grupoCliente_nombre;
                     var pedido = '<tr data-expanded="true" class="pedido-data" idPedido="' + pedidoList[i].idPedido + '">' +
                         '<td>  ' + pedidoList[i].idPedido+'</td>' +
                         '<td>  ' + pedidoList[i].numeroPedidoNumeroGrupoString + '  </td>' +
                         '<td>  ' + pedidoList[i].ciudad_nombre + '  </td>' +
                         '<td>  ' + pedidoList[i].cliente_codigo + ' </td>' +
-                        '<td>  ' + pedidoList[i].cliente_razonSocial + '</td>' +
+                        '<td>  ' + clienteRazonSocial + '</td>' +
                         '<td>  ' + grupoCliente + '</td>' +
                         '<td>  ' + pedidoList[i].numeroReferenciaCliente+'  </td>' +
                         '<td>  ' + pedidoList[i].usuario_nombre + '  </td>' +

@@ -33,6 +33,8 @@ namespace Cotizador.Models.DTOshow
         public Guid ciudad_idCiudad { get; set; }
         public Guid cliente_idCliente { get; set; }
         public String cliente_codigoRazonSocial { get; set; }
+        public String cliente_nombreComercial { get; set; }
+        public String cliente_tipoDocumento { get; set; }
         public String numeroReferenciaCliente { get; set; }
         public String numeroReferenciaAdicional { get; set; }
         public String fechaEntregaExtendidaString { get; set; }

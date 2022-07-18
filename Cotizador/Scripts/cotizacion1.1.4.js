@@ -2220,7 +2220,14 @@ jQuery(function ($) {
                     $("#labelCliente").show();
                     $("#labelGrupo").hide();
                     $("#spnTitleGrupo").hide();
-                    $("#verClienteGrupo").html(cotizacion.cliente_codigoRazonSocial);
+
+                    if (cotizacion.cliente_tipoDocumento == "RUC" && cotizacion.cliente_nombreComercial != "" && cotizacion.cliente_nombreComercial != "null") {
+                        $("#verClienteGrupo").html(cotizacion.cliente_codigoRazonSocial + '<br/><span class="spn-nombre-comercial">' + cotizacion.cliente_nombreComercial + '</span>');
+                    }
+                    else {
+                        $("#verClienteGrupo").html(cotizacion.cliente_codigoRazonSocial);
+                    }
+
                 }
 
                 if (cotizacion.tipoCotizacion == 0) {
@@ -4130,7 +4137,13 @@ jQuery(function ($) {
                     }
                     else {
                         creadoPara = 'Cliente';
-                        clienteRazonSocial = cotizacionList[i].cliente_razonSocial;
+                        if (cotizacionList[i].cliente_tipoDocumento == "RUC" && cotizacionList[i].cliente_nombreComercial != "" && cotizacionList[i].cliente_nombreComercial != "null") {
+                            clienteRazonSocial = cotizacionList[i].cliente_razonSocial + '<br/><span class="spn-nombre-comercial">' + cotizacionList[i].cliente_nombreComercial + '</span>';
+                        }
+                        else {
+                            clienteRazonSocial = cotizacionList[i].cliente_razonSocial;
+                        }
+                        
                         clienteRUC = cotizacionList[i].cliente_ruc;
                     }
 

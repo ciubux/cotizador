@@ -56,6 +56,8 @@ namespace Cotizador.Models.DTOsSearch
                 cotizacionDTO.cliente_razonSocial = cotizacionTmp.cliente.razonSocial;
                 cotizacionDTO.ciudad_nombre = cotizacionTmp.ciudad.nombre;
                 cotizacionDTO.cliente_ruc = cotizacionTmp.cliente.ruc;
+                cotizacionDTO.cliente_tipoDocumento = cotizacionTmp.cliente.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC ? "RUC" : "DNI";
+                cotizacionDTO.cliente_nombreComercial = cotizacionTmp.cliente.nombreComercial == null ? "" : cotizacionTmp.cliente.nombreComercial;
                 cotizacionDTO.montoTotal = cotizacionTmp.montoTotal;
                 cotizacionDTO.maximoPorcentajeDescuentoPermitido = cotizacionTmp.maximoPorcentajeDescuentoPermitido;
                 cotizacionDTO.montoIGV = cotizacionTmp.montoIGV;
@@ -263,6 +265,8 @@ namespace Cotizador.Models.DTOsSearch
                 pedidoDTO.ciudad_nombre = pedidoTmp.ciudad.nombre;
                 pedidoDTO.cliente_codigo = pedidoTmp.cliente.codigo;
                 pedidoDTO.cliente_razonSocial = pedidoTmp.cliente.razonSocial;
+                pedidoDTO.cliente_tipoDocumento = pedidoTmp.cliente.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC ? "RUC" : "DNI";
+                pedidoDTO.cliente_nombreComercial = pedidoTmp.cliente.nombreComercial == null ? "" : pedidoTmp.cliente.nombreComercial;
                 pedidoDTO.numeroReferenciaCliente = pedidoTmp.numeroReferenciaCliente;
                 pedidoDTO.usuario_nombre = pedidoTmp.usuario.nombre;
                 pedidoDTO.fechaHoraRegistro = pedidoTmp.fechaHoraRegistro;
