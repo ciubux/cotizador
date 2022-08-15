@@ -515,8 +515,13 @@ namespace Cotizador.Controllers
                 notaIngreso.pedido.clasePedido = Pedido.ClasesPedido.Almacen;
                 notaIngreso.pedido.tipoPedidoAlmacen = Pedido.tiposPedidoAlmacen.TrasladoInterno;
                 notaIngreso.motivoTraslado = NotaIngreso.motivosTraslado.TrasladoInterno;
-                
-                
+
+                //Cambiar a serie traslado interno si el traslado es entre almacenes de la misma sede
+                if (notaIngreso.pedido.almacenOrigen.idCiudad.Equals(notaIngreso.pedido.almacenDestino.idCiudad))
+                {
+                    this.Session["seAtiendeTrasladoInterno"] = true;
+                }
+
                 notaIngreso.observaciones = String.Empty;
 
 
@@ -587,6 +592,8 @@ namespace Cotizador.Controllers
                     }
                 }
 
+
+                
                 ViewBag.notaIngreso = notaIngreso;
 
                 this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] = notaIngreso;
@@ -601,9 +608,41 @@ namespace Cotizador.Controllers
                 logBL.insertLog(log);
             }
 
+            bool seAtiendeTrasladoInterno = this.Session["seAtiendeTrasladoInterno"] != null ? (bool)this.Session["seAtiendeTrasladoInterno"] : false;
+
+            if (seAtiendeTrasladoInterno)
+            {
+                this.CambiarASerieTrasladoInterno();
+                this.Session["seAtiendeTrasladoInterno"] = false;
+            }
+
             ViewBag.pagina = (int)Constantes.paginas.MantenimientoNotaIngreso;
             return View();
         }
+
+        public String CambiarASerieTrasladoInterno()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            String response = "{\"success\": 0}";
+
+            SerieDocumentoBL serieBL = new SerieDocumentoBL();
+            NotaIngreso notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO];
+
+            SerieDocumentoElectronico serie = serieBL.getSerieTrasladoInterno(notaIngreso.ciudadDestino.idCiudad);
+
+            if (serie.sedeMP != null)
+            {
+                notaIngreso.serieDocumento = serie.serie;
+                notaIngreso.numeroDocumento = serie.siguienteNumeroNotaIngreso;
+                notaIngreso.serieDocumentoElectronico = serie;
+                this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] = notaIngreso;
+
+                response = "{\"success\": 1,  \"serie\":\"" + serie.serie + "\", \"numero\":\"" + serie.siguienteNumeroNotaIngreso.ToString() + "\", \"serieNumeroString\":\"" + notaIngreso.serieNumeroNotaIngreso + "\"}";
+            }
+
+            return response;
+        }
+
 
         public String Create()
         {

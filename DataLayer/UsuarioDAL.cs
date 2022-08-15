@@ -152,7 +152,10 @@ namespace DataLayer
                 obj.idEmpresa = Converter.GetInt(row, "id_empresa");
                 obj.codigoEmpresa = Converter.GetString(row, "codigo_empresa");
                 obj.razonSocialEmpresa = Converter.GetString(row, "nombre_empresa");
+                
                 obj.factorEmpresa = Converter.GetDecimal(row, "factor_costo");
+                obj.pMargenMinimo = Converter.GetDecimal(row, "porcentaje_margen_minimo");
+                obj.pDescuentoInfraMargen = Converter.GetDecimal(row, "porcentaje_descuento_infra_margen");
             }
 
             return obj;

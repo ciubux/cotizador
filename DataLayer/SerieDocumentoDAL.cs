@@ -72,5 +72,32 @@ namespace DataLayer
             }
             return serieDocumentoElectronico;
         }
+
+        public SerieDocumentoElectronico selectSerieTrasladoInterno(Guid idSede)
+        {
+            var objCommand = GetSqlCommand("ps_serieTrasladoInternoPorSede");
+            InputParameterAdd.Guid(objCommand, "idSedeMP", idSede);
+
+            DataTable dataTable = Execute(objCommand);
+
+            SerieDocumentoElectronico serieDocumentoElectronico = new SerieDocumentoElectronico();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                serieDocumentoElectronico.sedeMP = new Ciudad();
+                serieDocumentoElectronico.sedeMP.idCiudad = Converter.GetGuid(row, "id_sede_mp");
+                serieDocumentoElectronico.serie = Converter.GetString(row, "serie");
+                serieDocumentoElectronico.esPrincipal = Converter.GetBool(row, "es_principal");
+                serieDocumentoElectronico.siguienteNumeroBoleta = Converter.GetInt(row, "siguiente_numero_boleta");
+                serieDocumentoElectronico.siguienteNumeroFactura = Converter.GetInt(row, "siguiente_numero_factura");
+                serieDocumentoElectronico.siguienteNumeroNotaCredito = Converter.GetInt(row, "siguiente_numero_nota_credito");
+                serieDocumentoElectronico.siguienteNumeroNotaDebito = Converter.GetInt(row, "siguiente_numero_nota_debito");
+                serieDocumentoElectronico.siguienteNumeroGuiaRemision = Converter.GetInt(row, "siguiente_numero_guia_remision");
+                serieDocumentoElectronico.siguienteNumeroNotaIngreso = Converter.GetInt(row, "siguiente_numero_nota_ingreso");
+                serieDocumentoElectronico.siguienteNumeroNotaCreditoBoleta = Converter.GetInt(row, "siguiente_numero_nota_credito_boleta");
+                serieDocumentoElectronico.siguienteNumeroNotaDebitoBoleta = Converter.GetInt(row, "siguiente_numero_nota_debito_boleta");
+            }
+            return serieDocumentoElectronico;
+        }
     }
 }

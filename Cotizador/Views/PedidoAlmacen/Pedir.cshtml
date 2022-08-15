@@ -87,10 +87,10 @@
                         @Html.Partial("../Almacen/_SelectAlmacenesSede",
                                         null,
                                         new ViewDataDictionary {
-                                            { "selectIdAS", "selectAlmacenOrigen" },
+                                            { "selectIdAS", "selectAlmacenDestino" },
                                             { "ciudadIdAS", "idCiudad" },
                                             { "tipoTextoAS", "nombre" },
-                                            { "selectedValueAS", pedido.almacenOrigen != null ? pedido.almacenOrigen.idAlmacen : Guid.Empty }
+                                            { "selectedValueAS", pedido.almacenDestino != null ? pedido.almacenDestino.idAlmacen : Guid.Empty }
                                         })
                     </div>
                     
@@ -145,10 +145,10 @@
                         @Html.Partial("../Almacen/_SelectAlmacenesSede",
                                         null,
                                         new ViewDataDictionary {
-                                            { "selectIdAS", "selectAlmacenDestino" },
+                                            { "selectIdAS", "selectAlmacenOrigen" },
                                             { "ciudadIdAS", "idCiudadASolicitar" },
                                             { "tipoTextoAS", "nombre" },
-                                            { "selectedValueAS", pedido.almacenDestino != null ? pedido.almacenDestino.idAlmacen : Guid.Empty }
+                                            { "selectedValueAS", pedido.almacenOrigen != null ? pedido.almacenOrigen.idAlmacen : Guid.Empty }
                                         })
                     </div>
                 </div>

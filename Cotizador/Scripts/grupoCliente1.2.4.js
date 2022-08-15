@@ -2228,7 +2228,7 @@ jQuery(function ($) {
         }
         
         $('body').loadingModal({
-            text: 'Editanto Hereda Precios Grupo'
+            text: 'Editando Hereda Precios Grupo'
         });
 
         $.ajax({

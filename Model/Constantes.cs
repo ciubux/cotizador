@@ -293,6 +293,8 @@ namespace Model
         public static String PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS = "";
 
 
+        public static String EMPRESA_CODIGO_MP = "MP";
+
         public static String EMPRESA_CODIGO_TECNICA = "TC";
 
         public static String RUC_MP = "";

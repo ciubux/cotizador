@@ -241,6 +241,11 @@ namespace BusinessLayer
                     }
                 }
 
+                if (cotizacionDetalle.tieneInfraMargenEmpresaExterna)
+                {
+                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "El precio untario del producto " + cotizacionDetalle.producto.sku + " tiene inframargen.\n";
+                }
+
                 if (cotizacionDetalle.producto.descontinuado == 1 && !cotizacion.usuario.apruebaCotizacionesVentaRestringida && cotizacion.considerarCantidades != Cotizacion.OpcionesConsiderarCantidades.Observaciones)
                 {
                     if (cotizacionDetalle.cantidad > 1 && cotizacionDetalle.cantidad > cotizacionDetalle.producto.cantidadMaximaPedidoRestringido)
@@ -276,6 +281,24 @@ namespace BusinessLayer
         {
             using (var dal = new CotizacionDAL())
             {
+                // Si no es una cotizacion MP, se revisa si tiene inframargen
+                if (!cotizacion.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP))
+                {
+                    UsuarioDAL usuarioDal = new UsuarioDAL();
+                    Usuario usuarioEmpresa = usuarioDal.getUsuario(cotizacion.usuario.idUsuario);
+
+                    foreach (CotizacionDetalle det in cotizacion.cotizacionDetalleList)
+                    {
+                        decimal margenDet = ((det.precioNeto - det.producto.costoLista) / det.precioNeto) * 100;
+                        det.tieneInfraMargenEmpresaExterna = false;
+
+                        if (margenDet < usuarioEmpresa.pMargenMinimo)
+                        {
+                            det.tieneInfraMargenEmpresaExterna = true;
+                        }
+                    }
+                }
+
                 validarCotizacion(cotizacion);
                 dal.InsertCotizacion(cotizacion);
             }
@@ -285,6 +308,24 @@ namespace BusinessLayer
         {
             using (var dal = new CotizacionDAL())
             {
+                // Si no es una cotizacion MP, se revisa si tiene inframargen
+                if (!cotizacion.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP))
+                {
+                    UsuarioDAL usuarioDal = new UsuarioDAL();
+                    Usuario usuarioEmpresa = usuarioDal.getUsuario(cotizacion.usuario.idUsuario);
+
+                    foreach (CotizacionDetalle det in cotizacion.cotizacionDetalleList)
+                    {
+                        decimal margenDet = ((det.precioNeto - det.producto.costoLista) / det.precioNeto) * 100;
+                        det.tieneInfraMargenEmpresaExterna = false;
+
+                        if (margenDet < usuarioEmpresa.pMargenMinimo)
+                        {
+                            det.tieneInfraMargenEmpresaExterna = true;
+                        }
+                    }
+                }
+
                 validarCotizacion(cotizacion, cotizacionAprobada);
                 dal.UpdateCotizacion(cotizacion);
             }

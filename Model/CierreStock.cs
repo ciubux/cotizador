@@ -21,7 +21,7 @@ namespace Model
 
         public DateTime fechaReporteValidacion { get; set; }
 
-        public String fechaDesc { get { return fechaReporteValidacion.ToString("dd/MM/yyyy"); } }
+        public String fechaDesc { get { return fecha.ToString("dd/MM/yyyy"); } }
 
         public String fechaReporteValidacionDesc { get { return fechaReporteValidacion.ToString("dd/MM/yyyy HH:mm:ss"); } }
         public GuiaRemision ajusteFaltante { get; set; }

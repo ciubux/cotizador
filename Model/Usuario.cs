@@ -19,7 +19,9 @@ namespace Model
         public string razonSocialEmpresa { get; set; }
         public string urlEmpresa { get; set; }
         public decimal factorEmpresa { get; set; }
-
+        public decimal pMargenMinimo { get; set; }
+        public decimal pDescuentoInfraMargen { get; set; }
+        
         public Area area { get; set; }
         public Guid idUsuario { get; set; }
         /*DATOS*/

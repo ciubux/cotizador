@@ -950,12 +950,14 @@ namespace DataLayer
 
                 pedido.almacenOrigen = new Almacen();
                 pedido.almacenOrigen.idAlmacen = Converter.GetGuid(row, "id_almacen_origen");
+                pedido.almacenOrigen.idCiudad = Converter.GetGuid(row, "id_ciudad_almacen_origen");
                 pedido.almacenOrigen.nombre = Converter.GetString(row, "nombre_almacen_origen");
                 pedido.almacenOrigen.direccion = Converter.GetString(row, "direccion_almacen_origen");
                 pedido.almacenOrigen.codigo = Converter.GetString(row, "codigo_almacen_origen");
 
                 pedido.almacenDestino = new Almacen();
                 pedido.almacenDestino.idAlmacen = Converter.GetGuid(row, "id_almacen_destino");
+                pedido.almacenDestino.idCiudad = Converter.GetGuid(row, "id_ciudad_almacen_destino");
                 pedido.almacenDestino.nombre = Converter.GetString(row, "nombre_almacen_destino");
                 pedido.almacenDestino.direccion = Converter.GetString(row, "direccion_almacen_destino");
                 pedido.almacenDestino.codigo = Converter.GetString(row, "codigo_almacen_destino");

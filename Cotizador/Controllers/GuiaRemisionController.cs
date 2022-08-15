@@ -797,6 +797,8 @@ namespace Cotizador.Controllers
             {
                 var tipo = Request.Params["tipo"];
                 this.Session["seAtiendeDiferidoVenta"] = false;
+                this.Session["seAtiendeTrasladoInterno"] = false;
+
                 Pedido pedido = null;
                 if (tipo.ToString().Equals("VD"))
                 {
@@ -835,6 +837,10 @@ namespace Cotizador.Controllers
                 else if ((Pedido.ClasesPedido)Char.Parse(tipo) == Pedido.ClasesPedido.Almacen)
                 {
                     guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)(char)pedido.tipoPedidoAlmacen;
+                    if (pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.TrasladoInterno && pedido.almacenOrigen.idCiudad.Equals(pedido.almacenDestino.idCiudad))
+                    {
+                        this.Session["seAtiendeTrasladoInterno"] = true;
+                    }
 
                     if (pedido.almacenOrigen != null && !pedido.almacenOrigen.idAlmacen.Equals(Guid.Empty))
                     {
@@ -1015,6 +1021,28 @@ namespace Cotizador.Controllers
             }
         }
 
+        public String CambiarASerieTrasladoInterno()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            String response = "{\"success\": 0}";
+
+            SerieDocumentoBL serieBL = new SerieDocumentoBL();
+            GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
+
+            SerieDocumentoElectronico serie = serieBL.getSerieTrasladoInterno(guiaRemision.ciudadOrigen.idCiudad);
+
+            if (serie.sedeMP != null)
+            {
+                guiaRemision.serieDocumento = serie.serie;
+                guiaRemision.numeroDocumento = serie.siguienteNumeroGuiaRemision;
+                this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
+
+                response = "{\"success\": 1,  \"serie\":\"" + serie.serie + "\", \"numero\":\"" + serie.siguienteNumeroGuiaRemision.ToString() + "\", \"serieNumeroString\":\"" + guiaRemision.serieNumeroGuia + "\"}";
+            }
+
+            return response;
+        }
+
         public String CambiarASerieDiferida()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -1132,6 +1160,14 @@ namespace Cotizador.Controllers
                 this.Session["seAtiendeDiferidoVenta"] = false;
             }
 
+            bool seAtiendeTrasladoInterno = this.Session["seAtiendeTrasladoInterno"] != null ? (bool)this.Session["seAtiendeTrasladoInterno"] : false;
+
+            if (seAtiendeTrasladoInterno)
+            {
+                this.CambiarASerieTrasladoInterno();
+                this.Session["seAtiendeTrasladoInterno"] = false;
+            }
+            
 
             ViewBag.pagina = (int)Constantes.paginas.MantenimientoGuiaRemision;
             return View();

@@ -13,7 +13,16 @@ namespace Model
         public String serie { get; set; }
 
 
-        public int serieFormatInt { get { return !serie.Substring(0,1).Equals("D") ? int.Parse(serie) : 0; } }
+        public int serieFormatInt { get { 
+                switch(serie.Substring(0, 1))
+                {
+                    case "D": return 999001;  break;
+                    case "T": return 999002; break;
+                    default: return int.Parse(serie);
+                }
+
+                //return !serie.Substring(0,1).Equals("D") && !serie.Substring(0, 1).Equals("T") ? int.Parse(serie) : 0; 
+            } }
 
         [Display(Name = "Número:")]
         public int siguienteNumeroBoleta { get; set; }

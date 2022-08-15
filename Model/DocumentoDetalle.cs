@@ -16,6 +16,7 @@ namespace Model
         public int cantidadTotalAtencion { get; set; }
         public decimal cantidadDecimal { get; set; }
 
+        
         public int cantidadPorAtender { get; set; }
 
         //public bool tienePrecioEspecial { get; set; }
@@ -329,6 +330,8 @@ namespace Model
                 return ProductoPresentacion == null ? 0 : ProductoPresentacion.IdProductoPresentacion;
             }
         }
+
+        public bool tieneInfraMargenEmpresaExterna { get; set; }
     }
 
 
