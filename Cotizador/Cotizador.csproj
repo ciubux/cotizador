@@ -346,6 +346,7 @@
     <Compile Include="Models\GrupoClienteViewModels.cs" />
     <Compile Include="Models\LogCampoViewModels.cs" />
     <Compile Include="Models\MonedaViewModels.cs" />
+    <Compile Include="Models\OBJsFiltro\ReportePendientesAtencionFiltro.cs" />
     <Compile Include="Models\RolViewModels.cs" />
     <Compile Include="Models\ProductoMultipleViewModels.cs" />
     <Compile Include="Models\ProductoViewModels.cs" />
@@ -745,6 +746,7 @@
     <Content Include="Views\Producto\_SelectVRIconState.cshtml" />
     <Content Include="Views\Pedido\_ModalAprobarLiberarColectivo.cshtml" />
     <Content Include="Views\Almacen\_SelectAlmacenesSede.cshtml" />
+    <Content Include="Views\Reporte\ProductosPendientesAtencion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

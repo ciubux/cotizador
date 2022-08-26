@@ -93,6 +93,7 @@
                                                         <th>Precio Unitario</th>
                                                         <th>Cantidad</th>
                                                         <th>Sub Total</th>
+                                                        <th>Margen</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -355,9 +356,12 @@
                         '<td>  ' + resumenProducto[i][0] + '  </td>' +
                         '<td>  ' + resumenProducto[i][1] + '  </td>' +
                         '<td>  ' + resumenProducto[i][2] + '  </td>' +
-                        '<td>  ' + resumenProducto[i][3] + '  </td>' +
+                        '<td>  ' + resumenProducto[i][3] +
+                        '<br/><span class="spn-nombre-comercial">' + resumenProducto[i][6] + '</span>' + 
+                        '  </td>' +
                         '<td>  ' + resumenProducto[i][4] + '  </td>' +
                         '<td>  ' + resumenProducto[i][5] + '  </td>' +
+                        '<td>  ' + resumenProducto[i][7] + ' % </td>' +
                         '</tr>';
 
                     $("#tableResumenVentaProductoPedidoColectivo").append(cliente);

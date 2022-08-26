@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "005";
+    TempData["ScriptVersion"] = "011";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -150,6 +150,7 @@
                         var linkReporteSellOutPersonalizado = "";
 
                         var linkResultadosKPI = "";
+                        var linkReporteProductosPendientesAtencion = "";
 
                         var linkRegistrarAjusteStock = "";
                         var linkBusquedaAjusteStock = "";
@@ -251,6 +252,9 @@
 
                             case 901: linkReporteSellOutPersonalizado = "active"; linkReportes = "active"; break;
                             case 920: linkResultadosKPI = "active"; linkReportes = "active"; break;
+                            case 910: linkReporteProductosPendientesAtencion = "active"; linkReportes = "active"; break;
+
+                                
                         }
 
                         if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
@@ -642,8 +646,14 @@
                                     }
                                     @if (usuario.NivelKpiMultiUsuario || usuario.NivelKpiMultiArea)
                                     {
-                                    <li id="linkResultadosKPI" class="@linkResultadosKPI">@Html.ActionLink("Reporte Resultados KPI", "ResultadosKpi", "KPI")</li>
+                                        <li id="linkResultadosKPI" class="@linkResultadosKPI">@Html.ActionLink("Reporte Resultados KPI", "ResultadosKpi", "KPI")</li>
                                     }
+
+                                    @if (usuario.NivelKpiMultiUsuario || usuario.NivelKpiMultiArea)
+                                    {
+                                        <li id="linkResultadosKPI" class="@linkResultadosKPI">@Html.ActionLink("Productos Pendiente Atención", "ProductosPendientesAtencion", "Reporte")</li>
+                                    }
+                                    
                                 </ul>
                             </li>
                         }

@@ -2450,10 +2450,27 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
                 Decimal cantidad = Converter.GetDecimal(row, "cantidad_unidad_mp");
                 Decimal subtotal = Converter.GetDecimal(row, "subtotal");
                 Decimal precioUnitario = subtotal / cantidad;
-                
+
                 item.Add(String.Format(Constantes.formatoDosDecimales, precioUnitario));
                 item.Add(String.Format(Constantes.formatoDosDecimales, cantidad));
                 item.Add(String.Format(Constantes.formatoDosDecimales, subtotal));
+
+                Decimal minPrice = Converter.GetDecimal(row, "min_precio");
+                Decimal maxPrice = Converter.GetDecimal(row, "max_precio");
+                float dif = float.Parse(maxPrice.ToString()) - float.Parse(minPrice.ToString());
+
+                if (dif > 0.01)
+                {
+                    item.Add(String.Format(Constantes.formatoDosDecimales, minPrice) + " ~ " + String.Format(Constantes.formatoDosDecimales, maxPrice));
+                } else
+                {
+                    item.Add("");
+                }
+
+                Decimal costoMP = Converter.GetDecimal(row, "costo_mp");
+                Decimal margen = ((precioUnitario - costoMP) / precioUnitario) * 100;
+
+                item.Add(String.Format(Constantes.formatoDosDecimales, margen));
 
                 resultados.Add(item);
             }

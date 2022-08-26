@@ -1284,23 +1284,23 @@ $darkred: darken($red, 0.2);*/
 
 .circle-price-status-success {
     background-color: #26ff68;
-    border-radius: 14px;
-    height: 28px;
-    width: 28px;
+    border-radius: 11px;
+    height: 22px;
+    width: 22px;
 }
 
 .circle-price-status-warning {
     background-color: #fcba03;
-    border-radius: 14px;
-    height: 28px;
-    width: 28px;
+    border-radius: 11px;
+    height: 22px;
+    width: 22px;
 }
 
 .circle-price-status-danger {
     background-color: #ff5757;
-    border-radius: 14px;
-    height: 28px;
-    width: 28px;
+    border-radius: 11px;
+    height: 22px;
+    width: 22px;
 }
 
 .lbl-vigencia-corregida {
@@ -1331,4 +1331,51 @@ $darkred: darken($red, 0.2);*/
 .btn_icon_16 {
     width: 16px;
     cursor: pointer;
+}
+
+.little-bar-status-warning {
+    border-radius: 3px;
+    height: 6px;
+    width: 22px;
+    background-color: #fcba03;
+    margin-top: 3px;
+}
+
+.little-bar-status-black {
+    border-radius: 3px;
+    height: 6px;
+    width: 22px;
+    background-color: #000000;
+    margin-top: 3px;
+}
+
+.little-circle-status-success {
+    border-radius: 5px;
+    height: 10px;
+    width: 10px;
+    margin-left: 20px;
+    background-color: #26ff68;
+}
+
+.little-circle-status-warning {
+    border-radius: 5px;
+    height: 10px;
+    margin-left: 20px;
+    width: 10px;
+    background-color: #fcba03;
+}
+
+.little-circle-status-danger {
+    border-radius: 5px;
+    height: 10px;
+    width: 10px;
+    margin-left: 20px;
+    background-color: #ff5757;
+}
+
+.top-bar-status {
+    height: 10px;
+    width: 30px;
+    padding: 0px;
+    margin-bottom: 0px;
 }

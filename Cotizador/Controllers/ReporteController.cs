@@ -1,5 +1,6 @@
 ﻿using BusinessLayer;
 using Cotizador.Models;
+using Cotizador.Models.OBJsFiltro;
 using Model;
 using Model.UTILES;
 using Newtonsoft.Json;
@@ -29,6 +30,75 @@ namespace Cotizador.Controllers
 
         }
 
+        public ReportePendientesAtencionFiltro instanciarFiltroProductosPendienteAtencion ()
+        {
+            ReportePendientesAtencionFiltro obj = new ReportePendientesAtencionFiltro();
+            obj.proveedor = "Todos";
+            obj.familia = "Todas";
+
+            ParametroBL parametroBL = new ParametroBL();
+            int diasPasado = int.Parse(parametroBL.getParametro("STOCK_DIAS_PEDIDOS_ENTREGA_VENCIDA"));
+            int diasFuturo = int.Parse(parametroBL.getParametro("STOCK_DIAS_PEDIDOS_ENTREGA_PENDIENTE"));
+
+            obj.fechaEntregaInicio = DateTime.Now.AddDays(-1 * diasPasado);
+            obj.fechaEntregaFin = DateTime.Now.AddDays(diasFuturo);
+            obj.sku = string.Empty;
+            obj.descripcion = string.Empty;
+            obj.idCiudad = Guid.Empty;
+
+            return obj;
+        }
+        public ActionResult ProductosPendientesAtencion()
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.ReporteProductosPendientesAtencion;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.visualizaReporteSellOutPersonalizado)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            ReportePendientesAtencionFiltro obj = (ReportePendientesAtencionFiltro) this.Session["s_rProductosPendientesAtencion"];
+            if (obj == null)
+            {
+                obj = instanciarFiltroProductosPendienteAtencion();
+                this.Session["s_rProductosPendientesAtencion"] = obj;
+            }
+
+            ViewBag.filtros = obj;
+            
+            //ViewBag.producto = this.ProductoBusquedaSession;
+            return View();
+        }
+
+        public void changeFiltroProductosPendienteAtencion(string propiedad, string valor, string tipo)
+        {
+            ReportePendientesAtencionFiltro obj = (ReportePendientesAtencionFiltro)this.Session["s_rProductosPendientesAtencion"];
+            
+            PropertyInfo propertyInfo = obj.GetType().GetProperty(propiedad);
+
+            switch (tipo)
+            {
+                case "string":
+                    propertyInfo.SetValue(obj, valor);
+                    break;
+                case "date":
+                    if (!valor.Trim().Equals(""))
+                    {
+                        String[] fecha = valor.Split('/');
+                        propertyInfo.SetValue(obj, new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0])));
+                    }
+                    break;
+                case "guid":
+                    if (!valor.Trim().Equals(""))
+                    {
+                        propertyInfo.SetValue(obj, Guid.Parse(valor));
+                    }
+                    break;
+            }
+
+            this.Session["s_rProductosPendientesAtencion"] = obj;
+        }
 
         public ActionResult SellOutPersonalizado()
         {

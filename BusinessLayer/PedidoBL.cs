@@ -1026,15 +1026,29 @@ namespace BusinessLayer
             pMP.numeroRequerimiento = "";
             pMP.numeroReferenciaAdicional = "";
             pMP.numeroReferenciaCliente = "";
+            pMP.observaciones = pMP.observaciones + " // N° Pedido Técnica: " + pedido.numeroPedido.ToString();
 
             foreach (PedidoDetalle det in pMP.pedidoDetalleList)
             {
                 decimal margenDet = ((det.precioNeto - det.producto.costoLista) / det.precioNeto) * 100;
+
+                if (det.esPrecioAlternativo)
+                {
+                    margenDet = (((det.precioNeto * det.ProductoPresentacion.Equivalencia) - det.producto.costoLista) / (det.precioNeto * det.ProductoPresentacion.Equivalencia)) * 100;
+                }
+
                 det.tieneInfraMargenEmpresaExterna = false;
 
                 if (margenDet < usuarioEmpresa.pMargenMinimo)
                 {
-                    det.precioNeto = det.precioNeto * ((100 - usuarioEmpresa.pDescuentoInfraMargen) / 100);
+                    if (det.esPrecioAlternativo)
+                    {
+                        det.precioNeto = det.precioNeto * det.ProductoPresentacion.Equivalencia * ((100 - usuarioEmpresa.pDescuentoInfraMargen) / 100);
+                    } else
+                    {
+                        det.precioNeto = det.precioNeto * ((100 - usuarioEmpresa.pDescuentoInfraMargen) / 100);
+                    }
+
                     det.tieneInfraMargenEmpresaExterna = true;
                 } else
                 {

@@ -718,6 +718,9 @@ namespace Model
             [Display(Name = "REPORTE SELLOUT PERSONALIZADO")]
             ReporteSellOutPersonalizado = 901,
 
+            [Display(Name = "REPORTE PRODUCTOS PENDIENTES ATENCION")]
+            ReporteProductosPendientesAtencion = 910,
+
             [Display(Name = "RESULTADOS KPI")]
             ResultadosKPI = 920,
 

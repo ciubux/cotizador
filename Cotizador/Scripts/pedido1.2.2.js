@@ -3157,7 +3157,7 @@ jQuery(function ($) {
                     else if (lista[i].indicadorAprobacion == 3)
                         imgIndicadorAprobacion = '<div class="circle-price-status-danger"></div>';
 
-
+                    imgIndicadorAprobacion = '<div class="top-bar-status"><div class="stock-mini-icon-status"></div></div>' + imgIndicadorAprobacion;
                     var observacion = lista[i].observacion == null || lista[i].observacion == 'undefined' ? '' : lista[i].observacion;
 
                     var descontinuadoLabel = "";
@@ -3173,7 +3173,7 @@ jQuery(function ($) {
                                 $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado .tooltip-label-text").html(lista[i].producto.motivoRestriccion);
                             }
                         }
-
+                        imgIndicadorAprobacion = imgIndicadorAprobacion + '<div class="little-bar-status-black"></div>';
                         descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
                     }
 
@@ -3626,7 +3626,7 @@ jQuery(function ($) {
                 }
                 $("#modalVerPedido").modal('show');
 
-                setTimeout(function () { cargarStockProductos(); }, 500);
+                setTimeout(function () { cargarStockProductos(); }, 1000);
 
                 //  window.location = '/Pedido/Index';
             }
@@ -3674,11 +3674,14 @@ jQuery(function ($) {
 
                         if (stock < atender) {
                             htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-danger">';
+                            $("#tableDetallePedido tr[sku='" + lista[i].producto.sku + "'] div.stock-mini-icon-status").addClass("little-circle-status-danger");
                         } else {
                             if (stockLibre < 0) {
                                 htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-warning">';
+                                $("#tableDetallePedido tr[sku='" + lista[i].producto.sku + "'] div.stock-mini-icon-status").addClass("little-circle-status-warning");
                             } else {
                                 htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + '<label class="lbl-stock-success">';
+                                $("#tableDetallePedido tr[sku='" + lista[i].producto.sku + "'] div.stock-mini-icon-status").addClass("little-circle-status-success");
                             }
                         }
 
