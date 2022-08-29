@@ -8,14 +8,17 @@ namespace Model.UTILES
 {
     public class FilaProductoPendienteAtencion
     {
-        public string sku { get; set; }
+        public string sede { get; set; }
 
+        public string sku { get; set; }
         public string nombreProducto { get; set; }
 
         public string familia { get; set; }
         public string proveedor { get; set; }
         public string unidad { get; set; }
-
+        public string unidadAlternativa { get; set; }
+        public string unidadProveedor { get; set; }
+        public string unidadConteo { get; set; }
 
         public decimal cpProveedor { get {
                 decimal cant = 0;

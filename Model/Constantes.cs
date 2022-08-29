@@ -516,6 +516,8 @@ namespace Model
         public const String NIVEL_KPI_MULTI_USUARIO = "P920";
         public const String NIVEL_KPI_MULTI_AREA = "P921";
 
+        public const String VISUALIZA_REPORTE_PRODUCTOS_PENDIENTES_ATENCION = "P910";
+
         public const String REVIERTE_TRUNCADO_PEDIDOS = "P341";
         public const String PEDIDO_REGISTRA_OBSERVACION_ALMACEN = "P311";
 

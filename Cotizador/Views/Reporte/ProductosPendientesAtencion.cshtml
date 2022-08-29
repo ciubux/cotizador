@@ -1,9 +1,9 @@
 ﻿@{
     ViewBag.Title = "Reporte de Productos Pendientes Atención";
-    
+
 
     Cotizador.Models.OBJsFiltro.ReportePendientesAtencionFiltro item = ViewBag.filtros;
-
+    List<Model.UTILES.FilaProductoPendienteAtencion> resultados = ViewBag.resultados;
 
 }
 
@@ -13,7 +13,7 @@
 <div class="container">
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
 
-    <form class="form-horizontal">
+    <form class="form-horizontal" method="post">
         <div class="row" style="margin-top: 10px;">
             <div class="col-sm-4 col-lg-4">
                 <!--Fecha Entrega-->
@@ -66,7 +66,7 @@
 
         <div class="row pull-right" style="margin-top: 20px; margin-bottom: 10px; margin-right: 0px">
             <button id="btnLimpiarFormulario" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
-            <button id="btnSearchRepPPA" type="button" class="btn btn-success">Buscar</button>
+            <button id="btnSearchRepPPA" type="submit" class="btn btn-success">Buscar</button>
         </div>
 
     </form>
@@ -91,6 +91,17 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach(Model.UTILES.FilaProductoPendienteAtencion fila in resultados)
+                    {
+                    <tr>
+                        <td>@fila.sku</td>
+                        <td>@fila.nombreProducto</td>
+                        <td>@fila.familia</td>
+                        <td>@fila.proveedor</td>
+                        <td>@fila.unidad</td>
+                        <td>@fila.cpMp</td>
+                    </tr>
+                    }
                 </tbody>
             </table>
         </div>
@@ -102,7 +113,7 @@
 <script type="text/javascript">
 
 
-    function funcionesModalAprobarPedidoColectivo() {
+    function funcionesModalProductosPendientesAtencion() {
         $.datepicker.regional['es'] = {
             closeText: 'Cerrar',
             prevText: '< Ant',
@@ -125,9 +136,6 @@
         $("#fechaInicio").datepicker({ dateFormat: "dd/mm/yy" });
         $("#fechaFin").datepicker({ dateFormat: "dd/mm/yy" });
 
-        $(document).on('click', "#btnSearchRepPPA", function () {
-            location.reload();
-        });
 
         $(document).on('click', "#btnLimpiarFormulario", function () {
             
@@ -174,11 +182,11 @@
 
     if (window.addEventListener) // W3C standard
     {
-        window.addEventListener('load', funcionesModalAprobarPedidoColectivo, false); // NB **not** 'onload'
+        window.addEventListener('load', funcionesModalProductosPendientesAtencion, false); // NB **not** 'onload'
     }
     else if (window.attachEvent) // Microsoft
     {
-        window.attachEvent('onload', funcionesModalAprobarPedidoColectivo);
+        window.attachEvent('onload', funcionesModalProductosPendientesAtencion);
     }
 
 </script>

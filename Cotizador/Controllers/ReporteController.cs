@@ -48,12 +48,13 @@ namespace Cotizador.Controllers
 
             return obj;
         }
+
         public ActionResult ProductosPendientesAtencion()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.ReporteProductosPendientesAtencion;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.visualizaReporteSellOutPersonalizado)
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.visualizaReporteProductosPendientesAtencion)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -65,8 +66,17 @@ namespace Cotizador.Controllers
                 this.Session["s_rProductosPendientesAtencion"] = obj;
             }
 
-            ViewBag.filtros = obj;
+            ReporteBL bl = new ReporteBL();
+            List<FilaProductoPendienteAtencion> resultados = new List<FilaProductoPendienteAtencion>();
+
+            if(Request.HttpMethod.Equals("POST"))
+            {
+                resultados = bl.productosPendientesAtencion(obj.sku, obj.familia, obj.proveedor, obj.fechaEntregaInicio, obj.fechaEntregaFin, obj.idCiudad, usuario.idUsuario);
+            }
             
+            ViewBag.filtros = obj;
+            ViewBag.resultados = resultados;
+
             //ViewBag.producto = this.ProductoBusquedaSession;
             return View();
         }

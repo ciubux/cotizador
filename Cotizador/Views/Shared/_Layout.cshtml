@@ -632,7 +632,8 @@
                             </li>
                         }
 
-                        if (usuario.visualizaReporteSellOutPersonalizado || usuario.NivelKpiMultiUsuario || usuario.NivelKpiMultiArea)
+                        if (usuario.visualizaReporteSellOutPersonalizado || usuario.NivelKpiMultiUsuario || usuario.NivelKpiMultiArea
+                             || usuario.visualizaReporteProductosPendientesAtencion)
                         {
                             <li class="@linkReportes">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
@@ -649,9 +650,9 @@
                                         <li id="linkResultadosKPI" class="@linkResultadosKPI">@Html.ActionLink("Reporte Resultados KPI", "ResultadosKpi", "KPI")</li>
                                     }
 
-                                    @if (usuario.NivelKpiMultiUsuario || usuario.NivelKpiMultiArea)
+                                    @if (usuario.visualizaReporteProductosPendientesAtencion)
                                     {
-                                        <li id="linkResultadosKPI" class="@linkResultadosKPI">@Html.ActionLink("Productos Pendiente Atención", "ProductosPendientesAtencion", "Reporte")</li>
+                                        <li id="linkReporteProductosPendientesAtencion" class="@linkReporteProductosPendientesAtencion">@Html.ActionLink("Productos Pendiente Atención", "ProductosPendientesAtencion", "Reporte")</li>
                                     }
                                     
                                 </ul>

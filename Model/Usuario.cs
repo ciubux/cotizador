@@ -299,7 +299,9 @@ namespace Model
         public bool buscaNotasIngresoTodasSedes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.BUSCA_NOTAS_INGRESO_TODAS_SEDES)).FirstOrDefault() != null; } }
         public bool validaReponsablescomercialesAsignados { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VALIDA_RESPONSABLES_COMERCIALES_ASIGNADOS)).FirstOrDefault() != null; } }
 
+        /* REPORTES */
         public bool visualizaReporteSellOutPersonalizado{ get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_REPORTE_SELLOUT_PERSONALIZADO)).FirstOrDefault() != null; } }
+        public bool visualizaReporteProductosPendientesAtencion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_REPORTE_PRODUCTOS_PENDIENTES_ATENCION)).FirstOrDefault() != null; } }
     }
 }
 
