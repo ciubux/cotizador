@@ -305,9 +305,11 @@
     <Compile Include="ExcelExport\ReasignacionCarteraCliente.cs" />
     <Compile Include="ExcelExport\PedidoOCExcel.cs" />
     <Compile Include="ExcelExport\ReporteCargaStock .cs" />
+    <Compile Include="ExcelExport\ReporteStockPendienteAtencion.cs" />
     <Compile Include="ExcelExport\ReporteKardexProducto.cs" />
     <Compile Include="ExcelExport\ReporteStock .cs" />
     <Compile Include="ExcelExport\PlantillaCargaStock.cs" />
+    <Compile Include="ExcelExport\ReporteProdPA.cs" />
     <Compile Include="ExcelExport\RubroSearch.cs" />
     <Compile Include="ExcelExport\SubDistribuidorSearch.cs" />
     <Compile Include="ExcelExport\OrigenSearch.cs" />
@@ -747,6 +749,7 @@
     <Content Include="Views\Pedido\_ModalAprobarLiberarColectivo.cshtml" />
     <Content Include="Views\Almacen\_SelectAlmacenesSede.cshtml" />
     <Content Include="Views\Reporte\ProductosPendientesAtencion.cshtml" />
+    <Content Include="Views\Stock\_ModalStockPendienteAtencion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

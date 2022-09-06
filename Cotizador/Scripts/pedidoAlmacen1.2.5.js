@@ -2605,7 +2605,12 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
                 if (pedido.tipoPedidoAlmacen == TIPO_PEDIDO_ALMACEN_TRASLADO_INTERNO_A_ENTREGAR.charCodeAt(0)) {
                     $("#divReferenciaCliente").hide();
                     $("#divCiudadSolicitante").show();
-                    $("#verCiudadSolicitante").html(pedido.cliente.ciudad.nombre);
+                    //$("#verCiudadSolicitante").html(pedido.cliente.ciudad.nombre);
+                    if (pedido.almacenDestino != null) {
+                        $("#verCiudadSolicitante").html(pedido.cliente.ciudad.nombre + '<br/><span class="spn-nombre-comercial">' + pedido.almacenDestino.nombre + '</span>');
+                    } else {
+                        $("#verCiudadSolicitante").html(pedido.cliente.ciudad.nombre);
+                    }
                 }
                 else {
                     $("#divReferenciaCliente").show();
@@ -2615,7 +2620,14 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
                 
                 $("#verFechaHorarioEntrega").html(pedido.fechaHorarioEntrega);
 
-                $("#verCiudad").html(pedido.ciudad.nombre);                
+                //$("#verCiudad").html(pedido.ciudad.nombre);        
+
+                if (pedido.almacenOrigen != null) {
+                    $("#verCiudad").html(pedido.ciudad.nombre + '<br/><span class="spn-nombre-comercial">' + pedido.almacenOrigen.nombre + '</span>');
+                } else {
+                    $("#verCiudad").html(pedido.ciudad.nombre);        
+                }
+
                 $("#verIdCliente").val(pedido.cliente.idCliente);
                 $("#verCliente").html(pedido.cliente.codigoRazonSocial);
 

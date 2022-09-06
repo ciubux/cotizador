@@ -1182,5 +1182,12 @@ namespace BusinessLayer
             }
         }
 
+        public List<List<String>> pedidosPendientesPorProducto(Guid idProducto, DateTime fechaInicio, DateTime fechaFin, Guid idCiudad, Guid idUsuario)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                return dal.pedidosPendientesPorProducto(idProducto, fechaInicio, fechaFin, idCiudad, idUsuario);
+            }
+        }
     }
 }

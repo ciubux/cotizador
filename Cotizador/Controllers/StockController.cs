@@ -261,7 +261,82 @@ namespace Cotizador.Controllers
             return excel.generateExcel(kardex, dateFechaInicio);
         }
 
+        public String ReporteStockPendienteAtencion(Guid idCiudad, Guid idProducto, int idProductoPresentacion, string fechaInicio, string fechaFin)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
+            ProductoBL blProducto = new ProductoBL();
+            PedidoBL blPedido = new PedidoBL();
+            CiudadBL blCiudad = new CiudadBL();
+
+            Ciudad ciudad = new Ciudad();
+            if (!idCiudad.Equals(Guid.Empty)) {
+                ciudad = blCiudad.getCiudad(idCiudad);
+            } else {
+                ciudad.idCiudad = idCiudad;
+                ciudad.nombre = "TODOS";
+            }
+
+            Producto producto = blProducto.getProductoById(idProducto);
+
+            ParametroBL parametroBL = new ParametroBL();
+            DateTime fechaEntregaInicio;
+            DateTime fechaEntregaFin;
+
+            if (fechaInicio.Trim().Equals(""))
+            {
+                int diasPasado = int.Parse(parametroBL.getParametro("STOCK_DIAS_PEDIDOS_ENTREGA_VENCIDA"));
+                fechaEntregaInicio = DateTime.Now.AddDays(-1 * diasPasado);
+            } else
+            {
+                String[] fiv = fechaInicio.Split('/');
+                fechaEntregaInicio = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
+            }
+
+            if (fechaFin.Trim().Equals(""))
+            {
+                int diasFuturo = int.Parse(parametroBL.getParametro("STOCK_DIAS_PEDIDOS_ENTREGA_PENDIENTE"));
+                fechaEntregaFin = DateTime.Now.AddDays(diasFuturo);
+            } else {
+                String[] fiv = fechaFin.Split('/');
+                fechaEntregaFin = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
+            }
+
+            List<List<String>> pedidos = blPedido.pedidosPendientesPorProducto(idProducto, fechaEntregaInicio, fechaEntregaFin, idCiudad, usuario.idUsuario);
+
+
+            this.Session["s_reporte_spa_pedidos"] = pedidos;
+            this.Session["s_reporte_spa_ciudad"] = ciudad;
+            this.Session["s_reporte_spa_producto"] = producto;
+
+            this.Session["s_reporte_spa_fechaInicio"] = fechaEntregaInicio;
+            this.Session["s_reporte_spa_fechaFin"] = fechaEntregaFin;
+
+            var result = new { 
+                producto = producto,
+                ciudad = ciudad,
+                lista = pedidos
+            };
+
+            return JsonConvert.SerializeObject(result);
+        }
+
+        [HttpGet]
+        public ActionResult ReporteStockPendienteAtencionExcel(int idProductoPresentacion)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            Ciudad ciudad = (Ciudad) this.Session["s_reporte_spa_ciudad"];
+            Producto producto = (Producto) this.Session["s_reporte_spa_producto"];
+            List<List<String>> pedidos = (List<List<String>>) this.Session["s_reporte_spa_pedidos"];
+            DateTime fechaEntregaInicio = (DateTime) this.Session["s_reporte_spa_fechaInicio"];
+            DateTime fechaEntregaFin = (DateTime) this.Session["s_reporte_spa_fechaFin"];
+
+            ReporteStockPendienteAtencion excel = new ReporteStockPendienteAtencion();
+
+            return excel.generateExcel(pedidos, ciudad, producto, fechaEntregaInicio, fechaEntregaFin, idProductoPresentacion);
+        }
+        
 
         public ActionResult CargasStock()
         {

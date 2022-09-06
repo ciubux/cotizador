@@ -416,8 +416,13 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaTraslado", notaIngreso.fechaTraslado);
             InputParameterAdd.Varchar(objCommand, "serieDocumento", notaIngreso.serieDocumento); //puede ser null
             InputParameterAdd.BigInt(objCommand, "numeroDocumento", notaIngreso.numeroDocumento); //puede ser null
-            
 
+            if (notaIngreso.pedido != null && notaIngreso.pedido.idPedido != null)
+            {
+                InputParameterAdd.Guid(objCommand, "idPedido", notaIngreso.pedido.idPedido);
+            }
+
+            /*
             if (notaIngreso.guiaRemisionAExtornar == null && notaIngreso.guiaRemisionAIngresar == null)
             {
                 InputParameterAdd.Guid(objCommand, "idPedido", notaIngreso.pedido.idPedido);
@@ -425,7 +430,7 @@ namespace DataLayer
             else
             {
                 InputParameterAdd.Guid(objCommand, "idPedido", null);
-            }
+            }*/
 
 
             InputParameterAdd.Int(objCommand, "atencionParcial", notaIngreso.atencionParcial ? 1 : 0);

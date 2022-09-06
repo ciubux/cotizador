@@ -2477,5 +2477,63 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
 
             return resultados;
         }
+
+        public List<List<String>> pedidosPendientesPorProducto(Guid idProducto, DateTime fechaInicio, DateTime fechaFin, Guid idCiudad, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_pedidos_pendientes_atencion_producto");
+            InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            if (idCiudad != null && !idCiudad.Equals(Guid.Empty))
+            {
+                InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
+            }
+
+            fechaInicio = new DateTime(fechaInicio.Year, fechaInicio.Month, fechaInicio.Day, 0, 0, 0);
+            fechaFin = new DateTime(fechaFin.Year, fechaFin.Month, fechaFin.Day, 23, 59, 59);
+
+            InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", fechaInicio);
+            InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", fechaFin);
+
+            DataTable dataTable = Execute(objCommand);
+
+            List<List<String>> lista = new List<List<String>>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                List<String> item = new List<String>();
+                //Guid idItem = Converter.GetGuid(row, "id_pedido");
+                item.Add(Converter.GetString(row, "sede")); // 0
+                item.Add(Converter.GetInt(row, "numero_pedido").ToString()); // 1
+                item.Add(Converter.GetString(row, "tipo_pedido")); // 2
+                item.Add(Converter.GetString(row, "sub_tipo_pedido")); // 3
+
+                item.Add(Converter.GetString(row, "codigo_cliente")); // 4
+                item.Add(Converter.GetString(row, "nombre_cliente")); // 5
+                item.Add(Converter.GetString(row, "nombre_grupo")); // 6
+
+                DateTime fechaPedido = Converter.GetDateTime(row, "fecha_pedido");
+                item.Add(fechaPedido.ToString("dd/MM/yyyy")); // 7
+
+                DateTime fechaDesde = Converter.GetDateTime(row, "fecha_entrega_desde");
+                item.Add(fechaDesde.ToString("dd/MM/yyyy")); // 8
+
+                DateTime fechaHasta = Converter.GetDateTime(row, "fecha_entrega_hasta");
+                item.Add(fechaHasta.ToString("dd/MM/yyyy")); // 9
+
+                int cantidadPedido = Converter.GetInt(row, "cantidad_pedida");
+                int cantidadAtendida = Converter.GetInt(row, "cantidad_atendida");
+                int cantidadPendiente = Converter.GetInt(row, "cantidad_pendiente");
+
+                item.Add(cantidadPedido.ToString()); // 10
+                item.Add(cantidadAtendida.ToString()); // 11
+                item.Add(cantidadPendiente.ToString()); // 12
+
+                lista.Add(item);
+            }
+
+            return lista;
+        }
     }
 }
+

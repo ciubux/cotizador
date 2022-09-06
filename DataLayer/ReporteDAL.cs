@@ -25,15 +25,12 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_reporte_productos_pendientes");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             
-            if (idCiudad.Equals(Guid.Empty))
-            {
-                InputParameterAdd.Guid(objCommand, "idCiudad", null);
-            } else
+            if (idCiudad != null && !idCiudad.Equals(Guid.Empty))
             {
                 InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
             }
 
-            InputParameterAdd.Varchar(objCommand, "sku", sku);
+            InputParameterAdd.VarcharEmpty(objCommand, "sku", sku);
             InputParameterAdd.Varchar(objCommand, "familia", familia);
             InputParameterAdd.Varchar(objCommand, "proveedor", proveedor);
 

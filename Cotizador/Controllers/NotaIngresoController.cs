@@ -691,10 +691,6 @@ namespace Cotizador.Controllers
                 }
             }
 
-            
-            
-
-
 
             String resultado = "{ \"serieNumeroNotaIngreso\":\"" + serieNumeroNotaIngreso + "\", \"idNotaIngreso\":\"" + idNotaIngreso + "\", \"error\":\"" + error + "\",     \"notaIngresoValidacion\": " + jsonNotaIngresoValidacion + ",     \"generarNotaCredito\": " + generarNotaCredito + "  }";
             return resultado;

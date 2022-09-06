@@ -15,7 +15,7 @@
 
     <form class="form-horizontal" method="post">
         <div class="row" style="margin-top: 10px;">
-            <div class="col-sm-4 col-lg-4">
+            <div class="col-sm-6 col-lg-4">
                 <!--Fecha Entrega-->
                 <div class="form-group">
                     <label class="control-label col-xs-4" for="skuProducto">SKU:</label>
@@ -25,7 +25,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-4 col-lg-4">
+            <div class="col-sm-6 col-lg-4">
                 <!--Proveedor-->
                 <div class="form-group">
                     <label class="control-label col-xs-4" for="proveedor">Proveedor:</label>
@@ -37,7 +37,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-4 col-lg-4">
+            <div class="col-sm-6 col-lg-4">
                 <!--Familia-->
                 <div class="form-group">
                     <label class="control-label col-xs-4" for="familia">Familia:</label>
@@ -51,7 +51,7 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-8 col-lg-8">
+            <div class="col-sm-12 col-lg-8">
                 <div class="form-group">
                     <!--Fecha Inicio Vigencia-->
                     <label class="control-label col-xs-2" for="fechaInicio">Rango Fecha Entrega:</label>
@@ -62,6 +62,44 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group row">
+                    <label class="control-label col-xs-4" for="tipoUnidad">Unidad:</label>
+                    <div class="col-xs-8">
+                        <select class="form-control" id="tipoUnidad" name="tipoUnidad">
+                            <option @(item.idProductoPresentacion == 0 ? "selected" : "") value="0">MP</option>
+                            <option @(item.idProductoPresentacion == 1 ? "selected" : "") value="1">Alternativa</option>
+                            <option @(item.idProductoPresentacion == 2 ? "selected" : "") value="2">Proveedor</option>
+                            <option @(item.idProductoPresentacion == 3 ? "selected" : "") value="3">Conteo</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group row">
+                    <label class="control-label col-xs-4" for="idCiudad">
+                        Sede:
+                    </label>
+                    <div class="col-xs-8">
+                        @Html.Action("GetCiudades", "Ciudad",
+                                        new
+                                        {
+                                            ciudadSelectId = "idCiudad",
+                                            selectedValue = item.idCiudad
+                                        })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pull-left" style="margin-top: 20px; margin-bottom: 10px; margin-left: 0px">
+        @if (resultados.Count > 0)
+        {
+            <button id="btnReporteProductosPendientesAtencionExcel" type="button" class="btn btn-primary bouton-image botonExcel" actionLink="@Url.Action("ExportReporteProductosPendientesAtencion", "Reporte")">Descargar Reporte</button>
+        }
         </div>
 
         <div class="row pull-right" style="margin-top: 20px; margin-bottom: 10px; margin-right: 0px">
@@ -79,9 +117,14 @@
 
     <div class="row">
         <div class="col-sm-12 col-lg-12 tableFixHead">
-            <table id="tableProductosPendientesAtencion" class="table table-bordered">
+            <table id="tableProductosPendientesAtencion" class="table" data-editing="false"
+                       data-editing-allow-add="false"
+                       data-editing-allow-delete="false"
+                       data-editing-allow-edit="false"
+                       data-show-toggle="false" >
                 <thead class="thead-dark">
                     <tr>
+                        <th>SEDE</th>
                         <th>SKU</th>
                         <th>NOMBRE PRODUCTO</th>
                         <th>FAMILIA</th>
@@ -93,13 +136,24 @@
                 <tbody>
                     @foreach(Model.UTILES.FilaProductoPendienteAtencion fila in resultados)
                     {
-                    <tr>
+                    <tr data-expanded="true">
+                        <td>@fila.sede</td>
                         <td>@fila.sku</td>
                         <td>@fila.nombreProducto</td>
                         <td>@fila.familia</td>
                         <td>@fila.proveedor</td>
-                        <td>@fila.unidad</td>
-                        <td>@fila.cpMp</td>
+                        <td>
+                            @(item.idProductoPresentacion == 0 ? fila.unidad : "")
+                            @(item.idProductoPresentacion == 1 ? fila.unidadAlternativa : "")
+                            @(item.idProductoPresentacion == 2 ? fila.unidadProveedor : "")
+                            @(item.idProductoPresentacion == 3 ? fila.unidadConteo : "")
+                        </td>
+                        <td>
+                            @(item.idProductoPresentacion == 0 ? fila.cpMp.ToString() : "")
+                            @(item.idProductoPresentacion == 1 ? fila.cpAlternativa.ToString() : "")
+                            @(item.idProductoPresentacion == 2 ? fila.cpProveedor.ToString() : "")
+                            @(item.idProductoPresentacion == 3 ? fila.cpConteo.ToString() : "")
+                        </td>
                     </tr>
                     }
                 </tbody>
@@ -107,15 +161,18 @@
         </div>
     </div>
 
-        
+
+
 </div>
 
 <script type="text/javascript">
 
 
     function funcionesModalProductosPendientesAtencion() {
+        var ID_SEDE_TODOS = "@Guid.Empty.ToString()";
+        var selFiltroCiudad = "@item.idCiudad.ToString()";
         $.datepicker.regional['es'] = {
-            closeText: 'Cerrar',
+                            closeText: 'Cerrar',
             prevText: '< Ant',
             nextText: 'Sig >',
             currentText: 'Hoy',
@@ -136,10 +193,40 @@
         $("#fechaInicio").datepicker({ dateFormat: "dd/mm/yy" });
         $("#fechaFin").datepicker({ dateFormat: "dd/mm/yy" });
 
+        if ($('#idCiudad option').length > 3) {
+            if (ID_SEDE_TODOS == selFiltroCiudad) {
+                $('#idCiudad').append('<option selected value="' + ID_SEDE_TODOS + '" >TODOS</option>');
+            } else {
+                $('#idCiudad').append('<option value="' + ID_SEDE_TODOS + '" >TODOS</option>');
+            }
+        }
+
+        $('#tableProductosPendientesAtencion').footable();
+
+        //setTimeout(function () { FooTable.get('#tableProductosPendientesAtencion').pageSize(10); }, 2000)
+        
+        //FooTable.init('#tableProductosPendientesAtencion');
+
 
         $(document).on('click', "#btnLimpiarFormulario", function () {
-            
+            $('body').loadingModal({
+                text: 'Cargando...'
+            });
+
+            $('body').loadingModal('show');
+
+            location.href = "/Reporte/LimpiarFiltroProductosPendientes";
         });
+
+        $(document).on('click', "#btnSearchRepPPA", function () {
+            $('body').loadingModal({
+                text: 'Cargando...'
+            });
+
+            $('body').loadingModal('show');
+        });
+        
+
 
         $("#skuProducto").change(function () {
             var valor = $(this).val();
@@ -156,6 +243,16 @@
             changeInputFiltro("familia", valor, "string");
         });
 
+        $("#tipoUnidad").change(function () {
+            var valor = $(this).val();
+            changeInputFiltro("idProductoPresentacion", valor, "int");
+        });
+
+        $("#idCiudad").change(function () {
+            var valor = $(this).val();
+            changeInputFiltro("idCiudad", valor, "guid");
+        });
+
         $("#fechaInicio").change(function () {
             var valor = $(this).val();
             changeInputFiltro("fechaEntregaInicio", valor, "date");
@@ -164,6 +261,10 @@
         $("#fechaFin").change(function () {
             var valor = $(this).val();
             changeInputFiltro("fechaEntregaFin", valor, "date");
+        });
+
+        $("#btnReporteProductosPendientesAtencionExcel").click(function () {
+            window.location.href = $(this).attr("actionLink");
         });
 
         function changeInputFiltro(propiedad, valor, tipo) {

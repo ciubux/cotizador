@@ -28,7 +28,7 @@ namespace Model.UTILES
                     cant = ((decimal)cpConteo) / ((decimal)eqProveedorConteo);
                 }
 
-                return cant;
+                return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cant));
             } 
         }
         public decimal cpMp {
@@ -41,7 +41,7 @@ namespace Model.UTILES
                     cant = ((decimal)cpConteo) / ((decimal)eqMpConteo);
                 }
 
-                return cant;
+                return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cant));
             }
         }
         public decimal cpAlternativa {
@@ -54,7 +54,7 @@ namespace Model.UTILES
                     cant = ((decimal)cpConteo) / ((decimal)eqAlternativaConteo);
                 }
 
-                return cant;
+                return Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cant));
             }
         }
 
