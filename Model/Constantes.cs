@@ -12,6 +12,7 @@ namespace Model
         /*FORMATOS*/
         public static String formatoDecimalesPrecioNeto = "{0:0.00}";
         public static String formatoDosDecimales = "{0:0.00}";
+        public static String formatoDosDecimalesSeparadorMiles = "{0:0,0.00}";
         public static String formatoUnDecimal = "{0:0.0}";
         public static String formatoCuatroDecimales = "{0:0.0000}";
         public static String formatoSeisDecimales = "{0:0.000000}";

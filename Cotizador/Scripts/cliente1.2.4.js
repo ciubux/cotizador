@@ -2851,6 +2851,7 @@ jQuery(function ($) {
                         '<td>  ' + clienteList[i].ruc + '  </td>' +
                         '<td>  ' + clienteList[i].ciudad_nombre + '  </td>' +
                         '<td>  ' + clienteList[i].grupoCliente_nombre + '  </td>' +
+                        '<td>  ' + clienteList[i].rubro_nombre + '  </td>' +
                         '<td>  ' + textoVendedorValidado + '</td>' +
                         '<td>  ' + clienteList[i].responsableComercial_descripcion + '</td>' +
                         '<td>  ' + clienteList[i].supervisorComercial_descripcion + '</td>' +

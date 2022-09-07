@@ -25,6 +25,7 @@ namespace Cotizador.Models.DTOsSearch
                 clienteDTO.ruc = clienteTmp.ruc;
                 clienteDTO.ciudad_nombre = clienteTmp.ciudad.nombre;
                 clienteDTO.grupoCliente_nombre = clienteTmp.grupoCliente.nombre;
+                clienteDTO.rubro_nombre = clienteTmp.rubro.nombre;
                 clienteDTO.responsableComercial_descripcion = clienteTmp.responsableComercial.descripcion;
                 clienteDTO.supervisorComercial_descripcion = clienteTmp.supervisorComercial.descripcion;
                 clienteDTO.asistenteServicioCliente_descripcion = clienteTmp.asistenteServicioCliente.descripcion;

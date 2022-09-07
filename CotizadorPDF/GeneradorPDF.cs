@@ -269,11 +269,11 @@ namespace cotizadorPDF
                 if (cot.considerarCantidades != Cotizacion.OpcionesConsiderarCantidades.Observaciones)
                 {
                     //Cant.
-                    table.Columns[5].Width = width1 * 0.10f;
+                    table.Columns[5].Width = width1 * 0.09f;
                     table.Columns[5].StringFormat
                         = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
                     //Subtotal
-                    table.Columns[6].Width = width1 * 0.10f;
+                    table.Columns[6].Width = width1 * 0.11f;
                     table.Columns[6].StringFormat
                         = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
 
@@ -414,16 +414,16 @@ namespace cotizadorPDF
                     dataTable2.Columns.Add("Descripcion");
                     dataTable2.Columns.Add("monto");
 
-                    String subtotal = "Subtotal: " + cot.moneda.simbolo + ": ";
-                    String montoSubtotal = String.Format(Constantes.formatoDosDecimales, cot.montoSubTotal);
+                    String subtotal = "Subtotal " + cot.moneda.simbolo + ":";
+                    String montoSubtotal = String.Format(Constantes.formatoDosDecimalesSeparadorMiles, cot.montoSubTotal);
                     dataTable2.Rows.Add(new object[] { subtotal, montoSubtotal });
 
-                    String igv = "IGV 18%: " + cot.moneda.simbolo + ": ";
-                    String montoIGV = String.Format(Constantes.formatoDosDecimales, cot.montoIGV);
+                    String igv = "IGV 18% " + cot.moneda.simbolo + ":";
+                    String montoIGV = String.Format(Constantes.formatoDosDecimalesSeparadorMiles, cot.montoIGV);
                     dataTable2.Rows.Add(new object[] { igv, montoIGV });
 
-                    String total = "Total: " + cot.moneda.simbolo + ": ";
-                    String montoTotal = String.Format(Constantes.formatoDosDecimales, cot.montoTotal);
+                    String total = "Total " + cot.moneda.simbolo + ":";
+                    String montoTotal = String.Format(Constantes.formatoDosDecimalesSeparadorMiles, cot.montoTotal);
                     dataTable2.Rows.Add(new object[] { total, montoTotal });
 
                     tableTotales.DataSource = dataTable2;
@@ -435,7 +435,7 @@ namespace cotizadorPDF
                     tableTotales.Columns[0].StringFormat
                         = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
 
-                    tableTotales.Columns[1].Width = width2 * 0.20f;
+                    tableTotales.Columns[1].Width = width2 * 0.30f;
                     tableTotales.Columns[1].StringFormat
                         = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
 
@@ -450,7 +450,7 @@ namespace cotizadorPDF
                     tableLayout2.EndColumnIndex = tableTotales.Columns.Count-1;
                     
 
-                    PdfLayoutResult result2 = tableTotales.Draw(sectionTotales, new PointF(420 + xPage2a, y), tableLayout2);
+                    PdfLayoutResult result2 = tableTotales.Draw(sectionTotales, new PointF(400 + xPage2a, y), tableLayout2);
                     y = y + result2.Bounds.Height + 5;
 
                 }

@@ -701,6 +701,9 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "sinAsesorValidado", cliente.vendedoresAsignados ? 1 : 0);
             InputParameterAdd.Int(objCommand, "estadoLiberacionCrediticia", (int)cliente.tipoLiberacionCrediticia);
 
+            InputParameterAdd.Int(objCommand, "idRubro", cliente.rubro.idRubro);
+            InputParameterAdd.Int(objCommand, "idRubroPadre", cliente.rubro.padre.idRubro);
+
             InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente.idGrupoCliente);
             InputParameterAdd.Int(objCommand, "perteneceCanalLima", cliente.perteneceCanalLima ? 1 : 0);
             InputParameterAdd.Int(objCommand, "perteneceCanalProvincias", cliente.perteneceCanalProvincias ? 1 : 0);
@@ -782,6 +785,10 @@ namespace DataLayer
                 ClienteResultado.origen.idOrigen = Converter.GetInt(row, "id_origen");
                 ClienteResultado.origen.codigo = Converter.GetString(row, "codigo_origen");
                 ClienteResultado.origen.nombre = Converter.GetString(row, "nombre_origen");
+
+                ClienteResultado.rubro = new Rubro();
+                ClienteResultado.rubro.idRubro = Converter.GetInt(row, "id_rubro");
+                ClienteResultado.rubro.nombre = Converter.GetString(row, "nombre_rubro_padre") + " - " + Converter.GetString(row, "nombre_rubro");
 
                 ClienteResultado.subDistribuidor = new SubDistribuidor();
                 ClienteResultado.subDistribuidor.idSubDistribuidor = Converter.GetInt(row, "id_subdistribuidor");

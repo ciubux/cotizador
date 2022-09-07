@@ -222,6 +222,11 @@ namespace Cotizador.Controllers
             cliente.perteneceCanalPCP = true;
             cliente.textoBusqueda = "";
             cliente.sku = "";
+            cliente.rubro = new Rubro();
+            cliente.rubro.idRubro = 0;
+            cliente.rubro.padre = new Rubro();
+            cliente.rubro.padre.idRubro = 0;
+
             return cliente;
         }
 

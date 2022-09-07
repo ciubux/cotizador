@@ -72,7 +72,7 @@
                 <br />
                 <div class="row">
                     <div class="col-sm-12 col-lg-12">
-                        <p><b>*</b> El número que esta entre corchetes "[ ]" al lado del stock de cada sede indica la cantidad del producto por atender en la sede (En pedidos que tienen plazo de entrega activo, o que su plazo de entrega comenzará dentro de los próximos 14 días, o cuyo plazo de entrega se venció hace 7 días o menos.</p>
+                        <p><b>*</b> El número que esta entre corchetes "[ ]" al lado del stock de cada sede indica la cantidad del producto por atender en la sede (En pedidos que tienen plazo de entrega activo, o que su plazo de entrega comenzará dentro de los próximos <span id="spnRSPDiasPendientePost">14</span> días, o cuyo plazo de entrega se venció hace <span id="spnRSPDiasPendienteAnt">7</span> días o menos.</p>
                     </div>
                 </div>
                 <br />
@@ -121,7 +121,11 @@
                 error: function (detalle) {
                     $('body').loadingModal('hide');
                 },
-                success: function (lista) {
+                success: function (result) {
+                    $("#spnRSPDiasPendientePost").html(result.diasPost);
+                    $("#spnRSPDiasPendienteAnt").html(result.diasAnt);
+                    var lista = result.lista;
+
                     var htmlStockSedes = "";
                     var htmlOptionsUnidad = "";
                     var stock, stockSeparado;

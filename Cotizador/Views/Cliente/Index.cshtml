@@ -299,6 +299,32 @@
         </div>
 
         <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => cliente.rubro, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4", @for = "idRubroPadre" })
+                    <div class="col-xs-8 col-sm-8 col-lg-8">
+                        @Html.Action("GetRubros", "Rubro",
+                            new
+                            {
+                                rubroSelectId = "idRubroPadre",
+                                selectedValue = cliente.rubro.padre == null ? 0 : cliente.rubro.padre.idRubro
+                            })
+
+                        @Html.Action("GetRubros", "Rubro",
+                            new
+                            {
+                                rubroSelectId = "idRubro",
+                                selectedValue = cliente.rubro.idRubro,
+                                idPadre = cliente.rubro.padre == null ? -2 : cliente.rubro.padre.idRubro
+                            })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+
+        <div class="row">
             <div class="col-sm-12 col-lg-12 container">
                 <div id="alertWrongSearch" class="alert alert-warning" style="display: none;">
                     Debe ingresar el texto a buscar utilizando 3 o más caracteres en el campo "N° Doc / Razón Social / Nombre.
@@ -339,6 +365,7 @@
                     <th data-name="numeroDocumento" data-visible="true" data-sortable="true">N° Doc.</th>
                     <th data-name="sedeMP" data-sortable="false" data-breakpoints="xs">Sede MP</th>
                     <th data-name="grupo" data-sortable="false" data-breakpoints="xs">Grupo</th>
+                    <th data-name="rubro" data-sortable="false" data-breakpoints="xs">Rubro</th>
                     <th data-name="vendedorAsignado" data-visible="true" data-sortable="true">¿Asesor Validado?</th>
                     <th data-name="asesorComercial" data-visible="true" data-sortable="true">Asesor Comercial</th>
                     <th data-name="supervisorComercial" data-visible="true" data-sortable="true">Supervisor Comercial</th>

@@ -21,6 +21,8 @@ namespace Cotizador.Models.DTOs
         public String ciudad_nombre { get; set; }
 
         public String grupoCliente_nombre { get; set; }
+        public String rubro_nombre { get; set; }
+        
         public String responsableComercial_descripcion { get; set; }
         public String supervisorComercial_descripcion { get; set; }
         public String asistenteServicioCliente_descripcion { get; set; }

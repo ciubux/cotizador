@@ -238,6 +238,7 @@
                             cantidadPendiente = cantidadPendienteProveedor;
                         }
 
+
                         htmlList = htmlList +
                             '<tr>' +
                             '<td>' + lista[i][0] + '</td>' +
@@ -247,9 +248,9 @@
                             //'<td>' + lista[i][6] + '</td>' +
                             '<td>' + lista[i][7] + '</td>' +
                             '<td>' + lista[i][8] + ' - ' + lista[i][9] + '</td>' +
-                            '<td class="tdRSPACantidadPedido" cMP="' + cantidadPedidoMP + '" cAlternativa="' + cantidadPedidoAlternativa + '" cProveedor="' + cantidadPedidoProveedor + '">' + cantidadPedido + '</td>' +
-                            '<td class="tdRSPACantidadAtendida" cMP="' + cantidadAtendidaMP + '" cAlternativa="' + cantidadAtendidaAlternativa + '" cProveedor="' + cantidadAtendidaProveedor + '">' + cantidadAtendida + '</td>' +
-                            '<td class="tdRSPACantidadPendiente" cMP="' + cantidadPendienteMP + '" cAlternativa="' + cantidadPendienteAlternativa + '" cProveedor="' + cantidadPendienteProveedor + '">' + cantidadPendiente + '</td>' +
+                            '<td class="tdRSPACantidadPedido" cMP="' + cantidadPedidoMP.toFixed(2) + '" cAlternativa="' + cantidadPedidoAlternativa.toFixed(2) + '" cProveedor="' + cantidadPedidoProveedor.toFixed(2) + '">' + cantidadPedido.toFixed(2) + '</td>' +
+                            '<td class="tdRSPACantidadAtendida" cMP="' + cantidadAtendidaMP.toFixed(2) + '" cAlternativa="' + cantidadAtendidaAlternativa.toFixed(2) + '" cProveedor="' + cantidadAtendidaProveedor.toFixed(2) + '">' + cantidadAtendida.toFixed(2) + '</td>' +
+                            '<td class="tdRSPACantidadPendiente" cMP="' + cantidadPendienteMP.toFixed(2) + '" cAlternativa="' + cantidadPendienteAlternativa.toFixed(2) + '" cProveedor="' + cantidadPendienteProveedor.toFixed(2) + '">' + cantidadPendiente.toFixed(2) + '</td>' +
                             '<td></td>' +
                             '</tr>';
                     }

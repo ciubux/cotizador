@@ -335,7 +335,8 @@
                                     new
                                     {
                                         rubroSelectId = "idRubroPadre",
-                                        selectedValue =  cliente.rubro.padre == null ? 0 : cliente.rubro.padre.idRubro
+                                        selectedValue =  cliente.rubro.padre == null ? 0 : cliente.rubro.padre.idRubro,
+                                        sinNoAsignado = 1
                                     })
 
                                 @Html.Action("GetRubros", "Rubro",
@@ -343,7 +344,8 @@
                                     {
                                         rubroSelectId = "idRubro",
                                         selectedValue = cliente.rubro.idRubro,
-                                        idPadre = cliente.rubro.padre == null ? -2 : cliente.rubro.padre.idRubro
+                                        idPadre = cliente.rubro.padre == null ? -2 : cliente.rubro.padre.idRubro,
+                                        sinNoAsignado = 1
                                     })
                             </div>
                         </div>

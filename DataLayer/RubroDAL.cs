@@ -60,11 +60,12 @@ namespace DataLayer
         }
 
 
-        public List<Rubro> getRubros(Rubro sub, int idPadre = -1)
+        public List<Rubro> getRubros(Rubro sub, int idPadre = -1, int sinNoAsignado = 0)
         {
             var objCommand = GetSqlCommand("ps_rubros");
             InputParameterAdd.Int(objCommand, "estado", sub.Estado);
             InputParameterAdd.Int(objCommand, "idPadre", idPadre);
+            InputParameterAdd.Int(objCommand, "sinNoAsignado", sinNoAsignado);
 
             DataTable dataTable = Execute(objCommand);
             List<Rubro> lista = new List<Rubro>();

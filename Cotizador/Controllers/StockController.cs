@@ -223,7 +223,16 @@ namespace Cotizador.Controllers
             ProductoBL bl = new ProductoBL();
             List<RegistroCargaStock> stocks = bl.StockProducto(sku, usuario.idUsuario);
 
-            return JsonConvert.SerializeObject(stocks); 
+            ParametroBL parametroBL = new ParametroBL();
+            int diasPasado = int.Parse(parametroBL.getParametro("STOCK_DIAS_PEDIDOS_ENTREGA_VENCIDA"));
+            int diasFuturo = int.Parse(parametroBL.getParametro("STOCK_DIAS_PEDIDOS_ENTREGA_PENDIENTE"));
+
+            var result = new {
+                diasPost = diasFuturo,
+                diasAnt = diasPasado,
+                lista = stocks
+            };
+            return JsonConvert.SerializeObject(result); 
         }
 
         public String ReporteStockProductoKardex(Guid idCiudad, Guid idProducto, int idProductoPresentacion, string fechaInicio)
