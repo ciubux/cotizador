@@ -1631,9 +1631,33 @@ namespace Cotizador.Controllers
 
                 String dataReasignacionCartera = this.Request.Params["dataReasignaciones"].ToString();
 
+                List<Guid> idsClientesReasignar = new List<Guid>();
+                List<List<String>> reporteReasignaciones = new List<List<string>>();
+                String[] rowsReasginaciones = dataReasignacionCartera.Split(new string[] { "|-*-|" }, StringSplitOptions.None);
+
+                foreach (String rowRes in rowsReasginaciones)
+                {
+                    String[] itemsRow = rowRes.Split(new string[] { "|*|" }, StringSplitOptions.None);
+                    List<String> itemsData = new List<string>();
+                    foreach (String itemData in itemsRow)
+                    {
+                        itemsData.Add(itemData);
+                    }
+
+                    if (itemsData.Count > 1)
+                    {
+                        idsClientesReasignar.Add(Guid.Parse(itemsData.ElementAt(5)));
+                        reporteReasignaciones.Add(itemsData);
+                    }
+                }
+
+                
+
                 foreach (Cliente item in clientes)
                 {
-                    if (this.Request.Params["idResignar_" + item.idCliente.ToString()] != null && !this.Request.Params["idResignar_" + item.idCliente.ToString()].ToString().Equals(""))
+                    Guid idEncontrado = idsClientesReasignar.Find(x => x.Equals(item.idCliente));
+                    if (idEncontrado != null && !idEncontrado.Equals(Guid.Empty) && 
+                        this.Request.Params["idResignar_" + item.idCliente.ToString()] != null && !this.Request.Params["idResignar_" + item.idCliente.ToString()].ToString().Equals(""))
                     {
                         int nuevoVendedor = Int32.Parse(this.Request.Params["idResignar_" + item.idCliente.ToString()].ToString());
                         if (nuevoVendedor > 0 && nuevoVendedor != cliente.responsableComercial.idVendedor)
@@ -1647,23 +1671,7 @@ namespace Cotizador.Controllers
                 ClienteBL bl = new ClienteBL();
                 bl.UpdateReasignarCartera(idsClientes, idsVendedores, fechaInicioVigencia, usuario.idUsuario);
 
-                List<List<String>> reporteReasignaciones = new List<List<string>>();
-
-                String[] rowsReasginaciones = dataReasignacionCartera.Split(new string[] { "|-*-|" }, StringSplitOptions.None);
-
-                foreach (String rowRes in rowsReasginaciones)
-                {
-                    String[] itemsRow = rowRes.Split(new string[] { "|*|" }, StringSplitOptions.None);
-                    List<String> itemsData = new List<string>();
-                    foreach (String itemData in itemsRow)
-                    {
-                        itemsData.Add(itemData);
-                    }
-
-                    if(itemsData.Count > 1) {
-                        reporteReasignaciones.Add(itemsData);
-                    }
-                }
+                
 
                 this.Session["s_last_cliente_reasginacion_cartera"] = reporteReasignaciones;
             }

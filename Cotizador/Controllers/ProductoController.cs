@@ -53,6 +53,10 @@ namespace Cotizador.Controllers
             ViewBag.producto = productoSearch;
             ViewBag.Si = Constantes.MENSAJE_SI;
             ViewBag.No = Constantes.MENSAJE_NO;
+
+            ViewBag.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            ViewBag.vistaAgregadoPedidoModals = true;
+
             return View();
 
         }

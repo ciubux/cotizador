@@ -2,9 +2,11 @@
     ViewBag.Title = "Reporte de Productos Pendientes de Atención";
 
 
-    Cotizador.Models.OBJsFiltro.ReportePendientesAtencionFiltro item = ViewBag.filtros;
+    Cotizador.Models.OBJsFiltro.ReporteSellOutVendedoresFiltro item = ViewBag.filtros;
     List<Model.UTILES.FilaProductoPendienteAtencion> resultados = ViewBag.resultados;
 
+    int anio = 2018;
+    int anioHoy = DateTime.Now.Year;
 }
 
 <div class="page-header">
@@ -56,21 +58,31 @@
                     <!--Fecha Inicio Vigencia-->
                     <label class="control-label col-xs-2" for="fechaInicio">Rango Fecha Entrega:</label>
                     <div class="col-xs-10">
-                        <input class="form-control" type="text" id="fechaInicio" name="fechaInicio" autocomplete="off" value="@item.fechaEntregaInicio.ToString("dd/MM/yyyy")" style="width:120px; display: inline-block;">
+                        <input class="form-control" type="text" id="fechaInicio" name="fechaInicio" autocomplete="off" value="@item.fechaInicio.ToString("dd/MM/yyyy")" style="width:120px; display: inline-block;">
                         <b> - </b>
-                        <input class="form-control" type="text" id="fechaFin" name="fechaFin" autocomplete="off" value="@item.fechaEntregaFin.ToString("dd/MM/yyyy")" style="width:120px; display: inline-block;">
+                        <input class="form-control" type="text" id="fechaFin" name="fechaFin" autocomplete="off" value="@item.fechaFin.ToString("dd/MM/yyyy")" style="width:120px; display: inline-block;">
                     </div>
                 </div>
             </div>
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group row">
-                    <label class="control-label col-xs-4" for="tipoUnidad">Unidad:</label>
+                    <label class="control-label col-xs-4" for="anio">Trimestre:</label>
                     <div class="col-xs-8">
-                        <select class="form-control" id="tipoUnidad" name="tipoUnidad">
-                            <option @(item.idProductoPresentacion == 0 ? "selected" : "") value="0">MP</option>
-                            <option @(item.idProductoPresentacion == 1 ? "selected" : "") value="1">Alternativa</option>
-                            <option @(item.idProductoPresentacion == 2 ? "selected" : "") value="2">Proveedor</option>
-                            <option @(item.idProductoPresentacion == 3 ? "selected" : "") value="3">Conteo</option>
+                        <select class="form-control" id="anio" name="anio">
+                            <option @(item.anio == 0 ? "selected" : "") value="0">TODOS</option>
+                            @while (anio <= anioHoy)
+                            {
+                                <option @(item.anio == anio ? "selected" : "") value="@anio">@anio</option>
+                                anio++;
+                            }
+
+                        </select>
+                        <select class="form-control" id="trimestre" name="trimestre">
+                            <option @(item.trimestre == 0 ? "selected" : "") value="0">TODOS</option>
+                            <option @(item.trimestre == 1 ? "selected" : "") value="1">Ene-Mar</option>
+                            <option @(item.trimestre == 2 ? "selected" : "") value="2">Abr-Jun</option>
+                            <option @(item.trimestre == 3 ? "selected" : "") value="3">Jul-Sep</option>
+                            <option @(item.trimestre == 4 ? "selected" : "") value="4">Oct-Dic</option>
                         </select>
                     </div>
                 </div>
@@ -96,7 +108,7 @@
         </div>
 
         <div class="row pull-left" style="margin-top: 20px; margin-bottom: 10px; margin-left: 0px">
-            @if (resultados.Count > 0)
+            @if (false)
             {
                 <button id="btnReporteProductosPendientesAtencionExcel" type="button" class="btn btn-primary bouton-image botonExcel" actionLink="@Url.Action("ExportReporteProductosPendientesAtencion", "Reporte")">Descargar Reporte</button>
             }
@@ -104,7 +116,7 @@
 
         <div class="row pull-right" style="margin-top: 20px; margin-bottom: 10px; margin-right: 0px">
             <button id="btnLimpiarFormulario" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
-            <button id="btnSearchRepPPA" type="submit" class="btn btn-success">Buscar</button>
+            <button id="btnSearchRepSOV" type="submit" class="btn btn-success">Buscar</button>
         </div>
 
     </form>
@@ -117,24 +129,19 @@
 
     <div class="row">
         <div class="col-sm-12 col-lg-12 tableFixHead">
-            <table id="tableProductosPendientesAtencion" class="table" data-editing="false"
+            <table id="tableSellOutVendedores" class="table" data-editing="false"
                    data-editing-allow-add="false"
                    data-editing-allow-delete="false"
                    data-editing-allow-edit="false"
                    data-show-toggle="false">
                 <thead class="thead-dark">
                     <tr>
-                        <th>SEDE</th>
-                        <th>SKU</th>
-                        <th>NOMBRE PRODUCTO</th>
-                        <th>FAMILIA</th>
-                        <th>PROVEEDOR</th>
-                        <th>UNIDAD</th>
-                        <th>STOCK PENDIENTE ATENCIÓN</th>
+                        <th>VENDEDOR</th>
+                        <th>TOTAL VENTAS</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (Model.UTILES.FilaProductoPendienteAtencion fila in resultados)
+                    @*@foreach (Model.UTILES.FilaProductoPendienteAtencion fila in resultados)
                     {
                         <tr data-expanded="true">
                             <td>@fila.sede</td>
@@ -158,7 +165,7 @@
                                 </a>
                             </td>
                         </tr>
-                    }
+                    }*@
                 </tbody>
             </table>
         </div>
@@ -167,11 +174,6 @@
 
 
 </div>
-
-@Html.Partial("../Stock/_ModalStockPendienteAtencion")
-
-@Html.Partial("../Pedido/_ModalPedidoReadOnly")
-
 
 
 <script type="text/javascript">
@@ -224,10 +226,10 @@
 
             $('body').loadingModal('show');
 
-            location.href = "/Reporte/LimpiarFiltroProductosPendientes";
+            location.href = "/Reporte/LimpiarFiltroSellOutVendedores";
         });
 
-        $(document).on('click', "#btnSearchRepPPA", function () {
+        $(document).on('click', "#btnSearchRepSOV", function () {
             $('body').loadingModal({
                 text: 'Cargando...'
             });
@@ -252,9 +254,14 @@
             changeInputFiltro("familia", valor, "string");
         });
 
-        $("#tipoUnidad").change(function () {
+        $("#anio").change(function () {
             var valor = $(this).val();
-            changeInputFiltro("idProductoPresentacion", valor, "int");
+            changeInputFiltro("anio", valor, "int");
+        });
+
+        $("#trimestre").change(function () {
+            var valor = $(this).val();
+            changeInputFiltro("trimestre", valor, "int");
         });
 
         $("#idCiudad").change(function () {
@@ -264,12 +271,12 @@
 
         $("#fechaInicio").change(function () {
             var valor = $(this).val();
-            changeInputFiltro("fechaEntregaInicio", valor, "date");
+            changeInputFiltro("fechaInicio", valor, "date");
         });
 
         $("#fechaFin").change(function () {
             var valor = $(this).val();
-            changeInputFiltro("fechaEntregaFin", valor, "date");
+            changeInputFiltro("fechaFin", valor, "date");
         });
 
         $("#btnReporteProductosPendientesAtencionExcel").click(function () {
@@ -278,7 +285,7 @@
 
         function changeInputFiltro(propiedad, valor, tipo) {
             $.ajax({
-                url: "/Reporte/changeFiltroProductosPendienteAtencion",
+                url: "/Reporte/changeFiltroSellOutVendedores",
                 type: 'POST',
                 data: {
                     tipo: tipo,

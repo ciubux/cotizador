@@ -237,6 +237,32 @@ namespace Model
         }
 
 
+        public Decimal margenPrecioLima
+        {
+            get
+            {
+                decimal margenVal = 0;
+                if (costoSinIgv > 0 && precioSinIgv > 0)
+                {
+                    margenVal = 1 - (costoSinIgv / precioSinIgv);
+                }
+                return margenVal;
+            }
+        }
+
+        public Decimal margenPrecioProvincias
+        {
+            get
+            {
+                decimal margenVal = 0;
+                if (costoSinIgv > 0 && precioProvinciaSinIgv > 0)
+                {
+                    margenVal = 1 - (costoSinIgv / precioProvinciaSinIgv);
+                }
+                return margenVal;
+            }
+        }
+
         [Display(Name = "Precio Provincias:")]
         public Decimal precioProvinciaSinIgv { get; set; }
 

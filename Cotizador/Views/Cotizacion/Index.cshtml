@@ -849,15 +849,29 @@
     </div>
 </div>
 
+<span id="spnProductoDescontinuado" style="display: none;">
+    @Html.Partial("../Producto/_LabelRestringido")
+</span>
+
+<span id="spnDetalleRestringido" style="display: none;">
+    @Html.Partial("../Pedido/_LabelDetalleRestringido")
+</span>
+
+<span id="spnDescripcionLargaInfo" style="display: none;">
+    @Html.Partial("../Producto/_LabelDescripcionLarga")
+</span>
+
+
 @Html.Action("LogPrecioProducto", "Precio")
 
 @Html.Partial("../Stock/_ModalStockProducto")
 
 @Html.Partial("../Cotizacion/_ModalExtenderVigencia")
 
-<span id="spnProductoDescontinuado" style="display: none;">
-    @Html.Partial("../Producto/_LabelRestringido")
-</span>
+@Html.Partial("../Stock/_ModalStockPendienteAtencion")
+
+@Html.Partial("../Pedido/_ModalPedidoReadOnly")
+
 
 @section Scripts {
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/cotizacion")

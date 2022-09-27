@@ -13,6 +13,9 @@ namespace Model.UTILES
         public string sku { get; set; }
         public string nombreProducto { get; set; }
 
+        public Guid idProducto { get; set; }
+        public Guid idSede { get; set; }
+
         public string familia { get; set; }
         public string proveedor { get; set; }
         public string unidad { get; set; }

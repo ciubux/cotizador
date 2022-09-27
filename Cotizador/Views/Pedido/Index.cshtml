@@ -15,7 +15,7 @@
     <input type="hidden" id="idPedido" value="@ViewBag.idPedido" />
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
     <input type="hidden" id="esCliente" value="@pedido.usuario.esCliente" />
-
+    
     <form class="form-horizontal">
 
         <div class="row">
@@ -376,11 +376,11 @@
             }
             @if (pedido.usuario.apruebaPedidos)
             {
-                <button type="button" id="btnAprobarPedidosColectivo" class="btn btn-success" style="display: none;">Aprobar Pedidos</button>
+                <button type="button" id="btnAprobarPedidosColectivo" class="btn btn-success" style="display: none;">Aprobar Pedidos Filtrados</button>
             }
             @if (pedido.usuario.liberaPedidos)
             {
-                <button type="button" id="btnLiberarPedidosColectivo" class="btn btn-success" style="display: none;">Liberar Pedidos</button>
+                <button type="button" id="btnLiberarPedidosColectivo" class="btn btn-success" style="display: none;">Liberar Pedidos Filtrados</button>
             }
         </div>
 
@@ -2531,6 +2531,8 @@
 @Html.Partial("../Stock/_ModalStockProducto")
 
 @Html.Partial("../Stock/_ModalStockPendienteAtencion")
+
+@Html.Partial("../Pedido/_ModalPedidoReadOnly")
 
 
 @section Scripts {

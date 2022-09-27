@@ -348,6 +348,7 @@
     <Compile Include="Models\GrupoClienteViewModels.cs" />
     <Compile Include="Models\LogCampoViewModels.cs" />
     <Compile Include="Models\MonedaViewModels.cs" />
+    <Compile Include="Models\OBJsFiltro\ReporteSellOutVendedoresFiltro.cs" />
     <Compile Include="Models\OBJsFiltro\ReportePendientesAtencionFiltro.cs" />
     <Compile Include="Models\RolViewModels.cs" />
     <Compile Include="Models\ProductoMultipleViewModels.cs" />
@@ -750,6 +751,7 @@
     <Content Include="Views\Almacen\_SelectAlmacenesSede.cshtml" />
     <Content Include="Views\Reporte\ProductosPendientesAtencion.cshtml" />
     <Content Include="Views\Stock\_ModalStockPendienteAtencion.cshtml" />
+    <Content Include="Views\Reporte\SellOutVendedores.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

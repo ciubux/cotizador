@@ -143,6 +143,9 @@ namespace Cotizador.Controllers
             ViewBag.cotizacionList =  this.Session[Constantes.VAR_SESSION_COTIZACION_LISTA];
             ViewBag.existeCliente = existeCliente;
             ViewBag.pagina = (int)Constantes.paginas.BusquedaCotizaciones;
+            ViewBag.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            ViewBag.vistaAgregadoPedidoModals = true;
+
             return View();
         }
 

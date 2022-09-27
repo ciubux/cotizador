@@ -1000,9 +1000,12 @@ namespace BusinessLayer
         }
 
         public void ProcesarPedidoAprobadoTecnica(Pedido pedido)
-        {   
-            this.EnviarMailTecnica(pedido);
-            this.ReplicarPedidoEntornoMP(pedido);
+        {
+            if (pedido.idMPPedido == null || pedido.idMPPedido.Equals(Guid.Empty))
+            {
+                this.EnviarMailTecnica(pedido);
+                this.ReplicarPedidoEntornoMP(pedido);
+            }
         }
 
         public void ReplicarPedidoEntornoMP(Pedido pedido)
@@ -1061,7 +1064,10 @@ namespace BusinessLayer
             pMP.observacionesGuiaRemision = pMP.observacionesGuiaRemision + " // Dejar en " + pedido.cliente.razonSocial;
 
             this.InsertPedido(pMP);
+            this.SetPedidoMP(pedido.idPedido, pMP.idPedido);
 
+            pedido.idMPPedido = pMP.idPedido;
+            pedido.numeroPedidoMP = pMP.numeroPedido;
         }
 
         public void EnviarMailTecnica(Pedido pedido) 
@@ -1187,6 +1193,14 @@ namespace BusinessLayer
             using (var dal = new PedidoDAL())
             {
                 return dal.pedidosPendientesPorProducto(idProducto, fechaInicio, fechaFin, idCiudad, idUsuario);
+            }
+        }
+
+        public bool SetPedidoMP(Guid idPedido, Guid idPedidoMP)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                return dal.SetPedidoMP(idPedido, idPedidoMP);
             }
         }
     }

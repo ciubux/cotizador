@@ -59,6 +59,9 @@ namespace Model
 
         public int idGrupoCliente { get; set; }
 
+        public Guid idMPPedido { get; set; }
+        public Int64 numeroPedidoMP { get; set; }
+
         public bool buscarSedesGrupoCliente { get; set; }
 
         [Display(Name = "Moneda:")]

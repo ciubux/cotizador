@@ -302,6 +302,8 @@ namespace Model
         /* REPORTES */
         public bool visualizaReporteSellOutPersonalizado{ get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_REPORTE_SELLOUT_PERSONALIZADO)).FirstOrDefault() != null; } }
         public bool visualizaReporteProductosPendientesAtencion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_REPORTE_PRODUCTOS_PENDIENTES_ATENCION)).FirstOrDefault() != null; } }
+
+        public bool visualizaReporteSellOutVendedores { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_REPORTE_SELLOUT_VENDEDORES)).FirstOrDefault() != null; } }
     }
 }
 

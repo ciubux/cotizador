@@ -3121,7 +3121,10 @@ jQuery(function ($) {
 
 
                 for (var i = 0; i < pedido.pedidoAdjuntoList.length; i++) {
-                    var liHTML = '<a href="javascript:mostrar();" class="descargar">' + pedido.pedidoAdjuntoList[i].nombre + '</a>';
+                    // var liHTML = '<a href="javascript:mostrar();" class="descargar">' + pedido.pedidoAdjuntoList[i].nombre + '</a>';
+                    var liHTML = '<a href="javascript:mostrar();" class="descargar">' + pedido.pedidoAdjuntoList[i].nombre + '</a>' +
+                        '<a href="javascript:mostrar();"><img src="/images/icon-close.png"  id="' + pedido.pedidoAdjuntoList[i].nombre + '" class="btnDeleteArchivo" /></a>';
+
                     $('<li />').html(liHTML).appendTo($('#nombreArchivos'));
                 }
 
@@ -3410,7 +3413,7 @@ jQuery(function ($) {
                 //ACTUALIZAR PEDIDO
                 if (pedido.seguimientoPedido_estado != ESTADO_EN_EDICION
                     && pedido.seguimientoPedido_estado != ESTADO_DENEGADO
-                    && pedido.seguimientoPedido_estado != ESTADO_ELIMINADO) {
+                    /*&& pedido.seguimientoPedido_estado != ESTADO_ELIMINADO*/) {
                     $("#btnActualizarPedido").show();
                 }
                 else {
@@ -5093,27 +5096,9 @@ jQuery(function ($) {
                 });
 
 
-                if (pedidoList.length > 0 && pedido_numeroGrupoPedido.trim() != "") {
-                    $("#btnAprobarPedidosGrupo").attr("idGrupo", pedido_numeroGrupoPedido);
-                    $("#btnLiberarPedidosGrupo").attr("idGrupo", pedido_numeroGrupoPedido);
-                    $("#btnAprobarPedidosGrupo").show();
-                    $("#btnLiberarPedidosGrupo").show();
-                } else {
-                    $("#btnAprobarPedidosGrupo").hide();
-                    $("#btnLiberarPedidosGrupo").hide();
+                
 
-                    if (idCliente != "" || pedido_idGrupoCliente != "") {
-                        if (estado == 0 && estadoCrediticio == -1) {
-                            $("#btnAprobarPedidosColectivo").show();
-                        }
-
-                        if (estadoCrediticio == 0 && estado == -1) {
-                            $("#btnLiberarPedidosColectivo").show();
-                        }
-                    }
-                }
-
-
+                var concatIdsPedido = "";
 
                 for (var i = 0; i < pedidoList.length; i++) {
 
@@ -5188,6 +5173,14 @@ jQuery(function ($) {
                     }
 
                     var grupoCliente = pedidoList[i].grupoCliente_nombre == null ? "" : pedidoList[i].grupoCliente_nombre;
+
+                    if (concatIdsPedido != "") {
+                        concatIdsPedido = concatIdsPedido + ";";
+                    }
+
+                    concatIdsPedido = concatIdsPedido + pedidoList[i].idPedido;
+
+
                     var pedido = '<tr data-expanded="true" class="pedido-data" idPedido="' + pedidoList[i].idPedido + '">' +
                         '<td>  ' + pedidoList[i].idPedido+'</td>' +
                         '<td>  ' + pedidoList[i].numeroPedidoNumeroGrupoString + '  </td>' +
@@ -5217,6 +5210,28 @@ jQuery(function ($) {
 
                     $("#tablePedidos").append(pedido);
                  
+                }
+
+                if (pedidoList.length > 0 && pedido_numeroGrupoPedido.trim() != "") {
+                    $("#btnAprobarPedidosGrupo").attr("idGrupo", pedido_numeroGrupoPedido);
+                    $("#btnLiberarPedidosGrupo").attr("idGrupo", pedido_numeroGrupoPedido);
+                    $("#btnAprobarPedidosGrupo").show();
+                    $("#btnLiberarPedidosGrupo").show();
+                } else {
+                    $("#btnAprobarPedidosGrupo").hide();
+                    $("#btnLiberarPedidosGrupo").hide();
+
+                    if (idCliente != "" || pedido_idGrupoCliente != "") {
+                        if (estado == 0 && estadoCrediticio == -1) {
+                            $("#btnAprobarPedidosColectivo").show();
+                            $("#btnAprobarPedidosColectivo").attr("idsPdidos", concatIdsPedido);
+                        }
+
+                        if (estadoCrediticio == 0 && estado == -1) {
+                            $("#btnLiberarPedidosColectivo").show();
+                            $("#btnLiberarPedidosColectivo").attr("idsPdidos", concatIdsPedido);
+                        }
+                    }
                 }
 
                 if (pedidoList.length > 0) {

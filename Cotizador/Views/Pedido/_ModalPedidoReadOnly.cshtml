@@ -1,8 +1,14 @@
 ﻿@{
     Model.Pedido vPed = new Model.Pedido();
 
-    
+
     vPed.usuario = ViewBag.usuario;
+
+    bool agregadoPedidoModals = false;
+    if(ViewBag.vistaAgregadoPedidoModals != null)
+    {
+        agregadoPedidoModals = ViewBag.vistaAgregadoPedidoModals;
+    }
 }
 
 <div class="modal fade" id="modalPedidoReadOnly" tabindex="-1">
@@ -19,9 +25,9 @@
 
             <div class="modal-body">
                 <form class="form-horizontal">
-                    <input type="hidden" id="verIdPedido" />
-                    <input type="hidden" id="verIdCliente" />
-                    <input type="hidden" id="verFechaEntregaExtendida" />
+                    <input type="hidden" id="verMROIdPedido" />
+                    <input type="hidden" id="verMROIdCliente" />
+                    <input type="hidden" id="verMROFechaEntregaExtendida" />
                     <!--NUMEROS PEDIDO-->
                     <div class="row">
                         <!--NÚMERO PEDIDO-->
@@ -29,7 +35,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(p => vPed.numeroPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verNumero"></p>
+                                    <p class="form-control-static" id="verMRONumero"></p>
                                 </div>
                             </div>
                         </div>
@@ -38,7 +44,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(p => vPed.numeroGrupoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verNumeroGrupo"></p>
+                                    <p class="form-control-static" id="verMRONumeroGrupo"></p>
                                 </div>
                             </div>
                         </div>-->
@@ -47,7 +53,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(p => vPed.cotizacion.codigo, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verCotizacionCodigo"></p>
+                                    <p class="form-control-static" id="verMROCotizacionCodigo"></p>
                                 </div>
                             </div>
                         </div>
@@ -57,7 +63,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(p => vPed.tipoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verTipoPedido"></p>
+                                    <p class="form-control-static" id="verMROTipoPedido"></p>
                                 </div>
                             </div>
                         </div>
@@ -71,7 +77,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(p => vPed.ciudad, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verCiudad"></p>
+                                    <p class="form-control-static" id="verMROCiudad"></p>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +86,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(p => vPed.cliente, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verCliente"></p>
+                                    <p class="form-control-static" id="verMROCliente"></p>
                                 </div>
                             </div>
                         </div>
@@ -89,7 +95,7 @@
                             <div class="form-group">
                                 <label for="estado" class="control-label col-xs-4">Grupo Cliente:</label>
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verGrupoCliente"></p>
+                                    <p class="form-control-static" id="verMROGrupoCliente"></p>
                                 </div>
                             </div>
                         </div>
@@ -104,7 +110,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(p => vPed.numeroReferenciaCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verNumeroReferenciaCliente"></p>
+                                    <p class="form-control-static" id="verMRONumeroReferenciaCliente"></p>
                                 </div>
                             </div>
                         </div>
@@ -112,7 +118,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(p => vPed.numeroRequerimiento, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verNumeroRequerimiento"></p>
+                                    <p class="form-control-static" id="verMRONumeroRequerimiento"></p>
                                 </div>
                             </div>
                         </div>
@@ -127,7 +133,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(p => vPed.usuarioCreacion, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verUsuarioCreacion"></p>
+                                    <p class="form-control-static" id="verMROUsuarioCreacion"></p>
                                 </div>
                             </div>
                         </div>
@@ -136,7 +142,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(p => vPed.fechaHoraRegistro, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verFechaHoraRegistro"></p>
+                                    <p class="form-control-static" id="verMROFechaHoraRegistro"></p>
                                 </div>
                             </div>
                         </div>
@@ -145,7 +151,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(p => vPed.numeroReferenciaAdicional, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verNumeroReferenciaAdicional"></p>
+                                    <p class="form-control-static" id="verMRONumeroReferenciaAdicional"></p>
                                 </div>
                             </div>
                         </div>
@@ -157,7 +163,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(p => vPed.cliente.responsableComercial, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verResponsableComercial"></p>
+                                    <p class="form-control-static" id="verMROResponsableComercial"></p>
                                 </div>
                             </div>
                         </div>
@@ -166,7 +172,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(p => vPed.cliente.supervisorComercial, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verSupervisorComercial"></p>
+                                    <p class="form-control-static" id="verMROSupervisorComercial"></p>
                                 </div>
                             </div>
                         </div>
@@ -175,7 +181,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(p => vPed.cliente.asistenteServicioCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verAsistenteServicioCliente"></p>
+                                    <p class="form-control-static" id="verMROAsistenteServicioCliente"></p>
                                 </div>
                             </div>
                         </div>
@@ -193,7 +199,7 @@
                                 <div class="form-group">
                                     @Html.LabelFor(p => vPed.ubigeoEntrega, htmlAttributes: new { @class = "control-label col-xs-4" })
                                     <div class="col-xs-8">
-                                        <p class="form-control-static" id="verUbigeoEntrega"></p>
+                                        <p class="form-control-static" id="verMROUbigeoEntrega"></p>
                                     </div>
                                 </div>
                             </div>
@@ -203,7 +209,7 @@
                                 <div class="form-group">
                                     @Html.LabelFor(p => vPed.direccionEntrega.descripcion, htmlAttributes: new { @class = "control-label col-xs-2" })
                                     <div class="col-xs-10">
-                                        <p class="form-control-static" id="verDireccionEntrega"></p>
+                                        <p class="form-control-static" id="verMRODireccionEntrega"></p>
                                     </div>
                                 </div>
                             </div>
@@ -218,7 +224,7 @@
                                 <div class="form-group">
                                     @Html.LabelFor(p => vPed.direccionEntrega.contacto, htmlAttributes: new { @class = "control-label col-xs-4" })
                                     <div class="col-xs-8">
-                                        <p class="form-control-static" id="verContactoEntrega"></p>
+                                        <p class="form-control-static" id="verMROContactoEntrega"></p>
                                     </div>
                                 </div>
                             </div>
@@ -227,7 +233,7 @@
                                 <div class="form-group">
                                     @Html.LabelFor(p => vPed.direccionEntrega.telefono, htmlAttributes: new { @class = "control-label col-xs-4" })
                                     <div class="col-xs-8">
-                                        <p class="form-control-static" id="verTelefonoContactoEntrega"></p>
+                                        <p class="form-control-static" id="verMROTelefonoContactoEntrega"></p>
                                     </div>
                                 </div>
                             </div>
@@ -237,7 +243,7 @@
 
                                     @Html.LabelFor(p => vPed.fechaHorarioEntrega, htmlAttributes: new { @class = "control-label col-xs-4" })
                                     <div class="col-xs-8">
-                                        <p class="form-control-static" id="verFechaHorarioEntrega"></p>
+                                        <p class="form-control-static" id="verMROFechaHorarioEntrega"></p>
                                     </div>
                                 </div>
                             </div>
@@ -255,7 +261,7 @@
                                 <div class="form-group">
                                     @Html.LabelFor(p => vPed.contactoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
                                     <div class="col-xs-8">
-                                        <p class="form-control-static" id="verContactoPedido"></p>
+                                        <p class="form-control-static" id="verMROContactoPedido"></p>
                                     </div>
                                 </div>
                             </div>
@@ -264,7 +270,7 @@
                                 <div class="form-group">
                                     @Html.LabelFor(p => vPed.telefonoCorreoContactoPedido, htmlAttributes: new { @class = "control-label col-xs-4" })
                                     <div class="col-xs-8">
-                                        <p class="form-control-static" id="verTelefonoCorreoContactoPedido"></p>
+                                        <p class="form-control-static" id="verMROTelefonoCorreoContactoPedido"></p>
                                     </div>
                                 </div>
                             </div>
@@ -273,7 +279,7 @@
                                 <div class="form-group">
                                     @Html.LabelFor(p => vPed.fechaHoraSolicitud, htmlAttributes: new { @class = "control-label col-xs-4" })
                                     <div class="col-xs-8">
-                                        <p class="form-control-static" id="verFechaHoraSolicitud"></p>
+                                        <p class="form-control-static" id="verMROFechaHoraSolicitud"></p>
                                     </div>
                                 </div>
                             </div>
@@ -292,8 +298,8 @@
                                 <div class="form-group">
                                     <label for="estado" class="control-label col-xs-4">Estado:</label>
                                     <div class="col-xs-8">
-                                        <p class="form-control-static" id="verEstado"></p>
-                                        <a id="lnkVerHistorial" href="#">Ver Historial</a>
+                                        <p class="form-control-static" id="verMROEstado"></p>
+                                        @*<a id="lnkVerHistorial" href="#">Ver Historial</a>*@
                                     </div>
                                 </div>
                             </div>
@@ -302,7 +308,7 @@
                                 <div class="form-group">
                                     <label for="modificado" class="control-label col-xs-4">Modificado Por:</label>
                                     <div class="col-xs-8">
-                                        <p class="form-control-static" id="verModificadoPor"></p>
+                                        <p class="form-control-static" id="verMROModificadoPor"></p>
                                     </div>
                                 </div>
                             </div>
@@ -311,7 +317,7 @@
                                 <div class="form-group">
                                     <label for="modificado" class="control-label col-xs-4">Comentario Estado:</label>
                                     <div class="col-xs-8">
-                                        <p class="form-control-static" id="verObservacionEstado">
+                                        <p class="form-control-static" id="verMROObservacionEstado">
                                         </p>
                                     </div>
                                 </div>
@@ -328,8 +334,8 @@
                                 <div class="form-group">
                                     <label for="estado" class="control-label col-xs-4">Estado:</label>
                                     <div class="col-xs-8">
-                                        <p class="form-control-static" id="verEstadoCrediticio"></p>
-                                        <a id="lnkVerHistorialCrediticio" href="#">Ver Historial</a>
+                                        <p class="form-control-static" id="verMROEstadoCrediticio"></p>
+                                        @*<a id="lnkVerHistorialCrediticio" href="#">Ver Historial</a>*@
                                     </div>
                                 </div>
                             </div>
@@ -338,7 +344,7 @@
                                 <div class="form-group">
                                     <label for="modificado" class="control-label col-xs-4">Modificado Por:</label>
                                     <div class="col-xs-8">
-                                        <p class="form-control-static" id="verModificadoCrediticioPor"></p>
+                                        <p class="form-control-static" id="verMROModificadoCrediticioPor"></p>
                                     </div>
                                 </div>
                             </div>
@@ -347,7 +353,7 @@
                                 <div class="form-group">
                                     <label for="modificado" class="control-label col-xs-4">Comentario Estado:</label>
                                     <div class="col-xs-8">
-                                        <p class="form-control-static" id="verObservacionEstadoCrediticio">
+                                        <p class="form-control-static" id="verMROObservacionEstadoCrediticio">
                                         </p>
                                     </div>
                                 </div>
@@ -356,7 +362,7 @@
                         </div>
                     </fieldset>
 
-                    <table id="tableDetallePedido" class="table" data-editing="false"
+                    <table id="tableDetallePedidoMRO" class="table" data-editing="false"
                            data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
                            data-editing-allow-add="false"
                            data-editing-allow-delete="false"
@@ -421,7 +427,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(p => vPed.observaciones, htmlAttributes: new { @class = "control-label col-xs-2" })
                                 <div class="col-xs-10">
-                                    <p class="form-control-static" id="verObservaciones">
+                                    <p class="form-control-static" id="verMROObservaciones">
                                     </p>
                                 </div>
                             </div>
@@ -432,19 +438,19 @@
                             <div class="form-group">
                                 <div class="pull-right">
                                     <span class="totales">Subtotal: S/ </span>
-                                    <span class="totales" id="verMontoSubTotal"></span>
+                                    <span class="totales" id="verMROMontoSubTotal"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="pull-right">
                                     <span class="totales">IGV 18%: S/ </span>
-                                    <span class="totales" id="verMontoIGV"></span>
+                                    <span class="totales" id="verMROMontoIGV"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="pull-right">
                                     <span class="totales">TOTAL: S/ </span>
-                                    <span class="totales" id="verMontoTotal"></span>
+                                    <span class="totales" id="verMROMontoTotal"></span>
                                 </div>
                             </div>
 
@@ -455,9 +461,9 @@
                     <div class="row">
                         <div class="col-sm-6 col-lg-9">
                             <div class="form-group">
-                                <label for="verCondicionesPago" class="control-label col-xs-2">Condición de Pago:</label>
+                                <label for="verMROCondicionesPago" class="control-label col-xs-2">Condición de Pago:</label>
                                 <div class="col-xs-8">
-                                    <p class="form-control-static" id="verCondicionesPago">
+                                    <p class="form-control-static" id="verMROCondicionesPago">
                                     </p>
                                 </div>
                             </div>
@@ -469,7 +475,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(p => vPed.observacionesGuiaRemision, htmlAttributes: new { @class = "control-label col-xs-2" })
                                 <div class="col-xs-10">
-                                    <p class="form-control-static" id="verObservacionesGuiaRemision">
+                                    <p class="form-control-static" id="verMROObservacionesGuiaRemision">
                                     </p>
                                 </div>
                             </div>
@@ -481,7 +487,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(p => vPed.observacionesFactura, htmlAttributes: new { @class = "control-label col-xs-2" })
                                 <div class="col-xs-10">
-                                    <p class="form-control-static" id="verObservacionesFactura">
+                                    <p class="form-control-static" id="verMROObservacionesFactura">
                                     </p>
                                 </div>
                             </div>
@@ -492,9 +498,9 @@
                     <div class="row" style="margin-right: 10px">
                         <div class="col-sm-6 col-lg-9">
                             <div class="form-group">
-                                <label for="verNombreArchivos" class="control-label col-xs-2">Archivos Adjuntos:</label>
+                                <label for="verMRONombreArchivos" class="control-label col-xs-2">Archivos Adjuntos:</label>
                                 <div class="col-xs-10">
-                                    <ul id="verNombreArchivos"><li>as</li></ul>
+                                    <ul id="verMRONombreArchivos"><li>as</li></ul>
                                 </div>
                             </div>
                         </div>
@@ -541,23 +547,24 @@
     </div>
 </div>
 
-<span id="spnProductoDescontinuado" style="display: none;">
-    @Html.Partial("../Producto/_LabelRestringido")
-</span>
+@if (!agregadoPedidoModals) { 
+    <span id="spnProductoDescontinuado" style="display: none;">
+        @Html.Partial("../Producto/_LabelRestringido")
+    </span>
 
-<span id="spnDetalleRestringido" style="display: none;">
-    @Html.Partial("../Pedido/_LabelDetalleRestringido")
-</span>
+    <span id="spnDetalleRestringido" style="display: none;">
+        @Html.Partial("../Pedido/_LabelDetalleRestringido")
+    </span>
 
-<span id="spnDescripcionLargaInfo" style="display: none;">
-    @Html.Partial("../Producto/_LabelDescripcionLarga")
-</span>
-
+    <span id="spnDescripcionLargaInfo" style="display: none;">
+        @Html.Partial("../Producto/_LabelDescripcionLarga")
+    </span>
+}
 
 <script type="text/javascript">
 
     function funcionesModalPedidoReadOnly() {
-        $(document).on('click', "button.verModalPedidoReadOnly", function () {
+        $(document).on('click', ".verModalPedidoReadOnly", function () {
             var idPedido = $(this).attr("idPedido");
 
             $.ajax({
@@ -584,36 +591,15 @@
                     pedidoItemsRestringidos = [];
                     //  var usuario = resultado.usuario;
 
-                    $("#verIdPedido").val(pedido.idPedido);
+                    $("#verMROIdPedido").val(pedido.idPedido);
 
-                    $('#pedido_numeroGrupo')
-                        .find('option')
-                        .remove()
-                        .end()
-                        ;
-
-                    $('#pedido_numeroGrupo').append($('<option>', {
-                        value: 0,
-                        text: "Seleccione Número Grupo"
-                    }));
-
-                    for (var m = 0; m < pedido.pedidoGrupoList.length; m++) {
-                        $('#pedido_numeroGrupo').append($('<option>', {
-                            value: pedido.pedidoGrupoList[m].numero,
-                            text: pedido.pedidoGrupoList[m].numeroToString + " Solicitado: " + pedido.pedidoGrupoList[m].fechaSolicitudToString
-                        }));
-                    }
-
-                    $('#pedido_numeroGrupo').val(pedido.numeroGrupoPedido);
-
-
+                    
 
                     $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
                     $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaHasta.substr(0, 10)));
                     $("#fechaProgramaciontmp").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
                     //Important
 
-                    $("#idPedido").val(pedido.idPedido);
 
                     var numeroPedido = pedido.numeroPedidoString;
 
@@ -628,91 +614,91 @@
                         numeroPedido = numeroPedido + '<br/><span style="color:red; font-weight: bold;">TRUNCADO</span>';
                     }
 
-                    $("#verNumero").html(numeroPedido);
+                    $("#verMRONumero").html(numeroPedido);
 
                     if (pedido.cotizacion_tipoCotizacion == 0) {
-                        $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString);
+                        $("#verMROCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString);
                     }
                     else if (pedido.cotizacion_tipoCotizacion == 1) {
-                        $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString + " (Puntual)");
+                        $("#verMROCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString + " (Puntual)");
                     }
                     else if (pedido.cotizacion_tipoCotizacion == 2) {
-                        $("#verCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString + " (Trivial)");
+                        $("#verMROCotizacionCodigo").html(pedido.cotizacion_numeroCotizacionString + " (Trivial)");
                     }
 
 
 
-                    $("#verTipoPedido").html(pedido.tiposPedidoString);
+                    $("#verMROTipoPedido").html(pedido.tiposPedidoString);
 
-                    $("#verResponsableComercial").html(pedido.cliente_responsableComercial_codigoDescripcion + " " + pedido.cliente_responsableComercial_usuario_email);
-                    $("#verSupervisorComercial").html(pedido.cliente_supervisorComercial_codigoDescripcion + " " + pedido.cliente_supervisorComercial_usuario_email);
-                    $("#verAsistenteServicioCliente").html(pedido.cliente_asistenteServicioCliente_codigoDescripcion + " " + pedido.cliente_asistenteServicioCliente_usuario_email);
+                    $("#verMROResponsableComercial").html(pedido.cliente_responsableComercial_codigoDescripcion + " " + pedido.cliente_responsableComercial_usuario_email);
+                    $("#verMROSupervisorComercial").html(pedido.cliente_supervisorComercial_codigoDescripcion + " " + pedido.cliente_supervisorComercial_usuario_email);
+                    $("#verMROAsistenteServicioCliente").html(pedido.cliente_asistenteServicioCliente_codigoDescripcion + " " + pedido.cliente_asistenteServicioCliente_usuario_email);
 
                     /*if (pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)) {
                         $("#divReferenciaCliente").hide();
                         $("#divCiudadSolicitante").show();
-                        $("#verCiudadSolicitante").html(pedido.cliente.ciudad.nombre);
+                        $("#verMROCiudadSolicitante").html(pedido.cliente.ciudad.nombre);
                     }
                     else {*/
                     $("#divReferenciaCliente").show();
                     $("#divCiudadSolicitante").hide();
                     //}
 
-                    $("#verCondicionesPago").html(pedido.textoCondicionesPago);
+                    $("#verMROCondicionesPago").html(pedido.textoCondicionesPago);
 
-                    $("#verFechaHorarioEntrega").html(pedido.fechaHorarioEntrega);
+                    $("#verMROFechaHorarioEntrega").html(pedido.fechaHorarioEntrega);
 
-                    $("#verCiudad").html(pedido.ciudad_nombre);
-                    $("#verIdCliente").val(pedido.cliente_idCliente);
-                    $("#verCliente").html(pedido.cliente_codigoRazonSocial);
-
-
-                    $("#verGrupoCliente").html(pedido.grupoCliente_nombre == null ? "" : pedido.grupoCliente_nombre);
+                    $("#verMROCiudad").html(pedido.ciudad_nombre);
+                    $("#verMROIdCliente").val(pedido.cliente_idCliente);
+                    $("#verMROCliente").html(pedido.cliente_codigoRazonSocial);
 
 
-                    $("#verNumeroReferenciaCliente").html(pedido.numeroReferenciaCliente);
-                    $("#verNumeroReferenciaAdicional").html(pedido.numeroReferenciaAdicional);
-                    $("#verNumeroRequerimiento").html(pedido.numeroRequerimiento);
-
-                    $("#verFechaEntregaExtendida").val(pedido.fechaEntregaExtendidaString);
-
-                    $("#verDireccionEntrega").html(pedido.direccionEntrega_descripcion);
-                    $("#verTelefonoContactoEntrega").html(pedido.direccionEntrega_telefono);
-                    $("#verContactoEntrega").html(pedido.direccionEntrega_contacto);
-
-                    $("#verUsuarioCreacion").html(pedido.usuario_nombre);
-                    $("#verFechaHoraRegistro").html(pedido.fechaHoraRegistro);
-
-                    $("#verUbigeoEntrega").html(pedido.ubigeoEntrega.ToString);
-
-                    $("#verContactoPedido").html(pedido.contactoPedido);
-                    $("#verTelefonoCorreoContactoPedido").html(pedido.telefonoCorreoContactoPedido);
+                    $("#verMROGrupoCliente").html(pedido.grupoCliente_nombre == null ? "" : pedido.grupoCliente_nombre);
 
 
+                    $("#verMRONumeroReferenciaCliente").html(pedido.numeroReferenciaCliente);
+                    $("#verMRONumeroReferenciaAdicional").html(pedido.numeroReferenciaAdicional);
+                    $("#verMRONumeroRequerimiento").html(pedido.numeroRequerimiento);
+
+                    $("#verMROFechaEntregaExtendida").val(pedido.fechaEntregaExtendidaString);
+
+                    $("#verMRODireccionEntrega").html(pedido.direccionEntrega_descripcion);
+                    $("#verMROTelefonoContactoEntrega").html(pedido.direccionEntrega_telefono);
+                    $("#verMROContactoEntrega").html(pedido.direccionEntrega_contacto);
+
+                    $("#verMROUsuarioCreacion").html(pedido.usuario_nombre);
+                    $("#verMROFechaHoraRegistro").html(pedido.fechaHoraRegistro);
+
+                    $("#verMROUbigeoEntrega").html(pedido.ubigeoEntrega.ToString);
+
+                    $("#verMROContactoPedido").html(pedido.contactoPedido);
+                    $("#verMROTelefonoCorreoContactoPedido").html(pedido.telefonoCorreoContactoPedido);
 
 
-                    $("#verFechaHoraSolicitud").html(pedido.fechaHoraSolicitud);
-
-                    $("#verEstado").html(pedido.seguimientoPedido_estadoString);
-                    $("#verModificadoPor").html(pedido.seguimientoPedido_usuario_nombre);
-                    $("#verObservacionEstado").html(pedido.seguimientoPedido_observacion);
-
-                    $("#verEstadoCrediticio").html(pedido.seguimientoCrediticioPedido_estadoString);
-                    $("#verModificadoCrediticioPor").html(pedido.seguimientoCrediticioPedido_usuario_nombre);
-                    $("#verObservacionEstadoCrediticio").html(pedido.seguimientoCrediticioPedido_observacion);
 
 
-                    $("#verObservaciones").html(pedido.observaciones);
-                    $("#verObservacionesFactura").html(pedido.observacionesFactura);
-                    $("#verObservacionesGuiaRemision").html(pedido.observacionesGuiaRemision);
-                    $("#verMontoSubTotal").html(Number(pedido.montoSubTotal).toFixed(cantidadDecimales));
-                    $("#verMontoIGV").html(Number(pedido.montoIGV).toFixed(cantidadDecimales));
-                    $("#verMontoTotal").html(Number(pedido.montoTotal).toFixed(cantidadDecimales));
+                    $("#verMROFechaHoraSolicitud").html(pedido.fechaHoraSolicitud);
+
+                    $("#verMROEstado").html(pedido.seguimientoPedido_estadoString);
+                    $("#verMROModificadoPor").html(pedido.seguimientoPedido_usuario_nombre);
+                    $("#verMROObservacionEstado").html(pedido.seguimientoPedido_observacion);
+
+                    $("#verMROEstadoCrediticio").html(pedido.seguimientoCrediticioPedido_estadoString);
+                    $("#verMROModificadoCrediticioPor").html(pedido.seguimientoCrediticioPedido_usuario_nombre);
+                    $("#verMROObservacionEstadoCrediticio").html(pedido.seguimientoCrediticioPedido_observacion);
+
+
+                    $("#verMROObservaciones").html(pedido.observaciones);
+                    $("#verMROObservacionesFactura").html(pedido.observacionesFactura);
+                    $("#verMROObservacionesGuiaRemision").html(pedido.observacionesGuiaRemision);
+                    $("#verMROMontoSubTotal").html(Number(pedido.montoSubTotal).toFixed(cantidadDecimales));
+                    $("#verMROMontoIGV").html(Number(pedido.montoIGV).toFixed(cantidadDecimales));
+                    $("#verMROMontoTotal").html(Number(pedido.montoTotal).toFixed(cantidadDecimales));
                     $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
 
-                    /*      $("#verMontoSubTotalVenta").html(Number(pedido.venta.subTotal).toFixed(cantidadDecimales));
-                          $("#verMontoIGVVenta").html(Number(pedido.venta.igv).toFixed(cantidadDecimales));
-                          $("#verMontoTotalVenta").html(Number(pedido.venta.total).toFixed(cantidadDecimales));
+                    /*      $("#verMROMontoSubTotalVenta").html(Number(pedido.venta.subTotal).toFixed(cantidadDecimales));
+                          $("#verMROMontoIGVVenta").html(Number(pedido.venta.igv).toFixed(cantidadDecimales));
+                          $("#verMROMontoTotalVenta").html(Number(pedido.venta.total).toFixed(cantidadDecimales));
           */
                     //  nombreArchivos
 
@@ -725,19 +711,19 @@
                     }
 
 
-                    $("#verNombreArchivos > li").remove().end();
+                    $("#verMRONombreArchivos > li").remove().end();
 
 
                     for (var i = 0; i < pedido.pedidoAdjuntoList.length; i++) {
                         var liHTML = '<a href="javascript:mostrar();" class="descargar btnDescargarArchivoAdjunto" idArchivoAdjunto="' + pedido.pedidoAdjuntoList[i].idArchivoAdjunto + '">' + pedido.pedidoAdjuntoList[i].nombre + '</a>';
                         //$('<li />').html(liHTML).appendTo($('#nombreArchivos'));
-                        $('#verNombreArchivos').append($('<li />').html(liHTML));
+                        $('#verMRONombreArchivos').append($('<li />').html(liHTML));
                     }
 
 
-                    $("#tableDetallePedido > tbody").empty();
+                    $("#tableDetallePedidoMRO > tbody").empty();
 
-                    FooTable.init('#tableDetallePedido');
+                    FooTable.init('#tableDetallePedidoMRO');
 
                     $("#formVerGuiasRemision").html("");
                     $("#formVerNotasIngreso").html("");
@@ -833,33 +819,20 @@
 
 
 
-                    $("#verRazonSocialSunat").html(pedido.cliente_razonSocialSunat);
-                    $("#verRUC").html(pedido.cliente_ruc);
-                    $("#verDireccionDomicilioLegalSunat").html(pedido.cliente_direccionDomicilioLegalSunat);
-                    $("#verCodigo").html(pedido.cliente_codigo);
+                    $("#verMRORazonSocialSunat").html(pedido.cliente_razonSocialSunat);
+                    $("#verMRORUC").html(pedido.cliente_ruc);
+                    $("#verMRODireccionDomicilioLegalSunat").html(pedido.cliente_direccionDomicilioLegalSunat);
+                    $("#verMROCodigo").html(pedido.cliente_codigo);
 
                     $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
-                    $("#verCorreoEnvioFactura").html(pedido.cliente_correoEnvioFactura);
+                    $("#verMROCorreoEnvioFactura").html(pedido.cliente_correoEnvioFactura);
 
                     //
                     // sleep
-                    $("#tableDetallePedido").append(d);
+                    $("#tableDetallePedidoMRO").append(d);
 
 
-                    /**/
-                    if (pedido.seguimientoPedido_estado == ESTADO_ATENDIDO) {
-                        $("#pedido_observacionesGuiaRemision").attr("disabled", "disabled");
-                    }
-                    else {
-                        $("#pedido_observacionesGuiaRemision").removeAttr("disabled");
-                    }
-
-                    if (pedido.seguimientoPedido_estado == ESTADO_FACTURADO) {
-                        $("#pedido_observacionesFactura").attr("disabled", "disabled");
-                    }
-                    else {
-                        $("#pedido_observacionesFactura").removeAttr("disabled");
-                    }
+                    
 
 
                     $("#modalPedidoReadOnly").modal('show');

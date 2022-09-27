@@ -816,6 +816,13 @@
     @Html.Partial("_LabelRestringido")
 </span>
 
+<span id="spnDetalleRestringido" style="display: none;">
+    @Html.Partial("../Pedido/_LabelDetalleRestringido")
+</span>
+
+<span id="spnDescripcionLargaInfo" style="display: none;">
+    @Html.Partial("../Producto/_LabelDescripcionLarga")
+</span>
 
 @Html.Partial("../Stock/_ModalStockProducto")
 
@@ -823,6 +830,10 @@
 {
     @Html.Partial("../Producto/_SelectVRIconState")
 }
+
+@Html.Partial("../Stock/_ModalStockPendienteAtencion")
+
+@Html.Partial("../Pedido/_ModalPedidoReadOnly")
 
 
 @section Scripts {

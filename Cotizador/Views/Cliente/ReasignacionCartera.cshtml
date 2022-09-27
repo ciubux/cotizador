@@ -349,13 +349,16 @@
             $("#tableClientesConfirmarReasignar > tbody").empty();
             var reasignaciones = 0;
             var dataReasignaciones = "";
+            var pasoLimite = false;
+            var limiteReasignaciones = 200;
             $('.input-reasignar-asesor').each(function () {
                 var idAsesor = parseInt($(this).val());
+                var uuid = $(this).attr("name").replace("idResignarSel_", "");
 
-                if (idAsesor > 0) {
+                if (idAsesor > 0 && !pasoLimite) {
                     reasignaciones = reasignaciones + 1;
                     var dataRow = "|-*-|" + $(this).attr("nombreCliente") + "|*|" + $(this).attr("rucCliente") + "|*|" + $(this).attr("ciudadCliente")
-                            + "|*|" + $(this).attr("nombreAsesor") + "|*|" + $(this).attr("nombreNuevoAsesor"); 
+                              + "|*|" + $(this).attr("nombreAsesor") + "|*|" + $(this).attr("nombreNuevoAsesor") + "|*|" + uuid; 
                     var itemRow = "<tr>" +
                         "<td>" + $(this).attr("nombreCliente") + "</td>" +
                         "<td>" + $(this).attr("rucCliente") + "</td>" +
@@ -364,6 +367,9 @@
                         "</tr>";
                     dataReasignaciones = dataReasignaciones + dataRow;
                     $("#tableClientesConfirmarReasignar").append(itemRow);
+                    if (reasignaciones == limiteReasignaciones) {
+                        pasoLimite = true;
+                    }
                 }
             });
 
@@ -371,7 +377,20 @@
             FooTable.init('#tableClientesConfirmarReasignar');
 
             $("#nroReasignacionesClientes").html(reasignaciones);
-            
+
+            if (pasoLimite) {
+                $.alert({
+                    title: 'LIMITE DE REASIGNACIONES',
+                    content: 'Solo se pueden reasignar ' + limiteReasignaciones + ' clientes por operación. Para reasignar los restantes debera volver a realizar otra operación de reasignación.',
+                    type: 'orange',
+                    buttons: {
+                        OK: function () {
+                            
+                        }
+                    }
+                });
+            }
+
             if (reasignaciones <= 0) {
                 setTimeout(function () {
                     $("#btnCancelConfirmarReasginarCartera").click();

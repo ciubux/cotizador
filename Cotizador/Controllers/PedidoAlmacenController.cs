@@ -194,6 +194,9 @@ namespace Cotizador.Controllers
             ViewBag.pedidoList = this.Session[Constantes.VAR_SESSION_PEDIDO_ALMACEN_LISTA];
             ViewBag.existeCliente = existeCliente;
             ViewBag.pagina = (int)Constantes.paginas.BusquedaPedidosAlmacen;
+            ViewBag.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            ViewBag.vistaAgregadoPedidoModals = true;
+
             return View();
         }
 

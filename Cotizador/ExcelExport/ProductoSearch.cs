@@ -34,20 +34,30 @@ namespace Cotizador.ExcelExport
                 HSSFFont titleFont = (HSSFFont)wb.CreateFont();
                 titleFont.FontHeightInPoints = (short)11;
                 titleFont.FontName = "Arial";
-                titleFont.Color = IndexedColors.Black.Index;
+                //titleFont.Color = IndexedColors.Black.Index;
+                titleFont.Color = IndexedColors.White.Index;
                 titleFont.IsBold = true;
                 //  HSSFColor color = new HSSFColor(); // (new byte[] { 184, 212, 249 });
                 //     color.RGB.SetValue(new byte[] { 184, 212, 249 },0);
                 HSSFCellStyle titleCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
                 titleCellStyle.SetFont(titleFont);
+                //titleCellStyle.FillPattern = FillPattern.SolidForeground;
+                //titleCellStyle.FillForegroundColor = HSSFColor.Grey25Percent.Index;
                 titleCellStyle.FillPattern = FillPattern.SolidForeground;
-                titleCellStyle.FillForegroundColor = HSSFColor.Grey25Percent.Index;
+                titleCellStyle.FillForegroundColor = HSSFColor.RoyalBlue.Index;
 
                 //titleCellStyle.FillBackgroundColor = HSSFColor.BlueGrey.Index;
 
 
+                var avgCellFormate = wb.CreateDataFormat();
+                var twoDecFormat = avgCellFormate.GetFormat("0.00");
+                HSSFCellStyle twoDecCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                twoDecCellStyle.DataFormat = twoDecFormat;
+                twoDecCellStyle.VerticalAlignment = VerticalAlignment.Center;
 
-
+                HSSFCellStyle twoDecPercentageCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
+                twoDecPercentageCellStyle.DataFormat = HSSFDataFormat.GetBuiltinFormat("0.00%");
+                twoDecPercentageCellStyle.VerticalAlignment = VerticalAlignment.Center;
 
                 IDataFormat format = wb.CreateDataFormat();
                 ICellStyle dateFormatStyle = wb.CreateCellStyle();
@@ -93,6 +103,12 @@ namespace Cotizador.ExcelExport
                 if (usuario.visualizaCostos) { 
                     UtilesHelper.setValorCelda(sheet, 1, "M", "Costo", titleCellStyle);
                 }
+
+                if (usuario.visualizaMargen)
+                {
+                    UtilesHelper.setValorCelda(sheet, 1, "N", "Margen Lima", titleCellStyle);
+                    UtilesHelper.setValorCelda(sheet, 1, "O", "Margen Provincias", titleCellStyle);
+                }
                 i = 2;
 
                 /*  for (int iii = 0; iii<50;iii++)
@@ -110,11 +126,18 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "H", obj.equivalenciaAlternativa);
                     UtilesHelper.setValorCelda(sheet, i, "I", obj.unidadProveedor);
                     UtilesHelper.setValorCelda(sheet, i, "J", obj.equivalenciaProveedor);
-                    UtilesHelper.setValorCelda(sheet, i, "K", (double) obj.precioSinIgv);
-                    UtilesHelper.setValorCelda(sheet, i, "L", (double) obj.precioProvinciaSinIgv);
+                    UtilesHelper.setValorCelda(sheet, i, "K", (double) obj.precioSinIgv, twoDecCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "L", (double) obj.precioProvinciaSinIgv, twoDecCellStyle);
+                    
                     if (usuario.visualizaCostos)
                     {
-                        UtilesHelper.setValorCelda(sheet, i, "M", (double) obj.costoSinIgv);
+                        UtilesHelper.setValorCelda(sheet, i, "M", (double) obj.costoSinIgv, twoDecCellStyle);
+                    }
+
+                    if (usuario.visualizaMargen)
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, "N", (double) obj.margenPrecioLima, twoDecPercentageCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "O", (double) obj.margenPrecioProvincias, twoDecPercentageCellStyle);
                     }
 
                     i++;

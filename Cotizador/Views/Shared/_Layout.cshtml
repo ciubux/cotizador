@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "017";
+    TempData["ScriptVersion"] = "019";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -151,6 +151,7 @@
 
                         var linkResultadosKPI = "";
                         var linkReporteProductosPendientesAtencion = "";
+                        var linkReporteSellOutVendedores = "";
 
                         var linkRegistrarAjusteStock = "";
                         var linkBusquedaAjusteStock = "";
@@ -253,8 +254,7 @@
                             case 901: linkReporteSellOutPersonalizado = "active"; linkReportes = "active"; break;
                             case 920: linkResultadosKPI = "active"; linkReportes = "active"; break;
                             case 910: linkReporteProductosPendientesAtencion = "active"; linkReportes = "active"; break;
-
-                                
+                            case 911: linkReporteSellOutVendedores = "active"; linkReportes = "active"; break;
                         }
 
                         if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
@@ -654,7 +654,12 @@
                                     {
                                         <li id="linkReporteProductosPendientesAtencion" class="@linkReporteProductosPendientesAtencion">@Html.ActionLink("Productos Pendientes Atención", "ProductosPendientesAtencion", "Reporte")</li>
                                     }
-                                    
+
+                                    @if (usuario.visualizaReporteSellOutVendedores)
+                                    {
+                                        <li id="linkReporteSellOutVendedores" class="@linkReporteSellOutVendedores">@Html.ActionLink("SellOut Vendedores", "SellOutVendedores", "Reporte")</li>
+                                    }
+
                                 </ul>
                             </li>
                         }

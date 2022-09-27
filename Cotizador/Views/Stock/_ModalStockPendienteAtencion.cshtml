@@ -4,7 +4,7 @@
 
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modalStockPendienteAtencionTitle"><b>Pedidos Pendientes Atención Producto</b></h4>
+                <h4 class="modal-title" id="modalStockPendienteAtencionTitle"><b>Pedidos Pendientes de Atención por Producto</b></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -242,7 +242,7 @@
                         htmlList = htmlList +
                             '<tr>' +
                             '<td>' + lista[i][0] + '</td>' +
-                            '<td>' + lista[i][1] + '</td>' +
+                            '<td><a href="#" class="verModalPedidoReadOnly" idPedido="' + lista[i][13] + '">' + lista[i][1] + '</a></td>' +
                             '<td><b>' + lista[i][2] + '</b>: ' + lista[i][3] + '</td>' +
                             '<td>' + lista[i][4] + ' - ' + lista[i][5] + '</td>' +
                             //'<td>' + lista[i][6] + '</td>' +

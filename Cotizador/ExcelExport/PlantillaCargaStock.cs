@@ -148,10 +148,11 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.combinarCeldas(sheet, i, i + 1, "B", "B");
                 UtilesHelper.combinarCeldas(sheet, i, i + 1, "C", "C");
                 UtilesHelper.combinarCeldas(sheet, i, i + 1, "D", "D");
+                UtilesHelper.combinarCeldas(sheet, i, i + 1, "E", "E");
 
-                UtilesHelper.combinarCeldas(sheet, i, i, "F", "G");
-                UtilesHelper.combinarCeldas(sheet, i, i, "I", "J");
-                UtilesHelper.combinarCeldas(sheet, i, i, "L", "M");
+                UtilesHelper.combinarCeldas(sheet, i, i, "G", "H");
+                UtilesHelper.combinarCeldas(sheet, i, i, "J", "K");
+                UtilesHelper.combinarCeldas(sheet, i, i, "M", "N");
 
                 UtilesHelper.setValorCelda(sheet, i, "A", "FAMILIA", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "B", "SKU", titleDataCellStyle);
@@ -272,8 +273,8 @@ namespace Cotizador.ExcelExport
 
                         if (obj.equivalenciaAlternativa > 1)
                         {
-                            UtilesHelper.setValorCelda(sheet, i, "L", obj.unidad_alternativa, tableDataCellStyle);
-                            UtilesHelper.setValorCelda(sheet, i, "M", "", tableDataCenterCellStyle);
+                            UtilesHelper.setValorCelda(sheet, i, "M", obj.unidad_alternativa, tableDataCellStyle);
+                            UtilesHelper.setValorCelda(sheet, i, "N", "", tableDataCenterCellStyle);
                         }
 
                         if (obj.equivalenciaProveedor <= 1)

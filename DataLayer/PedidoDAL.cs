@@ -802,6 +802,9 @@ namespace DataLayer
                 pedido.horaEntregaAdicionalDesde = Converter.GetString(row, "hora_entrega_adicional_desde");
                 pedido.horaEntregaAdicionalHasta = Converter.GetString(row, "hora_entrega_adicional_hasta");
 
+                pedido.idMPPedido = Converter.GetGuid(row, "id_pedido_mp");
+                pedido.numeroPedidoMP = Converter.GetLong(row, "numero_pedido_mp");
+
                 pedido.moneda = new Moneda();
                 pedido.moneda.codigo = Converter.GetString(row, "moneda");
 
@@ -1371,6 +1374,20 @@ namespace DataLayer
                 pedido.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 pedido.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
 
+                pedido.almacenOrigen = new Almacen();
+                pedido.almacenOrigen.idAlmacen = Converter.GetGuid(row, "id_almacen_origen");
+                pedido.almacenOrigen.idCiudad = Converter.GetGuid(row, "id_ciudad_almacen_origen");
+                pedido.almacenOrigen.nombre = Converter.GetString(row, "nombre_almacen_origen");
+                pedido.almacenOrigen.direccion = Converter.GetString(row, "direccion_almacen_origen");
+                pedido.almacenOrigen.codigo = Converter.GetString(row, "codigo_almacen_origen");
+
+                pedido.almacenDestino = new Almacen();
+                pedido.almacenDestino.idAlmacen = Converter.GetGuid(row, "id_almacen_destino");
+                pedido.almacenDestino.idCiudad = Converter.GetGuid(row, "id_ciudad_almacen_destino");
+                pedido.almacenDestino.nombre = Converter.GetString(row, "nombre_almacen_destino");
+                pedido.almacenDestino.direccion = Converter.GetString(row, "direccion_almacen_destino");
+                pedido.almacenDestino.codigo = Converter.GetString(row, "codigo_almacen_destino");
+
                 pedido.promocion = new Promocion();
                 pedido.promocion.idPromocion = Converter.GetGuid(row, "id_promocion");
                 pedido.promocion.codigo = Converter.GetString(row, "codigo_promocion");
@@ -1718,6 +1735,16 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             return true;
         }
 
+        public bool SetPedidoMP(Guid idPedido, Guid idPedidoMP)
+        {
+            var objCommand = GetSqlCommand("pu_set_pedido_mp");
+            InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
+            InputParameterAdd.Guid(objCommand, "idPedidoMP", idPedidoMP);
+
+            ExecuteNonQuery(objCommand);
+
+            return true;
+        }
 
         public List<SeguimientoPedido> GetHistorialSeguimiento(Guid idPedido)
         {
@@ -2528,6 +2555,8 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
                 item.Add(cantidadPedido.ToString()); // 10
                 item.Add(cantidadAtendida.ToString()); // 11
                 item.Add(cantidadPendiente.ToString()); // 12
+
+                item.Add(Converter.GetString(row, "id_pedido")); // 13
 
                 lista.Add(item);
             }

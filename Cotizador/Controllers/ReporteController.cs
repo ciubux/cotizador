@@ -21,14 +21,89 @@ namespace Cotizador.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaGrupoClientes;
 
-
-           
             return View();
-
         }
+
+        public ActionResult LimpiarFiltroSellOutVendedores()
+        {
+            ReporteSellOutVendedoresFiltro obj = (ReporteSellOutVendedoresFiltro)this.Session["s_rSellOutVendedoresFiltro"];
+
+            obj = instanciarFiltroSellOutVendedores();
+            this.Session["s_rSellOutVendedoresFiltro"] = obj;
+
+            return RedirectToAction("SellOutVendedores", "Reporte");
+        }
+
+        public void changeFiltroSellOutVendedores(string propiedad, string valor, string tipo)
+        {
+            ReporteSellOutVendedoresFiltro obj = (ReporteSellOutVendedoresFiltro)this.Session["s_rSellOutVendedoresFiltro"];
+
+            obj.changeDatoParametro(propiedad, valor, tipo);
+
+            if (propiedad.Equals("idCiudad") && obj.idCiudad != null && !obj.idCiudad.Equals(Guid.Empty))
+            {
+                CiudadBL blCiudad = new CiudadBL();
+                obj.ciudad = blCiudad.getCiudad(obj.idCiudad);
+            } else { obj.ciudad = null; }
+
+            this.Session["s_rSellOutVendedoresFiltro"] = obj;
+        }
+
+        public ReporteSellOutVendedoresFiltro instanciarFiltroSellOutVendedores()
+        {
+            ReporteSellOutVendedoresFiltro obj = new ReporteSellOutVendedoresFiltro();
+            obj.proveedor = "Todos";
+            obj.familia = "Todas";
+
+            ParametroBL parametroBL = new ParametroBL();
+
+            obj.fechaInicio = DateTime.Now;
+            obj.fechaFin = DateTime.Now;
+            obj.sku = string.Empty;
+            obj.idCiudad = Guid.Empty;
+            obj.ciudad = null;
+            obj.anio = 0;
+            obj.trimestre = 0;
+
+            return obj;
+        }
+        public ActionResult SellOutVendedores()
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.ReporteSellOutVendedores;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.visualizaReporteSellOutVendedores)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            ReporteSellOutVendedoresFiltro obj = (ReporteSellOutVendedoresFiltro)this.Session["s_rSellOutVendedoresFiltro"];
+            if (obj == null)
+            {
+                obj = instanciarFiltroSellOutVendedores();
+                this.Session["s_rSellOutVendedoresFiltro"] = obj;
+            }
+
+            /*ReporteBL bl = new ReporteBL();
+            List<FilaProductoPendienteAtencion> resultados = new List<FilaProductoPendienteAtencion>();
+
+            if (Request.HttpMethod.Equals("POST"))
+            {
+                resultados = bl.productosPendientesAtencion(obj.sku, obj.familia, obj.proveedor, obj.fechaInicio, obj.fechaFin, obj.idCiudad, usuario.idUsuario);
+                this.Session["s_rProductosPendientesAtencionLastF"] = obj;
+                this.Session["s_rProductosPendientesAtencionLastS"] = resultados;
+            }
+            */
+            ViewBag.filtros = obj;
+            //ViewBag.resultados = resultados;
+            ViewBag.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            //ViewBag.producto = this.ProductoBusquedaSession;
+            return View();
+        }
+
 
         public ReportePendientesAtencionFiltro instanciarFiltroProductosPendienteAtencion ()
         {
@@ -81,6 +156,7 @@ namespace Cotizador.Controllers
             
             ViewBag.filtros = obj;
             ViewBag.resultados = resultados;
+            ViewBag.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             //ViewBag.producto = this.ProductoBusquedaSession;
             return View();
@@ -106,46 +182,17 @@ namespace Cotizador.Controllers
 
         public void changeFiltroProductosPendienteAtencion(string propiedad, string valor, string tipo)
         {
+
             ReportePendientesAtencionFiltro obj = (ReportePendientesAtencionFiltro)this.Session["s_rProductosPendientesAtencionFiltro"];
-            
-            PropertyInfo propertyInfo = obj.GetType().GetProperty(propiedad);
 
-            switch (tipo)
+            obj.changeDatoParametro(propiedad, valor, tipo);
+
+            if (propiedad.Equals("idCiudad") && obj.idCiudad != null && !obj.idCiudad.Equals(Guid.Empty))
             {
-                case "string":
-                    propertyInfo.SetValue(obj, valor);
-                    break;
-                case "int":
-                    propertyInfo.SetValue(obj, int.Parse(valor));
-                    break;
-                case "date":
-                    if (!valor.Trim().Equals(""))
-                    {
-                        String[] fecha = valor.Split('/');
-                        propertyInfo.SetValue(obj, new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0])));
-                    }
-                    break;
-                case "guid":
-                    Guid idGuid = Guid.Parse(valor);
-                    if (!valor.Trim().Equals(""))
-                    {
-                        propertyInfo.SetValue(obj, idGuid);
-                    }
-
-                    if (propiedad.Equals("idCiudad"))
-                    {
-                        if (idGuid.Equals(Guid.Empty))
-                        {
-                            obj.ciudad = null;
-                        } else
-                        {
-                            CiudadBL blCiudad = new CiudadBL();
-                            obj.ciudad = blCiudad.getCiudad(idGuid);
-                        }
-                    }
-
-                    break;
+                CiudadBL blCiudad = new CiudadBL();
+                obj.ciudad = blCiudad.getCiudad(obj.idCiudad);
             }
+            else { obj.ciudad = null; }
 
             this.Session["s_rProductosPendientesAtencionFiltro"] = obj;
         }

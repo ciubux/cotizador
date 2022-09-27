@@ -47,7 +47,9 @@ namespace DataLayer
             foreach (DataRow row in dataTable.Rows)
             {
                 FilaProductoPendienteAtencion item = new FilaProductoPendienteAtencion();
-
+                
+                item.idProducto = Converter.GetGuid(row, "id_producto");
+                item.idSede = Converter.GetGuid(row, "id_sede");
                 item.sede = Converter.GetString(row, "sede");
                 item.sku = Converter.GetString(row, "sku");
                 item.nombreProducto = Converter.GetString(row, "descripcion");

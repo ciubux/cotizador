@@ -1929,6 +1929,10 @@
     @Html.Partial("../Producto/_LabelCompraRestringida")
 </span>
 
+<span id="spnDetalleRestringido" style="display: none;">
+    @Html.Partial("../Pedido/_LabelDetalleRestringido")
+</span>
+
 
 <span id="spnDescripcionLargaInfo" style="display: none;">
     @Html.Partial("../Producto/_LabelDescripcionLarga")
@@ -1936,6 +1940,11 @@
 
 
 @Html.Partial("../Stock/_ModalStockProducto")
+
+@Html.Partial("../Stock/_ModalStockPendienteAtencion")
+
+@Html.Partial("../Pedido/_ModalPedidoReadOnly")
+
 
 @section Scripts {
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/pedidoCompra")
