@@ -2061,5 +2061,160 @@ namespace DataLayer
             }
             return productoList;
         }
+
+        public List<ProductoWeb> SearchProductosWeb(ProductoWeb producto, int tipoBusqueda)
+        {
+            var objCommand = GetSqlCommand("ps_productos_web");
+
+            InputParameterAdd.VarcharEmpty(objCommand, "sku", "");
+            InputParameterAdd.VarcharEmpty(objCommand, "nombre", "");
+            InputParameterAdd.VarcharEmpty(objCommand, "categoria", "Todas");
+            InputParameterAdd.VarcharEmpty(objCommand, "subcategoria", "Todos");
+            InputParameterAdd.Int(objCommand, "estado", -1);
+            InputParameterAdd.Int(objCommand, "tipoBusqueda", tipoBusqueda);
+
+
+            DataTable dataTable = Execute(objCommand);
+
+
+            List<ProductoWeb> list = new List<ProductoWeb>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                ProductoWeb item = new ProductoWeb();
+                item.idProductoWeb = Converter.GetGuid(row, "id_producto_web");
+                item.nombre = Converter.GetString(row, "nombre");
+                item.descripcionCorta = Converter.GetString(row, "descripcion_corta");
+                item.descripcionCatalogo = Converter.GetString(row, "descripcion_catalogo");
+                item.itemOrder = Converter.GetInt(row, "item_order");
+                item.categoria = Converter.GetString(row, "categoria");
+                item.subCategoria = Converter.GetString(row, "subcategoria");
+                item.cuotaWeb = Converter.GetInt(row, "cuota_web");
+                item.Estado = Converter.GetInt(row, "estado");
+
+                item.producto = new Producto();
+                item.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                item.producto.sku = Converter.GetString(row, "sku");
+                item.producto.unidad = Converter.GetString(row, "unidad");
+                item.producto.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
+                item.producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
+                item.producto.unidadConteo = Converter.GetString(row, "unidad_conteo");
+
+                item.presentacion = new ProductoPresentacion();
+                item.presentacion.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion");
+                switch(item.presentacion.IdProductoPresentacion)
+                {
+                    case 0: item.presentacion.Presentacion = item.producto.unidad; break;
+                    case 1: item.presentacion.Presentacion = item.producto.unidad_alternativa; break;
+                    case 2: item.presentacion.Presentacion = item.producto.unidadProveedor; break;
+                    case 3: item.presentacion.Presentacion = item.producto.unidadConteo; break;
+                }
+
+                if (tipoBusqueda == 1)
+                {
+                    item.atributoTitulo1 = Converter.GetString(row, "atributo1_titulo");
+                    item.atributoValor1 = Converter.GetString(row, "atributo1_valor");
+                    item.atributoTitulo2 = Converter.GetString(row, "atributo2_titulo");
+                    item.atributoValor2 = Converter.GetString(row, "atributo2_valor");
+                    item.atributoTitulo3 = Converter.GetString(row, "atributo3_titulo");
+                    item.atributoValor3 = Converter.GetString(row, "atributo3_valor");
+                    item.atributoTitulo4 = Converter.GetString(row, "atributo4_titulo");
+                    item.atributoValor4 = Converter.GetString(row, "atributo4_valor");
+                    item.atributoTitulo5 = Converter.GetString(row, "atributo5_titulo");
+                    item.atributoValor5 = Converter.GetString(row, "atributo5_valor");
+                    item.tagBusqueda = Converter.GetString(row, "tags_busqueda");
+                    item.tagPromociones = Converter.GetString(row, "tags_promociones");
+                    item.seoTitulo = Converter.GetString(row, "seo_titulo");
+                    item.seoPalabrasClave = Converter.GetString(row, "seo_palabras_clave");
+                    item.seoDescripcion = Converter.GetString(row, "seo_descripcion");
+                }
+
+                list.Add(item);
+            }
+
+            return list;
+        }
+
+        public List<int> LoadProductosWeb(List<ProductoWeb> productos, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pi_load_productos_web");
+  
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("SKU", typeof(string)));
+            tvp.Columns.Add(new DataColumn("NOMBRE", typeof(string)));
+            tvp.Columns.Add(new DataColumn("DESCRIPCIONCORTA", typeof(string)));
+            tvp.Columns.Add(new DataColumn("DESCRIPCIONCATALOGO", typeof(string)));
+            tvp.Columns.Add(new DataColumn("ITEMORDER", typeof(int)));
+            tvp.Columns.Add(new DataColumn("CATEGORIA", typeof(string)));
+            tvp.Columns.Add(new DataColumn("SUBCATEGORIA", typeof(string)));
+            tvp.Columns.Add(new DataColumn("ATRIBUTOTITULO1", typeof(string)));
+            tvp.Columns.Add(new DataColumn("ATRIBUTOVALOR1", typeof(string)));
+            tvp.Columns.Add(new DataColumn("ATRIBUTOTITULO2", typeof(string)));
+            tvp.Columns.Add(new DataColumn("ATRIBUTOVALOR2", typeof(string)));
+            tvp.Columns.Add(new DataColumn("ATRIBUTOTITULO3", typeof(string)));
+            tvp.Columns.Add(new DataColumn("ATRIBUTOVALOR3", typeof(string)));
+            tvp.Columns.Add(new DataColumn("ATRIBUTOTITULO4", typeof(string)));
+            tvp.Columns.Add(new DataColumn("ATRIBUTOVALOR4", typeof(string)));
+            tvp.Columns.Add(new DataColumn("ATRIBUTOTITULO5", typeof(string)));
+            tvp.Columns.Add(new DataColumn("ATRIBUTOVALOR5", typeof(string)));
+            tvp.Columns.Add(new DataColumn("TAGSBUSQUEDA", typeof(string)));
+            tvp.Columns.Add(new DataColumn("TAGPROMOCIONES", typeof(string)));
+            tvp.Columns.Add(new DataColumn("SEOTITULO", typeof(string)));
+            tvp.Columns.Add(new DataColumn("SEOPALABRASCLAVE", typeof(string)));
+            tvp.Columns.Add(new DataColumn("SEODESCRIPCION", typeof(string)));
+            tvp.Columns.Add(new DataColumn("IDPRODUCTOPRESENTACION", typeof(int)));
+            tvp.Columns.Add(new DataColumn("CUOTAWEB", typeof(int)));
+            tvp.Columns.Add(new DataColumn("ESTADO", typeof(int)));
+
+            foreach (ProductoWeb item in productos)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["SKU"] = item.producto.sku;
+                rowObj["NOMBRE"] = item.nombre;
+                rowObj["DESCRIPCIONCORTA"] = item.descripcionCorta;
+                rowObj["DESCRIPCIONCATALOGO"] = item.descripcionCatalogo;
+                rowObj["ITEMORDER"] = item.itemOrder;
+                rowObj["CATEGORIA"] = item.categoria;
+                rowObj["SUBCATEGORIA"] = item.subCategoria;
+
+                rowObj["ATRIBUTOTITULO1"] = item.atributoTitulo1;
+                rowObj["ATRIBUTOVALOR1"] = item.atributoValor1;
+                rowObj["ATRIBUTOTITULO2"] = item.atributoTitulo2;
+                rowObj["ATRIBUTOVALOR2"] = item.atributoValor2;
+                rowObj["ATRIBUTOTITULO3"] = item.atributoTitulo3;
+                rowObj["ATRIBUTOVALOR3"] = item.atributoValor3;
+                rowObj["ATRIBUTOTITULO4"] = item.atributoTitulo4;
+                rowObj["ATRIBUTOVALOR4"] = item.atributoValor4;
+                rowObj["ATRIBUTOTITULO5"] = item.atributoTitulo5;
+                rowObj["ATRIBUTOVALOR5"] = item.atributoValor5;
+
+                rowObj["TAGSBUSQUEDA"] = item.tagBusqueda;
+                rowObj["TAGPROMOCIONES"] = item.tagPromociones;
+                rowObj["SEOTITULO"] = item.seoTitulo;
+                rowObj["SEOPALABRASCLAVE"] = item.seoPalabrasClave;
+                rowObj["SEODESCRIPCION"] = item.seoDescripcion;
+                rowObj["IDPRODUCTOPRESENTACION"] = item.presentacion.IdProductoPresentacion;
+                rowObj["CUOTAWEB"] = item.cuotaWeb;
+                rowObj["ESTADO"] = item.Estado;
+
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@productos", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.ProductoWebLoadList";
+
+            OutputParameterAdd.Int(objCommand, "inexistentes");
+            OutputParameterAdd.Int(objCommand, "nuevos");
+            OutputParameterAdd.Int(objCommand, "actualizados");
+
+            ExecuteNonQuery(objCommand);
+            List<int> list = new List<int>();
+            list.Add((int)objCommand.Parameters["@inexistentes"].Value);
+            list.Add((int)objCommand.Parameters["@nuevos"].Value);
+            list.Add((int)objCommand.Parameters["@actualizados"].Value);
+            return list;
+        }
     }
 }

@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlertaValidacion.cs" />
+    <Compile Include="ProductoWeb.cs" />
     <Compile Include="Auditoria.cs" />
     <Compile Include="CampoPersistir.cs" />
     <Compile Include="CierreStock.cs" />

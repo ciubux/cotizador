@@ -1,12 +1,19 @@
 ﻿@{
-    ViewBag.Title = "Reporte de Productos Pendientes de Atención";
+    ViewBag.Title = "Reporte Sell Out Vendedores";
 
 
     Cotizador.Models.OBJsFiltro.ReporteSellOutVendedoresFiltro item = ViewBag.filtros;
-    List<Model.UTILES.FilaProductoPendienteAtencion> resultados = ViewBag.resultados;
+    List<List<String>> resultados = ViewBag.resultados;
 
     int anio = 2018;
     int anioHoy = DateTime.Now.Year;
+    decimal total = 0;
+
+    foreach (List<String> fila in resultados)
+    {
+        decimal totalFila = decimal.Parse(fila.ElementAt(2));
+        total = total + totalFila;
+    }
 }
 
 <div class="page-header">
@@ -53,18 +60,20 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-12 col-lg-8">
+            <div class="col-xs-12 col-sm-6 col-lg-4">
                 <div class="form-group">
                     <!--Fecha Inicio Vigencia-->
-                    <label class="control-label col-xs-2" for="fechaInicio">Rango Fecha Entrega:</label>
-                    <div class="col-xs-10">
-                        <input class="form-control" type="text" id="fechaInicio" name="fechaInicio" autocomplete="off" value="@item.fechaInicio.ToString("dd/MM/yyyy")" style="width:120px; display: inline-block;">
+                    <label class="control-label col-xs-4" for="fechaInicio">Rango Fecha Entrega:</label>
+                    <div class="col-xs-8">
+                        <input class="form-control" type="text" id="fechaInicio" name="fechaInicio" autocomplete="off" value="@item.fechaInicio.ToString("dd/MM/yyyy")" 
+                               style="width:95px; display: inline-block;" @(item.anio > 0 ? "disabled" : "") >
                         <b> - </b>
-                        <input class="form-control" type="text" id="fechaFin" name="fechaFin" autocomplete="off" value="@item.fechaFin.ToString("dd/MM/yyyy")" style="width:120px; display: inline-block;">
+                        <input class="form-control" type="text" id="fechaFin" name="fechaFin" autocomplete="off" value="@item.fechaFin.ToString("dd/MM/yyyy")" 
+                               style="width:95px; display: inline-block;" @(item.anio > 0 ? "disabled" : "")>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-lg-4">
+            <div class="col-xs-12 col-sm-6 col-lg-4">
                 <div class="form-group row">
                     <label class="control-label col-xs-4" for="anio">Trimestre:</label>
                     <div class="col-xs-8">
@@ -91,6 +100,55 @@
 
         <div class="row">
             <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="anio">Responsable Comercial:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("GetResponsablesComerciales", "Vendedor",
+                                new
+                                {
+                                    vendedorSelectId = "idResponsableComercial",
+                                    selectedValue = item.idResponsableComercial,
+                                })
+
+                    </div>
+                </div>
+            </div>
+            <!--Supervisor Comercial-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="anio">Supervisor Comercial:</label>
+                    <div class="col-xs-8">
+
+                        @Html.Action("GetSupervisoresComerciales", "Vendedor",
+                                       new
+                                       {
+                                           vendedorSelectId = "idSupervisorComercial",
+                                           selectedValue = item.idSupervisorComercial,
+                                       })
+
+                    </div>
+                </div>
+            </div>
+            <!--Asistente Servicio al Cliente-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="anio">Asistente Comercial:</label>
+                    <div class="col-xs-8">
+
+                        @Html.Action("GetAsistentesServicioCliente", "Vendedor",
+                                            new
+                                            {
+                                                vendedorSelectId = "idAsistenteServicioCliente",
+                                                selectedValue = item.idAsistenteComercial,
+                                            })
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
                 <div class="form-group row">
                     <label class="control-label col-xs-4" for="idCiudad">
                         Sede:
@@ -105,13 +163,20 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <!--USUARIO-->
+                <div class="form-group">
+                    @*<label for="usuario" class="control-label col-xs-4">Creado Por:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("usuariosPedidoList", "Usuario")
+                    </div>*@
+                </div>
+            </div>
         </div>
 
         <div class="row pull-left" style="margin-top: 20px; margin-bottom: 10px; margin-left: 0px">
-            @if (false)
-            {
-                <button id="btnReporteProductosPendientesAtencionExcel" type="button" class="btn btn-primary bouton-image botonExcel" actionLink="@Url.Action("ExportReporteProductosPendientesAtencion", "Reporte")">Descargar Reporte</button>
-            }
+            
         </div>
 
         <div class="row pull-right" style="margin-top: 20px; margin-bottom: 10px; margin-right: 0px">
@@ -136,36 +201,37 @@
                    data-show-toggle="false">
                 <thead class="thead-dark">
                     <tr>
-                        <th>VENDEDOR</th>
-                        <th>TOTAL VENTAS</th>
+                        <th>CODIGO VENDEDOR</th>
+                        <th>NOMBRE VENDEDOR</th>
+                        <th>
+                            TOTAL VENTAS
+                            @if (total > 0)
+                            {
+                                <span id="spnTotalHeader">: S/ @String.Format("{0:0.00}", total)</span>
+                            }
+                        </th>
+                        <th>
+                            @if (resultados.Count > 0)
+                            {
+                                <button type="button" class="btn btn-primary bouton-image botonExcel btnDetallesResultadosVendedorExcel" codVendedor=""
+                                        actionLink="@Url.Action("ExportDetallesReporteSellOutVendedor", "Reporte")">
+                                    TODOS LOS DETALLES
+                                </button>
+                            }
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @*@foreach (Model.UTILES.FilaProductoPendienteAtencion fila in resultados)
+                    @foreach (List<String> fila in resultados)
                     {
                         <tr data-expanded="true">
-                            <td>@fila.sede</td>
-                            <td>@fila.sku</td>
-                            <td>@fila.nombreProducto</td>
-                            <td>@fila.familia</td>
-                            <td>@fila.proveedor</td>
-                            <td>
-                                @(item.idProductoPresentacion == 0 ? fila.unidad : "")
-                                @(item.idProductoPresentacion == 1 ? fila.unidadAlternativa : "")
-                                @(item.idProductoPresentacion == 2 ? fila.unidadProveedor : "")
-                                @(item.idProductoPresentacion == 3 ? fila.unidadConteo : "")
-                            </td>
-                            <td>
-                                <a class="verModalStockPendienteAtencion" idProducto="@fila.idProducto" idProductoPresentacion="@item.idProductoPresentacion"
-                                   idCiudad="@fila.idSede" fechaInicio="@item.fechaEntregaInicio.ToString("dd/MM/yyyy")" fechaFin="@item.fechaEntregaFin.ToString("dd/MM/yyyy")">
-                                    @(item.idProductoPresentacion == 0 ? fila.cpMp.ToString() : "")
-                                    @(item.idProductoPresentacion == 1 ? fila.cpAlternativa.ToString() : "")
-                                    @(item.idProductoPresentacion == 2 ? fila.cpProveedor.ToString() : "")
-                                    @(item.idProductoPresentacion == 3 ? fila.cpConteo.ToString() : "")
-                                </a>
-                            </td>
-                        </tr>
-                    }*@
+                            <td>@fila.ElementAt(0)</td>
+                            <td>@fila.ElementAt(1)</td>
+                            <td>@fila.ElementAt(2)</td>
+                            <td><button type="button" class="btn btn-primary bouton-image botonExcel btnDetallesResultadosVendedorExcel" codVendedor="@fila.ElementAt(0)" 
+                                        actionLink="@Url.Action("ExportDetallesReporteSellOutVendedor", "Reporte")">Detalles</button></td>
+                         </tr>
+                    }
                 </tbody>
             </table>
         </div>
@@ -212,7 +278,7 @@
             }
         }
 
-        $('#tableProductosPendientesAtencion').footable();
+        $('#tableSellOutVendedores').footable();
 
         //setTimeout(function () { FooTable.get('#tableProductosPendientesAtencion').pageSize(10); }, 2000)
 
@@ -256,6 +322,13 @@
 
         $("#anio").change(function () {
             var valor = $(this).val();
+            if (valor > 0) {
+                document.getElementById("fechaInicio").disabled = true;
+                document.getElementById("fechaFin").disabled = true;
+            } else {
+                document.getElementById("fechaInicio").disabled = false;
+                document.getElementById("fechaFin").disabled = false;
+            }
             changeInputFiltro("anio", valor, "int");
         });
 
@@ -279,8 +352,25 @@
             changeInputFiltro("fechaFin", valor, "date");
         });
 
-        $("#btnReporteProductosPendientesAtencionExcel").click(function () {
-            window.location.href = $(this).attr("actionLink");
+        $("#idResponsableComercial").change(function () {
+            var valor = $("#idResponsableComercial").val();
+            changeInputFiltro("idResponsableComercial", valor, "int");
+        });
+
+        $("#idSupervisorComercial").change(function () {
+            var valor = $("#idSupervisorComercial").val();
+            changeInputFiltro("idSupervisorComercial", valor, "int");
+        });
+
+        $("#idAsistenteServicioCliente").change(function () {
+            var valor = $("#idAsistenteServicioCliente").val();
+            changeInputFiltro("idAsistenteComercial", valor, "int");
+        });
+
+
+        $(document).on('click', ".btnDetallesResultadosVendedorExcel", function () {
+            var codigoVendedor = $(this).attr("codVendedor");
+            window.location.href = $(this).attr("actionLink") + "?codigoVendedor=" + codigoVendedor;
         });
 
         function changeInputFiltro(propiedad, valor, tipo) {

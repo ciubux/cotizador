@@ -20,5 +20,27 @@ namespace BusinessLayer
                 return list;
             }
         }
+
+        public List<List<String>> sellOutVendedores(String sku, String familia, String proveedor, String codVRC, String codVSC, String codVAC,
+            DateTime fechaInicio, DateTime fechaFin, int anio, int trimestre, String ciudad, Guid idUsuario)
+        {
+            using (var dal = new ReporteDAL())
+            {
+                List<List<String>> list = dal.sellOutVendedores(sku, familia, proveedor, codVRC, codVSC, codVAC, fechaInicio, fechaFin, anio, trimestre, ciudad, idUsuario);
+
+                return list;
+            }
+        }
+
+        public List<List<String>> sellOutVendedoresDetalles(String codVendedor, String sku, String familia, String proveedor, String codVRC, String codVSC, String codVAC, 
+            DateTime fechaInicio, DateTime fechaFin, int anio, int trimestre, String ciudad, Guid idUsuario)
+        {
+            using (var dal = new ReporteDAL())
+            {
+                List<List<String>> list = dal.sellOutVendedoresDetalles(codVendedor, sku, familia, proveedor, codVRC, codVSC, codVAC, fechaInicio, fechaFin, anio, trimestre, ciudad, idUsuario);
+
+                return list;
+            }
+        }
     }
 }

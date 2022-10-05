@@ -305,6 +305,7 @@
     <Compile Include="ExcelExport\ReasignacionCarteraCliente.cs" />
     <Compile Include="ExcelExport\PedidoOCExcel.cs" />
     <Compile Include="ExcelExport\ReporteCargaStock .cs" />
+    <Compile Include="ExcelExport\ReporteDetallesSellOutVendedor.cs" />
     <Compile Include="ExcelExport\ReporteStockPendienteAtencion.cs" />
     <Compile Include="ExcelExport\ReporteKardexProducto.cs" />
     <Compile Include="ExcelExport\ReporteStock .cs" />

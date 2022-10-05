@@ -685,5 +685,21 @@ namespace BusinessLayer
                 return kardex;
             }
         }
+
+        public List<ProductoWeb> SearchProductosWeb(ProductoWeb producto, int tipoBusqueda)
+        {
+            using (ProductoDAL dal = new ProductoDAL())
+            {
+                return dal.SearchProductosWeb(producto, tipoBusqueda);
+            }
+        }
+
+        public List<int> LoadProductosWeb(List<ProductoWeb> productos, Guid idUsuario)
+        {
+            using (ProductoDAL dal = new ProductoDAL())
+            {
+                return dal.LoadProductosWeb(productos, idUsuario);
+            }
+        }
     }
 }

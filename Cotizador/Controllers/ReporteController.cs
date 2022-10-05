@@ -46,7 +46,13 @@ namespace Cotizador.Controllers
             {
                 CiudadBL blCiudad = new CiudadBL();
                 obj.ciudad = blCiudad.getCiudad(obj.idCiudad);
-            } else { obj.ciudad = null; }
+            } else {
+                if (propiedad.Equals("idCiudad")) { 
+                    obj.ciudad = new Ciudad();
+                    obj.ciudad.idCiudad = Guid.Empty;
+                    obj.ciudad.nombre = "TODOS";
+                } 
+            }
 
             this.Session["s_rSellOutVendedoresFiltro"] = obj;
         }
@@ -63,7 +69,9 @@ namespace Cotizador.Controllers
             obj.fechaFin = DateTime.Now;
             obj.sku = string.Empty;
             obj.idCiudad = Guid.Empty;
-            obj.ciudad = null;
+            obj.ciudad = new Ciudad();
+            obj.ciudad.idCiudad = Guid.Empty;
+            obj.ciudad.nombre = "TODOS";
             obj.anio = 0;
             obj.trimestre = 0;
 
@@ -86,24 +94,63 @@ namespace Cotizador.Controllers
                 this.Session["s_rSellOutVendedoresFiltro"] = obj;
             }
 
-            /*ReporteBL bl = new ReporteBL();
-            List<FilaProductoPendienteAtencion> resultados = new List<FilaProductoPendienteAtencion>();
+            ReporteBL bl = new ReporteBL();
+            List<List<String>> resultados = new List<List<String>>();
 
             if (Request.HttpMethod.Equals("POST"))
             {
-                resultados = bl.productosPendientesAtencion(obj.sku, obj.familia, obj.proveedor, obj.fechaInicio, obj.fechaFin, obj.idCiudad, usuario.idUsuario);
-                this.Session["s_rProductosPendientesAtencionLastF"] = obj;
-                this.Session["s_rProductosPendientesAtencionLastS"] = resultados;
-            }
-            */
-            ViewBag.filtros = obj;
-            //ViewBag.resultados = resultados;
-            ViewBag.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                Vendedor responsableComercial = usuario.vendedorList.Where(v => v.idVendedor == obj.idResponsableComercial).FirstOrDefault();
+                Vendedor supervisorComercial = usuario.supervisorComercialList.Where(v => v.idVendedor == obj.idSupervisorComercial).FirstOrDefault();
+                Vendedor asistenteServicioCliente = usuario.asistenteServicioClienteList.Where(v => v.idVendedor == obj.idAsistenteComercial).FirstOrDefault();
+                //Usuario us = usuario.usuarioTomaPedidoList.Where(u => u.idUsuario == obj.idUsuarioCreador).FirstOrDefault();
 
-            //ViewBag.producto = this.ProductoBusquedaSession;
+                
+
+                resultados = bl.sellOutVendedores(obj.sku, obj.familia, obj.proveedor, 
+                    responsableComercial != null ? responsableComercial.codigo : "",
+                    supervisorComercial != null ? supervisorComercial.codigo : "",
+                    asistenteServicioCliente != null ? asistenteServicioCliente.codigo : "",
+                    obj.fechaInicio, obj.fechaFin, obj.anio, obj.trimestre, obj.ciudad.nombre, usuario.idUsuario);
+                this.Session["s_rSellOutVendedoresFiltroLastF"] = obj;
+                this.Session["s_rSellOutVendedoresFiltroLastS"] = resultados;
+            }
+            
+            ViewBag.filtros = obj;
+            ViewBag.resultados = resultados;
+            ViewBag.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            ViewBag.usuarios = usuario.usuarioTomaPedidoList;
+
             return View();
         }
 
+        [HttpGet]
+        public ActionResult ExportDetallesReporteSellOutVendedor(String codigoVendedor)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.visualizaReporteProductosPendientesAtencion)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            ReporteBL bl = new ReporteBL();
+
+            ReporteSellOutVendedoresFiltro obj = (ReporteSellOutVendedoresFiltro) this.Session["s_rSellOutVendedoresFiltroLastF"];
+
+            Vendedor responsableComercial = usuario.vendedorList.Where(v => v.idVendedor == obj.idResponsableComercial).FirstOrDefault();
+            Vendedor supervisorComercial = usuario.supervisorComercialList.Where(v => v.idVendedor == obj.idSupervisorComercial).FirstOrDefault();
+            Vendedor asistenteServicioCliente = usuario.asistenteServicioClienteList.Where(v => v.idVendedor == obj.idAsistenteComercial).FirstOrDefault();
+
+            List<List<String>> resultados = bl.sellOutVendedoresDetalles(codigoVendedor, obj.sku, obj.familia, obj.proveedor,
+                    responsableComercial != null ? responsableComercial.codigo : "",
+                    supervisorComercial != null ? supervisorComercial.codigo : "",
+                    asistenteServicioCliente != null ? asistenteServicioCliente.codigo : "", 
+                    obj.fechaInicio, obj.fechaFin, obj.anio, obj.trimestre, obj.ciudad.nombre, usuario.idUsuario);
+
+            ReporteDetallesSellOutVendedor excel = new ReporteDetallesSellOutVendedor();
+
+            return excel.generateExcel(resultados, obj, usuario);
+        }
 
         public ReportePendientesAtencionFiltro instanciarFiltroProductosPendienteAtencion ()
         {
@@ -191,8 +238,7 @@ namespace Cotizador.Controllers
             {
                 CiudadBL blCiudad = new CiudadBL();
                 obj.ciudad = blCiudad.getCiudad(obj.idCiudad);
-            }
-            else { obj.ciudad = null; }
+            } else { obj.ciudad = propiedad.Equals("idCiudad") ? null : obj.ciudad; }
 
             this.Session["s_rProductosPendientesAtencionFiltro"] = obj;
         }
