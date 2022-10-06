@@ -2069,7 +2069,7 @@ namespace DataLayer
             InputParameterAdd.VarcharEmpty(objCommand, "sku", "");
             InputParameterAdd.VarcharEmpty(objCommand, "nombre", "");
             InputParameterAdd.VarcharEmpty(objCommand, "categoria", "Todas");
-            InputParameterAdd.VarcharEmpty(objCommand, "subcategoria", "Todos");
+            InputParameterAdd.VarcharEmpty(objCommand, "subcategoria", "Todas");
             InputParameterAdd.Int(objCommand, "estado", -1);
             InputParameterAdd.Int(objCommand, "tipoBusqueda", tipoBusqueda);
 

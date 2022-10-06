@@ -525,6 +525,8 @@ namespace Model
 
         public const String REASIGNA_CARTERA_CLIENTE = "P630";
 
+        public const String REALIZA_CARGA_PRODUCTOS_WEB = "P740";
+
         public enum paginas
         {
             /*COTIZACION*/
@@ -737,7 +739,14 @@ namespace Model
 
             /*PARAMETRO*/
             [Display(Name = "TIPO CLIENTE CONTACTO")]
-            MantenimientoClienteContactoTipo = 761
+            MantenimientoClienteContactoTipo = 761,
+
+            /*PRODUCTO WEB*/
+            [Display(Name = "CARGA PRODUCTOS WEB")]
+            CargaProductosWeb = 740,
+
+            [Display(Name = "BÚSQUEDA PRODUCTOS WEB")]
+            BusquedaProductosWeb = 741
         };
 
 

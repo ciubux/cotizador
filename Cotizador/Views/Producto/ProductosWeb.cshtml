@@ -1,0 +1,257 @@
+﻿@{
+    ViewBag.Title = "Búsqueda de Productos de la WEB";
+
+    List<Model.ProductoWeb> resultados = ViewBag.resultados;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+
+    <form class="form-horizontal" method="post">
+        @*<div class="row" style="margin-top: 10px;">
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <label class="control-label col-xs-4" for="skuProducto">SKU:</label>
+                        <div class="col-xs-8">
+                            <input class="form-control" type="text" id="skuProducto" name="skuProducto" value="@item.sku">
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-lg-8">
+                    <div class="form-group">
+                        <label class="control-label col-xs-2" for="fechaInicio">Rango Fecha Entrega:</label>
+                        <div class="col-xs-10">
+                            <input class="form-control" type="text" id="fechaInicio" name="fechaInicio" autocomplete="off" value="@item.fechaEntregaInicio.ToString("dd/MM/yyyy")" style="width:120px; display: inline-block;">
+                            <b> - </b>
+                            <input class="form-control" type="text" id="fechaFin" name="fechaFin" autocomplete="off" value="@item.fechaEntregaFin.ToString("dd/MM/yyyy")" style="width:120px; display: inline-block;">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group row">
+                        <label class="control-label col-xs-4" for="tipoUnidad">Unidad:</label>
+                        <div class="col-xs-8">
+                            <select class="form-control" id="tipoUnidad" name="tipoUnidad">
+                                <option @(item.idProductoPresentacion == 0 ? "selected" : "") value="0">MP</option>
+                                <option @(item.idProductoPresentacion == 1 ? "selected" : "") value="1">Alternativa</option>
+                                <option @(item.idProductoPresentacion == 2 ? "selected" : "") value="2">Proveedor</option>
+                                <option @(item.idProductoPresentacion == 3 ? "selected" : "") value="3">Conteo</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group row">
+                        <label class="control-label col-xs-4" for="idCiudad">
+                            Sede:
+                        </label>
+                        <div class="col-xs-8">
+                            @Html.Action("GetCiudades", "Ciudad",
+                                            new
+                                            {
+                                                ciudadSelectId = "idCiudad",
+                                                selectedValue = item.idCiudad
+                                            })
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+        <div class="row pull-left" style="margin-top: 20px; margin-bottom: 10px; margin-left: 0px">
+            @if (resultados.Count > 0)
+            {
+                <button id="btnProductosWebExcel" type="button" class="btn btn-primary bouton-image botonExcel" actionLink="@Url.Action("ExportProductosWeb", "Producto")">Descargar En Plantilla</button>
+            }
+        </div>
+
+        <div class="row pull-right" style="margin-top: 20px; margin-bottom: 10px; margin-right: 0px">
+            <button id="btnLimpiarFormulario" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
+            <button id="btnSearchProductosWeb" type="submit" class="btn btn-success">Buscar</button>
+        </div>
+
+    </form>
+
+    <div class="row">
+        <div class="col-sm-6 col-lg-4">
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-lg-12 tableFixHead">
+            <table id="tableProductosWeb" class="table" data-editing="false"
+                   data-editing-allow-add="false"
+                   data-editing-allow-delete="false"
+                   data-editing-allow-edit="false"
+                   data-show-toggle="false">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>SKU</th>
+                        <th>TITULO</th>
+                        <th>CATEGORÍA</th>
+                        <th>SUBCATEGORÍA</th>
+                        <th>ORDEN</th>
+                        <th>UNIDAD</th>
+                        <th>CUOTA WEB</th>
+                        <th>ESTADO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Model.ProductoWeb fila in resultados)
+                    {
+                        <tr data-expanded="true">
+                            <td>@fila.producto.sku</td>
+                            <td>@fila.nombre</td>
+                            <td>@fila.categoria</td>
+                            <td>@fila.subCategoria</td>
+                            <td>@fila.itemOrder</td>
+                            <td>
+                                @(fila.presentacion.IdProductoPresentacion == 0 ? "MP - " + fila.presentacion.Presentacion: "")
+                                @(fila.presentacion.IdProductoPresentacion == 1 ? "Alternativa - " + fila.presentacion.Presentacion : "")
+                                @(fila.presentacion.IdProductoPresentacion == 2 ? "Proveedor - " + fila.presentacion.Presentacion : "")
+                                @(fila.presentacion.IdProductoPresentacion == 3 ? "Conteo - " + fila.presentacion.Presentacion : "")
+                            </td>
+                            <td>@(fila.cuotaWeb >= 0 ? fila.cuotaWeb.ToString() : "-")</td>
+                            <td>
+                                @if(fila.Estado == 1) {
+                                <span style="color: green; font-weight: bold;">@fila.EstadoDesc</span>
+                                } else {
+                                <span style="color: red; font-weight: bold;">@fila.EstadoDesc</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function funcionesModalProductosPendientesAtencion() {
+
+        $.datepicker.regional['es'] = {
+                            closeText: 'Cerrar',
+            prevText: '< Ant',
+            nextText: 'Sig >',
+            currentText: 'Hoy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        //$("#fechaInicio").datepicker({ dateFormat: "dd/mm/yy" });
+        //$("#fechaFin").datepicker({ dateFormat: "dd/mm/yy" });
+
+        $('#tableProductosWeb').footable();
+
+        //setTimeout(function () { FooTable.get('#tableProductosPendientesAtencion').pageSize(10); }, 2000)
+
+        //FooTable.init('#tableProductosPendientesAtencion');
+
+
+        /*$(document).on('click', "#btnLimpiarFormulario", function () {
+            $('body').loadingModal({
+                text: 'Cargando...'
+            });
+
+            $('body').loadingModal('show');
+
+            location.href = "/Reporte/LimpiarFiltroProductosPendientes";
+        });*/
+
+        $(document).on('click', "#btnSearchProductosWeb", function () {
+            $('body').loadingModal({
+                text: 'Cargando...'
+            });
+
+            $('body').loadingModal('show');
+        });
+
+
+        /*
+        $("#skuProducto").change(function () {
+            var valor = $(this).val();
+            changeInputFiltro("sku", valor, "string");
+        });
+
+        $("#proveedor").change(function () {
+            var valor = $(this).val();
+            changeInputFiltro("proveedor", valor, "string");
+        });
+
+        $("#familia").change(function () {
+            var valor = $(this).val();
+            changeInputFiltro("familia", valor, "string");
+        });
+
+        $("#tipoUnidad").change(function () {
+            var valor = $(this).val();
+            changeInputFiltro("idProductoPresentacion", valor, "int");
+        });
+
+        $("#idCiudad").change(function () {
+            var valor = $(this).val();
+            changeInputFiltro("idCiudad", valor, "guid");
+        });
+
+        $("#fechaInicio").change(function () {
+            var valor = $(this).val();
+            changeInputFiltro("fechaEntregaInicio", valor, "date");
+        });
+
+        $("#fechaFin").change(function () {
+            var valor = $(this).val();
+            changeInputFiltro("fechaEntregaFin", valor, "date");
+        });
+        */
+
+        $("#btnProductosWebExcel").click(function () {
+            window.location.href = $(this).attr("actionLink");
+        });
+
+        /*function changeInputFiltro(propiedad, valor, tipo) {
+            $.ajax({
+                url: "/Reporte/changeFiltroProductosPendienteAtencion",
+                type: 'POST',
+                data: {
+                    tipo: tipo,
+                    propiedad: propiedad,
+                    valor: valor
+                },
+                success: function () { }
+            });
+        }*/
+    };
+
+    if (window.addEventListener) // W3C standard
+    {
+        window.addEventListener('load', funcionesModalProductosPendientesAtencion, false); // NB **not** 'onload'
+    }
+    else if (window.attachEvent) // Microsoft
+    {
+        window.attachEvent('onload', funcionesModalProductosPendientesAtencion);
+    }
+
+</script>

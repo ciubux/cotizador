@@ -1,0 +1,18 @@
+﻿<div class="container">
+    <h1>La carga del archivo de productos para la web se realizó correctamente</h1>
+
+    @if (ViewBag.contInexistentes > 0)
+    {
+    <h2>Se encontraron @ViewBag.contInexistentes registros con SKUs que no existen.</h2>
+    }
+
+    @if (ViewBag.contNuevos > 0)
+    {
+    <h2>Se agregaron @ViewBag.contNuevos registros.</h2>
+    }
+
+    @if (ViewBag.contActualizados > 0)
+    {
+    <h2>Se actualizaron @ViewBag.contActualizados registros.</h2>
+    }
+</div>

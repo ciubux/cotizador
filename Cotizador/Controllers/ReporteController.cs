@@ -77,6 +77,7 @@ namespace Cotizador.Controllers
 
             return obj;
         }
+
         public ActionResult SellOutVendedores()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.ReporteSellOutVendedores;
@@ -394,7 +395,6 @@ namespace Cotizador.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-
 
             return View();
         }

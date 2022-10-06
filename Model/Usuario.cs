@@ -224,6 +224,10 @@ namespace Model
         public bool registraAjusteStock { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REGISTRA_AJUSTE_STOCK)).FirstOrDefault() != null; } }
         public bool apruebaAjusteStock { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_AJUSTE_STOCK)).FirstOrDefault() != null; } }
 
+        //public bool modificaProducto { get; set; }
+        public bool realizaCargaProductosWEB { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REALIZA_CARGA_MASIVA_PRODUCTOS)).FirstOrDefault() != null; } }
+
+
         /*SubDistribuidores*/
         public bool modificaSubDistribuidor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_SUBDISTRIBUIDOR)).FirstOrDefault() != null; } }
         public bool visualizaSubDistribuidores { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_SUBDISTRIBUIDORES)).FirstOrDefault() != null; } }

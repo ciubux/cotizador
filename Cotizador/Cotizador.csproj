@@ -306,6 +306,7 @@
     <Compile Include="ExcelExport\PedidoOCExcel.cs" />
     <Compile Include="ExcelExport\ReporteCargaStock .cs" />
     <Compile Include="ExcelExport\ReporteDetallesSellOutVendedor.cs" />
+    <Compile Include="ExcelExport\ProductoWebCarga.cs" />
     <Compile Include="ExcelExport\ReporteStockPendienteAtencion.cs" />
     <Compile Include="ExcelExport\ReporteKardexProducto.cs" />
     <Compile Include="ExcelExport\ReporteStock .cs" />
@@ -753,6 +754,9 @@
     <Content Include="Views\Reporte\ProductosPendientesAtencion.cshtml" />
     <Content Include="Views\Stock\_ModalStockPendienteAtencion.cshtml" />
     <Content Include="Views\Reporte\SellOutVendedores.cshtml" />
+    <Content Include="Views\Producto\CargaCorrectaWeb.cshtml" />
+    <Content Include="Views\Producto\CargaProductosWeb.cshtml" />
+    <Content Include="Views\Producto\ProductosWeb.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

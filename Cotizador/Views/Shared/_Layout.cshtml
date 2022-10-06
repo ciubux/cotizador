@@ -92,6 +92,9 @@
 
                         var linkBusquedaProducto = "";
                         var linkCargaMasivaProducto = "";
+                        var linkCargaProductosWeb = "";
+                        var linkBusquedaProductosWeb = "";
+                        
                         var linkCargaMasivaStock = "";
                         var linkPlantillaStock = "";
                         var linkReporteStock = "";
@@ -202,6 +205,9 @@
                             case 722: linkReporteStock = "active"; linkMaestros = "active"; break;
                             case 725: linkRegistrarAjusteStock = "active"; linkMaestros = "active"; break;
                             case 726: linkBusquedaAjusteStock = "active"; linkMaestros = "active"; break;
+
+                            case 740: linkCargaProductosWeb = "active"; linkMaestros = "active"; break;
+                            case 741: linkBusquedaProductosWeb = "active"; linkMaestros = "active"; break;
 
                             case 30: linkBusquedaOrigen = "active"; linkMaestros = "active"; break;
                             case 31: linkMantenimientoOrigen = "active"; linkMaestros = "active"; break;
@@ -489,6 +495,16 @@
                                         <li id="linkCRProducto" class="@linkCargaMasivaProducto">@Html.ActionLink("Producto - Importar ", "Index", "Producto")</li>
                                     }
 
+                                    @if (usuario.realizaCargaProductosWEB)
+                                    {
+                                        <li id="linkBusquedaProductoWeb" class="@linkBusquedaProductosWeb">@Html.ActionLink("Producto - Búsqueda de Productos WEB", "ProductosWeb", "Producto")</li>
+                                    }
+
+                                    @if (usuario.realizaCargaProductosWEB)
+                                    {
+                                        <li id="linkCProductoWeb" class="@linkCargaProductosWeb">@Html.ActionLink("Producto - Carga WEB", "CargaProductosWeb", "Producto")</li>
+                                    }
+
                                     @if (usuario.modificaPromocion)
                                     {
                                         <li id="linkBusquedaPromocion" class="@linkBusquedaPromocion">@Html.ActionLink("Promociones - Búsqueda", "List", "Promocion")</li>
@@ -575,6 +591,7 @@
                                     {
                                         <li id="linkBusquedaRol" class="@linkBusquedaRol">@Html.ActionLink("Rol - Búsqueda", "List", "Rol")</li>
                                     }
+
                                     @if (usuario.modificaRol)
                                     {
                                         <li id="linkCRRol" class="@linkMantenimientoRol">@Html.ActionLink("Rol - Crear/Modificar ", "Editar", "Rol")</li>

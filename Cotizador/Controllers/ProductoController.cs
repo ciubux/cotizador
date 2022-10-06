@@ -2162,6 +2162,442 @@ namespace Cotizador.Controllers
             return RedirectToAction("List", "Producto");
 
         }
+
+        public ActionResult ProductosWeb()
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaProductosWeb;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.realizaCargaProductosWEB)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            ProductoBL bl = new ProductoBL();
+            List<ProductoWeb> resultados = new List<ProductoWeb>();
+
+            ProductoWeb filtro = new ProductoWeb(); 
+
+            if (Request.HttpMethod.Equals("POST"))
+            {
+                this.Session["s_productoWebSearchLastF"] = filtro;
+                resultados = bl.SearchProductosWeb(filtro, 0);
+            }
+
+            ViewBag.pagina = (int)Constantes.paginas.BusquedaProductosWeb;
+            ViewBag.filtros = filtro;
+            ViewBag.resultados = resultados;
+            ViewBag.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            return View();
+        }
+
+
+        [HttpGet]
+        public ActionResult CargaProductosWeb()
+        {
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                if (!usuario.realizaCargaProductosWEB)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+            }
+
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.CargaProductosWeb;
+            ViewBag.pagina = (int)Constantes.paginas.CargaProductosWeb;
+
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult ExportProductosWeb()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.realizaCargaProductosWEB)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            ProductoBL bl = new ProductoBL();
+
+            ProductoWeb filtro = (ProductoWeb)this.Session["s_productoWebSearchLastF"];
+            List<ProductoWeb> resultados = bl.SearchProductosWeb(filtro, 1);
+
+            ProductoWebCarga excel = new ProductoWebCarga();
+
+            return excel.generateExcel(resultados, usuario);
+        }
+
+        [HttpPost]
+        public ActionResult LoadProductosWeb(HttpPostedFileBase file)
+        {
+            Usuario usuario = (Usuario)this.Session["usuario"];
+
+            HSSFWorkbook hssfwb;
+
+            ProductoBL productoBL = new ProductoBL();
+
+            hssfwb = new HSSFWorkbook(file.InputStream);
+
+            ISheet sheet = hssfwb.GetSheetAt(0);
+            int row = 1;
+
+            int posicionInicial = 0;
+            int pos = 0;
+            bool agregar = false;
+            bool finaliza = false;
+
+            List<ProductoWeb> items = new List<ProductoWeb>();
+
+            while(!finaliza)
+            {
+                int a = 1;
+                if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
+                {
+                    ProductoWeb obj = new ProductoWeb();
+                    obj.producto = new Producto();
+                    obj.presentacion = new ProductoPresentacion();
+
+                    agregar = true;
+                    posicionInicial = 0;
+
+                    try
+                    {
+
+                        pos = posicionInicial + 0;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {        
+                            obj.producto.sku = null;
+                            agregar = false;
+                        }
+                        else
+                        {
+                            obj.producto.sku = sheet.GetRow(row).GetCell(pos).ToString();
+                            if (obj.producto.sku.Trim().Equals(""))
+                            {
+                                agregar = false;
+                            }
+                        }
+
+
+                        if (agregar)
+                        {
+                            pos = posicionInicial + 1;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.nombre = "";
+                            }
+                            else
+                            {
+                                obj.nombre = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 2;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.presentacion.IdProductoPresentacion = 0;
+                            }
+                            else
+                            {
+                                string unidad = sheet.GetRow(row).GetCell(pos).ToString();
+                                unidad = unidad.ToLower();
+                                obj.presentacion.IdProductoPresentacion = 0;
+
+                                switch (unidad)
+                                {
+                                    case "alternativa": obj.presentacion.IdProductoPresentacion = 1; break;
+                                    case "proveedor": obj.presentacion.IdProductoPresentacion = 2; break;
+                                    case "conteo": obj.presentacion.IdProductoPresentacion = 3; break;
+                                }
+                            }
+
+                            posicionInicial++;
+
+                            pos = posicionInicial + 3;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.cuotaWeb = -1;
+                            }
+                            else
+                            {
+                                string dato = sheet.GetRow(row).GetCell(pos).ToString();
+
+                                if (dato.Trim().Equals(""))
+                                {
+                                    obj.cuotaWeb = -1;
+                                }
+                                else
+                                {
+                                    obj.cuotaWeb = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
+                                }
+                            }
+
+                            pos = posicionInicial + 4;
+                            try
+                            {
+                                obj.Estado = sheet.GetRow(row).GetCell(pos).ToString().Trim().ToUpper().Equals("SI") ? 1 : 0;
+                            }
+                            catch (Exception e)
+                            {
+                                obj.Estado = 0;
+                            }
+
+                            pos = posicionInicial + 5;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.descripcionCatalogo = "";
+                            }
+                            else
+                            {
+                                obj.descripcionCatalogo = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 6;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.descripcionCorta = "";
+                            }
+                            else
+                            {
+                                obj.descripcionCorta = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 7;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.itemOrder = 1;
+                            }
+                            else
+                            {
+                                string dato = sheet.GetRow(row).GetCell(pos).ToString();
+
+                                if (dato.Trim().Equals(""))
+                                {
+                                    obj.itemOrder = 1;
+                                }
+                                else
+                                {
+                                    obj.itemOrder = Int32.Parse(sheet.GetRow(row).GetCell(pos).ToString());
+                                }
+                            }
+
+                            pos = posicionInicial + 8;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.categoria = "";
+                            }
+                            else
+                            {
+                                obj.categoria = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 9;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.subCategoria = "";
+                            }
+                            else
+                            {
+                                obj.subCategoria = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 10;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.atributoTitulo1 = "";
+                            }
+                            else
+                            {
+                                obj.atributoTitulo1 = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 11;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.atributoValor1 = "";
+                            }
+                            else
+                            {
+                                obj.atributoValor1 = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 12;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.atributoTitulo2 = "";
+                            }
+                            else
+                            {
+                                obj.atributoTitulo2 = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 13;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.atributoValor2 = "";
+                            }
+                            else
+                            {
+                                obj.atributoValor2 = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 14;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.atributoTitulo3 = "";
+                            }
+                            else
+                            {
+                                obj.atributoTitulo3 = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 15;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.atributoValor3 = "";
+                            }
+                            else
+                            {
+                                obj.atributoValor3 = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 16;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.atributoTitulo4 = "";
+                            }
+                            else
+                            {
+                                obj.atributoTitulo4 = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 17;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.atributoValor4 = "";
+                            }
+                            else
+                            {
+                                obj.atributoValor4 = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 18;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.atributoTitulo5 = "";
+                            }
+                            else
+                            {
+                                obj.atributoTitulo5 = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 19;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.atributoValor5 = "";
+                            }
+                            else
+                            {
+                                obj.atributoValor5 = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 20;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.tagBusqueda = "";
+                            }
+                            else
+                            {
+                                obj.tagBusqueda = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 21;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.tagPromociones = "";
+                            }
+                            else
+                            {
+                                obj.tagPromociones = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 22;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.seoTitulo = "";
+                            }
+                            else
+                            {
+                                obj.seoTitulo = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 23;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.seoPalabrasClave = "";
+                            }
+                            else
+                            {
+                                obj.seoPalabrasClave = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 24;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.seoDescripcion = "";
+                            }
+                            else
+                            {
+                                obj.seoDescripcion = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            items.Add(obj);
+                        }
+                        else
+                        {
+                            finaliza = true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log log = new Log("CARGA WEB: " + ex.ToString() + " paso:" + pos, TipoLog.Error, usuario);
+                        LogBL logBL = new LogBL();
+                        logBL.insertLog(log);
+                    }
+                } else
+                {
+                    finaliza = true;
+                }
+
+                row++;
+            }
+
+            List<int> results = new List<int>();
+            if (items.Count > 0)
+            {
+                ProductoBL bl = new ProductoBL();
+                results = bl.LoadProductosWeb(items, usuario.idUsuario);
+            } else
+            {
+                results.Add(0);
+                results.Add(0);
+                results.Add(0);
+            }
+
+            ViewBag.contInexistentes = results.ElementAt(0);
+            ViewBag.contNuevos = results.ElementAt(1);
+            ViewBag.contActualizados = results.ElementAt(2);
+            return View("CargaCorrectaWeb");
+        }
+
+
     }
 
 
