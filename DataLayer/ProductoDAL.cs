@@ -2216,5 +2216,124 @@ namespace DataLayer
             list.Add((int)objCommand.Parameters["@actualizados"].Value);
             return list;
         }
+
+        public List<ProductoWeb> GetInventarioSendWeb(Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_data_inventario_web");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataSet dataSet = ExecuteDataSet(objCommand);
+
+            DataTable dataTable = dataSet.Tables[0];
+
+            List<ProductoWeb> productoList = new List<ProductoWeb>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                ProductoWeb item = null;
+
+                string sku = Converter.GetString(row, "sku");
+
+                int equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
+                int equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+                int equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_mp_conteo");
+
+                item = productoList.Where(p => p.sku.Equals(sku)).First();
+
+                if (item == null)
+                {
+                    item = new ProductoWeb();
+                    item.sku = sku;
+                    item.codigoSedes = new List<String>();
+                    item.stocks = new List<int>();
+                    item.presentacion = new ProductoPresentacion();
+                    item.presentacion.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion");
+
+                    item.precio = Converter.GetDecimal(row, "precio");
+                    item.precioProvincia = Converter.GetDecimal(row, "precio_provincia");
+
+                    switch (item.presentacion.IdProductoPresentacion)
+                    {
+                        case 1: 
+                            item.precio = item.precio / (decimal)equivalenciaAlternativa;
+                            item.precioProvincia = item.precioProvincia / (decimal)equivalenciaAlternativa;
+                            break;
+                        case 2: 
+                            item.precio = item.precio * (decimal) equivalenciaProveedor;
+                            item.precioProvincia = item.precioProvincia * (decimal)equivalenciaProveedor;
+                            break;
+                        case 3: 
+                            item.precio = item.precio / (decimal) equivalenciaUnidadEstandarUnidadConteo;
+                            item.precioProvincia = item.precioProvincia / (decimal)equivalenciaUnidadEstandarUnidadConteo;
+                            break;
+                    }
+
+                    item.precio = item.precio * (decimal) 1.18;
+                    item.precioProvincia = item.precioProvincia * (decimal) 1.18;
+
+                    decimal precioTemp = decimal.Ceiling(item.precio * (decimal) 10) / (decimal) 10;
+                    item.precio = decimal.Round(item.precio * (decimal) 1.01 * (decimal) 100) / (decimal) 100;
+
+                    if (precioTemp < item.precio)
+                    {
+                        item.precio = precioTemp;
+                    }
+
+                    decimal precioPTemp = decimal.Ceiling(item.precioProvincia * (decimal)10) / (decimal)10;
+                    item.precioProvincia = decimal.Round(item.precioProvincia * (decimal)1.01 * (decimal)100) / (decimal)100;
+
+                    if (precioPTemp < item.precioProvincia)
+                    {
+                        item.precioProvincia = precioPTemp;
+                    }
+
+                    productoList.Add(item);
+                }
+
+                
+                int stock = 0;
+                string codigoSede = Converter.GetString(row, "codigo_web");
+                bool tieneRegistroStock = Converter.GetBool(row, "tiene_registro_stock");
+                int cuotaWeb = Converter.GetInt(row, "cuota_web");
+                bool registradoPeridoAplicable = Converter.GetBool(row, "registrado_periodo_aplicable");
+                
+                if (tieneRegistroStock || registradoPeridoAplicable)
+                {
+                    int cantidadConteo = Converter.GetInt(row, "cantidad_unidad_conteo") + Converter.GetInt(row, "movimientos_unidad_conteo");
+                    int cantidadSeparadaConteo = (int)Converter.GetDecimal(row, "stock_separado_unidad_conteo");
+                    decimal cantTemp = 0;
+
+                    cantidadConteo = cantidadConteo - cantidadSeparadaConteo;
+
+                    switch (item.presentacion.IdProductoPresentacion)
+                    {
+                        case 0: 
+                            cantTemp = ((Decimal) cantidadConteo) / ((Decimal) equivalenciaUnidadEstandarUnidadConteo);
+                            cantTemp = Math.Truncate(cantTemp);
+                            break;
+                        case 1:
+                            cantTemp = ((Decimal)(cantidadConteo * equivalenciaAlternativa)) / ((Decimal) equivalenciaUnidadEstandarUnidadConteo);
+                            cantTemp = Math.Truncate(cantTemp);
+                            break;
+                        case 2:
+                            cantTemp = ((Decimal)cantidadConteo) / ((Decimal)(equivalenciaProveedor * equivalenciaUnidadEstandarUnidadConteo));
+                            cantTemp = Math.Truncate(cantTemp);
+                            break; 
+                        case 3:
+                            cantTemp = (Decimal) cantidadConteo;
+                            break;
+                    }
+
+                    stock = (int) cantTemp;
+
+                    if (stock > cuotaWeb) { stock = cuotaWeb; }
+                }
+
+
+                item.codigoSedes.Add(codigoSede);
+                item.stocks.Add(stock);                
+            }
+            return productoList;
+        }
     }
 }

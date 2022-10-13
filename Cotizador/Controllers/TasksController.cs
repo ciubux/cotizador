@@ -136,13 +136,13 @@ namespace Cotizador.Controllers
             PedidoBL bl = new PedidoBL();
             
             Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
-            pedido.idPedido = Guid.Parse("95932165-0D89-41AD-8EF8-5E3F65E1188F");
+            pedido.idPedido = Guid.Parse("28373A94-F57E-46F1-8684-0E314F187221");
             pedido = bl.GetPedido(pedido, usuario);
             pedido.usuario = usuario;
 
 
-            //bl.ReplicarPedidoEntornoMP(pedido);
-            bl.EnviarMailTecnica(pedido);
+            bl.ProcesarPedidoAprobadoTecnica(pedido);
+            //bl.EnviarMailTecnica(pedido);
         }
 
         public async Task<String> TipoCambioSunat()

@@ -16,6 +16,7 @@ namespace Model
         public Guid idProductoWeb { get; set; }
         public Producto producto { get; set; }
         
+        public string sku { get; set; }
         public string nombre { get; set; }
         public string descripcionCorta { get; set; }
         public string descripcionCatalogo { get; set; }
@@ -40,6 +41,11 @@ namespace Model
         public string seoDescripcion { get; set; }
         public int cuotaWeb { get; set; }
 
+        public decimal precio { get; set; }
+        public decimal precioProvincia { get; set; }
+
+        public List<String> codigoSedes { get; set; }
+        public List<int> stocks { get; set; }
         public ProductoPresentacion presentacion { get; set; }
     }
 }

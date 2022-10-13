@@ -701,5 +701,13 @@ namespace BusinessLayer
                 return dal.LoadProductosWeb(productos, idUsuario);
             }
         }
+
+        public List<ProductoWeb> GetInventarioSendWeb(Guid idUsuario)
+        {
+            using (ProductoDAL dal = new ProductoDAL())
+            {
+                return dal.GetInventarioSendWeb(idUsuario);
+            }
+        }
     }
 }

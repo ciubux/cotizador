@@ -1011,6 +1011,7 @@ namespace BusinessLayer
         public void ReplicarPedidoEntornoMP(Pedido pedido)
         {
             Pedido pMP = (Pedido)pedido.Clone();
+            Guid idPedidoTec = pedido.idPedido;
             pedido.idPedido = Guid.Empty;
 
             ClienteDAL clienteDal = new ClienteDAL();
@@ -1064,7 +1065,7 @@ namespace BusinessLayer
             pMP.observacionesGuiaRemision = pMP.observacionesGuiaRemision + " // Dejar en " + pedido.cliente.razonSocial;
 
             this.InsertPedido(pMP);
-            this.SetPedidoMP(pedido.idPedido, pMP.idPedido);
+            this.SetPedidoMP(idPedidoTec, pMP.idPedido);
 
             pedido.idMPPedido = pMP.idPedido;
             pedido.numeroPedidoMP = pMP.numeroPedido;
