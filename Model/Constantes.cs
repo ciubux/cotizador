@@ -500,6 +500,7 @@ namespace Model
         public const String CREA_FACTURA_COMPLEJA = "P582";
 
         public const String BUSCA_NOTAS_INGRESO_TODAS_SEDES = "P320";
+        public const String SALTA_VALIDACION_STOCK = "P326";
         public const String CREA_ORDENES_COMPRA_CLIENTE = "P380";
 
 

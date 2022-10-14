@@ -2216,6 +2216,25 @@ namespace Cotizador.Controllers
         }
 
         [HttpGet]
+        public ActionResult ExportProductosWebInventario()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.realizaCargaProductosWEB)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            ProductoBL bl = new ProductoBL();
+
+            List<ProductoWeb> resultados = bl.GetInventarioSendWeb(usuario.idUsuario);
+
+            ProductoWebSendData excel = new ProductoWebSendData();
+
+            return excel.generateExcel(resultados, usuario);
+        }
+
+        [HttpGet]
         public ActionResult ExportProductosWeb()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];

@@ -629,6 +629,46 @@ jQuery(function ($) {
         if (!validarIngresoDatosObligatoriosGuiaRemision())
             return false;
 
+        if (!stockValido()) {
+            var saltaValidacionStock = $("#saltaValidacionStock").val();
+            if (saltaValidacionStock == 1) {
+                $.confirm({
+                    type: 'orange',
+                    title: "STOCK INSUFICIENTE",
+                    content: 'Hay productos que no cuentan con stock suficiente para esta atención. ¿Desea Continuar?',
+                    buttons: {
+                        confirm: {
+                            text: 'SÍ',
+                            action: function () {
+                                GoCrearGuiaRemision(continuarLuego);
+                            }
+                        },
+                        cancel: {
+                            text: 'NO',
+                            action: function () {
+                            }
+                        }
+                    }
+                });
+            } else {
+                $.alert({
+                    type: 'red',
+                    title: "STOCK INSUFICIENTE",
+                    content: 'No se puede atender productos que no tengan stock suficiente. Verifique los item con stock en color ROJO.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            }
+
+            
+            return false;
+        }
+
+        GoCrearGuiaRemision(continuarLuego);
+    }
+
+    function GoCrearGuiaRemision(continuarLuego) {
         desactivarBotonesCreacionModificacion();
 
         $('body').loadingModal({
@@ -656,8 +696,9 @@ jQuery(function ($) {
                         type: 'green',
                         buttons: {
                             OK: function () {
-                                
-                                window.location = '/GuiaRemision/Index?idMovimientoAlmacen=' + resultado.idGuiaRemision; }
+
+                                window.location = '/GuiaRemision/Index?idMovimientoAlmacen=' + resultado.idGuiaRemision;
+                            }
                         }
                     });
                 }
@@ -667,21 +708,21 @@ jQuery(function ($) {
                 }
 
 
-                
-/*
-                $('body').loadingModal("hide");
-                activarBotonesCreacionModificacion();
-                $("#numero").val(resultado.codigo);
 
-                if (resultado.error == "DuplicateNumberDocumentException") {
-                    alert("El número de guía de remisión ya fue utilizado, por favor actualice el número de guía, haciendo clic en el botón actualizar.");
-                }
-                else {
-                    alert("La guía de remisión número " + resultado.serieNumeroGuia + " fue creada correctamente.");
-                    showMovimientoAlmacen(resultado.idGuiaRemision);
-                    window.location = '/GuiaRemision/Index?idMovimientoAlmacen=' + resultado.idGuiaRemision;
-                }
-                */
+                /*
+                                $('body').loadingModal("hide");
+                                activarBotonesCreacionModificacion();
+                                $("#numero").val(resultado.codigo);
+                
+                                if (resultado.error == "DuplicateNumberDocumentException") {
+                                    alert("El número de guía de remisión ya fue utilizado, por favor actualice el número de guía, haciendo clic en el botón actualizar.");
+                                }
+                                else {
+                                    alert("La guía de remisión número " + resultado.serieNumeroGuia + " fue creada correctamente.");
+                                    showMovimientoAlmacen(resultado.idGuiaRemision);
+                                    window.location = '/GuiaRemision/Index?idMovimientoAlmacen=' + resultado.idGuiaRemision;
+                                }
+                                */
                 /*
                 else if (resultado.estado == ESTADO_APROBADA) {
                     alert("La guía de remisión número " + resultado.codigo + " fue creada correctamente.");
@@ -815,18 +856,7 @@ jQuery(function ($) {
             return false;
         }
 
-        if (!stockValido()) {
-            $.alert({
-                type: 'red',
-                title: "STOCK INSUFICIENTE",
-                content: 'No se puede atender productos que no tengan stock suficiente. Verifique los item con stock en color ROJO.',
-                buttons: {
-                    OK: function () { }
-                }
-            });
-            return false;
-        }
-
+        
         return true;
     }
       

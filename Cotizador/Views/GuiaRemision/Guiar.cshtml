@@ -15,6 +15,8 @@
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
     <input type="hidden" value="@ViewBag.debug" />
     <input type="hidden" id="esGuiaDiferida" value="@(guiaRemision.esGuiaDiferida ? "1" : "0")" />
+    <input type="hidden" id="saltaValidacionStock" value="@(guiaRemision.usuario.saltaValidacionStock ? "1" : "0")"  />
+    
     <form class="form-horizontal">
         <input type="hidden" id="idGuiaRemision" name="idGuiaRemision" value="2" />
 
@@ -40,9 +42,10 @@
                         {
                             @*@Html.TextBoxFor(g => guiaRemision.ciudadOrigen.direccionPuntoPartida, htmlAttributes: new { @class = "form-control", disabled = "disabled" })*@
                             <select id="guiaRemision_idAlmacen" name="guiaRemision_idAlmacen" class="form-control">
-                                @foreach(Model.Almacen item in guiaRemision.almacenes) {
-                                <option value="@item.idAlmacen" @(item.idAlmacen.Equals(guiaRemision.idAlmacen) ? "selected" : "")>@item.nombre - @item.direccion</option>
-                                 }
+                                @foreach (Model.Almacen item in guiaRemision.almacenes)
+                                {
+                                    <option value="@item.idAlmacen" @(item.idAlmacen.Equals(guiaRemision.idAlmacen) ? "selected" : "")>@item.nombre - @item.direccion</option>
+                                }
                             </select>
                         }
                         else

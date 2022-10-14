@@ -73,6 +73,7 @@
             {
                 <button id="btnProductosWebExcel" type="button" class="btn btn-primary bouton-image botonExcel" actionLink="@Url.Action("ExportProductosWeb", "Producto")">Descargar En Plantilla</button>
             }
+            <button id="btnProductosInventarioWeb" type="button" class="btn btn-primary bouton-image botonExcel" actionLink="@Url.Action("ExportProductosWebInventario", "Producto")">Descargar Inventario Activo</button>
         </div>
 
         <div class="row pull-right" style="margin-top: 20px; margin-bottom: 10px; margin-right: 0px">
@@ -231,6 +232,10 @@
             window.location.href = $(this).attr("actionLink");
         });
 
+        $("#btnProductosInventarioWeb").click(function () {
+            window.location.href = $(this).attr("actionLink");
+        });
+        
         /*function changeInputFiltro(propiedad, valor, tipo) {
             $.ajax({
                 url: "/Reporte/changeFiltroProductosPendienteAtencion",

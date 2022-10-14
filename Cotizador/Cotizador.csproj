@@ -302,6 +302,7 @@
     <Compile Include="ExcelExport\CotizacionSearch.cs" />
     <Compile Include="ExcelExport\ClienteSearch.cs" />
     <Compile Include="ExcelExport\CotizacionDetalleExcel.cs" />
+    <Compile Include="ExcelExport\ProductoWebSendData.cs" />
     <Compile Include="ExcelExport\ReasignacionCarteraCliente.cs" />
     <Compile Include="ExcelExport\PedidoOCExcel.cs" />
     <Compile Include="ExcelExport\ReporteCargaStock .cs" />

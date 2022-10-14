@@ -2238,7 +2238,13 @@ namespace DataLayer
                 int equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
                 int equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_mp_conteo");
 
-                item = productoList.Where(p => p.sku.Equals(sku)).First();
+                try
+                {
+                    item = productoList.Where(p => p.sku.Equals(sku)).First();
+                } catch(Exception ex)
+                {
+
+                }
 
                 if (item == null)
                 {
@@ -2325,8 +2331,8 @@ namespace DataLayer
                     }
 
                     stock = (int) cantTemp;
-
-                    if (stock > cuotaWeb) { stock = cuotaWeb; }
+                    if(stock < 0) { stock = 0; }
+                    if (cuotaWeb >= 0 && stock > cuotaWeb) { stock = cuotaWeb; }
                 }
 
 
