@@ -607,6 +607,49 @@ namespace Cotizador.Controllers
                     pedidoDetalle.producto.precioClienteProducto.precioNeto = documentoDetalle.precioNeto;
                     pedidoDetalle.producto.precioClienteProducto.esUnidadAlternativa = documentoDetalle.esPrecioAlternativo;
 
+                    int diaFinVigenciaCot = int.Parse(pedidoDetalle.producto.precioClienteProducto.fechaFinVigencia.Value.ToString("yyyyMMdd"));
+                    int diaFechaHoy = int.Parse(DateTime.Now.ToString("yyyyMMdd"));
+
+                    if (diaFinVigenciaCot < diaFechaHoy)
+                    {
+                        ProductoBL productoBL = new ProductoBL();
+                        Producto producto = productoBL.getProducto(pedidoDetalle.producto.idProducto, pedido.ciudad.esProvincia, pedido.incluidoIGV, pedido.cliente.idCliente);
+
+                        int diaFinVigProd = 0;
+                        if (producto.precioClienteProducto != null)
+                        {
+                            diaFinVigProd = int.Parse(producto.precioClienteProducto.fechaFinVigencia.Value.ToString("yyyyMMdd"));
+                            //decimal precioProd = producto.precioClienteProducto.precioNeto * producto.precioClienteProducto.equivalencia;
+                            //decimal precioCot = pedidoDetalle.producto.precioClienteProducto.precioNeto * pedidoDetalle.producto.precioClienteProducto.equivalencia;
+
+                            if (diaFinVigProd > diaFinVigenciaCot)
+                            {
+                                pedidoDetalle.producto = producto;
+                            }
+                        }
+                        
+
+                        /*if (pedidoDetalle.esPrecioAlternativo)
+                        {
+                            ProductoPresentacion productoPresentacion = producto.getProductoPresentacion(documentoDetalle.idProductoPresentacion);
+                            detalle.unidad = productoPresentacion.Presentacion;
+                            detalle.ProductoPresentacion = productoPresentacion;
+                            //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
+                            //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
+                            detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, precioNeto * detalle.ProductoPresentacion.Equivalencia));
+
+                            //Si es el precio Alternativo se debe modificar el precio_cliente_producto para que compare con el precio
+                            //de la unidad alternativa en lugar del precio de la unidad estandar
+                            //detalle.producto.precioClienteProducto.precioUnitario =
+                            //  detalle.producto.precioClienteProducto.precioUnitario / producto.equivalencia;
+                            if (detalle.producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
+                            {
+                                detalle.producto.precioClienteProducto.precioUnitario =
+                                detalle.producto.precioClienteProducto.precioUnitario / detalle.ProductoPresentacion.Equivalencia;
+                            }
+                        }*/
+                    }
+
                 }
                 else if (cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial)
                 {
