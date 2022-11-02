@@ -618,7 +618,12 @@ namespace Cotizador.Controllers
                         int diaFinVigProd = 0;
                         if (producto.precioClienteProducto != null)
                         {
-                            diaFinVigProd = int.Parse(producto.precioClienteProducto.fechaFinVigencia.Value.ToString("yyyyMMdd"));
+                            if (producto.precioClienteProducto.fechaFinVigencia == null)
+                            {
+                                diaFinVigProd = int.Parse(producto.precioClienteProducto.fechaInicioVigencia.Value.AddDays(Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION).ToString("yyyyMMdd"));
+                            } else {
+                                diaFinVigProd = int.Parse(producto.precioClienteProducto.fechaFinVigencia.Value.ToString("yyyyMMdd"));
+                            }
                             //decimal precioProd = producto.precioClienteProducto.precioNeto * producto.precioClienteProducto.equivalencia;
                             //decimal precioCot = pedidoDetalle.producto.precioClienteProducto.precioNeto * pedidoDetalle.producto.precioClienteProducto.equivalencia;
 
@@ -629,25 +634,10 @@ namespace Cotizador.Controllers
                         }
                         
 
-                        /*if (pedidoDetalle.esPrecioAlternativo)
+                        if (pedidoDetalle.esPrecioAlternativo)
                         {
-                            ProductoPresentacion productoPresentacion = producto.getProductoPresentacion(documentoDetalle.idProductoPresentacion);
-                            detalle.unidad = productoPresentacion.Presentacion;
-                            detalle.ProductoPresentacion = productoPresentacion;
-                            //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
-                            //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
-                            detalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, precioNeto * detalle.ProductoPresentacion.Equivalencia));
-
-                            //Si es el precio Alternativo se debe modificar el precio_cliente_producto para que compare con el precio
-                            //de la unidad alternativa en lugar del precio de la unidad estandar
-                            //detalle.producto.precioClienteProducto.precioUnitario =
-                            //  detalle.producto.precioClienteProducto.precioUnitario / producto.equivalencia;
-                            if (detalle.producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
-                            {
-                                detalle.producto.precioClienteProducto.precioUnitario =
-                                detalle.producto.precioClienteProducto.precioUnitario / detalle.ProductoPresentacion.Equivalencia;
-                            }
-                        }*/
+                            pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.precioClienteProducto.equivalencia;
+                        }
                     }
 
                 }
@@ -1037,7 +1027,6 @@ namespace Cotizador.Controllers
                 }
                 else
                 {
-
                     //Se obtiene la lista de direccioines de entrega registradas para el cliente
                     DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
                     pedido.cliente.direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(idCliente);

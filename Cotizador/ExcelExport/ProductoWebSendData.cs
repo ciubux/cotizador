@@ -117,7 +117,7 @@ namespace Cotizador.ExcelExport
                     for(int j = 0; j < obj.stocks.Count; j++)
                     {
                         UtilesHelper.setValorCelda(sheet, i, "A", obj.codigoSedes.ElementAt(j) + obj.sku);
-                        if (obj.codigoSedes.ElementAt(j).Equals("L"))
+                        if (obj.codigoSedes.ElementAt(j).Equals("LI"))
                         {
                             UtilesHelper.setValorCelda(sheet, i, "B", (double) obj.precio, twoDecCellStyle);
                         } else

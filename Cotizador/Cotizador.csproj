@@ -758,6 +758,7 @@
     <Content Include="Views\Producto\CargaCorrectaWeb.cshtml" />
     <Content Include="Views\Producto\CargaProductosWeb.cshtml" />
     <Content Include="Views\Producto\ProductosWeb.cshtml" />
+    <Content Include="Views\Promocion\_ModalSelectAdd.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

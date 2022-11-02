@@ -208,6 +208,7 @@ namespace Cotizador.Controllers
             cotizacionTmp.flete = 0;
             cotizacionTmp.ajusteCalculoPrecios = false;
             cotizacionTmp.moneda = Moneda.ListaMonedas.Where(m => m.codigo.Equals("PEN")).FirstOrDefault();
+            cotizacionTmp.promociones = new List<Promocion>();
 
             cotizacionTmp.promocion = new Promocion();
             cotizacionTmp.promocion.idPromocion = Guid.Empty;
@@ -811,6 +812,77 @@ namespace Cotizador.Controllers
         #endregion
 
 
+        public String AddPromocion()
+        {
+            Cotizacion cotizacion = this.CotizacionSession;
+            Guid idPromocion = Guid.Empty;
+            int success = 0;
+            string errorMessage = "";
+            Promocion prom = null;
+
+            if (this.Request.Params["idPromocion"] != null && !this.Request.Params["idPromocion"].Equals(""))
+            {
+                idPromocion = Guid.Parse(this.Request.Params["idPromocion"]);
+                prom = cotizacion.promociones.Where(p => p.idPromocion.Equals(idPromocion)).FirstOrDefault();
+
+                if (prom == null) { 
+                    PromocionBL bL = new PromocionBL();
+                    prom = bL.getPromocion(idPromocion);
+                    cotizacion.promociones.Add(prom);
+                    success = 1;
+                } else
+                {
+                    errorMessage = "La promoción ya está agregada.";
+                }
+            } else
+            {
+                errorMessage = "La promoción no es válida.";
+            }
+
+            this.CotizacionSession = cotizacion;
+            var obj = new {
+                promocion = prom,
+                success = success,
+                errorMessage = errorMessage
+            };
+
+            return JsonConvert.SerializeObject(obj);
+        }
+
+        public String RemovePromocion()
+        {
+            Cotizacion cotizacion = this.CotizacionSession;
+            Guid idPromocion = Guid.Empty;
+            int success = 0;
+            string errorMessage = "";
+            Promocion prom = null;
+
+            if (this.Request.Params["idPromocion"] != null && !this.Request.Params["idPromocion"].Equals(""))
+            {
+                idPromocion = Guid.Parse(this.Request.Params["idPromocion"]);
+                prom = cotizacion.promociones.Where(p => p.idPromocion.Equals(idPromocion)).FirstOrDefault();
+
+                if (prom != null)
+                {
+                    cotizacion.promociones.Remove(prom);
+                    success = 1;
+                }
+            }
+            else
+            {
+                errorMessage = "Promoción no válida.";
+            }
+
+            this.CotizacionSession = cotizacion;
+            var obj = new
+            {
+                promocion = prom,
+                success = success,
+                errorMessage = errorMessage
+            };
+
+            return JsonConvert.SerializeObject(obj);
+        }
 
         public String ChangeIdPromocion()
         {

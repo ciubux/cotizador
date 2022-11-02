@@ -27,6 +27,20 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pi_pedido");
             InputParameterAdd.BigInt(objCommand, "numeroGrupo", pedido.numeroGrupoPedido); //puede ser null
 
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            foreach (Promocion item in pedido.promociones)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = item.idPromocion;
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@promociones", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
             if (pedido.cotizacion.idCotizacion == Guid.Empty)
                 InputParameterAdd.Guid(objCommand, "idCotizacion", null); //puede ser null
             else
@@ -262,6 +276,20 @@ namespace DataLayer
                 InputParameterAdd.Guid(objCommand, "idAlmacenDestino", null); //puede ser null
             else
                 InputParameterAdd.Guid(objCommand, "idAlmacenDestino", pedido.almacenDestino.idAlmacen); //puede ser null
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            foreach (Promocion item in pedido.promociones)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = item.idPromocion;
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@promociones", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
 
             InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);

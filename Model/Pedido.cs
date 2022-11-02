@@ -68,6 +68,7 @@ namespace Model
         public Moneda moneda { get; set; }
         public OrdenCompraCliente ordenCompracliente { get; set; }
 
+        public List<Promocion> promociones { get; set; }
         public Cotizacion cotizacion { get; set; }
         [Display(Name = "Sede MP:")]
         public Ciudad ciudad { get; set; }
@@ -156,7 +157,6 @@ namespace Model
 
         [Display(Name = "Número Requerimiento:")]
         public String numeroRequerimiento { get; set; }
-
 
         [Display(Name = "Fechas de Entrega:")]
         public String rangoFechasEntrega {

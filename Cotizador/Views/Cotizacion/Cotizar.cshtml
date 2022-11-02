@@ -684,93 +684,110 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-sm-6 col-lg-9">
-        <div class="form-group">
-            <label for="observacionesFijas" class="control-label col-xs-2">Observaciones Fijas:</label>
-            <div class="col-xs-10">
-                @if (cotizacion.usuario.apruebaCotizaciones)
-                {
-                    <textarea rows="4" cols="100" maxlength="500" style="min-width: 100%; margin-bottom: 10px;" id="observacionesFijas" name="observacionesFijas">@cotizacion.observacionesFijas</textarea>
-                }
-                else
-                {
-                    <textarea rows="4" cols="100" maxlength="500" style="min-width: 100%; margin-bottom: 10px;" id="observacionesFijas" readonly name="observacionesFijas">@cotizacion.observacionesFijas</textarea>
-                }
-            </div>
-        </div>
 
-        <!--PROMOCIONES-->
-        <div class="form-group">
-            @Html.LabelFor(p => cotizacion.promocion, htmlAttributes: new { @class = "control-label col-xs-2" })
-            <div class="col-xs-10">
-                @Html.Partial("../Promocion/_PluginSelect")
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="observaciones" class="control-label col-xs-2">Observaciones:</label>
-            <div class="col-xs-10">
-                <textarea rows="6" cols="100" style="min-width: 100%" id="observaciones" name="observaciones">@cotizacion.observaciones</textarea>
-            </div>
-
-        </div>
-        @if (cotizacion.aplicaSedes)
-        {
+    <div class="row">
+        <div class="col-sm-6 col-lg-9">
             <div class="form-group">
-                <div class="">
-                    <p class=" text-danger" id="verSedesAplica">
-                        Esta cotización aplicará también para las sedes:  @cotizacion.cliente.sedeListWebString.Replace("<br>", ", ")
-                    </p>
+                <label for="observacionesFijas" class="control-label col-xs-2">Observaciones Fijas:</label>
+                <div class="col-xs-10">
+                    @if (cotizacion.usuario.apruebaCotizaciones)
+                    {
+                        <textarea rows="4" cols="100" maxlength="500" style="min-width: 100%; margin-bottom: 10px;" id="observacionesFijas" name="observacionesFijas">@cotizacion.observacionesFijas</textarea>
+                    }
+                    else
+                    {
+                        <textarea rows="4" cols="100" maxlength="500" style="min-width: 100%; margin-bottom: 10px;" id="observacionesFijas" readonly name="observacionesFijas">@cotizacion.observacionesFijas</textarea>
+                    }
                 </div>
             </div>
-        }
-    </div>
-    <div class="col-sm-6 col-lg-3">
 
-        @if ((int)cotizacion.considerarCantidades == 1 || (int)cotizacion.considerarCantidades == 2)
-        {
-            <div class="row form-group">
-                <div class="pull-right">
-                    <span class="totales">Subtotal: <span class="mostrarSimboloMoneda">@(cotizacion.moneda != null ? cotizacion.moneda.simbolo : "")</span> </span>
-                    <span class="totales" id="montoSubTotal">@cotizacion.montoSubTotal</span>
+            <!--PROMOCIONES-->
+            <div class="form-group">
+                @Html.LabelFor(p => cotizacion.promocion, htmlAttributes: new { @class = "control-label col-xs-2" })
+                <div class="col-xs-10">
+                    <button type="button" class="btn btn-primary btnOpenMAP" data-toggle="modal" data-target="#modalAgregarPromocion">Agregar Promoción</button>
+                    <div class="promocionesContainer" urlAddPromo="/Cotizacion/AddPromocion" urlRemovePromo="/Cotizacion/RemovePromocion">
+                        @foreach (Model.Promocion prom in cotizacion.promociones)
+                        {
+                            <div class="row" idPromocion="@prom.idPromocion" >
+                                <span class="form-control-static col-xs-10" id="verNombrePromocion" style="vertical-align: middle;">@(prom.codigo + " - " + prom.titulo)</span>
+                                <label class="lblInfoDescripcionLarga tooltip-motivo-restriccion col-xs-1" style="vertical-align: middle; text-align: left;">
+                                    <img src="~/images/icon_info_22.png" />
+
+                                    <span id="spnPromocionTexto" class="tooltip-label-text tooltip-label-text-info tooltiptext" style="width: 250px;">
+                                        @Html.Raw(prom.textoDescripcion.Replace("\n", "<br/>"))
+                                    </span>
+                                </label>
+                                <button type="button" class="btn btn-danger btnRemoverPromocion">X</button>
+                            </div>
+                        }
+                    </div>
                 </div>
-            </div>
-            <div class="row form-group">
-                <div class="pull-right">
-                    <span class="totales">IGV 18%: <span class="mostrarSimboloMoneda">@(cotizacion.moneda != null ? cotizacion.moneda.simbolo : "")</span> </span>
-                    <span class="totales" id="montoIGV">@cotizacion.montoIGV</span>
+
+                <div class="form-group">
+                    <label for="observaciones" class="control-label col-xs-2">Observaciones:</label>
+                    <div class="col-xs-10">
+                        <textarea rows="6" cols="100" style="min-width: 100%" id="observaciones" name="observaciones">@cotizacion.observaciones</textarea>
+                    </div>
+
                 </div>
+                @if (cotizacion.aplicaSedes)
+                {
+                    <div class="form-group">
+                        <div class="">
+                            <p class=" text-danger" id="verSedesAplica">
+                                Esta cotización aplicará también para las sedes:  @cotizacion.cliente.sedeListWebString.Replace("<br>", ", ")
+                            </p>
+                        </div>
+                    </div>
+                }
             </div>
-            <div class="row form-group">
-                <div class="pull-right">
-                    <input type="hidden" id="total" value="@cotizacion.montoTotal" />
-                    <span class="totales">TOTAL: <span class="mostrarSimboloMoneda">@(cotizacion.moneda != null ? cotizacion.moneda.simbolo : "")</span> </span>
-                    <span class="totales" id="montoTotal">@cotizacion.montoTotal</span>
-                </div>
+            <div class="col-sm-6 col-lg-3">
+
+                @if ((int)cotizacion.considerarCantidades == 1 || (int)cotizacion.considerarCantidades == 2)
+                {
+                    <div class="row form-group">
+                        <div class="pull-right">
+                            <span class="totales">Subtotal: <span class="mostrarSimboloMoneda">@(cotizacion.moneda != null ? cotizacion.moneda.simbolo : "")</span> </span>
+                            <span class="totales" id="montoSubTotal">@cotizacion.montoSubTotal</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="pull-right">
+                            <span class="totales">IGV 18%: <span class="mostrarSimboloMoneda">@(cotizacion.moneda != null ? cotizacion.moneda.simbolo : "")</span> </span>
+                            <span class="totales" id="montoIGV">@cotizacion.montoIGV</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="pull-right">
+                            <input type="hidden" id="total" value="@cotizacion.montoTotal" />
+                            <span class="totales">TOTAL: <span class="mostrarSimboloMoneda">@(cotizacion.moneda != null ? cotizacion.moneda.simbolo : "")</span> </span>
+                            <span class="totales" id="montoTotal">@cotizacion.montoTotal</span>
+                        </div>
+                    </div>
+                }
             </div>
-        }
-    </div>
-</div>
-
-<div class="row">
-    <div class="pull-left">
-        <button id="btnContinuarEditandoLuego" type="button" class="btn btn-primary">Guardar</button>
+        </div>
     </div>
 
+    <div class="row">
+        <div class="pull-left">
+            <button id="btnContinuarEditandoLuego" type="button" class="btn btn-primary">Guardar</button>
+        </div>
 
-    <div class="pull-right">
-        <button type="button" id="btnCancelCotizacion" class="btn btn-danger">Cancelar</button>
-        @if (cotizacion.codigo > 0)
-        {
-            <button id="btnFinalizarEdicionCotizacion" type="button" class="btn btn-success">Finalizar Edición</button>
-        }
-        else
-        {
-            <button id="btnFinalizarCreacionCotizacion" type="button" class="btn btn-success">Finalizar Creación</button>
-        }
+
+        <div class="pull-right">
+            <button type="button" id="btnCancelCotizacion" class="btn btn-danger">Cancelar</button>
+            @if (cotizacion.codigo > 0)
+            {
+                <button id="btnFinalizarEdicionCotizacion" type="button" class="btn btn-success">Finalizar Edición</button>
+            }
+            else
+            {
+                <button id="btnFinalizarCreacionCotizacion" type="button" class="btn btn-success">Finalizar Creación</button>
+            }
+        </div>
     </div>
-</div>
 
 
     </form>
@@ -904,7 +921,7 @@
                                 </div>
                                 <div class="col-xs-2">
                                     <button id="btnMostrarPrecios" type="button" class="btn btn-primary bouton-image botonPrecios" data-toggle="modal" data-target="#modalMostrarPrecios"></button>
-                                </div>                                
+                                </div>
                             </div>
 
 
@@ -1594,6 +1611,8 @@
 
 
 @Html.Partial("../Stock/_ModalStockProducto")
+
+@Html.Partial("../Promocion/_ModalSelectAdd")
 
 <div class="modal fade" id="modalComentarioAprobacion" tabindex="-1">
 

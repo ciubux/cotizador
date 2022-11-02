@@ -9,7 +9,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -143,6 +146,53 @@ namespace Cotizador.Controllers
 
             bl.ProcesarPedidoAprobadoTecnica(pedido);
             //bl.EnviarMailTecnica(pedido);
+        }
+
+        public async Task<String> envSW()
+        {
+            ProductoBL bl = new ProductoBL();
+
+            string baseUrl = "https://api-external.samishop.pe/api/producto/inventario";
+            string dominio = "mpinstitucional.com";
+            string apiToken = "VVXZ64FCFV5422";
+
+            List<ProductoWeb> resultados = bl.GetInventarioSendWeb(Guid.Empty);
+
+            string lista = "";
+
+            foreach (ProductoWeb obj in resultados)
+            {
+                for (int j = 0; j < obj.stocks.Count; j++)
+                {
+                    var itemInv = new {
+                        ID = obj.codigoSedes.ElementAt(j) + obj.sku,
+                        PrecioOferta = obj.codigoSedes.ElementAt(j).Equals("LI") ? obj.precio : obj.precioProvincia,
+                        PrecioVenta = obj.codigoSedes.ElementAt(j).Equals("LI") ? obj.precio : obj.precioProvincia,
+                        Cantidad = obj.stocks.ElementAt(j)
+                    };
+
+                    if (lista.Equals(""))
+                    {
+                        lista = JsonConvert.SerializeObject(itemInv);
+                    } else {
+                        lista = lista + "," + JsonConvert.SerializeObject(itemInv);
+                    }
+                }
+            }
+
+            var sendData = "{\"productos\": [" + lista + "]}";
+
+            var client = new HttpClient();
+            
+            //client.BaseAddress = new Uri(baseUrl);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiToken);
+            // serialize your json using newtonsoft json serializer then add it to the StringContent
+            var content = new StringContent(sendData, Encoding.UTF8, "application/json");
+
+            var result = await client.PostAsync(new Uri(baseUrl), content);
+            string resultContent = await result.Content.ReadAsStringAsync();
+        
+            return resultContent;
         }
 
         public async Task<String> TipoCambioSunat()

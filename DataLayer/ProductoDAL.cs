@@ -2235,6 +2235,7 @@ namespace DataLayer
                 string sku = Converter.GetString(row, "sku");
 
                 int equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
+                int ventaRestringida = Converter.GetInt(row, "descontinuado");
                 int equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
                 int equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_mp_conteo");
 
@@ -2315,23 +2316,34 @@ namespace DataLayer
                     {
                         case 0: 
                             cantTemp = ((Decimal) cantidadConteo) / ((Decimal) equivalenciaUnidadEstandarUnidadConteo);
-                            cantTemp = Math.Truncate(cantTemp);
                             break;
                         case 1:
                             cantTemp = ((Decimal)(cantidadConteo * equivalenciaAlternativa)) / ((Decimal) equivalenciaUnidadEstandarUnidadConteo);
-                            cantTemp = Math.Truncate(cantTemp);
                             break;
                         case 2:
                             cantTemp = ((Decimal)cantidadConteo) / ((Decimal)(equivalenciaProveedor * equivalenciaUnidadEstandarUnidadConteo));
-                            cantTemp = Math.Truncate(cantTemp);
                             break; 
                         case 3:
                             cantTemp = (Decimal) cantidadConteo;
                             break;
                     }
 
+                    switch (ventaRestringida)
+                    {
+                        case 0: cantTemp = cantTemp * (decimal) 0.5; break; // Sin Restricciópn
+                        case 1: cantTemp = cantTemp; break; // Descontinuado
+                        case 2: cantTemp = cantTemp * (decimal) 0.5; break; // Inestabilidad de precios
+                        case 3: cantTemp = cantTemp * (decimal) 0.2; break; // Stock limitado
+                        case 4: cantTemp = cantTemp * (decimal) 0.5; break; // Venta controlada
+                        case 5: cantTemp = cantTemp; break; // NO Stockeable
+                        default: cantTemp = cantTemp * (decimal) 0.5; break; 
+                    }
+
+                    cantTemp = Math.Truncate(cantTemp);
+
                     stock = (int) cantTemp;
-                    if(stock < 0) { stock = 0; }
+                    if(stock <= 0) { stock = 0; }
+
                     if (cuotaWeb >= 0 && stock > cuotaWeb) { stock = cuotaWeb; }
                 }
 

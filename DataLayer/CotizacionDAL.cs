@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using Model;
 using System.Linq;
+using System.Data.SqlClient;
 
 namespace DataLayer
 {
@@ -56,6 +57,19 @@ namespace DataLayer
             else
                 InputParameterAdd.Guid(objCommand, "idPromocion", cotizacion.promocion.idPromocion); //puede ser null
 
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            foreach (Promocion item in cotizacion.promociones)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = item.idPromocion;
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@promociones", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
 
             //porcentajeFlete
             InputParameterAdd.Decimal(objCommand, "porcentajeFlete", cotizacion.flete);
@@ -114,6 +128,19 @@ namespace DataLayer
             else
                 InputParameterAdd.Guid(objCommand, "idPromocion", cotizacion.promocion.idPromocion); //puede ser null
 
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            foreach (Promocion item in cotizacion.promociones)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = item.idPromocion;
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@promociones", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
 
             //Si no se cuenta con idCliente entonces se registra el grupo
             if (cotizacion.cliente.idCliente == Guid.Empty)

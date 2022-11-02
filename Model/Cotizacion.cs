@@ -19,7 +19,7 @@ namespace Model
             [Display(Name = "Solo Cantidades")]
             Cantidades = 1,
             [Display(Name = "Cantidades y Observaciones")]
-            Ambos =2};
+            Ambos = 2 };
 
         public enum TiposCotizacion
         {
@@ -66,7 +66,7 @@ namespace Model
         public Boolean incluidoIGV { get; set; }
         public Decimal flete { get; set; }
         public String usuarioCreacion { get; set; }
-      //  public Usuario usuario_aprobador { get; set; }
+        //  public Usuario usuario_aprobador { get; set; }
         public Decimal igv { get; set; }
 
         [Display(Name = "Moneda:")]
@@ -114,8 +114,9 @@ namespace Model
 
         public Boolean aplicaSedes { get; set; }
 
-        public Boolean esPagoContado { get; set; } 
+        public Boolean esPagoContado { get; set; }
 
+        public List<Promocion> promociones { get; set; }
         public List<DocumentoDetalle> documentoDetalle
         {
             get {

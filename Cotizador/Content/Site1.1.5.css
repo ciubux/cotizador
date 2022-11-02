@@ -1394,3 +1394,11 @@ $darkred: darken($red, 0.2);*/
     overflow-x: hidden;
     margin-bottom: 15px;
 }
+
+.promocionesContainer {
+    margin-top: 10px;
+}
+
+.promocionesContainer > div.row{
+    margin-bottom: 5px;
+}
