@@ -1,0 +1,182 @@
+﻿@{
+    
+    String textoTooltip = "";
+    String displayTooltip = "display: none;";
+}
+
+
+
+<div class="modal fade" id="modalAgregarPromocion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalCalculadoraTitle"><b>Agregar Promoción</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-11">
+                        @Html.Action("GetPromociones", "Promocion",
+                        new
+                        {
+                            SelectId = "idPromocionMAP",
+                            selectedValue = Guid.Empty
+                        })
+                    </div>
+                    <div class="col-xs-1">
+                        <label class="lblInfoDescripcionLarga tooltip-motivo-restriccion">
+                            <img src="~/images/icon_info_22.png" />
+
+                            <span id="spnPromocionTextMAP" class="tooltip-label-text tooltip-label-text-info tooltiptext" style="width: 250px; @displayTooltip">
+                                @textoTooltip
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnMAPCancel" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnMAPAdd" class="btn btn-primary">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script type="text/javascript">
+    function funcionesModalAgregarPromocion() {
+        $(document).on('change', "select#idPromocionMAP", function () {
+            var idPromocion = $(this).val();
+
+            $.ajax({
+                url: "/Promocion/GetPromocion",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idPromocion: idPromocion
+                },
+                success: function (obj) {
+                    if (obj != null) {
+                        $("#spnPromocionTextMAP").show();
+                        $("#spnPromocionTextMAP").html(obj.textoDescripcion.replace(/\n/g, "<br/>"));
+                    } else {
+                        $("#spnPromocionTextMAP").html("");
+                        $("#spnPromocionTextMAP").hide();
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', ".btnOpenMAP", function () {
+            $("#idPromocionMAP").val("");
+        });
+
+        $(document).on('click', "#btnMAPAdd", function () {
+            var idPromocion = $("#idPromocionMAP").val();
+            var urlAdd = $(".promocionesContainer").attr("urlAddPromo");
+
+            $.ajax({
+                url: urlAdd,
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idPromocion: idPromocion
+                },
+                success: function (obj) {
+                    if (obj.success == 1) {
+                        var htmlAdd = '<div class="row" idPromocion="' + obj.promocion.idPromocion + '">' +
+                            '<span class="form-control-static col-xs-10" id="verNombrePromocion" style="vertical-align: middle;">' + obj.promocion.codigo + ' - ' + obj.promocion.titulo + '</span>' +
+                            '<label class="lblInfoDescripcionLarga tooltip-motivo-restriccion col-xs-1" style="vertical-align: middle; text-align: left;">' +
+                            '   <img src="/images/icon_info_22.png" />' +
+                            '   <span id="spnPromocionTexto" class="tooltip-label-text tooltip-label-text-info tooltiptext" style="width: 250px;">' +
+                            obj.promocion.textoDescripcion.replace(/\n/g, "<br/>") +
+                            '   </span>' +
+                            '</label>' +
+                            '<button type="button" class="btn btn-danger btnRemoverPromocion">X</button>' +
+                            '</div>';
+
+                        $("div.promocionesContainer").append(htmlAdd);
+                        $.alert({
+                            title: "PROMOCIÓN AGREGADA",
+                            type: 'green',
+                            content: "Se agregó la promoción.",
+                            buttons: {
+                                OK: function () {
+                                    $("#modalAgregarPromocion").modal('hide')
+                                }
+                            }
+                        });
+                    } else {
+                        $.alert({
+                            title: "ERROR",
+                            type: 'red',
+                            content: obj.errorMessage,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', ".btnRemoverPromocion", function () {
+            var idPromocion = $(this).closest("div.row").attr("idPromocion");
+            var urlRemove = $(".promocionesContainer").attr("urlRemovePromo");
+            var that = this;
+
+            $.ajax({
+                url: urlRemove,
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idPromocion: idPromocion
+                },
+                success: function (obj) {
+                    if (obj.success == 1) {
+                        $(that).closest("div.row").remove();
+
+                        $.alert({
+                            title: "PROMOCIÓN REMOVIDA",
+                            type: 'green',
+                            content: "Se removió la promoción.",
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    } else {
+                        $.alert({
+                            title: "ERROR",
+                            type: 'red',
+                            content: obj.errorMessage,
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+    };
+
+    if (window.addEventListener) // W3C standard
+    {
+        window.addEventListener('load', funcionesModalAgregarPromocion, false);
+    }
+    else if (window.attachEvent) // Microsoft
+    {
+        window.attachEvent('onload', funcionesModalAgregarPromocion);
+    }
+
+</script>
