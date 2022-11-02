@@ -13,6 +13,13 @@ namespace BusinessLayer
 
         private void validarCotizacion(Cotizacion cotizacion, Cotizacion cotizacionAprobada = null)
         {
+            bool enviaAprobacion = false;
+            ParametroBL blParametro = new ParametroBL();
+            string paramEnviaAprobacion = blParametro.getParametro("ENVIA_APROBACION_TODAS_COTIZACIONES");
+            if (paramEnviaAprobacion.ToUpper().Equals("SI"))
+            {
+                enviaAprobacion = true;
+            }
 
             //Si no se consideran cantidades no se debe grabar el subtotal
             if (cotizacion.considerarCantidades == Cotizacion.OpcionesConsiderarCantidades.Observaciones)
@@ -261,7 +268,13 @@ namespace BusinessLayer
                     cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
                 }*/
             }
-           
+
+            if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada && enviaAprobacion && !cotizacion.usuario.apruebaCotizaciones)
+            {
+                cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + " TODAS las cotizaciones pasan a aprobación.";
+                cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+            }
+
             if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada)
             {
                 cotizacion.seguimientoCotizacion.observacion = null;

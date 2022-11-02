@@ -410,6 +410,8 @@ namespace Cotizador.Controllers
            // pedido.mostrarCodigoProveedor = true;
             pedido.observaciones = String.Empty;
 
+            pedido.promociones = new List<Promocion>();
+
             pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             pedido.seguimientoPedido = new SeguimientoPedido();
             pedido.seguimientoCrediticioPedido = new SeguimientoCrediticioPedido();

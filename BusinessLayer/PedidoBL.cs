@@ -16,6 +16,14 @@ namespace BusinessLayer
         #region Pedidos de VENTA
         private void validarPedidoVenta(Pedido pedido)
         {
+            bool enviaAprobacion = false;
+            ParametroBL blParametro = new ParametroBL();
+            string paramEnviaAprobacion = blParametro.getParametro("ENVIA_APROBACION_TODOS_PEDIDOS");
+            if (paramEnviaAprobacion.ToUpper().Equals("SI"))
+            {
+                enviaAprobacion = true;
+            }
+
             pedido.seguimientoPedido.observacion = String.Empty;
             pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
             pedido.seguimientoCrediticioPedido.observacion = String.Empty;
@@ -200,10 +208,15 @@ namespace BusinessLayer
                             pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
                         }
                     }
+
                 }
             }
 
-            
+            if (pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado && enviaAprobacion && !pedido.usuario.apruebaPedidos)
+            {
+                pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + " TODOS los pedidos pasan a aprobación.";
+                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+            }
 
             foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
             {
