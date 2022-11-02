@@ -547,10 +547,12 @@ namespace Cotizador.Controllers
                 pedido.horaEntregaAdicionalHasta = cotizacion.cliente.horaFinSegundoTurnoEntregaFormat;
             }
 
-            if(cotizacion.promocion != null && !cotizacion.promocion.idPromocion.Equals(Guid.Empty))
-            {
-                pedido.promocion = cotizacion.promocion;
-            }
+            //if(cotizacion.promocion != null && !cotizacion.promocion.idPromocion.Equals(Guid.Empty))
+            //{
+            //    pedido.promocion = cotizacion.promocion;
+            //}
+
+            pedido.promociones = cotizacion.promociones;
 
             SolicitanteBL solicitanteBL = new SolicitanteBL();
             pedido.cliente.solicitanteList = solicitanteBL.getSolicitantes(cotizacion.cliente.idCliente);
@@ -816,6 +818,8 @@ namespace Cotizador.Controllers
 
                 pedido.promocion = new Promocion();
                 pedido.promocion.idPromocion = Guid.Empty;
+
+                pedido.promociones = new List<Promocion>();
 
                 pedido.tipoPedido = Pedido.tiposPedido.Venta;
                 pedido.ciudadASolicitar = new Ciudad();
@@ -1617,6 +1621,82 @@ namespace Cotizador.Controllers
 
             this.PedidoSession = pedido;
             return "{\"idPromocion\": \"" + idPromocion + "\"}";
+        }
+
+        public String AddPromocion()
+        {
+            Pedido pedido = this.PedidoSession;
+            Guid idPromocion = Guid.Empty;
+            int success = 0;
+            string errorMessage = "";
+            Promocion prom = null;
+
+            if (this.Request.Params["idPromocion"] != null && !this.Request.Params["idPromocion"].Equals(""))
+            {
+                idPromocion = Guid.Parse(this.Request.Params["idPromocion"]);
+                prom = pedido.promociones.Where(p => p.idPromocion.Equals(idPromocion)).FirstOrDefault();
+
+                if (prom == null)
+                {
+                    PromocionBL bL = new PromocionBL();
+                    prom = bL.getPromocion(idPromocion);
+                    pedido.promociones.Add(prom);
+                    success = 1;
+                }
+                else
+                {
+                    errorMessage = "La promoción ya está agregada.";
+                }
+            }
+            else
+            {
+                errorMessage = "La promoción no es válida.";
+            }
+
+            this.PedidoSession = pedido;
+            var obj = new
+            {
+                promocion = prom,
+                success = success,
+                errorMessage = errorMessage
+            };
+
+            return JsonConvert.SerializeObject(obj);
+        }
+
+        public String RemovePromocion()
+        {
+            Pedido pedido = this.PedidoSession;
+            Guid idPromocion = Guid.Empty;
+            int success = 0;
+            string errorMessage = "";
+            Promocion prom = null;
+
+            if (this.Request.Params["idPromocion"] != null && !this.Request.Params["idPromocion"].Equals(""))
+            {
+                idPromocion = Guid.Parse(this.Request.Params["idPromocion"]);
+                prom = pedido.promociones.Where(p => p.idPromocion.Equals(idPromocion)).FirstOrDefault();
+
+                if (prom != null)
+                {
+                    pedido.promociones.Remove(prom);
+                    success = 1;
+                }
+            }
+            else
+            {
+                errorMessage = "Promoción no válida.";
+            }
+
+            this.PedidoSession = pedido;
+            var obj = new
+            {
+                promocion = prom,
+                success = success,
+                errorMessage = errorMessage
+            };
+
+            return JsonConvert.SerializeObject(obj);
         }
 
 

@@ -46,8 +46,9 @@ namespace Cotizador.Models.DTOshow
         public Decimal montoTotal { get; set; }
         public Decimal minimoMargen { get; set; }
         public List<Model.CotizacionDetalle> cotizacionDetalleList { get; set; }
-       
-        
+
+        public List<Promocion> promocionesList { get; set; }
+
         public SeguimientoCotizacion.estadosSeguimientoCotizacion seguimientoCotizacion_estado { get; set; }
         public Decimal maximoPorcentajeDescuentoPermitido { get; set; }
         public String grupo_codigoNombre { get; set; }

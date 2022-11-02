@@ -13,7 +13,7 @@ namespace Cotizador.Models.DTOshow
 
         public Moneda moneda { get; set; }
 
-        public Promocion promocion { get; set; }
+        public List<Promocion> promocionesList { get; set; }
         public DateTime? fechaEntregaDesde { get; set; }
         public DateTime? fechaEntregaHasta { get; set; }
         public String numeroPedidoString { get; set; }

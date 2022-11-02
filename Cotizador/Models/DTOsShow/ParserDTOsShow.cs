@@ -63,7 +63,7 @@ namespace Cotizador.Models.DTOsShow
             cotizacionDTOshow.ciudad_nombre = cotizacion.ciudad.nombre;
             cotizacionDTOshow.ciudad_idCiudad = cotizacion.ciudad.idCiudad;
             cotizacionDTOshow.cliente_razonSocial = cotizacion.cliente.razonSocial;//no se muestra
-            cotizacionDTOshow.promocion = cotizacion.promocion;
+            cotizacionDTOshow.promocionesList = cotizacion.promociones;
             cotizacionDTOshow.fechaFinVigenciaPreciosExtendida = cotizacion.fechaFinVigenciaPreciosExtendida;
             cotizacionDTOshow.estadoExtendida = cotizacion.estadoExtendida;
 
@@ -361,7 +361,7 @@ namespace Cotizador.Models.DTOsShow
         {
 
             PedidoDTOshow pedidoDTOshow = new PedidoDTOshow();
-            pedidoDTOshow.promocion = pedido.promocion;
+            pedidoDTOshow.promocionesList = pedido.promociones;
             pedidoDTOshow.idPedido = pedido.idPedido;
             pedidoDTOshow.truncado = pedido.truncado;
             pedidoDTOshow.moneda = pedido.moneda;

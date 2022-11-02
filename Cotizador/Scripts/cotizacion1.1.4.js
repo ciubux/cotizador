@@ -2402,12 +2402,25 @@ jQuery(function ($) {
                 // sleep
                 $("#tableDetalleCotizacion").append(d);
 
-                if (cotizacion.promocion != null && cotizacion.promocion.idPromocion != null && cotizacion.promocion.idPromocion != '00000000-0000-0000-0000-000000000000') {
+                /*if (cotizacion.promocion != null && cotizacion.promocion.idPromocion != null && cotizacion.promocion.idPromocion != '00000000-0000-0000-0000-000000000000') {
                     $("#verNombrePromocion").html(cotizacion.promocion.codigo + " - " + cotizacion.promocion.titulo,);
                     $("#spnPromocionTexto").html(cotizacion.promocion.textoDescripcion.replace(/\n/g, "<br/>"));
                     $("#divPromoInfo").show();
                 } else {
                     $("#divPromoInfo").hide();
+                }*/
+                $(".promocionesContainerView").find("div").remove();
+                for (var j = 0; j < cotizacion.promocionesList.length; j++) {
+                    var htmlAddProm = '<div class="row" idPromocion="' + cotizacion.promocionesList[j].idPromocion + '">' +
+                        '<span class="form-control-static col-xs-11" id="verNombrePromocion" style="vertical-align: middle;"><b>' + (j+1) + '. </b>' + cotizacion.promocionesList[j].codigo + ' - ' + cotizacion.promocionesList[j].titulo + '</span>' +
+                        '<label class="lblInfoDescripcionLarga tooltip-motivo-restriccion col-xs-1" style="vertical-align: middle; text-align: left;">' +
+                        '   <img src="/images/icon_info_22.png" />' +
+                        '   <span id="spnPromocionTexto" class="tooltip-label-text tooltip-label-text-info tooltiptext" style="width: 250px;">' +
+                        cotizacion.promocionesList[j].textoDescripcion.replace(/\n/g, "<br/>") +
+                        '   </span>' +
+                        '</label>' +
+                        '</div>';
+                    $(".promocionesContainerView").append(htmlAddProm);
                 }
 
 

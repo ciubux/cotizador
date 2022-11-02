@@ -52,10 +52,10 @@ namespace DataLayer
                 InputParameterAdd.Guid(objCommand, "idCiudad", cotizacion.ciudad.idCiudad);
             }
 
-            if (cotizacion.promocion.idPromocion == Guid.Empty)
-                InputParameterAdd.Guid(objCommand, "idPromocion", null); //puede ser null
-            else
-                InputParameterAdd.Guid(objCommand, "idPromocion", cotizacion.promocion.idPromocion); //puede ser null
+            //if (cotizacion.promocion.idPromocion == Guid.Empty)
+            //    InputParameterAdd.Guid(objCommand, "idPromocion", null); //puede ser null
+            //else
+            //    InputParameterAdd.Guid(objCommand, "idPromocion", cotizacion.promocion.idPromocion); //puede ser null
 
             DataTable tvp = new DataTable();
             tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
@@ -123,10 +123,10 @@ namespace DataLayer
             InputParameterAdd.SmallInt(objCommand, "incluidoIgv", short.Parse((cotizacion.incluidoIGV ? 1 : 0).ToString()));
             InputParameterAdd.Int(objCommand, "consideraCantidades", (int)cotizacion.considerarCantidades);
 
-            if (cotizacion.promocion.idPromocion == Guid.Empty)
-                InputParameterAdd.Guid(objCommand, "idPromocion", null); //puede ser null
-            else
-                InputParameterAdd.Guid(objCommand, "idPromocion", cotizacion.promocion.idPromocion); //puede ser null
+            //if (cotizacion.promocion.idPromocion == Guid.Empty)
+            //    InputParameterAdd.Guid(objCommand, "idPromocion", null); //puede ser null
+            //else
+            //    InputParameterAdd.Guid(objCommand, "idPromocion", cotizacion.promocion.idPromocion); //puede ser null
 
             DataTable tvp = new DataTable();
             tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
@@ -282,6 +282,7 @@ namespace DataLayer
             DataTable cotizacionDataTable = dataSet.Tables[0];
             DataTable cotizacionDetalleDataTable = dataSet.Tables[1];
             DataTable preciosEspecialesDataTable = dataSet.Tables[2];
+            DataTable promocionesDataTable = dataSet.Tables[3];
 
             //CABECERA DE COTIZACIÓN
             foreach (DataRow row in cotizacionDataTable.Rows)
@@ -528,6 +529,22 @@ namespace DataLayer
                             
                     }
                 }
+            }
+
+            cotizacion.promociones = new List<Promocion>();
+
+            foreach (DataRow row in promocionesDataTable.Rows)
+            {
+                Promocion prom = new Promocion();
+
+                prom.idPromocion = Converter.GetGuid(row, "id_promocion");
+                prom.codigo = Converter.GetString(row, "codigo_promocion");
+                prom.titulo = Converter.GetString(row, "titulo_promocion");
+                prom.fechaInicio = Converter.GetDateTime(row, "fecha_inicio_promocion");
+                prom.fechaFin = Converter.GetDateTime(row, "fecha_fin_promocion");
+                prom.descripcion = Converter.GetString(row, "descripcion_promocion");
+                
+                cotizacion.promociones.Add(prom);
             }
 
             return cotizacion;

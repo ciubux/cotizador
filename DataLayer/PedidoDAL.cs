@@ -56,10 +56,11 @@ namespace DataLayer
             else
                 InputParameterAdd.Guid(objCommand, "idAlmacenDestino", pedido.almacenDestino.idAlmacen); //puede ser null
 
-            if (pedido.promocion == null || pedido.promocion.idPromocion == Guid.Empty)
-                InputParameterAdd.Guid(objCommand, "idPromocion", null); //puede ser null
-            else
-                InputParameterAdd.Guid(objCommand, "idPromocion", pedido.promocion.idPromocion); //puede ser null
+            //if (pedido.promocion == null || pedido.promocion.idPromocion == Guid.Empty)
+            //    InputParameterAdd.Guid(objCommand, "idPromocion", null); //puede ser null
+            //else
+            //    InputParameterAdd.Guid(objCommand, "idPromocion", pedido.promocion.idPromocion); //puede ser null
+
 
             if (pedido.ordenCompracliente == null || pedido.ordenCompracliente.idOrdenCompraCliente == Guid.Empty)
                 InputParameterAdd.Guid(objCommand, "idOrdenCompraCliente", null); //puede ser null
@@ -262,10 +263,10 @@ namespace DataLayer
             else
                 InputParameterAdd.Guid(objCommand, "idCotizacion", pedido.cotizacion.idCotizacion); //puede ser null
 
-            if (pedido.promocion == null || pedido.promocion.idPromocion == Guid.Empty)
-                InputParameterAdd.Guid(objCommand, "idPromocion", null); //puede ser null
-            else
-                InputParameterAdd.Guid(objCommand, "idPromocion", pedido.promocion.idPromocion); //puede ser null
+            //if (pedido.promocion == null || pedido.promocion.idPromocion == Guid.Empty)
+            //    InputParameterAdd.Guid(objCommand, "idPromocion", null); //puede ser null
+            //else
+            //    InputParameterAdd.Guid(objCommand, "idPromocion", pedido.promocion.idPromocion); //puede ser null
 
             if (pedido.almacenOrigen == null || pedido.almacenOrigen.idAlmacen == Guid.Empty)
                 InputParameterAdd.Guid(objCommand, "idAlmacenOrigen", null); //puede ser null
@@ -815,6 +816,7 @@ namespace DataLayer
             DataTable solicitanteDataTable = dataSet.Tables[5];
             DataTable pedidoGrupoDataTable = dataSet.Tables[6];
             DataTable preciosEspecialesDataTable = dataSet.Tables[7];
+            DataTable promocionesDataTable = dataSet.Tables[8];
 
             //   DataTable dataTable = Execute(objCommand);
             //Datos de la cotizacion
@@ -1269,6 +1271,22 @@ namespace DataLayer
                 }
             }
 
+            pedido.promociones = new List<Promocion>();
+
+            foreach (DataRow row in promocionesDataTable.Rows)
+            {
+                Promocion prom = new Promocion();
+
+                prom.idPromocion = Converter.GetGuid(row, "id_promocion");
+                prom.codigo = Converter.GetString(row, "codigo_promocion");
+                prom.titulo = Converter.GetString(row, "titulo_promocion");
+                prom.fechaInicio = Converter.GetDateTime(row, "fecha_inicio_promocion");
+                prom.fechaFin = Converter.GetDateTime(row, "fecha_fin_promocion");
+                prom.descripcion = Converter.GetString(row, "descripcion_promocion");
+
+                pedido.promociones.Add(prom);
+            }
+
             return pedido;
         }
 
@@ -1283,6 +1301,7 @@ namespace DataLayer
             DataTable movimientoAlmacenDataTable = dataSet.Tables[3];
             DataTable pedidoAdjuntoDataTable = dataSet.Tables[4];
             DataTable solicitanteDataTable = dataSet.Tables[5];
+            DataTable promocionesDataTable = dataSet.Tables[6];
 
             //   DataTable dataTable = Execute(objCommand);
             //Datos de la cotizacion
@@ -1640,6 +1659,23 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
                 pedidoAdjunto.adjunto = Converter.GetBytes(row, "adjunto");
                 pedidoAdjunto.nombre = Converter.GetString(row, "nombre");
                 pedido.pedidoAdjuntoList.Add(pedidoAdjunto);
+            }
+
+
+            pedido.promociones = new List<Promocion>();
+
+            foreach (DataRow row in promocionesDataTable.Rows)
+            {
+                Promocion prom = new Promocion();
+
+                prom.idPromocion = Converter.GetGuid(row, "id_promocion");
+                prom.codigo = Converter.GetString(row, "codigo_promocion");
+                prom.titulo = Converter.GetString(row, "titulo_promocion");
+                prom.fechaInicio = Converter.GetDateTime(row, "fecha_inicio_promocion");
+                prom.fechaFin = Converter.GetDateTime(row, "fecha_fin_promocion");
+                prom.descripcion = Converter.GetString(row, "descripcion_promocion");
+
+                pedido.promociones.Add(prom);
             }
 
             return pedido;

@@ -560,9 +560,29 @@ namespace cotizadorPDF
                     y = margenTop;
                 }
 
-                if (cot.promocion != null && cot.promocion.idPromocion != Guid.Empty)
+                //if (cot.promocion != null && cot.promocion.idPromocion != Guid.Empty)
+                //{
+                //    string[] linesPromocion = cot.promocion.textoPresentacion.Split(stringSeparators, StringSplitOptions.None);
+
+                //    PdfPen promoPen = new PdfPen(Color.Black, 1f);
+                //    int boxPromoHeight = 0;
+                //    int boxPromoWidth = 375;
+
+                //    Point boxPromoInitPoint = new Point(xPage2 - 4, ((int)y) - 1);
+
+                //    foreach (string line in linesPromocion)
+                //    {
+                //        sectionObervaciones.Canvas.DrawString(line, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                //        y = y + sepLine;
+                //        boxPromoHeight += sepLine;
+                //    }
+
+                //    sectionObervaciones.Canvas.DrawRectangle(promoPen, new Rectangle(boxPromoInitPoint, new Size(boxPromoWidth, boxPromoHeight)));
+                //}
+
+                foreach(Promocion prom in cot.promociones)
                 {
-                    string[] linesPromocion = cot.promocion.textoPresentacion.Split(stringSeparators, StringSplitOptions.None);
+                    string[] linesPromocion = prom.textoPresentacion.Split(stringSeparators, StringSplitOptions.None);
 
                     PdfPen promoPen = new PdfPen(Color.Black, 1f);
                     int boxPromoHeight = 0;
@@ -578,6 +598,22 @@ namespace cotizadorPDF
                     }
 
                     sectionObervaciones.Canvas.DrawRectangle(promoPen, new Rectangle(boxPromoInitPoint, new Size(boxPromoWidth, boxPromoHeight)));
+
+                    y = y + sepLine;
+
+                    if (y > 600)
+                    {
+                        SizeF size = page.Size;
+                        PdfPageBase newPage = doc.Pages.Add(size, new PdfMargins(0));
+
+                        sectionObervaciones = doc.Pages[countPages];
+                        sectionFirma = doc.Pages[countPages];
+                        page = doc.Pages[countPages];
+                        //Si es una nueva pagina se inicia en el margen top
+                        //Y se agrega 150 porque en la siguiente instrucción se restán 150 para que no haya mucho margen entre
+                        //el fin de la tabla y la observación.
+                        y = margenTop;
+                    }
                 }
 
                 y = y + sepLine;

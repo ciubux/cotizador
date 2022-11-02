@@ -3292,14 +3292,27 @@ jQuery(function ($) {
                 $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
                 $("#verCorreoEnvioFactura").html(pedido.cliente_correoEnvioFactura);
 
-                if (pedido.promocion != null && pedido.promocion.idPromocion != null && pedido.promocion.idPromocion != '00000000-0000-0000-0000-000000000000') {
-                    $("#verNombrePromocion").html(pedido.promocion.codigo + " - " + pedido.promocion.titulo,);
-                    $("#spnPromocionTexto").html(pedido.promocion.textoDescripcion.replace(/\n/g, "<br/>"));
-                    $("#divPromoInfo").show();
-                } else {
-                    $("#divPromoInfo").hide();
-                }
+                //if (pedido.promocion != null && pedido.promocion.idPromocion != null && pedido.promocion.idPromocion != '00000000-0000-0000-0000-000000000000') {
+                //    $("#verNombrePromocion").html(pedido.promocion.codigo + " - " + pedido.promocion.titulo,);
+                //    $("#spnPromocionTexto").html(pedido.promocion.textoDescripcion.replace(/\n/g, "<br/>"));
+                //    $("#divPromoInfo").show();
+                //} else {
+                //    $("#divPromoInfo").hide();
+                //}
 
+                $(".promocionesContainerView").find("div").remove();
+                for (var j = 0; j < pedido.promocionesList.length; j++) {
+                    var htmlAddProm = '<div class="row" idPromocion="' + pedido.promocionesList[j].idPromocion + '">' +
+                        '<span class="form-control-static col-xs-11" id="verNombrePromocion" style="vertical-align: middle;"><b>' + (j + 1) + '. </b>' + pedido.promocionesList[j].codigo + ' - ' + pedido.promocionesList[j].titulo + '</span>' +
+                        '<label class="lblInfoDescripcionLarga tooltip-motivo-restriccion col-xs-1" style="vertical-align: middle; text-align: left;">' +
+                        '   <img src="/images/icon_info_22.png" />' +
+                        '   <span id="spnPromocionTexto" class="tooltip-label-text tooltip-label-text-info tooltiptext" style="width: 250px;">' +
+                        pedido.promocionesList[j].textoDescripcion.replace(/\n/g, "<br/>") +
+                        '   </span>' +
+                        '</label>' +
+                        '</div>';
+                    $(".promocionesContainerView").append(htmlAddProm);
+                }
 
                 if (pedido.tipoPedido == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
                     //|| pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)

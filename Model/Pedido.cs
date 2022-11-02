@@ -68,6 +68,7 @@ namespace Model
         public Moneda moneda { get; set; }
         public OrdenCompraCliente ordenCompracliente { get; set; }
 
+        [Display(Name = "Promociones:")]
         public List<Promocion> promociones { get; set; }
         public Cotizacion cotizacion { get; set; }
         [Display(Name = "Sede MP:")]

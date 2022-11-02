@@ -116,6 +116,7 @@ namespace Model
 
         public Boolean esPagoContado { get; set; }
 
+        [Display(Name = "Promociones:")]
         public List<Promocion> promociones { get; set; }
         public List<DocumentoDetalle> documentoDetalle
         {
