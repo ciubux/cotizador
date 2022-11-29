@@ -1475,8 +1475,10 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "idGrupoCliente", notaIngreso.pedido.idGrupoCliente);
             InputParameterAdd.Bit(objCommand, "buscaSedesGrupoCliente", notaIngreso.pedido.buscarSedesGrupoCliente);
             InputParameterAdd.Guid(objCommand, "idUsuario", notaIngreso.usuario.idUsuario);
-            InputParameterAdd.DateTime(objCommand, "fechaTrasladoDesde", notaIngreso.fechaTrasladoDesde);
-            InputParameterAdd.DateTime(objCommand, "fechaTrasladoHasta", notaIngreso.fechaTrasladoHasta);
+            InputParameterAdd.DateTime(objCommand, "fechaEmisionDesde", notaIngreso.fechaEmisionDesde);
+            InputParameterAdd.DateTime(objCommand, "fechaEmisionHasta", notaIngreso.fechaEmisionHasta);
+            //InputParameterAdd.DateTime(objCommand, "fechaTrasladoDesde", notaIngreso.fechaTrasladoDesde);
+            //InputParameterAdd.DateTime(objCommand, "fechaTrasladoHasta", notaIngreso.fechaTrasladoHasta);
             InputParameterAdd.Int(objCommand, "anulado", notaIngreso.estaAnulado ? 1 : 0);
             InputParameterAdd.Int(objCommand, "numeroGuiaReferencia", notaIngreso.numeroGuiaReferencia);
             InputParameterAdd.BigInt(objCommand, "numeroPedido", notaIngreso.pedido.numeroPedido);

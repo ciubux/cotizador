@@ -319,6 +319,11 @@ jQuery(function ($) {
     var fechaEmision = $("#fechaEmisiontmp").val();
     $("#notaIngreso_fechaEmision").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEmision);
 
+    var fechaEmisionDesde = $("#fechaEmisionDesdetmp").val();
+    $("#notaIngreso_fechaEmisionDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEmisionDesde);
+
+    var fechaEmisionHasta = $("#fechaEmisionHastatmp").val();
+    $("#notaIngreso_fechaEmisionHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEmisionHasta);
 
     var fechaTrasladoDesde = $("#fechaTrasladoDesdetmp").val();
     $("#notaIngreso_fechaTrasladoDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaTrasladoDesde);
@@ -2223,8 +2228,8 @@ jQuery(function ($) {
         var numeroDocumento = $("#notaIngreso_numeroDocumento").val();
         var numeroPedido = $("#notaIngreso_pedido_numeroPedido").val();
         var numeroGuiaReferencia = $("#notaIngreso_numeroGuiaReferencia").val();
-        var fechaTrasladoDesde = $("#notaIngreso_fechaTrasladoDesde").val();
-        var fechaTrasladoHasta = $("#notaIngreso_fechaTrasladoHasta").val();
+        var fechaEmisionDesde = $("#notaIngreso_fechaEmisionDesde").val();
+        var fechaEmisionHasta = $("#notaIngreso_fechaEmisionHasta").val();
         //var estado = $("#estado").val();
 
         $("#btnBusqueda").attr("disabled", "disabled");
@@ -2238,8 +2243,8 @@ jQuery(function ($) {
                 numeroDocumento: numeroDocumento,
                 numeroPedido: numeroPedido,
                 numeroGuiaReferencia: numeroGuiaReferencia,
-                fechaTrasladoDesde: fechaTrasladoDesde,
-                fechaTrasladoHasta: fechaTrasladoHasta
+                fechaEmisionDesde: fechaEmisionDesde,
+                fechaEmisionHasta: fechaEmisionHasta
                 //      estado: estado
             },
             error: function () {
@@ -2393,6 +2398,31 @@ jQuery(function ($) {
         });
     });
 
+    $("#notaIngreso_fechaEmisionDesde").change(function () {
+        var fecha = $("#notaIngreso_fechaEmisionDesde").val();
+        $.ajax({
+            url: "/NotaIngreso/ChangeFechaEmisionDesde",
+            type: 'POST',
+            data: {
+                fecha: fecha
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#notaIngreso_fechaEmisionHasta").change(function () {
+        var fecha = $("#notaIngreso_fechaEmisionHasta").val();
+        $.ajax({
+            url: "/NotaIngreso/ChangeFechaEmisionHasta",
+            type: 'POST',
+            data: {
+                fecha: fecha
+            },
+            success: function () {
+            }
+        });
+    });
 
 
     $("#notaIngreso_fechaTrasladoDesde").change(function () {

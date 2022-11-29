@@ -494,7 +494,7 @@ namespace Model
             get; set;
         }
 
-        public string motivoRestriccionCompuesto { get { return this.tipoVentaRestingidaToString + ". " + this.motivoRestriccion; } }
+        public string motivoRestriccionCompuesto { get { return this.motivoRestriccion != null && !this.motivoRestriccion.Trim().Equals("")  ? this.tipoVentaRestingidaToString + " / " + this.motivoRestriccion : this.tipoVentaRestingidaToString; } }
 
         public void calcularCostoPrecio()
         {

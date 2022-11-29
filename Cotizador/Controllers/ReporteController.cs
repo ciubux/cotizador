@@ -361,28 +361,28 @@ namespace Cotizador.Controllers
 
 
 
-        [HttpGet]
-        public ActionResult ExportPlantillaStock()
-        {
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+        //[HttpGet]
+        //public ActionResult ExportPlantillaStock()
+        //{
+        //    Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.realizaCargaMasivaStock)
-            {
-                return RedirectToAction("Login", "Account");
-            }
+        //    if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.realizaCargaMasivaStock)
+        //    {
+        //        return RedirectToAction("Login", "Account");
+        //    }
 
-            Producto obj = (Producto)this.Session[Constantes.VAR_SESSION_STOCK_PRODUCTO_BUSQUEDA];
+        //    Producto obj = (Producto)this.Session[Constantes.VAR_SESSION_STOCK_PRODUCTO_BUSQUEDA];
            
-            obj.familia = this.Session["familia"].ToString();
-            obj.proveedor = this.Session["proveedor"].ToString();
+        //    obj.familia = this.Session["familia"].ToString();
+        //    obj.proveedor = this.Session["proveedor"].ToString();
 
-            PlantillaCargaStock excel = new PlantillaCargaStock();
-            ProductoBL bl = new ProductoBL();
-            List<Producto> lista = bl.getProductosPlantillaStock(obj);
+        //    PlantillaCargaStock excel = new PlantillaCargaStock();
+        //    ProductoBL bl = new ProductoBL();
+        //    List<Producto> lista = bl.getProductosPlantillaStock(obj);
             
 
-            return excel.generateExcel(lista, usuario);
-        }
+        //    return excel.generateExcel(lista, usuario);
+        //}
 
 
 

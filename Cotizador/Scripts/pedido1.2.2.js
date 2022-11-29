@@ -3166,16 +3166,15 @@ jQuery(function ($) {
                     var descontinuadoLabel = "";
                     if (lista[i].producto.descontinuado == 1) {
                         tieneProductoRestringido = true;
-                        
-                        if (lista[i].producto.motivoRestriccion != null) {
-                            lista[i].producto.motivoRestriccion = lista[i].producto.motivoRestriccion.trim();
 
-                            $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").removeClass("tooltip-motivo-restriccion");
-                            if (lista[i].producto.motivoRestriccion != "") {
-                                $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").addClass("tooltip-motivo-restriccion");
-                                $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado .tooltip-label-text").html(lista[i].producto.motivoRestriccion);
-                            }
+                        
+                        $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").removeClass("tooltip-motivo-restriccion");
+                        if (lista[i].producto.motivoRestriccion != "") {
+                            $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado ").addClass("tooltip-motivo-restriccion");
+                            $("#spnProductoDescontinuado .lblAlertaProductoDescontinuado .tooltip-label-text").html(lista[i].producto.motivoRestriccionCompuesto);
                         }
+
+
                         imgIndicadorAprobacion = imgIndicadorAprobacion + '<div class="little-bar-status-black"></div>';
                         descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
                     }

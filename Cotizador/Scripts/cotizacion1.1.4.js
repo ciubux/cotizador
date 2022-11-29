@@ -2313,14 +2313,13 @@ jQuery(function ($) {
 
                         descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
 
-                        if (lista[i].producto.motivoRestriccion != null) {
-                            lista[i].producto.motivoRestriccion = lista[i].producto.motivoRestriccion.trim();
-                            descontinuadoLabel = descontinuadoLabel.replace("_DATA_TIPSO_", lista[i].producto.motivoRestriccion);
+                        
+                        descontinuadoLabel = descontinuadoLabel.replace("_DATA_TIPSO_", lista[i].producto.motivoRestriccionCompuesto);
 
-                            if (lista[i].producto.motivoRestriccion != "") {
-                                descontinuadoLabel = descontinuadoLabel.replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
-                            }
+                        if (lista[i].producto.motivoRestriccion != "") {
+                            descontinuadoLabel = descontinuadoLabel.replace("_CLASS_TOOLTIP_", "tooltip-motivo-restriccion");
                         }
+                        
                     }
 
                     if (lista[i].producto.topeDescuento > 0 && lista[i].producto.topeDescuento < lista[i].porcentajeDescuento) {

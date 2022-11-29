@@ -231,11 +231,11 @@ namespace BusinessLayer
             }
         }
 
-        public List<Producto> getProductosPlantillaStock(Producto producto)
+        public List<Producto> getProductosPlantillaStock(Producto producto, Guid idCiudad)
         {
             using (var productoDAL = new ProductoDAL())
             {
-                return productoDAL.ProductosPlantillaStock(producto);
+                return productoDAL.ProductosPlantillaStock(producto, idCiudad);
             }
         }
 

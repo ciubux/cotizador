@@ -1127,7 +1127,7 @@ namespace DataLayer
             return productoList;
         }
 
-        public List<Producto> ProductosPlantillaStock(Producto producto)
+        public List<Producto> ProductosPlantillaStock(Producto producto, Guid idCiudad)
         {
             var objCommand = GetSqlCommand("ps_productos_plantilla_stock");
             InputParameterAdd.VarcharEmpty(objCommand, "sku", producto.sku);
@@ -1136,6 +1136,14 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "tipoVentaRestingida", producto.tipoVentaRestringidaBusqueda);
             InputParameterAdd.Varchar(objCommand, "familia", producto.familia);
             InputParameterAdd.Varchar(objCommand, "proveedor", producto.proveedor);
+
+            if (idCiudad == Guid.Empty)
+            {
+                InputParameterAdd.Guid(objCommand, "idCiudad", null);
+            } else 
+            {
+                InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
+            }
 
             DataTable dataTable = Execute(objCommand);
 

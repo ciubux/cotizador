@@ -98,7 +98,6 @@
         <!--Familia, proveedor, producto -->
         <div class="row">
             <!--Familia-->
-            
             <!--Descripcion producto-->
             <div class="col-sm-6 col-lg-8">
 
@@ -126,6 +125,21 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="idCiudad">Sede:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("GetCiudades", "Ciudad",
+                                    new
+                                    {
+                                        ciudadSelectId = "idCiudadPlantillaStock"
+                                    })
+                    </div>
+                </div>
             </div>
         </div>
 

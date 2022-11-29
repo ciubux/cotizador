@@ -3030,6 +3030,7 @@ namespace Cotizador.Controllers
             pedido.contactoPedido = String.Empty;
             pedido.telefonoContactoPedido = String.Empty;
             pedido.incluidoIGV = false;
+            pedido.promociones = new List<Promocion>();
 
             pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             pedido.seguimientoPedido = new SeguimientoPedido();

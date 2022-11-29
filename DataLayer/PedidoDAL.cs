@@ -30,6 +30,8 @@ namespace DataLayer
             DataTable tvp = new DataTable();
             tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
 
+            if (pedido.promociones == null) { pedido.promociones = new List<Promocion>(); }
+
             foreach (Promocion item in pedido.promociones)
             {
                 DataRow rowObj = tvp.NewRow();
@@ -280,6 +282,8 @@ namespace DataLayer
 
             DataTable tvp = new DataTable();
             tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            if (pedido.promociones == null) { pedido.promociones = new List<Promocion>(); }
 
             foreach (Promocion item in pedido.promociones)
             {

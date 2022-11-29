@@ -121,6 +121,7 @@ namespace Cotizador.Controllers
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.DescargaPlantillMasivaStock;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+           
 
             if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.realizaCargaMasivaStock)
             {
@@ -132,6 +133,7 @@ namespace Cotizador.Controllers
                 instanciarProductoBusqueda();
             }
 
+            this.Session["plantillaSotck_idCiudad"] = "";
 
             ViewBag.pagina = (int)this.Session[Constantes.VAR_SESSION_PAGINA];
             ViewBag.producto = this.ProductoBusquedaSession;
@@ -154,12 +156,24 @@ namespace Cotizador.Controllers
             obj.familia = this.Session["familia"].ToString();
             obj.proveedor = this.Session["proveedor"].ToString();
 
+            Guid idSede = Guid.Empty;
+            if (this.Session["plantillaSotck_idCiudad"] != null && !this.Session["plantillaSotck_idCiudad"].ToString().Trim().Equals(""))
+            {
+                idSede = Guid.Parse(this.Session["plantillaSotck_idCiudad"].ToString());
+            }
+
             PlantillaCargaStock excel = new PlantillaCargaStock();
             ProductoBL bl = new ProductoBL();
-            List<Producto> lista = bl.getProductosPlantillaStock(obj);
+            List<Producto> lista = bl.getProductosPlantillaStock(obj, idSede);
             
 
             return excel.generateExcel(lista, usuario);
+        }
+
+
+        public void ChangeIdCiudadPlantillaStock()
+        {
+            this.Session["plantillaSotck_idCiudad"] = this.Request.Params["valor"];
         }
 
 

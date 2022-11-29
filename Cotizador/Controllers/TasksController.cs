@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
+
 namespace Cotizador.Controllers
 {
     public class TasksController : Controller
@@ -152,7 +153,7 @@ namespace Cotizador.Controllers
         {
             ProductoBL bl = new ProductoBL();
 
-            string baseUrl = "https://api-external.samishop.pe/api/producto/inventario";
+            string baseUrl = "https://api-external.samishop.pe/inventary/update/variant";
             string dominio = "mpinstitucional.com";
             string apiToken = "VVXZ64FCFV5422";
 
@@ -164,32 +165,59 @@ namespace Cotizador.Controllers
             {
                 for (int j = 0; j < obj.stocks.Count; j++)
                 {
-                    var itemInv = new {
-                        ID = obj.codigoSedes.ElementAt(j) + obj.sku,
-                        PrecioOferta = obj.codigoSedes.ElementAt(j).Equals("LI") ? obj.precio : obj.precioProvincia,
-                        PrecioVenta = obj.codigoSedes.ElementAt(j).Equals("LI") ? obj.precio : obj.precioProvincia,
-                        Cantidad = obj.stocks.ElementAt(j)
-                    };
+                    //var itemInv = new {
+                    //    ID = obj.codigoSedes.ElementAt(j) + obj.sku,
+                    //    PrecioOferta = obj.codigoSedes.ElementAt(j).Equals("LI") ? obj.precio : obj.precioProvincia,
+                    //    PrecioVenta = obj.codigoSedes.ElementAt(j).Equals("LI") ? obj.precio : obj.precioProvincia,
+                    //    Cantidad = obj.stocks.ElementAt(j)
+                    //};
+
+                    string strItem = "{\"ID\": \"" + obj.codigoSedes.ElementAt(j) + obj.sku +
+                        "\",\"PrecioOferta\":" + (obj.codigoSedes.ElementAt(j).Equals("LI") ? obj.precio : obj.precioProvincia).ToString() +
+                        ",\"PrecioVenta\":" + (obj.codigoSedes.ElementAt(j).Equals("LI") ? obj.precio : obj.precioProvincia).ToString() +
+                        ",\"Cantidad\":" + obj.stocks.ElementAt(j).ToString() + " }";
 
                     if (lista.Equals(""))
                     {
-                        lista = JsonConvert.SerializeObject(itemInv);
+                        lista = strItem; //JsonConvert.SerializeObject(itemInv);
                     } else {
-                        lista = lista + "," + JsonConvert.SerializeObject(itemInv);
+                        lista = lista + "," + strItem; //JsonConvert.SerializeObject(itemInv);
                     }
                 }
             }
 
-            var sendData = "{\"productos\": [" + lista + "]}";
+            //var sendData = "?\"productos\"=[" + lista + "]";
 
-            var client = new HttpClient();
-            
-            //client.BaseAddress = new Uri(baseUrl);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiToken);
-            // serialize your json using newtonsoft json serializer then add it to the StringContent
+            var sendData = "[" + lista + "]";
+
+            var httpClient = new HttpClient();
+            //HttpClientHandler handler = new HttpClientHandler();
+            //HttpClient httpClient = new HttpClient(handler);
+            //string strcontent = "productos=["+ lista + "]";
+            var input = new {
+                productos = "[" + lista + "]"
+            };
             var content = new StringContent(sendData, Encoding.UTF8, "application/json");
+            //client.BaseAddress = new Uri(baseUrl);
+            
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiToken);
+            
+            //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, baseUrl);
+            //var content = new StringContent(strcontent);
+            
+            var result = await httpClient.PostAsync(baseUrl, content);
+            
+            // serialize your json using newtonsoft json serializer then add it to the StringContent
+            //var content = new StringContent(sendData, Encoding.UTF8, "application/json");
 
-            var result = await client.PostAsync(new Uri(baseUrl), content);
+            //var parameters = new Dictionary<string, string>()
+            //{
+            //    ["productos"] = "[" + lista + "]"
+            //};
+            //var encodedContent = new FormUrlEncodedContent(parameters);
+
+
+            //var result = await client.PostAsync(new Uri(baseUrl), encodedContent).ConfigureAwait(false);
             string resultContent = await result.Content.ReadAsStringAsync();
         
             return resultContent;

@@ -214,7 +214,7 @@ namespace BusinessLayer
 
             if (pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado && enviaAprobacion && !pedido.usuario.apruebaPedidos)
             {
-                pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + " TODOS los pedidos pasan a aprobación.";
+                pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + " Esta activa la aprobación obligatoria de TODOS los pedidos.";
                 pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
             }
 
@@ -302,7 +302,7 @@ namespace BusinessLayer
 
                 if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && 
                     pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
-                pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
+                    pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
                 {
                     ProcesarPedidoAprobadoTecnica(pedido);
                 }
@@ -440,6 +440,16 @@ namespace BusinessLayer
         #region Pedidos de COMPRA
         private void validarPedidoCompra(Pedido pedido)
         {
+            bool enviaAprobacion = false;
+            ParametroBL blParametro = new ParametroBL();
+            string paramEnviaAprobacion = blParametro.getParametro("ENVIA_APROBACION_TODOS_PEDIDOS_COMPRA");
+            if (paramEnviaAprobacion.ToUpper().Equals("SI"))
+            {
+                enviaAprobacion = true;
+            }
+
+            
+
             pedido.seguimientoPedido.observacion = String.Empty;
             pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
             pedido.seguimientoCrediticioPedido.observacion = String.Empty;
@@ -476,6 +486,12 @@ namespace BusinessLayer
                     pedido.seguimientoPedido.observacion = "El producto " + pedidoDetalle.producto.sku + " tiene RESTRICCIÓN DE COMPRA.";
                     pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
                 }
+            }
+
+            if (pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado && enviaAprobacion && !pedido.usuario.apruebaPedidosCompra)
+            {
+                pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + " Esta activa la aprobación obligatoria de TODOS los pedidos de compra.";
+                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
             }
 
             if (pedido.cliente.tipoLiberacionCrediticia == Persona.TipoLiberacionCrediticia.bloqueado)
@@ -525,6 +541,14 @@ namespace BusinessLayer
 
         private void validarPedidoAlmacen(Pedido pedido)
         {
+            bool enviaAprobacion = false;
+            ParametroBL blParametro = new ParametroBL();
+            string paramEnviaAprobacion = blParametro.getParametro("ENVIA_APROBACION_TODOS_PEDIDOS_COMPRA");
+            if (paramEnviaAprobacion.ToUpper().Equals("SI"))
+            {
+                enviaAprobacion = true;
+            }
+
             pedido.seguimientoPedido.observacion = String.Empty;
             pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
             pedido.seguimientoCrediticioPedido.observacion = String.Empty;
@@ -558,11 +582,19 @@ namespace BusinessLayer
                 }
             }
 
+
             if(pedido.usuario.apruebaPedidosAlmacen)
             {
                 pedido.seguimientoPedido.observacion = "";
                 pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
             }
+
+            if (pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado && enviaAprobacion && !pedido.usuario.apruebaPedidosAlmacen)
+            {
+                pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + " Esta activa la aprobación obligatoria de TODOS los pedidos de almacén.";
+                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+            }
+
 
             foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
             {

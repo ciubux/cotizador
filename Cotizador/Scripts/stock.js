@@ -51,7 +51,7 @@ jQuery(function ($) {
         $("#rubro_nombre").val("");
     }
 
-
+    
     $("#producto_estado_si").click(function () {
         var valCheck = 1;
         changeInputInt("Estado", valCheck)
@@ -65,6 +65,17 @@ jQuery(function ($) {
     $("#producto_estado_todos").click(function () {
         var valCheck = -1;
         changeInputInt("Estado", valCheck)
+    });
+
+    $("#idCiudadPlantillaStock").change(function () {
+        $.ajax({
+            url: "/Stock/ChangeIdCiudadPlantillaStock",
+            type: 'POST',
+            data: {
+                valor: $("#idCiudadPlantillaStock").val()
+            },
+            success: function () { }
+        });
     });
 
     $("#producto_sku").change(function () {

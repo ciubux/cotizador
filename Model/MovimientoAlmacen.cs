@@ -122,10 +122,10 @@ namespace Model
         public int numeroDocumento { get; set; }
 
         
-        [Display(Name = "Fecha Traslado Desde:")]
+        [Display(Name = "Fecha Inicio Traslado Desde:")]
         public DateTime fechaTrasladoDesde { get; set; }
 
-        [Display(Name = "Fecha Traslado Hasta:")]
+        [Display(Name = "Fecha Inicio Traslado Hasta:")]
         public DateTime fechaTrasladoHasta { get; set; }
 
         public List<DocumentoDetalle> documentoDetalle { get; set; }

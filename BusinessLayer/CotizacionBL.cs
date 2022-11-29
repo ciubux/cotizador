@@ -271,7 +271,7 @@ namespace BusinessLayer
 
             if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada && enviaAprobacion && !cotizacion.usuario.apruebaCotizaciones)
             {
-                cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + " TODAS las cotizaciones pasan a aprobación.";
+                cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + " Esta activa la aprobación obligatoria de TODAS las cotizaciones.";
                 cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
             }
 

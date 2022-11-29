@@ -94,6 +94,8 @@ namespace Cotizador.Controllers
 
             notaIngreso.fechaTrasladoDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             notaIngreso.fechaTrasladoHasta = DateTime.Now.AddDays(0);
+            notaIngreso.fechaEmisionDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
+            notaIngreso.fechaEmisionHasta = DateTime.Now.AddDays(0);
             notaIngreso.estaFacturado = true;
 
             this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_BUSQUEDA] = notaIngreso;
@@ -131,8 +133,8 @@ namespace Cotizador.Controllers
             ViewBag.notaIngresoList = this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_LISTA];
             ViewBag.pagina = (int)Constantes.paginas.BusquedaGuiasRemision;
 
-            ViewBag.fechaTrasladoDesde = notaIngresoSearch.fechaTrasladoDesde.ToString(Constantes.formatoFecha);
-            ViewBag.fechaTrasladoHasta = notaIngresoSearch.fechaTrasladoHasta.ToString(Constantes.formatoFecha);
+            ViewBag.fechaEmisionDesde = notaIngresoSearch.fechaEmisionDesde.ToString(Constantes.formatoFecha);
+            ViewBag.fechaEmisionHasta = notaIngresoSearch.fechaEmisionHasta.ToString(Constantes.formatoFecha);
             ViewBag.Si = Constantes.MENSAJE_SI;
             ViewBag.No = Constantes.MENSAJE_NO;
 
@@ -180,11 +182,11 @@ namespace Cotizador.Controllers
             //Se recupera el pedido Búsqueda de la session
             NotaIngreso notaIngreso = this.NotaIngresoSession;
 
-            String[] movDesde = this.Request.Params["fechaTrasladoDesde"].Split('/');
-            notaIngreso.fechaTrasladoDesde = new DateTime(Int32.Parse(movDesde[2]), Int32.Parse(movDesde[1]), Int32.Parse(movDesde[0]));
+            String[] movDesde = this.Request.Params["fechaEmisionDesde"].Split('/');
+            notaIngreso.fechaEmisionDesde = new DateTime(Int32.Parse(movDesde[2]), Int32.Parse(movDesde[1]), Int32.Parse(movDesde[0]));
 
-            String[] movHasta = this.Request.Params["fechaTrasladoHasta"].Split('/');
-            notaIngreso.fechaTrasladoHasta = new DateTime(Int32.Parse(movHasta[2]), Int32.Parse(movHasta[1]), Int32.Parse(movHasta[0]), 23, 59, 59);
+            String[] movHasta = this.Request.Params["fechaEmisionHasta"].Split('/');
+            notaIngreso.fechaEmisionHasta = new DateTime(Int32.Parse(movHasta[2]), Int32.Parse(movHasta[1]), Int32.Parse(movHasta[0]), 23, 59, 59);
 
 
             if (this.Request.Params["numeroDocumento"] == null || this.Request.Params["numeroDocumento"].Trim().Length == 0)
@@ -812,6 +814,18 @@ namespace Cotizador.Controllers
         public void ChangeEstaFacturado()
         {
             this.NotaIngresoSession.estaFacturado = Int32.Parse(this.Request.Params["estaFacturado"]) == 1;
+        }
+
+        public void ChangeFechaEmisionDesde()
+        {
+            String[] fec = this.Request.Params["fecha"].Split('/');
+            this.NotaIngresoSession.fechaEmisionDesde = new DateTime(Int32.Parse(fec[2]), Int32.Parse(fec[1]), Int32.Parse(fec[0]));
+        }
+
+        public void ChangeFechaEmisionHasta()
+        {
+            String[] fec = this.Request.Params["fecha"].Split('/');
+            this.NotaIngresoSession.fechaEmisionHasta = new DateTime(Int32.Parse(fec[2]), Int32.Parse(fec[1]), Int32.Parse(fec[0]));
         }
 
         public void ChangeFechaTrasladoDesde()
