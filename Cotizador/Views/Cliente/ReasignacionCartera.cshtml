@@ -18,18 +18,73 @@
             <input type="hidden" id="idResignar_@item.idCliente.ToString()" name="idResignar_@item.idCliente.ToString()" class="input-reasignar-asesor" value=""
                    nombreCliente="(@item.codigo) @item.nombreCliente" nombreAsesor="@item.responsableComercial.codigoDescripcion" rucCliente="@item.ruc" ciudadCliente="@item.ciudad.nombre" nombreNuevoAsesor="" />
         }
+        @foreach (Model.Cliente item in clientes)
+        {
+            <input type="hidden" id="idResignarSup_@item.idCliente.ToString()" name="idResignarSup_@item.idCliente.ToString()" class="input-reasignar-supervisor" value=""
+                   nombreCliente="(@item.codigo) @item.nombreCliente" nombreSupervisor="@item.supervisorComercial.codigoDescripcion" rucCliente="@item.ruc" ciudadCliente="@item.ciudad.nombre" nombreNuevoSupervisor="" />
+        }
+        @foreach (Model.Cliente item in clientes)
+        {
+            <input type="hidden" id="idResignarAsis_@item.idCliente.ToString()" name="idResignarAsis_@item.idCliente.ToString()" class="input-reasignar-asistente" value=""
+                   nombreCliente="(@item.codigo) @item.nombreCliente" nombreAsistente="@item.asistenteServicioCliente.codigoDescripcion" rucCliente="@item.ruc" ciudadCliente="@item.ciudad.nombre" nombreNuevoAsistente="" />
+        }
     </form>
     <div class="row" style="margin-top: 10px;">
         <div class="col-xs-6 col-lg-4">
-            <!--Fecha Inicio Vigencia-->
-            <label class="control-label col-xs-3" for="kpiPeriodos">Responsable Comercial:</label>
-            <div class="col-xs-9">
-                @Html.Action("GetResponsablesComerciales", "Vendedor",
-                new
-                {
-                    vendedorSelectId = "idResponsableComercial",
-                    selectedValue = cliente.responsableComercial.idVendedor
-                })
+            <div class="form-group">
+                <label class="control-label col-xs-3" for="idResponsableComercial">Responsable Comercial:</label>
+                <div class="col-xs-9">
+                    @Html.Action("GetResponsablesComerciales", "Vendedor",
+                    new
+                    {
+                        vendedorSelectId = "idResponsableComercial",
+                        selectedValue = cliente.responsableComercial.idVendedor
+                    })
+                </div>
+            </div>
+        </div>
+        <!--Supervisor Comercial-->
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label class="control-label col-xs-3" for="idSupervisorComercial">Supervisor Comercial:</label>
+                <div class="col-xs-9">
+                    @Html.Action("GetSupervisoresComerciales", "Vendedor",
+                    new
+                    {
+                        vendedorSelectId = "idSupervisorComercial",
+                        selectedValue = cliente.supervisorComercial.idVendedor,
+                    })
+                </div>
+            </div>
+        </div>
+        <!--Asistente Servicio al Cliente-->
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label class="control-label col-xs-3" for="idAsistenteServicioCliente">Asistente Cliente:</label>
+                <div class="col-xs-9">
+                    @Html.Action("GetAsistentesServicioCliente", "Vendedor",
+                    new
+                    {
+                        vendedorSelectId = "idAsistenteServicioCliente",
+                        selectedValue = cliente.asistenteServicioCliente.idVendedor,
+                    })
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(c => cliente.grupoCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
+                <div class="col-xs-8">
+                    @Html.Action("GetGruposCliente", "GrupoCliente",
+                                new
+                                {
+                                    grupoClienteSelectId = "idGrupoCliente",
+                                    selectedValue = cliente.grupoCliente.idGrupoCliente
+                                })
+                </div>
             </div>
         </div>
 
@@ -68,19 +123,10 @@
             </div>
         </div>
     </div>
+
     <div class="row" style="margin-top: 10px;">
-        <div class="col-sm-6 col-lg-4">
-            <div class="form-group">
-                @Html.LabelFor(c => cliente.grupoCliente, htmlAttributes: new { @class = "control-label col-xs-4" })
-                <div class="col-xs-8">
-                    @Html.Action("GetGruposCliente", "GrupoCliente",
-                                new
-                                {
-                                    grupoClienteSelectId = "idGrupoCliente",
-                                    selectedValue = cliente.grupoCliente.idGrupoCliente
-                                })
-                </div>
-            </div>
+        <div class="col-xs-6 col-lg-4">
+            
         </div>
 
         <div class="col-sm-6 col-lg-4">
@@ -160,7 +206,6 @@
             </div>
         </div>
     </div>
-    </div>
 
     <div class="row text-right" style="margin-bottom:10px; margin-right:0px">
         <button id="btnLimpiarBusquedaReasignacion" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
@@ -195,6 +240,30 @@
                                             })
                             }
                         </th>
+                        <th data-name="supervisor" data-visible="true" data-sortable="true">Supervisor<br />Comercial</th>
+                        <th data-name="reasignar" data-sortable="false" data-breakpoints="xs">
+                            Reasignar A:
+                            @if (clientes.Count > 0)
+                            {
+                                @Html.Action("GetSupervisoresComerciales", "Vendedor",
+                                            new
+                                            {
+                                                vendedorSelectId = "idResignarSupervisorGlobal"
+                                            })
+                            }
+                        </th>
+                        <th data-name="asistente" data-visible="true" data-sortable="true">Asistente<br />Cliente</th>
+                        <th data-name="reasignar" data-sortable="false" data-breakpoints="xs">
+                            Reasignar A:
+                            @if (clientes.Count > 0)
+                            {
+                                @Html.Action("GetAsistentesServicioCliente", "Vendedor",
+                                            new
+                                            {
+                                                vendedorSelectId = "idResignarAsistenteGlobal"
+                                            })
+                            }
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -202,7 +271,7 @@
                     {
                     <tr>
                         <td>(@item.codigo) @item.nombreCliente</td>
-                        
+
                         <td>@item.ciudad.nombre</td>
                         <td>
                             @if (item.rubro.idRubro > 0)
@@ -217,7 +286,7 @@
                         <td>
                             @if (item.grupoCliente.idGrupoCliente > 0)
                             {
-                              <span>@item.grupoCliente.codigo - @item.grupoCliente.nombre</span>
+                                <span>@item.grupoCliente.codigo - @item.grupoCliente.nombre</span>
                             }
                             else
                             {
@@ -240,6 +309,22 @@
                                     new
                                     {
                                         vendedorSelectId = "idResignarSel_" + item.idCliente.ToString()
+                                    })
+                        </td>
+                        <td>@item.supervisorComercial.codigoDescripcion</td>
+                        <td class="td-reasignar-supervisor-a">
+                            @Html.Action("GetSupervisoresComerciales", "Vendedor",
+                                    new
+                                    {
+                                        vendedorSelectId = "idResignarSupSel_" + item.idCliente.ToString()
+                                    })
+                        </td>
+                        <td>@item.asistenteServicioCliente.codigoDescripcion</td>
+                        <td class="td-reasignar-asistente-a">
+                            @Html.Action("GetAsistentesServicioCliente", "Vendedor",
+                                    new
+                                    {
+                                        vendedorSelectId = "idResignarAsisSel_" + item.idCliente.ToString()
                                     })
                         </td>
                     </tr>
@@ -332,6 +417,21 @@
                 $("#idResignarGlobal").val("");
             });
 
+            $("#idResignarSupervisorGlobal").change(function () {
+                //alert($("#idResignarSupervisorGlobal").val());
+                $(".td-reasignar-supervisor-a select.form-control").val($("#idResignarSupervisorGlobal").val());
+                $(".input-reasignar-supervisor").val($("#idResignarSupervisorGlobal").val());
+                $(".input-reasignar-supervisor").attr("nombreNuevoSupervisor", $("#idResignarSupervisorGlobal option:selected").text());
+                $("#idResignarSupervisorGlobal").val("");
+            });
+
+            $("#idResignarAsistenteGlobal").change(function () {
+                //alert($("#idResignarAsistenteGlobal").val());
+                $(".td-reasignar-asistente-a select.form-control").val($("#idResignarAsistenteGlobal").val());
+                $(".input-reasignar-asistente").val($("#idResignarAsistenteGlobal").val());
+                $(".input-reasignar-asistente").attr("nombreNuevoAsistente", $("#idResignarAsistenteGlobal option:selected").text());
+                $("#idResignarAsistenteGlobal").val("");
+            });
         }, 1000);
 
         $('body').on('change', ".td-reasignar-cartera-a select.form-control", function () {
@@ -339,6 +439,19 @@
             $("#idResignar_" + uuid).val($(this).val());
             $("#idResignar_" + uuid).attr("nombreNuevoAsesor", $("#idResignarSel_" + uuid + " option:selected").text());
         });
+
+        $('body').on('change', ".td-reasignar-supervisor-a select.form-control", function () {
+            var uuid = $(this).attr("name").replace("idResignarSupSel_", "");
+            $("#idResignarSup_" + uuid).val($(this).val());
+            $("#idResignarSup_" + uuid).attr("nombreNuevoSupervisor", $("#idResignarSupSel_" + uuid + " option:selected").text());
+        });
+
+        $('body').on('change', ".td-reasignar-asistente-a select.form-control", function () {
+            var uuid = $(this).attr("name").replace("idResignarAsisSel_", "");
+            $("#idResignarAsis_" + uuid).val($(this).val());
+            $("#idResignarAsis_" + uuid).attr("nombreNuevoAsistente", $("#idResignarAsisSel_" + uuid + " option:selected").text());
+        });
+
 
         $("#btnBusquedaReasignacion").click(function () {
             location.reload();
@@ -417,6 +530,16 @@
                 $(".td-reasignar-cartera-a select.form-control").each(function () {
                     var uuid = $(this).attr("name").replace("idResignarSel_", "");
                     $(this).val($("#idResignar_" + uuid).val());
+                });
+
+                $(".td-reasignar-supervisor-a select.form-control").each(function () {
+                    var uuid = $(this).attr("name").replace("idResignarSupSel_", "");
+                    $(this).val($("#idResignarSup_" + uuid).val());
+                });
+
+                $(".td-reasignar-asistente-a select.form-control").each(function () {
+                    var uuid = $(this).attr("name").replace("idResignarAsisSel_", "");
+                    $(this).val($("#idResignarAsis_" + uuid).val());
                 });
             }, 500);
         });

@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "027";
+    TempData["ScriptVersion"] = "028";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -649,7 +649,7 @@
                             </li>
                         }
 
-                        if (usuario.visualizaReporteSellOutPersonalizado || usuario.NivelKpiMultiUsuario || usuario.NivelKpiMultiArea
+                        if (usuario.visualizaReporteSellOutPersonalizado || usuario.NivelKpiMultiUsuario || usuario.NivelKpiMultiArea || usuario.visualizaReporteSellOutVendedores
                              || usuario.visualizaReporteProductosPendientesAtencion)
                         {
                             <li class="@linkReportes">

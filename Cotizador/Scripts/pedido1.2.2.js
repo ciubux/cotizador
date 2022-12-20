@@ -3416,7 +3416,13 @@ jQuery(function ($) {
                     else {
                         $("#btnEditarPedido").html("Editar");
                     }
-                    $("#btnEditarPedido").show();
+
+                    if (usuario.codigoEmpresa == 'TC' && pedido.seguimientoPedido_estado == ESTADO_INGRESADO && pedido.seguimientoCrediticioPedido_estado == ESTADO_LIBERADO) {
+                        $("#btnEditarPedido").hide();
+                    } else {
+                        $("#btnEditarPedido").show();
+                    }
+                    
                 }
                 else {
                     $("#btnEditarPedido").hide();

@@ -1599,7 +1599,9 @@ namespace Cotizador.Controllers
 
             ClienteBL bl = new ClienteBL();
             List<Cliente> clientes = new List<Cliente>();
-            if ((cliente.responsableComercial != null && cliente.responsableComercial.idVendedor > 0) || (cliente.esSubDistribuidor) || (cliente.grupoCliente.idGrupoCliente > 0))
+            if ((cliente.supervisorComercial != null && cliente.supervisorComercial.idVendedor > 0) ||
+                (cliente.asistenteServicioCliente != null && cliente.asistenteServicioCliente.idVendedor > 0) ||
+                (cliente.responsableComercial != null && cliente.responsableComercial.idVendedor > 0) || (cliente.esSubDistribuidor) || (cliente.grupoCliente.idGrupoCliente > 0))
             {
                 clientes = bl.BusquedaClientesCartera(cliente);
             }
@@ -1646,7 +1648,8 @@ namespace Cotizador.Controllers
 
                     if (itemsData.Count > 1)
                     {
-                        idsClientesReasignar.Add(Guid.Parse(itemsData.ElementAt(5)));
+                        String idStr = itemsData.ElementAt(5).Replace("idResignar_","");
+                        idsClientesReasignar.Add(Guid.Parse(idStr));
                         reporteReasignaciones.Add(itemsData);
                     }
                 }

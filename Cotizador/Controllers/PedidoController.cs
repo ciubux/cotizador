@@ -618,7 +618,7 @@ namespace Cotizador.Controllers
                         Producto producto = productoBL.getProducto(pedidoDetalle.producto.idProducto, pedido.ciudad.esProvincia, pedido.incluidoIGV, pedido.cliente.idCliente);
 
                         int diaFinVigProd = 0;
-                        if (producto.precioClienteProducto != null)
+                        if (producto.precioClienteProducto != null && producto.precioClienteProducto.fechaInicioVigencia != null)
                         {
                             if (producto.precioClienteProducto.fechaFinVigencia == null)
                             {
@@ -633,12 +633,11 @@ namespace Cotizador.Controllers
                             {
                                 pedidoDetalle.producto = producto;
                             }
-                        }
-                        
 
-                        if (pedidoDetalle.esPrecioAlternativo)
-                        {
-                            pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.precioClienteProducto.equivalencia;
+                            if (pedidoDetalle.esPrecioAlternativo)
+                            {
+                                pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.precioClienteProducto.equivalencia;
+                            }
                         }
                     }
 

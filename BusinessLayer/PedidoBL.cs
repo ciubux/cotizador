@@ -1111,6 +1111,7 @@ namespace BusinessLayer
 
             this.InsertPedido(pMP);
             this.SetPedidoMP(idPedidoTec, pMP.idPedido);
+            this.SetPedidoMP(pMP.idPedido, idPedidoTec);
 
             pedido.idMPPedido = pMP.idPedido;
             pedido.numeroPedidoMP = pMP.numeroPedido;

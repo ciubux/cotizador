@@ -1208,6 +1208,8 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idUsuario", cliente.usuario.idUsuario);
             InputParameterAdd.Int(objCommand, "idResponsableComercial", cliente.responsableComercial.idVendedor);
+            InputParameterAdd.Int(objCommand, "idSupervisorComercial", cliente.supervisorComercial.idVendedor);
+            InputParameterAdd.Int(objCommand, "idAsistenteCliente", cliente.asistenteServicioCliente.idVendedor);
             InputParameterAdd.Int(objCommand, "idGrupoCliente", cliente.grupoCliente.idGrupoCliente);
             InputParameterAdd.Int(objCommand, "perteneceCanalLima", cliente.perteneceCanalLima ? 1 : 0);
             InputParameterAdd.Int(objCommand, "perteneceCanalProvincias", cliente.perteneceCanalProvincias ? 1 : 0);
@@ -1250,6 +1252,16 @@ namespace DataLayer
                 ClienteResultado.responsableComercial.idVendedor = Converter.GetInt(row, "id_responsable_comercial");
                 ClienteResultado.responsableComercial.codigo = Converter.GetString(row, "codigo_vendedor");
                 ClienteResultado.responsableComercial.descripcion = Converter.GetString(row, "nombre_vendedor");
+
+                ClienteResultado.supervisorComercial = new Vendedor();
+                ClienteResultado.supervisorComercial.idVendedor = Converter.GetInt(row, "id_supervisor_comercial");
+                ClienteResultado.supervisorComercial.codigo = Converter.GetString(row, "codigo_supervisor");
+                ClienteResultado.supervisorComercial.descripcion = Converter.GetString(row, "nombre_supervisor");
+
+                ClienteResultado.asistenteServicioCliente = new Vendedor();
+                ClienteResultado.asistenteServicioCliente.idVendedor = Converter.GetInt(row, "id_asistente_servicio_cliente");
+                ClienteResultado.asistenteServicioCliente.codigo = Converter.GetString(row, "codigo_asistente");
+                ClienteResultado.asistenteServicioCliente.descripcion = Converter.GetString(row, "nombre_asistente");
 
                 ClienteResultado.perteneceCanalMultiregional = Converter.GetBool(row, "pertenece_canal_multiregional");
                 ClienteResultado.perteneceCanalLima = Converter.GetBool(row, "pertenece_canal_lima");
