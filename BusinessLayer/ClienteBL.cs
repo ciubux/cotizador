@@ -906,11 +906,12 @@ namespace BusinessLayer
             }
         }
 
-        public void UpdateReasignarCartera(List<Guid> idsCliente, List<int> idsVendedor, DateTime fechaInicioVigencia, Guid idUsuario)
+        public void UpdateReasignarCartera(List<Guid> idsCliente, List<int> idsVendedor, List<Guid> idsClienteSup, List<int> idsSupervisores,
+                List<Guid> idsClienteAsis, List<int> idsAsistentes, DateTime fechaInicioVigencia, Guid idUsuario)
         {
             using (var dal = new ClienteDAL())
             {
-                dal.UpdateReasignarCartera(idsCliente, idsVendedor, fechaInicioVigencia, idUsuario);
+                dal.UpdateReasignarCartera(idsCliente, idsVendedor, idsClienteSup, idsSupervisores, idsClienteAsis, idsAsistentes, fechaInicioVigencia, idUsuario);
             }
         }
     }

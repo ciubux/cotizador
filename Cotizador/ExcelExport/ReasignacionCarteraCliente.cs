@@ -39,7 +39,7 @@ namespace Cotizador.ExcelExport
         private HSSFCellStyle tableDataLastCenterCellStyle;
         private IDataFormat format;
 
-        public FileStreamResult generateExcel(List<List<String>> list)
+        public FileStreamResult generateExcel(List<List<String>> list, List<List<String>> listSup, List<List<String>> listAsis)
         {
             
             HSSFWorkbook wb;

@@ -1624,6 +1624,11 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             List<int> idsVendedores = new List<int>();
             List<Guid> idsClientes = new List<Guid>();
+            List<int> idsSupervisores = new List<int>();
+            List<Guid> idsClientesSup = new List<Guid>();
+            List<int> idsAsistentes = new List<int>();
+            List<Guid> idsClientesAsis = new List<Guid>();
+
             DateTime fechaInicioVigencia = DateTime.Now;
 
             if (usuario.reasignaCarteraCliente)
@@ -1631,8 +1636,8 @@ namespace Cotizador.Controllers
                 String[] fiv = this.Request.Params["fechaInicioVigencia"].Split('/');
                 fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]), 0, 0, 0);
 
+                /* ASESORES */
                 String dataReasignacionCartera = this.Request.Params["dataReasignaciones"].ToString();
-
                 List<Guid> idsClientesReasignar = new List<Guid>();
                 List<List<String>> reporteReasignaciones = new List<List<string>>();
                 String[] rowsReasginaciones = dataReasignacionCartera.Split(new string[] { "|-*-|" }, StringSplitOptions.None);
@@ -1654,8 +1659,6 @@ namespace Cotizador.Controllers
                     }
                 }
 
-                
-
                 foreach (Cliente item in clientes)
                 {
                     Guid idEncontrado = idsClientesReasignar.Find(x => x.Equals(item.idCliente));
@@ -1671,12 +1674,89 @@ namespace Cotizador.Controllers
                     }
                 }
 
-                ClienteBL bl = new ClienteBL();
-                bl.UpdateReasignarCartera(idsClientes, idsVendedores, fechaInicioVigencia, usuario.idUsuario);
+                /* SUPERVISORES */
+                String dataReasignacionSupervisor = this.Request.Params["dataReasignacionSupervisores"].ToString();
+                List<Guid> idsClientesReasignarSup = new List<Guid>();
+                List<List<String>> reporteReasignacionesSup = new List<List<string>>();
+                String[] rowsReasginacionesSup = dataReasignacionSupervisor.Split(new string[] { "|-*-|" }, StringSplitOptions.None);
 
-                
+                foreach (String rowRes in rowsReasginacionesSup)
+                {
+                    String[] itemsRow = rowRes.Split(new string[] { "|*|" }, StringSplitOptions.None);
+                    List<String> itemsData = new List<string>();
+                    foreach (String itemData in itemsRow)
+                    {
+                        itemsData.Add(itemData);
+                    }
+
+                    if (itemsData.Count > 1)
+                    {
+                        String idStr = itemsData.ElementAt(5).Replace("idResignarSup_", "");
+                        idsClientesReasignarSup.Add(Guid.Parse(idStr));
+                        reporteReasignacionesSup.Add(itemsData);
+                    }
+                }
+
+                foreach (Cliente item in clientes)
+                {
+                    Guid idEncontrado = idsClientesReasignarSup.Find(x => x.Equals(item.idCliente));
+                    if (idEncontrado != null && !idEncontrado.Equals(Guid.Empty) &&
+                        this.Request.Params["idResignarSup_" + item.idCliente.ToString()] != null && !this.Request.Params["idResignarSup_" + item.idCliente.ToString()].ToString().Equals(""))
+                    {
+                        int nuevoVendedor = Int32.Parse(this.Request.Params["idResignarSup_" + item.idCliente.ToString()].ToString());
+                        if (nuevoVendedor > 0 && nuevoVendedor != cliente.supervisorComercial.idVendedor)
+                        {
+                            idsClientesSup.Add(item.idCliente);
+                            idsSupervisores.Add(nuevoVendedor);
+                        }
+                    }
+                }
+
+                /* ASISTENTES */
+                String dataReasignacionAsistente = this.Request.Params["dataReasignacionAsistentes"].ToString();
+                List<Guid> idsClientesReasignarAsis = new List<Guid>();
+                List<List<String>> reporteReasignacionesAsis = new List<List<string>>();
+                String[] rowsReasginacionesAsis = dataReasignacionAsistente.Split(new string[] { "|-*-|" }, StringSplitOptions.None);
+
+                foreach (String rowRes in rowsReasginacionesAsis)
+                {
+                    String[] itemsRow = rowRes.Split(new string[] { "|*|" }, StringSplitOptions.None);
+                    List<String> itemsData = new List<string>();
+                    foreach (String itemData in itemsRow)
+                    {
+                        itemsData.Add(itemData);
+                    }
+
+                    if (itemsData.Count > 1)
+                    {
+                        String idStr = itemsData.ElementAt(5).Replace("idResignar_", "");
+                        idsClientesReasignarAsis.Add(Guid.Parse(idStr));
+                        reporteReasignacionesAsis.Add(itemsData);
+                    }
+                }
+
+                foreach (Cliente item in clientes)
+                {
+                    Guid idEncontrado = idsClientesReasignarAsis.Find(x => x.Equals(item.idCliente));
+                    if (idEncontrado != null && !idEncontrado.Equals(Guid.Empty) &&
+                        this.Request.Params["idResignarAsis_" + item.idCliente.ToString()] != null && !this.Request.Params["idResignarAsis_" + item.idCliente.ToString()].ToString().Equals(""))
+                    {
+                        int nuevoVendedor = Int32.Parse(this.Request.Params["idResignarAsis_" + item.idCliente.ToString()].ToString());
+                        if (nuevoVendedor > 0 && nuevoVendedor != cliente.asistenteServicioCliente.idVendedor)
+                        {
+                            idsClientesAsis.Add(item.idCliente);
+                            idsAsistentes.Add(nuevoVendedor);
+                        }
+                    }
+                }
+
+
+                ClienteBL bl = new ClienteBL();
+                bl.UpdateReasignarCartera(idsClientes, idsVendedores, idsClientesSup, idsSupervisores, idsClientesAsis, idsAsistentes, fechaInicioVigencia, usuario.idUsuario);
 
                 this.Session["s_last_cliente_reasginacion_cartera"] = reporteReasignaciones;
+                this.Session["s_last_cliente_reasginacion_supervisores"] = reporteReasignacionesSup;
+                this.Session["s_last_cliente_reasginacion_asistentes"] = reporteReasignacionesAsis;
             }
             
             return "";
@@ -1686,9 +1766,11 @@ namespace Cotizador.Controllers
         public ActionResult ExportLastReasginacionCartera()
         {
             List<List<String>> list = (List<List<String>>)this.Session["s_last_cliente_reasginacion_cartera"];
+            List<List<String>> listSup = (List<List<String>>)this.Session["s_last_cliente_reasginacion_supervisores"];
+            List<List<String>> listAsis = (List<List<String>>)this.Session["s_last_cliente_reasginacion_asistentes"];
 
             ReasignacionCarteraCliente excel = new ReasignacionCarteraCliente();
-            return excel.generateExcel(list);
+            return excel.generateExcel(list, listSup, listAsis);
         }
 
 

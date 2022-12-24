@@ -1275,7 +1275,8 @@ namespace DataLayer
             return clienteList;
         }
 
-        public void UpdateReasignarCartera(List<Guid> idsCliente, List<int> idsVendedor, DateTime fechaInicioVigencia, Guid idUsuario)
+        public void UpdateReasignarCartera(List<Guid> idsCliente, List<int> idsVendedor, List<Guid> idsClienteSup, List<int> idsSupervisores, 
+                List<Guid> idsClienteAsis, List<int> idsAsistentes, DateTime fechaInicioVigencia, Guid idUsuario)
         {
             var objCommand = GetSqlCommand("pu_reasignar_cartera_comercial");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
@@ -1309,6 +1310,66 @@ namespace DataLayer
             SqlParameter dtParamVen = objCommand.Parameters.AddWithValue("@idsVendedor", dtVendedores);
             dtParamVen.SqlDbType = SqlDbType.Structured;
             dtParamVen.TypeName = "dbo.IntegerList";
+
+
+            DataTable dtClientesSup = new DataTable();
+            dtClientesSup.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            foreach (Guid item in idsClienteSup)
+            {
+                DataRow rowObj = dtClientesSup.NewRow();
+                rowObj["ID"] = item;
+                dtClientesSup.Rows.Add(rowObj);
+            }
+
+            SqlParameter dtParamClSup = objCommand.Parameters.AddWithValue("@idsClienteSup", dtClientesSup);
+            dtParamClSup.SqlDbType = SqlDbType.Structured;
+            dtParamClSup.TypeName = "dbo.UniqueIdentifierList";
+
+
+            DataTable dtSupervisores = new DataTable();
+            dtSupervisores.Columns.Add(new DataColumn("ID", typeof(int)));
+
+            foreach (int item in idsSupervisores)
+            {
+                DataRow rowObj = dtSupervisores.NewRow();
+                rowObj["ID"] = item;
+                dtSupervisores.Rows.Add(rowObj);
+            }
+
+            SqlParameter dtParamSup = objCommand.Parameters.AddWithValue("@idsSupervisor", dtSupervisores);
+            dtParamSup.SqlDbType = SqlDbType.Structured;
+            dtParamSup.TypeName = "dbo.IntegerList";
+
+
+            DataTable dtClientesAsis = new DataTable();
+            dtClientesAsis.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            foreach (Guid item in idsClienteAsis)
+            {
+                DataRow rowObj = dtClientesAsis.NewRow();
+                rowObj["ID"] = item;
+                dtClientesAsis.Rows.Add(rowObj);
+            }
+
+            SqlParameter dtParamClAsis = objCommand.Parameters.AddWithValue("@idsClienteAsis", dtClientesAsis);
+            dtParamClAsis.SqlDbType = SqlDbType.Structured;
+            dtParamClAsis.TypeName = "dbo.UniqueIdentifierList";
+
+
+            DataTable dtAsistentes = new DataTable();
+            dtAsistentes.Columns.Add(new DataColumn("ID", typeof(int)));
+
+            foreach (int item in idsAsistentes)
+            {
+                DataRow rowObj = dtAsistentes.NewRow();
+                rowObj["ID"] = item;
+                dtAsistentes.Rows.Add(rowObj);
+            }
+
+            SqlParameter dtParamAsis = objCommand.Parameters.AddWithValue("@idsAsistente", dtAsistentes);
+            dtParamAsis.SqlDbType = SqlDbType.Structured;
+            dtParamAsis.TypeName = "dbo.IntegerList";
 
 
             ExecuteNonQuery(objCommand);

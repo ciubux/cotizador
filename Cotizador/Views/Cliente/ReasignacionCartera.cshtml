@@ -12,6 +12,9 @@
 
     <form action="/Cliente/ReasignarCartera" method="post" id="formReasignarCarteraClientes">
         <input id="inputDataReasignaciones" name="dataReasignaciones" type="hidden" value="" />
+        <input id="inputDataReasignacionSupervisores" name="dataReasignacionSupervisores" type="hidden" value="" />
+        <input id="inputDataReasignacionAsistentes" name="dataReasignacionAsistentes" type="hidden" value="" />
+
         <input type="hidden" id="fechaInicioVigencia" name="fechaInicioVigencia" value="@cliente.FechaInicioVigenciaDesc" />
         @foreach (Model.Cliente item in clientes)
         {
@@ -363,35 +366,114 @@
                     </div>
                 </div>
             </div>
+
+            <div class="panel-group" id="accordion" style="margin-top: 10px;">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                Reasignar responsables comerciales de <span id="nroReasignacionesClientes"></span> clientes:
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <div class="row" style="padding: 10px 20px;">
+                                <div class="col-sm-12 col-lg-12" style="height: 450px;  overflow-y: scroll; ">
+                                    <input id="modalDataReasignaciones" type="hidden" value="" />
+                                    <table id="tableClientesConfirmarReasignar" class="table" data-editing="false"
+                                           data-editing-allow-add="false"
+                                           data-editing-allow-delete="false"
+                                           data-editing-allow-edit="false"
+                                           data-show-toggle="false">
+                                        <thead>
+                                            <tr>
+                                                <th data-name="nombre" data-visible="true" data-sortable="true" data-sorted="true" data-direction="DESC">Razon Social / Nombre</th>
+                                                <th data-name="ruc" data-visible="true" data-sortable="true">Nro. Documento</th>
+                                                <th data-name="ciudad" data-visible="true" data-sortable="true">Sede</th>
+                                                <th data-name="reasignar" data-sortable="true" data-breakpoints="xs">Reasignar A:</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                Reasignar supervisores comerciales de <span id="nroReasignacionSupervisores"></span> clientes:
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="row" style="padding: 10px 20px;">
+                                <div class="col-sm-12 col-lg-12" style="height: 450px;  overflow-y: scroll; ">
+                                    <input id="modalDataReasignacionSupervisores" type="hidden" value="" />
+                                    <table id="tableClientesConfirmarReasignarSupervisores" class="table" data-editing="false"
+                                           data-editing-allow-add="false"
+                                           data-editing-allow-delete="false"
+                                           data-editing-allow-edit="false"
+                                           data-show-toggle="false">
+                                        <thead>
+                                            <tr>
+                                                <th data-name="nombre" data-visible="true" data-sortable="true" data-sorted="true" data-direction="DESC">Razon Social / Nombre</th>
+                                                <th data-name="ruc" data-visible="true" data-sortable="true">Nro. Documento</th>
+                                                <th data-name="ciudad" data-visible="true" data-sortable="true">Sede</th>
+                                                <th data-name="reasignar" data-sortable="true" data-breakpoints="xs">Reasignar Supervisor A:</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                Reasignar asistentes comerciales de <span id="nroReasignacionAsistente"></span> clientes:
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="row" style="padding: 10px 20px;">
+                                <div class="col-sm-12 col-lg-12" style="height: 450px;  overflow-y: scroll; ">
+                                    <input id="modalDataReasignacionAsistentes" type="hidden" value="" />
+                                    <table id="tableClientesConfirmarReasignarAsistentes" class="table" data-editing="false"
+                                           data-editing-allow-add="false"
+                                           data-editing-allow-delete="false"
+                                           data-editing-allow-edit="false"
+                                           data-show-toggle="false">
+                                        <thead>
+                                            <tr>
+                                                <th data-name="nombre" data-visible="true" data-sortable="true" data-sorted="true" data-direction="DESC">Razon Social / Nombre</th>
+                                                <th data-name="ruc" data-visible="true" data-sortable="true">Nro. Documento</th>
+                                                <th data-name="ciudad" data-visible="true" data-sortable="true">Sede</th>
+                                                <th data-name="reasignar" data-sortable="true" data-breakpoints="xs">Reasignar Asistente A:</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             
-            <div class="row">
-                <div class="col-sm-12 col-lg-12" style="padding: 5px 35px;">
-                    <h5 class="text-info">Se reasignarán los responsables comerciales de <span id="nroReasignacionesClientes"></span> clientes:</h5>
-                </div>
-            </div>
-
-            <div class="row" style="padding: 10px 20px;">
-                <div class="col-sm-12 col-lg-12" style="height: 450px;  overflow-y: scroll; ">
-                    <input id="modalDataReasignaciones" type="hidden" value="" />
-                    <table id="tableClientesConfirmarReasignar" class="table" data-editing="false"
-                           data-editing-allow-add="false"
-                           data-editing-allow-delete="false"
-                           data-editing-allow-edit="false"
-                           data-show-toggle="false">
-                        <thead>
-                            <tr>
-                                <th data-name="nombre" data-visible="true" data-sortable="true" data-sorted="true" data-direction="DESC">Razon Social / Nombre</th>
-                                <th data-name="ruc" data-visible="true" data-sortable="true">Nro. Documento</th>
-                                <th data-name="ciudad" data-visible="true" data-sortable="true">Sede</th>
-                                <th data-name="reasignar" data-sortable="true" data-breakpoints="xs">Reasignar A:</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
             <div class="modal-footer">
                 <button type="button" id="btnCancelConfirmarReasginarCartera" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <button type="button" id="btnSaveConfirmarReasginarCartera" class="btn btn-primary">Registrar Reasignación Cartera</button>
@@ -461,15 +543,26 @@
             $("#fechaVigenciaSel").val($("#fechaInicioVigencia").val());
             $("#tableClientesConfirmarReasignar > tbody").empty();
             var reasignaciones = 0;
+            var reasignacionesAsesores = 0;
             var dataReasignaciones = "";
+
+            var reasignacionSupervisores = 0;
+            var dataReasignacionesSupervisor = "";
+
+            var reasignacionAsistentes = 0;
+            var dataReasignacionesAsistente = "";
+
+
             var pasoLimite = false;
             var limiteReasignaciones = 200;
+
             $('.input-reasignar-asesor').each(function () {
                 var idAsesor = parseInt($(this).val());
                 var uuid = $(this).attr("name").replace("idResignarSel_", "");
 
                 if (idAsesor > 0 && !pasoLimite) {
                     reasignaciones = reasignaciones + 1;
+                    reasignacionesAsesores = reasignacionesAsesores + 1;
                     var dataRow = "|-*-|" + $(this).attr("nombreCliente") + "|*|" + $(this).attr("rucCliente") + "|*|" + $(this).attr("ciudadCliente")
                               + "|*|" + $(this).attr("nombreAsesor") + "|*|" + $(this).attr("nombreNuevoAsesor") + "|*|" + uuid; 
                     var itemRow = "<tr>" +
@@ -489,12 +582,72 @@
             $("#inputDataReasignaciones").val(dataReasignaciones);
             FooTable.init('#tableClientesConfirmarReasignar');
 
-            $("#nroReasignacionesClientes").html(reasignaciones);
+
+
+            $('.input-reasignar-supervisor').each(function () {
+                var idAsesor = parseInt($(this).val());
+                var uuid = $(this).attr("name").replace("idResignarSupSel_", "");
+
+                if (idAsesor > 0 && !pasoLimite) {
+                    reasignaciones = reasignaciones + 1;
+                    reasignacionSupervisores = reasignacionSupervisores + 1;
+                    var dataRow = "|-*-|" + $(this).attr("nombreCliente") + "|*|" + $(this).attr("rucCliente") + "|*|" + $(this).attr("ciudadCliente")
+                        + "|*|" + $(this).attr("nombreSupervisor") + "|*|" + $(this).attr("nombreNuevoSupervisor") + "|*|" + uuid;
+                    var itemRow = "<tr>" +
+                        "<td>" + $(this).attr("nombreCliente") + "</td>" +
+                        "<td>" + $(this).attr("rucCliente") + "</td>" +
+                        "<td>" + $(this).attr("ciudadCliente") + "</td>" +
+                        "<td>" + $(this).attr("nombreNuevoSupervisor") + "</td>" +
+                        "</tr>";
+                    dataReasignacionesSupervisor = dataReasignacionesSupervisor + dataRow;
+                    $("#tableClientesConfirmarReasignarSupervisores").append(itemRow);
+                    if (reasignaciones == limiteReasignaciones) {
+                        pasoLimite = true;
+                    }
+                }
+            });
+
+            $("#inputDataReasignacionSupervisores").val(dataReasignacionesSupervisor);
+            FooTable.init('#tableClientesConfirmarReasignarSupervisores');
+
+
+
+            $('.input-reasignar-asistente').each(function () {
+                var idAsesor = parseInt($(this).val());
+                var uuid = $(this).attr("name").replace("idResignarAsisSel_", "");
+
+                if (idAsesor > 0 && !pasoLimite) {
+                    reasignaciones = reasignaciones + 1;
+                    reasignacionAsistentes = reasignacionAsistentes + 1;
+                    var dataRow = "|-*-|" + $(this).attr("nombreCliente") + "|*|" + $(this).attr("rucCliente") + "|*|" + $(this).attr("ciudadCliente")
+                        + "|*|" + $(this).attr("nombreAsistente") + "|*|" + $(this).attr("nombreNuevoAsistente") + "|*|" + uuid;
+                    var itemRow = "<tr>" +
+                        "<td>" + $(this).attr("nombreCliente") + "</td>" +
+                        "<td>" + $(this).attr("rucCliente") + "</td>" +
+                        "<td>" + $(this).attr("ciudadCliente") + "</td>" +
+                        "<td>" + $(this).attr("nombreNuevoAsistente") + "</td>" +
+                        "</tr>";
+                    dataReasignacionesAsistente = dataReasignacionesAsistente + dataRow;
+                    $("#tableClientesConfirmarReasignarAsistentes").append(itemRow);
+                    if (reasignaciones == limiteReasignaciones) {
+                        pasoLimite = true;
+                    }
+                }
+            });
+
+            $("#inputDataReasignacionAsistentes").val(dataReasignacionesAsistente);
+            FooTable.init('#tableClientesConfirmarReasignarAsistentes');
+
+
+            //$("#nroReasignacionesClientes").html(reasignaciones);
+            $("#nroReasignacionesClientes").html(reasignacionesAsesores);
+            $("#nroReasignacionSupervisores").html(reasignacionSupervisores);
+            $("#nroReasignacionAsistente").html(reasignacionAsistentes);
 
             if (pasoLimite) {
                 $.alert({
                     title: 'LIMITE DE REASIGNACIONES',
-                    content: 'Solo se pueden reasignar ' + limiteReasignaciones + ' clientes por operación. Para reasignar los restantes debera volver a realizar otra operación de reasignación.',
+                    content: 'Solo se pueden realizar ' + limiteReasignaciones + ' reasignaciones por operación. Para reasignar los restantes debera volver a realizar otra operación de reasignación.',
                     type: 'orange',
                     buttons: {
                         OK: function () {

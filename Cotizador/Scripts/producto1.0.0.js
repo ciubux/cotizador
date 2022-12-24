@@ -162,7 +162,7 @@ jQuery(function ($) {
             return false;
         }
         
-        if ($("#producto_skuProveedor").val().length < 4) {
+        if ($("#producto_skuProveedor").val().length < 2) {
             $.alert({
                 title: "Código Proveedor Inválido",
                 type: 'orange',
