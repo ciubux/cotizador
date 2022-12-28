@@ -829,13 +829,13 @@ namespace Cotizador.Controllers
             this.ClienteSession = cliente;
         }
 
-        public String Create()
+        public async System.Threading.Tasks.Task<string> Create()
         {
             try
             {
                 ClienteBL clienteBL = new ClienteBL();
                 Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
-                cliente = clienteBL.insertClienteSunat(cliente);
+                cliente = await clienteBL.insertClienteSunatAsync(cliente);
                 if (cliente.codigo != null && !cliente.codigo.Equals(""))
                 {
                     this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
@@ -852,7 +852,7 @@ namespace Cotizador.Controllers
         }
 
 
-        public String Update()
+        public async System.Threading.Tasks.Task<string> Update()
         {
             //try
             //{
@@ -860,7 +860,7 @@ namespace Cotizador.Controllers
                 Cliente cliente = this.ClienteSession;
                 if (cliente.idCliente == Guid.Empty)
                 {
-                    cliente = clienteBL.insertClienteSunat(cliente);
+                    cliente = await clienteBL.insertClienteSunatAsync(cliente);
                     if (cliente.codigo != null && !cliente.codigo.Equals(""))
                     {
                         this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
@@ -868,7 +868,7 @@ namespace Cotizador.Controllers
                 }
                 else
                 {
-                    cliente = clienteBL.updateClienteSunat(cliente);
+                    cliente = await clienteBL.updateClienteSunatAsync(cliente);
                     this.Session[Constantes.VAR_SESSION_CLIENTE] = null;
                 }
                 String resultado = JsonConvert.SerializeObject(cliente);
@@ -1078,6 +1078,8 @@ namespace Cotizador.Controllers
                             idSupervisor = ClienteSession.supervisorComercial.idVendedor;
                         }
                     }
+
+                    ClienteSession.responsableComercial = asesor;
                 }
                 ClienteSession.responsableComercial.idVendedor = idVendedor;
             }
@@ -1549,7 +1551,7 @@ namespace Cotizador.Controllers
                                 }
 
 
-                                clienteBL.updateClienteSunat(item);
+                                clienteBL.updateClienteSunatAsync(item);
                             }
                         }
                         catch (Exception ex)

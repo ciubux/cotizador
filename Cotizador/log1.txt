@@ -149,3 +149,5 @@ The statement has been terminated.
 2022-05-25 09:34:57.2533|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE' with unique index 'IDX_RUC_EMPRESA_SEDE_ESTADO'. The duplicate key value is (10461243679, 15526227-2108-4113-b46a-1c8ab5c0e581, 1, 1).
 The statement has been terminated.
 2022-11-02 05:25:16.5636|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Procedure or function pi_cotizacion has too many arguments specified.
+2022-12-28 00:54:20.2410|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Cannot insert duplicate key row in object 'dbo.CLIENTE' with unique index 'IDX_RUC_EMPRESA_SEDE_ESTADO'. The duplicate key value is (20547391501, 8ba0ac4e-fed3-44e4-a422-5567b9c3e65d, 1, 1).
+The statement has been terminated.

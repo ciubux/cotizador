@@ -306,7 +306,7 @@ namespace Cotizador.Controllers
                 cliente.grupoCliente = grupoCliente;
                 cliente.usuario = usuario;
                 cliente.habilitadoNegociacionGrupal = heredaPrecios == 1 ? true : false;
-                clienteBl.updateClienteSunat(cliente);
+                clienteBl.updateClienteSunatAsync(cliente);
 
                 grupoCliente.miembros.Add(cliente);
                 cliente.grupoCliente = null;
@@ -369,7 +369,7 @@ namespace Cotizador.Controllers
                     cli.grupoCliente = grupoCliente;
                     cli.usuario = usuario;
                     cli.habilitadoNegociacionGrupal = heredaPrecios == 1 ? true : false;
-                    clienteBl.updateClienteSunat(cli);
+                    clienteBl.updateClienteSunatAsync(cli);
                     cli.grupoCliente = null;
                     grupoCliente.miembros.Add(cli);
 
@@ -660,7 +660,7 @@ namespace Cotizador.Controllers
 
                 cliente.grupoCliente = null;
                 cliente.usuario = usuario;
-                clienteBl.updateClienteSunat(cliente);
+                clienteBl.updateClienteSunatAsync(cliente);
 
                 grupoCliente.miembros.RemoveAt(removeAt);
                 message = "Se retiró el cliente del grupo.";
@@ -713,7 +713,7 @@ namespace Cotizador.Controllers
 
                 cliente.usuario = usuario;
                 cliente.habilitadoNegociacionGrupal = heredaPrecios == 1 ? true : false;
-                clienteBl.updateClienteSunat(cliente);
+                clienteBl.updateClienteSunatAsync(cliente);
                 
                 message = "Se actualizó el cliente.";
             } else

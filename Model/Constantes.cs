@@ -303,6 +303,8 @@ namespace Model
         public static String DIRECCION_MP = "";
         public static String TELEFONO_MP = "";
         public static String WEB_MP = "";
+        public static String NEXTSOFT_API_URL = "";
+        public static String NEXTSOFT_API_TOKEN = "";
 
 
         public static List<Producto> DESCUENTOS_LIST;

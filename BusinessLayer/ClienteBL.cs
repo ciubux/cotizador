@@ -10,7 +10,7 @@ using System.Net;
 using System.IO;
 using System.Text;
 using ServiceLayer;
-
+using Model.NextSoft;
 
 namespace BusinessLayer
 {
@@ -460,7 +460,7 @@ namespace BusinessLayer
         }
         */
 
-        public Cliente insertClienteSunat(Cliente cliente)
+        public async System.Threading.Tasks.Task<Cliente> insertClienteSunatAsync(Cliente cliente)
         {
             using (var clienteDAL = new ClienteDAL())
             {
@@ -544,6 +544,14 @@ namespace BusinessLayer
                     mensajeDal.insertMensaje(notificacion);
                 }
 
+                ClienteWS ws = new ClienteWS();
+                ws.urlApi = Constantes.NEXTSOFT_API_URL;
+                ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
+
+                string result = await ws.crearCliente(ConverterMPToNextSoft.toCliente(cliente));
+
+                cliente.FechaEdicion = cliente.FechaEdicion;
+
                 return cliente;
             }
         }
@@ -559,7 +567,7 @@ namespace BusinessLayer
         }
 
 
-        public Cliente updateClienteSunat(Cliente cliente)
+        public async System.Threading.Tasks.Task<Cliente> updateClienteSunatAsync(Cliente cliente)
         {
             using (var clienteDAL = new ClienteDAL())
             {
@@ -738,6 +746,13 @@ namespace BusinessLayer
                 {
                     enviarNotificacionSolicitudCredito(cliente);
                 }
+
+                ClienteWS ws = new ClienteWS();
+                ws.urlApi = Constantes.NEXTSOFT_API_URL;
+                ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
+
+                string result = await ws.crearCliente(ConverterMPToNextSoft.toCliente(cliente));
+
 
                 return cliente;
             }

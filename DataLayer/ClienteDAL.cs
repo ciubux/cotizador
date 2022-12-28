@@ -385,6 +385,7 @@ namespace DataLayer
                 cliente.responsableComercial = new Vendedor();
                 cliente.responsableComercial.idVendedor = Converter.GetInt(row, "responsable_comercial_id_vendedor");
                 cliente.responsableComercial.codigo = Converter.GetString(row, "responsable_comercial_codigo");
+                cliente.responsableComercial.codigoNextSoft = Converter.GetString(row, "responsable_comercial_codigo_nextsoft");
                 cliente.responsableComercial.descripcion = Converter.GetString(row, "responsable_comercial_descripcion");
                 cliente.responsableComercial.usuario = new Usuario();
                 cliente.responsableComercial.usuario.idUsuario = Converter.GetGuid(row, "responsable_comercial_id_usuario");

@@ -369,7 +369,10 @@ namespace DataLayer
                         Constantes.TELEFONO_MP = valorParametro; break;
                     case "WEB_MP":
                         Constantes.WEB_MP = valorParametro; break;
-
+                    case "NEXTSOFT_API_URL":
+                        Constantes.NEXTSOFT_API_URL = valorParametro; break;
+                    case "NEXTSOFT_API_TOKEN":
+                        Constantes.NEXTSOFT_API_TOKEN = valorParametro; break;
 
                     case "AMBIENTE_EOL":
                         {
@@ -498,6 +501,7 @@ namespace DataLayer
                     vendedor.idVendedor = Converter.GetInt(row, "id_vendedor");
                     vendedor.descripcion = Converter.GetString(row, "descripcion");
                     vendedor.codigo = Converter.GetString(row, "codigo");
+                    vendedor.codigoNextSoft = Converter.GetString(row, "codigo_nextsoft");
                     vendedor.esResponsableComercial = Converter.GetBool(row, "es_responsable_comercial");
                     vendedor.esAsistenteServicioCliente = Converter.GetBool(row, "es_asistente_servicio_cliente");
                     vendedor.esResponsablePortafolio = Converter.GetBool(row, "es_responsable_portafolio");

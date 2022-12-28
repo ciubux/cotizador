@@ -16,6 +16,9 @@ namespace Model
         [Display(Name = "Codigo:")]
         public String codigo { get; set; }
         [Display(Name = "Nombre:")]
+
+        public String codigoNextSoft { get; set; }
+        
         public String descripcion { get; set; }
         public Usuario usuario { get; set; }
         public Boolean esResponsableComercial { get; set; }

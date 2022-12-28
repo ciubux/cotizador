@@ -1,6 +1,7 @@
 ﻿using BusinessLayer;
 using BusinessLayer.Email;
 using Model;
+using Model.NextSoft;
 using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
@@ -237,5 +238,71 @@ namespace Cotizador.Controllers
 
             bl.JobDiario();
         }
+
+
+        public async Task<string> testSendClienteNextSoftAsync()
+        {
+            var cliente = new
+            {
+                tdi = "6",
+                numdoc = "20547391501",
+                razonsocial = "EMPRESA DIGITAL PERUANA S.A.C.",
+                nomcomercial = "REDBUS",
+                paterno = "",
+                materno = "",
+                nombres = "",
+                nodomiciliado = false,
+                email = "yrvingrl520@gmail.com",
+                vendedor = "0001",
+                listaprecios = "0001",
+                fpg = "001",
+                direccion = new
+                {
+                    descripcion = "Av. Alfredo Benavides Nro. 1944",
+                    ubigeo = "15.01.22"
+                }
+            };
+
+            ClienteWS ws = new ClienteWS();
+            ws.urlApi = "https://service.solutions-ns.com/ServiceINT-MPInstitucional/RESTServiceINT.svc/rest/";
+            ws.apiToken = "D0B51C9D-0406-42D0-AB08-948D50BC1F1F";
+
+            string result = await ws.crearCliente(cliente);
+
+            return result;
+        }
+
+        public String testCarrito()
+        {
+            var guia = new
+            {
+                id = "2313",
+                nombre = "sasd",
+                cantidad = 3.45
+            };
+
+            object dataGuia = this.dataGuia();
+
+            var data = new
+            {
+                token = "asdadr1234sadfs",
+                guia = dataGuia
+            };
+
+            return JsonConvert.SerializeObject(data);
+        }
+
+        private object dataGuia()
+        {
+            var guia = new
+            {
+                id = "2313",
+                nombre = "sasd",
+                cantidad = 3.45
+            };
+
+            return guia;
+        }
+
     }
 }
