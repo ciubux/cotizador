@@ -38,6 +38,8 @@ namespace Model
         [Display(Name = "Familia:")]
         public String familia { get; set; }
 
+        public String codigoNextSoft { get; set; }
+
         ///<summary>
         ///Identifica si el producto se encuentra exonerado de IGV
         ///</summary>

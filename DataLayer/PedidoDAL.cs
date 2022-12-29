@@ -990,14 +990,25 @@ namespace DataLayer
                 pedido.almacenOrigen.idCiudad = Converter.GetGuid(row, "id_ciudad_almacen_origen");
                 pedido.almacenOrigen.nombre = Converter.GetString(row, "nombre_almacen_origen");
                 pedido.almacenOrigen.direccion = Converter.GetString(row, "direccion_almacen_origen");
+                pedido.almacenOrigen.ubigeo = new Ubigeo();
+                pedido.almacenOrigen.ubigeo.Id = Converter.GetString(row, "ubigeo_almacen_origen");
                 pedido.almacenOrigen.codigo = Converter.GetString(row, "codigo_almacen_origen");
+                pedido.almacenOrigen.codigoSucursalNextSoft = Converter.GetString(row, "codigo_sucursal_nextsoft_almacen_origen");
+                pedido.almacenOrigen.codigoPuntoVentaNextSoft = Converter.GetString(row, "codigo_punto_venta_nextsoft_almacen_origen");
+                pedido.almacenOrigen.codigoAlmacenNextSoft = Converter.GetString(row, "codigo_almacen_nextsoft_origen");
 
                 pedido.almacenDestino = new Almacen();
                 pedido.almacenDestino.idAlmacen = Converter.GetGuid(row, "id_almacen_destino");
                 pedido.almacenDestino.idCiudad = Converter.GetGuid(row, "id_ciudad_almacen_destino");
                 pedido.almacenDestino.nombre = Converter.GetString(row, "nombre_almacen_destino");
                 pedido.almacenDestino.direccion = Converter.GetString(row, "direccion_almacen_destino");
+                pedido.almacenDestino.ubigeo = new Ubigeo();
+                pedido.almacenDestino.ubigeo.Id = Converter.GetString(row, "ubigeo_almacen_destino");
                 pedido.almacenDestino.codigo = Converter.GetString(row, "codigo_almacen_destino");
+                pedido.almacenDestino.codigoSucursalNextSoft = Converter.GetString(row, "codigo_sucursal_nextsoft_almacen_destino");
+                pedido.almacenDestino.codigoPuntoVentaNextSoft = Converter.GetString(row, "codigo_punto_venta_nextsoft_almacen_destino");
+                pedido.almacenDestino.codigoAlmacenNextSoft = Converter.GetString(row, "codigo_almacen_nextsoft_destino");
+
 
                 pedido.usuario = new Usuario();
                 pedido.usuario.idUsuario = Converter.GetGuid(row, "id_usuario_creacion");
@@ -1081,6 +1092,7 @@ namespace DataLayer
                 pedidoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
                 pedidoDetalle.producto.sku = Converter.GetString(row, "sku");
                 pedidoDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
+                pedidoDetalle.producto.codigoNextSoft = Converter.GetString(row, "codigo_nextsoft");
                 pedidoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
                 pedidoDetalle.producto.descripcionLarga = Converter.GetString(row, "descripcion_larga");
                 pedidoDetalle.producto.proveedor = Converter.GetString(row, "proveedor");

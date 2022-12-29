@@ -25,7 +25,13 @@ namespace Model
         [Display(Name = "Distrito:")]
         public string Distrito { get; set; }
 
+        public string codigoSepPunto { 
+            get {
+                return this.Id.Substring(0, 2) + "." + this.Id.Substring(2, 2) + "." + this.Id.Substring(4, 2)
+            } 
+        }
 
+        
         public new string ToString
         {
             get

@@ -8,6 +8,7 @@ namespace Model.NextSoft
 {
     public static class ConverterMPToNextSoft
     {
+        static string codListaPrecios = "0001";
         public static object toCliente(Cliente obj)
         {
             object direccion;
@@ -20,7 +21,7 @@ namespace Model.NextSoft
                 direccion = new
                 {
                     descripcion = obj.direccionDomicilioLegalSunat,
-                    ubigeo = obj.ubigeo.Id.Substring(0, 2) + "." + obj.ubigeo.Id.Substring(2, 2) + "." + obj.ubigeo.Id.Substring(4, 2)
+                    ubigeo = obj.ubigeo.codigoSepPunto
                 };
             } else
             {
@@ -75,9 +76,80 @@ namespace Model.NextSoft
                 nodomiciliado = obj.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.Carnet ? true : false,
                 email = obj.correoEnvioFactura == null ? "" : obj.correoEnvioFactura,
                 vendedor = obj.responsableComercial.codigoNextSoft,
-                listaprecios = "0001",
+                listaprecios = codListaPrecios,
                 fpg = formaPag,
                 direccion = direccion
+            };
+
+
+            return item;
+        }
+
+        public static object toGuia(GuiaRemision obj)
+        {
+            List<object> listaDet = new List<object>();
+            int numDet = 1;
+            foreach(MovimientoDetalle movDet in obj.documentoDetalle)
+            {
+                var det = new {
+                    almacen = obj.almacen.codigoAlmacenNextSoft,
+                    numitem = numDet,
+                    codprod = movDet.producto.codigoNextSoft, 
+                    descripcion = movDet.producto.descripcion,
+                    cantidad = movDet.cantidad,
+                    notas = "",
+                    codfcv = "002", // REVISAR
+                    fcv = "1", // REVISAR
+                    listaprecio = codListaPrecios,
+                    peso = 0
+                };
+
+                listaDet.Add(det);
+            }
+
+            string motivoTraslado = "006";
+            switch(obj.motivoTraslado)
+            {
+                case GuiaRemision.motivosTraslado.Venta: motivoTraslado = "001"; break;
+                case GuiaRemision.motivosTraslado.TrasladoInterno: motivoTraslado = "004"; break;
+            }
+
+            string tipoDocumentoAlmacen = "004";
+            switch (obj.motivoTraslado)
+            {
+                case GuiaRemision.motivosTraslado.Venta: motivoTraslado = "004"; break;
+                case GuiaRemision.motivosTraslado.DevolucionCompra: motivoTraslado = "002"; break;
+                case GuiaRemision.motivosTraslado.TrasladoInterno: motivoTraslado = "010"; break;
+            }
+
+            var item = new
+            {
+                sucursal =  obj.almacen.codigoSucursalNextSoft, 
+                puntoventa = obj.almacen.codigoPuntoVentaNextSoft, 
+                ruc = obj.pedido.cliente.ruc,
+                direcccion = "1", // REVISAR
+                exportacion = false,
+                tdo = tipoDocumentoAlmacen, 
+                serie = "G" + obj.serieDocumento, // REVISAR
+                numero = "1", // SALIDA
+                fecemision = obj.fechaEmision.ToString("dd/MM/yyyy"),
+                observaciones = obj.observaciones,
+                vendedor = obj.pedido.cliente.responsableComercial.codigoNextSoft,
+                ordencompra = obj.pedido != null && obj.pedido.numeroReferenciaCliente != null && obj.pedido.numeroReferenciaCliente.Trim().Equals("") ? obj.pedido.numeroReferenciaCliente : "sin orden de compra",
+                motivotraslado = motivoTraslado, 
+                modalidadtraslado = "", 
+                fectraslado = obj.fechaTraslado.ToString("dd/MM/yyyy"),
+                ructransportista = obj.transportista.ruc, 
+                placa = obj.placaVehiculo, 
+                docconductor = obj.transportista.ruc, 
+                licconductor = obj.transportista.brevete,
+                nomconductor = obj.transportista.descripcion, 
+                ubigeopartida = obj.almacen.ubigeo.codigoSepPunto, 
+                ubigeollegada = obj.ubigeoEntrega.codigoSepPunto,
+                partida = obj.direccionOrigen,
+                llegada = obj.direccionEntrega,
+                peso = 0,
+                items = listaDet.ToArray()
             };
 
 

@@ -292,6 +292,25 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(data);
         }
 
+        public String testLista()
+        {
+            List<object> lista = new List<object>();
+
+            lista.Add(this.dataGuia());
+            lista.Add(this.dataGuia());
+            lista.Add(this.dataGuia());
+
+            object dataGuia = this.dataGuia();
+
+            var data = new
+            {
+                token = "asdadr1234sadfs",
+                guias = lista.ToArray()
+            };
+
+            return JsonConvert.SerializeObject(data);
+        }
+
         private object dataGuia()
         {
             var guia = new
