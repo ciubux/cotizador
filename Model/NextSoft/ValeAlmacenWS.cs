@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace Model.NextSoft
 {
-    public class ClienteWS : MasterWSClass
+    public class GuiaWS : MasterWSClass
     {
-        public async Task<object> crearCliente(object dataCliente)
+        public async Task<object> crearGuia(object dataGuia)
         {
-            string nombreServicio = "crearcliente";
+            string nombreServicio = "crearguia";
 
             var sendData = new { 
                 token = this.apiToken,
-                cliente = dataCliente
+                guia = dataGuia
             };
 
             object resultContent = await this.callService(sendData, nombreServicio);

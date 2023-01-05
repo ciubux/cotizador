@@ -551,6 +551,9 @@ namespace Cotizador.Controllers
 
         public ActionResult Ingresar()
         {
+            //this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] = null;
+            //return RedirectToAction("Index", "Pedido");
+
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoNotaIngreso;
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];

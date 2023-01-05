@@ -1230,6 +1230,8 @@ jQuery(function ($) {
         $("btnExtornar").attr("disabled", "disabled");
         $("btnVerNotasIngresoExtornantes").attr("disabled", "disabled");
         $("btnIngresar").attr("disabled", "disabled");
+        $("btnEnviarNextSys").attr("disabled", "disabled");
+        
     }
 
     function activarBotonesVer() {
@@ -1242,6 +1244,7 @@ jQuery(function ($) {
         $("btnExtornar").removeAttr("disabled");
         $("btnVerNotasIngresoExtornantes").removeAttr("disabled");
         $("btnIngresar").removeAttr("disabled");
+        $("btnEnviarNextSys").removeAttr("disabled");
     }
 
    
@@ -2809,6 +2812,32 @@ jQuery(function ($) {
 
 
 
+
+    $('#btnEnviarNextSys').click(function () {
+        desactivarBotonesVer();
+        $.ajax({
+            url: "/GuiaRemision/EnviarGuiaANextSoft",
+            type: 'POST',
+            // dataType: 'JSON',
+            data: {
+            },
+            error: function (error) {
+                mostrarMensajeErrorProceso("ERROR");
+            },
+            success: function (movimientoAlmacen) {
+                $.alert({
+                    title: "Se envió la guía a NextSys",
+                    content: "Envio correcto.",
+                    type: 'green',
+                    buttons: {
+                        OK: function () {
+                            activarBotonesVer();
+                        }
+                    }
+                });
+            }
+        });
+    });
 
 
     $('#btnIngresar').click(function () {

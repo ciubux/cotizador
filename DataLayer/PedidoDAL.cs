@@ -1092,7 +1092,6 @@ namespace DataLayer
                 pedidoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
                 pedidoDetalle.producto.sku = Converter.GetString(row, "sku");
                 pedidoDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
-                pedidoDetalle.producto.codigoNextSoft = Converter.GetString(row, "codigo_nextsoft");
                 pedidoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
                 pedidoDetalle.producto.descripcionLarga = Converter.GetString(row, "descripcion_larga");
                 pedidoDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
@@ -1105,6 +1104,13 @@ namespace DataLayer
                 pedidoDetalle.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
                 pedidoDetalle.producto.costoFleteProvincias = Converter.GetDecimal(row, "costo_flete_provincias");
                 pedidoDetalle.producto.monedaFleteProvincias = Moneda.ListaMonedasFija.Where(m => m.codigo.Equals(Converter.GetString(row, "moneda_flete_provincias"))).First();
+
+                pedidoDetalle.producto.codigoNextSoft = Converter.GetString(row, "codigo_nextsoft");
+                pedidoDetalle.producto.codigoFactorUnidadMP = Converter.GetString(row, "codigo_factor_unidad_mp");
+                pedidoDetalle.producto.codigoFactorUnidadAlternativa = Converter.GetString(row, "codigo_factor_unidad_alternativa");
+                pedidoDetalle.producto.codigoFactorUnidadProveedor = Converter.GetString(row, "codigo_factor_unidad_proveedor");
+                pedidoDetalle.producto.codigoFactorUnidadConteo = Converter.GetString(row, "codigo_factor_unidad_conteo");
+
 
                 pedidoDetalle.producto.image = Converter.GetBytes(row, "imagen");
 

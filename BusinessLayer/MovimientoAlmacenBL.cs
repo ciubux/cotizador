@@ -6,6 +6,7 @@ using Model;
 using System.IO;
 using Model.EXCEPTION;
 using System.Linq;
+using Model.NextSoft;
 
 namespace BusinessLayer
 {
@@ -47,7 +48,7 @@ namespace BusinessLayer
 
 
 
-        public void InsertMovimientoAlmacenSalida(GuiaRemision guiaRemision) 
+        public async System.Threading.Tasks.Task InsertMovimientoAlmacenSalida(GuiaRemision guiaRemision) 
         {
             using (var dal = new MovimientoALmacenDAL())
             {
@@ -83,7 +84,9 @@ namespace BusinessLayer
 
                 try
                 {
-                dal.InsertMovimientoAlmacenSalida(guiaRemision);
+                    dal.InsertMovimientoAlmacenSalida(guiaRemision);
+                    //GuiaWS ws = new GuiaWS();
+                    //object resultWs = await ws.crearGuia(guiaRemision);
                 }
                 catch (DuplicateNumberDocumentException ex)
                 {
@@ -291,6 +294,14 @@ namespace BusinessLayer
             using (var dal = new MovimientoALmacenDAL())
             {
                 return dal.SelectMovimientoAlmacenIdCpeCabeceraBe(movimientoAlmacen);
+            }
+        }
+
+        public void GuardarRespuestaNextSys(Guid idGuiaRemision, int success, string resultText)
+        {
+            using (var dal = new MovimientoALmacenDAL())
+            {
+                dal.GuardarRespuestaNextSys(idGuiaRemision, success, resultText);
             }
         }
     }

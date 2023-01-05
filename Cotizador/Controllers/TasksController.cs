@@ -3,6 +3,7 @@ using BusinessLayer.Email;
 using Model;
 using Model.NextSoft;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using ServiceLayer;
@@ -267,9 +268,44 @@ namespace Cotizador.Controllers
             ws.urlApi = "https://service.solutions-ns.com/ServiceINT-MPInstitucional/RESTServiceINT.svc/rest/";
             ws.apiToken = "D0B51C9D-0406-42D0-AB08-948D50BC1F1F";
 
-            string result = await ws.crearCliente(cliente);
+            object result = await ws.crearCliente(cliente);
 
-            return result;
+            return JsonConvert.SerializeObject(result);
+        }
+
+        public async Task<string> actualizarFactoresProductos()
+        {
+            ProductoBL bl = new ProductoBL();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            List<object> result = await bl.ActualizarFactoresProductos(usuario.idUsuario);
+            return JsonConvert.SerializeObject(result);
+        }
+
+        
+        public async Task<string> obtenerDatosProducto()
+        {
+            ProductoWS ws = new ProductoWS();
+            ws.urlApi = "https://service.solutions-ns.com/ServiceINT-MPInstitucional/RESTServiceINT.svc/rest/";
+            ws.apiToken = "D0B51C9D-0406-42D0-AB08-948D50BC1F1F";
+            object result = await ws.getProducto("04.20.02.01.001");
+
+            JObject dataResult = (JObject) result;
+            var listaFactores = dataResult["consultarproductoResult"]["listaFactores"].Children();
+
+            List<FactorNS> factores = new List<FactorNS>();
+            foreach (var factor in listaFactores)
+            {
+                FactorNS item = new FactorNS();
+
+                item.codigo = factor["TIPO_CodFactor"].Value<string>();
+                item.nombre =  factor["TIPO_Desc1"].Value<string>();
+                item.factor = int.Parse(factor["Factor"].Value<string>());
+
+                factores.Add(item);
+            }
+
+            return JsonConvert.SerializeObject(result);
         }
 
         public String testCarrito()

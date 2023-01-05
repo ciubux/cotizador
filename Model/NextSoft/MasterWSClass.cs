@@ -12,14 +12,15 @@ namespace Model.NextSoft
         public string urlApi { get; set; }
         public string apiToken { get; set; }
 
-        protected async Task<String> callService(object sendData, string  nombreServicio) {
+        protected async Task<object> callService(object sendData, string  nombreServicio) {
 
             var httpClient = new HttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(sendData), Encoding.UTF8, "application/json");
             var result = await httpClient.PostAsync(this.fullUrl(nombreServicio), content);
             string resultContent = await result.Content.ReadAsStringAsync();
 
-            return resultContent;
+            object dataResult = JsonConvert.DeserializeObject(resultContent);
+            return dataResult;
         }
 
         protected string fullUrl(string urlService)

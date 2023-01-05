@@ -2225,6 +2225,8 @@ namespace DataLayer
             return list;
         }
 
+        
+
         public List<ProductoWeb> GetInventarioSendWeb(Guid idUsuario)
         {
             var objCommand = GetSqlCommand("ps_data_inventario_web");
@@ -2361,5 +2363,74 @@ namespace DataLayer
             }
             return productoList;
         }
+
+        public List<Producto> SearchProductosActualizarFactores()
+        {
+            var objCommand = GetSqlCommand("ps_productos_factores_faltantes");
+
+
+            DataTable dataTable = Execute(objCommand);
+
+            List<Producto> list = new List<Producto>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Producto item = new Producto();
+                item.idProducto = Converter.GetGuid(row, "id_producto");
+                item.sku = Converter.GetString(row, "sku");
+                item.codigoNextSoft = Converter.GetString(row, "codigo_nextsoft");
+
+                item.unidad = Converter.GetString(row, "unidad");
+                item.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
+                item.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
+                item.unidadConteo = Converter.GetString(row, "unidad_conteo");
+
+                item.codigoFactorUnidadMP = Converter.GetString(row, "codigo_factor_unidad_mp");
+                item.codigoFactorUnidadAlternativa = Converter.GetString(row, "codigo_factor_unidad_alternativa");
+                item.codigoFactorUnidadProveedor = Converter.GetString(row, "codigo_factor_unidad_proveedor");
+                item.codigoFactorUnidadConteo = Converter.GetString(row, "codigo_factor_unidad_conteo");
+
+                list.Add(item);
+            }
+
+            return list;
+        }
+
+
+        public void ActualizarFactores(List<Producto> productos, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pu_actualizar_factores_productos");
+
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+            tvp.Columns.Add(new DataColumn("SKU", typeof(string)));
+            tvp.Columns.Add(new DataColumn("CODIGO_FACTOR_UNIDAD_MP", typeof(string)));
+            tvp.Columns.Add(new DataColumn("CODIGO_FACTOR_UNIDAD_ALTERNATIVA", typeof(string)));
+            tvp.Columns.Add(new DataColumn("CODIGO_FACTOR_UNIDAD_PROVEEDOR", typeof(string)));
+            tvp.Columns.Add(new DataColumn("CODIGO_FACTOR_UNIDAD_CONTEO", typeof(string)));
+
+            foreach (Producto item in productos)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = item.idProducto;
+                rowObj["SKU"] = "";
+                rowObj["CODIGO_FACTOR_UNIDAD_MP"] = item.codigoFactorUnidadMP;
+                rowObj["CODIGO_FACTOR_UNIDAD_ALTERNATIVA"] = item.codigoFactorUnidadAlternativa;
+                rowObj["CODIGO_FACTOR_UNIDAD_PROVEEDOR"] = item.codigoFactorUnidadProveedor;
+                rowObj["CODIGO_FACTOR_UNIDAD_CONTEO"] = item.codigoFactorUnidadConteo;
+
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@productos", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.ProductosFactoresList";
+
+            ExecuteNonQuery(objCommand);
+
+        }
+
+
     }
 }

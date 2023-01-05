@@ -4,8 +4,10 @@ using Cotizador.Models.DTOsSearch;
 using Cotizador.Models.DTOsShow;
 using Model;
 using Model.EXCEPTION;
+using Model.NextSoft;
 using Model.UTILES;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NPOI.HSSF.Model;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
@@ -1087,7 +1089,9 @@ namespace Cotizador.Controllers
 
         public ActionResult Guiar()
         {
-
+            //this.Session[Constantes.VAR_SESSION_GUIA] = null;
+            //return RedirectToAction("Index", "Pedido");
+            
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoGuiaRemision;
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -1174,7 +1178,7 @@ namespace Cotizador.Controllers
         }
 
 
-        public String Create()
+        public async System.Threading.Tasks.Task<string> Create()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoGuiaRemision;
 
@@ -1190,7 +1194,7 @@ namespace Cotizador.Controllers
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
             try
             {
-                movimientoAlmacenBL.InsertMovimientoAlmacenSalida(guiaRemision);
+                await movimientoAlmacenBL.InsertMovimientoAlmacenSalida(guiaRemision);
             }
             catch (DuplicateNumberDocumentException ex)
             {
@@ -1319,6 +1323,38 @@ namespace Cotizador.Controllers
             String json = "{\"usuario\":" + jsonUsuario + ", \"guiaRemision\":" + jsonGuiaRemision + "}";
             return json;
         }
+
+        public async System.Threading.Tasks.Task<string> EnviarGuiaANextSoft()
+        {
+            GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            guiaRemision.usuario = usuario;
+
+            int success = 0;
+
+            GuiaWS ws = new GuiaWS();
+            ws.urlApi = Constantes.NEXTSOFT_API_URL;
+            ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
+
+            object dataSend = ConverterMPToNextSoft.toGuia(guiaRemision);
+            object result = await ws.crearGuia(dataSend);
+
+            JObject dataResult = (JObject)result;
+            int codigo = dataResult["crearguiaResult"]["codigo"].Value<int>();
+            
+            string resultText = JsonConvert.SerializeObject(result); 
+
+            MovimientoAlmacenBL bl = new MovimientoAlmacenBL();
+            if (codigo == 0)
+            {
+                success = 1;
+            }
+
+            bl.GuardarRespuestaNextSys(guiaRemision.idMovimientoAlmacen, success, resultText);
+
+            return resultText;
+        }
+
 
         public ActionResult Print()
         {

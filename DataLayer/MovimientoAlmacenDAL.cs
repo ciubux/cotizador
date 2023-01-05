@@ -247,7 +247,14 @@ namespace DataLayer
         }
 
 
-
+        public void GuardarRespuestaNextSys(Guid idGuiaRemision, int success, string resultText)
+        {
+            var objCommand = GetSqlCommand("pu_guia_enviada_nextsys");
+            InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", idGuiaRemision);
+            InputParameterAdd.Int(objCommand, "success", success);
+            InputParameterAdd.Varchar(objCommand, "respuesta", resultText);
+            ExecuteNonQuery(objCommand);
+        }
 
 
         public void UpdateMarcaNoEntregado(GuiaRemision guiaRemision)
@@ -847,8 +854,8 @@ namespace DataLayer
                 guiaRemision.estaAnulado = Converter.GetBool(row, "anulado");
                 guiaRemision.estaFacturado = Converter.GetBool(row, "facturado");
                 guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado) Char.Parse(Converter.GetString(row, "motivo_traslado"));
-
-              
+                guiaRemision.direccionEntrega = Converter.GetString(row, "direccion_entrega");
+                
 
                 //PEDIDO
                 guiaRemision.pedido = new Pedido();
@@ -861,9 +868,17 @@ namespace DataLayer
                 guiaRemision.pedido.numeroGrupoPedido = Converter.GetLong(row, "numero_grupo");
                 //UBIGEO
                 guiaRemision.pedido.ubigeoEntrega = new Ubigeo();
+                guiaRemision.pedido.ubigeoEntrega.Id = Converter.GetString(row, "id_ubigeo_entrega");
                 guiaRemision.pedido.ubigeoEntrega.Departamento = Converter.GetString(row, "departamento");
                 guiaRemision.pedido.ubigeoEntrega.Provincia = Converter.GetString(row, "provincia");
                 guiaRemision.pedido.ubigeoEntrega.Distrito = Converter.GetString(row, "distrito");
+                guiaRemision.ubigeoEntrega = guiaRemision.pedido.ubigeoEntrega;
+
+                guiaRemision.pedido.vendedor = new Vendedor();
+                guiaRemision.pedido.vendedor.idVendedor = Converter.GetInt(row, "id_vendedor");
+                guiaRemision.pedido.vendedor.codigoNextSoft = Converter.GetString(row, "codigo_nextsoft_vendedor");
+
+
 
                 //CLIENTE
                 guiaRemision.pedido.cliente = new Cliente();
@@ -901,6 +916,11 @@ namespace DataLayer
                 guiaRemision.almacen = new Almacen();
                 guiaRemision.almacen.idAlmacen = Converter.GetGuid(row, "id_almacen");
                 guiaRemision.almacen.direccion = Converter.GetString(row, "direccion_almacen");
+                guiaRemision.almacen.ubigeo = new Ubigeo();
+                guiaRemision.almacen.ubigeo.Id = Converter.GetString(row, "ubigeo_almacen");
+                guiaRemision.almacen.codigoSucursalNextSoft = Converter.GetString(row, "codigo_sucursal_nextsoft_almacen");
+                guiaRemision.almacen.codigoPuntoVentaNextSoft = Converter.GetString(row, "codigo_punto_venta_nextsoft_almacen");
+                guiaRemision.almacen.codigoAlmacenNextSoft = Converter.GetString(row, "codigo_almacen_nextsoft_almacen");
 
                 //TRANSPORTISTA
                 guiaRemision.transportista = new Transportista();
@@ -940,6 +960,11 @@ namespace DataLayer
                 documentoDetalle.idDocumentoDetalle = Converter.GetGuid(row, "id_movimiento_almacen_detalle");
                 documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
                 documentoDetalle.cantidadTotalAtencion = Converter.GetInt(row, "cantidad_pedido");
+
+                documentoDetalle.ProductoPresentacion = new ProductoPresentacion();
+                documentoDetalle.ProductoPresentacion.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion");
+                documentoDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+
                 documentoDetalle.unidad = Converter.GetString(row, "unidad");
                 documentoDetalle.producto = new Producto();
                 documentoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
@@ -949,6 +974,12 @@ namespace DataLayer
                 documentoDetalle.producto.descripcionLarga = Converter.GetString(row, "descripcion_larga");
                 documentoDetalle.producto.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");
                 documentoDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
+                documentoDetalle.producto.codigoNextSoft = Converter.GetString(row, "codigo_nextsoft");
+                documentoDetalle.producto.codigoFactorUnidadMP = Converter.GetString(row, "codigo_factor_unidad_mp");
+                documentoDetalle.producto.codigoFactorUnidadAlternativa = Converter.GetString(row, "codigo_factor_unidad_alternativa");
+                documentoDetalle.producto.codigoFactorUnidadProveedor = Converter.GetString(row, "codigo_factor_unidad_proveedor");
+                documentoDetalle.producto.codigoFactorUnidadConteo = Converter.GetString(row, "codigo_factor_unidad_conteo");
+
                 guiaRemision.documentoDetalle.Add(documentoDetalle);
             }
 

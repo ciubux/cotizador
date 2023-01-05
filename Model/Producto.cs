@@ -40,6 +40,12 @@ namespace Model
 
         public String codigoNextSoft { get; set; }
 
+        public String codigoFactorUnidadProveedor { get; set; }
+        public String codigoFactorUnidadAlternativa { get; set; }
+        public String codigoFactorUnidadMP { get; set; }
+
+        public String codigoFactorUnidadConteo { get; set; }
+
         ///<summary>
         ///Identifica si el producto se encuentra exonerado de IGV
         ///</summary>
@@ -582,6 +588,12 @@ namespace Model
                     case "inafecto": cp.nombre = Producto.nombreAtributo("inafecto"); break;
                     case "tipo": cp.nombre = Producto.nombreAtributo("tipoProducto"); break;
 
+                    case "codigo_factor_unidad_mp": cp.nombre = Producto.nombreAtributo("codigoFactorUnidadMP"); break;
+                    case "codigo_factor_unidad_alternativa": cp.nombre = Producto.nombreAtributo("codigoFactorUnidadAlternativa"); break;
+                    case "codigo_factor_unidad_proveedor": cp.nombre = Producto.nombreAtributo("codigoFactorUnidadProveedor"); break;
+                    case "codigo_factor_unidad_conteo": cp.nombre = Producto.nombreAtributo("codigoFactorUnidadConteo"); break;
+                    case "codigo_nextsoft": cp.nombre = Producto.nombreAtributo("codigoNextSoft"); break;
+
                     case "tope_descuento": cp.nombre = Producto.nombreAtributo("topeDescuento"); break;
                     case "costo_original": cp.nombre = Producto.nombreAtributo("costoOriginal"); break;
                     case "precio_original": cp.nombre = Producto.nombreAtributo("precioOriginal"); break;
@@ -687,6 +699,12 @@ namespace Model
                     case "unidad_alternativa_internacional": lc = instanciarLogCambio(campo); lc.valor = this.unidadAlternativaInternacional; break;
                     case "inafecto": lc = instanciarLogCambio(campo); lc.valor = this.inafecto.ToString(); break;
                     case "tipo": lc = instanciarLogCambio(campo); lc.valor = ((int) this.tipoProducto).ToString(); break;
+
+                    case "codigo_factor_unidad_mp": lc = instanciarLogCambio(campo); lc.valor = this.codigoFactorUnidadMP; break;
+                    case "codigo_factor_unidad_alternativa": lc = instanciarLogCambio(campo); lc.valor = this.codigoFactorUnidadAlternativa; break;
+                    case "codigo_factor_unidad_proveedor": lc = instanciarLogCambio(campo); lc.valor = this.codigoFactorUnidadProveedor; break;
+                    case "codigo_factor_unidad_conteo": lc = instanciarLogCambio(campo); lc.valor = this.codigoFactorUnidadConteo; break;
+                    case "codigo_nextsoft": lc = instanciarLogCambio(campo); lc.valor = this.codigoNextSoft; break;
 
                     case "tope_descuento": lc = instanciarLogCambio(campo); lc.valor = this.topeDescuento.ToString(); break;
                     case "costo_original": lc = instanciarLogCambio(campo); lc.valor = this.costoOriginal.ToString(); break;
@@ -1240,6 +1258,81 @@ namespace Model
                         else
                         {
                             this.unidadAlternativaInternacional = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "codigo_nextsoft":
+                        if (this.codigoNextSoft == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.codigoNextSoft = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "codigo_factor_unidad_mp":
+                        if (this.codigoFactorUnidadMP == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.codigoFactorUnidadMP = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "codigo_factor_unidad_alternativa":
+                        if (this.codigoFactorUnidadAlternativa == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.codigoFactorUnidadAlternativa = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "codigo_factor_unidad_proveedor":
+                        if (this.codigoFactorUnidadProveedor == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.codigoFactorUnidadProveedor = cambio.valor;
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "codigo_factor_unidad_conteo":
+                        if (this.codigoFactorUnidadConteo == cambio.valor)
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.codigoFactorUnidadConteo = cambio.valor;
                             lista.Add(cambio);
                         }
                         break;

@@ -548,7 +548,7 @@ namespace BusinessLayer
                 ws.urlApi = Constantes.NEXTSOFT_API_URL;
                 ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
 
-                string result = await ws.crearCliente(ConverterMPToNextSoft.toCliente(cliente));
+                object result = await ws.crearCliente(ConverterMPToNextSoft.toCliente(cliente));
 
                 cliente.FechaEdicion = cliente.FechaEdicion;
 
@@ -751,7 +751,7 @@ namespace BusinessLayer
                 ws.urlApi = Constantes.NEXTSOFT_API_URL;
                 ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
 
-                string result = await ws.crearCliente(ConverterMPToNextSoft.toCliente(cliente));
+                object result = await ws.crearCliente(ConverterMPToNextSoft.toCliente(cliente));
 
 
                 return cliente;

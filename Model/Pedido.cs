@@ -673,7 +673,7 @@ namespace Model
         public String sku { get; set; }
 
 
-
+        public Vendedor vendedor { get; set; }
 
         public object Clone()
         {

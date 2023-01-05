@@ -8,7 +8,8 @@ namespace Model.NextSoft
 {
     public static class ConverterMPToNextSoft
     {
-        static string codListaPrecios = "0001";
+        static string codListaPreciosLim = "0001";
+        static string codListaPreciosProv = "0002";
         public static object toCliente(Cliente obj)
         {
             object direccion;
@@ -61,9 +62,10 @@ namespace Model.NextSoft
                 case DocumentoVenta.TipoPago.NoAsignado: formaPag = ""; break;
             }
             */
-            
-            
 
+            List<object> direcciones = new List<object>();
+            direcciones.Add(direccion);
+ 
             var item = new
             {
                 tdi = ((int)obj.tipoDocumentoIdentidad).ToString(),
@@ -76,9 +78,9 @@ namespace Model.NextSoft
                 nodomiciliado = obj.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.Carnet ? true : false,
                 email = obj.correoEnvioFactura == null ? "" : obj.correoEnvioFactura,
                 vendedor = obj.responsableComercial.codigoNextSoft,
-                listaprecios = codListaPrecios,
+                listaprecios = codListaPreciosLim,
                 fpg = formaPag,
-                direccion = direccion
+                direccion = direcciones
             };
 
 
@@ -89,8 +91,18 @@ namespace Model.NextSoft
         {
             List<object> listaDet = new List<object>();
             int numDet = 1;
-            foreach(MovimientoDetalle movDet in obj.documentoDetalle)
+
+            foreach(DocumentoDetalle movDet in obj.documentoDetalle)
             {
+                string codFactor = "";
+                switch(movDet.idProductoPresentacion)
+                {
+                    case 0: codFactor = movDet.producto.codigoFactorUnidadMP; break;
+                    case 1: codFactor = movDet.producto.codigoFactorUnidadAlternativa; break;
+                    case 2: codFactor = movDet.producto.codigoFactorUnidadProveedor; break;
+                    case 3: codFactor = movDet.producto.codigoFactorUnidadConteo; break;
+
+                }
                 var det = new {
                     almacen = obj.almacen.codigoAlmacenNextSoft,
                     numitem = numDet,
@@ -98,13 +110,14 @@ namespace Model.NextSoft
                     descripcion = movDet.producto.descripcion,
                     cantidad = movDet.cantidad,
                     notas = "",
-                    codfcv = "002", // REVISAR
-                    fcv = "1", // REVISAR
-                    listaprecio = codListaPrecios,
-                    peso = 0
+                    codfcv = codFactor, 
+                    //fcv = "1", // REVISAR
+                    listaprecio = codListaPreciosLim,
+                    peso = 1
                 };
 
                 listaDet.Add(det);
+                numDet++;
             }
 
             string motivoTraslado = "006";
@@ -114,27 +127,37 @@ namespace Model.NextSoft
                 case GuiaRemision.motivosTraslado.TrasladoInterno: motivoTraslado = "004"; break;
             }
 
-            string tipoDocumentoAlmacen = "004";
-            switch (obj.motivoTraslado)
+            string tipoDocumentoAlmacen = "009";
+            /*switch (obj.motivoTraslado)
             {
                 case GuiaRemision.motivosTraslado.Venta: motivoTraslado = "004"; break;
                 case GuiaRemision.motivosTraslado.DevolucionCompra: motivoTraslado = "002"; break;
                 case GuiaRemision.motivosTraslado.TrasladoInterno: motivoTraslado = "010"; break;
-            }
+            }*/
+
+            string nombreUsuario = obj.usuario.email.Split('@')[0];
+            nombreUsuario = nombreUsuario.Replace(".", "");
+
+            var direccion = new
+            {
+                descripcion = obj.direccionEntrega,
+                ubigeo = obj.ubigeoEntrega.codigoSepPunto
+            };
 
             var item = new
             {
-                sucursal =  obj.almacen.codigoSucursalNextSoft, 
-                puntoventa = obj.almacen.codigoPuntoVentaNextSoft, 
+                sucursal = obj.almacen.codigoSucursalNextSoft,
+                puntoventa = obj.almacen.codigoPuntoVentaNextSoft,
                 ruc = obj.pedido.cliente.ruc,
-                direcccion = "1", // REVISAR
+                direcccion = obj.direccionEntrega, 
+                ubigeo = obj.ubigeoEntrega.codigoSepPunto,
                 exportacion = false,
                 tdo = tipoDocumentoAlmacen, 
                 serie = "G" + obj.serieDocumento, // REVISAR
-                numero = "1", // SALIDA
+                numero = obj.numeroDocumento, // SALIDA
                 fecemision = obj.fechaEmision.ToString("dd/MM/yyyy"),
                 observaciones = obj.observaciones,
-                vendedor = obj.pedido.cliente.responsableComercial.codigoNextSoft,
+                vendedor = obj.pedido.vendedor.codigoNextSoft,
                 ordencompra = obj.pedido != null && obj.pedido.numeroReferenciaCliente != null && obj.pedido.numeroReferenciaCliente.Trim().Equals("") ? obj.pedido.numeroReferenciaCliente : "sin orden de compra",
                 motivotraslado = motivoTraslado, 
                 modalidadtraslado = "", 
@@ -146,9 +169,10 @@ namespace Model.NextSoft
                 nomconductor = obj.transportista.descripcion, 
                 ubigeopartida = obj.almacen.ubigeo.codigoSepPunto, 
                 ubigeollegada = obj.ubigeoEntrega.codigoSepPunto,
-                partida = obj.direccionOrigen,
+                partida = obj.almacen.direccion,
                 llegada = obj.direccionEntrega,
-                peso = 0,
+                usuario = nombreUsuario,
+                peso = 1,
                 items = listaDet.ToArray()
             };
 

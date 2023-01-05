@@ -54,6 +54,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlertaValidacion.cs" />
+    <Compile Include="NextSoft\FactorNS.cs" />
+    <Compile Include="NextSoft\ProductoWS.cs" />
+    <Compile Include="NextSoft\ValeAlmacenWS.cs" />
     <Compile Include="NextSoft\ClienteWS.cs" />
     <Compile Include="NextSoft\ConverterMPToNextSoft.cs" />
     <Compile Include="NextSoft\MasterWSClass.cs" />

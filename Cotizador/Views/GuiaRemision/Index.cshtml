@@ -753,6 +753,10 @@
                         <button type="button" id="btnExtornar" class="btn btn-danger">Extornar</button>
                         <button type="button" id="btnIngresar" class="btn btn-primary">Ingresar</button>
                     }
+                    @if (guiaRemision.usuario.modificaUsuario)
+                    {
+                        <button type="button" id="btnEnviarNextSys" class="btn btn-success">Enviar a NextSys</button>
+                    }
                     @if (guiaRemision.usuario.realizaRefacturacion)
                     {
                         <button type="button" id="btnRefacturar" class="btn btn-danger">Refacturar</button>

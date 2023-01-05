@@ -27,7 +27,8 @@ namespace Model
 
         public string codigoSepPunto { 
             get {
-                return this.Id.Substring(0, 2) + "." + this.Id.Substring(2, 2) + "." + this.Id.Substring(4, 2)
+                
+                return this.Id == null || this.Id.Length < 6 ? "" : this.Id.Substring(0, 2) + "." + this.Id.Substring(2, 2) + "." + this.Id.Substring(4, 2);
             } 
         }
 

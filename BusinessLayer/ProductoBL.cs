@@ -5,6 +5,8 @@ using System;
 using Model;
 using Model.UTILES;
 using System.IO;
+using Model.NextSoft;
+using Newtonsoft.Json.Linq;
 
 namespace BusinessLayer
 {
@@ -708,6 +710,69 @@ namespace BusinessLayer
             {
                 return dal.GetInventarioSendWeb(idUsuario);
             }
+        }
+
+        public async System.Threading.Tasks.Task<List<object>> ActualizarFactoresProductos(Guid idUsuario)
+        {
+            List<object> procesados = new List<object>();
+            using (ProductoDAL dal = new ProductoDAL())
+            {
+                List<Producto> productos = dal.SearchProductosActualizarFactores();
+
+
+                ProductoWS ws = new ProductoWS();
+                ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
+                ws.urlApi = Constantes.NEXTSOFT_API_URL;
+
+                foreach (Producto obj in productos)
+                {
+
+                    object result = await ws.getProducto(obj.codigoNextSoft);
+
+                    JObject dataResult = (JObject)result;
+
+                    var listaFactores = dataResult["consultarproductoResult"]["listaFactores"].Children();
+
+                    obj.codigoFactorUnidadMP = "";
+                    obj.codigoFactorUnidadAlternativa = "";
+                    obj.codigoFactorUnidadProveedor = "";
+                    obj.codigoFactorUnidadConteo = "";
+
+                    foreach (var factor in listaFactores)
+                    {
+                        string codigo = factor["TIPO_CodFactor"].Value<string>();
+                        string nombre = factor["TIPO_Desc1"].Value<string>();
+                        int nFactor = int.Parse(factor["PFCV_Factor"].Value<string>());
+                        nombre = nombre.ToLower().Trim();
+
+                        if (obj.unidad.ToLower().Trim().Equals(nombre))
+                        {
+                            obj.codigoFactorUnidadMP = codigo;
+                        }
+
+                        if (obj.unidad_alternativa.ToLower().Trim().Equals(nombre))
+                        {
+                            obj.codigoFactorUnidadAlternativa = codigo;
+                        }
+
+                        if (obj.unidadProveedor.ToLower().Trim().Equals(nombre))
+                        {
+                            obj.codigoFactorUnidadProveedor = codigo;
+                        }
+
+                        if (obj.unidadConteo.ToLower().Trim().Equals(nombre))
+                        {
+                            obj.codigoFactorUnidadConteo = codigo;
+                        }
+                    }
+
+                    procesados.Add(obj);
+                }
+
+                dal.ActualizarFactores(productos, idUsuario);
+            }
+
+            return procesados;
         }
     }
 }
