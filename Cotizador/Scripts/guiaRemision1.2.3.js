@@ -2818,23 +2818,37 @@ jQuery(function ($) {
         $.ajax({
             url: "/GuiaRemision/EnviarGuiaANextSoft",
             type: 'POST',
-            // dataType: 'JSON',
+            dataType: 'JSON',
             data: {
             },
             error: function (error) {
                 mostrarMensajeErrorProceso("ERROR");
             },
-            success: function (movimientoAlmacen) {
-                $.alert({
-                    title: "Se envió la guía a NextSys",
-                    content: "Envio correcto.",
-                    type: 'green',
-                    buttons: {
-                        OK: function () {
-                            activarBotonesVer();
+            success: function (res) {
+                if (res.success == 1) {
+                    $.alert({
+                        title: "Envio Correcto",
+                        content: "Se envió la guía a NextSys.",
+                        type: 'green',
+                        buttons: {
+                            OK: function () {
+                                $('#btnEnviarNextSys').hide();
+                                activarBotonesVer();
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    $.alert({
+                        title: "Error en envío",
+                        content: "No se guardó la guía correctamente. Si el error persiste, contactacte con TI.",
+                        type: 'red',
+                        buttons: {
+                            OK: function () {
+                                activarBotonesVer();
+                            }
+                        }
+                    });
+                }
             }
         });
     });

@@ -850,7 +850,17 @@ else
                                     <select class="form-control" id="producto" name="producto">
                                         <option value=""></option>
                                     </select>
-                                    <!--  <label><input type="checkbox" id="considerarDescontinuados" />Considerar Descontinuados</label>-->
+                                    <label class="radio-label" style="margin-top: 5px;">
+                                        @if (ViewBag.busquedaProductosIncluyeDescontinuados == 1)
+                                        {
+                                            <input checked type="checkbox" class="chkProductSerchCheckParam" paramName="incluyeDescontinuados" checkValue="1" unCheckValue="0" value="1">
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" class="chkProductSerchCheckParam" paramName="incluyeDescontinuados" checkValue="1" unCheckValue="0" value="1">
+                                        }
+                                        Incluir productos DESCONTINUADOS
+                                    </label>
                                 </div>
                             </div>
 

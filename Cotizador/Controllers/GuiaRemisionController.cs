@@ -1352,7 +1352,7 @@ namespace Cotizador.Controllers
 
             bl.GuardarRespuestaNextSys(guiaRemision.idMovimientoAlmacen, success, resultText);
 
-            return resultText;
+            return JsonConvert.SerializeObject(new { success = success, dataSend = dataSend });
         }
 
 
