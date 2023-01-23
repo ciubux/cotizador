@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Model.Proveedor>
 
 @Html.DropDownList("proveedor",
-new SelectList(Model, "nombre", "nombre", ViewBag.selectProveedor),
+new SelectList(Model, "codigo", "nombre", ViewBag.selectProveedor),
 new { @class = "form-control", onchange = @"
 $.ajax({
 url: '/Proveedor/ChangeProveedor',

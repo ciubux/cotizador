@@ -34,6 +34,7 @@ namespace DataLayer
                 obj.Estado = Converter.GetInt(row, "estado");
 
                 int idPadre = Converter.GetInt(row, "id_rubro_padre");
+                obj.idRubroPadre = idPadre;
 
                 if (idPadre > 0)
                 {
@@ -77,6 +78,18 @@ namespace DataLayer
                 obj.codigo = Converter.GetString(row, "codigo");
                 obj.nombre = Converter.GetString(row, "nombre");
                 obj.Estado = Converter.GetInt(row, "estado");
+                obj.idRubroPadre = Converter.GetInt(row, "id_rubro_padre");
+
+                obj.padre = new Rubro();
+                obj.padre.idRubro = obj.idRubroPadre;
+
+                if (obj.padre.idRubro == 0)
+                {
+                    obj.padre.nombre = "-";
+                } else
+                {
+                    obj.padre.nombre = Converter.GetString(row, "nombre_padre");
+                }
 
                 lista.Add(obj);
             }
@@ -93,6 +106,11 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo);
             InputParameterAdd.Varchar(objCommand, "nombre", obj.nombre);
             InputParameterAdd.Int(objCommand, "estado", obj.Estado);
+            
+            if (obj.idRubroPadre > 0)
+            {
+                InputParameterAdd.Int(objCommand, "idPadre", obj.idRubroPadre);
+            }
 
             OutputParameterAdd.Int(objCommand, "newId");
 
@@ -114,6 +132,11 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo);
             InputParameterAdd.Int(objCommand, "estado", obj.Estado);
 
+            if (obj.idRubroPadre > 0)
+            {
+                InputParameterAdd.Int(objCommand, "idPadre", obj.idRubroPadre);
+            }
+            
             ExecuteNonQuery(objCommand);
 
             return obj;

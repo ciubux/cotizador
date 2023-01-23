@@ -532,6 +532,7 @@ namespace DataLayer
 
             documentoVenta.cPE_CABECERA_BE = new CPE_CABECERA_BE();
             documentoVenta.cPE_DETALLE_BEList = new List<CPE_DETALLE_BE>();
+            documentoVenta.ventaDetalleList = new List<VentaDetalle>();
             documentoVenta.cPE_DAT_ADIC_BEList = new List<CPE_DAT_ADIC_BE>();
             documentoVenta.cPE_DOC_REF_BEList = new List<CPE_DOC_REF_BE>();
             documentoVenta.cPE_ANTICIPO_BEList = new List<CPE_ANTICIPO_BE>();
@@ -539,6 +540,7 @@ namespace DataLayer
             documentoVenta.cPE_DOC_ASOC_BEList = new List<CPE_DOC_ASOC_BE>();
             documentoVenta.cPE_CABECERA_FPGList = new List<CPE_CABECERA_FPG>();
 
+            documentoVenta.almacen = new Almacen();
             documentoVenta.pedido = new Pedido();
             foreach (DataRow row in cpeCabeceraBETable.Rows)
             {
@@ -553,8 +555,6 @@ namespace DataLayer
 
                 foreach (String column in columnasCabecera)
                 {
-                   
-
                     if (!column.Equals("id_cpe_cabecera_be") && 
                         !column.Equals("estado") &&
                         !column.Equals("usuario_creacion") &&
@@ -586,6 +586,12 @@ namespace DataLayer
                         !column.Equals("tiene_nota_credito") &&
                         !column.Equals("id_pedido") &&
                         !column.Equals("numero_pedido") &&
+                        !column.Equals("id_almacen") &&
+                        !column.Equals("codigo_sucursal_nextsoft") &&
+                        !column.Equals("codigo_punto_venta_nextsoft") &&
+                        !column.Equals("codigo_almacen_nextsoft") &&
+                        !column.Equals("enviado_nextsys") &&
+                        !column.Equals("respuesta_nextsys") &&
                         !column.Equals("tiene_nota_debito")
                         )
                     {
@@ -595,13 +601,31 @@ namespace DataLayer
                         }   
                     }
 
-                    switch(column)
+                    switch (column)
                     {
+                        case "id_cpe_cabecera_be":
+                            documentoVenta.idCpe = Converter.GetGuid(row, column);
+                            break;
                         case "id_pedido":
                             documentoVenta.pedido.idPedido = Converter.GetGuid(row, column); 
                             break;
                         case "numero_pedido":
                             documentoVenta.pedido.numeroPedido = Converter.GetInt(row, column);
+                            break;
+                        case "enviado_nextsys":
+                            documentoVenta.enviadoNextsys = Converter.GetInt(row, column);
+                            break;
+                        case "id_almacen":
+                            documentoVenta.almacen.idAlmacen = Converter.GetGuid(row, column);
+                            break;
+                        case "codigo_sucursal_nextsoft":
+                            documentoVenta.almacen.codigoSucursalNextSoft = Converter.GetString(row, column);
+                            break;
+                        case "codigo_punto_venta_nextsoft":
+                            documentoVenta.almacen.codigoPuntoVentaNextSoft = Converter.GetString(row, column);
+                            break;
+                        case "codigo_almacen_nextsoft":
+                            documentoVenta.almacen.codigoAlmacenNextSoft = Converter.GetString(row, column);
                             break;
                     }
                 }
@@ -611,21 +635,59 @@ namespace DataLayer
 
             foreach (DataRow row in cpeDetalleBETable.Rows)
             {
+                VentaDetalle detalle = new VentaDetalle();
+                detalle.producto = new Producto();
+                detalle.ProductoPresentacion = new ProductoPresentacion();
                 CPE_DETALLE_BE cPE_DETALLE_BE = new CPE_DETALLE_BE();
                 foreach (String column in columnnasDetalle)
                 {
-                    if (!column.Equals("id_cpe_detalle_be") && !column.Equals("id_cpe_cabecera_be") && !column.Equals("estado"))
+                    if (!column.Equals("id_cpe_detalle_be") && !column.Equals("id_cpe_cabecera_be") &&
+                        !column.Equals("equivalencia") && !column.Equals("unidad") &&
+                        !column.Equals("es_precio_alternativo") && !column.Equals("id_producto_presentacion") &&
+                        !column.Equals("codigo_factor_unidad_mp") && !column.Equals("codigo_factor_unidad_alternativa") &&
+                        !column.Equals("codigo_factor_unidad_proveedor") && !column.Equals("codigo_factor_unidad_conteo") &&
+                        !column.Equals("estado"))
                     {
                         if (cPE_DETALLE_BE.GetType().GetProperty(column) != null)
                         {
                             cPE_DETALLE_BE.GetType().GetProperty(column).SetValue(cPE_DETALLE_BE, Converter.GetString(row, column));
                         }
                     }
+                    switch (column)
+                    {
+                        case "codigo_nextsoft":
+                            detalle.producto.codigoNextSoft = Converter.GetString(row, column);
+                            break;
+                        case "equivalencia":
+                            detalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, column);
+                            break;
+                        case "unidad":
+                            detalle.unidad = Converter.GetString(row, column);
+                            break;
+                        case "es_precio_alternativo":
+                            detalle.esPrecioAlternativo = Converter.GetBool(row, column);
+                            break;
+                        case "id_producto_presentacion":
+                            detalle.ProductoPresentacion.IdProductoPresentacion = Converter.GetInt(row, column);
+                            break;
+                        case "codigo_factor_unidad_mp":
+                            detalle.producto.codigoFactorUnidadMP = Converter.GetString(row, column);
+                            break;
+                        case "codigo_factor_unidad_alternativa":
+                            detalle.producto.codigoFactorUnidadAlternativa = Converter.GetString(row, column);
+                            break;
+                        case "codigo_factor_unidad_proveedor":
+                            detalle.producto.codigoFactorUnidadProveedor = Converter.GetString(row, column);
+                            break;
+                        case "codigo_factor_unidad_conteo":
+                            detalle.producto.codigoFactorUnidadConteo = Converter.GetString(row, column);
+                            break;
+                    }
                 }
                 documentoVenta.cPE_DETALLE_BEList.Add(cPE_DETALLE_BE);
+                documentoVenta.ventaDetalleList.Add(detalle);
 
             }
-
 
             foreach (DataRow row in cpeDatAdicBETable.Rows)
             {
@@ -1113,6 +1175,15 @@ namespace DataLayer
             List.Add(ListDocumentoVenta5);
 
             return List;
+        }
+
+        public void GuardarRespuestaNextSys(Guid idCpe, int success, string resultText)
+        {
+            var objCommand = GetSqlCommand("pu_cpe_enviada_nextsys");
+            InputParameterAdd.Guid(objCommand, "idCpe", idCpe);
+            InputParameterAdd.Int(objCommand, "success", success);
+            InputParameterAdd.Varchar(objCommand, "respuesta", resultText);
+            ExecuteNonQuery(objCommand);
         }
     }
 }

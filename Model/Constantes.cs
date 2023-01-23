@@ -117,7 +117,7 @@ namespace Model
         public static String VAR_SESSION_PRODUCTO_VER = "productoVer";
 
         public static String VAR_SESSION_PRODUCTO_SEARCH_PARAM = "productoSearchParamn_";
-        public static String VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM = "pedidoSearchProductoParamn_";
+        //public static String VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM = "pedidoSearchProductoParamn_";
 
         public static String VAR_SESSION_STOCK_PRODUCTO_BUSQUEDA = "stockProductoBusqueda";
         public static String VAR_SESSION_STOCK_PRODUCTO_REPORTE = "stockProductoReporte";

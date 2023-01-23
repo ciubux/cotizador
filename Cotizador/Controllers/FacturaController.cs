@@ -1,8 +1,10 @@
 ﻿using BusinessLayer;
 using Cotizador.ExcelExport;
 using Model;
+using Model.NextSoft;
 using Model.ServiceReferencePSE;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using System;
@@ -169,7 +171,37 @@ namespace Cotizador.Controllers
 
         }
 
+        public async System.Threading.Tasks.Task<string> EnviarFacturaANextSoft()
+        {
+            DocumentoVenta dv = (DocumentoVenta)this.Session[Constantes.VAR_SESSION_FACTURA_VER];
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            dv.usuario = usuario;
 
+            int success = 0;
+
+            ComprobanteVentaWS ws = new ComprobanteVentaWS();
+            ws.urlApi = Constantes.NEXTSOFT_API_URL;
+            ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
+
+            object dataSend = ConverterMPToNextSoft.toCpe(dv);
+            object result = await ws.crearComprobanteVenta(dataSend);
+
+            JObject dataResult = (JObject)result;
+            int codigo = dataResult["crearcomprobanteResult"]["codigo"].Value<int>();
+            //int codigo = 0;
+
+            string resultText = JsonConvert.SerializeObject(result);
+
+            DocumentoVentaBL bl = new DocumentoVentaBL();
+            if (codigo == 0)
+            {
+                success = 1;
+            }
+
+            bl.GuardarRespuestaNextSys(dv.idCpe, success, resultText);
+
+            return JsonConvert.SerializeObject(new { success = success, dataSend = dataSend });
+        }
 
         public String iniciarRefacturacion()
         {

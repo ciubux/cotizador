@@ -71,7 +71,7 @@ namespace Cotizador.Controllers
 
 
             List<Proveedor> proveedorList = new List<Proveedor>();
-            Proveedor proveedorTodos = new Proveedor { nombre = "Todos" };
+            Proveedor proveedorTodos = new Proveedor { codigo = "Todos", nombre = "Todos" };
 
             if (this.Session["proveedor"] == null)
             { this.Session["proveedor"] = "Todos"; }

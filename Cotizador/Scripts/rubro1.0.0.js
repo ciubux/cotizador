@@ -253,6 +253,10 @@ jQuery(function ($) {
         changeInputString("codigo", $("#rubro_codigo").val());
     });
 
+    $("#idRubroPadre").change(function () {
+        changeInputInt("idRubroPadre", $("#idRubroPadre").val());
+    });
+    
     $("#rubro_nombre").change(function () {
         changeInputString("nombre", $("#rubro_nombre").val());
     });
@@ -393,6 +397,7 @@ jQuery(function ($) {
                         '<td>  ' + list[i].idRubro + '</td>' +
                         '<td>  ' + list[i].codigo + '  </td>' +
                         '<td>  ' + list[i].nombre + '  </td>' +
+                        '<td>  ' + list[i].padre.nombre + '  </td>' +
                         '<td>' +
                         '<button type="button" class="' + list[i].idRubro + ' btnEditarRubro btn btn-primary ">Editar</button>' +
                         '</td>' +

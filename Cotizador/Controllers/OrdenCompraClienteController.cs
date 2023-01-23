@@ -302,9 +302,9 @@ namespace Cotizador.Controllers
                 ViewBag.fechaPrecios = DateTime.Now.AddDays(-Constantes.DIAS_MAX_BUSQUEDA_PRECIOS).ToString(Constantes.formatoFecha);
 
                 ViewBag.busquedaProductosIncluyeDescontinuados = 0;
-                if (this.Session[Constantes.VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM + "incluyeDescontinuados"] != null)
+                if (this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"] != null)
                 {
-                    ViewBag.busquedaProductosIncluyeDescontinuados = int.Parse(this.Session[Constantes.VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM + "incluyeDescontinuados"].ToString());
+                    ViewBag.busquedaProductosIncluyeDescontinuados = int.Parse(this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"].ToString());
                 }
 
                 ViewBag.pagina = (int)Constantes.paginas.MantenimientoOrdenCompraCliente;
@@ -571,9 +571,9 @@ namespace Cotizador.Controllers
                 ProductoBL bl = new ProductoBL();
 
                 int incluyeDescontinuados = 0;
-                if (this.Session[Constantes.VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM + "incluyeDescontinuados"] != null)
+                if (this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"] != null)
                 {
-                    incluyeDescontinuados = int.Parse(this.Session[Constantes.VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM + "incluyeDescontinuados"].ToString());
+                    incluyeDescontinuados = int.Parse(this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"].ToString());
                 }
 
                 OrdenCompraCliente occ = this.OrdenCompraClienteSession;
@@ -591,7 +591,7 @@ namespace Cotizador.Controllers
         {
             String parametro = this.Request.Params["parametro"];
             String valor = this.Request.Params["valor"];
-            this.Session[Constantes.VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM + parametro] = valor;
+            this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + parametro] = valor;
         }
 
 

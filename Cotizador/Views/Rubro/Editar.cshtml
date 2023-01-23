@@ -23,7 +23,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-sm-12 col-lg-8">
                     <div class="form-group">
                         @Html.LabelFor(dv => rubro.nombre, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-3" })
@@ -34,38 +34,59 @@
                 </div>
             </div>
 
-            <div class="col-sm-6 col-lg-6">
-                <div class="form-group">
-                    @Html.LabelFor(c => rubro.Estado, htmlAttributes: new { @class = "control-label col-xs-3" })
-                    <div class="col-xs-9">
-                        <div class="radio radio-inline">
-                            <label class="radio-label">
-                                @if (rubro.Estado == 1)
-                                {
-                                    <input class="radio-input" checked type="radio" name="rubro_estado" id="rubro_estado_si" value="1"><span>Activo</span>
-                                }
-                                else
-                                {
-                                    <input class="radio-input" type="radio" name="rubro_estado" id="rubro_estado_si" value="1"><span>Activo</span>
-                                }
 
-                            </label>
+            <div class="row">
+                <div class="col-sm-12 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => rubro.codigo, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-3" })
+                        <div class="col-xs-8 col-lg-9">
+                            @Html.Action("GetRubros", "Rubro",
+                            new
+                            {
+                                rubroSelectId = "idRubroPadre",
+                                selectedValue = rubro.padre == null ? 0 : rubro.padre.idRubro
+                            })
                         </div>
-                        <div class="radio radio-inline">
-                            <label class="radio-label">
-                                @if (rubro.Estado == 0)
-                                {
-                                    <input class="radio-input" checked type="radio" name="rubro_estado" id="rubro_estado_no" value="0"><span>Inactivo</span>
-                                }
-                                else
-                                {
-                                    <input class="radio-input" type="radio" name="rubro_estado" id="rubro_estado_no" value="0"><span>Inactivo</span>
-                                }
-                            </label>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(c => rubro.Estado, htmlAttributes: new { @class = "control-label col-xs-3" })
+                        <div class="col-xs-9">
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    @if (rubro.Estado == 1)
+                                    {
+                                        <input class="radio-input" checked type="radio" name="rubro_estado" id="rubro_estado_si" value="1"><span>Activo</span>
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" type="radio" name="rubro_estado" id="rubro_estado_si" value="1"><span>Activo</span>
+                                    }
+
+                                </label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    @if (rubro.Estado == 0)
+                                    {
+                                        <input class="radio-input" checked type="radio" name="rubro_estado" id="rubro_estado_no" value="0"><span>Inactivo</span>
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" type="radio" name="rubro_estado" id="rubro_estado_no" value="0"><span>Inactivo</span>
+                                    }
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+           
+
+            
         </div>
 
         <div class="row">

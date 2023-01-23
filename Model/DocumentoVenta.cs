@@ -17,6 +17,9 @@ namespace Model
             this.tipoDocumentoIdentidad = TiposDocumentoIdentidad.RUC;
         }
 
+        public Almacen almacen { get; set; }
+
+
         [Display(Name = "Fecha Emisión:")]
         public DateTime? fechaEmision { get; set; }
 
@@ -212,7 +215,8 @@ namespace Model
             NotaDébito = 8
         };
 
-       
+        public Guid idCpe { get; set; }
+
         public CPE_CABECERA_BE cPE_CABECERA_BE;
 
         public List<CPE_DETALLE_BE> cPE_DETALLE_BEList;
@@ -479,5 +483,7 @@ namespace Model
         public int estado_anulacion { get; set; }
 
         public string telefonoContacto { get; set; }
+
+        public int enviadoNextsys { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Model.ServiceReferencePSE;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -178,6 +179,181 @@ namespace Model.NextSoft
 
 
             return item;
+        }
+
+
+        public static object toCpe(DocumentoVenta obj)
+        {
+            List<object> listaDet = new List<object>();
+            int numDet = 1;
+
+            foreach (CPE_DETALLE_BE objDet in obj.cPE_DETALLE_BEList)
+            {
+                VentaDetalle vDet = obj.ventaDetalleList.ElementAt(numDet - 1);
+
+                
+
+                if (vDet.producto.tipoProducto == Producto.TipoProducto.Bien ||
+                     vDet.producto.tipoProducto == Producto.TipoProducto.Comodato)
+                {
+                    string codFactor = "";
+                    switch (vDet.ProductoPresentacion.IdProductoPresentacion)
+                    {
+                        case 0: codFactor = vDet.producto.codigoFactorUnidadMP; break;
+                        case 1: codFactor = vDet.producto.codigoFactorUnidadAlternativa; break;
+                        case 2: codFactor = vDet.producto.codigoFactorUnidadProveedor; break;
+                        case 3: codFactor = vDet.producto.codigoFactorUnidadConteo; break;
+
+                    }
+
+                    var detAdd = new
+                    {
+                        almacen = obj.almacen.codigoAlmacenNextSoft, // PREGUNTAR
+                        numitem = numDet,
+                        codprod = vDet.producto.codigoNextSoft,
+                        descripcion = objDet.TXT_DES_ITM,
+                        cantidad = Decimal.ToInt32(decimal.Parse(objDet.CANT_UND_ITM)),
+                        valorunitario = decimal.Parse(objDet.VAL_UNIT_ITM),
+                        valorventa = decimal.Parse(objDet.VAL_VTA_ITM),
+                        valorventatotal = decimal.Parse(objDet.VAL_VTA_ITM),
+                        preciounitario = decimal.Parse(objDet.PRC_VTA_UND_ITM),
+                        precioventa = decimal.Parse(objDet.PRC_VTA_ITEM),
+                        precioventatotal = decimal.Parse(objDet.PRC_VTA_ITEM),
+                        dcto = 0,
+                        porcdcto = 0,
+                        transgratuita = false,
+                        igv = decimal.Parse(objDet.MNT_IGV_ITM),
+                        porcigv = decimal.Parse(objDet.POR_IGV_ITM),
+                        notas = "",
+                        codfcv = codFactor, // PREGUNTAR
+                        listaprecio = codListaPreciosLim,
+                        combo = false,
+                        fmtbebida = false,
+                        guia = obj.cPE_CABECERA_BE.NRO_GRE, // PREGUNTAR
+                        itemguia = 0 // PREGUNTAR
+                        
+                    };
+
+                    listaDet.Add(detAdd);
+                }
+
+                if (vDet.producto.tipoProducto == Producto.TipoProducto.Servicio ||
+                    vDet.producto.tipoProducto == Producto.TipoProducto.Descuento ||
+                    vDet.producto.tipoProducto == Producto.TipoProducto.Cargo)
+                {
+                    var detAdd = new
+                    {
+                        numitem = numDet,
+                        codserv = vDet.producto.codigoNextSoft,
+                        descripcion = vDet.producto.descripcion,
+                        cantidad = int.Parse(objDet.CANT_UND_ITM),
+                        valorunitario = decimal.Parse(objDet.VAL_UNIT_ITM),
+                        valorventa = decimal.Parse(objDet.VAL_VTA_ITM),
+                        valorventatotal = decimal.Parse(objDet.VAL_VTA_ITM),
+                        preciounitario = decimal.Parse(objDet.PRC_VTA_UND_ITM),
+                        precioventa = decimal.Parse(objDet.PRC_VTA_ITEM),
+                        precioventatotal = decimal.Parse(objDet.PRC_VTA_ITEM),
+                        dcto = 0,
+                        porcdcto = 0,
+                        transgratuita = false,
+                        igv = decimal.Parse(objDet.MNT_IGV_ITM),
+                        porcigv = decimal.Parse(objDet.POR_IGV_ITM),
+                        notas = "",
+                        codfcv = "", // PREGUNTAR
+                        fcv = 0, // PREGUNTAR
+                        listaprecio = codListaPreciosLim,
+                        combo = false,
+                        fmtbebida = false,
+                        guia = obj.cPE_CABECERA_BE.NRO_GRE, // PREGUNTAR
+                        itemguia = 0 // PREGUNTAR
+                    };
+                    listaDet.Add(detAdd);
+                }
+
+                //listaDet.Add(det);
+                numDet++;
+            }
+
+
+            string tipoDocumento = "001";
+            /*switch (obj.motivoTraslado)
+            {
+                case GuiaRemision.motivosTraslado.Venta: motivoTraslado = "004"; break;
+                case GuiaRemision.motivosTraslado.DevolucionCompra: motivoTraslado = "002"; break;
+                case GuiaRemision.motivosTraslado.TrasladoInterno: motivoTraslado = "010"; break;
+            }*/
+
+            string nombreUsuario = obj.usuario.email.Split('@')[0];
+            nombreUsuario = nombreUsuario.Replace(".", "");
+
+            string ubigeo = obj.cPE_CABECERA_BE.UBI_RCT;
+            ubigeo = ubigeo == null || ubigeo.Length < 6 ? "" : ubigeo.Substring(0, 2) + "." + ubigeo.Substring(2, 2) + "." + ubigeo.Substring(4, 2);
+
+            string formaPago = "001";
+            switch (obj.tipoPago)
+            {
+                case DocumentoVenta.TipoPago.Crédito7: formaPago = "004"; break;
+                case DocumentoVenta.TipoPago.Crédito15: formaPago = "005"; break;
+                case DocumentoVenta.TipoPago.Crédito20:
+                case DocumentoVenta.TipoPago.Crédito21: formaPago = "006"; break;
+                case DocumentoVenta.TipoPago.Crédito30: formaPago = "007"; break;
+                case DocumentoVenta.TipoPago.Crédito45: formaPago = "009"; break;
+                case DocumentoVenta.TipoPago.Crédito60: formaPago = "010"; break;
+                case DocumentoVenta.TipoPago.Crédito90: formaPago = "011"; break;
+            }
+
+
+            var item = new
+            {
+                sucursal = obj.almacen.codigoSucursalNextSoft,
+                puntoventa = obj.almacen.codigoPuntoVentaNextSoft,
+                ruc = obj.cPE_CABECERA_BE.NRO_DOC_RCT,
+                direcccion = obj.cPE_CABECERA_BE.DIR_DES_RCT,
+                ubigeo = ubigeo,
+                exportacion = 0,
+                fpg = formaPago,
+                tdo = tipoDocumento,
+                serie = obj.cPE_CABECERA_BE.SERIE,
+                numero = obj.cPE_CABECERA_BE.CORRELATIVO,
+                mnd = "001",
+                fecemision = cambiarFormatoFechaV1(obj.cPE_CABECERA_BE.FEC_EMI),
+                fecvencimiento = cambiarFormatoFechaV1(obj.cPE_CABECERA_BE.FEC_VCTO),
+                notas = obj.cPE_CABECERA_BE.OBS_CPE,
+                valorg = decimal.Parse(obj.cPE_CABECERA_BE.MNT_TOT_GRV),
+                valorng = decimal.Parse(obj.cPE_CABECERA_BE.MNT_TOT_INF) + decimal.Parse(obj.cPE_CABECERA_BE.MNT_TOT_EXR),
+                dscglobal = 0,
+                igv = decimal.Parse(obj.cPE_CABECERA_BE.MNT_TOT_IMP),
+                porcigv = Constantes.IGV,
+                det = "",
+                porcdet = 0,
+                valorreganticipo = 0,
+                vendedor = "07885378",
+                numref = "",
+                ordencompra = obj.cPE_CABECERA_BE.NRO_ORD_COM,
+                montocuota = obj.cPE_CABECERA_BE.MDP_MNT_PDT_PAG, // PREGUNTAR
+                fechacuota = obj.cPE_CABECERA_BE.FEC_VCTO, // PREGUNTAR
+                motivonc = "",
+                motivond = "",
+                porcretencion = 0,
+                usuario = nombreUsuario,
+                items = listaDet.ToArray()
+            };
+
+            return item;
+        }
+
+        /* CONVIERTE UNA FECHA EN STRING DE AÑO-MES-DIA A DIA/MES/AÑO */
+        private static string cambiarFormatoFechaV1(string fecha) {
+            string[] aFecha = fecha.Split('-');
+
+            string result = "";
+
+            if(aFecha.Length == 3)
+            {
+                result = aFecha[2] + "/" + aFecha[1] + "/" + aFecha[0];
+            }
+
+            return result;
         }
     }
 }

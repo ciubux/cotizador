@@ -834,5 +834,13 @@ namespace BusinessLayer
                 return dal.JobDiario();
             }
         }
+
+        public void GuardarRespuestaNextSys(Guid idCpe, int success, string resultText)
+        {
+            using (var dal = new DocumentoVentaDAL())
+            {
+                dal.GuardarRespuestaNextSys(idCpe, success, resultText);
+            }
+        }
     }
 }

@@ -327,9 +327,9 @@ namespace Cotizador.Controllers
                 ViewBag.fechaEntregaHasta = pedido.fechaEntregaHasta == null?"": pedido.fechaEntregaHasta.Value.ToString(Constantes.formatoFecha);
 
                 ViewBag.busquedaProductosIncluyeDescontinuados = 0;
-                if (this.Session[Constantes.VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM + "incluyeDescontinuados"] != null)
+                if (this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"] != null)
                 {
-                    ViewBag.busquedaProductosIncluyeDescontinuados = int.Parse(this.Session[Constantes.VAR_SESSION_PEDIDO_SEARCH_PRODUCTO_PARAM + "incluyeDescontinuados"].ToString());
+                    ViewBag.busquedaProductosIncluyeDescontinuados = int.Parse(this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"].ToString());
                 }
 
                 ViewBag.pedido = pedido;

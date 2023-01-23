@@ -532,6 +532,7 @@ jQuery(function ($) {
         $("btnIniciarAprobacion").attr("disabled", "disabled");
         $("btnRechazarAprobacion").attr("disabled", "disabled");
         $("btnIniciarRefacturacion").attr("disabled", "disabled");
+        $("btnEnviarNextSys").attr("disabled", "disabled");
     }
 
     function activarBotonesVer() {
@@ -546,6 +547,7 @@ jQuery(function ($) {
         $("btnIniciarAprobacion").removeAttr("disabled");
         $("btnRechazarAprobacion").removeAttr("disabled");
         $("btnIniciarRefacturacion").removeAttr("disabled");
+        $("btnEnviarNextSys").removeAttr("disabled");
     }
 
 
@@ -674,6 +676,46 @@ jQuery(function ($) {
         //   modalAnulacion.modal();
     });
 
+
+    $('#btnEnviarNextSys').click(function () {
+        desactivarBotonesVer();
+        $.ajax({
+            url: "/Factura/EnviarFacturaANextSoft",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+            },
+            error: function (error) {
+                mostrarMensajeErrorProceso("ERROR");
+            },
+            success: function (res) {
+                if (res.success == 1) {
+                    $.alert({
+                        title: "Envio Correcto",
+                        content: "Se envió la guía a NextSys.",
+                        type: 'green',
+                        buttons: {
+                            OK: function () {
+                                $('#btnEnviarNextSys').hide();
+                                activarBotonesVer();
+                            }
+                        }
+                    });
+                } else {
+                    $.alert({
+                        title: "Error en envío",
+                        content: "No se guardó la guía correctamente. Si el error persiste, contactacte con TI.",
+                        type: 'red',
+                        buttons: {
+                            OK: function () {
+                                activarBotonesVer();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    });
 
 
     $(document).on('click', "#btnAceptarAnulacion", function () {
@@ -1240,6 +1282,12 @@ jQuery(function ($) {
                 }
 
 
+                if (documentoVenta.enviadoNextsys == 0) {
+                    $('#btnEnviarNextSys').show();
+                }
+                else {
+                    $('#btnEnviarNextSys').hide();
+                }
 
                 if (documentoVenta.tipoDocumento == CONS_TIPO_DOC_NOTA_CREDITO
                     || documentoVenta.tipoDocumento == CONS_TIPO_DOC_NOTA_DEBITO) {

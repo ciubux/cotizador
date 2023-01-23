@@ -3102,6 +3102,29 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
     });
 
 
+    $(".chkPedidoSerchProductCheckParam").change(function () {
+        var param = $(this).attr("paramName");
+        var valor = 0;
+        if ($(this).is(":checked")) {
+            valor = $(this).attr("checkValue");
+        } else {
+            valor = $(this).attr("unCheckValue");
+        }
+
+
+        $.ajax({
+            url: "/Pedido/SetSearchProductParam",
+            type: 'POST',
+            data: {
+                parametro: param,
+                valor: valor
+            },
+            success: function () {
+
+            }
+        });
+
+    });
 
     function cargarStockProductos() {
         $.ajax({

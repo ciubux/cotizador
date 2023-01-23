@@ -679,6 +679,10 @@
                         <button type="button" id="btnVerNotaDebito" class="btn btn-primary">Ver Notas Débito</button>
                         <button type="button" id="btnVerNotaCredito" class="btn btn-primary">Ver Notas Crédito</button>
                     }
+                    @if (documentoVenta.usuario.modificaUsuario)
+                    {
+                        <button type="button" id="btnEnviarNextSys" class="btn btn-success">Enviar a NextSys</button>
+                    }
                 </div>
 
             </div>

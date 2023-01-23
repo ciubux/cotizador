@@ -322,7 +322,29 @@ jQuery(function ($) {
 
  
 
+    $(".chkPedidoSerchProductCheckParam").change(function () {
+        var param = $(this).attr("paramName");
+        var valor = 0;
+        if ($(this).is(":checked")) {
+            valor = $(this).attr("checkValue");
+        } else {
+            valor = $(this).attr("unCheckValue");
+        }
 
+
+        $.ajax({
+            url: "/Pedido/SetSearchProductParam",
+            type: 'POST',
+            data: {
+                parametro: param,
+                valor: valor
+            },
+            success: function () {
+
+            }
+        });
+
+    });
     
 
     $('#modalAgregarCliente').on('shown.bs.modal', function () {
