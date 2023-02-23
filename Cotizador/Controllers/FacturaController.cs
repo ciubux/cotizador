@@ -200,7 +200,7 @@ namespace Cotizador.Controllers
 
             bl.GuardarRespuestaNextSys(dv.idCpe, success, resultText);
 
-            return JsonConvert.SerializeObject(new { success = success, dataSend = dataSend });
+            return JsonConvert.SerializeObject(new { success = success, dataSend = dataSend, result = result });
         }
 
         public String iniciarRefacturacion()

@@ -154,6 +154,9 @@ namespace Model
         public bool tomaPedidosAlmacen { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.TOMA_PEDIDOS_ALMACEN)).FirstOrDefault() != null; } }
         public bool modificaPedidoVentaFechaEntregaHasta { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_PEDIDO_VENTA_FECHA_ENTREGA_HASTA)).FirstOrDefault() != null; } }
         public bool creaOrdenesCompraCliente { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_ORDENES_COMPRA_CLIENTE)).FirstOrDefault() != null; } }
+        public bool marcaPedidoVentaIndirecta { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MARCA_PEDIDO_VENTA_INDIRECTA)).FirstOrDefault() != null; } }
+
+        
 
         /*PERMISOS GUIA REMISION*/
         public bool creaGuias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_GUIAS)).FirstOrDefault() != null; } }

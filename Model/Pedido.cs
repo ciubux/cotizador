@@ -159,6 +159,11 @@ namespace Model
         [Display(Name = "Número Requerimiento:")]
         public String numeroRequerimiento { get; set; }
 
+        [Display(Name = "Venta Indirecta:")]
+        public bool esVentaIndirecta { get; set; }
+
+        public bool esVentaIndirectaAnt { get; set; }
+
         [Display(Name = "Fechas de Entrega:")]
         public String rangoFechasEntrega {
             get

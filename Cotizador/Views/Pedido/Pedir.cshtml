@@ -180,8 +180,8 @@
                 </div>
             </div>
 
-            <!--Factura Unica-->
-            <div class="col-sm-6 col-lg-4" id="divFacturaUnica">
+
+            <div class="col-sm-6 col-lg-4" id="divVentaIndirecta">
                 <div class="form-group">
                     <label for="chkFacturaUnica" class="control-label col-xs-8 col-lg-8">Restringir a factura única:<br />(Aplica a pedidos con el mismo número de grupo)</label>
 
@@ -197,6 +197,44 @@
                     </div>
                 </div>
             </div>
+
+            @if (pedido.usuario.marcaPedidoVentaIndirecta)
+            {
+            <!--Venta Indirecta-->
+            <div class="col-sm-6 col-lg-4">
+                <!--IGV-->
+                <div class="form-group">
+                    <label for="igv" class="control-label col-xs-4">Venta Indirecta:</label>
+                    <div class="col-xs-8">
+                        <div class="radio radio-inline">
+                            <label class="radio-label" for="ventadirectasi">
+                                @if (pedido.esVentaIndirecta)
+                                {
+                                    <input class="radio-input" checked type="radio" name="ventaindirecta" id="ventaindirectasi" value="1">@ViewBag.Si;
+                                }
+                                else
+                                {
+                                    <input class="radio-input" type="radio" name="ventaindirecta" id="ventaindirectasi" value="1">@ViewBag.Si;
+                                }
+
+                            </label>
+                        </div>
+                        <div class="radio radio-inline">
+                            <label class="radio-label" for="ventadirectano">
+                                @if (!pedido.esVentaIndirecta)
+                                {
+                                    <input class="radio-input" checked type="radio" name="ventaindirecta" id="ventaindirectano" value="0">@ViewBag.No;
+                                }
+                                else
+                                {
+                                    <input class="radio-input" type="radio" name="ventaindirecta" id="ventaindirectano" value="0">@ViewBag.No;
+                                }
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
         </div>
 
 

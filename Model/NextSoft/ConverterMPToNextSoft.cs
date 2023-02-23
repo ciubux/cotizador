@@ -114,6 +114,7 @@ namespace Model.NextSoft
                     codfcv = codFactor, 
                     //fcv = "1", // REVISAR
                     listaprecio = codListaPreciosLim,
+                    //comprobante = "001-F001-22029",
                     peso = 1
                 };
 
@@ -149,24 +150,26 @@ namespace Model.NextSoft
             {
                 sucursal = obj.almacen.codigoSucursalNextSoft,
                 puntoventa = obj.almacen.codigoPuntoVentaNextSoft,
+                
                 ruc = obj.pedido.cliente.ruc,
                 direcccion = obj.direccionEntrega, 
                 ubigeo = obj.ubigeoEntrega.codigoSepPunto,
                 exportacion = false,
                 tdo = tipoDocumentoAlmacen, 
-                serie = "G" + obj.serieDocumento, // REVISAR
-                numero = obj.numeroDocumento, // SALIDA
+                serie = "G" + "001", // obj.serieDocumento, // REVISAR
+                //numero = obj.numeroDocumento, // SALIDA
                 fecemision = obj.fechaEmision.ToString("dd/MM/yyyy"),
                 observaciones = obj.observaciones,
-                vendedor = obj.pedido.vendedor.codigoNextSoft,
+                vendedor = "07885378",
+                //vendedor = obj.pedido.vendedor.codigoNextSoft,
                 ordencompra = obj.pedido != null && obj.pedido.numeroReferenciaCliente != null && obj.pedido.numeroReferenciaCliente.Trim().Equals("") ? obj.pedido.numeroReferenciaCliente : "sin orden de compra",
                 motivotraslado = motivoTraslado, 
                 modalidadtraslado = "", 
                 fectraslado = obj.fechaTraslado.ToString("dd/MM/yyyy"),
                 ructransportista = obj.transportista.ruc, 
                 placa = obj.placaVehiculo, 
-                docconductor = obj.transportista.ruc, 
-                licconductor = obj.transportista.brevete,
+                docconductor = obj.transportista.ruc.Trim(), 
+                licconductor = obj.transportista.brevete.Trim(),
                 nomconductor = obj.transportista.descripcion, 
                 ubigeopartida = obj.almacen.ubigeo.codigoSepPunto, 
                 ubigeollegada = obj.ubigeoEntrega.codigoSepPunto,
@@ -186,6 +189,48 @@ namespace Model.NextSoft
         {
             List<object> listaDet = new List<object>();
             int numDet = 1;
+
+            bool sinEntregaInmediata = true;
+            string tipoDocumento = "001";
+            string motivoNC = "";
+            string nroGuiaRef = "";
+            string nroFacturaRef = "";
+
+            switch (obj.tipoDocumento)
+            {
+                case DocumentoVenta.TipoDocumento.Factura: {
+                        tipoDocumento = "001";
+                        nroGuiaRef = "009-" + obj.cPE_CABECERA_BE.NRO_GRE;
+                        break;
+                    }
+                case DocumentoVenta.TipoDocumento.BoletaVenta: tipoDocumento = "003"; break;
+                case DocumentoVenta.TipoDocumento.NotaCrédito:
+                    {
+                        tipoDocumento = "007";
+                        nroFacturaRef = "001-" + obj.cPE_DOC_REF_BEList[0].NUM_SERIE_CPE_REF + "-"
+                            + obj.cPE_DOC_REF_BEList[0].NUM_CORRE_CPE_REF;
+
+                        if (!(obj.cPE_CABECERA_BE.NRO_GRE == null || obj.cPE_CABECERA_BE.NRO_GRE.Trim().Equals(""))) { 
+                            sinEntregaInmediata = false;
+                        }
+                        
+                        switch (obj.tipoNotaCredito)
+                        {
+                            case DocumentoVenta.TiposNotaCredito.AnulacionOperacion: motivoNC = "001"; break;
+                            case DocumentoVenta.TiposNotaCredito.AnulacionErrorRUC: motivoNC = "002"; break;
+                            case DocumentoVenta.TiposNotaCredito.DescuentoGlobal: motivoNC = "004"; break;
+                            case DocumentoVenta.TiposNotaCredito.DescuentoItem: motivoNC = "005"; break;
+                            case DocumentoVenta.TiposNotaCredito.DevolucionTotal: motivoNC = "006"; break;
+                            case DocumentoVenta.TiposNotaCredito.DevolucionItem: motivoNC = "007"; break;
+                            case DocumentoVenta.TiposNotaCredito.DisminucionValor: motivoNC = "010"; break;
+                            case DocumentoVenta.TiposNotaCredito.CorreccionFechaPago: motivoNC = "013"; break;
+                            
+                        }
+                        break;
+                    }
+                case DocumentoVenta.TipoDocumento.NotaDébito: tipoDocumento = "008"; break;
+            }
+
 
             foreach (CPE_DETALLE_BE objDet in obj.cPE_DETALLE_BEList)
             {
@@ -229,9 +274,9 @@ namespace Model.NextSoft
                         listaprecio = codListaPreciosLim,
                         combo = false,
                         fmtbebida = false,
-                        guia = obj.cPE_CABECERA_BE.NRO_GRE, // PREGUNTAR
-                        itemguia = 0 // PREGUNTAR
-                        
+                        guia = nroGuiaRef, // "009-G001-153763" PREGUNTAR
+                        //itemguia = 0 // PREGUNTAR
+
                     };
 
                     listaDet.Add(detAdd);
@@ -264,8 +309,7 @@ namespace Model.NextSoft
                         listaprecio = codListaPreciosLim,
                         combo = false,
                         fmtbebida = false,
-                        guia = obj.cPE_CABECERA_BE.NRO_GRE, // PREGUNTAR
-                        itemguia = 0 // PREGUNTAR
+                        guia = obj.cPE_CABECERA_BE.NRO_GRE // PREGUNTAR
                     };
                     listaDet.Add(detAdd);
                 }
@@ -275,7 +319,9 @@ namespace Model.NextSoft
             }
 
 
-            string tipoDocumento = "001";
+            
+
+            
             /*switch (obj.motivoTraslado)
             {
                 case GuiaRemision.motivosTraslado.Venta: motivoTraslado = "004"; break;
@@ -314,7 +360,7 @@ namespace Model.NextSoft
                 fpg = formaPago,
                 tdo = tipoDocumento,
                 serie = obj.cPE_CABECERA_BE.SERIE,
-                numero = obj.cPE_CABECERA_BE.CORRELATIVO,
+                //numero = int.Parse(obj.cPE_CABECERA_BE.CORRELATIVO).ToString(),
                 mnd = "001",
                 fecemision = cambiarFormatoFechaV1(obj.cPE_CABECERA_BE.FEC_EMI),
                 fecvencimiento = cambiarFormatoFechaV1(obj.cPE_CABECERA_BE.FEC_VCTO),
@@ -323,16 +369,17 @@ namespace Model.NextSoft
                 valorng = decimal.Parse(obj.cPE_CABECERA_BE.MNT_TOT_INF) + decimal.Parse(obj.cPE_CABECERA_BE.MNT_TOT_EXR),
                 dscglobal = 0,
                 igv = decimal.Parse(obj.cPE_CABECERA_BE.MNT_TOT_IMP),
-                porcigv = Constantes.IGV,
+                porcigv = Constantes.IGV*100,
                 det = "",
+                sinentregainmediata = sinEntregaInmediata,
                 porcdet = 0,
                 valorreganticipo = 0,
                 vendedor = "07885378",
-                numref = "",
+                numref = nroFacturaRef,
                 ordencompra = obj.cPE_CABECERA_BE.NRO_ORD_COM,
                 montocuota = obj.cPE_CABECERA_BE.MDP_MNT_PDT_PAG, // PREGUNTAR
                 fechacuota = obj.cPE_CABECERA_BE.FEC_VCTO, // PREGUNTAR
-                motivonc = "",
+                motivonc = motivoNC,
                 motivond = "",
                 porcretencion = 0,
                 usuario = nombreUsuario,

@@ -394,6 +394,7 @@ namespace Cotizador.Controllers
             pedido.ubigeoEntrega.Id = "000000";
             pedido.ciudad = new Ciudad();
             pedido.cliente = new Cliente();
+            pedido.esVentaIndirecta = false;
 
             pedido.tipoPedido = Pedido.tiposPedido.Venta;
             pedido.ciudadASolicitar = new Ciudad();

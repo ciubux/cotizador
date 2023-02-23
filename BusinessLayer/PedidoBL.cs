@@ -337,6 +337,12 @@ namespace BusinessLayer
                 }
 
                 validarPedidoVenta(pedido);
+                
+                if (pedido.esVentaIndirecta && !pedido.esVentaIndirectaAnt)
+                {
+                    pedido.observacionesAlmacen = pedido.observacionesAlmacen + " // Venta indirecta a [RAZON_SOCIAL_CLIENTE_FINAL] a través de TECNICA SAC";
+                }
+
                 dal.UpdatePedido(pedido);
 
                 if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && 
@@ -1088,15 +1094,32 @@ namespace BusinessLayer
 
                 det.tieneInfraMargenEmpresaExterna = false;
 
+
                 if (margenDet < usuarioEmpresa.pMargenMinimo)
                 {
-                    if (det.esPrecioAlternativo)
+                    // descuento es igual a un % del margen y ya no del total 
+
+                    /* Formula descuento inframargen
+                     if (det.esPrecioAlternativo)
                     {
                         det.precioNeto = det.precioNeto * det.ProductoPresentacion.Equivalencia * ((100 - usuarioEmpresa.pDescuentoInfraMargen) / 100);
                     } else
                     {
                         det.precioNeto = det.precioNeto * ((100 - usuarioEmpresa.pDescuentoInfraMargen) / 100);
                     }
+                    */
+
+                    if (det.esPrecioAlternativo)
+                    {
+                        //det.precioNeto = det.precioNeto * det.ProductoPresentacion.Equivalencia * ((100 - usuarioEmpresa.pDescuentoInfraMargen) / 100);
+                        det.precioNeto = det.producto.costoLista + ((det.precioNeto * det.ProductoPresentacion.Equivalencia) - det.producto.costoLista) * ((100 - usuarioEmpresa.pDescuentoInfraMargen) / 100);
+                    }
+                    else
+                    {
+                        det.precioNeto = det.producto.costoLista + (det.precioNeto - det.producto.costoLista) * ((100 - usuarioEmpresa.pDescuentoInfraMargen) / 100);
+                    }
+                    
+                    pMP.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
 
                     det.tieneInfraMargenEmpresaExterna = true;
                 } else
@@ -1110,8 +1133,8 @@ namespace BusinessLayer
             pMP.observacionesGuiaRemision = pMP.observacionesGuiaRemision + " // Dejar en " + pedido.cliente.razonSocial;
 
             this.InsertPedido(pMP);
-            this.SetPedidoMP(idPedidoTec, pMP.idPedido);
-            this.SetPedidoMP(pMP.idPedido, idPedidoTec);
+            this.SetPedidoMP(idPedidoTec, pMP.idPedido, "// N° Pedido MP: " + pMP.numeroPedido.ToString());
+            this.SetPedidoMP(pMP.idPedido, idPedidoTec, "");
 
             pedido.idMPPedido = pMP.idPedido;
             pedido.numeroPedidoMP = pMP.numeroPedido;
@@ -1243,11 +1266,11 @@ namespace BusinessLayer
             }
         }
 
-        public bool SetPedidoMP(Guid idPedido, Guid idPedidoMP)
+        public bool SetPedidoMP(Guid idPedido, Guid idPedidoMP, String agregarObservacion)
         {
             using (var dal = new PedidoDAL())
             {
-                return dal.SetPedidoMP(idPedido, idPedidoMP);
+                return dal.SetPedidoMP(idPedido, idPedidoMP, agregarObservacion);
             }
         }
     }

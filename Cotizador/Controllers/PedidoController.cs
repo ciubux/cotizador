@@ -814,6 +814,7 @@ namespace Cotizador.Controllers
                 pedido.ciudad = new Ciudad();
                 pedido.cliente = new Cliente();
                 pedido.esPagoContado = false;
+                pedido.esVentaIndirecta = false;
 
                 pedido.promocion = new Promocion();
                 pedido.promocion.idPromocion = Guid.Empty;
@@ -822,7 +823,7 @@ namespace Cotizador.Controllers
 
                 pedido.tipoPedido = Pedido.tiposPedido.Venta;
                 pedido.ciudadASolicitar = new Ciudad();
-
+                
                 pedido.moneda = Moneda.ListaMonedas.Where(m => m.codigo.Equals("PEN")).FirstOrDefault();
 
                 pedido.numeroReferenciaCliente = null;
@@ -1336,6 +1337,14 @@ namespace Cotizador.Controllers
             Pedido pedido = this.PedidoSession;
             PropertyInfo propertyInfo = pedido.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(pedido, Int32.Parse(this.Request.Params["valor"]));
+            this.PedidoSession = pedido;
+        }
+
+        public void ChangeInputBool()
+        {
+            Pedido pedido = this.PedidoSession;
+            PropertyInfo propertyInfo = pedido.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(pedido, Int32.Parse(this.Request.Params["valor"]) == 1 ? true : false);
             this.PedidoSession = pedido;
         }
 

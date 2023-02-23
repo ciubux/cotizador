@@ -131,6 +131,7 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta.Value);
             InputParameterAdd.Bit(objCommand, "esPagoContado", pedido.esPagoContado);
 
+            InputParameterAdd.Int(objCommand, "ventaIndirecta", pedido.esVentaIndirecta ? 1 : 0);
             InputParameterAdd.Int(objCommand, "facturaUnica", pedido.facturaUnica ? 1 : 0);
             InputParameterAdd.Int(objCommand, "usaSerieTI", pedido.usaSerieTI);
 
@@ -357,6 +358,7 @@ namespace DataLayer
 
             InputParameterAdd.Bit(objCommand, "esPagoContado", pedido.esPagoContado);
             InputParameterAdd.Int(objCommand, "facturaUnica", pedido.facturaUnica ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "ventaIndirecta", pedido.esVentaIndirecta ? 1 : 0);
             InputParameterAdd.Int(objCommand, "usaSerieTI", pedido.usaSerieTI);
 
             DateTime dtTmp = DateTime.Now;
@@ -867,7 +869,9 @@ namespace DataLayer
                 pedido.solicitante = new Solicitante();
                 pedido.solicitante.idSolicitante = Converter.GetGuid(row, "id_solicitante");
 
-                pedido.esPagoContado = Converter.GetBool(row, "es_pago_contado"); 
+                pedido.esPagoContado = Converter.GetBool(row, "es_pago_contado");
+                pedido.esVentaIndirecta = Converter.GetInt(row, "venta_indirecta") == 1 ? true : false;
+                pedido.esVentaIndirectaAnt = pedido.esVentaIndirecta;
 
                 pedido.contactoPedido = Converter.GetString(row, "contacto_pedido");
                 pedido.telefonoContactoPedido = Converter.GetString(row, "telefono_contacto_pedido");
@@ -1376,6 +1380,8 @@ namespace DataLayer
                 pedido.numeroRequerimiento = Converter.GetString(row, "numero_requerimiento");
                 pedido.esPagoContado = Converter.GetBool(row, "es_pago_contado");
                 pedido.facturaUnica = Converter.GetInt(row, "factura_unica") == 1 ? true : false;
+                pedido.esVentaIndirecta = Converter.GetInt(row, "venta_indirecta") == 1 ? true : false;
+                pedido.esVentaIndirectaAnt = pedido.esVentaIndirecta;
 
                 pedido.solicitante.nombre = pedido.contactoPedido;
                 pedido.solicitante.telefono = pedido.telefonoContactoPedido;
@@ -1821,11 +1827,12 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             return true;
         }
 
-        public bool SetPedidoMP(Guid idPedido, Guid idPedidoMP)
+        public bool SetPedidoMP(Guid idPedido, Guid idPedidoMP, String agregarObservacion)
         {
             var objCommand = GetSqlCommand("pu_set_pedido_mp");
             InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
             InputParameterAdd.Guid(objCommand, "idPedidoMP", idPedidoMP);
+            InputParameterAdd.VarcharEmpty(objCommand, "agregarObservacion", agregarObservacion);
 
             ExecuteNonQuery(objCommand);
 

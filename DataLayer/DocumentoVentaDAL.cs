@@ -522,6 +522,7 @@ namespace DataLayer
             DataTable cpeDatAdicBETable = dataSet.Tables[2];
             DataTable cpeDocRefBETable = dataSet.Tables[3];
             DataTable cpeCabeceraFPGTable = dataSet.Tables[4];
+            DataTable cpeRefCabecera = dataSet.Tables[5];
 
             //Se obtienen todas las columnas de la tabla 
             var columnasCabecera = cpeCabeceraBETable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
@@ -529,6 +530,7 @@ namespace DataLayer
             var columnnasDatAdic = cpeDatAdicBETable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
             var columnnasDocRef = cpeDocRefBETable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
             var columnnasCabeceraFPG = cpeCabeceraFPGTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
+            var columnnasRefCabecera = cpeRefCabecera.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
 
             documentoVenta.cPE_CABECERA_BE = new CPE_CABECERA_BE();
             documentoVenta.cPE_DETALLE_BEList = new List<CPE_DETALLE_BE>();
@@ -742,6 +744,18 @@ namespace DataLayer
             if (documentoVenta.cPE_CABECERA_FPGList.Count > 0)
             {
                 documentoVenta.cPE_CABECERA_BE.MDP_MOD_PAG_LIST = documentoVenta.cPE_CABECERA_FPGList.ToArray();
+            }
+
+
+            if (documentoVenta.almacen.idAlmacen == null || documentoVenta.almacen.idAlmacen.Equals(Guid.Empty))
+            {
+                foreach (DataRow row in cpeRefCabecera.Rows)
+                {
+                    documentoVenta.almacen.idAlmacen = Converter.GetGuid(row, "id_almacen");
+                    documentoVenta.almacen.codigoSucursalNextSoft = Converter.GetString(row, "codigo_sucursal_nextsoft");
+                    documentoVenta.almacen.codigoPuntoVentaNextSoft = Converter.GetString(row, "codigo_punto_venta_nextsoft");
+                    documentoVenta.almacen.codigoAlmacenNextSoft = Converter.GetString(row, "codigo_almacen_nextsoft");
+                }
             }
 
             return documentoVenta;

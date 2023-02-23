@@ -505,6 +505,7 @@ namespace Model
         public const String SALTA_VALIDACION_STOCK = "P326";
         public const String CREA_ORDENES_COMPRA_CLIENTE = "P380";
 
+        public const String MARCA_PEDIDO_VENTA_INDIRECTA = "P351";
 
         public const String VALIDA_RESPONSABLES_COMERCIALES_ASIGNADOS = "P780";
 

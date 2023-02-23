@@ -1063,6 +1063,18 @@ jQuery(function ($) {
         });
     }
 
+    function changeInputBool(propiedad, valor) {
+        $.ajax({
+            url: "/Pedido/ChangeInputBool",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
     function changeInputString(propiedad, valor) {
         $.ajax({
             url: "/Pedido/ChangeInputString",
@@ -4427,6 +4439,11 @@ jQuery(function ($) {
     
     var ft = null;
 
+
+    $("input[name=ventaindirecta]").on("click", function () {
+        var valor = $("input[name=ventaindirecta]:checked").val();
+        changeInputBool("esVentaIndirecta", valor);
+    });
 
 
     //Mantener en Session cambio de Seleccion de IGV
