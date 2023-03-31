@@ -36,6 +36,8 @@ namespace Model
         public Guid idCotizacionAntecedente { get; set; }
 
         public bool productosInactivosRemovidos { get; set; }
+
+        public bool noAfectoCambiosPrecio { get; set; }
         public Int64 codigoAntecedente { get; set; }
 
         [Display(Name = "Número Cotización:")]

@@ -42,6 +42,20 @@
         </div>
     </div>
 
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-sm-12 col-lg-12">
+            <label class="control-label col-xs-2" for="skuProducto">Sede:</label>
+            <div class="col-xs-9">
+                @Html.Action("GetCiudades", "Ciudad",
+                              new
+                              {
+                                  ciudadSelectId = "idSede",
+                                  selectedValue = ViewBag.idSede
+                              })
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-sm-12 col-lg-12">
             <div class="form-group">

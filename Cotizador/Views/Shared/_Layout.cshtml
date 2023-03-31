@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "032";
+    TempData["ScriptVersion"] = "043";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -117,6 +117,8 @@
 
                         var linkBusquedaUsuario = "";
                         var linkMantenimientoUsuario = "";
+
+                        var linkBusquedaPrecioEspecial = "";
 
                         var linkBusquedaVendedor = "";
                         var linkMantenimientoVendedor = "";
@@ -249,6 +251,9 @@
                             case 102: linkMantenimientoRol = "active"; linkSistema = "active"; break;
                             case 103: linkBusquedaUsuario = "active"; linkSistema = "active"; break;
                             case 104: linkMantenimientoUsuario = "active"; linkSistema = "active"; break;
+
+                            case 220: linkBusquedaPrecioEspecial = "active"; linkMaestros = "active"; break;
+
 
                             case 710: linkBusquedaClienteLite = "active"; linkMaestros = "active"; break;
 
@@ -455,6 +460,11 @@
                                     @if (usuario.modificaMaestroClientes || usuario.visualizaClientes)
                                     {
                                         <li id="linkMantenimientoCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Crear/Modificar", "Editar", "Cliente")</li>
+                                    }
+
+                                    @if (usuario.modificaUsuario)
+                                    {
+                                        <li id="linkBusquedaPrecioEspecial" class="@linkBusquedaPrecioEspecial">@Html.ActionLink("Precios Especiales - Búsqueda", "List", "PrecioEspecial")</li>
                                     }
 
                                     @if (usuario.modificaMaestroClientes || usuario.visualizaClientes)

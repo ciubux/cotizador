@@ -102,6 +102,7 @@ jQuery(function ($) {
         var fechaFin = $("#fechaFin").val();
         var sku = $("#skuProducto").val();
         var proveedor = $("#proveedor").val();
+        var idSede = $("#idSede").val();
 
         $.ajax({
             url: "/Reporte/ActualizarPametrosSellOutPersonalizado",
@@ -113,7 +114,8 @@ jQuery(function ($) {
                 fechaFin: fechaFin,
                 rucs: rucs,
                 codigosCliente: codsCliente,
-                codigosGrupoCliente: codsGrupoCliente
+                codigosGrupoCliente: codsGrupoCliente,
+                idSede: idSede
             },
             success: function () {
                 $.alert({

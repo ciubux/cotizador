@@ -278,7 +278,8 @@ namespace Cotizador.Controllers
             string txtRucs = parametroBL.getParametro("PARAM_SELLOUT_PERSONALIZADO_RUCS");
             string txtCodigosCliente = parametroBL.getParametro("PARAM_SELLOUT_PERSONALIZADO_CODIGOS_CLIENTE");
             string txtCodigosGrupoCliente = parametroBL.getParametro("PARAM_SELLOUT_PERSONALIZADO_CODIGOS_GRUPO_CLIENTE");
-
+            string txtIdSede = parametroBL.getParametro("PARAM_SELLOUT_PERSONALIZADO_SEDE");
+            
             txtRucs = txtRucs == null ? "" : txtRucs;
             txtCodigosCliente = txtCodigosCliente == null ? "" : txtCodigosCliente;
             txtCodigosGrupoCliente = txtCodigosGrupoCliente == null ? "" : txtCodigosGrupoCliente;
@@ -307,13 +308,14 @@ namespace Cotizador.Controllers
             ViewBag.rucs = txtRucs.Split(';');
             ViewBag.codigosCliente = txtCodigosCliente.Split(';');
             ViewBag.codigosGrupoCliente = txtCodigosGrupoCliente.Split(';');
+            ViewBag.idSede = txtIdSede;
 
             //ViewBag.producto = this.ProductoBusquedaSession;
             return View();
         }
 
         [HttpPost]
-        public String ActualizarPametrosSellOutPersonalizado(String sku, String proveedor, String fechaInicio, String fechaFin, String[] rucs, String[] codigosCliente, String[] codigosGrupoCliente)
+        public String ActualizarPametrosSellOutPersonalizado(String sku, String proveedor, String fechaInicio, String fechaFin, String[] rucs, String[] codigosCliente, String[] codigosGrupoCliente, String idSede)
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.ReporteSellOutPersonalizado;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -351,6 +353,7 @@ namespace Cotizador.Controllers
                 parametroBL.updateParametro("PARAM_SELLOUT_PERSONALIZADO_CODIGOS_CLIENTE", txtCodigosCliente);
                 parametroBL.updateParametro("PARAM_SELLOUT_PERSONALIZADO_CODIGOS_GRUPO_CLIENTE", txtCodigosGrupoCliente);
                 parametroBL.updateParametro("PARAM_SELLOUT_PERSONALIZADO_PROVEEDOR", proveedor);
+                parametroBL.updateParametro("PARAM_SELLOUT_PERSONALIZADO_SEDE", idSede);
             }
 
             // GET PARAMETROS

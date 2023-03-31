@@ -397,6 +397,16 @@ jQuery(function ($) {
 
     $("#fechaFinVigenciaPrecios").change(function () {
         var fechaFinVigenciaPrecios = $("#fechaFinVigenciaPrecios").val();
+
+        if (fechaFinVigenciaPrecios == "") {
+            $("#chkNoAfectoCambioPrecios").prop("checked", false);
+            cambioChkNoAfectoCambioPrecios();
+
+            $("#divFijaPrecios").hide();
+        } else {
+            $("#divFijaPrecios").show();
+        } 
+
         $.ajax({
             url: "/Cotizacion/updateFechaFinVigenciaPrecios",
             type: 'POST',
@@ -3189,6 +3199,44 @@ jQuery(function ($) {
         });
 
     });
+
+    
+
+    $("#chkNoAfectoCambioPrecios").change(function () {
+        cambioChkNoAfectoCambioPrecios();
+    });
+    $("#lblChkNoAfectoCambioPrecios").click(function () {
+        if ($("#chkNoAfectoCambioPrecios").is(":checked")) {
+            $("#chkNoAfectoCambioPrecios").prop("checked", false);
+        } else {
+            $("#chkNoAfectoCambioPrecios").prop("checked", true);
+        }
+
+        cambioChkNoAfectoCambioPrecios();
+    });
+
+    function cambioChkNoAfectoCambioPrecios() {
+        var noAfectoCambioPrecios = $('#chkNoAfectoCambioPrecios').prop('checked');
+        $.ajax({
+            url: "/Cotizacion/updateNoAfectoCambioPrecios",
+            type: 'POST',
+            data: {
+                noAfectoCambioPrecios: noAfectoCambioPrecios
+            },
+            success: function () {
+
+            }
+        });
+
+        if ($("#chkNoAfectoCambioPrecios").is(":checked")) {
+            $("#lblChkNoAfectoCambioPrecios").addClass("lbl-ajuste-calculo-precios");
+            $("#lblChkNoAfectoCambioPrecios").removeClass("text-muted");
+        } else {
+            $("#lblChkNoAfectoCambioPrecios").addClass("text-muted");
+            $("#lblChkNoAfectoCambioPrecios").removeClass("lbl-ajuste-calculo-precios");
+        }
+    }
+
 
     $("#chkAjusteCalculoPrecios").change(function () {
         if ($("#chkAjusteCalculoPrecios").is(":checked")) {

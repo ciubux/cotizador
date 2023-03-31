@@ -54,6 +54,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlertaValidacion.cs" />
+    <Compile Include="PrecioEspecialDetalle.cs" />
+    <Compile Include="PrecioEspecialCabecera.cs" />
     <Compile Include="NextSoft\FactorNS.cs" />
     <Compile Include="NextSoft\ProductoWS.cs" />
     <Compile Include="NextSoft\ComprobanteVentaWS.cs" />

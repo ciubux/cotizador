@@ -80,6 +80,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "contacto", cotizacion.contacto);
             InputParameterAdd.Bit(objCommand, "esPagoContado", cotizacion.esPagoContado);
+            InputParameterAdd.Bit(objCommand, "noAfectoCambiosPrecio", cotizacion.noAfectoCambiosPrecio);
             InputParameterAdd.Bit(objCommand, "ajusteCalculoPrecios", cotizacion.ajusteCalculoPrecios);
             InputParameterAdd.Int(objCommand, "tipoCotizacion", (int)cotizacion.tipoCotizacion);
 
@@ -164,6 +165,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "contacto", cotizacion.contacto);
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
+            InputParameterAdd.Bit(objCommand, "noAfectoCambiosPrecio", cotizacion.noAfectoCambiosPrecio);
             InputParameterAdd.Int(objCommand, "mostrarCodigoProveedor", short.Parse((cotizacion.mostrarCodigoProveedor ? 1 : 0).ToString()));
 
             InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
@@ -313,6 +315,7 @@ namespace DataLayer
                 cotizacion.maximoPorcentajeDescuentoPermitido = Converter.GetDecimal(row, "maximo_porcentaje_descuento");
                 cotizacion.esPagoContado = Converter.GetBool(row, "es_pago_contado");
                 cotizacion.tipoCotizacion = (Cotizacion.TiposCotizacion)Converter.GetInt(row, "tipo_cotizacion");
+                cotizacion.noAfectoCambiosPrecio = Converter.GetBool(row, "no_afecto_cambios_precio");
 
                 cotizacion.idCotizacionAntecedente = Converter.GetGuid(row, "id_cotizacion_antecedente");
                 cotizacion.codigoAntecedente = Converter.GetInt(row, "codigo_antecedente");

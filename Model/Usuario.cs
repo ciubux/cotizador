@@ -128,6 +128,10 @@ namespace Model
         public bool creaCotizacionesProvincias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_COTIZACIONES_PROVINCIAS)).FirstOrDefault() != null; } }
         public bool visualizaMargen { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_MARGEN)).FirstOrDefault() != null; } }
 
+        public bool fijaVigenciaPreciosCotizacion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.FIJA_VIGENCIA_PRECIOS_COTIZACION)).FirstOrDefault() != null; } }
+
+        
+
         /*PERMISOS PEDIDO*/
         public bool tomaPedidos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.TOMA_PEDIDOS_LIMA)).FirstOrDefault() != null; } }
         public bool modificaPedidoFechaEntregaExtendida { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_PEDIDO_FECHA_ENTREGA_EXTENDIDA)).FirstOrDefault() != null; } }

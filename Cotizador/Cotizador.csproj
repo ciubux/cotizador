@@ -231,6 +231,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\PrecioEspecialController.cs" />
     <Compile Include="Controllers\ArchivoAdjuntoController.cs" />
     <Compile Include="Controllers\AlmacenController.cs" />
     <Compile Include="Controllers\MotivoAjusteController.cs" />
@@ -473,6 +474,7 @@
     <Content Include="images\up2.png" />
     <Content Include="images\user_icon_1.png" />
     <Content Include="images\user_icon_2.png" />
+    <Content Include="Scripts\precioEspecial.js" />
     <Content Include="Scripts\app\cotizador\cotizador.js" />
     <Content Include="Scripts\archivoAdjunto1.0.0.js" />
     <Content Include="Scripts\bootstrap-tooltip.js" />
@@ -759,6 +761,7 @@
     <Content Include="Views\Producto\CargaProductosWeb.cshtml" />
     <Content Include="Views\Producto\ProductosWeb.cshtml" />
     <Content Include="Views\Promocion\_ModalSelectAdd.cshtml" />
+    <Content Include="Views\PrecioEspecial\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

@@ -303,6 +303,10 @@ textarea {
     #modalLogEditarDato .modal-dialog {
         width: 500px;
     }
+
+    #modalVerPrecioEspecial .modal-dialog {
+        width: 800px;
+    }
 }
 
 

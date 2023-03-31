@@ -212,7 +212,7 @@ namespace Cotizador.Controllers
 
             cotizacionTmp.promocion = new Promocion();
             cotizacionTmp.promocion.idPromocion = Guid.Empty;
-
+            
             ParametroBL parametroBL = new ParametroBL();
             string ajusteDefecto = parametroBL.getParametro("COTIZACION_AJUSTAR_PRECIO_UNIDADES_MENORES");
             
@@ -225,6 +225,7 @@ namespace Cotizador.Controllers
                 cotizacionTmp.ajusteCalculoPrecios = true;
             }
 
+            cotizacionTmp.noAfectoCambiosPrecio = false;
             cotizacionTmp.validezOfertaEnDias = Constantes.PLAZO_OFERTA_DIAS;
             cotizacionTmp.considerarCantidades = Cotizacion.OpcionesConsiderarCantidades.Observaciones;
             Usuario usuario = (Usuario)this.Session["usuario"];
@@ -585,6 +586,14 @@ namespace Cotizador.Controllers
             cotizacion.ajusteCalculoPrecios = Boolean.Parse(this.Request.Params["ajusteCalculoPrecios"]);
             this.CotizacionSession = cotizacion;
         }
+
+        public void updateNoAfectoCambioPrecios()
+        {
+            Cotizacion cotizacion = this.CotizacionSession;
+            cotizacion.noAfectoCambiosPrecio = Boolean.Parse(this.Request.Params["noAfectoCambioPrecios"]);
+            this.CotizacionSession = cotizacion;
+        }
+        
 
         public void updateConsiderarDescontinuados()
         {
@@ -1991,6 +2000,8 @@ namespace Cotizador.Controllers
 
 
             cotizacion.validezOfertaEnDias = Constantes.PLAZO_OFERTA_DIAS;
+
+            HelperDocumento.calcularMontosTotales(cotizacion);
 
             return cotizacion;
         }

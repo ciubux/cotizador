@@ -250,6 +250,11 @@ namespace Model
         public static String VAR_SESSION_AJUSTE_ALMACEN_LISTA = "ajusteAlmacenList";
         public static String VAR_SESSION_AJUSTE_ALMACEN_VER = "ajusteAlmacenVer";
 
+        public static String VAR_SESSION_PRECIO_ESPECIAL = "precioEspecial";
+        public static String VAR_SESSION_PRECIO_ESPECIAL_BUSQUEDA = "precioEspecialBusqueda";
+        public static String VAR_SESSION_PRECIO_ESPECIAL_LISTA = "precioEspecialList";
+        public static String VAR_SESSION_PRECIO_ESPECIAL_VER = "precioEspecialVer";
+
         public static String VAR_SESSION_PAGINA = "pagina";
 
 
@@ -531,6 +536,9 @@ namespace Model
 
         public const String REALIZA_CARGA_PRODUCTOS_WEB = "P740";
 
+        public const String FIJA_VIGENCIA_PRECIOS_COTIZACION = "P221";
+
+
         public enum paginas
         {
             /*COTIZACION*/
@@ -750,7 +758,12 @@ namespace Model
             CargaProductosWeb = 740,
 
             [Display(Name = "BÚSQUEDA PRODUCTOS WEB")]
-            BusquedaProductosWeb = 741
+            BusquedaProductosWeb = 741,
+
+            [Display(Name = "REGISTRAR PRECIOS ESPECIALES")]
+            RegistrarPrecioEspecial = 221,
+            [Display(Name = "BÚSQUEDA PRECIOS ESPECIALES")]
+            BusquedaPrecioEspecial = 220,
         };
 
 

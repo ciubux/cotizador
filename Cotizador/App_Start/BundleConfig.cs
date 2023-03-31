@@ -39,6 +39,10 @@ namespace Cotizador
                         "~/Scripts/ajusteAlmacen.js"
                         ));
 
+            bundles.Add(new ScriptBundle("~/bundles/precioEspecial").Include(
+                       "~/Scripts/precioEspecial.js"
+                       ));
+
             bundles.Add(new ScriptBundle("~/bundles/stock").Include(
                         "~/Scripts/stock.js"
                         ));

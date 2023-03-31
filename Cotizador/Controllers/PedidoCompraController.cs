@@ -261,7 +261,7 @@ namespace Cotizador.Controllers
                 else
                 {
                     Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                    if (!usuario.tomaPedidos)
+                    if (!usuario.tomaPedidosCompra)
                     {
                         return RedirectToAction("Login", "Account");
                     }

@@ -14,6 +14,20 @@
     encodedStrTSC = encodedStrTSC.Replace("<br>", "</li><li>");
     encodedStrTSC = "<br><ul><li>" + encodedStrTSC + "</li></ul>";
 
+    var nacpChecked = "";
+    var nacpTextClass = "text-muted";
+    var displayFijaPrecios = "none";
+
+    if (cotizacion.noAfectoCambiosPrecio)
+    {
+        nacpChecked = "checked";
+        nacpTextClass = "lbl-ajuste-calculo-precios";
+    }
+
+    if (cotizacion.fechaFinVigenciaPrecios.HasValue)
+    {
+        displayFijaPrecios = "block";
+    }
 }
 <script>
     var encodedStrTSC = '@encodedStrTSC';
@@ -188,6 +202,20 @@
                     </div>
                 </div>
             </div>
+
+            @if (cotizacion.usuario.fijaVigenciaPreciosCotizacion)
+            {
+                <div class="col-sm-6 col-lg-4" id="divFijaPrecios" style="display: @displayFijaPrecios;">
+                    <div class="onoffswitch" title="La vigencia de los precios de esta cotización no será cambiada automáticamente cuando el precio de lista del procducto cambie.">
+                        <input type="checkbox" name="onoffswitch" @nacpChecked class="onoffswitch-checkbox" id="chkNoAfectoCambioPrecios">
+                        <label class="onoffswitch-label" for="chkNoAfectoCambioPrecios"></label>
+                    </div>
+                    <h5 id="lblChkNoAfectoCambioPrecios" class="@nacpTextClass" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;"
+                        title="La vigencia de los precios de esta cotización no será cambiada automáticamente cuando el precio de lista del procducto cambie.">
+                        No Afecto a Cambios de Precio
+                    </h5>
+                </div>
+            }
         </div>
 
 
