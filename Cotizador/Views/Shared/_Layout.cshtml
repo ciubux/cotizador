@@ -94,7 +94,7 @@
                         var linkCargaMasivaProducto = "";
                         var linkCargaProductosWeb = "";
                         var linkBusquedaProductosWeb = "";
-                        
+
                         var linkCargaMasivaStock = "";
                         var linkPlantillaStock = "";
                         var linkReporteStock = "";
@@ -119,7 +119,8 @@
                         var linkMantenimientoUsuario = "";
 
                         var linkBusquedaPrecioEspecial = "";
-
+                        var linkRegistroPrecioEspecial = "";
+                        
                         var linkBusquedaVendedor = "";
                         var linkMantenimientoVendedor = "";
 
@@ -253,7 +254,7 @@
                             case 104: linkMantenimientoUsuario = "active"; linkSistema = "active"; break;
 
                             case 220: linkBusquedaPrecioEspecial = "active"; linkMaestros = "active"; break;
-
+                            case 221: linkRegistroPrecioEspecial = "active"; linkMaestros = "active"; break;
 
                             case 710: linkBusquedaClienteLite = "active"; linkMaestros = "active"; break;
 
@@ -465,8 +466,10 @@
                                     @if (usuario.modificaUsuario)
                                     {
                                         <li id="linkBusquedaPrecioEspecial" class="@linkBusquedaPrecioEspecial">@Html.ActionLink("Precios Especiales - Búsqueda", "List", "PrecioEspecial")</li>
+                                        <li id="linkRegistroPrecioEspecial" class="@linkRegistroPrecioEspecial">@Html.ActionLink("Precios Especiales - Registro", "Editar", "PrecioEspecial")</li>
                                     }
 
+                                    
                                     @if (usuario.modificaMaestroClientes || usuario.visualizaClientes)
                                     {
                                         <li id="linkBusquedaClienteLite" class="@linkBusquedaClienteLite">@Html.ActionLink("Cliente Potencial - Búsqueda", "List", "ClienteLite")</li>

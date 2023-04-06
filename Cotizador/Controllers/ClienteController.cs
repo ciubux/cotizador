@@ -456,6 +456,13 @@ namespace Cotizador.Controllers
 
             return clienteBL.getCLientesBusqueda(data, this.ClienteSession.ciudad.idCiudad, usuario.idUsuario);
         }
+        public String SearchClienteSunat()
+        {
+            String data = this.Request.Params["data[q]"];
+            ClienteBL clienteBL = new ClienteBL();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            return clienteBL.getClientesSunatBusqueda(data);
+        }
 
         public String Search()
         {

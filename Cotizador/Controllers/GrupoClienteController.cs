@@ -415,6 +415,8 @@ namespace Cotizador.Controllers
             instanciarGrupoClienteBusqueda();
         }
 
+        
+
         public String ChangeIdCiudad()
         {
             GrupoCliente grupoCliente = this.GrupoClienteSession;

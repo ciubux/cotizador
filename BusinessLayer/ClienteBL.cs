@@ -11,6 +11,7 @@ using System.IO;
 using System.Text;
 using ServiceLayer;
 using Model.NextSoft;
+using Newtonsoft.Json;
 
 namespace BusinessLayer
 {
@@ -184,7 +185,12 @@ namespace BusinessLayer
                 Boolean existeCliente = false;
                 foreach (Model.ClienteSunat cliente in clienteList)
                 {
-                    resultado += "{\"id\":\"" + cliente.idClienteSunat + "\",\"text\":\"" + cliente.ToString() + "\"},";
+                    var obj = new
+                    {
+                        id = cliente.idClienteSunat,
+                        text = cliente.ToString()
+                    };
+                    resultado +=  JsonConvert.SerializeObject(obj) + ",";
                     existeCliente = true;
                 }
                 if (existeCliente)

@@ -292,6 +292,7 @@
     <Compile Include="Controllers\CompraController.cs" />
     <Compile Include="Controllers\VentaController.cs" />
     <Compile Include="ExcelExport\CanastaGrupoCliente.cs" />
+    <Compile Include="ExcelExport\PrecioEspecialDetalleExcel.cs" />
     <Compile Include="ExcelExport\DireccionCliente.cs" />
     <Compile Include="ExcelExport\CanastaCliente.cs" />
     <Compile Include="ExcelExport\CotizacionDetalleFormatoExcel.cs" />
@@ -762,6 +763,7 @@
     <Content Include="Views\Producto\ProductosWeb.cshtml" />
     <Content Include="Views\Promocion\_ModalSelectAdd.cshtml" />
     <Content Include="Views\PrecioEspecial\List.cshtml" />
+    <Content Include="Views\PrecioEspecial\Editar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

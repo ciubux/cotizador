@@ -1,0 +1,164 @@
+﻿@{
+    ViewBag.Title = "Crear/Modificar Precio Especial";
+    Model.PrecioEspecialCabecera obj = ViewBag.obj;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" value="@ViewBag.debug" />
+    <form class="form-horizontal">
+        <div class="row">
+            <input type="hidden" id="idPrecioEspecialCabecera" name="idPrecioEspecialCabecera" value="@obj.idPrecioEspecialCabecera" />
+
+            <div class="row">
+                <div class="col-sm-12 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => obj.codigo, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-3" })
+                        <div class="col-xs-8 col-lg-9">
+                            @Html.TextBoxFor(c => obj.codigo, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => obj.titulo, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-3" })
+                        <div class="col-xs-8 col-lg-9">
+                            @Html.TextBoxFor(c => obj.titulo, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => obj.tipoNegociacion, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-3" })
+                        <div class="col-xs-8">
+                            <select id="tipoNegociacion" class="form-control">
+                                <option @(obj.tipoNegociacion.Equals("RUC") ? "selected" : "") value="RUC">RUC</option>
+                                <option @(obj.tipoNegociacion.Equals("GRUPO") ? "selected" : "") value="GRUPO">GRUPO</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-lg-4" id="divGrupoCliente">
+                    <div class="form-group">
+                        <label class="control-label col-xs-4" for="idGrupoCliente">Grupo Cliente:</label>
+                        <div class="col-xs-8">
+                            @Html.Action("GetGruposCliente", "GrupoCliente",
+                                    new
+                                    {
+                                        grupoClienteSelectId = "idGrupoCliente",
+                                        selectedValue = obj.grupoCliente.idGrupoCliente
+                                    })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-lg-4" >
+                    <div class="form-group">
+                        <label class="control-label col-xs-4" for="idClienteSunat">RUC:</label>
+                        <div class="col-xs-8">
+                            <select class="form-control input-sm" id="idClienteSunat" name="idClienteSunat">
+                                @if(obj.clienteSunat != null && obj.clienteSunat.idClienteSunat > 0)
+                                {
+                                    <option selected value="@obj.clienteSunat.idClienteSunat">@obj.clienteSunat</option>
+                                }
+                                else
+                                {
+                                    <option value=""></option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => obj.fechaInicio, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-3" })
+                        <div class="col-xs-8 col-lg-9">
+                            <input class="form-control" type="text" value="@obj.fechaInicio.ToString("dd/MM/yyyy")" id="fechaInicio">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => obj.fechaFin, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-3" })
+                        <div class="col-xs-8 col-lg-9">
+                            <input class="form-control" type="text" value="@obj.fechaFin.ToString("dd/MM/yyyy")" id="fechaFin">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(c => obj.Estado, htmlAttributes: new { @class = "control-label col-xs-3" })
+                        <div class="col-xs-9">
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    @if (obj.Estado == 1)
+                                    {
+                                        <input class="radio-input" checked type="radio" name="rubro_estado" id="rubro_estado_si" value="1"><span>Activo</span>
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" type="radio" name="rubro_estado" id="rubro_estado_si" value="1"><span>Activo</span>
+                                    }
+
+                                </label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    @if (obj.Estado == 0)
+                                    {
+                                        <input class="radio-input" checked type="radio" name="rubro_estado" id="rubro_estado_no" value="0"><span>Inactivo</span>
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" type="radio" name="rubro_estado" id="rubro_estado_no" value="0"><span>Inactivo</span>
+                                    }
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-12 col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(dv => obj.observaciones, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-3" })
+                        <div class="col-xs-8 col-lg-9">
+                            @Html.TextAreaFor(c => obj.observaciones, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="pull-right">
+                <button type="button" id="btnCancelarPrecioEspecial" class="btn btn-danger">Cancelar</button>
+                <button id="btnFinalizarEdicionPrecioEspecial" type="button" class="btn btn-success">Finalizar Creación</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/rubro")
+}
