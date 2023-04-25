@@ -262,3 +262,17 @@ D:\Repo\freelos\cotizador\Model\obj\Debug\Model.dll
 D:\Repo\freelos\cotizador\Model\obj\Debug\Model.pdb
 D:\Repo\freelos\cotizador\Model\bin\Debug\Newtonsoft.Json.dll
 D:\Repo\freelos\cotizador\Model\bin\Debug\Newtonsoft.Json.xml
+F:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.AssemblyReference.cache
+F:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
+F:\Repo\freelos\cotizador\Model\obj\Debug\Model.dll
+F:\Repo\freelos\cotizador\Model\obj\Debug\Model.pdb
+F:\Repo\freelos\cotizador\Model\bin\Debug\Model.dll.config
+F:\Repo\freelos\cotizador\Model\bin\Debug\Model.dll
+F:\Repo\freelos\cotizador\Model\bin\Debug\Model.pdb
+F:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.dll
+F:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.SqlServer.dll
+F:\Repo\freelos\cotizador\Model\bin\Debug\Newtonsoft.Json.dll
+F:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.xml
+F:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.SqlServer.xml
+F:\Repo\freelos\cotizador\Model\bin\Debug\Newtonsoft.Json.xml
+F:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.CopyComplete

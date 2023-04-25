@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using Model.UTILES;
+using NPOI.XWPF.UserModel;
 
 namespace Cotizador.Controllers
 {
@@ -62,10 +63,10 @@ namespace Cotizador.Controllers
 
             PrecioEspecialBL bl = new PrecioEspecialBL();
             List<PrecioEspecialCabecera> lista = new List<PrecioEspecialCabecera>();
-            
+
             ViewBag.pagina = (int)Constantes.paginas.BusquedaPrecioEspecial;
             ViewBag.objSearch = objSearch;
-            
+
             return View();
         }
 
@@ -135,7 +136,7 @@ namespace Cotizador.Controllers
                 instanciarPrecioEspecial();
             }
 
-            PrecioEspecialCabecera obj = (PrecioEspecialCabecera) this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL];
+            PrecioEspecialCabecera obj = (PrecioEspecialCabecera)this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL];
 
             if (idPrecioEspecialCabecera != null)
             {
@@ -150,7 +151,7 @@ namespace Cotizador.Controllers
 
             ViewBag.obj = obj;
             ViewBag.pagina = (int)this.Session[Constantes.VAR_SESSION_PAGINA];
-           
+
 
             return View();
         }
@@ -212,7 +213,7 @@ namespace Cotizador.Controllers
 
             //Para recuperar el producto se envia si la sede seleccionada es provincia o no
             ProductoBL bl = new ProductoBL();
-           
+
             Producto producto = bl.getProducto(idProducto, false, false, Guid.Empty, false);
 
 
@@ -236,10 +237,10 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
-     
 
 
-        
+
+
         public String AddProducto()
         {
             GuiaRemision obj = (GuiaRemision)this.Session[Constantes.VAR_SESSION_AJUSTE_ALMACEN];
@@ -252,7 +253,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             detalle = new DocumentoDetalle();
             ProductoBL productoBL = new ProductoBL();
-            
+
             Producto producto = productoBL.getProducto(idProducto, false, false, Guid.Empty);
             detalle.producto = producto;
 
@@ -280,7 +281,7 @@ namespace Cotizador.Controllers
 
             obj.documentoDetalle.Add(detalle);
 
-            var nombreProducto = detalle.producto.sku + " - " + detalle.producto.descripcion;            
+            var nombreProducto = detalle.producto.sku + " - " + detalle.producto.descripcion;
 
             var v = new
             {
@@ -384,7 +385,7 @@ namespace Cotizador.Controllers
                 if (det.stockValidable == 1 && det.diferenciaCantidadValidacion != 0)
                 {
                     DocumentoDetalle detalle = new DocumentoDetalle();
-                    detalle.producto = productoBL.getProducto(det.producto.idProducto, false, false, Guid.Empty, false, "PEN", null, false); 
+                    detalle.producto = productoBL.getProducto(det.producto.idProducto, false, false, Guid.Empty, false, "PEN", null, false);
 
                     detalle.esPrecioAlternativo = true;
 
@@ -443,7 +444,7 @@ namespace Cotizador.Controllers
             obj.idMovimientoAlmacen = idAjusteAlmacen;
             obj = bL.GetAjusteAlmacen(obj);
             obj.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            
+
             String resultado = JsonConvert.SerializeObject(obj);
             this.Session[Constantes.VAR_SESSION_AJUSTE_ALMACEN_VER] = obj;
 
@@ -487,12 +488,27 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+
+        public void ChangeGrupoCliente()
+        {
+            PrecioEspecialCabecera obj = this.PrecioEspecialCabeceraSession;
+            obj.grupoCliente.idGrupoCliente = Int32.Parse(this.Request.Params["valor"]);
+            this.PrecioEspecialCabeceraSession = obj;
+        }
+
+        public void ChangeClienteSunat()
+        {
+            PrecioEspecialCabecera obj = this.PrecioEspecialCabeceraSession;
+            obj.clienteSunat.idClienteSunat = Int32.Parse(this.Request.Params["valor"]);
+            this.PrecioEspecialCabeceraSession = obj;
+        }
+
         public void ChangeInputString()
         {
             PrecioEspecialCabecera obj = this.PrecioEspecialCabeceraSession;
             PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(obj, this.Request.Params["valor"]);
-            this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL] = obj;
+            this.PrecioEspecialCabeceraSession = obj;
         }
 
         public void ChangeInputDate()
@@ -506,7 +522,7 @@ namespace Cotizador.Controllers
                 String[] fecha = fechaParam.Split('/');
                 PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
                 propertyInfo.SetValue(obj, new DateTime(Int32.Parse(fecha[2]), Int32.Parse(fecha[1]), Int32.Parse(fecha[0])));
-                this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL] = obj;
+                this.PrecioEspecialCabeceraSession = obj;
             }
         }
 
@@ -516,7 +532,7 @@ namespace Cotizador.Controllers
             PrecioEspecialCabecera obj = this.PrecioEspecialCabeceraSession;
             PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(obj, Int32.Parse(this.Request.Params["valor"]));
-            this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL] = obj;
+            this.PrecioEspecialCabeceraSession = obj;
         }
 
         public void ChangeInputDecimal()
@@ -524,14 +540,14 @@ namespace Cotizador.Controllers
             PrecioEspecialCabecera obj = this.PrecioEspecialCabeceraSession;
             PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(obj, Decimal.Parse(this.Request.Params["valor"]));
-            this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL] = obj;
+            this.PrecioEspecialCabeceraSession = obj;
         }
         public void ChangeInputBoolean()
         {
             PrecioEspecialCabecera obj = this.PrecioEspecialCabeceraSession;
             PropertyInfo propertyInfo = obj.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(obj, Int32.Parse(this.Request.Params["valor"]) == 1);
-            this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL] = obj;
+            this.PrecioEspecialCabeceraSession = obj;
         }
 
       
@@ -541,6 +557,197 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL] = null;
             return RedirectToAction("List", "PrecioEspecial");
         }
-       
+
+        [HttpPost]
+        public ActionResult LoadProductosWeb(HttpPostedFileBase file)
+        {
+            Usuario usuario = (Usuario)this.Session["usuario"];
+
+            HSSFWorkbook hssfwb;
+
+            ProductoBL productoBL = new ProductoBL();
+
+            hssfwb = new HSSFWorkbook(file.InputStream);
+
+            ISheet sheet = hssfwb.GetSheetAt(0);
+            int row = 1;
+
+            int posicionInicial = 0;
+            int pos = 0;
+            bool agregar = false;
+            bool finaliza = false;
+
+            List<PrecioEspecialDetalle> items = new List<PrecioEspecialDetalle>();
+
+            while (!finaliza)
+            {
+                int a = 1;
+                if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
+                {
+                    PrecioEspecialDetalle obj = new PrecioEspecialDetalle();
+                    obj.producto = new Producto();
+                    obj.unidadPrecio = new ProductoPresentacion();
+                    obj.unidadCosto = new ProductoPresentacion();
+                    obj.moneda = new Moneda();
+
+                    /*  A	SKU
+                        C	Moneda
+                        D	Tipo Unidad Precio
+                        F	Precio
+                        H	Tipo Unidad Costo
+                        J	Costo
+                        L	Fecha Inicio
+                        M	Fecha Fin
+                        N	Observaciones
+                     */
+                    agregar = true;
+                    posicionInicial = 0;
+
+                    try
+                    {
+
+                        pos = posicionInicial + 0;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            obj.producto.sku = null;
+                            agregar = false;
+                        }
+                        else
+                        {
+                            obj.producto.sku = sheet.GetRow(row).GetCell(pos).ToString();
+                            if (obj.producto.sku.Trim().Equals(""))
+                            {
+                                agregar = false;
+                            }
+                        }
+
+
+                        if (agregar)
+                        {
+                            pos = posicionInicial + 2;
+                            obj.moneda.simbolo = "";
+                            if (sheet.GetRow(row).GetCell(pos) != null)
+                            {
+                                obj.moneda.simbolo = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 3;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.unidadPrecio.IdProductoPresentacion = 0;
+                            }
+                            else
+                            {
+                                string unidad = sheet.GetRow(row).GetCell(pos).ToString();
+                                unidad = unidad.ToLower();
+                                obj.unidadPrecio.IdProductoPresentacion = 0;
+
+                                switch (unidad)
+                                {
+                                    case "alternativa": obj.unidadPrecio.IdProductoPresentacion = 1; break;
+                                    case "proveedor": obj.unidadPrecio.IdProductoPresentacion = 2; break;
+                                    case "conteo": obj.unidadPrecio.IdProductoPresentacion = 3; break;
+                                }
+                            }
+
+                            pos = posicionInicial + 5;
+                            obj.unidadPrecio.PrecioSinIGV = 0;
+                            if (sheet.GetRow(row).GetCell(pos) != null && !sheet.GetRow(row).GetCell(pos).ToString().Trim().Equals(""))
+                            {
+                                obj.unidadPrecio.PrecioSinIGV = decimal.Parse(sheet.GetRow(row).GetCell(pos).ToString());
+                            }
+
+                            pos = posicionInicial + 7;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.unidadCosto.IdProductoPresentacion = 0;
+                            }
+                            else
+                            {
+                                string unidad = sheet.GetRow(row).GetCell(pos).ToString();
+                                unidad = unidad.ToLower();
+                                obj.unidadCosto.IdProductoPresentacion = 0;
+
+                                switch (unidad)
+                                {
+                                    case "alternativa": obj.unidadCosto.IdProductoPresentacion = 1; break;
+                                    case "proveedor": obj.unidadCosto.IdProductoPresentacion = 2; break;
+                                    case "conteo": obj.unidadCosto.IdProductoPresentacion = 3; break;
+                                }
+                            }
+
+                            pos = posicionInicial + 9;
+                            obj.unidadCosto.CostoSinIGV = 0;
+                            if (sheet.GetRow(row).GetCell(pos) != null && !sheet.GetRow(row).GetCell(pos).ToString().Trim().Equals(""))
+                            {
+                                obj.unidadCosto.CostoSinIGV = decimal.Parse(sheet.GetRow(row).GetCell(pos).ToString());
+                            }
+
+                            pos = posicionInicial + 11;
+                            obj.fechaInicio = DateTime.MinValue;
+                            if (sheet.GetRow(row).GetCell(pos) != null && sheet.GetRow(row).GetCell(pos).CellType == CellType.Numeric
+                                && DateUtil.IsCellDateFormatted(sheet.GetRow(row).GetCell(pos)))
+                            {
+                                obj.fechaInicio = sheet.GetRow(row).GetCell(pos).DateCellValue;
+                            }
+
+                            pos = posicionInicial + 12;
+                            obj.fechaFin = DateTime.MinValue;
+                            if (sheet.GetRow(row).GetCell(pos) != null && sheet.GetRow(row).GetCell(pos).CellType == CellType.Numeric 
+                                && DateUtil.IsCellDateFormatted(sheet.GetRow(row).GetCell(pos)))
+                            {
+                                obj.fechaFin = sheet.GetRow(row).GetCell(pos).DateCellValue;
+                            }
+
+                            pos = posicionInicial + 13;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.observaciones = "";
+                            }
+                            else
+                            {
+                                obj.observaciones = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }                           
+
+                            items.Add(obj);
+                        }
+                        else
+                        {
+                            finaliza = true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log log = new Log("CARGA WEB: " + ex.ToString() + " paso:" + pos, TipoLog.Error, usuario);
+                        LogBL logBL = new LogBL();
+                        logBL.insertLog(log);
+                    }
+                }
+                else
+                {
+                    finaliza = true;
+                }
+
+                row++;
+            }
+
+            List<int> results = new List<int>();
+            if (items.Count > 0)
+            {
+                ProductoBL bl = new ProductoBL();
+                results = bl.LoadProductosWeb(items, usuario.idUsuario);
+            }
+            else
+            {
+                results.Add(0);
+                results.Add(0);
+                results.Add(0);
+            }
+
+            ViewBag.contInexistentes = results.ElementAt(0);
+            ViewBag.contNuevos = results.ElementAt(1);
+            ViewBag.contActualizados = results.ElementAt(2);
+            return View("CargaCorrectaWeb");
+        }
     }
 }

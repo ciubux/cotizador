@@ -367,6 +367,9 @@ namespace Model.ServiceReferencePSE {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string NRO_INTField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MNT_TOT_ANTCP_IGVField;
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -1872,6 +1875,19 @@ namespace Model.ServiceReferencePSE {
             }
         }
         
+        [System.Runtime.Serialization.DataMemberAttribute(Order=115)]
+        public string MNT_TOT_ANTCP_IGV {
+            get {
+                return this.MNT_TOT_ANTCP_IGVField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MNT_TOT_ANTCP_IGVField, value) != true)) {
+                    this.MNT_TOT_ANTCP_IGVField = value;
+                    this.RaisePropertyChanged("MNT_TOT_ANTCP_IGV");
+                }
+            }
+        }
+        
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         
         protected void RaisePropertyChanged(string propertyName) {
@@ -2224,6 +2240,9 @@ namespace Model.ServiceReferencePSE {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string MNT_ICBPER_ITMField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TIP_DSCTO_ITMField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -2807,6 +2826,19 @@ namespace Model.ServiceReferencePSE {
             }
         }
         
+        [System.Runtime.Serialization.DataMemberAttribute(Order=44)]
+        public string TIP_DSCTO_ITM {
+            get {
+                return this.TIP_DSCTO_ITMField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TIP_DSCTO_ITMField, value) != true)) {
+                    this.TIP_DSCTO_ITMField = value;
+                    this.RaisePropertyChanged("TIP_DSCTO_ITM");
+                }
+            }
+        }
+        
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         
         protected void RaisePropertyChanged(string propertyName) {
@@ -3294,6 +3326,9 @@ namespace Model.ServiceReferencePSE {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string VAL_ADC_03_ANTCPField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MNT_ANTCP_CON_IGVField;
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -3508,6 +3543,19 @@ namespace Model.ServiceReferencePSE {
                 if ((object.ReferenceEquals(this.VAL_ADC_03_ANTCPField, value) != true)) {
                     this.VAL_ADC_03_ANTCPField = value;
                     this.RaisePropertyChanged("VAL_ADC_03_ANTCP");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=16)]
+        public string MNT_ANTCP_CON_IGV {
+            get {
+                return this.MNT_ANTCP_CON_IGVField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MNT_ANTCP_CON_IGVField, value) != true)) {
+                    this.MNT_ANTCP_CON_IGVField = value;
+                    this.RaisePropertyChanged("MNT_ANTCP_CON_IGV");
                 }
             }
         }

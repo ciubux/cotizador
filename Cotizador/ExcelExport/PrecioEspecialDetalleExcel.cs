@@ -228,6 +228,9 @@ namespace Cotizador.ExcelExport
 
                 i = filaInicioDatos;
 
+                HSSFCellStyle tableDataDateCellStyle = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataCellStyle);
+                tableDataDateCellStyle.DataFormat = wb.CreateDataFormat().GetFormat("dd/MM/yyyy");
+
                 HSSFCellStyle tableDataCenterCellStyle = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataCellStyle);
                 HSSFCellStyle tableDataLastCenterCellStyle = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataLastCellStyle);
 
@@ -274,8 +277,8 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "J", (double) det.unidadCosto.CostoSinIGV, tableDataCellStyle);
                     UtilesHelper.setValorCelda(sheet, i, "K", (double) det.unidadCosto.CostoOriginalSinIGV, tableDataCellStyle);
 
-                    UtilesHelper.setValorCelda(sheet, i, "L", det.fechaInicio.ToString("yyyy-MM-dd"), tableDataCenterCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "M", det.fechaFin.ToString("yyyy-MM-dd"), tableDataCenterCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "L", det.fechaInicio, tableDataDateCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "M", det.fechaFin, tableDataDateCellStyle);
 
                     UtilesHelper.setValorCelda(sheet, i, "N", det.observaciones, tableDataCenterCellStyle);
                     i++;

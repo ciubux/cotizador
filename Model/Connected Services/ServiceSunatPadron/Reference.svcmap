@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="34eebda7-b950-4025-bd92-ea5ffeda51cd" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="34eebda7-b950-4025-bd92-ea5ffeda51cd" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -23,9 +23,9 @@
   </MetadataSources>
   <Metadata>
     <MetadataFile FileName="wsSunatPadron.xsd" MetadataType="Schema" ID="24755976-3cca-4c27-9042-8fdab33f1c37" SourceId="1" SourceUrl="http://eol.pe/padron/wsSunatPadron.svc?xsd=xsd1" />
-    <MetadataFile FileName="wsSunatPadron1.xsd" MetadataType="Schema" ID="9d9dcd50-2ab6-41bf-9841-731842fcec2c" SourceId="1" SourceUrl="http://eol.pe/padron/wsSunatPadron.svc?xsd=xsd2" />
-    <MetadataFile FileName="wsSunatPadron.wsdl" MetadataType="Wsdl" ID="89eb6608-9fbf-4488-8b7b-8532be5ee929" SourceId="1" SourceUrl="http://eol.pe/padron/wsSunatPadron.svc?wsdl" />
     <MetadataFile FileName="wsSunatPadron2.xsd" MetadataType="Schema" ID="523cc2ed-d1fc-4f4d-b71d-c68b0e4a0d6a" SourceId="1" SourceUrl="http://eol.pe/padron/wsSunatPadron.svc?xsd=xsd0" />
+    <MetadataFile FileName="wsSunatPadron.wsdl" MetadataType="Wsdl" ID="89eb6608-9fbf-4488-8b7b-8532be5ee929" SourceId="1" SourceUrl="http://eol.pe/padron/wsSunatPadron.svc?wsdl" />
+    <MetadataFile FileName="wsSunatPadron1.xsd" MetadataType="Schema" ID="9d9dcd50-2ab6-41bf-9841-731842fcec2c" SourceId="1" SourceUrl="http://eol.pe/padron/wsSunatPadron.svc?xsd=xsd2" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

@@ -247,3 +247,14 @@ D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Setting
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CopyComplete
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb
+F:\Repo\freelos\cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.dll
+F:\Repo\freelos\cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.Settings.pdb
+F:\Repo\freelos\cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.dll
+F:\Repo\freelos\cotizador\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.dll
+F:\Repo\freelos\cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.pdb
+F:\Repo\freelos\cotizador\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.pdb
+F:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.AssemblyReference.cache
+F:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CoreCompileInputs.cache
+F:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CopyComplete
+F:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
+F:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb

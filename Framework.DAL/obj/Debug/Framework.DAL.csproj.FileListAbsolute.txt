@@ -211,3 +211,15 @@ D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
 D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb
 D:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Newtonsoft.Json.dll
 D:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Newtonsoft.Json.xml
+F:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Framework.DAL.dll
+F:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Framework.DAL.pdb
+F:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Model.dll
+F:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Newtonsoft.Json.dll
+F:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Model.pdb
+F:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Model.dll.config
+F:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Newtonsoft.Json.xml
+F:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.AssemblyReference.cache
+F:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCompileInputs.cache
+F:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
+F:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
+F:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb

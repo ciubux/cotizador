@@ -144,7 +144,52 @@ jQuery(function ($) {
         });
     }
 
-   
+    function ChangeGrupoCliente(valor) {
+        $.ajax({
+            url: "/PrecioEspecial/ChangeGrupoCliente",
+            type: 'POST',
+            data: {
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
+    function ChangeClienteSunat(valor) {
+        $.ajax({
+            url: "/PrecioEspecial/ChangeClienteSunat",
+            type: 'POST',
+            data: {
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
+    $("#obj_codigo").change(function () {
+        changeInputString("codigo", $(this).val());
+    });
+
+    $("#obj_titulo").change(function () {
+        changeInputString("titulo", $(this).val());
+    });
+
+    $("#tipoNegociacion").change(function () {
+        changeInputString("tipoNegociacion", $(this).val());
+    });
+
+    $("#obj_observaciones").change(function () {
+        changeInputString("observaciones", $(this).val());
+    });
+
+    $("#idGrupoCliente").change(function () {
+        ChangeGrupoCliente($(this).val());
+    });
+
+    $("#idClienteSunat").change(function () {
+        ChangeClienteSunat($(this).val());
+    });
+
     $("#fechaVigenciaDesde").change(function () {
         changeInputDate("fechaVigenciaDesde", $(this).val());
     });
@@ -153,12 +198,28 @@ jQuery(function ($) {
         changeInputDate("fechaVigenciaHasta", $(this).val());
     });
 
-    $("#fechaInicio").change(function () {
-        changeInputDate("fechaInicio", $(this).val());
+    $("#fechaInicio").change(function (event) {
+        var fechaInicio = $(this).val();
+        var fechaFin = $("#fechaFin").val();
+
+        if (compararFechas(fechaInicio, fechaFin) == 1) {
+            fechaInicio = fechaFin;
+            $("#fechaInicio").val(fechaInicio);
+        }
+
+        changeInputDate("fechaInicio", fechaInicio);
     });
 
     $("#fechaFin").change(function () {
-        changeInputDate("fechaFin", $(this).val());
+        var fechaInicio = $("#fechaInicio").val();
+        var fechaFin = $(this).val();
+
+        if (compararFechas(fechaInicio, fechaFin) == 1) {
+            fechaFin = fechaInicio;
+            $("#fechaFin").val(fechaFin);
+        }
+
+        changeInputDate("fechaFin", fechaFin);
     });
 
 
@@ -293,7 +354,20 @@ jQuery(function ($) {
         });
     }
 
-    
+    function compararFechas(fecha1, fecha2) {
+        // Convertir las fechas en formato DD/MM/YY a objetos Date de JavaScript
+        var partesFecha1 = fecha1.split("/");
+        var fechaObj1 = new Date(partesFecha1[2], partesFecha1[1] - 1, partesFecha1[0]);
+
+        var partesFecha2 = fecha2.split("/");
+        var fechaObj2 = new Date(partesFecha2[2], partesFecha2[1] - 1, partesFecha2[0]);
+
+        if (fechaObj1 > fechaObj2) {
+            return 1;
+        } else {
+            return 2;
+        }
+    }    
 
     $("#btnBusqueda").click(function () {
 

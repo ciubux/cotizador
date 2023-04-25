@@ -118,6 +118,7 @@
       <xs:element minOccurs="0" name="RET_FAC" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="OBS_CPE" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="NRO_INT" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MNT_TOT_ANTCP_IGV" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CPE_CABECERA_BE" nillable="true" type="tns:CPE_CABECERA_BE" />
@@ -173,6 +174,7 @@
       <xs:element minOccurs="0" name="COD_UND_ICBPER_ITM" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="FAC_ICBPER_ITM" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="MNT_ICBPER_ITM" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TIP_DSCTO_ITM" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CPE_DETALLE_BE" nillable="true" type="tns:CPE_DETALLE_BE" />
@@ -263,6 +265,7 @@
       <xs:element minOccurs="0" name="VAL_ADC_01_ANTCP" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="VAL_ADC_02_ANTCP" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="VAL_ADC_03_ANTCP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MNT_ANTCP_CON_IGV" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CPE_ANTICIPO_BE" nillable="true" type="tns:CPE_ANTICIPO_BE" />

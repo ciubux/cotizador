@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="a0625358-d44c-43dc-9d92-535cd8c4c5a3" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="a0625358-d44c-43dc-9d92-535cd8c4c5a3" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -22,14 +22,14 @@
     <MetadataSource Address="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?wsdl" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="wsOnlineToCPE.xsd" MetadataType="Schema" ID="25feea87-7da2-43ab-ba0b-fc817e6778b0" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd4" />
-    <MetadataFile FileName="wsOnlineToCPE5.xsd" MetadataType="Schema" ID="8737e71b-ba43-48fd-8cff-19e7ff0e87e7" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd5" />
-    <MetadataFile FileName="wsOnlineToCPE.wsdl" MetadataType="Wsdl" ID="dff165b6-4cf4-447b-9829-f132672bf23f" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?wsdl" />
-    <MetadataFile FileName="wsOnlineToCPE1.xsd" MetadataType="Schema" ID="c35ce405-e2f0-4663-8612-b6289c0fb46c" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd2" />
-    <MetadataFile FileName="wsOnlineToCPE2.xsd" MetadataType="Schema" ID="f8025ff6-c0b0-40e3-8fbd-e5a6042d4ad3" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd3" />
+    <MetadataFile FileName="wsOnlineToCPE6.xsd" MetadataType="Schema" ID="d592b38d-1cc8-43bb-9c0a-ae17ad387eb9" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd6" />
     <MetadataFile FileName="wsOnlineToCPE3.xsd" MetadataType="Schema" ID="ec597f87-702b-402f-8b5d-545216394591" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd0" />
     <MetadataFile FileName="wsOnlineToCPE4.xsd" MetadataType="Schema" ID="b3c181a3-b04b-4dfd-8632-9a35e9401530" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd1" />
-    <MetadataFile FileName="wsOnlineToCPE6.xsd" MetadataType="Schema" ID="d592b38d-1cc8-43bb-9c0a-ae17ad387eb9" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd6" />
+    <MetadataFile FileName="wsOnlineToCPE1.xsd" MetadataType="Schema" ID="c35ce405-e2f0-4663-8612-b6289c0fb46c" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd2" />
+    <MetadataFile FileName="wsOnlineToCPE5.xsd" MetadataType="Schema" ID="8737e71b-ba43-48fd-8cff-19e7ff0e87e7" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd5" />
+    <MetadataFile FileName="wsOnlineToCPE.xsd" MetadataType="Schema" ID="25feea87-7da2-43ab-ba0b-fc817e6778b0" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd4" />
+    <MetadataFile FileName="wsOnlineToCPE.wsdl" MetadataType="Wsdl" ID="dff165b6-4cf4-447b-9829-f132672bf23f" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?wsdl" />
+    <MetadataFile FileName="wsOnlineToCPE2.xsd" MetadataType="Schema" ID="f8025ff6-c0b0-40e3-8fbd-e5a6042d4ad3" SourceId="1" SourceUrl="http://emiteonline.pe/OnlineCPE/CPE/wsOnlineToCPE.svc?xsd=xsd3" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
