@@ -36,6 +36,8 @@ namespace Model
         [Display(Name = "Fecha Fin:")]
         public DateTime fechaFin { get; set; }
 
+        public List<string> dataRelacionada { get; set; }
+
         public string FechaInicioDesc
         {
             get { return fechaInicio.ToString("dd/MM/yyyy"); }

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Data;
 using Model;
 using System.Data.SqlClient;
+using System.Runtime.Remoting;
+using System.Security.Cryptography;
 
 namespace DataLayer
 {
@@ -115,6 +117,155 @@ namespace DataLayer
         }
 
 
+
+        public List<PrecioEspecialDetalle> ValidarPrecios(PrecioEspecialCabecera obj)
+        {
+            var objCommand = GetSqlCommand("ps_validacionPrecioEspecialDetalles");
+            InputParameterAdd.Guid(objCommand, "idUsuario", obj.usuario.idUsuario);
+            InputParameterAdd.VarcharEmpty(objCommand, "tipoNegociacion", obj.tipoNegociacion);
+
+            InputParameterAdd.Int(objCommand, "idClienteSunat", obj.clienteSunat.idClienteSunat);
+            InputParameterAdd.Int(objCommand, "idGrupo", obj.grupoCliente.idGrupoCliente);
+
+            if (obj.idPrecioEspecialCabecera != null && !obj.idPrecioEspecialCabecera.Equals(Guid.Empty)) {
+                InputParameterAdd.Guid(objCommand, "idPrecioEspecialCabecera", obj.idPrecioEspecialCabecera);
+            }
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("SKU", typeof(string)));
+            tvp.Columns.Add(new DataColumn("MONEDA", typeof(string)));
+            tvp.Columns.Add(new DataColumn("PRECIO_UNITARIO", typeof(decimal)));
+            tvp.Columns.Add(new DataColumn("ID_PRODUCTO_PRESENTACION_PRECIO", typeof(int)));
+            tvp.Columns.Add(new DataColumn("COSTO_UNITARIO", typeof(decimal)));
+            tvp.Columns.Add(new DataColumn("ID_PRODUCTO_PRESENTACION_COSTO", typeof(int)));
+            tvp.Columns.Add(new DataColumn("FECHA_INICIO", typeof(DateTime)));
+            tvp.Columns.Add(new DataColumn("FECHA_FIN", typeof(DateTime)));
+            tvp.Columns.Add(new DataColumn("OBSERVACIONES", typeof(string)));
+
+            foreach (PrecioEspecialDetalle item in obj.precios)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["SKU"] = item.producto.sku;
+                rowObj["MONEDA"] = item.moneda.codigo;
+                rowObj["PRECIO_UNITARIO"] = item.unidadPrecio.PrecioSinIGV;
+                rowObj["ID_PRODUCTO_PRESENTACION_PRECIO"] = item.unidadPrecio.IdProductoPresentacion;
+                rowObj["COSTO_UNITARIO"] = item.unidadCosto.CostoSinIGV;
+                rowObj["ID_PRODUCTO_PRESENTACION_COSTO"] = item.unidadCosto.IdProductoPresentacion;
+                rowObj["FECHA_INICIO"] = item.fechaInicio;
+                rowObj["FECHA_FIN"] = item.fechaFin;
+                rowObj["OBSERVACIONES"] = item.observaciones;
+
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@precios", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.PrecioDetalleValidarList";
+
+
+            DataTable dataTable = Execute(objCommand);
+
+            
+            
+
+            List<PrecioEspecialDetalle> lista = new List<PrecioEspecialDetalle>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                PrecioEspecialDetalle item = new PrecioEspecialDetalle();
+                
+                item.producto = new Producto();
+                item.producto.sku = Converter.GetString(row, "SKU");
+                item.producto.descripcion = Converter.GetString(row, "descripcion_producto");
+
+                decimal precio = Converter.GetDecimal(row, "precio");
+                decimal costo = Converter.GetDecimal(row, "costo");
+
+                int eqAlternativa = Converter.GetInt(row, "equivalencia");
+                int eqProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+
+                string unMP = Converter.GetString(row, "unidad");
+                string unProveedor = Converter.GetString(row, "unidad_proveedor");
+                string unAlternativa = Converter.GetString(row, "unidad_alternativa");
+
+                item.unidadPrecio = new ProductoPresentacion();
+                item.unidadPrecio.IdProductoPresentacion = Converter.GetInt(row, "ID_PRODUCTO_PRESENTACION_PRECIO");
+                item.unidadPrecio.PrecioSinIGV = Converter.GetDecimal(row, "PRECIO_UNITARIO");
+
+                switch(item.unidadPrecio.IdProductoPresentacion)
+                {
+                    case 0:
+                        item.unidadPrecio.Presentacion = unMP;
+                        item.unidadPrecio.PrecioOriginalSinIGV = precio;
+                        item.unidadPrecio.Equivalencia = 1;
+                        break;
+                    case 1:
+                        item.unidadPrecio.Presentacion = unAlternativa;
+                        item.unidadPrecio.PrecioOriginalSinIGV = precio / ((decimal)eqAlternativa);
+                        item.unidadPrecio.Equivalencia = eqAlternativa;
+                        break;
+                    case 2:
+                        item.unidadPrecio.Presentacion = unProveedor;
+                        item.unidadPrecio.PrecioOriginalSinIGV = precio * ((decimal)eqProveedor); 
+                        item.unidadPrecio.Equivalencia = 1 / (decimal)eqProveedor;
+                        break;
+                }
+
+                item.unidadCosto = new ProductoPresentacion();
+                item.unidadCosto.IdProductoPresentacion = Converter.GetInt(row, "ID_PRODUCTO_PRESENTACION_COSTO");
+                item.unidadCosto.CostoSinIGV = Converter.GetDecimal(row, "COSTO_UNITARIO");
+
+                switch (item.unidadCosto.IdProductoPresentacion)
+                {
+                    case 0:
+                        item.unidadCosto.Presentacion = unMP;
+                        item.unidadCosto.CostoOriginalSinIGV = costo;
+                        item.unidadCosto.Equivalencia = 1;
+                        break;
+                    case 1:
+                        item.unidadCosto.Presentacion = unAlternativa;
+                        item.unidadCosto.CostoOriginalSinIGV = costo / ((decimal)eqAlternativa);
+                        item.unidadCosto.Equivalencia = eqAlternativa;
+                        break;
+                    case 2:
+                        item.unidadCosto.Presentacion = unProveedor;
+                        item.unidadCosto.CostoOriginalSinIGV = costo * ((decimal)eqProveedor);
+                        item.unidadCosto.Equivalencia = 1 / (decimal)eqProveedor;
+                        break;
+                }
+
+                item.fechaInicio = Converter.GetDateTime(row, "FECHA_INICIO");
+                item.fechaFin = Converter.GetDateTime(row, "FECHA_FIN");
+                item.observaciones = Converter.GetString(row, "OBSERVACIONES");
+
+                item.moneda = new Moneda();
+                item.moneda.codigo = Converter.GetString(row, "codigo_moneda");
+                item.moneda.nombre = Converter.GetString(row, "nombre_moneda");
+                item.moneda.simbolo = Converter.GetString(row, "simbolo_moneda");
+
+                item.Estado = 1;
+
+                Guid idDetalleRelacionado = Converter.GetGuid(row, "id_precio_especial_detalle_conflicto");
+                
+                if (idDetalleRelacionado != null && !idDetalleRelacionado.Equals(Guid.Empty))
+                {
+                    item.dataRelacionada = new List<string>();
+                    item.dataRelacionada.Add(idDetalleRelacionado.ToString());
+                    item.dataRelacionada.Add(Converter.GetString(row, "codigo_conflicto") + " - " + Converter.GetString(row, "titulo_conflicto"));
+                    item.dataRelacionada.Add(Converter.GetString(row, "fecha_inicio_conflicto"));
+                    item.dataRelacionada.Add(Converter.GetString(row, "fecha_fin_conflicto"));
+                    item.dataRelacionada.Add(Converter.GetString(row, "simbolo_moneda_conflicto"));
+                    item.dataRelacionada.Add(Converter.GetString(row, "unidad_precio_conflicto"));
+                    item.dataRelacionada.Add(Converter.GetString(row, "precio_unitario_conflicto"));
+                    item.dataRelacionada.Add(Converter.GetString(row, "unidad_costo_conflicto"));
+                    item.dataRelacionada.Add(Converter.GetString(row, "costo_unitario_conflicto"));
+
+                }
+
+                lista.Add(item);
+            }
+
+            return lista;
+        }
 
         public List<PrecioEspecialCabecera> BuscarCabeceras(PrecioEspecialCabecera obj)
         {

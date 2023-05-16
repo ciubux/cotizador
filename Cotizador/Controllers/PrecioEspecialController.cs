@@ -161,7 +161,7 @@ namespace Cotizador.Controllers
             PrecioEspecialCabecera obj = new PrecioEspecialCabecera();
             obj.idPrecioEspecialCabecera = Guid.Empty;
             obj.Estado = 1;
-            obj.tipoNegociacion = "";
+            obj.tipoNegociacion = "RUC";
             obj.codigo = "";
             obj.fechaInicio = DateTime.Now;
             obj.fechaFin = DateTime.Now;
@@ -205,102 +205,6 @@ namespace Cotizador.Controllers
         }
 
 
-        public String GetProducto()
-        {
-            //Se recupera el producto y se guarda en Session
-            Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
-            this.Session["idProducto"] = idProducto.ToString();
-
-            //Para recuperar el producto se envia si la sede seleccionada es provincia o no
-            ProductoBL bl = new ProductoBL();
-
-            Producto producto = bl.getProducto(idProducto, false, false, Guid.Empty, false);
-
-
-            String jsonProductoPresentacion = JsonConvert.SerializeObject(producto.ProductoPresentacionList);
-
-
-            var v = new
-            {
-                idProducto = producto.idProducto,
-                sku = producto.sku,
-                //descontinuado = producto.descontinuado,
-                //motivoRestriccion = producto.motivoRestriccion,
-                image = Convert.ToBase64String(producto.image),
-                nombre = producto.descripcion,
-                unidad = producto.unidad,
-                productoPresentacionList = producto.ProductoPresentacionList
-            };
-
-
-            String resultado = JsonConvert.SerializeObject(v);
-            return resultado;
-        }
-
-
-
-
-
-        public String AddProducto()
-        {
-            GuiaRemision obj = (GuiaRemision)this.Session[Constantes.VAR_SESSION_AJUSTE_ALMACEN];
-            Guid idProducto = Guid.Parse(this.Session["idProducto"].ToString());
-            DocumentoDetalle detalle = obj.documentoDetalle.Where(p => p.producto.idProducto == idProducto).FirstOrDefault();
-            if (detalle != null)
-            {
-                throw new System.Exception("Producto ya se encuentra en la lista");
-            }
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            detalle = new DocumentoDetalle();
-            ProductoBL productoBL = new ProductoBL();
-
-            Producto producto = productoBL.getProducto(idProducto, false, false, Guid.Empty);
-            detalle.producto = producto;
-
-            detalle.cantidad = Int32.Parse(Request["cantidad"].ToString());
-            detalle.esPrecioAlternativo = Int16.Parse(Request["esPrecioAlternativo"].ToString()) == 1;
-            int idProductoPresentacion = Int16.Parse(Request["idProductoPresentacion"].ToString());
-
-
-            detalle.observacion = Request["observacion"].ToString();
-
-            detalle.unidad = detalle.producto.unidad;
-            //si esPrecioAlternativo  se mostrará la unidad alternativa
-
-            if (detalle.esPrecioAlternativo)
-            {
-                detalle.ProductoPresentacion = producto.getProductoPresentacion(idProductoPresentacion);
-
-                ProductoPresentacion productoPresentacion = producto.getProductoPresentacion(idProductoPresentacion);
-
-                detalle.unidad = productoPresentacion.Presentacion;
-            }
-            else
-            {
-            }
-
-            obj.documentoDetalle.Add(detalle);
-
-            var nombreProducto = detalle.producto.sku + " - " + detalle.producto.descripcion;
-
-            var v = new
-            {
-                idProducto = detalle.producto.idProducto,
-                codigoProducto = detalle.producto.sku,
-                motivoRestriccion = detalle.producto.motivoRestriccion,
-                nombreProducto = nombreProducto,
-                unidad = detalle.unidad,
-                observacion = detalle.observacion,
-                idProductoPresentacion = detalle.esPrecioAlternativo ? detalle.ProductoPresentacion.IdProductoPresentacion : 0
-            };
-
-
-            this.Session[Constantes.VAR_SESSION_AJUSTE_ALMACEN] = obj;
-
-
-            String resultado = JsonConvert.SerializeObject(v);
-            return resultado;
-        }
 
         public void RemoverProducto()
         {
@@ -313,19 +217,6 @@ namespace Cotizador.Controllers
                 this.Session[Constantes.VAR_SESSION_AJUSTE_ALMACEN] = obj;
             }
 
-        }
-
-        [HttpPost]
-        public void AprobarAjusteAlmacen()
-        {
-            GuiaRemision obj = new GuiaRemision();
-            obj.idMovimientoAlmacen = Guid.Parse(Request["idAjusteAlmacen"].ToString());
-            obj.ajusteAprobado = 1;
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            obj.usuario = usuario;
-
-            MovimientoAlmacenBL bl = new MovimientoAlmacenBL();
-            bl.UpdateAjusteEstadoAprobado(obj);
         }
 
 
@@ -578,6 +469,7 @@ namespace Cotizador.Controllers
             bool finaliza = false;
 
             List<PrecioEspecialDetalle> items = new List<PrecioEspecialDetalle>();
+            PrecioEspecialCabecera cabecera = (PrecioEspecialCabecera)this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL];
 
             while (!finaliza)
             {
@@ -625,10 +517,10 @@ namespace Cotizador.Controllers
                         if (agregar)
                         {
                             pos = posicionInicial + 2;
-                            obj.moneda.simbolo = "";
+                            obj.moneda.codigo = "";
                             if (sheet.GetRow(row).GetCell(pos) != null)
                             {
-                                obj.moneda.simbolo = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                                obj.moneda.codigo = sheet.GetRow(row).GetCell(pos).ToString().Trim();
                             }
 
                             pos = posicionInicial + 3;
@@ -685,18 +577,26 @@ namespace Cotizador.Controllers
 
                             pos = posicionInicial + 11;
                             obj.fechaInicio = DateTime.MinValue;
-                            if (sheet.GetRow(row).GetCell(pos) != null && sheet.GetRow(row).GetCell(pos).CellType == CellType.Numeric
+                            if (sheet.GetRow(row).GetCell(pos) != null && !sheet.GetRow(row).GetCell(pos).ToString().Trim().Equals("") 
+                                && sheet.GetRow(row).GetCell(pos).CellType == CellType.Numeric 
                                 && DateUtil.IsCellDateFormatted(sheet.GetRow(row).GetCell(pos)))
                             {
                                 obj.fechaInicio = sheet.GetRow(row).GetCell(pos).DateCellValue;
+                            } else
+                            {
+                                obj.fechaInicio = cabecera.fechaInicio;
                             }
 
                             pos = posicionInicial + 12;
                             obj.fechaFin = DateTime.MinValue;
-                            if (sheet.GetRow(row).GetCell(pos) != null && sheet.GetRow(row).GetCell(pos).CellType == CellType.Numeric 
+                            if (sheet.GetRow(row).GetCell(pos) != null && !sheet.GetRow(row).GetCell(pos).ToString().Trim().Equals("")
+                                && sheet.GetRow(row).GetCell(pos).CellType == CellType.Numeric 
                                 && DateUtil.IsCellDateFormatted(sheet.GetRow(row).GetCell(pos)))
                             {
                                 obj.fechaFin = sheet.GetRow(row).GetCell(pos).DateCellValue;
+                            } else
+                            {
+                                obj.fechaFin = cabecera.fechaFin;
                             }
 
                             pos = posicionInicial + 13;
@@ -718,7 +618,7 @@ namespace Cotizador.Controllers
                     }
                     catch (Exception ex)
                     {
-                        Log log = new Log("CARGA WEB: " + ex.ToString() + " paso:" + pos, TipoLog.Error, usuario);
+                        Log log = new Log("Excel Precio Especial De talle: " + ex.ToString() + " paso:" + pos, TipoLog.Error, usuario);
                         LogBL logBL = new LogBL();
                         logBL.insertLog(log);
                     }
@@ -731,23 +631,18 @@ namespace Cotizador.Controllers
                 row++;
             }
 
-            List<int> results = new List<int>();
+            cabecera.precios = items;
+            List<PrecioEspecialDetalle> results = new List<PrecioEspecialDetalle>();
             if (items.Count > 0)
             {
-                ProductoBL bl = new ProductoBL();
-                results = bl.LoadProductosWeb(items, usuario.idUsuario);
-            }
-            else
-            {
-                results.Add(0);
-                results.Add(0);
-                results.Add(0);
+                PrecioEspecialBL bl = new PrecioEspecialBL();
+                results = bl.ValidarDetalles(cabecera);
+                cabecera.precios = results;
+                this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL] = cabecera;
             }
 
-            ViewBag.contInexistentes = results.ElementAt(0);
-            ViewBag.contNuevos = results.ElementAt(1);
-            ViewBag.contActualizados = results.ElementAt(2);
-            return View("CargaCorrectaWeb");
+
+            return RedirectToAction("Editar", "PrecioEspecial");
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "043";
+    TempData["ScriptVersion"] = "047";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -463,13 +463,6 @@
                                         <li id="linkMantenimientoCliente" class="@linkMantenimientoCliente">@Html.ActionLink("Cliente - Crear/Modificar", "Editar", "Cliente")</li>
                                     }
 
-                                    @if (usuario.modificaUsuario)
-                                    {
-                                        <li id="linkBusquedaPrecioEspecial" class="@linkBusquedaPrecioEspecial">@Html.ActionLink("Precios Especiales - Búsqueda", "List", "PrecioEspecial")</li>
-                                        <li id="linkRegistroPrecioEspecial" class="@linkRegistroPrecioEspecial">@Html.ActionLink("Precios Especiales - Registro", "Editar", "PrecioEspecial")</li>
-                                    }
-
-                                    
                                     @if (usuario.modificaMaestroClientes || usuario.visualizaClientes)
                                     {
                                         <li id="linkBusquedaClienteLite" class="@linkBusquedaClienteLite">@Html.ActionLink("Cliente Potencial - Búsqueda", "List", "ClienteLite")</li>
@@ -494,6 +487,11 @@
                                         <li id="linkMantenimientoGrupoCliente" class="@linkMantenimientoGrupoCliente">@Html.ActionLink("Grupo Cliente - Crear/Modificar", "Editar", "GrupoCliente")</li>
                                     }
 
+                                    @if (usuario.modificaUsuario)
+                                    {
+                                        <li id="linkBusquedaPrecioEspecial" class="@linkBusquedaPrecioEspecial">@Html.ActionLink("Precios Especiales - Búsqueda", "List", "PrecioEspecial")</li>
+                                        <li id="linkRegistroPrecioEspecial" class="@linkRegistroPrecioEspecial">@Html.ActionLink("Precios Especiales - Registro", "Editar", "PrecioEspecial")</li>
+                                    }
 
                                     @if (usuario.modificaMaestroProductos || usuario.visualizaProductos || usuario.realizaCargaMasivaProductos)
                                     {

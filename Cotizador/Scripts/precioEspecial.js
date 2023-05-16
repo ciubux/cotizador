@@ -36,6 +36,12 @@ jQuery(function ($) {
         }
     });
 
+    $("#tableDetalles").footable({
+        "paging": {
+            "enabled": false
+        }
+    });
+
 
     $(document).ready(function () {
         $("#btnBusqueda").click();

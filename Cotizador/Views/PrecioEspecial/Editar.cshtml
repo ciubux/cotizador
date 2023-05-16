@@ -10,141 +10,249 @@
 <div class="container">
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
     <input type="hidden" value="@ViewBag.debug" />
-    <form class="form-horizontal">
+    <div class="form-horizontal">
+        <input type="hidden" id="idPrecioEspecialCabecera" name="idPrecioEspecialCabecera" value="@obj.idPrecioEspecialCabecera" />
+
         <div class="row">
-            <input type="hidden" id="idPrecioEspecialCabecera" name="idPrecioEspecialCabecera" value="@obj.idPrecioEspecialCabecera" />
-
-            <div class="row">
-                <div class="col-sm-12 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(dv => obj.codigo, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-3" })
-                        <div class="col-xs-8 col-lg-9">
-                            @Html.TextBoxFor(c => obj.codigo, htmlAttributes: new { @class = "form-control" })
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-12 col-lg-8">
-                    <div class="form-group">
-                        @Html.LabelFor(dv => obj.titulo, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-3" })
-                        <div class="col-xs-8 col-lg-9">
-                            @Html.TextBoxFor(c => obj.titulo, htmlAttributes: new { @class = "form-control" })
-                        </div>
+            <div class="col-sm-12 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(dv => obj.codigo, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                    <div class="col-xs-8 col-lg-8">
+                        @Html.TextBoxFor(c => obj.codigo, htmlAttributes: new { @class = "form-control" })
                     </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-sm-12 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(dv => obj.tipoNegociacion, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-3" })
-                        <div class="col-xs-8">
-                            <select id="tipoNegociacion" class="form-control">
-                                <option @(obj.tipoNegociacion.Equals("RUC") ? "selected" : "") value="RUC">RUC</option>
-                                <option @(obj.tipoNegociacion.Equals("GRUPO") ? "selected" : "") value="GRUPO">GRUPO</option>
-                            </select>
-                        </div>
+            <div class="col-sm-12 col-lg-8">
+                <div class="form-group">
+                    @Html.LabelFor(dv => obj.titulo, htmlAttributes: new { @class = "control-label col-xs-2 col-lg-4" })
+                    <div class="col-xs-10 col-lg-8">
+                        @Html.TextBoxFor(c => obj.titulo, htmlAttributes: new { @class = "form-control" })
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="col-sm-12 col-lg-4" id="divGrupoCliente">
-                    <div class="form-group">
-                        <label class="control-label col-xs-4" for="idGrupoCliente">Grupo Cliente:</label>
-                        <div class="col-xs-8">
-                            @Html.Action("GetGruposCliente", "GrupoCliente",
-                                    new
-                                    {
-                                        grupoClienteSelectId = "idGrupoCliente",
-                                        selectedValue = obj.grupoCliente.idGrupoCliente
-                                    })
-                        </div>
+        <div class="row">
+            <div class="col-sm-12 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(dv => obj.tipoNegociacion, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                    <div class="col-xs-8 col-lg-8">
+                        <select id="tipoNegociacion" class="form-control">
+                            <option @(obj.tipoNegociacion.Equals("RUC") ? "selected" : "") value="RUC">RUC</option>
+                            <option @(obj.tipoNegociacion.Equals("GRUPO") ? "selected" : "") value="GRUPO">GRUPO</option>
+                        </select>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-sm-12 col-lg-4" >
-                    <div class="form-group">
-                        <label class="control-label col-xs-4" for="idClienteSunat">RUC:</label>
-                        <div class="col-xs-8">
-                            <select class="form-control input-sm" id="idClienteSunat" name="idClienteSunat">
-                                @if(obj.clienteSunat != null && obj.clienteSunat.idClienteSunat > 0)
+            <div class="col-sm-12 col-lg-4" id="divGrupoCliente">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="idGrupoCliente">Grupo Cliente:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("GetGruposCliente", "GrupoCliente",
+                                new
                                 {
-                                    <option selected value="@obj.clienteSunat.idClienteSunat">@obj.clienteSunat</option>
+                                    grupoClienteSelectId = "idGrupoCliente",
+                                    selectedValue = obj.grupoCliente.idGrupoCliente
+                                })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="idClienteSunat">RUC:</label>
+                    <div class="col-xs-8">
+                        <select class="form-control input-sm" id="idClienteSunat" name="idClienteSunat">
+                            @if (obj.clienteSunat != null && obj.clienteSunat.idClienteSunat > 0)
+                            {
+                                <option selected value="@obj.clienteSunat.idClienteSunat">@obj.clienteSunat</option>
+                            }
+                            else
+                            {
+                                <option value=""></option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(dv => obj.fechaInicio, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                    <div class="col-xs-8 col-lg-8">
+                        <input class="form-control" type="text" value="@obj.fechaInicio.ToString("dd/MM/yyyy")" id="fechaInicio">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(dv => obj.fechaFin, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
+                    <div class="col-xs-8 col-lg-8">
+                        <input class="form-control" type="text" value="@obj.fechaFin.ToString("dd/MM/yyyy")" id="fechaFin">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => obj.Estado, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        <div class="radio radio-inline">
+                            <label class="radio-label">
+                                @if (obj.Estado == 1)
+                                {
+                                    <input class="radio-input" checked type="radio" name="rubro_estado" id="rubro_estado_si" value="1"><span>Activo</span>
                                 }
                                 else
                                 {
-                                    <option value=""></option>
+                                    <input class="radio-input" type="radio" name="rubro_estado" id="rubro_estado_si" value="1"><span>Activo</span>
                                 }
-                            </select>
+
+                            </label>
+                        </div>
+                        <div class="radio radio-inline">
+                            <label class="radio-label">
+                                @if (obj.Estado == 0)
+                                {
+                                    <input class="radio-input" checked type="radio" name="rubro_estado" id="rubro_estado_no" value="0"><span>Inactivo</span>
+                                }
+                                else
+                                {
+                                    <input class="radio-input" type="radio" name="rubro_estado" id="rubro_estado_no" value="0"><span>Inactivo</span>
+                                }
+                            </label>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="row">
-                <div class="col-sm-12 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(dv => obj.fechaInicio, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-3" })
-                        <div class="col-xs-8 col-lg-9">
-                            <input class="form-control" type="text" value="@obj.fechaInicio.ToString("dd/MM/yyyy")" id="fechaInicio">
-                        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-lg-8">
+                <div class="form-group">
+                    @Html.LabelFor(dv => obj.observaciones, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-2" })
+                    <div class="col-xs-8 col-lg-10">
+                        @Html.TextAreaFor(c => obj.observaciones, htmlAttributes: new { @class = "form-control" })
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="col-sm-12 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(dv => obj.fechaFin, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-3" })
-                        <div class="col-xs-8 col-lg-9">
-                            <input class="form-control" type="text" value="@obj.fechaFin.ToString("dd/MM/yyyy")" id="fechaFin">
-                        </div>
+        <div class="row">
+            <form action="/PrecioEspecial/LoadProductosWeb" method="post" enctype="multipart/form-data" id="formCargarPrecios">
+                <div class="col-xs-8 col-lg-4">
+                    <!--Archivo-->
+                    <label class="control-label col-xs-4" for="file">Cargar Archivo de Precios:</label>
+                    <div class="col-xs-8">
+                        <input class="form-control" type="file" name="file" id="file" accept="application/vnd.ms-excel" />
                     </div>
                 </div>
+                <div class="col-xs-4 col-lg-2">
+                    <button id="btnCargarPrecios" type="submit" class="btn btn-primary">Cargar Precios</button>
+                </div>
+            </form>
+        </div>
 
-                <div class="col-sm-12 col-lg-4">
-                    <div class="form-group">
-                        @Html.LabelFor(c => obj.Estado, htmlAttributes: new { @class = "control-label col-xs-3" })
-                        <div class="col-xs-9">
-                            <div class="radio radio-inline">
-                                <label class="radio-label">
-                                    @if (obj.Estado == 1)
-                                    {
-                                        <input class="radio-input" checked type="radio" name="rubro_estado" id="rubro_estado_si" value="1"><span>Activo</span>
-                                    }
-                                    else
-                                    {
-                                        <input class="radio-input" type="radio" name="rubro_estado" id="rubro_estado_si" value="1"><span>Activo</span>
-                                    }
-
-                                </label>
+        <div class="row">
+            <table id="tableDetalles" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
+                   data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                   data-editing-allow-add="false"
+                   data-editing-allow-delete="false"
+                   data-editing-allow-edit="false"
+                   data-sorting="true"
+                   data-show-toggle="false"
+                   data-editing-hide-text="Finalizar edición"
+                   data-editing-add-text="Descartar cambios">
+                <thead>
+                    <tr>
+                        <th data-name="producto" data-visible="true" data-sortable="true">Producto</th>
+                        <th data-name="unidadPrecio" data-visible="true" data-sortable="true">Unidad Precio</th>
+                        <th data-name="valorPrecio" data-visible="true" data-sortable="true">Precio</th>
+                        <th data-name="unidadCosto" data-visible="true" data-sortable="true">Unidad Costo</th>
+                        <th data-name="valorCosto" data-visible="true" data-sortable="true">Costo</th>
+                        <th data-name="fechaInicio" data-visible="true" data-sortable="true">Fecha Inicio</th>
+                        <th data-name="fechaFin" data-visible="true" data-sortable="true">Fecha Fin</th>
+                        <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(Model.PrecioEspecialDetalle item in obj.precios) 
+                    {
+                    <tr>
+                        <td>
+                            @(item.producto.sku + " - " + item.producto.descripcion)
+                            <br />
+                            @if (item.dataRelacionada != null)
+                            {
+                            <div class="tooltipCustom" style="position: relative;">
+                                <div>
+                                    <label class="label-error-btn">
+                                        <img class="label-error-btn-icon" src="~/images/equis.png"/>
+                                        Existe Conflicto
+                                    </label>
+                                </div>
+                                <div class="tooltipCustomBody" style="width: 400px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label class="control-label col-xs-3">Lista:</label>
+                                                <div class="col-xs-9">
+                                                    <p class="form-control-static">@item.dataRelacionada.ElementAt(1)</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label class="control-label col-xs-3">Fechas:</label>
+                                                <div class="col-xs-9">
+                                                    <p class="form-control-static">
+                                                        @item.dataRelacionada.ElementAt(2) - @item.dataRelacionada.ElementAt(3)
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label class="control-label col-xs-3">Precio:</label>
+                                                <div class="col-xs-9">
+                                                    <p class="form-control-static">
+                                                        @item.dataRelacionada.ElementAt(4) @item.dataRelacionada.ElementAt(6) - @item.dataRelacionada.ElementAt(5)
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label class="control-label col-xs-3">Costo:</label>
+                                                <div class="col-xs-9">
+                                                    <p class="form-control-static">
+                                                        @item.dataRelacionada.ElementAt(4) @item.dataRelacionada.ElementAt(8) - @item.dataRelacionada.ElementAt(7)
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="radio radio-inline">
-                                <label class="radio-label">
-                                    @if (obj.Estado == 0)
-                                    {
-                                        <input class="radio-input" checked type="radio" name="rubro_estado" id="rubro_estado_no" value="0"><span>Inactivo</span>
-                                    }
-                                    else
-                                    {
-                                        <input class="radio-input" type="radio" name="rubro_estado" id="rubro_estado_no" value="0"><span>Inactivo</span>
-                                    }
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="row">
-                <div class="col-sm-12 col-lg-8">
-                    <div class="form-group">
-                        @Html.LabelFor(dv => obj.observaciones, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-3" })
-                        <div class="col-xs-8 col-lg-9">
-                            @Html.TextAreaFor(c => obj.observaciones, htmlAttributes: new { @class = "form-control" })
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+                            }
+                        </td>
+                        <td>@item.unidadPrecio.Presentacion</td>
+                        <td>@item.unidadPrecio.PrecioSinIGV</td>
+                        <td>@item.unidadCosto.Presentacion</td>
+                        <td>@item.unidadCosto.CostoSinIGV</td>
+                        <td>@item.FechaInicioDesc</td>
+                        <td>@item.fechaFinDesc</td>
+                        <td></td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
         </div>
 
         <div class="row">
@@ -154,11 +262,50 @@
             </div>
         </div>
 
-    </form>
+    </div>
 </div>
 
+        <style>
+            .label-error-btn {
+                border: solid 2px red;
+                border-radius: 5px;
+                padding: 2px 5px;
+                vertical-align: middle;
+                color: red;
+            }
+
+            .label-error-btn-icon {
+                height: 14px;
+                margin-top: -3px;
+            }
+
+            .tooltipCustom {
+                position: relative;
+                display: inline-block;
+            }
+
+            .tooltipCustom .tooltipCustomBody {
+                visibility: hidden;
+                background-color: #fff;
+                border: solid 2px #285e8e;
+                color: #000;
+                border-radius: 5px;
+                padding: 5px 5px;
+                position: absolute;
+                z-index: 1;
+                margin-top: -5px;
+                margin-left: 0px;
+                opacity: 0;
+                transition: opacity 0.5s;
+            }
 
 
-@section Scripts {
-    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/precioEspecial")
-}
+            .tooltipCustom:hover .tooltipCustomBody {
+                visibility: visible;
+                opacity: 1;
+            }
+        </style>
+
+        @section Scripts {
+            @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/precioEspecial")
+        }

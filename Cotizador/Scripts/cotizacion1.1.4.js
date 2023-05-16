@@ -1259,6 +1259,10 @@ jQuery(function ($) {
         var costo = $("#costoLista").val();
         var idCiudad = $("#idCiudad").val();
 
+        if (idCiudad == undefined || idCiudad == null || idCiudad == "" || idCiudad == 0) {
+            idCiudad = $("#idSedeDefectoStock").val();
+        }
+
         $.ajax({
             url: "/Cotizacion/AddProducto",
             type: 'POST',

@@ -218,6 +218,16 @@ namespace BusinessLayer
                 pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
             }
 
+            if (pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion && pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
+            {
+                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
+            }
+
+            if (pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.PendienteLiberación && pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
+            {
+                pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado;
+            }
+
             foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
             {
                 pedidoAdjunto.usuario = pedido.usuario;
@@ -299,6 +309,7 @@ namespace BusinessLayer
 
                 validarPedidoVenta(pedido);
                 dal.InsertPedido(pedido);
+                pedido.IdUsuarioRegistro = pedido.usuario.idUsuario;
 
                 if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && 
                     pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
@@ -344,7 +355,7 @@ namespace BusinessLayer
                 }
 
                 dal.UpdatePedido(pedido);
-
+                pedido.IdUsuarioRegistro = pedido.usuario.idUsuario;
                 if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && 
                     pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
                     pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)

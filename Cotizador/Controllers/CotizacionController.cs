@@ -386,6 +386,7 @@ namespace Cotizador.Controllers
                 ViewBag.Si = Constantes.MENSAJE_SI;
                 ViewBag.No = Constantes.MENSAJE_NO;
                 ViewBag.IGV = Constantes.IGV;
+                ViewBag.idSedeLima = Constantes.ID_SEDE_LIMA;
 
 
                 //Si no se está trabajando con una cotización se crea una y se agrega a la sesion

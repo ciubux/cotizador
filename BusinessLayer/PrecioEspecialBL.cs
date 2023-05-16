@@ -25,7 +25,13 @@ namespace BusinessLayer
             }
         }
 
-     
+        public List<PrecioEspecialDetalle> ValidarDetalles(PrecioEspecialCabecera obj)
+        {
+            using (var dal = new PrecioEspecialDAL())
+            {
+                return dal.ValidarPrecios(obj);
+            }
+        }
 
         public PrecioEspecialCabecera InsertarCabecera(PrecioEspecialCabecera obj)
         {

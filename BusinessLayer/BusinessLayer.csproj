@@ -38,16 +38,16 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NPOI">
-      <HintPath>..\..\..\Users\Andre\Desktop\NPOI 2.2.1 binary package\Release\Net20\NPOI.dll</HintPath>
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OOXML">
-      <HintPath>..\..\..\Users\Andre\Desktop\NPOI 2.2.1 binary package\Release\Net20\NPOI.OOXML.dll</HintPath>
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OOXML.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OpenXml4Net">
-      <HintPath>..\..\..\Users\Andre\Desktop\NPOI 2.2.1 binary package\Release\Net20\NPOI.OpenXml4Net.dll</HintPath>
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
     </Reference>
     <Reference Include="NPOI.OpenXmlFormats">
-      <HintPath>..\..\..\Users\Andre\Desktop\NPOI 2.2.1 binary package\Release\Net20\NPOI.OpenXmlFormats.dll</HintPath>
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

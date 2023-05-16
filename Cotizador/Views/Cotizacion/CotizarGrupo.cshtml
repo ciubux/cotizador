@@ -50,6 +50,8 @@
     <input type="hidden" id="clienteSedePrincipal" value="@clienteSedePrincipal" />
     <input type="hidden" value="@ViewBag.debug" />
     <input type="hidden" id="productosInactivosRemovidos" value="@ViewBag.productosInactivosRemovidos" />
+    <input type="hidden" id="idSedeDefectoStock" value="@ViewBag.idSedeLima" />
+
     <form class="form-horizontal">
         <div class="row">
             <!--NÚMERO COTIZACION-->
@@ -572,7 +574,15 @@
                         <td class="@cotizacionDetalle.producto.idProducto detsubtotal" style="text-align:right">@cotizacionDetalle.subTotal</td>
                         <td class="@cotizacionDetalle.producto.idProducto detobservacion" style="text-align:left">@cotizacionDetalle.observacion</td>
                         <!--class="@cotizacionDetalle.producto.idProducto detobservacion"-->
-                        <td class="@cotizacionDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@cotizacionDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
+                        <td class="@cotizacionDetalle.producto.idProducto detbtnMostrarPrecios">
+                            <button type="button" class="@cotizacionDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button>
+                            <br />
+                            <button type="button" title="Consultar Stock" class="verModalStockProducto btn" sku="@cotizacionDetalle.producto.sku"
+                                    idProductoPresentacion="@(cotizacionDetalle.esPrecioAlternativo ? cotizacionDetalle.ProductoPresentacion.IdProductoPresentacion : 0)"
+                                    idCiudad="@ViewBag.idSedeLima" style="margin-top: 7px;">
+                                <img src="~/images/icon_stock.png" height="25" />
+                            </button>
+                        </td>
 
                         @if (!cotizacion.esRecotizacion)
                         {
@@ -1359,7 +1369,10 @@
 
 @Html.Partial("_ModalImportarDetallesExcel")
 
+@Html.Partial("../Stock/_ModalStockProducto")
+
 @Html.Partial("../Promocion/_ModalSelectAdd")
+
 
 <div class="modal fade" id="modalComentarioAprobacion" tabindex="-1">
 
