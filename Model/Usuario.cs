@@ -215,6 +215,8 @@ namespace Model
 
         public bool reasignaCarteraCliente { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REASIGNA_CARTERA_CLIENTE)).FirstOrDefault() != null; } }
 
+        public bool modificaPreciosEspeciales { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_PRECIOS_ESPECIALES)).FirstOrDefault() != null; } }
+
 
         /*Productos*/
         public bool visualizaProductos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_PRODUCTOS)).FirstOrDefault() != null; } }

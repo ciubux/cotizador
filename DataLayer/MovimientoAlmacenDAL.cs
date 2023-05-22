@@ -514,8 +514,15 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observaciones", "Se crea Transacción");
             ExecuteNonQuery(objCommand);
 
+            if (notaIngreso.pedido != null && notaIngreso.pedido.idPedido != null)
+            {
+                PedidoDAL pedidoDal = new PedidoDAL();
+                pedidoDal.ActualizarEstadoIngresoPedido(notaIngreso.pedido.idPedido, notaIngreso.usuario.idUsuario);
+            }
+
             this.Commit();
         }
+
 
 
         public void InsertMovimientoAlmacenDetalle(MovimientoAlmacen movimientoAlmacen)

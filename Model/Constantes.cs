@@ -534,6 +534,9 @@ namespace Model
 
         public const String REASIGNA_CARTERA_CLIENTE = "P630";
 
+        public const String MODIFICA_PRECIOS_ESPECIALES = "P635";
+
+        
         public const String REALIZA_CARGA_PRODUCTOS_WEB = "P740";
 
         public const String FIJA_VIGENCIA_PRECIOS_COTIZACION = "P221";

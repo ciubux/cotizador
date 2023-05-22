@@ -47,7 +47,7 @@ namespace Cotizador.Controllers
         public ActionResult List()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (!usuario.modificaUsuario)
+            if (!usuario.modificaPreciosEspeciales)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -107,7 +107,7 @@ namespace Cotizador.Controllers
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.modificaUsuario)
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.modificaPreciosEspeciales)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -125,7 +125,7 @@ namespace Cotizador.Controllers
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            if (usuario == null || !usuario.modificaUsuario)
+            if (usuario == null || !usuario.modificaPreciosEspeciales)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -151,8 +151,28 @@ namespace Cotizador.Controllers
 
             ViewBag.obj = obj;
             ViewBag.pagina = (int)this.Session[Constantes.VAR_SESSION_PAGINA];
+            if (this.Session["s_precioespecial_errorcargaprecios"] == null)
+            {
+                this.Session["s_precioespecial_errorcargaprecios"] = 0;
+            }
+               
+            ViewBag.errorCargaPrecios = (int)this.Session["s_precioespecial_errorcargaprecios"];
+            
+            ViewBag.tieneDetallesConflicto = 0;
+            ViewBag.tieneDetallesValidos = 0;
 
-
+            foreach (PrecioEspecialDetalle det in obj.precios)
+            {
+                if(det.dataRelacionada != null && det.dataRelacionada.Count > 0)
+                {
+                    ViewBag.tieneDetallesConflicto = 1;
+                } else
+                {
+                    ViewBag.tieneDetallesValidos = 1;
+                }
+            }
+            
+            
             return View();
         }
 
@@ -318,7 +338,7 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPrecioEspecial;
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (!usuario.modificaUsuario)
+            if (!usuario.modificaPreciosEspeciales)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -327,19 +347,18 @@ namespace Cotizador.Controllers
 
         }
 
-        public String ConsultarSiExisteAjusteAlmacen()
+        public String ConsultarSiExistePrecioEspecial()
         {
-            Guid idAjusteAlmacen = Guid.Parse(Request["idAjusteAlmacen"].ToString());
-            MovimientoAlmacenBL bL = new MovimientoAlmacenBL();
-            GuiaRemision obj = new GuiaRemision();
-            obj.idMovimientoAlmacen = idAjusteAlmacen;
-            obj = bL.GetAjusteAlmacen(obj);
-            obj.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Guid idPrecioEspecialCabecera = Guid.Parse(Request["idPrecioEspecialCabecera"].ToString());
+            PrecioEspecialBL bL = new PrecioEspecialBL();
+            PrecioEspecialCabecera obj = bL.GetPrecioEspcial(idPrecioEspecialCabecera, usuario.idUsuario);
+            obj.usuario = usuario;
 
             String resultado = JsonConvert.SerializeObject(obj);
-            this.Session[Constantes.VAR_SESSION_AJUSTE_ALMACEN_VER] = obj;
+            this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL_VER] = obj;
 
-            obj = (GuiaRemision)this.Session[Constantes.VAR_SESSION_AJUSTE_ALMACEN];
+            obj = (PrecioEspecialCabecera)this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL];
             if (obj == null)
                 return "{\"existe\":\"false\"}";
             else
@@ -347,21 +366,34 @@ namespace Cotizador.Controllers
         }
 
 
-        public void iniciarEdicionAjusteAlmacen()
+        public void iniciarEdicionPrecioEspecial()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            GuiaRemision obj = (GuiaRemision)this.Session[Constantes.VAR_SESSION_AJUSTE_ALMACEN_VER];
-            this.Session[Constantes.VAR_SESSION_AJUSTE_ALMACEN] = obj;
+            PrecioEspecialCabecera obj = (PrecioEspecialCabecera)this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL_VER];
+            this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL] = obj;
         }
 
         public String Create()
         {
-            MovimientoAlmacenBL bL = new MovimientoAlmacenBL();
-            GuiaRemision obj = (GuiaRemision)this.Session[Constantes.VAR_SESSION_AJUSTE_ALMACEN];
+            PrecioEspecialCabecera obj = (PrecioEspecialCabecera)this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL];
+            
+            PrecioEspecialBL bL = new PrecioEspecialBL();
 
-            bL.InsertAjusteAlmacen(obj);
+            List<PrecioEspecialDetalle> detallesValidos = new List<PrecioEspecialDetalle>();
 
-            this.Session[Constantes.VAR_SESSION_AJUSTE_ALMACEN] = null;
+            foreach (PrecioEspecialDetalle det in obj.precios)
+            {
+                if(det.dataRelacionada == null || det.dataRelacionada.Count == 0)
+                {
+                    detallesValidos.Add(det);
+                }
+            }
+            
+            obj.precios = detallesValidos;
+
+            bL.InsertarCabecera(obj);
+
+            this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL] = null;
             String resultado = JsonConvert.SerializeObject(obj);
             return resultado;
         }
@@ -369,12 +401,25 @@ namespace Cotizador.Controllers
 
         public String Update()
         {
-            MovimientoAlmacenBL bL = new MovimientoAlmacenBL();
-            GuiaRemision obj = (GuiaRemision)this.Session[Constantes.VAR_SESSION_AJUSTE_ALMACEN];
+            PrecioEspecialCabecera obj = (PrecioEspecialCabecera)this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL];
 
-            bL.InsertAjusteAlmacen(obj);
+            PrecioEspecialBL bL = new PrecioEspecialBL();
 
-            this.Session[Constantes.VAR_SESSION_AJUSTE_ALMACEN] = null;
+            List<PrecioEspecialDetalle> detallesValidos = new List<PrecioEspecialDetalle>();
+
+            foreach (PrecioEspecialDetalle det in obj.precios)
+            {
+                if (det.dataRelacionada == null || det.dataRelacionada.Count == 0)
+                {
+                    detallesValidos.Add(det);
+                }
+            }
+
+            obj.precios = detallesValidos;
+
+            bL.ActualizarCabecera(obj);
+
+            this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL] = null;
             String resultado = JsonConvert.SerializeObject(obj);
             return resultado;
         }
@@ -385,6 +430,7 @@ namespace Cotizador.Controllers
             PrecioEspecialCabecera obj = this.PrecioEspecialCabeceraSession;
             obj.grupoCliente.idGrupoCliente = Int32.Parse(this.Request.Params["valor"]);
             this.PrecioEspecialCabeceraSession = obj;
+            LimpiarDetallesPrecios();
         }
 
         public void ChangeClienteSunat()
@@ -392,6 +438,7 @@ namespace Cotizador.Controllers
             PrecioEspecialCabecera obj = this.PrecioEspecialCabeceraSession;
             obj.clienteSunat.idClienteSunat = Int32.Parse(this.Request.Params["valor"]);
             this.PrecioEspecialCabeceraSession = obj;
+            LimpiarDetallesPrecios();
         }
 
         public void ChangeInputString()
@@ -441,7 +488,16 @@ namespace Cotizador.Controllers
             this.PrecioEspecialCabeceraSession = obj;
         }
 
-      
+        public void LimpiarDetallesPrecios()
+        {
+            if(((Constantes.paginas) this.Session[Constantes.VAR_SESSION_PAGINA]) == Constantes.paginas.RegistrarPrecioEspecial)
+            {
+                PrecioEspecialCabecera obj = this.PrecioEspecialCabeceraSession;
+                obj.precios = new List<PrecioEspecialDetalle>();
+                this.PrecioEspecialCabeceraSession = obj;
+            }
+        }
+
         public ActionResult CancelarCreacion()
         {
             PrecioEspecialCabecera obj = (PrecioEspecialCabecera)this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL];
@@ -450,7 +506,7 @@ namespace Cotizador.Controllers
         }
 
         [HttpPost]
-        public ActionResult LoadProductosWeb(HttpPostedFileBase file)
+        public ActionResult LoadPrecios(HttpPostedFileBase file)
         {
             Usuario usuario = (Usuario)this.Session["usuario"];
 
@@ -470,6 +526,17 @@ namespace Cotizador.Controllers
 
             List<PrecioEspecialDetalle> items = new List<PrecioEspecialDetalle>();
             PrecioEspecialCabecera cabecera = (PrecioEspecialCabecera)this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL];
+
+            if (cabecera.tipoNegociacion.Equals("") || 
+                (cabecera.tipoNegociacion.Equals("GRUPO") && cabecera.grupoCliente.idGrupoCliente == 0) ||
+                (cabecera.tipoNegociacion.Equals("RUC") && cabecera.clienteSunat.idClienteSunat == 0))
+            {
+                finaliza = true;
+                this.Session["s_precioespecial_errorcargaprecios"] = 1;
+            } else
+            {
+                this.Session["s_precioespecial_errorcargaprecios"] = 0;
+            }
 
             while (!finaliza)
             {

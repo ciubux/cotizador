@@ -1062,6 +1062,10 @@ namespace DataLayer
                 pedidoDetalle.cantidadPendienteAtencion = Converter.GetInt(row, "cantidadPendienteAtencion");
                 pedidoDetalle.cantidadPorAtender = Converter.GetInt(row, "cantidadPendienteAtencion");
 
+                
+                pedidoDetalle.cantidadIngresada = Converter.GetInt(row, "cantidad_ingresada");
+                pedidoDetalle.cantidadGuiada = Converter.GetInt(row, "cantidad_enviada");
+
                 pedidoDetalle.cantidadPermitida = Converter.GetInt(row, "cantidad_permitida");
                 pedidoDetalle.observacionRestriccion = Converter.GetString(row, "comentario_retencion");
 
@@ -2346,6 +2350,13 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
                 pedidoList.Add(pedido);
             }
             return pedidoList;
+        }
+        public void ActualizarEstadoIngresoPedido(Guid idPedido, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pi_movimientoAlmacenEntrada_b");
+            InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            ExecuteNonQuery(objCommand);
         }
 
         public List<Pedido> SelectPedidosByIds(List<Guid> idPedidos, int tipoOrdenamiento)

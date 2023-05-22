@@ -174,6 +174,7 @@ namespace DataLayer
                 PrecioEspecialDetalle item = new PrecioEspecialDetalle();
                 
                 item.producto = new Producto();
+                item.producto.idProducto = Converter.GetGuid(row, "id_producto");
                 item.producto.sku = Converter.GetString(row, "SKU");
                 item.producto.descripcion = Converter.GetString(row, "descripcion_producto");
 
@@ -360,7 +361,7 @@ namespace DataLayer
                 rowObj["EQUIVALENCIA_PRECIO"] = item.unidadPrecio.Equivalencia;
                 rowObj["ID_PRODUCTO_PRESENTACION_PRECIO"] = item.unidadPrecio.IdProductoPresentacion;
                 rowObj["UNIDAD_COSTO"] = item.unidadCosto.Presentacion;
-                rowObj["COSTO_UNITARIO"] = item.unidadCosto.PrecioSinIGV;
+                rowObj["COSTO_UNITARIO"] = item.unidadCosto.CostoSinIGV;
                 rowObj["EQUIVALENCIA_COSTO"] = item.unidadCosto.Equivalencia;
                 rowObj["ID_PRODUCTO_PRESENTACION_COSTO"] = item.unidadCosto.IdProductoPresentacion;
                 rowObj["FECHA_INICIO"] = item.fechaInicio;

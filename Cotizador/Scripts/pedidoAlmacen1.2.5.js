@@ -2748,7 +2748,7 @@ var TIPO_PEDIDO_ALMACEN_TRASLADO_EXTORNO_GUIA_REMISION = 'X';
                         '<td>' + lista[i].precioUnitario.toFixed(cantidadCuatroDecimales) + '</td>' +
                  //       '<td>' + lista[i].precioUnitarioVenta.toFixed(cantidadCuatroDecimales) + '</td>' +
                         '<td class="cantidadPendienteAtencion">' + lista[i].cantidad + '</td>' +
-                        '<td>' + lista[i].cantidadPendienteAtencion + '</td>' +
+                        '<td>' + (lista[i].cantidad - lista[i].cantidadGuiada) + '</td>' +
                         '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + observacion + '</td>' +
                         '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button>' +

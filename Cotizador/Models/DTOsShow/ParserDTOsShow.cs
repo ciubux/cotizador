@@ -381,12 +381,14 @@ namespace Cotizador.Models.DTOsShow
             pedidoDTOshow.cliente_asistenteServicioCliente_usuario_email = pedido.cliente.asistenteServicioCliente.usuario.email;
             pedidoDTOshow.cliente_nombreComercial = pedido.cliente.nombreComercial == null ? "" : pedido.cliente.nombreComercial;
             pedidoDTOshow.cliente_tipoDocumento = pedido.cliente.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC ? "RUC" : "DNI";
+            pedidoDTOshow.esVentaIndirecta = pedido.esVentaIndirecta;
+
 
             pedidoDTOshow.textoCondicionesPago = pedido.textoCondicionesPago;
             pedidoDTOshow.fechaHorarioEntrega = pedido.fechaHorarioEntrega;
             pedidoDTOshow.ciudad_nombre = pedido.ciudad.nombre;
             pedidoDTOshow.ciudad_idCiudad = pedido.ciudad.idCiudad;
-
+            
             pedidoDTOshow.cliente_idCliente = pedido.cliente.idCliente;
             pedidoDTOshow.cliente_codigoRazonSocial = pedido.cliente.codigoRazonSocial;
             pedidoDTOshow.numeroReferenciaCliente = pedido.numeroReferenciaCliente;

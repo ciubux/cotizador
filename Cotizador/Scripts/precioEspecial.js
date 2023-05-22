@@ -159,6 +159,13 @@ jQuery(function ($) {
             },
             success: function () { }
         });
+
+        $("#tableDetalles > tbody").empty();
+        $("#tableDetalles").footable({
+            "paging": {
+                "enabled": false
+            }
+        });
     }
 
     function ChangeClienteSunat(valor) {
@@ -169,6 +176,13 @@ jQuery(function ($) {
                 valor: valor
             },
             success: function () { }
+        });
+
+        $("#tableDetalles > tbody").empty();
+        $("#tableDetalles").footable({
+            "paging": {
+                "enabled": false
+            }
         });
     }
 
@@ -182,6 +196,21 @@ jQuery(function ($) {
 
     $("#tipoNegociacion").change(function () {
         changeInputString("tipoNegociacion", $(this).val());
+
+        $.ajax({
+            url: "/PrecioEspecial/LimpiarDetallesPrecios",
+            type: 'POST',
+            data: {
+            },
+            success: function () { }
+        });
+
+        $("#tableDetalles > tbody").empty();
+        $("#tableDetalles").footable({
+            "paging": {
+                "enabled": false
+            }
+        });
     });
 
     $("#obj_observaciones").change(function () {
@@ -197,11 +226,11 @@ jQuery(function ($) {
     });
 
     $("#fechaVigenciaDesde").change(function () {
-        changeInputDate("fechaVigenciaDesde", $(this).val());
+        changeInputDate("fechaInicio", $(this).val());
     });
 
     $("#fechaVigenciaHasta").change(function () {
-        changeInputDate("fechaVigenciaHasta", $(this).val());
+        changeInputDate("fechaFin", $(this).val());
     });
 
     $("#fechaInicio").change(function (event) {
@@ -209,8 +238,9 @@ jQuery(function ($) {
         var fechaFin = $("#fechaFin").val();
 
         if (compararFechas(fechaInicio, fechaFin) == 1) {
-            fechaInicio = fechaFin;
-            $("#fechaInicio").val(fechaInicio);
+            fechaFin = fechaInicio;
+            $("#fechaFin").val(fechaFin);
+            changeInputDate("fechaFin", fechaFin);
         }
 
         changeInputDate("fechaInicio", fechaInicio);
@@ -434,6 +464,164 @@ jQuery(function ($) {
     $("#btnExportExcel").click(function () {
         window.location.href = $(this).attr("actionLink");
     });
+
+    $("#btnCancelarPrecioEspecial").click(function () {
+        ConfirmDialog(MENSAJE_CANCELAR_EDICION, '/PrecioEspecial/CancelarCreacion', null)
+    })
+
+    $("#btnFinalizarEdicionPrecioEspecial").click(function () {  
+        if ($("#idPrecioEspecialCabecera").val() == "00000000-0000-0000-0000-000000000000") {
+            procesarCrearPrecioEspecial();
+        }
+        else {
+            //editarPrecioEspecial();
+        }
+    });
+
+    function procesarCrearPrecioEspecial() {
+        if (!validacionDatosPrecioEspecial())
+            return false;
+
+        if ($("#tieneDetallesConflicto").val() == 1) {
+            $.confirm({
+                title: "Precios con conflicto",
+                type: 'orange',
+                content: 'Tiene precios con conflicot, estos no serán registrados.',
+                buttons: {
+                    aceptar: {
+                        text: 'ACEPTAR',
+                        btnClass: 'btn-success',
+                        action: function () {
+                            crearPrecioEspecial();
+                        }
+                    },
+                    regresar: {
+                        text: 'REGRESAR',
+                        btnClass: 'btn-danger',
+                        action: function () {
+
+                        }
+                    }
+                }
+            });
+        } else {
+            crearPrecioEspecial();
+        }
+    }
+
+    function crearPrecioEspecial() {
+        $('body').loadingModal({
+            text: 'Creando Rol...'
+        });
+        $.ajax({
+            url: "/PrecioEspecial/Create",
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) {
+                $('body').loadingModal('hide');
+                $.alert({
+                    title: 'Error',
+                    content: 'Se generó un error al intentar registrar.',
+                    type: 'red',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            },
+            success: function (resultado) {
+                $('body').loadingModal('hide');
+                $.alert({
+                    title: "Registro Correcto",
+                    content: 'Los precios especiales se registraron correctamente.',
+                    type: 'green',
+                    buttons: {
+                        OK: function () {
+                            window.location = '/PrecioEspecial/List';
+                        }
+                    }
+                });
+            }
+        });
+
+    }
+
+    function validacionDatosPrecioEspecial() {
+
+        if ($("#obj_codigo").val().length < 2) {
+            $.alert({
+                title: "Código Inválido",
+                type: 'orange',
+                content: 'Debe ingresar un Código válido.',
+                buttons: {
+                    OK: function () { $('#obj_codigo').focus(); }
+                }
+            });
+            return false;
+        }
+
+        if ($("#obj_titulo").val().length < 4) {
+            $.alert({
+                title: "Título Inválido",
+                type: 'orange',
+                content: 'Debe ingresar un título válido.',
+                buttons: {
+                    OK: function () { $('#obj_titulo').focus(); }
+                }
+            });
+            return false;
+        }
+
+        if ($("#tipoNegociacion").val().length < 1) {
+            $.alert({
+                title: "Tipo Negociación Inválido",
+                type: 'orange',
+                content: 'Debe seleccionar un tipo de negociación.',
+                buttons: {
+                    OK: function () { $('#obj_titulo').focus(); }
+                }
+            });
+            return false;
+        }
+
+        if ($("#tipoNegociacion").val()  == "GRUPO" && $("#idGrupoCliente").val() == 0) {
+            $.alert({
+                title: "Grupo Inválido",
+                type: 'orange',
+                content: 'Debe seleccionar un grupo.',
+                buttons: {
+                    OK: function () { $('#idGrupoCliente').focus(); }
+                }
+            });
+            return false;
+        }
+
+        if ($("#tipoNegociacion").val() == "RUC" && $("#idClienteSunat").val() == 0) {
+            $.alert({
+                title: "Cliente Inválido",
+                type: 'orange',
+                content: 'Debe seleccionar un Cliente.',
+                buttons: {
+                    OK: function () { $('#idClienteSunat').focus(); }
+                }
+            });
+            return false;
+        }
+
+        if ($("#tieneDetallesValidos").val() == 0) {
+            $.alert({
+                title: "Ingresar Precios",
+                type: 'orange',
+                content: 'Debe ingresar precios válidos.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            return false;
+        }
+
+        return true;
+
+    }
 
 
     $(document).on('click', "button.btnEditarAjusteAlmacen", function () {

@@ -12,6 +12,8 @@
     <input type="hidden" value="@ViewBag.debug" />
     <div class="form-horizontal">
         <input type="hidden" id="idPrecioEspecialCabecera" name="idPrecioEspecialCabecera" value="@obj.idPrecioEspecialCabecera" />
+        <input type="hidden" id="tieneDetallesConflicto" name="tieneDetallesConflicto" value="@ViewBag.tieneDetallesConflicto" />
+        <input type="hidden" id="tieneDetallesValidos" name="tieneDetallesValidos" value="@ViewBag.tieneDetallesValidos" />
 
         <div class="row">
             <div class="col-sm-12 col-lg-4">
@@ -145,7 +147,7 @@
         </div>
 
         <div class="row">
-            <form action="/PrecioEspecial/LoadProductosWeb" method="post" enctype="multipart/form-data" id="formCargarPrecios">
+            <form action="/PrecioEspecial/LoadPrecios" method="post" enctype="multipart/form-data" id="formCargarPrecios">
                 <div class="col-xs-8 col-lg-4">
                     <!--Archivo-->
                     <label class="control-label col-xs-4" for="file">Cargar Archivo de Precios:</label>
@@ -159,101 +161,112 @@
             </form>
         </div>
 
-        <div class="row">
-            <table id="tableDetalles" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
-                   data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
-                   data-editing-allow-add="false"
-                   data-editing-allow-delete="false"
-                   data-editing-allow-edit="false"
-                   data-sorting="true"
-                   data-show-toggle="false"
-                   data-editing-hide-text="Finalizar edición"
-                   data-editing-add-text="Descartar cambios">
-                <thead>
-                    <tr>
-                        <th data-name="producto" data-visible="true" data-sortable="true">Producto</th>
-                        <th data-name="unidadPrecio" data-visible="true" data-sortable="true">Unidad Precio</th>
-                        <th data-name="valorPrecio" data-visible="true" data-sortable="true">Precio</th>
-                        <th data-name="unidadCosto" data-visible="true" data-sortable="true">Unidad Costo</th>
-                        <th data-name="valorCosto" data-visible="true" data-sortable="true">Costo</th>
-                        <th data-name="fechaInicio" data-visible="true" data-sortable="true">Fecha Inicio</th>
-                        <th data-name="fechaFin" data-visible="true" data-sortable="true">Fecha Fin</th>
-                        <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach(Model.PrecioEspecialDetalle item in obj.precios) 
-                    {
-                    <tr>
-                        <td>
-                            @(item.producto.sku + " - " + item.producto.descripcion)
-                            <br />
-                            @if (item.dataRelacionada != null)
-                            {
-                            <div class="tooltipCustom" style="position: relative;">
-                                <div>
-                                    <label class="label-error-btn">
-                                        <img class="label-error-btn-icon" src="~/images/equis.png"/>
-                                        Existe Conflicto
-                                    </label>
-                                </div>
-                                <div class="tooltipCustomBody" style="width: 400px;">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="form-group">
-                                                <label class="control-label col-xs-3">Lista:</label>
-                                                <div class="col-xs-9">
-                                                    <p class="form-control-static">@item.dataRelacionada.ElementAt(1)</p>
+        @if (ViewBag.errorCargaPrecios == 1)
+        {
+            <div class="row">
+                <h3 class="text-danger">Debe seleccionar un tipo de negociación y el grupo o cliente correspondiente.</h3>
+            </div>
+        }
+        else
+        {
+
+
+            <div class="row">
+                <table id="tableDetalles" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
+                       data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                       data-editing-allow-add="false"
+                       data-editing-allow-delete="false"
+                       data-editing-allow-edit="false"
+                       data-sorting="true"
+                       data-show-toggle="false"
+                       data-editing-hide-text="Finalizar edición"
+                       data-editing-add-text="Descartar cambios">
+                    <thead>
+                        <tr>
+                            <th data-name="producto" data-visible="true" data-sortable="true">Producto</th>
+                            <th data-name="unidadPrecio" data-visible="true" data-sortable="true">Unidad Precio</th>
+                            <th data-name="valorPrecio" data-visible="true" data-sortable="true">Precio</th>
+                            <th data-name="unidadCosto" data-visible="true" data-sortable="true">Unidad Costo</th>
+                            <th data-name="valorCosto" data-visible="true" data-sortable="true">Costo</th>
+                            <th data-name="fechaInicio" data-visible="true" data-sortable="true">Fecha Inicio</th>
+                            <th data-name="fechaFin" data-visible="true" data-sortable="true">Fecha Fin</th>
+                            <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Model.PrecioEspecialDetalle item in obj.precios)
+                        {
+                            <tr>
+                                <td>
+                                    @(item.producto.sku + " - " + item.producto.descripcion)
+                                    <br />
+                                    @if (item.dataRelacionada != null)
+                                    {
+                                        <div class="tooltipCustom" style="position: relative;">
+                                            <div>
+                                                <label class="label-error-btn">
+                                                    <img class="label-error-btn-icon" src="~/images/equis.png" />
+                                                    Existe Conflicto
+                                                </label>
+                                            </div>
+                                            <div class="tooltipCustomBody" style="width: 400px;">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-xs-3">Lista:</label>
+                                                            <div class="col-xs-9">
+                                                                <p class="form-control-static">@item.dataRelacionada.ElementAt(1)</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-xs-3">Fechas:</label>
+                                                            <div class="col-xs-9">
+                                                                <p class="form-control-static">
+                                                                    @item.dataRelacionada.ElementAt(2) - @item.dataRelacionada.ElementAt(3)
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-xs-3">Precio:</label>
+                                                            <div class="col-xs-9">
+                                                                <p class="form-control-static">
+                                                                    @item.dataRelacionada.ElementAt(4) @item.dataRelacionada.ElementAt(6) - @item.dataRelacionada.ElementAt(5)
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-xs-3">Costo:</label>
+                                                            <div class="col-xs-9">
+                                                                <p class="form-control-static">
+                                                                    @item.dataRelacionada.ElementAt(4) @item.dataRelacionada.ElementAt(8) - @item.dataRelacionada.ElementAt(7)
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-12">
-                                            <div class="form-group">
-                                                <label class="control-label col-xs-3">Fechas:</label>
-                                                <div class="col-xs-9">
-                                                    <p class="form-control-static">
-                                                        @item.dataRelacionada.ElementAt(2) - @item.dataRelacionada.ElementAt(3)
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12">
-                                            <div class="form-group">
-                                                <label class="control-label col-xs-3">Precio:</label>
-                                                <div class="col-xs-9">
-                                                    <p class="form-control-static">
-                                                        @item.dataRelacionada.ElementAt(4) @item.dataRelacionada.ElementAt(6) - @item.dataRelacionada.ElementAt(5)
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12">
-                                            <div class="form-group">
-                                                <label class="control-label col-xs-3">Costo:</label>
-                                                <div class="col-xs-9">
-                                                    <p class="form-control-static">
-                                                        @item.dataRelacionada.ElementAt(4) @item.dataRelacionada.ElementAt(8) - @item.dataRelacionada.ElementAt(7)
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            }
-                        </td>
-                        <td>@item.unidadPrecio.Presentacion</td>
-                        <td>@item.unidadPrecio.PrecioSinIGV</td>
-                        <td>@item.unidadCosto.Presentacion</td>
-                        <td>@item.unidadCosto.CostoSinIGV</td>
-                        <td>@item.FechaInicioDesc</td>
-                        <td>@item.fechaFinDesc</td>
-                        <td></td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                                    }
+                                </td>
+                                <td>@item.unidadPrecio.Presentacion</td>
+                                <td>@item.unidadPrecio.PrecioSinIGV</td>
+                                <td>@item.unidadCosto.Presentacion</td>
+                                <td>@item.unidadCosto.CostoSinIGV</td>
+                                <td>@item.FechaInicioDesc</td>
+                                <td>@item.fechaFinDesc</td>
+                                <td></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
 
         <div class="row">
             <div class="pull-right">
@@ -265,47 +278,47 @@
     </div>
 </div>
 
-        <style>
-            .label-error-btn {
-                border: solid 2px red;
-                border-radius: 5px;
-                padding: 2px 5px;
-                vertical-align: middle;
-                color: red;
-            }
+<style>
+    .label-error-btn {
+        border: solid 2px red;
+        border-radius: 5px;
+        padding: 2px 5px;
+        vertical-align: middle;
+        color: red;
+    }
 
-            .label-error-btn-icon {
-                height: 14px;
-                margin-top: -3px;
-            }
+    .label-error-btn-icon {
+        height: 14px;
+        margin-top: -3px;
+    }
 
-            .tooltipCustom {
-                position: relative;
-                display: inline-block;
-            }
+    .tooltipCustom {
+        position: relative;
+        display: inline-block;
+    }
 
-            .tooltipCustom .tooltipCustomBody {
-                visibility: hidden;
-                background-color: #fff;
-                border: solid 2px #285e8e;
-                color: #000;
-                border-radius: 5px;
-                padding: 5px 5px;
-                position: absolute;
-                z-index: 1;
-                margin-top: -5px;
-                margin-left: 0px;
-                opacity: 0;
-                transition: opacity 0.5s;
-            }
+    .tooltipCustom .tooltipCustomBody {
+        visibility: hidden;
+        background-color: #fff;
+        border: solid 2px #285e8e;
+        color: #000;
+        border-radius: 5px;
+        padding: 5px 5px;
+        position: absolute;
+        z-index: 1;
+        margin-top: -5px;
+        margin-left: 0px;
+        opacity: 0;
+        transition: opacity 0.5s;
+    }
 
 
-            .tooltipCustom:hover .tooltipCustomBody {
-                visibility: visible;
-                opacity: 1;
-            }
-        </style>
+    .tooltipCustom:hover .tooltipCustomBody {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>
 
-        @section Scripts {
-            @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/precioEspecial")
-        }
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/precioEspecial")
+}

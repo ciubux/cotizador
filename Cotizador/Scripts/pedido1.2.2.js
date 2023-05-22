@@ -3049,6 +3049,18 @@ jQuery(function ($) {
                     $("#pedido_chkFacturaUnica").prop("checked", false);
                 }
 
+                if (usuario.marcaPedidoVentaIndirecta) {
+                    $("#divEsVentaIndirecta").show();
+
+                    if (pedido.esVentaIndirecta) {
+                        $("#verVentaIndirecta").html("SI");
+                    } else {
+                        $("#verVentaIndirecta").html("NO");
+                    }
+                } else {
+                    $("#divEsVentaIndirecta").hide();
+                }
+
                 $("#verTipoPedido").html(pedido.tiposPedidoString);
 
                 $("#verResponsableComercial").html(pedido.cliente_responsableComercial_codigoDescripcion + " " + pedido.cliente_responsableComercial_usuario_email);

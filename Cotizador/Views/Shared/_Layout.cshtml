@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "047";
+    TempData["ScriptVersion"] = "053";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -487,7 +487,7 @@
                                         <li id="linkMantenimientoGrupoCliente" class="@linkMantenimientoGrupoCliente">@Html.ActionLink("Grupo Cliente - Crear/Modificar", "Editar", "GrupoCliente")</li>
                                     }
 
-                                    @if (usuario.modificaUsuario)
+                                    @if (usuario.modificaPreciosEspeciales)
                                     {
                                         <li id="linkBusquedaPrecioEspecial" class="@linkBusquedaPrecioEspecial">@Html.ActionLink("Precios Especiales - Búsqueda", "List", "PrecioEspecial")</li>
                                         <li id="linkRegistroPrecioEspecial" class="@linkRegistroPrecioEspecial">@Html.ActionLink("Precios Especiales - Registro", "Editar", "PrecioEspecial")</li>

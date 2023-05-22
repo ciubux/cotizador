@@ -18,6 +18,8 @@ namespace Model
 
         
         public int cantidadPorAtender { get; set; }
+        public int cantidadIngresada { get; set; }
+        public int cantidadGuiada { get; set; }
 
         //public bool tienePrecioEspecial { get; set; }
         //public decimal precioEspecial { get; set; }
