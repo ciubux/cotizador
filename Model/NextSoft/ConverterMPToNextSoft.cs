@@ -389,6 +389,55 @@ namespace Model.NextSoft
             return item;
         }
 
+        public static object toProducto(Producto obj)
+        {
+            List<object> preciosList = new List<object>();
+            string tipoProd = "007";
+            
+            switch(obj.tipoProducto)
+            {
+                case Producto.TipoProducto.Bien: tipoProd = "007"; break;
+            }
+
+            preciosList.Add(new {
+                tipofcv = obj.unidad,
+                factor = obj.equivalenciaUnidadEstandarUnidadConteo,
+                principal = 1
+            });
+
+            preciosList.Add(new
+            {
+                tipofcv = obj.unidad_alternativa,
+                factor = obj.equivalenciaUnidadEstandarUnidadConteo/obj.equivalenciaAlternativa,
+                principal = 0
+            });
+
+            preciosList.Add(new
+            {
+                tipofcv = obj.unidadProveedor,
+                factor = obj.equivalenciaUnidadEstandarUnidadConteo * obj.equivalenciaProveedor,
+                principal = 0
+            });
+
+            var item = new
+            {
+                codigo = obj.sku,
+                familia = obj.sku.Substring(0,3),
+                tprProd = tipoProd,
+                unmMenor = obj.unidad,
+                unmMayor = obj.unidadProveedor,
+                factor = obj.equivalenciaAlternativa,
+                codAlternativo = obj.skuProveedor,
+                descripcion = obj.descripcion,
+                usuario = "nextsoft",
+                almacen = "",
+                items = preciosList.ToArray()
+            };
+
+            return item;
+        }
+
+
         /* CONVIERTE UNA FECHA EN STRING DE AÑO-MES-DIA A DIA/MES/AÑO */
         private static string cambiarFormatoFechaV1(string fecha) {
             string[] aFecha = fecha.Split('-');

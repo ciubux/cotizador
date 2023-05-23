@@ -26,6 +26,19 @@ namespace Model.NextSoft
             return dataResult;
         }
 
-        
+        public async Task<object> crearProducto(object dataProducto)
+        {
+            string nombreServicio = "crearproducto";
+
+            var sendData = new
+            {
+                token = this.apiToken,
+                prod = dataProducto
+            };
+
+            object resultContent = await this.callService(sendData, nombreServicio);
+
+            return resultContent;
+        }
     }
 }
