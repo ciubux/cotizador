@@ -268,6 +268,116 @@ namespace DataLayer
             return lista;
         }
 
+        public List<PrecioEspecialCabecera> BuscarCabecerasDetalles(PrecioEspecialCabecera obj)
+        {
+            var objCommand = GetSqlCommand("ps_precioEspecialCabecerasDetalles");
+            InputParameterAdd.Guid(objCommand, "idUsuario", obj.usuario.idUsuario);
+            InputParameterAdd.VarcharEmpty(objCommand, "codigo", obj.codigo);
+            InputParameterAdd.VarcharEmpty(objCommand, "tipoNegociacion", obj.tipoNegociacion);
+
+            InputParameterAdd.VarcharEmpty(objCommand, "fechaVigenciaDesde", obj.fechaInicio.ToString("yyyy-MM-dd"));
+            InputParameterAdd.VarcharEmpty(objCommand, "fechaVigenciaHasta", obj.fechaFin.ToString("yyyy-MM-dd"));
+
+            InputParameterAdd.Int(objCommand, "idClienteSunat", obj.clienteSunat.idClienteSunat);
+            InputParameterAdd.Int(objCommand, "idGrupo", obj.grupoCliente.idGrupoCliente);
+
+            DataTable dataTable = Execute(objCommand);
+
+            List<PrecioEspecialCabecera> lista = new List<PrecioEspecialCabecera>();
+            PrecioEspecialCabecera cabTemp = null;
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                
+                PrecioEspecialCabecera item = new PrecioEspecialCabecera();
+                item.idPrecioEspecialCabecera = Converter.GetGuid(row, "id_precio_especial_cabecera");
+
+                if (cabTemp != null && cabTemp.idPrecioEspecialCabecera.Equals(item.idPrecioEspecialCabecera))
+                {
+                    item = cabTemp;
+                } else
+                {
+                    if (cabTemp != null)
+                    {
+                        lista.Add(cabTemp);
+                    }
+
+                    item.codigo = Converter.GetString(row, "codigo");
+                    item.fechaInicio = Converter.GetDateTime(row, "fecha_inicio");
+                    item.fechaFin = Converter.GetDateTime(row, "fecha_fin");
+
+                    item.tipoNegociacion = Converter.GetString(row, "tipo_negociacion");
+                    item.titulo = Converter.GetString(row, "titulo");
+
+                    item.clienteSunat = new ClienteSunat();
+                    item.clienteSunat.idClienteSunat = Converter.GetInt(row, "id_cliente_sunat");
+                    item.clienteSunat.nombreComercial = Converter.GetString(row, "nombre_comercial");
+                    item.clienteSunat.razonSocial = Converter.GetString(row, "razon_social");
+                    item.clienteSunat.ruc = Converter.GetString(row, "ruc");
+
+                    item.grupoCliente = new GrupoCliente();
+                    item.grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo");
+                    item.grupoCliente.codigo = Converter.GetString(row, "codigo_grupo");
+                    item.grupoCliente.nombre = Converter.GetString(row, "nombre_grupo");
+
+
+                    item.Estado = Converter.GetInt(row, "estado");
+                    item.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
+                    item.FechaEdicion = Converter.GetDateTime(row, "fecha_modificacion");
+
+                    item.precios = new List<PrecioEspecialDetalle>();
+                }
+
+
+                PrecioEspecialDetalle det = new PrecioEspecialDetalle();
+
+                det.idPrecioEspecialDetalle = Converter.GetGuid(row, "id_precio_especial_detalle");
+
+                det.producto = new Producto();
+                det.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                det.producto.sku = Converter.GetString(row, "sku");
+                det.producto.descripcion = Converter.GetString(row, "nombre_producto");
+
+                det.fechaInicio = Converter.GetDateTime(row, "fecha_inicio_det");
+                det.fechaFin = Converter.GetDateTime(row, "fecha_fin_det");
+                det.observaciones = Converter.GetString(row, "observaciones");
+
+                det.moneda = new Moneda();
+                det.moneda.codigo = Converter.GetString(row, "moneda");
+                det.moneda.nombre = Converter.GetString(row, "nombre_moneda");
+                det.moneda.simbolo = Converter.GetString(row, "simbolo_moneda");
+
+                det.unidadPrecio = new ProductoPresentacion();
+                det.unidadPrecio.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion_precio");
+                det.unidadPrecio.Presentacion = Converter.GetString(row, "unidad_precio");
+                det.unidadPrecio.PrecioSinIGV = Converter.GetDecimal(row, "precio_unitario");
+                det.unidadPrecio.PrecioOriginalSinIGV = Converter.GetDecimal(row, "precio_unitario_mp");
+                det.unidadPrecio.Equivalencia = Converter.GetDecimal(row, "equivalencia_precio");
+
+                det.unidadCosto = new ProductoPresentacion();
+                det.unidadCosto.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion_costo");
+                det.unidadCosto.Presentacion = Converter.GetString(row, "unidad_costo");
+                det.unidadCosto.CostoSinIGV = Converter.GetDecimal(row, "costo_unitario");
+                det.unidadCosto.CostoOriginalSinIGV = Converter.GetDecimal(row, "costo_unitario_mp");
+                det.unidadCosto.Equivalencia = Converter.GetDecimal(row, "equivalencia_costo");
+
+                det.Estado = Converter.GetInt(row, "estado_det");
+                det.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion_det");
+
+                item.precios.Add(det);
+
+
+                cabTemp = item;
+            }
+
+            if (cabTemp != null)
+            {
+                lista.Add(cabTemp);
+            }
+
+            return lista;
+        }
+
         public List<PrecioEspecialCabecera> BuscarCabeceras(PrecioEspecialCabecera obj)
         {
             var objCommand = GetSqlCommand("ps_precioEspecialCabeceras");

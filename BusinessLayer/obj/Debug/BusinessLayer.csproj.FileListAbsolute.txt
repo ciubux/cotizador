@@ -577,6 +577,8 @@ F:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompi
 F:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CopyComplete
 F:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.dll
 F:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.pdb
+D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.AssemblyReference.cache
+D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompileInputs.cache
 D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\BusinessLayer.dll.config
 D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\BusinessLayer.dll
 D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\BusinessLayer.pdb
@@ -601,8 +603,6 @@ D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\ServiceLayer.pdb
 D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Newtonsoft.Json.xml
 D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\NPOI.xml
 D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Framework.DAL.Settings.pdb
-D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.AssemblyReference.cache
-D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CoreCompileInputs.cache
 D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CopyComplete
 D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.dll
 D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.pdb

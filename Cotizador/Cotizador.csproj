@@ -292,6 +292,7 @@
     <Compile Include="Controllers\CompraController.cs" />
     <Compile Include="Controllers\VentaController.cs" />
     <Compile Include="ExcelExport\CanastaGrupoCliente.cs" />
+    <Compile Include="ExcelExport\PrecioEspecialCabecerasDetallesExcel.cs" />
     <Compile Include="ExcelExport\PrecioEspecialDetalleExcel.cs" />
     <Compile Include="ExcelExport\DireccionCliente.cs" />
     <Compile Include="ExcelExport\CanastaCliente.cs" />

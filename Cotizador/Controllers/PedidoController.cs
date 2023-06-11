@@ -1969,6 +1969,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             int continuarLuego = int.Parse(Request["continuarLuego"].ToString());
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+            pedido.guardadoParcialmente = continuarLuego == 1 ? true : false;
             pedido.usuario = usuario;
             pedido.UsuarioRegistro = usuario;
             PedidoBL pedidoBL = new PedidoBL();
@@ -2015,6 +2016,7 @@ namespace Cotizador.Controllers
 
             int continuarLuego = int.Parse(Request["continuarLuego"].ToString());
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
+            pedido.guardadoParcialmente = continuarLuego == 1 ? true : false;
             pedido.usuario = usuario;
             pedido.UsuarioRegistro = usuario;
             PedidoBL bl = new PedidoBL();

@@ -31,6 +31,8 @@ namespace Cotizador.Models.OBJsFiltro
 
         public Guid idUsuarioCreador { get; set; }
 
+        public int incluirVentasExcluidas { get; set; }
+
         public void changeDatoParametro(string propiedad, string valor, string tipo)
         {
             PropertyInfo propertyInfo = this.GetType().GetProperty(propiedad);

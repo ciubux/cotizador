@@ -617,6 +617,8 @@ F:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompile
 F:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
 F:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.dll
 F:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.AssemblyReference.cache
+D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
 D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\CotizadorPDF.dll
 D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\CotizadorPDF.pdb
 D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\BusinessLayer.dll
@@ -643,8 +645,6 @@ D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Newtonsoft.Json.xml
 D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.pdb
 D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.Settings.pdb
 D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.WebCommon.pdb
-D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.AssemblyReference.cache
-D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CoreCompileInputs.cache
 D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
 D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.dll
 D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.pdb

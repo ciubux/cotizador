@@ -47,7 +47,7 @@ namespace Cotizador.Controllers
         public ActionResult List()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (!usuario.modificaPreciosEspeciales)
+            if (usuario == null || !usuario.modificaPreciosEspeciales)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -117,6 +117,27 @@ namespace Cotizador.Controllers
             PrecioEspecialDetalleExcel excel = new PrecioEspecialDetalleExcel();
 
             return excel.generateExcel(obj);
+        }
+
+        [HttpGet]
+        public ActionResult ExportListadoGlobal()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.modificaPreciosEspeciales)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            PrecioEspecialCabecera objSearch = (PrecioEspecialCabecera)this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL_BUSQUEDA];
+
+            PrecioEspecialBL bL = new PrecioEspecialBL();
+            List<PrecioEspecialCabecera> lista = bL.BuscarCabecerasDetalles(objSearch);
+
+
+            PrecioEspecialCabecerasDetallesExcel excel = new PrecioEspecialCabecerasDetallesExcel();
+
+            return excel.generateExcel(lista);
         }
 
         public ActionResult Editar(Guid? idPrecioEspecialCabecera = null)

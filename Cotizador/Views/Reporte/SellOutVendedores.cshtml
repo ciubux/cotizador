@@ -14,6 +14,16 @@
         decimal totalFila = decimal.Parse(fila.ElementAt(2));
         total = total + totalFila;
     }
+
+
+    var iveTextClass = "text-muted";
+    var iveChecked = "";
+
+    if (item.incluirVentasExcluidas == 1)
+    {
+        iveTextClass = "lbl-ajuste-calculo-precios";
+        iveChecked = "checked";
+    }
 }
 
 <div class="page-header">
@@ -65,10 +75,10 @@
                     <!--Fecha Inicio Vigencia-->
                     <label class="control-label col-xs-4" for="fechaInicio">Rango Fecha Entrega:</label>
                     <div class="col-xs-8">
-                        <input class="form-control" type="text" id="fechaInicio" name="fechaInicio" autocomplete="off" value="@item.fechaInicio.ToString("dd/MM/yyyy")" 
-                               style="width:95px; display: inline-block;" @(item.anio > 0 ? "disabled" : "") >
+                        <input class="form-control" type="text" id="fechaInicio" name="fechaInicio" autocomplete="off" value="@item.fechaInicio.ToString("dd/MM/yyyy")"
+                               style="width:95px; display: inline-block;" @(item.anio > 0 ? "disabled" : "")>
                         <b> - </b>
-                        <input class="form-control" type="text" id="fechaFin" name="fechaFin" autocomplete="off" value="@item.fechaFin.ToString("dd/MM/yyyy")" 
+                        <input class="form-control" type="text" id="fechaFin" name="fechaFin" autocomplete="off" value="@item.fechaFin.ToString("dd/MM/yyyy")"
                                style="width:95px; display: inline-block;" @(item.anio > 0 ? "disabled" : "")>
                     </div>
                 </div>
@@ -165,18 +175,30 @@
             </div>
 
             <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <div class="onoffswitch" title="Considera en el reporte las ventas que fueron excluidas.">
+                            <input type="checkbox" name="onoffswitch" @iveChecked class="onoffswitch-checkbox" id="chkIncluirVentasExcluidas">
+                            <label class="onoffswitch-label" for="chkIncluirVentasExcluidas"></label>
+                        </div>
+                        <h5 id="lblchkIncluirVentasExcluidas" for="chkIncluirVentasExcluidas" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;" class="@iveTextClass" title="Considera en el reporte las ventas que fueron excluidas.">Añadir ventas excluidas</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
                 <!--USUARIO-->
                 <div class="form-group">
                     @*<label for="usuario" class="control-label col-xs-4">Creado Por:</label>
-                    <div class="col-xs-8">
-                        @Html.Action("usuariosPedidoList", "Usuario")
-                    </div>*@
+                        <div class="col-xs-8">
+                            @Html.Action("usuariosPedidoList", "Usuario")
+                        </div>*@
                 </div>
             </div>
         </div>
 
         <div class="row pull-left" style="margin-top: 20px; margin-bottom: 10px; margin-left: 0px">
-            
+
         </div>
 
         <div class="row pull-right" style="margin-top: 20px; margin-bottom: 10px; margin-right: 0px">
@@ -228,9 +250,13 @@
                             <td>@fila.ElementAt(0)</td>
                             <td>@fila.ElementAt(1)</td>
                             <td>@fila.ElementAt(2)</td>
-                            <td><button type="button" class="btn btn-primary bouton-image botonExcel btnDetallesResultadosVendedorExcel" codVendedor="@fila.ElementAt(0)" 
-                                        actionLink="@Url.Action("ExportDetallesReporteSellOutVendedor", "Reporte")">Detalles</button></td>
-                         </tr>
+                            <td>
+                                <button type="button" class="btn btn-primary bouton-image botonExcel btnDetallesResultadosVendedorExcel" codVendedor="@fila.ElementAt(0)"
+                                        actionLink="@Url.Action("ExportDetallesReporteSellOutVendedor", "Reporte")">
+                                    Detalles
+                                </button>
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
@@ -366,6 +392,43 @@
             var valor = $("#idAsistenteServicioCliente").val();
             changeInputFiltro("idAsistenteComercial", valor, "int");
         });
+
+
+        $("#chkIncluirVentasExcluidas").change(function () {
+            if ($("#chkIncluirVentasExcluidas").is(":checked"));
+            cambioChkIncluirVentasExcluidas();
+        });
+
+
+        $("#lblchkIncluirVentasExcluidas").click(function () {
+            if ($("#chkIncluirVentasExcluidas").is(":checked")) {
+                $("#chkIncluirVentasExcluidas").prop("checked", false);
+            } else {
+                $("#chkIncluirVentasExcluidas").prop("checked", true);
+            }
+
+            cambioChkIncluirVentasExcluidas();
+        });
+
+
+        function cambioChkIncluirVentasExcluidas() {
+
+            var valor = 0;
+
+            if ($("#chkIncluirVentasExcluidas").is(":checked")) {
+                valor = 1;
+            }
+
+            changeInputFiltro("incluirVentasExcluidas", valor, "int");
+
+            if ($("#chkIncluirVentasExcluidas").is(":checked")) {
+                $("#lblchkIncluirVentasExcluidas").addClass("lbl-ajuste-calculo-precios");
+                $("#lblchkIncluirVentasExcluidas").removeClass("text-muted");
+            } else {
+                $("#lblchkIncluirVentasExcluidas").addClass("text-muted");
+                $("#lblchkIncluirVentasExcluidas").removeClass("lbl-ajuste-calculo-precios");
+            }
+        }
 
 
         $(document).on('click', ".btnDetallesResultadosVendedorExcel", function () {

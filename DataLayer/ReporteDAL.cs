@@ -74,7 +74,7 @@ namespace DataLayer
         }
 
         public List<List<String>> sellOutVendedores(String sku, String familia, String proveedor, String codVRC, String codVSC, String codVAC, 
-            DateTime fechaInicio, DateTime fechaFin, int anio, int trimestre, String ciudad, Guid idUsuario)
+            DateTime fechaInicio, DateTime fechaFin, int anio, int trimestre, String ciudad, int incluirVentasExcluidas, Guid idUsuario)
         {
             var objCommand = GetSqlCommand("ps_sellout_vendedores");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
@@ -86,6 +86,8 @@ namespace DataLayer
 
             InputParameterAdd.Int(objCommand, "anio", anio);
             InputParameterAdd.Int(objCommand, "trimestre", trimestre);
+
+            InputParameterAdd.Int(objCommand, "incluirVentasExcluidas", incluirVentasExcluidas);
 
             InputParameterAdd.VarcharEmpty(objCommand, "sku", sku);
             InputParameterAdd.Varchar(objCommand, "familia", familia);
@@ -119,7 +121,7 @@ namespace DataLayer
         }
 
         public List<List<String>> sellOutVendedoresDetalles(String codVendedor, String sku, String familia, String proveedor, String codVRC, String codVSC, String codVAC, 
-            DateTime fechaInicio, DateTime fechaFin, int anio, int trimestre, String ciudad, Guid idUsuario)
+            DateTime fechaInicio, DateTime fechaFin, int anio, int trimestre, String ciudad, int incluirVentasExcluidas, Guid idUsuario)
         {
             var objCommand = GetSqlCommand("ps_sellout_vendedores_detalles");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
@@ -129,6 +131,8 @@ namespace DataLayer
 
             InputParameterAdd.Int(objCommand, "anio", anio);
             InputParameterAdd.Int(objCommand, "trimestre", trimestre);
+
+            InputParameterAdd.Int(objCommand, "incluirVentasExcluidas", incluirVentasExcluidas);
 
             InputParameterAdd.VarcharEmpty(objCommand, "codVRC", codVRC);
             InputParameterAdd.VarcharEmpty(objCommand, "codVSC", codVSC);
@@ -208,6 +212,8 @@ namespace DataLayer
                 Decimal cantidadProv = Converter.GetDecimal(row, "CANT_UND_PROV");
                 item.Add(String.Format(Constantes.formatoDosDecimales, eqProv)); /* 37: */
                 item.Add(String.Format(Constantes.formatoDosDecimales, cantidadProv)); /* 38: */
+
+                item.Add(Converter.GetString(row, "X")); /* 39: */
 
                 resultados.Add(item);
             }

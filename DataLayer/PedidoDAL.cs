@@ -2353,7 +2353,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
         }
         public void ActualizarEstadoIngresoPedido(Guid idPedido, Guid idUsuario)
         {
-            var objCommand = GetSqlCommand("pi_movimientoAlmacenEntrada_b");
+            var objCommand = GetSqlCommand("pu_revisar_estado_ingreso_pedido");
             InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             ExecuteNonQuery(objCommand);

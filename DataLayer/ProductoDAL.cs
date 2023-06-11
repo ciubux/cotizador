@@ -2431,6 +2431,29 @@ namespace DataLayer
 
         }
 
+        public void ActualizarFechaRegistroNextSoft (List<Producto> productos, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pu_registroProductoNextSoft");
 
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+           
+            foreach (Producto item in productos)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = item.idProducto;
+           
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@productos", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+            ExecuteNonQuery(objCommand);
+
+        }
     }
 }

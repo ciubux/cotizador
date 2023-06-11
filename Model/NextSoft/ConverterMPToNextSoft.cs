@@ -393,11 +393,12 @@ namespace Model.NextSoft
         {
             List<object> preciosList = new List<object>();
             string tipoProd = "007";
-            
-            switch(obj.tipoProducto)
+
+            switch (obj.tipoProducto)
             {
                 case Producto.TipoProducto.Bien: tipoProd = "007"; break;
             }
+
 
             preciosList.Add(new {
                 tipofcv = obj.unidad,
@@ -405,24 +406,30 @@ namespace Model.NextSoft
                 principal = 1
             });
 
-            preciosList.Add(new
-            {
-                tipofcv = obj.unidad_alternativa,
-                factor = obj.equivalenciaUnidadEstandarUnidadConteo/obj.equivalenciaAlternativa,
-                principal = 0
-            });
+            if (obj.equivalenciaAlternativa > 1) { 
+                preciosList.Add(new
+                {
+                    tipofcv = obj.unidad_alternativa,
+                    factor = obj.equivalenciaUnidadEstandarUnidadConteo / obj.equivalenciaAlternativa,
+                    principal = 0
+                });
+            }
 
-            preciosList.Add(new
+
+            if (obj.equivalenciaProveedor > 1)
             {
-                tipofcv = obj.unidadProveedor,
-                factor = obj.equivalenciaUnidadEstandarUnidadConteo * obj.equivalenciaProveedor,
-                principal = 0
-            });
+                preciosList.Add(new
+                {
+                    tipofcv = obj.unidadProveedor,
+                    factor = obj.equivalenciaUnidadEstandarUnidadConteo * obj.equivalenciaProveedor,
+                    principal = 0
+                });
+            }
 
             var item = new
             {
                 codigo = obj.sku,
-                familia = obj.sku.Substring(0,3),
+                familia = "YXX", //obj.sku.Substring(0,3),
                 tprProd = tipoProd,
                 unmMenor = obj.unidad,
                 unmMayor = obj.unidadProveedor,
@@ -437,7 +444,17 @@ namespace Model.NextSoft
             return item;
         }
 
+        public static List<object> toProductoList(List<Producto> lista)
+        {
+            List<object> listaResult = new List<object>();
 
+            foreach (Producto obj in lista)
+            {
+                listaResult.Add(ConverterMPToNextSoft.toProducto(obj));
+            }
+
+            return listaResult;
+        }
         /* CONVIERTE UNA FECHA EN STRING DE AÑO-MES-DIA A DIA/MES/AÑO */
         private static string cambiarFormatoFechaV1(string fecha) {
             string[] aFecha = fecha.Split('-');

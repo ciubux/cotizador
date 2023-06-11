@@ -49,6 +49,7 @@ namespace Model
 
         [Display(Name = "Restringir a factura única:")]
         public Boolean facturaUnica { get; set; }
+        public Boolean guardadoParcialmente { get; set; }
         public bool accion_truncar { get; set; }
         public bool accion_alertarNoAtendido { get; set; }
         public Guid idPedido { get; set; }

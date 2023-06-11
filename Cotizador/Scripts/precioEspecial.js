@@ -44,8 +44,11 @@ jQuery(function ($) {
 
 
     $(document).ready(function () {
-        $("#btnBusqueda").click();
-        cargarChosenCliente();
+        setTimeout(function () {
+            $("#btnBusqueda").click();
+            cargarChosenCliente();
+        }, 500);
+        
     });
 
 
@@ -462,6 +465,10 @@ jQuery(function ($) {
     });
 
     $("#btnExportExcel").click(function () {
+        window.location.href = $(this).attr("actionLink");
+    });
+
+    $("#btnExportExcelGlobal").click(function () {
         window.location.href = $(this).attr("actionLink");
     });
 

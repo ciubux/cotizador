@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "053";
+    TempData["ScriptVersion"] = "055";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -253,8 +253,8 @@
                             case 103: linkBusquedaUsuario = "active"; linkSistema = "active"; break;
                             case 104: linkMantenimientoUsuario = "active"; linkSistema = "active"; break;
 
-                            case 220: linkBusquedaPrecioEspecial = "active"; linkMaestros = "active"; break;
-                            case 221: linkRegistroPrecioEspecial = "active"; linkMaestros = "active"; break;
+                            case 220: linkBusquedaPrecioEspecial = "active"; linkCotizaciones = "active"; break;
+                            case 221: linkRegistroPrecioEspecial = "active"; linkCotizaciones = "active"; break;
 
                             case 710: linkBusquedaClienteLite = "active"; linkMaestros = "active"; break;
 
@@ -277,7 +277,7 @@
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
-                                    @if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
+                                    @if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones || usuario.modificaPreciosEspeciales)
                                     {
                                         <li id="linkBusquedaCotizaciones" class="@linkBusquedaCotizaciones">@Html.ActionLink("Cotización - Búsqueda", "Index", "Cotizacion")</li>
                                     }
@@ -288,6 +288,11 @@
                                     @if (usuario.creaCotizacionesGrupales)
                                     {
                                         <li id="linkMantenimientoCotizacionGrupal" class="@linkMantenimientoCotizacionGrupal">@Html.ActionLink("Cotización Grupal - Crear/Modificar", "CotizarGrupo", "Cotizacion")</li>
+                                    }
+                                    @if (usuario.modificaPreciosEspeciales)
+                                    {
+                                        <li id="linkBusquedaPrecioEspecial" class="@linkBusquedaPrecioEspecial">@Html.ActionLink("Precios Especiales - Búsqueda", "List", "PrecioEspecial")</li>
+                                        <li id="linkRegistroPrecioEspecial" class="@linkRegistroPrecioEspecial">@Html.ActionLink("Precios Especiales - Registro", "Editar", "PrecioEspecial")</li>
                                     }
                                 </ul>
                             </li>
@@ -487,11 +492,7 @@
                                         <li id="linkMantenimientoGrupoCliente" class="@linkMantenimientoGrupoCliente">@Html.ActionLink("Grupo Cliente - Crear/Modificar", "Editar", "GrupoCliente")</li>
                                     }
 
-                                    @if (usuario.modificaPreciosEspeciales)
-                                    {
-                                        <li id="linkBusquedaPrecioEspecial" class="@linkBusquedaPrecioEspecial">@Html.ActionLink("Precios Especiales - Búsqueda", "List", "PrecioEspecial")</li>
-                                        <li id="linkRegistroPrecioEspecial" class="@linkRegistroPrecioEspecial">@Html.ActionLink("Precios Especiales - Registro", "Editar", "PrecioEspecial")</li>
-                                    }
+                                   
 
                                     @if (usuario.modificaMaestroProductos || usuario.visualizaProductos || usuario.realizaCargaMasivaProductos)
                                     {

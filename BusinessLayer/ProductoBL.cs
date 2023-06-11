@@ -7,6 +7,8 @@ using Model.UTILES;
 using System.IO;
 using Model.NextSoft;
 using Newtonsoft.Json.Linq;
+using NPOI.SS.Formula.Functions;
+using System.Threading.Tasks;
 
 namespace BusinessLayer
 {
@@ -374,6 +376,31 @@ namespace BusinessLayer
             using (var productoDAL = new ProductoDAL())
             {
                 return productoDAL.updateProducto(producto);
+            }
+        }
+
+        public async Task RegistroMasivoNextSoftAsync(List<Producto> lista, Guid idUsuario)
+        {
+            ProductoWS ws = new ProductoWS();
+            ws.urlApi = Constantes.NEXTSOFT_API_URL;
+            ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
+
+            object result = await ws.crearProductoLista(ConverterMPToNextSoft.toProductoList(lista));
+
+            
+            dynamic resultDatos = (dynamic)result;
+            int codigoResult = resultDatos.crearproductoResult.codigo;
+
+            if (codigoResult == 0)
+            {
+                using (var productoDAL = new ProductoDAL())
+                {
+                    productoDAL.ActualizarFechaRegistroNextSoft(lista, idUsuario);
+                }
+            }
+            else
+            {
+                //ERROR
             }
         }
 

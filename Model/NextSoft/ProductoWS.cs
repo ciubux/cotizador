@@ -40,5 +40,20 @@ namespace Model.NextSoft
 
             return resultContent;
         }
+
+        public async Task<object> crearProductoLista(List<object> dataProductos)
+        {
+            string nombreServicio = "crearproducto";
+
+            var sendData = new
+            {
+                token = this.apiToken,
+                prods = dataProductos.ToArray()
+            };
+
+            object resultContent = await this.callService(sendData, nombreServicio);
+
+            return resultContent;
+        }
     }
 }

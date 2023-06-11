@@ -88,7 +88,7 @@ namespace Cotizador.ExcelExport
 
                 /*Cabecera, Sub total*/
                 int rTotal = (list.Count) + 12;
-                int cTotal = 50 + 2;
+                int cTotal = 51 + 2;
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
@@ -201,6 +201,8 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i, "AL", "ASISTENTE COMERCIAL", titleCellStyle); /* 31 */
                 UtilesHelper.setValorCelda(sheet, i, "AM", "PEDIDO CREADO POR", titleCellStyle); /* 32 */
 
+                UtilesHelper.setValorCelda(sheet, i, "AN", "VENTA EXCLUIDA", titleCellStyle); /* 39 */
+
                 i = i + 1;
 
                 /*  for (int iii = 0; iii<50;iii++)
@@ -250,6 +252,7 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "AK", obj.ElementAt(30));
                     UtilesHelper.setValorCelda(sheet, i, "AL", obj.ElementAt(31));
                     UtilesHelper.setValorCelda(sheet, i, "AM", obj.ElementAt(32));
+                    UtilesHelper.setValorCelda(sheet, i, "AN", obj.ElementAt(39));
                     i++;
                 }
 
