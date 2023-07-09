@@ -981,6 +981,8 @@ namespace DataLayer
                 documentoDetalle.producto.descripcionLarga = Converter.GetString(row, "descripcion_larga");
                 documentoDetalle.producto.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");
                 documentoDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
+                documentoDetalle.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia_producto");
+                documentoDetalle.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor_producto");
                 documentoDetalle.producto.codigoNextSoft = Converter.GetString(row, "codigo_nextsoft");
                 documentoDetalle.producto.codigoFactorUnidadMP = Converter.GetString(row, "codigo_factor_unidad_mp");
                 documentoDetalle.producto.codigoFactorUnidadAlternativa = Converter.GetString(row, "codigo_factor_unidad_alternativa");

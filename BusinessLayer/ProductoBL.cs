@@ -81,7 +81,7 @@ namespace BusinessLayer
             {
                 Producto producto = dal.getProducto(idProducto, idCliente, esCompra, soloActivos);
                 //Si es Provincia automaticamente se considera el precioProvincia como precioSinIGV
-                
+
                 if (tc != null)
                 {
                     if (moneda.Equals("USD"))
@@ -171,7 +171,7 @@ namespace BusinessLayer
                         }
                     }
                 }
-                
+
                 if (esProvincia)
                 {
                     producto.precioSinIgv = producto.precioProvinciaSinIgv;
@@ -387,7 +387,7 @@ namespace BusinessLayer
 
             object result = await ws.crearProductoLista(ConverterMPToNextSoft.toProductoList(lista));
 
-            
+
             dynamic resultDatos = (dynamic)result;
             int codigoResult = resultDatos.crearproductoResult.codigo;
 
@@ -659,7 +659,7 @@ namespace BusinessLayer
         {
             using (var productoDAL = new ProductoDAL())
             {
-                return productoDAL.StockProductosCadaSede(idProductos, idUsuario);  
+                return productoDAL.StockProductosCadaSede(idProductos, idUsuario);
             }
         }
 
@@ -676,7 +676,7 @@ namespace BusinessLayer
             using (var productoDAL = new ProductoDAL())
             {
                 CiudadDAL ciudadDal = new CiudadDAL();
-                
+
                 MovimientoKardexCabecera kardex = productoDAL.StockProductoKardex(idUsuario, idCiudad, idProducto, fechaInicio);
                 kardex.producto = productoDAL.GetProductoById(idProducto);
                 kardex.unidadConteo = kardex.producto.unidadConteo;
@@ -700,7 +700,7 @@ namespace BusinessLayer
                     }
 
                     item.stockConteo = stockConteo;
-                    
+
                     switch (idProductoPresentacion)
                     {
                         case 0: item.stockUnidad = ((Decimal)item.stockConteo) / ((Decimal)kardex.producto.equivalenciaUnidadEstandarUnidadConteo); break;
@@ -709,7 +709,7 @@ namespace BusinessLayer
                     }
 
                     item.stockUnidad = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.stockUnidad));
-                }                
+                }
 
                 return kardex;
             }
@@ -800,6 +800,14 @@ namespace BusinessLayer
             }
 
             return procesados;
+        }
+
+        public List<Producto> SearchProductosRegistrarNextSys()
+        {
+            using (ProductoDAL dal = new ProductoDAL())
+            {
+                return dal.SearchProductosRegistrarNextSys();
+            }
         }
     }
 }

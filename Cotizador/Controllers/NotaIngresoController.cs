@@ -633,7 +633,7 @@ namespace Cotizador.Controllers
             SerieDocumentoBL serieBL = new SerieDocumentoBL();
             NotaIngreso notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO];
 
-            SerieDocumentoElectronico serie = serieBL.getSerieTrasladoInterno(notaIngreso.ciudadDestino.idCiudad);
+            SerieDocumentoElectronico serie = serieBL.getSerieDocumento("TRASLADOINTERNO", notaIngreso.ciudadDestino.idCiudad);
 
             if (serie.sedeMP != null)
             {

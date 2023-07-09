@@ -974,6 +974,11 @@ namespace DataLayer
                 pedido.cliente.grupoCliente = new GrupoCliente();
                 pedido.cliente.grupoCliente.nombre = Converter.GetString(row, "grupo_nombre");
 
+                pedido.vendedor = new Vendedor();
+                pedido.vendedor.idVendedor = Converter.GetInt(row, "id_vendedor_usuario");
+                pedido.vendedor.codigoNextSoft = Converter.GetString(row, "codigo_nextsoft_vendedor");
+
+
                 pedido.promocion = new Promocion();
                 pedido.promocion.idPromocion = Converter.GetGuid(row, "id_promocion");
                 pedido.promocion.codigo = Converter.GetString(row, "codigo_promocion");
@@ -1109,6 +1114,7 @@ namespace DataLayer
                 pedidoDetalle.producto.compraRestringida = Converter.GetInt(row, "compra_restringida");
                 pedidoDetalle.producto.topeDescuento = Converter.GetDecimal(row, "tope_descuento");
                 pedidoDetalle.producto.costoOriginal = Converter.GetDecimal(row, "costo_original");
+                pedidoDetalle.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia_alternativa");
                 pedidoDetalle.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
                 pedidoDetalle.producto.costoFleteProvincias = Converter.GetDecimal(row, "costo_flete_provincias");
                 pedidoDetalle.producto.monedaFleteProvincias = Moneda.ListaMonedasFija.Where(m => m.codigo.Equals(Converter.GetString(row, "moneda_flete_provincias"))).First();

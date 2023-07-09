@@ -98,6 +98,8 @@ namespace Model
         ///</return>
         public String unidad { get; set; }
 
+        public String unidadCorta { get; set; }
+
         private String _unidad_alternativa;
         [Display(Name = "Unidad Alternativa:")]
         public String unidad_alternativa
@@ -106,6 +108,8 @@ namespace Model
             get { return _unidad_alternativa; }
             set { _unidad_alternativa = value; }
         }
+
+        public String unidadAlternativaCorta { get; set; }
 
         [Display(Name = "Unidad de Conteo:")]
         ///<summary>
@@ -116,8 +120,11 @@ namespace Model
         ///</return>
         public String unidadConteo { get; set; }
 
+        public String unidadConteoCorta { get; set; }
+
         [Display(Name = "Unidad Proveedor:")]
         public String unidadProveedor { get; set; }
+        public String unidadProveedorCorta { get; set; }
 
         [Display(Name = "Unidad Facturación Proveedor:")]
         public String unidadPedidoProveedor { get; set; }

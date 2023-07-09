@@ -7,6 +7,8 @@ using System.IO;
 using Model.EXCEPTION;
 using System.Linq;
 using Model.NextSoft;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace BusinessLayer
 {
@@ -84,9 +86,52 @@ namespace BusinessLayer
 
                 try
                 {
-                    dal.InsertMovimientoAlmacenSalida(guiaRemision);
-                    //GuiaWS ws = new GuiaWS();
-                    //object resultWs = await ws.crearGuia(guiaRemision);
+                    if (guiaRemision.serieDocumento.Substring(0, 2).Equals("T0"))
+                    {
+                        ClienteBL blCliente = new ClienteBL();
+
+                        ClienteWS wsCli = new ClienteWS();
+                        wsCli.urlApi = Constantes.NEXTSOFT_API_URL;
+                        wsCli.apiToken = Constantes.NEXTSOFT_API_TOKEN;
+
+                        Cliente clie = blCliente.getCliente(guiaRemision.pedido.cliente.idCliente);
+
+                        object resultCli = await wsCli.crearCliente(ConverterMPToNextSoft.toCliente(clie));
+
+
+                        GuiaWS ws = new GuiaWS();
+                        ws.urlApi = Constantes.NEXTSOFT_API_URL;
+                        ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
+                        //object resultWs = await ws.crearGuia(guiaRemision);
+
+                        object dataSend = ConverterMPToNextSoft.toGuia(guiaRemision);
+
+                        int success = 0;
+
+                        object result = await ws.crearGuia(dataSend);
+
+                        JObject dataResult = (JObject)result;
+                        int codigo = dataResult["crearguiaResult"]["codigo"].Value<int>();
+
+                        string resultText = JsonConvert.SerializeObject(result);
+
+                        MovimientoAlmacenBL bl = new MovimientoAlmacenBL();
+                        if (codigo == 0)
+                        {
+                            success = 1;
+                            dal.InsertMovimientoAlmacenSalida(guiaRemision);
+
+                            bl.GuardarRespuestaNextSys(guiaRemision.idMovimientoAlmacen, success, resultText);
+                        }
+
+                        //return JsonConvert.SerializeObject(new { success = success, dataSend = dataSend, result = result });
+                    } else
+                    {
+                        if (guiaRemision.serieDocumento.Substring(0, 2).Equals("TI"))
+                        {
+                            dal.InsertMovimientoAlmacenSalida(guiaRemision);
+                        }
+                    }
                 }
                 catch (DuplicateNumberDocumentException ex)
                 {

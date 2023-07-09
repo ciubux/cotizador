@@ -7,7 +7,7 @@ jQuery(function ($) {
     var TITLE_EXITO = 'Operación Realizada';
     var TITLE_MENSAJE_BUSQUEDA = "Ingresar datos solicitados";
     var ID_SEDE_TODOS = "78343C04-DA94-4249-B0CE-474DAB6dAD3F";
-
+    var RUC_MP = "20509411671";
     var motivoTraslado = "";
 
     $(document).ready(function () {
@@ -606,7 +606,7 @@ jQuery(function ($) {
     }
 
     $("#guiaRemision_transportista_ruc").change(function () {
-        changeInputStringTransportista("ruc", $("#guiaRemision_transportista_ruc").val())
+        changeInputStringTransportista("ruc", $("#guiaRemision_transportista_ruc").val().trim())
     });
 
     $("#guiaRemision_transportista_direccion").change(function () {
@@ -614,7 +614,7 @@ jQuery(function ($) {
     });
 
     $("#guiaRemision_transportista_brevete").change(function () {
-        changeInputStringTransportista("brevete", $("#guiaRemision_transportista_brevete").val())
+        changeInputStringTransportista("brevete", $("#guiaRemision_transportista_brevete").val().trim())
     });
     
 
@@ -797,13 +797,13 @@ jQuery(function ($) {
             return false;
         }
 
-        if ($("#guiaRemision_transportista_ruc").val() == null || $("#guiaRemision_transportista_ruc").val().trim() == "") {
+        if ($("#guiaRemision_transportista_ruc").val().trim().length < 11) {
             alert('Debe ingresar el ruc del transportista.');
             $('#guiaRemision_transportista_ruc').focus();
             return false;
         }
 
-        if ($("#guiaRemision_transportista_brevete").val() == null || $("#guiaRemision_transportista_brevete").val().trim() == "") {
+        if ($("#guiaRemision_transportista_ruc").val() == RUC_MP && $("#guiaRemision_transportista_brevete").val().trim().length < 9) {
             alert('Debe ingresar el brevete del transportista.');
             $('#guiaRemision_transportista_brevete').focus();
             return false;
@@ -815,7 +815,7 @@ jQuery(function ($) {
             return false;
         }
 
-        if ($("#guiaRemision_placaVehiculo").val() == null || $("#guiaRemision_placaVehiculo").val().trim() == "") {
+        if ($("#guiaRemision_transportista_ruc").val() == RUC_MP && $("#guiaRemision_placaVehiculo").val().trim().length < 6) {
             alert('Debe ingresar la placa del vehículo.');
             $('#guiaRemision_placaVehiculo').focus();
             return false;
@@ -851,8 +851,8 @@ jQuery(function ($) {
                 contador++;
         });
 
-        if (contador > 10) {
-            alert('La guía de remisión debe contener 10 productos como máximo, por favor marque el check de "Atención Parcial", indique que NO es la última atención y modifique la "Cantidad por Atender" a 0 a algunos productos (los productos que tengan 0 no se considerarán en la guía).');
+        if (contador > 20) {
+            alert('La guía de remisión debe contener 20 productos como máximo, por favor marque el check de "Atención Parcial", indique que NO es la última atención y modifique la "Cantidad por Atender" a 0 a algunos productos (los productos que tengan 0 no se considerarán en la guía).');
             return false;
         }
 
@@ -2686,7 +2686,7 @@ jQuery(function ($) {
             return false;
         }
 
-        if ($("#transportista_ruc").val().trim() == "") {
+        if ($("#transportista_ruc").val().trim().length < 11) {
             alert("Debe ingresar el RUC del transportista.");
             $('#transportista_ruc').focus();
             return false;
@@ -2698,10 +2698,10 @@ jQuery(function ($) {
             return false;
         }
 
-        var descripcion = $("#transportista_descripcion").val();
-        var direccion = $("#transportista_direccion").val();
-        var ruc = $("#transportista_ruc").val();
-        var telefono = $("#transportista_telefono").val();
+        var descripcion = $("#transportista_descripcion").val().trim();
+        var direccion = $("#transportista_direccion").val().trim();
+        var ruc = $("#transportista_ruc").val().trim();
+        var telefono = $("#transportista_telefono").val().trim();
 
         $.ajax({
             url: "/GuiaRemision/CreateTransportistaTemporal",

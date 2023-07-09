@@ -1601,7 +1601,8 @@ namespace DataLayer
 
         public List<RegistroCargaStock> InventarioStock(int ajusteMercaderiaTransito, DateTime fechaReferencia, Guid idUsuario, Guid idCiudad, Producto producto)
         {
-            var objCommand = GetSqlCommand("ps_stock_global");
+            var objCommand = GetSqlCommand("ps_stock_global_nextsys");
+            //var objCommand = GetSqlCommand("ps_stock_global");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
             InputParameterAdd.Int(objCommand, "ajusteMercaderiaTransito", ajusteMercaderiaTransito);
@@ -1637,12 +1638,17 @@ namespace DataLayer
                 item.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia_alternativa");
                 item.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
                 item.producto.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_mp_conteo");
+                item.producto.costoSinIgv = Converter.GetDecimal(row, "costo");
+
+
+
                 item.cantidadProveedor = Converter.GetInt(row, "cantidad_unidad_proveedor");
                 item.cantidadMp = Converter.GetInt(row, "cantidad_unidad_mp");
                 item.cantidadAlternativa = Converter.GetInt(row, "cantidad_unidad_alternativa");
                 item.cantidadConteo = Converter.GetInt(row, "cantidad_unidad_conteo") + Converter.GetInt(row, "movimientos_unidad_conteo");
 
                 item.cantidadTrasladosSumarConteo = Converter.GetInt(row, "movimientos_traslado_sumar");
+
 
                 item.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 item.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
@@ -1652,7 +1658,12 @@ namespace DataLayer
 
                 item.fecha = Converter.GetDateTime(row, "fecha");
 
-                productoList.Add(item);
+                item.producto.familia = String.Format(Constantes.formatoCuatroDecimales, item.producto.costoAlternativo);
+                if (item.cantidadConteo > 0) { 
+                    productoList.Add(item);
+                }
+
+                //productoList.Add(item);
             }
 
             return productoList;
@@ -2454,6 +2465,40 @@ namespace DataLayer
 
             ExecuteNonQuery(objCommand);
 
+        }
+
+        public List<Producto> SearchProductosRegistrarNextSys()
+        {
+            var objCommand = GetSqlCommand("ps_productos_registrar_nextsys");
+
+            DataTable dataTable = Execute(objCommand);
+
+            List<Producto> list = new List<Producto>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Producto item = new Producto();
+                item.idProducto = Converter.GetGuid(row, "id_producto");
+                item.sku = Converter.GetString(row, "sku");
+                item.skuProveedor = Converter.GetString(row, "sku_proveedor");
+                item.descripcion = Converter.GetString(row, "descripcion");
+
+                item.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
+                item.codigoFactorUnidadAlternativa = Converter.GetString(row, "codigo_factor_unidad_alternativa");
+                item.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
+
+                item.unidad = Converter.GetString(row, "unidad");
+                item.codigoFactorUnidadMP = Converter.GetString(row, "codigo_factor_unidad_mp");
+
+                item.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
+                item.codigoFactorUnidadProveedor = Converter.GetString(row, "codigo_factor_unidad_proveedor");
+                item.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+
+                item.equivalenciaUnidadEstandarUnidadConteo = item.equivalenciaAlternativa;
+
+                list.Add(item);
+            }
+
+            return list;
         }
     }
 }

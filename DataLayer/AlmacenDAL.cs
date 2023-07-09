@@ -36,6 +36,12 @@ namespace DataLayer
                 obj.esPrincipal = Converter.GetBool(row, "es_principal");
                 obj.Estado = 1;
 
+                obj.ubigeo = new Ubigeo();
+                obj.ubigeo.Id = Converter.GetString(row, "ubigeo");
+                obj.codigoSucursalNextSoft = Converter.GetString(row, "codigo_sucursal_nextsoft");
+                obj.codigoPuntoVentaNextSoft = Converter.GetString(row, "codigo_punto_venta_nextsoft");
+                obj.codigoAlmacenNextSoft = Converter.GetString(row, "codigo_almacen_nextsoft");
+
                 lista.Add(obj);
             }
 

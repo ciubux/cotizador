@@ -66,13 +66,19 @@ namespace Model.NextSoft
 
             List<object> direcciones = new List<object>();
             direcciones.Add(direccion);
- 
+
+            string nombreComercial = (obj.nombreComercial != null && !obj.nombreComercial.Trim().Equals("")) ? obj.nombreComercial : obj.nombreComercialSunat;
+            if(nombreComercial == null || nombreComercial.Trim().Equals(""))
+            {
+                nombreComercial = obj.razonSocialSunat;
+            }
+
             var item = new
             {
                 tdi = ((int)obj.tipoDocumentoIdentidad).ToString(),
                 numdoc = obj.ruc,
                 razonsocial = obj.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC ? obj.razonSocialSunat : "",
-                nomcomercial = obj.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC ? obj.nombreComercial : "",
+                nomcomercial = obj.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC ? nombreComercial : "",
                 paterno = apepat,
                 materno = apemat,
                 nombres = nombres,
@@ -95,38 +101,58 @@ namespace Model.NextSoft
 
             foreach(DocumentoDetalle movDet in obj.documentoDetalle)
             {
-                string codFactor = "";
-                switch(movDet.idProductoPresentacion)
+                int cantidadAtender = movDet.cantidadPorAtender;
+
+                if (cantidadAtender > 0)
                 {
-                    case 0: codFactor = movDet.producto.codigoFactorUnidadMP; break;
-                    case 1: codFactor = movDet.producto.codigoFactorUnidadAlternativa; break;
-                    case 2: codFactor = movDet.producto.codigoFactorUnidadProveedor; break;
-                    case 3: codFactor = movDet.producto.codigoFactorUnidadConteo; break;
+                    string codFactor = "";
+                    int nFactor = 1;
+                    switch (movDet.idProductoPresentacion)
+                    {
+                        case 0:
+                            codFactor = movDet.producto.codigoFactorUnidadMP;
+                            nFactor = movDet.producto.equivalenciaAlternativa;
+                            break;
+                        case 1:
+                            codFactor = movDet.producto.codigoFactorUnidadAlternativa;
+                            nFactor = 1;
+                            break;
+                        case 2:
+                            codFactor = movDet.producto.codigoFactorUnidadProveedor;
+                            nFactor = movDet.producto.equivalenciaAlternativa * movDet.producto.equivalenciaProveedor;
+                            break;
+                        case 3:
+                            codFactor = movDet.producto.codigoFactorUnidadConteo;
+                            nFactor = 1;
+                            break;
 
+                    }
+                    var det = new
+                    {
+                        almacen = obj.almacen.codigoAlmacenNextSoft,
+                        numitem = numDet,
+                        codprod = movDet.producto.sku,
+                        descripcion = movDet.producto.descripcion,
+                        cantidad = cantidadAtender,
+                        notas = "",
+                        //codfcv = codFactor, 
+                        fcv = nFactor, // REVISAR
+                        listaprecio = codListaPreciosLim,
+                        //comprobante = "001-F001-22029",
+                        peso = 1
+                    };
+
+                    listaDet.Add(det);
+                    numDet++;
                 }
-                var det = new {
-                    almacen = obj.almacen.codigoAlmacenNextSoft,
-                    numitem = numDet,
-                    codprod = movDet.producto.codigoNextSoft, 
-                    descripcion = movDet.producto.descripcion,
-                    cantidad = movDet.cantidad,
-                    notas = "",
-                    codfcv = codFactor, 
-                    //fcv = "1", // REVISAR
-                    listaprecio = codListaPreciosLim,
-                    //comprobante = "001-F001-22029",
-                    peso = 1
-                };
-
-                listaDet.Add(det);
-                numDet++;
             }
 
-            string motivoTraslado = "006";
+            string motivoTraslado = "001";
             switch(obj.motivoTraslado)
             {
                 case GuiaRemision.motivosTraslado.Venta: motivoTraslado = "001"; break;
                 case GuiaRemision.motivosTraslado.TrasladoInterno: motivoTraslado = "004"; break;
+                case GuiaRemision.motivosTraslado.TransferenciaGratuitaEntregada: motivoTraslado = "001"; break;
             }
 
             string tipoDocumentoAlmacen = "009";
@@ -150,32 +176,35 @@ namespace Model.NextSoft
             {
                 sucursal = obj.almacen.codigoSucursalNextSoft,
                 puntoventa = obj.almacen.codigoPuntoVentaNextSoft,
-                
+
                 ruc = obj.pedido.cliente.ruc,
-                direcccion = obj.direccionEntrega, 
+                direcccion = obj.direccionEntrega,
                 ubigeo = obj.ubigeoEntrega.codigoSepPunto,
                 exportacion = false,
-                tdo = tipoDocumentoAlmacen, 
-                serie = "G" + "001", // obj.serieDocumento, // REVISAR
-                //numero = obj.numeroDocumento, // SALIDA
+                tdo = tipoDocumentoAlmacen,
+                serie = obj.serieDocumento, // REVISAR
+                numero = obj.numeroDocumento, // SALIDA
                 fecemision = obj.fechaEmision.ToString("dd/MM/yyyy"),
                 observaciones = obj.observaciones,
-                vendedor = "07885378",
-                //vendedor = obj.pedido.vendedor.codigoNextSoft,
-                ordencompra = obj.pedido != null && obj.pedido.numeroReferenciaCliente != null && obj.pedido.numeroReferenciaCliente.Trim().Equals("") ? obj.pedido.numeroReferenciaCliente : "sin orden de compra",
-                motivotraslado = motivoTraslado, 
-                modalidadtraslado = "", 
+                //vendedor = "46124367",
+                vendedor = obj.pedido.vendedor.codigoNextSoft,
+                ordencompra = obj.pedido != null && obj.pedido.numeroReferenciaCliente != null && 
+                            !obj.pedido.numeroReferenciaCliente.Trim().Equals("") && !obj.pedido.numeroReferenciaCliente.Substring(0,2).Equals("IF") ? 
+                                obj.pedido.numeroReferenciaCliente : "",
+                motivotraslado = motivoTraslado,
+                modalidadtraslado = "",
                 fectraslado = obj.fechaTraslado.ToString("dd/MM/yyyy"),
-                ructransportista = obj.transportista.ruc, 
-                placa = obj.placaVehiculo, 
-                docconductor = obj.transportista.ruc.Trim(), 
-                licconductor = obj.transportista.brevete.Trim(),
+                ructransportista = obj.transportista.ruc,
+                placa = (obj.placaVehiculo == null || obj.placaVehiculo.Length < 6) ? "" : obj.placaVehiculo.Trim(),
+                docconductor = (obj.transportista.brevete == null || obj.transportista.brevete.Length < 9) ? "" : obj.transportista.brevete.Substring(1,8), 
+                licconductor = (obj.transportista.brevete == null || obj.transportista.brevete.Length < 9) ? "" : obj.transportista.brevete,
                 nomconductor = obj.transportista.descripcion, 
                 ubigeopartida = obj.almacen.ubigeo.codigoSepPunto, 
                 ubigeollegada = obj.ubigeoEntrega.codigoSepPunto,
                 partida = obj.almacen.direccion,
                 llegada = obj.direccionEntrega,
-                usuario = nombreUsuario,
+                //usuario = nombreUsuario,
+                usuario = "nextsoft",
                 peso = 1,
                 items = listaDet.ToArray()
             };
@@ -392,16 +421,16 @@ namespace Model.NextSoft
         public static object toProducto(Producto obj)
         {
             List<object> preciosList = new List<object>();
-            string tipoProd = "007";
+            string tipoProd = "001";
 
             switch (obj.tipoProducto)
             {
-                case Producto.TipoProducto.Bien: tipoProd = "007"; break;
+                case Producto.TipoProducto.Bien: tipoProd = "001"; break;
             }
 
 
             preciosList.Add(new {
-                tipofcv = obj.unidad,
+                tipofcv = obj.codigoFactorUnidadMP,
                 factor = obj.equivalenciaUnidadEstandarUnidadConteo,
                 principal = 1
             });
@@ -409,7 +438,7 @@ namespace Model.NextSoft
             if (obj.equivalenciaAlternativa > 1) { 
                 preciosList.Add(new
                 {
-                    tipofcv = obj.unidad_alternativa,
+                    tipofcv = obj.codigoFactorUnidadAlternativa,
                     factor = obj.equivalenciaUnidadEstandarUnidadConteo / obj.equivalenciaAlternativa,
                     principal = 0
                 });
@@ -420,7 +449,7 @@ namespace Model.NextSoft
             {
                 preciosList.Add(new
                 {
-                    tipofcv = obj.unidadProveedor,
+                    tipofcv = obj.codigoFactorUnidadProveedor,
                     factor = obj.equivalenciaUnidadEstandarUnidadConteo * obj.equivalenciaProveedor,
                     principal = 0
                 });
@@ -431,9 +460,9 @@ namespace Model.NextSoft
                 codigo = obj.sku,
                 familia = "YXX", //obj.sku.Substring(0,3),
                 tprProd = tipoProd,
-                unmMenor = obj.unidad,
-                unmMayor = obj.unidadProveedor,
-                factor = obj.equivalenciaAlternativa,
+                unmMenor = obj.codigoFactorUnidadAlternativa,
+                unmMayor = obj.codigoFactorUnidadProveedor,
+                factor = obj.equivalenciaAlternativa * obj.equivalenciaProveedor,
                 codAlternativo = obj.skuProveedor,
                 descripcion = obj.descripcion,
                 usuario = "nextsoft",

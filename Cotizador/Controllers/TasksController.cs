@@ -1,5 +1,6 @@
 ﻿using BusinessLayer;
 using BusinessLayer.Email;
+using DataLayer;
 using Model;
 using Model.NextSoft;
 using Newtonsoft.Json;
@@ -282,7 +283,20 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(result);
         }
 
-        
+        public async Task<string> registrarProductosNextsys()
+        {
+            ProductoBL bl = new ProductoBL();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            List<Producto> lista = bl.SearchProductosRegistrarNextSys();
+            
+            await bl.RegistroMasivoNextSoftAsync(lista, usuario.idUsuario);
+
+            List<object> result = await bl.ActualizarFactoresProductos(usuario.idUsuario);
+            return JsonConvert.SerializeObject(ConverterMPToNextSoft.toProductoList(lista));
+            //return JsonConvert.SerializeObject(result);
+        }
+
         public async Task<string> obtenerDatosProducto()
         {
             ProductoWS ws = new ProductoWS();

@@ -16,20 +16,13 @@ namespace BusinessLayer
             }
         }
 
-        public SerieDocumentoElectronico getSerieDocumentoDiferido(Guid idSede)
+        public SerieDocumentoElectronico getSerieDocumento(String tipo, Guid idSede)
         {
             using (var dal = new SerieDocumentoDAL())
             {
-                return dal.selectSerieDocumentoDiferido(idSede);
+                return dal.selectSerieDocumento(tipo, idSede);
             }
         }
 
-        public SerieDocumentoElectronico getSerieTrasladoInterno(Guid idSede)
-        {
-            using (var dal = new SerieDocumentoDAL())
-            {
-                return dal.selectSerieTrasladoInterno(idSede);
-            }
-        }
     }
 }

@@ -53,7 +53,15 @@ namespace Cotizador.Controllers
             string jsonSeries = "[]";
             if (ciudad != null)
             {
-                var serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList.OrderByDescending(x => x.esPrincipal).ToList();
+                List<SerieDocumentoElectronico> serieDocumentoElectronicoList = new List<SerieDocumentoElectronico>();
+                foreach(SerieDocumentoElectronico item in ciudad.serieDocumentoElectronicoList.OrderByDescending(x => x.esPrincipal).ToList())
+                {
+                    if (!item.serie.Substring(0,1).Equals("T"))
+                    {
+                        serieDocumentoElectronicoList.Add(item);
+                    }
+                }
+                
                 jsonSeries = JsonConvert.SerializeObject(serieDocumentoElectronicoList);
 
             }
