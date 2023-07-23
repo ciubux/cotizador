@@ -142,7 +142,8 @@ namespace Cotizador.Controllers
             List<SerieDocumentoElectronico> serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList.OrderByDescending(x => x.esPrincipal).ToList();
             //  transaccion.cliente = new Cliente();
             //     transaccion.cliente.ciudad = new Ciudad();
-            transaccion.cliente.ciudad.serieDocumentoElectronicoList = serieDocumentoElectronicoList;
+            serieDocumentoElectronicoList = serieDocumentoElectronicoList.Where(x => x.serie.Substring(0, 1).Equals("0")).ToList();
+            transaccion.cliente.ciudad.serieDocumentoElectronicoList = serieDocumentoElectronicoList; 
 
             /*Se selecciona la primera serie de la lista*/
             transaccion.documentoVenta.serieDocumentoElectronico = serieDocumentoElectronicoList[0];

@@ -767,15 +767,17 @@ namespace DataLayer
             List<DocumentoVenta> facturaList = new List<DocumentoVenta>();
 
             var objCommand = GetSqlCommand("ps_facturas");
+            string numero = "";
             if (!documentoVenta.numero.Equals("0"))
             {
-                InputParameterAdd.Varchar(objCommand, "numero", documentoVenta.numero.PadLeft(8, '0'));
+                numero = documentoVenta.numero.PadLeft(8, '0');
             }
             else
             {
-                InputParameterAdd.Varchar(objCommand, "numero", String.Empty);
+                numero = String.Empty;
             }
 
+            InputParameterAdd.Varchar(objCommand, "numero", numero);
             InputParameterAdd.Guid(objCommand, "idCliente", documentoVenta.cliente.idCliente);
             InputParameterAdd.Bit(objCommand, "buscaSedesGrupoCliente", documentoVenta.buscarSedesGrupoCliente);
             InputParameterAdd.Int(objCommand, "idGrupoCliente", documentoVenta.idGrupoCliente);

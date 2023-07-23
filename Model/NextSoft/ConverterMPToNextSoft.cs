@@ -103,7 +103,9 @@ namespace Model.NextSoft
             {
                 int cantidadAtender = movDet.cantidadPorAtender;
 
-                if (cantidadAtender > 0)
+                if (cantidadAtender > 0 && 
+                    (movDet.producto.tipoProducto == Producto.TipoProducto.Bien || 
+                    movDet.producto.tipoProducto == Producto.TipoProducto.Comodato))
                 {
                     string codFactor = "";
                     int nFactor = 1;

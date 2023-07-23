@@ -31,16 +31,30 @@ namespace Model
             get
             {
                 int valor = cantidadPendienteAtencionPermitida - cantidadPorAtender;
-                if (valor < 0) cantidadPorAtender = cantidadPendienteAtencionPermitida;
+                if (valor < 0 || valor > cantidadPendienteAtencionPermitida) cantidadPorAtender = cantidadPendienteAtencionPermitida;
                 
                 return cantidadPorAtender;
             }
         }
 
+        /*public int cantidadPorAtenderPermitida
+        {
+            get
+            {
+                //int valor = cantidadPendienteAtencionPermitida - cantidadPorAtender;
+                int valor = cantidadPendienteAtencionPermitida - (cantidad - cantidadGuiada);
+                if (valor < 0) cantidadPorAtender = cantidadPendienteAtencionPermitida;
+
+                return cantidadPorAtender;
+            }
+        }*/
+
         public int cantidadPendienteAtencionPermitida
         {
             get {
-                int valor = cantidadPermitida - (cantidad - cantidadPendienteAtencion);
+                //int valor = cantidadPermitida - (cantidad - cantidadPendienteAtencion);
+                int valor = cantidadPermitida - cantidadGuiada;
+
                 if (valor < 0) valor = 0;
                 return valor;
             }

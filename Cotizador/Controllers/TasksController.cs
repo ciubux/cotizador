@@ -297,6 +297,27 @@ namespace Cotizador.Controllers
             //return JsonConvert.SerializeObject(result);
         }
 
+        public async Task<string> registrarProductosNextsysPasoAPaso()
+        {
+            ProductoBL bl = new ProductoBL();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            List<Producto> lista = bl.SearchProductosRegistrarNextSys();
+
+            foreach (Producto item in lista)
+            {
+                List<Producto> items = new List<Producto>();
+                items.Add(item);
+                await bl.RegistroMasivoNextSoftAsync(items, usuario.idUsuario);
+            }
+            
+
+            List<object> result = await bl.ActualizarFactoresProductos(usuario.idUsuario);
+            return JsonConvert.SerializeObject(ConverterMPToNextSoft.toProductoList(lista));
+            //return JsonConvert.SerializeObject(result);
+        }
+
+
         public async Task<string> obtenerDatosProducto()
         {
             ProductoWS ws = new ProductoWS();

@@ -56,7 +56,11 @@
                     @Html.LabelFor(v => venta.documentoVenta.serie, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                     <div class="col-xs-8">
                         @Html.DropDownListFor(x => venta.documentoVenta.serieDocumentoElectronico,
-                         new SelectList(venta.cliente.ciudad.serieDocumentoElectronicoList, "serie", "serie", venta.documentoVenta.serieDocumentoElectronico), htmlAttributes: new { @class = "form-control", id = "documentoVenta_serie" })
+                         new SelectList(
+                            venta.cliente.ciudad.serieDocumentoElectronicoList.Where(x => x.serie.Substring(0, 1).Equals("0")).ToList(), 
+                            "serie", "serie", 
+                            venta.documentoVenta.serieDocumentoElectronico), 
+                         htmlAttributes: new { @class = "form-control", id = "documentoVenta_serie" })
                     </div>
                 </div>
             </div>
@@ -66,7 +70,7 @@
                     @Html.LabelFor(v => venta.documentoVenta.fechaEmision, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                     <div class="col-xs-8">
                         <!--<input type="hidden" id="fechaEmision" value="" />
-                    <input type="hidden" id="fechaEntregaHastaProgramacion" value="" />-->
+                <input type="hidden" id="fechaEntregaHastaProgramacion" value="" />-->
                         <input type="hidden" id="documentoVenta_fechaEmisiontmp" value="@ViewBag.fechaEmision" />
                         <input class="form-control" type="text" id="documentoVenta_fechaEmision" name="documentoVenta_fechaEmision">
                     </div>
