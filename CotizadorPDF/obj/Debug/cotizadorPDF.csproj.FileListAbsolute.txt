@@ -648,3 +648,4 @@ D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.WebCommon.pdb
 D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplete
 D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.dll
 D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
+F:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\NPOI.xml

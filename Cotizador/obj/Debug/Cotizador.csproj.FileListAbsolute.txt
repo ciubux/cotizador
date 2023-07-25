@@ -3266,3 +3266,8 @@ D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.MicrosoftAcco
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CopyComplete
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.dll
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.pdb
+F:\Repo\freelos\cotizador\Cotizador\bin\NPOI.dll
+F:\Repo\freelos\cotizador\Cotizador\bin\NPOI.OOXML.dll
+F:\Repo\freelos\cotizador\Cotizador\bin\NPOI.OpenXml4Net.dll
+F:\Repo\freelos\cotizador\Cotizador\bin\NPOI.OpenXmlFormats.dll
+F:\Repo\freelos\cotizador\Cotizador\bin\NPOI.xml

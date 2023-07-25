@@ -606,3 +606,8 @@ D:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\Framework.DAL.Settings.pdb
 D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.csproj.CopyComplete
 D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.dll
 D:\Repo\freelos\cotizador\BusinessLayer\obj\Debug\BusinessLayer.pdb
+F:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\NPOI.dll
+F:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\NPOI.OOXML.dll
+F:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\NPOI.OpenXml4Net.dll
+F:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\NPOI.OpenXmlFormats.dll
+F:\Repo\freelos\cotizador\BusinessLayer\bin\Debug\NPOI.xml

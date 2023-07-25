@@ -1221,14 +1221,12 @@ namespace Cotizador.Controllers
             if (seAtiendeDiferido)
             {
                 this.CambiarASerieDiferida();
-                this.Session["seAtiendeDiferidoVenta"] = false;
             }
 
             bool seAtiendeTrasladoInterno = this.Session["seAtiendeTrasladoInterno"] != null ? (bool)this.Session["seAtiendeTrasladoInterno"] : false;
             if (seAtiendeTrasladoInterno)
             {
                 this.CambiarASerieTrasladoInterno();
-                this.Session["seAtiendeTrasladoInterno"] = false;
             }
 
 
@@ -1236,10 +1234,10 @@ namespace Cotizador.Controllers
             if (seAtiendeTrasladoSedes)
             {
                 this.CambiarASerieTrasladoSedes();
-                this.Session["seAtiendeTrasladoSedes"] = false;
             }
 
             
+
             if (!seAtiendeDiferido && !seAtiendeTrasladoInterno && !seAtiendeTrasladoSedes)
             {
                 this.CambiarASerieElectronica();
@@ -1271,6 +1269,9 @@ namespace Cotizador.Controllers
             try
             {
                 await movimientoAlmacenBL.InsertMovimientoAlmacenSalida(guiaRemision);
+                this.Session["seAtiendeDiferidoVenta"] = false;
+                this.Session["seAtiendeTrasladoInterno"] = false;
+                this.Session["seAtiendeTrasladoSedes"] = false;
             }
             catch (DuplicateNumberDocumentException ex)
             {
@@ -1813,6 +1814,9 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_GUIA] = null;
             UsuarioBL usuarioBL = new UsuarioBL();
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            this.Session["seAtiendeDiferidoVenta"] = false;
+            this.Session["seAtiendeTrasladoInterno"] = false;
+            this.Session["seAtiendeTrasladoSedes"] = false;
             //   usuarioBL.updateCotizacionSerializada(usuario, null);
             return RedirectToAction("Index");
         }

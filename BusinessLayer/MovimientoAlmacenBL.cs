@@ -125,13 +125,13 @@ namespace BusinessLayer
                         }
 
                         //return JsonConvert.SerializeObject(new { success = success, dataSend = dataSend, result = result });
-                    } /*else
+                    } 
                     {
-                        if (guiaRemision.serieDocumento.Substring(0, 2).Equals("TI"))
+                        if (guiaRemision.serieDocumento.Substring(0, 2).Equals("DF"))
                         {
                             dal.InsertMovimientoAlmacenSalida(guiaRemision);
                         }
-                    }*/
+                    }
                 }
                 catch (DuplicateNumberDocumentException ex)
                 {
