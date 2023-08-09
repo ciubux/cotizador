@@ -311,6 +311,9 @@ namespace Model
         public static String NEXTSOFT_API_URL = "";
         public static String NEXTSOFT_API_TOKEN = "";
 
+        public static String NEXTSOFT_API_WEB_URL = "";
+        public static String NEXTSOFT_API_WEB_TOKEN = "";
+        public static String NEXTSOFT_API_WEB_RUC = "";
 
         public static List<Producto> DESCUENTOS_LIST;
         public static List<Producto> CARGOS_LIST;

@@ -1414,14 +1414,14 @@ namespace Cotizador.Controllers
             ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
 
             object dataSend = ConverterMPToNextSoft.toGuia(guiaRemision);
-            //object result = await ws.crearGuia(dataSend);
+            object result = await ws.crearGuia(dataSend);
 
-            //JObject dataResult = (JObject)result;
-            //int codigo = dataResult["crearguiaResult"]["codigo"].Value<int>();
+            JObject dataResult = (JObject)result;
+            int codigo = dataResult["crearguiaResult"]["codigo"].Value<int>();
 
-            //string resultText = JsonConvert.SerializeObject(result); 
+            string resultText = JsonConvert.SerializeObject(result); 
 
-            int codigo = 1; var result = new { codigo = "PRUEBA" };
+            //int codigo = 1; var result = new { codigo = "PRUEBA" };
 
             MovimientoAlmacenBL bl = new MovimientoAlmacenBL();
             if (codigo == 0)
@@ -1429,7 +1429,39 @@ namespace Cotizador.Controllers
                 success = 1;
             }
 
-            //bl.GuardarRespuestaNextSys(guiaRemision.idMovimientoAlmacen, success, resultText);
+            bl.GuardarRespuestaNextSys(guiaRemision.idMovimientoAlmacen, success, resultText);
+
+            return JsonConvert.SerializeObject(new { success = success, dataSend = dataSend, result = result });
+        }
+
+        public async System.Threading.Tasks.Task<string> DescargarArchivoPDF()
+        {
+            GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            guiaRemision.usuario = usuario;
+
+            int success = 0;
+
+            GuiaWS ws = new GuiaWS();
+            ws.urlApiWeb = Constantes.NEXTSOFT_API_WEB_URL;
+            ws.apiWebToken = Constantes.NEXTSOFT_API_WEB_TOKEN;
+            ws.apiWebRUC = Constantes.NEXTSOFT_API_WEB_RUC;
+
+            object dataSend = ConverterMPToNextSoft.toGuiaConsulta(guiaRemision, Constantes.NEXTSOFT_API_WEB_TOKEN, Constantes.NEXTSOFT_API_WEB_RUC);
+            object result = await ws.consultarGuia(dataSend);
+
+            JObject dataResult = (JObject)result;
+            int codigo = dataResult["ConsultarComprobanteResult"]["Codigo"].Value<int>();
+
+            string resultText = JsonConvert.SerializeObject(result);
+
+            //int codigo = 1; var result = new { codigo = "PRUEBA" };
+
+            MovimientoAlmacenBL bl = new MovimientoAlmacenBL();
+            if (codigo == 0)
+            {
+                success = 1;
+            }
 
             return JsonConvert.SerializeObject(new { success = success, dataSend = dataSend, result = result });
         }

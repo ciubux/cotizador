@@ -374,6 +374,13 @@ namespace DataLayer
                     case "NEXTSOFT_API_TOKEN":
                         Constantes.NEXTSOFT_API_TOKEN = valorParametro; break;
 
+                    case "NEXTSOFT_API_WEB_URL":
+                        Constantes.NEXTSOFT_API_WEB_URL = valorParametro; break;
+                    case "NEXTSOFT_API_WEB_TOKEN":
+                        Constantes.NEXTSOFT_API_WEB_TOKEN = valorParametro; break;
+                    case "NEXTSOFT_API_WEB_RUC":
+                        Constantes.NEXTSOFT_API_WEB_RUC = valorParametro; break;
+
                     case "AMBIENTE_EOL":
                         {
                             Constantes.AMBIENTE_EOL = valorParametro;

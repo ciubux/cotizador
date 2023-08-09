@@ -23,6 +23,15 @@ namespace Model.NextSoft
             return resultContent;
         }
 
-        
+        public async Task<object> consultarGuia(object sendData)
+        {
+            string nombreServicio = "ConsultarComprobante";
+
+
+            object resultContent = await this.callServiceWeb(sendData, nombreServicio);
+
+            return resultContent;
+        }
+
     }
 }

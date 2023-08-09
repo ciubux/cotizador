@@ -9,6 +9,7 @@ using Model.NextSoft;
 using Newtonsoft.Json.Linq;
 using NPOI.SS.Formula.Functions;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace BusinessLayer
 {
@@ -385,7 +386,8 @@ namespace BusinessLayer
             ws.urlApi = Constantes.NEXTSOFT_API_URL;
             ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
 
-            object result = await ws.crearProductoLista(ConverterMPToNextSoft.toProductoList(lista));
+            List<object> envio = ConverterMPToNextSoft.toProductoList(lista);
+            object result = await ws.crearProductoLista(envio);
 
 
             dynamic resultDatos = (dynamic)result;
@@ -401,6 +403,10 @@ namespace BusinessLayer
             else
             {
                 //ERROR
+                using (var logDAL = new LogDAL())
+                {
+                    logDAL.insertLogWS("NEXTSYS_REGISTRO_LISTADO_PRODUCTOS", JsonConvert.SerializeObject(envio), JsonConvert.SerializeObject(result), idUsuario);
+                }
             }
         }
 

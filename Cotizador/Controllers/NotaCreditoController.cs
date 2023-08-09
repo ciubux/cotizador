@@ -89,8 +89,9 @@ namespace Cotizador.Controllers
                 /*Se obtiene la ciudad para poder cargar las series del documento de pago*/
                 Ciudad ciudad = usuario.sedesMPPedidos.Where(s => s.idCiudad == transaccion.cliente.ciudad.idCiudad).FirstOrDefault();//  Guid.Parse("39C9D42B-6D94-4AAE-93B8-D1D6A5F11A33")).FirstOrDefault();
                 List<SerieDocumentoElectronico> serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList.OrderByDescending(x => x.esPrincipal).ToList();
-              //  transaccion.cliente = new Cliente();
-           //     transaccion.cliente.ciudad = new Ciudad();
+                serieDocumentoElectronicoList = serieDocumentoElectronicoList.Where(x => x.serie.Substring(0, 1).Equals("0")).ToList();
+                //  transaccion.cliente = new Cliente();
+                //     transaccion.cliente.ciudad = new Ciudad();
                 transaccion.cliente.ciudad.serieDocumentoElectronicoList = serieDocumentoElectronicoList;
 
                 /*Se selecciona la primera serie de la lista*/

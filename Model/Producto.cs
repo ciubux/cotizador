@@ -40,8 +40,13 @@ namespace Model
 
         public String codigoNextSoft { get; set; }
 
+        [Display(Name = "Unid. Proveedor Abrev.:")]
         public String codigoFactorUnidadProveedor { get; set; }
+
+        [Display(Name = "Unid. Alternativa Abrev.:")]
         public String codigoFactorUnidadAlternativa { get; set; }
+
+        [Display(Name = "Unid. MP Abrev.:")]
         public String codigoFactorUnidadMP { get; set; }
 
         public String codigoFactorUnidadConteo { get; set; }

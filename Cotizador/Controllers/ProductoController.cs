@@ -333,7 +333,7 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PRODUCTO] = productoVer;
         }
 
-        public String Create()
+        public async Task<string> Create()
         {
             ProductoBL productoBL = new ProductoBL();
             Producto producto = (Producto)this.Session[Constantes.VAR_SESSION_PRODUCTO];
@@ -342,6 +342,12 @@ namespace Cotizador.Controllers
             producto.calcularCostoPrecio();
             producto.calcularEquivalenciasConteo();
             producto = productoBL.insertProducto(producto);
+
+            List<Producto> lista = new List<Producto> ();
+            lista.Add(producto);
+
+            await productoBL.RegistroMasivoNextSoftAsync(lista, producto.usuario.idUsuario);
+
             this.Session[Constantes.VAR_SESSION_PRODUCTO] = null;
             String resultado = JsonConvert.SerializeObject(producto);
             return resultado;
@@ -1817,6 +1823,36 @@ namespace Cotizador.Controllers
                                 productoStaging.validaStock = 0;
                             }
 
+                            pos = posicionInicial + 47;
+                            try
+                            {
+                                productoStaging.codigoFactorUnidadAlternativa = sheet.GetRow(row).GetCell(pos).ToString().Trim().Replace("\"", "''");
+                            }
+                            catch (Exception e)
+                            {
+                                productoStaging.codigoFactorUnidadAlternativa = "";
+                            }
+
+                            pos = posicionInicial + 48;
+                            try
+                            {
+                                productoStaging.codigoFactorUnidadMP = sheet.GetRow(row).GetCell(pos).ToString().Trim().Replace("\"", "''");
+                            }
+                            catch (Exception e)
+                            {
+                                productoStaging.codigoFactorUnidadMP = "";
+                            }
+
+                            pos = posicionInicial + 49;
+                            try
+                            {
+                                productoStaging.codigoFactorUnidadProveedor = sheet.GetRow(row).GetCell(pos).ToString().Trim().Replace("\"", "''");
+                            }
+                            catch (Exception e)
+                            {
+                                productoStaging.codigoFactorUnidadProveedor = "";
+                            }
+
                             productoStaging.tipoCambio = tipoCambio;
                             productoStaging.calcularCostoPrecio();
                             productoStaging.calcularEquivalenciasConteo();
@@ -1924,13 +1960,13 @@ namespace Cotizador.Controllers
                 }
             }
 
-            //this.Session["ImportProducts_Inserts"] = contInsert;
-            //this.Session["ImportProducts_Updates"] = contUpdate;
+            this.Session["ImportProducts_Inserts"] = contInsert;
+            this.Session["ImportProducts_Updates"] = contUpdate;
 
-           /* if (listaInsertar.Count > 0)
+            if (listaInsertar.Count > 0)
             {
                 await productoBL.RegistroMasivoNextSoftAsync(listaInsertar, usuario.idUsuario);
-            }*/
+            }
 
             if (nFIV <= nFT)
             {

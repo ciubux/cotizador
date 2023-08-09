@@ -28,6 +28,15 @@ namespace DataLayer
         }
 
 
+        public void insertLogWS(string tipo, string envio, string respuesta, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pi_log_ws");
+            InputParameterAdd.Varchar(objCommand, "tipo", tipo);
+            InputParameterAdd.Varchar(objCommand, "envio", envio);
+            InputParameterAdd.Varchar(objCommand, "respuesta", respuesta);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            ExecuteNonQuery(objCommand);
+        }
 
     }
 }

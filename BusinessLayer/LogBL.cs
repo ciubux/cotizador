@@ -17,5 +17,13 @@ namespace BusinessLayer
                 logDAL.insertLog(log);
             }
         }
+
+        public void insertLogWS(string tipo, string envio, string respuesta, Guid idUsuario)
+        {
+            using (var logDAL = new LogDAL())
+            {
+                logDAL.insertLogWS(tipo, envio, respuesta, idUsuario);
+            }
+        }
     }
 }

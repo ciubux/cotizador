@@ -1072,6 +1072,10 @@ namespace DataLayer
                 item.unidadProveedorInternacional = Converter.GetString(row, "unidad_proveedor_internacional");
                 item.unidadEstandarInternacional = Converter.GetString(row, "unidad_estandar_internacional");
                 item.unidadAlternativaInternacional = Converter.GetString(row, "unidad_alternativa_internacional");
+                item.codigoFactorUnidadMP = Converter.GetString(row, "codigo_factor_unidad_mp");
+                item.codigoFactorUnidadAlternativa = Converter.GetString(row, "codigo_factor_unidad_alternativa");
+                item.codigoFactorUnidadProveedor = Converter.GetString(row, "codigo_factor_unidad_proveedor");
+
                 item.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
                 item.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
                 item.unidadPedidoProveedor = Converter.GetString(row, "unidad_pedido_proveedor");
@@ -1308,6 +1312,9 @@ namespace DataLayer
                 item.unidadProveedorInternacional = Converter.GetString(row, "unidad_proveedor_internacional");
                 item.unidadEstandarInternacional = Converter.GetString(row, "unidad_estandar_internacional");
                 item.unidadAlternativaInternacional = Converter.GetString(row, "unidad_alternativa_internacional");
+                item.codigoFactorUnidadMP = Converter.GetString(row, "codigo_factor_unidad_mp");
+                item.codigoFactorUnidadAlternativa = Converter.GetString(row, "codigo_factor_unidad_alternativa");
+                item.codigoFactorUnidadProveedor = Converter.GetString(row, "codigo_factor_unidad_proveedor");
 
                 item.Estado = Converter.GetInt(row, "estado");
                 item.agregarDescripcionCotizacion = Converter.GetInt(row, "agregar_descripcion_cotizacion");
@@ -1370,6 +1377,9 @@ namespace DataLayer
             InputParameterAdd.VarcharEmpty(objCommand, "unidadProveedor", producto.unidadProveedor == null ? "" : producto.unidadProveedor);
             InputParameterAdd.Varchar(objCommand, "unidadEstandarInternacional", producto.unidadEstandarInternacional);
             InputParameterAdd.Varchar(objCommand, "unidadPedidoProveedor", producto.unidadPedidoProveedor);
+            InputParameterAdd.Varchar(objCommand, "codigoFactorUnidadMP", producto.codigoFactorUnidadMP);
+            InputParameterAdd.Varchar(objCommand, "codigoFactorUnidadAlternativa", producto.codigoFactorUnidadAlternativa);
+            InputParameterAdd.Varchar(objCommand, "codigoFactorUnidadProveedor", producto.codigoFactorUnidadProveedor);
             InputParameterAdd.Int(objCommand, "equivalencia", producto.equivalenciaAlternativa);
             InputParameterAdd.Int(objCommand, "equivalenciaProveedor", producto.equivalenciaProveedor);
             InputParameterAdd.Decimal(objCommand, "equivalenciaUnidadPedidoProveedor", producto.equivalenciaUnidadPedidoProveedor);
@@ -1482,6 +1492,10 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
             InputParameterAdd.Int(objCommand, "descontinuado", (int)producto.ventaRestringida);
             InputParameterAdd.Int(objCommand, "compraRestringida", producto.compraRestringida);
+
+            //InputParameterAdd.Varchar(objCommand, "codigoFactorUnidadMP", producto.codigoFactorUnidadMP);
+            //InputParameterAdd.Varchar(objCommand, "codigoFactorUnidadAlternativa", producto.codigoFactorUnidadAlternativa);
+            //InputParameterAdd.Varchar(objCommand, "codigoFactorUnidadProveedor", producto.codigoFactorUnidadProveedor);
 
             if (producto.descripcionLarga == null) producto.descripcionLarga = "";
             InputParameterAdd.Varchar(objCommand, "descripcionLarga", producto.descripcionLarga.Replace("\"", "''"));

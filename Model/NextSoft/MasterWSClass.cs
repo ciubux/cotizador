@@ -12,6 +12,10 @@ namespace Model.NextSoft
         public string urlApi { get; set; }
         public string apiToken { get; set; }
 
+        public string urlApiWeb { get; set; }
+        public string apiWebToken { get; set; }
+        public string apiWebRUC { get; set; }
+
         protected async Task<object> callService(object sendData, string  nombreServicio) {
 
             var httpClient = new HttpClient();
@@ -23,9 +27,25 @@ namespace Model.NextSoft
             return dataResult;
         }
 
+        protected async Task<object> callServiceWeb(object sendData, string nombreServicio)
+        {
+
+            var httpClient = new HttpClient();
+            var content = new StringContent(JsonConvert.SerializeObject(sendData), Encoding.UTF8, "application/json");
+            var result = await httpClient.PostAsync(this.fullUrlWeb(nombreServicio), content);
+            string resultContent = await result.Content.ReadAsStringAsync();
+
+            object dataResult = JsonConvert.DeserializeObject(resultContent);
+            return dataResult;
+        }
+
         protected string fullUrl(string urlService)
         {
             return urlApi + urlService;
+        }
+        protected string fullUrlWeb(string urlService)
+        {
+            return urlApiWeb + urlService;
         }
     }
 }

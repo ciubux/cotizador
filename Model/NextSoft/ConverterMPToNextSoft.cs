@@ -101,7 +101,7 @@ namespace Model.NextSoft
 
             foreach(DocumentoDetalle movDet in obj.documentoDetalle)
             {
-                int cantidadAtender = movDet.cantidadPorAtender;
+                int cantidadAtender = movDet.cantidadPorAtender; //movDet.cantidadPorAtender;
 
                 if (cantidadAtender > 0 && 
                     (movDet.producto.tipoProducto == Producto.TipoProducto.Bien || 
@@ -215,6 +215,23 @@ namespace Model.NextSoft
             return item;
         }
 
+        public static object toGuiaConsulta(GuiaRemision obj, string apiToken, string apiRUC)
+        {
+            string tipoDocumentoAlmacen = "09";
+
+            var item = new
+            {
+                Token = apiToken,
+                Ruc = apiRUC,
+                Tipo = tipoDocumentoAlmacen,
+                Serie = obj.serieDocumento,
+                Numero = obj.numeroDocumento,
+                Usuario = "nextsoft",
+                Archivo = true
+            };
+
+            return item;
+        }
 
         public static object toCpe(DocumentoVenta obj)
         {
@@ -460,7 +477,7 @@ namespace Model.NextSoft
             var item = new
             {
                 codigo = obj.sku,
-                familia = "YXX", //obj.sku.Substring(0,3),
+                familia = obj.sku.Substring(0,3),
                 tprProd = tipoProd,
                 unmMenor = obj.codigoFactorUnidadAlternativa,
                 unmMayor = obj.codigoFactorUnidadProveedor,

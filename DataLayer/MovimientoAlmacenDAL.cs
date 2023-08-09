@@ -966,6 +966,9 @@ namespace DataLayer
                 DocumentoDetalle documentoDetalle = new DocumentoDetalle();
                 documentoDetalle.idDocumentoDetalle = Converter.GetGuid(row, "id_movimiento_almacen_detalle");
                 documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+                documentoDetalle.cantidadPorAtender = documentoDetalle.cantidad;
+                documentoDetalle.cantidadPermitida = documentoDetalle.cantidad;
+                documentoDetalle.cantidadGuiada = 0;
                 documentoDetalle.cantidadTotalAtencion = Converter.GetInt(row, "cantidad_pedido");
 
                 documentoDetalle.ProductoPresentacion = new ProductoPresentacion();

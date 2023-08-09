@@ -735,7 +735,9 @@
                     <button type="button" id="btnCancelarVerGuiaRemision" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     @if (guiaRemision.usuario.administraGuias || guiaRemision.usuario.creaGuias)
                     {
-                        <button type="button" id="btnImprimirGuiaRemision" class="btn btn-success">Imprimir</button>
+                        @*<button type="button" id="btnImprimirGuiaRemision" class="btn btn-success">Imprimir</button>*@
+                        <button type="button" id="btnDescargarPDFGuia" class="btn btn-primary bouton-image pdfBoton">PDF</button>
+                        
                     }
                     @if (guiaRemision.usuario.creaDocumentosVenta)
                     {

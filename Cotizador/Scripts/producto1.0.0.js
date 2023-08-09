@@ -709,6 +709,18 @@ jQuery(function ($) {
     });
 
 
+    $("#producto_codigoFactorUnidadMP").change(function () {
+        changeInputString("codigoFactorUnidadMP", $("#producto_codigoFactorUnidadMP").val());
+    });
+
+    $("#producto_codigoFactorUnidadAlternativa").change(function () {
+        changeInputString("codigoFactorUnidadAlternativa", $("#producto_codigoFactorUnidadAlternativa").val());
+    });
+
+    $("#producto_codigoFactorUnidadProveedor").change(function () {
+        changeInputString("codigoFactorUnidadProveedor", $("#producto_codigoFactorUnidadProveedor").val());
+    });
+
 
     $("#producto_exoneradoIgv").change(function () {
         var valor = 1;
