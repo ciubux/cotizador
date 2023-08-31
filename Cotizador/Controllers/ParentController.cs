@@ -7,6 +7,7 @@ using Model;
 
 using System.Web.Routing;
 using NLog;
+using BusinessLayer;
 
 namespace Cotizador.Controllers
 {
@@ -61,7 +62,21 @@ namespace Cotizador.Controllers
             return true;
         }
 
+        protected List<EscalaComision> GetEscalasComision()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            List<EscalaComision> lista = new List<EscalaComision>();
+            if (this.Session[Constantes.VAR_ESCALA_COMISION_VALIDAS] == null)
+            {
+                EscalaComisionBL bl = new EscalaComisionBL(); 
+                
+                lista = bl.getEscalasComisionValidas(usuario.idUsuario);
+            } else
+            {
+                lista = (List<EscalaComision>)this.Session[Constantes.VAR_ESCALA_COMISION_VALIDAS];
+            }
 
-
+            return lista;
+        }
     }
 }

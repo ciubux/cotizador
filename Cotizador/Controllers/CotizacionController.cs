@@ -225,6 +225,7 @@ namespace Cotizador.Controllers
                 cotizacionTmp.ajusteCalculoPrecios = true;
             }
 
+            cotizacionTmp.escalasComision = this.GetEscalasComision();
             cotizacionTmp.noAfectoCambiosPrecio = false;
             cotizacionTmp.validezOfertaEnDias = Constantes.PLAZO_OFERTA_DIAS;
             cotizacionTmp.considerarCantidades = Cotizacion.OpcionesConsiderarCantidades.Observaciones;
@@ -319,8 +320,8 @@ namespace Cotizador.Controllers
                 }
                 ViewBag.existeCliente = existeCliente;
 
-                
-                
+
+                cotizacion.asignarEscalasComisionADetalles();
 
                 if (cotizacion.cliente.idCliente != Guid.Empty)
                 {
@@ -1649,6 +1650,9 @@ namespace Cotizador.Controllers
             cotizacion.codigo = Int64.Parse(Request["numero"].ToString());
             cotizacion = cotizacionBL.GetCotizacion(cotizacion, usuario);
             cotizacion.usuarioBusqueda = usuario;
+            cotizacion.escalasComision = this.GetEscalasComision();
+            cotizacion.asignarEscalasComisionADetalles();
+
             this.Session[Constantes.VAR_SESSION_COTIZACION_VER] = cotizacion;
 
             string jsonUsuario = JsonConvert.SerializeObject(usuario);

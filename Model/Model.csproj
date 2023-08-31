@@ -80,6 +80,7 @@
     <Compile Include="Promocion.cs" />
     <Compile Include="Empresa.cs" />
     <Compile Include="Kpi.cs" />
+    <Compile Include="EscalaComision.cs" />
     <Compile Include="TipoCambioSunat.cs" />
     <Compile Include="TipoVistaDashboard.cs" />
     <Compile Include="UTILES\MovimientoKardexCabecera.cs" />

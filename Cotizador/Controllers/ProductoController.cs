@@ -1869,6 +1869,7 @@ namespace Cotizador.Controllers
 
                             productoStaging.idProducto = idRegistro;
                             productoStaging.usuario = usuario;
+                            productoStaging.IdUsuarioRegistro = usuario.idUsuario;
                             productoStaging.fechaInicioVigencia = fechaInicioVigencia;
 
 

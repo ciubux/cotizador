@@ -1107,7 +1107,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             String response = "{\"success\": 0}";
 
-            if (usuario.creaGuiasDiferidas)
+            if (usuario.creaGuias)
             {
                 SerieDocumentoBL serieBL = new SerieDocumentoBL();
                 GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
@@ -1134,7 +1134,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             String response = "{}";
 
-            if (usuario.creaGuiasDiferidas)
+            if (usuario.creaGuias)
             {
                 GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
                 guiaRemision.serieDocumento = guiaRemision.ciudadOrigen.serieGuiaRemision;

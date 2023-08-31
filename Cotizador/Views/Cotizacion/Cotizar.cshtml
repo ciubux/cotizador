@@ -497,6 +497,8 @@
                 <th data-name="costo" data-visible="false">Costo</th>
             }
 
+            <th data-name="escala" data-sortable="false" data-breakpoints="xs sm" style="width:60px">ESC</th>
+
             @if (cotizacion.usuario.visualizaMargen)
             {
                 <th data-name="margen" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
@@ -505,6 +507,7 @@
             {
                 <th data-name="margen" data-visible="false" data-breakpoints="xs sm" style="width:60px">Mg %</th>
             }
+
 
             <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
             <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Precio Unit.</th>
@@ -621,6 +624,7 @@
                 <td class="@cotizacionDetalle.producto.idProducto detprecio" style="text-align:right">@cotizacionDetalle.precioNeto</td>
                 <td class="@cotizacionDetalle.producto.idProducto detcostoLista">@cotizacionDetalle.costoListaVisible  </td>
 
+                <td class="@cotizacionDetalle.producto.idProducto detEscala" style="width:50px; text-align:right"><b>@cotizacionDetalle.escalaComision</b></td>
                 <td class="@cotizacionDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@cotizacionDetalle.margen %</td>
 
                 <td class="@cotizacionDetalle.producto.idProducto detflete" style="text-align:right">@cotizacionDetalle.flete</td>

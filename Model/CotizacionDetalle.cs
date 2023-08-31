@@ -158,6 +158,9 @@ namespace Model
             }
         }
 
+        public string escalaComision { get; set; }
+        
+
         public Decimal margenCostoFlete
         {
             get

@@ -331,7 +331,6 @@ namespace DataLayer
                 cotizacionDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_sin_igv");
 
 
-
                 //El Precio sin igv es el precio lista
                 cotizacionDetalle.producto.precioLista = cotizacionDetalle.producto.precioSinIgv;
                 cotizacionDetalle.producto.precioListaAnterior = Converter.GetDecimal(row, "precio_sin_igv_anterior");
@@ -341,6 +340,7 @@ namespace DataLayer
                 {
                     cotizacionDetalle.ProductoPresentacion = new ProductoPresentacion();
                     cotizacionDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+                    cotizacionDetalle.ProductoPresentacion.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion");
                 }
 
 
@@ -496,6 +496,7 @@ namespace DataLayer
                 {
                     cotizacionDetalle.ProductoPresentacion = new ProductoPresentacion();
                     cotizacionDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+                    cotizacionDetalle.ProductoPresentacion.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion");
                 }
 
                 cotizacionDetalle.unidad = Converter.GetString(row, "unidad");
@@ -529,8 +530,6 @@ namespace DataLayer
 
                 if (cotizacionDetalle.esPrecioAlternativo)
                 {
-
-
                     //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
                     //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
                     cotizacionDetalle.precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacionDetalle.producto.precioClienteProducto.precioNeto * cotizacionDetalle.ProductoPresentacion.Equivalencia));

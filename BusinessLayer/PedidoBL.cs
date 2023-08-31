@@ -99,6 +99,11 @@ namespace BusinessLayer
                 /*Si es venta se valida los precios de lo contrario pasa directamente sin aprobacion*/
                 if (pedido.tipoPedido == Pedido.tiposPedido.Venta)
                 {
+                    if (pedidoDetalle.esPrecioAlternativo && (pedidoDetalle.ProductoPresentacion == null || pedidoDetalle.ProductoPresentacion.IdProductoPresentacion == 0))
+                    {
+                        throw new Exception("ERROR DE EQUIVALENCIAS, CONTACTE CON TI");
+                    }
+
                     if (!pedido.usuario.apruebaPedidos)
                     {
                         //Si cliente está bloqueado

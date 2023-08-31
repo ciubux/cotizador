@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json.Bson;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity.Core.Common.EntitySql;
 using System.Linq;
 using System.Web;
 
@@ -117,6 +119,8 @@ namespace Model
         public Boolean aplicaSedes { get; set; }
 
         public Boolean esPagoContado { get; set; }
+
+        public List<EscalaComision> escalasComision { get; set; }
 
         [Display(Name = "Promociones:")]
         public List<Promocion> promociones { get; set; }
@@ -285,6 +289,14 @@ namespace Model
                 }
                 
                 return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (utilidad / total) * 100));
+            }
+        }
+
+        public void asignarEscalasComisionADetalles()
+        {
+            foreach(CotizacionDetalle det in cotizacionDetalleList)
+            {
+                det.escalaComision = EscalaComision.escalaPorMargen(det.margen, this.escalasComision).nombre;
             }
         }
 

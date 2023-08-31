@@ -275,6 +275,7 @@ namespace Model
         public static String VAR_SESSION_PERMISO_LISTA_MANTENEDOR = "permisoMantenedorList";
         public static String VAR_SESSION_PERMISO_VER = "permisoVer";
 
+        public static String VAR_ESCALA_COMISION_VALIDAS = "escalasComisionValidasList";
 
         public static String VAR_SESSION_ASIGNACION_PERMISOS = "AsignacionPermisos";
         public static String VAR_SESSION_CAMBIO_ASIGNACION_PERMISOS = "CambioAsignacionPermisos";

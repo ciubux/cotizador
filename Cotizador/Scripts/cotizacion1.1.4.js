@@ -2381,6 +2381,7 @@ jQuery(function ($) {
                         '<td>' + lista[i].porcentajeDescuentoMostrar.toFixed(cantidadDecimales) + ' %</td>' +
                         '<td>' + lista[i].precioNeto.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
                         '<td>' + htmlAdicionalCosto + '</td>' +
+                        '<td><b>' + lista[i].escalaComision + '</b></td>' +
                         '<td>' + lista[i].margen.toFixed(cantidadDecimales) + '%' + htmlAdicionalMargen + '</td>' +
                         '<td>' + lista[i].flete.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
                         '<td>' + lista[i].precioUnitario.toFixed(cantidadDecimalesPrecioNeto) + '</td>' +
