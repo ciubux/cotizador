@@ -497,7 +497,7 @@
                 <th data-name="costo" data-visible="false">Costo</th>
             }
 
-            <th data-name="escala" data-sortable="false" data-breakpoints="xs sm" style="width:60px">ESC</th>
+            <th data-name="escala" data-sortable="false" data-breakpoints="xs sm" style="width:60px">E.</th>
 
             @if (cotizacion.usuario.visualizaMargen)
             {
@@ -624,7 +624,8 @@
                 <td class="@cotizacionDetalle.producto.idProducto detprecio" style="text-align:right">@cotizacionDetalle.precioNeto</td>
                 <td class="@cotizacionDetalle.producto.idProducto detcostoLista">@cotizacionDetalle.costoListaVisible  </td>
 
-                <td class="@cotizacionDetalle.producto.idProducto detEscala" style="width:50px; text-align:right"><b>@cotizacionDetalle.escalaComision</b></td>
+                <td class="@cotizacionDetalle.producto.idProducto detescala" style="width:50px; text-align:right"><b>@cotizacionDetalle.escalaComision</b></td>
+
                 <td class="@cotizacionDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@cotizacionDetalle.margen %</td>
 
                 <td class="@cotizacionDetalle.producto.idProducto detflete" style="text-align:right">@cotizacionDetalle.flete</td>
@@ -926,11 +927,14 @@
                             <!--PRECIO LISTA-->
                             <div class="form-group">
                                 <label for="precioLista" class="control-label col-xs-3">Precio Lista:</label>
-                                <div class="col-xs-9">
+                                <div class="col-xs-7">
 
                                     <input class="form-control" type="text" value="" id="precioLista" name="precioLista" disabled>
                                     <!--  <span style="margin-right: 20px; color: red; font-weight: normal " class="has-error" id="mensajeFlete"></span>
-                                    -->
+        -->
+                                </div>
+                                <div class="col-xs-2">
+                                    <H3 id="addProductCodigoEscalaComision" style="margin-top:6px;"></H3>
                                 </div>
                             </div>
 
@@ -962,7 +966,7 @@
                             </div>
 
                             <div class="form-group" id="observacionProductoDiv">
-                                <label for="observacionProducto" class="control-label col-xs-3">Observaciones:</label>
+                                <label for="observacionProducto" class="col-xs-3 control-label">Observaciones:</label>
                                 <div class="col-xs-9">
                                     <textarea rows="5" cols="35" id="observacionProducto" name="observacionProducto"> </textarea>
                                 </div>

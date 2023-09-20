@@ -545,6 +545,8 @@ namespace Model
 
         public const String FIJA_VIGENCIA_PRECIOS_COTIZACION = "P221";
 
+        public const String ANULA_GUIAS_REMISION = "P331";
+
 
         public enum paginas
         {

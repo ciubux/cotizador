@@ -76,11 +76,11 @@ namespace BusinessLayer
 
 
 
-        public Producto getProducto(Guid idProducto, Boolean esProvincia, Boolean incluidoIGV, Guid idCliente, Boolean esCompra = false, String moneda = "PEN", TipoCambioSunat tc = null, Boolean soloActivos = true)
+        public Producto getProducto(Guid idProducto, Boolean esProvincia, Boolean incluidoIGV, Guid idCliente, Boolean esCompra = false, String moneda = "PEN", TipoCambioSunat tc = null, Boolean soloActivos = true, Guid idUsuario = new Guid())
         {
             using (var dal = new ProductoDAL())
             {
-                Producto producto = dal.getProducto(idProducto, idCliente, esCompra, soloActivos);
+                Producto producto = dal.getProducto(idProducto, idCliente, esCompra, soloActivos, idUsuario);
                 //Si es Provincia automaticamente se considera el precioProvincia como precioSinIGV
 
                 if (tc != null)

@@ -210,6 +210,8 @@ namespace Model
         [Display(Name = "Costo Lista Original:")]
         public Decimal costoReferencialOriginal { get; set; }
 
+        public Decimal descuentoBaseEmpresa { get; set; }
+
         public Decimal precioProveedor {
             get {
                 return (precioSinIgv * equivalenciaProveedor);

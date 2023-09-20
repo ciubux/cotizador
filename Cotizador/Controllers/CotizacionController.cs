@@ -320,7 +320,7 @@ namespace Cotizador.Controllers
                 }
                 ViewBag.existeCliente = existeCliente;
 
-
+                cotizacion.escalasComision = this.GetEscalasComision();
                 cotizacion.asignarEscalasComisionADetalles();
 
                 if (cotizacion.cliente.idCliente != Guid.Empty)
@@ -1079,6 +1079,7 @@ namespace Cotizador.Controllers
 
         public String GetProducto()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             Cotizacion cotizacion = this.CotizacionSession;
             //Se recupera el producto y se guarda en Session
             Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
@@ -1089,7 +1090,8 @@ namespace Cotizador.Controllers
             TipoCambioSunatBL tcBl = new TipoCambioSunatBL();
             TipoCambioSunat tc = tcBl.GetTipoCambioHoy();
 
-            Producto producto = bl.getProducto(idProducto, cotizacion.ciudad.esProvincia , cotizacion.incluidoIGV, cotizacion.cliente.idCliente, false, cotizacion.moneda.codigo, tc);
+            Producto producto = bl.getProducto(idProducto, cotizacion.ciudad.esProvincia , cotizacion.incluidoIGV, 
+                cotizacion.cliente.idCliente, false, cotizacion.moneda.codigo, tc, true, usuario.idUsuario);
 
             ParametroBL parametroBL = new ParametroBL();
             string activaUnidProvSub = parametroBL.getParametro("COTIZACION_UNID_PROV_SUBDISTRIBUIDOR");
@@ -1114,6 +1116,9 @@ namespace Cotizador.Controllers
                 //si no se obtiene precioNetoEquivalente quiere decir que no hay precioRegistrado
                 porcentajeDescuento = 100 - (producto.precioClienteProducto.precioNeto * 100 / producto.precioLista);
                 fleteDetalle = producto.precioClienteProducto.flete;
+            } else
+            {
+                porcentajeDescuento = producto.descuentoBaseEmpresa;
             }
 
             String jsonPrecioLista = JsonConvert.SerializeObject(producto.precioListaList);
@@ -1219,7 +1224,7 @@ namespace Cotizador.Controllers
             detalle.flete = flete;
             detalle.precioNetoAnterior = precioNetoAnterior;
             cotizacion.cotizacionDetalleList.Add(detalle);
-
+            cotizacion.asignarEscalasComisionADetalles();
 
             if (cotizacion.ajusteCalculoPrecios)
             {
@@ -1306,6 +1311,7 @@ namespace Cotizador.Controllers
                 igv = cotizacion.montoIGV.ToString(),
                 subTotal = cotizacion.montoSubTotal.ToString(),
                 margen = detalle.margen,
+                escalaComision = detalle.escalaComision,
                 precioUnitario = detalle.precioUnitario,
                 precioNetoAnt = precioNetoAnterior,
                 observacion = detalle.observacion,

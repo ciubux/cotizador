@@ -698,6 +698,8 @@ jQuery(function ($) {
         $('#valor').val(0);
         $('#valorAlternativo').val(0);
         $('#observacionProducto').val("");
+        $('#addProductCodigoEscalaComision').html("");
+        
         $('#valor').attr('type', 'text');
         $('#valorAlternativo').attr('type', 'hidden');
         $('#precio').val(0);
@@ -1039,6 +1041,7 @@ jQuery(function ($) {
         //Se calcula margen
         margen = (1 - (Number($("#costoLista").val()) / Number(precio))) * 100;
         $("#margen").val(margen.toFixed(cantidadDecimales));
+        dibujarEscalaComision("addProductCodigoEscalaComision", margen);
 
     };
 
@@ -1330,6 +1333,7 @@ jQuery(function ($) {
                     '<td class="' + detalle.idProducto + ' detporcentajedescuentoMostrar" style="width:75px; text-align:right;">' + porcentajeDescuento.toFixed(1) + ' %</td>' +
                     '<td class="' + detalle.idProducto + ' detprecio" style="text-align:right">' + detalle.precioUnitario + '</td>' +
                     '<td class="' + detalle.idProducto + ' detcostoLista">' + costoLista + '</td>' +
+                    '<td class="' + detalle.idProducto + ' detescala" style="width:50px; text-align:right; "><b>' + detalle.escalaComision + '</b></td>' +
                     '<td class="' + detalle.idProducto + ' detmargen" style="width:70px; text-align:right; ">' + detalle.margen + ' %</td>' +
 
                     '<td class="' + detalle.idProducto + ' detflete" style="text-align:right">' + flete.toFixed(2) + '</td>' +
@@ -1388,9 +1392,18 @@ jQuery(function ($) {
 
 
 
-
-
-
+    function dibujarEscalaComision(idElemento, margen) {
+        $.ajax({
+            url: "/Cotizacion/GetCodigoEscalaComision",
+            type: 'POST',
+            data: {
+                margen: margen
+            },
+            success: function (res) {
+                $("#" + idElemento).html(res);
+            }
+        });
+    }
 
 
 

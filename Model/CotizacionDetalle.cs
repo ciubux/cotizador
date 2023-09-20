@@ -144,7 +144,7 @@ namespace Model
         {
             get
             {
-                if (this.visualizaMargen)// && !this.usuario.esCliente)
+                //if (this.visualizaMargen)// && !this.usuario.esCliente)
                     if (tieneCostoEspecial)
                     {
                         return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - costoEspecial / (precioNeto == 0 ? 1 : precioNeto)) * 100));
@@ -153,8 +153,8 @@ namespace Model
                     {
                         return Decimal.Parse(String.Format(Constantes.formatoUnDecimal, (1 - costoLista / (precioNeto == 0 ? 1 : precioNeto)) * 100));
                     }
-                else
-                    return 0.0M;
+                /*else
+                    return 0.0M;*/
             }
         }
 

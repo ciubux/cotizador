@@ -112,11 +112,12 @@ namespace DataLayer
             return idProducto;
         }
 
-        public Producto getProducto(Guid idProducto, Guid idCliente, Boolean esCompra = false, Boolean soloActivos = true)
+        public Producto getProducto(Guid idProducto, Guid idCliente, Boolean esCompra = false, Boolean soloActivos = true, Guid idUsuario = new Guid())
         {
             var objCommand = GetSqlCommand("ps_getproducto");
             InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
             InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             InputParameterAdd.Int(objCommand, "soloActivos", soloActivos ? 1 : 0);
             DataSet dataSet = ExecuteDataSet(objCommand);
 
@@ -155,6 +156,8 @@ namespace DataLayer
                     producto.precioOriginal = Converter.GetDecimal(row, "precio_original"); ;
                     producto.precioProvinciasOriginal = Converter.GetDecimal(row, "precio_provincia_original");
                 }
+
+                producto.descuentoBaseEmpresa = Converter.GetDecimal(row, "descuento_base_empresa");
 
                 producto.familia = Converter.GetString(row, "familia");
                 // producto.clase = Converter.GetString(row, "clase");

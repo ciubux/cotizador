@@ -170,6 +170,9 @@ namespace Model
         public bool administraGuiasProvincias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_GUIAS_PROVINCIAS)).FirstOrDefault() != null; } }
         public bool visualizaGuias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_GUIAS_REMISION)).FirstOrDefault() != null; } }
 
+        public bool anulaGuias { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ANULA_GUIAS_REMISION)).FirstOrDefault() != null; } }
+
+        
         /*PERMISOS FACTURA ELECTRONICA*/
         public bool creaDocumentosVenta { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_DOCUMENTOS_VENTA)).FirstOrDefault() != null; } }
         public bool creaDocumentosCompra { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_DOCUMENTOS_COMPRA)).FirstOrDefault() != null; } }

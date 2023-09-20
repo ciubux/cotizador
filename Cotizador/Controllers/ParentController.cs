@@ -78,5 +78,13 @@ namespace Cotizador.Controllers
 
             return lista;
         }
+
+        public String GetCodigoEscalaComision(decimal margen)
+        {
+            List<EscalaComision> lista = GetEscalasComision();
+            EscalaComision es = EscalaComision.escalaPorMargen(margen, lista);
+
+            return es.codigo;
+        }
     }
 }
