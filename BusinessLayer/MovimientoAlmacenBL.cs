@@ -9,6 +9,7 @@ using System.Linq;
 using Model.NextSoft;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Data;
 
 namespace BusinessLayer
 {
@@ -82,7 +83,10 @@ namespace BusinessLayer
                 {
                     guiaRemision.atencionParcial = false;
                     guiaRemision.ultimaAtencionParcial = true;
-                }                
+                }
+
+
+                object dataSend = ConverterMPToNextSoft.toGuia(guiaRemision);
 
                 try
                 {
@@ -104,11 +108,16 @@ namespace BusinessLayer
                         ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
                         //object resultWs = await ws.crearGuia(guiaRemision);
 
-                        object dataSend = ConverterMPToNextSoft.toGuia(guiaRemision);
-
+                        
                         int success = 0;
 
                         object result = await ws.crearGuia(dataSend);
+
+                        using (var logDAL = new LogDAL())
+                        {
+                            logDAL.insertLogWS("NEXTSYS_REGISTRO_GUIA_REMISION", JsonConvert.SerializeObject(dataSend), JsonConvert.SerializeObject(result), guiaRemision.IdUsuarioRegistro);
+                        }
+
 
                         JObject dataResult = (JObject)result;
                         int codigo = dataResult["crearguiaResult"]["codigo"].Value<int>();
@@ -135,6 +144,10 @@ namespace BusinessLayer
                 }
                 catch (DuplicateNumberDocumentException ex)
                 {
+                    using (var logDAL = new LogDAL())
+                    {
+                        logDAL.insertLogWS("NEXTSYS_REGISTRO_GUIA_REMISION", JsonConvert.SerializeObject(dataSend), JsonConvert.SerializeObject(new {error = ex.Message }), guiaRemision.IdUsuarioRegistro);
+                    }
                     throw ex;
                 }
             }

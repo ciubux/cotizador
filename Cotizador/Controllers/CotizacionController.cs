@@ -1118,7 +1118,14 @@ namespace Cotizador.Controllers
                 fleteDetalle = producto.precioClienteProducto.flete;
             } else
             {
-                porcentajeDescuento = producto.descuentoBaseEmpresa;
+                if(producto.tipoDescuentoBaseEmpresa.Equals("MONTO")) {  
+                    porcentajeDescuento = 100 - ((producto.precioLista - producto.descuentoBaseEmpresa) * 100 / producto.precioLista);
+                }
+
+                if (producto.tipoDescuentoBaseEmpresa.Equals("PORCENTAJE"))
+                {
+                    porcentajeDescuento = producto.descuentoBaseEmpresa;
+                }
             }
 
             String jsonPrecioLista = JsonConvert.SerializeObject(producto.precioListaList);

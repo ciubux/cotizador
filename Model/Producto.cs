@@ -211,6 +211,7 @@ namespace Model
         public Decimal costoReferencialOriginal { get; set; }
 
         public Decimal descuentoBaseEmpresa { get; set; }
+        public String tipoDescuentoBaseEmpresa { get; set; }
 
         public Decimal precioProveedor {
             get {

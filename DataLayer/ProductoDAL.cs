@@ -157,6 +157,7 @@ namespace DataLayer
                     producto.precioProvinciasOriginal = Converter.GetDecimal(row, "precio_provincia_original");
                 }
 
+                producto.tipoDescuentoBaseEmpresa = Converter.GetString(row, "tipo_descuento_base_empresa");
                 producto.descuentoBaseEmpresa = Converter.GetDecimal(row, "descuento_base_empresa");
 
                 producto.familia = Converter.GetString(row, "familia");
