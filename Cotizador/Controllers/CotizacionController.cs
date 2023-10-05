@@ -51,6 +51,8 @@ namespace Cotizador.Controllers
 
         public void instanciarCotizacionBusqueda()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
             Cotizacion cotizacionTmp = new Cotizacion();
             cotizacionTmp.esPagoContado = false;
             cotizacionTmp.tipoCotizacion = Cotizacion.TiposCotizacion.Normal;
@@ -59,12 +61,20 @@ namespace Cotizador.Controllers
             cotizacionTmp.fechaHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
             cotizacionTmp.ciudad = new Ciudad();
             cotizacionTmp.cliente = new Cliente();
+            cotizacionTmp.cliente.responsableComercial = new Vendedor();
+
+            if (usuario.vendedor.idVendedor > 0 && usuario.vendedor.esResponsableComercial && !usuario.vendedor.esSupervisorComercial)
+            {
+                cotizacionTmp.cliente.responsableComercial = usuario.vendedor;
+            }
+            
+
             cotizacionTmp.grupo = new GrupoCliente();
             cotizacionTmp.seguimientoCotizacion = new SeguimientoCotizacion();
             cotizacionTmp.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Todos;
             cotizacionTmp.buscarSedesGrupoCliente = false;
             // cotizacionTmp.cotizacionDetalleList = new List<CotizacionDetalle>();
-            cotizacionTmp.usuario = (Usuario)this.Session["usuario"];
+            cotizacionTmp.usuario = usuario;
             cotizacionTmp.usuarioBusqueda = new Usuario { idUsuario = Guid.Empty };
             cotizacionTmp.aplicaSedes = false;
             cotizacionTmp.observacionesFijas = "";
@@ -654,6 +664,18 @@ namespace Cotizador.Controllers
             this.CotizacionSession = cotizacion;
         }
 
+        public void updateResponsableComercialCotizacionBusqueda()
+        {
+            Cotizacion cotizacion = this.CotizacionSession;
+            try
+            {
+                cotizacion.cliente.responsableComercial.idVendedor = int.Parse(this.Request.Params["idVendedor"]);
+            }
+            catch (Exception ex)
+            {
+            }
+            this.CotizacionSession = cotizacion;
+        }
 
         public void updateEstadoCotizacionBusqueda()
         {
@@ -1118,13 +1140,17 @@ namespace Cotizador.Controllers
                 fleteDetalle = producto.precioClienteProducto.flete;
             } else
             {
-                if(producto.tipoDescuentoBaseEmpresa.Equals("MONTO")) {  
-                    porcentajeDescuento = 100 - ((producto.precioLista - producto.descuentoBaseEmpresa) * 100 / producto.precioLista);
-                }
-
-                if (producto.tipoDescuentoBaseEmpresa.Equals("PORCENTAJE"))
+                if (producto.tipoDescuentoBaseEmpresa != null)
                 {
-                    porcentajeDescuento = producto.descuentoBaseEmpresa;
+                    if (producto.tipoDescuentoBaseEmpresa.Equals("MONTO"))
+                    {
+                        porcentajeDescuento = 100 - ((producto.precioLista - producto.descuentoBaseEmpresa) * 100 / producto.precioLista);
+                    }
+
+                    if (producto.tipoDescuentoBaseEmpresa.Equals("PORCENTAJE"))
+                    {
+                        porcentajeDescuento = producto.descuentoBaseEmpresa;
+                    }
                 }
             }
 

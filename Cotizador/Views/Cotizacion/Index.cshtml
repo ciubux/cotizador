@@ -156,6 +156,20 @@
 
 
         <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => cotizacion.cliente.responsableComercial, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idResponsableComercial" })
+                    <div class="col-xs-8">
+                        @Html.Action("GetResponsablesComerciales", "Vendedor",
+                                new
+                                {
+                                    vendedorSelectId = "idResponsableComercial",
+                                    selectedValue = cotizacion.cliente.responsableComercial.idVendedor,
+                                })
+
+                    </div>
+                </div>
+            </div>
 
             <div class="col-sm-6 col-lg-4">
                 <!--USUARIO-->

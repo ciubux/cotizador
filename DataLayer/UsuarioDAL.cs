@@ -187,6 +187,14 @@ namespace DataLayer
                 usuario.area.idArea = Converter.GetInt(row, "id_area");
                 usuario.area.nombre = Converter.GetString(row, "nombre_area");
 
+                usuario.vendedor = new Vendedor();
+                usuario.vendedor.idVendedor = Converter.GetInt(row, "id_vendedor");
+                usuario.vendedor.esResponsableComercial = Converter.GetBool(row, "es_responsable_comercial");
+                usuario.vendedor.esSupervisorComercial = Converter.GetBool(row, "es_supervisor_comercial"); 
+                usuario.vendedor.esAsistenteServicioCliente = Converter.GetBool(row, "es_asistente_servicio_cliente"); 
+                usuario.vendedor.idSupervisorComercial = Converter.GetInt(row, "id_supervisor_comercial");
+
+
                 usuario.firmaImagen = Converter.GetBytes(row, "firma_imagen");
 
                 //Cotizaciones

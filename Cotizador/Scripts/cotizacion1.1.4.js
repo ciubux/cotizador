@@ -4317,7 +4317,20 @@ jQuery(function ($) {
         });
     });
 
-    
+    $("#idResponsableComercial").change(function () {
+        var idResponsableComercial = $("#idResponsableComercial").val();
+        $.ajax({
+            url: "/Cotizacion/updateResponsableComercialCotizacionBusqueda",
+            type: 'POST',
+            data: {
+                idVendedor: idResponsableComercial
+            },
+            success: function () {
+            }
+        });
+    });
+
+
     $("#idCiudad").change(function () {
         var idCiudad = $("#idCiudad").val();
 
