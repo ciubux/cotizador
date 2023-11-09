@@ -205,7 +205,6 @@
         </div>
 
         <div class="row">
-
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group row">
                     <label for="guiaRemision_estaFacturado" class="control-label col-xs-4">¿Considerar Facturados?:</label>
@@ -236,15 +235,6 @@
                             </label>
                         </div>
                     </div>
-
-                </div>
-
-                <div class="form-group row">
-                    <label for="guiaRemision_cpeNro" class="control-label col-xs-4">Número Factura venta:</label>
-                    <div class="col-xs-8">
-                        @Html.TextBoxFor(p => guiaRemision.cpeNro, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
-                    </div>
-
                 </div>
             </div>
 
@@ -282,7 +272,36 @@
 
                 </div>
             </div>
+        </div>
 
+
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group row">
+                    <label for="guiaRemision_cpeNro" class="control-label col-xs-4">Número Factura venta:</label>
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(p => guiaRemision.cpeNro, htmlAttributes: new { @class = "form-control", type = "number", min = "0" })
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => guiaRemision.responsableComercial, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idResponsableComercial" })
+
+                    <div class="col-xs-8">
+                        @Html.Action("GetResponsablesComerciales", "Vendedor",
+                                new
+                                {
+                                    vendedorSelectId = "idResponsableComercial",
+                                    selectedValue = guiaRemision.responsableComercial.idVendedor,
+                                    disabled = guiaRemision.usuario.modificaFiltroVendedor ? "" : "disabled"
+                                })
+                    </div>
+                </div>
+            </div>
 
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
@@ -292,33 +311,28 @@
                         @Html.TextBoxFor(p => guiaRemision.sku, htmlAttributes: new { @class = "form-control" })
                         <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Puede ingresar el SKU del producto que se encuentra en el detalle del movimiento de almacén.</span>
                     </div>
-
-
                 </div>
-
             </div>
-
         </div>
 
 
 
-
         <!--ESTADO-
-        <div class="row">
+    <div class="row">
 
 
-            <div class="col-sm-6 col-lg-5">
-                <div class="form-group">
-                    <label for="estado" class="control-label col-xs-4">Estado:</label>
-                    <div class="col-xs-8">
-                        @Html.DropDownList("estado",
-                                 EnumHelper.GetSelectList(typeof(Model.SeguimientoMovimientoAlmacenSalida.estadosSeguimientoMovimientoAlmacenSalida), guiaRemision.seguimientoMovimientoAlmacenSalida.estado),
-                                 new { @class = "form-control" }
-                                 )
-                    </div>
+        <div class="col-sm-6 col-lg-5">
+            <div class="form-group">
+                <label for="estado" class="control-label col-xs-4">Estado:</label>
+                <div class="col-xs-8">
+                    @Html.DropDownList("estado",
+                             EnumHelper.GetSelectList(typeof(Model.SeguimientoMovimientoAlmacenSalida.estadosSeguimientoMovimientoAlmacenSalida), guiaRemision.seguimientoMovimientoAlmacenSalida.estado),
+                             new { @class = "form-control" }
+                             )
                 </div>
             </div>
-        </div>-->
+        </div>
+    </div>-->
 
         <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
             <button id="btnLimpiarBusqueda" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
@@ -353,10 +367,10 @@
                     <th data-name="ruc" data-sortable="false" data-breakpoints="xs">RUC</th>
                     <th data-name="ciudad" data-sortable="false" data-breakpoints="xs">Sede MP</th>
                     <!--  <th data-name="subtotal" data-sortable="true" data-breakpoints="xs">Sub Total</th>
-                    <th data-name="igv" data-sortable="true" data-breakpoints="xs">IGV</th>-->
+                <th data-name="igv" data-sortable="true" data-breakpoints="xs">IGV</th>-->
                     <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado</th>
                     <!--   <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Modificado última vez por</th>
-                    <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>-->
+                <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>-->
                     <th data-name="extornada" data-sortable="true" data-breakpoints="xs">¿Extornada?</th>
                     @if (guiaRemision.usuario.creaGuias)
                     {

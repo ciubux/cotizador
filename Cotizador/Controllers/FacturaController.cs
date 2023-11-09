@@ -287,6 +287,36 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_NOTA_CREDITO] = venta;
         }
 
+        public void ChangeResponsableComercialFacturaBusqueda()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            DocumentoVenta factura = this.FacturaSession;
+
+            try
+            {
+                string idVendedor = this.Request.Params["idVendedor"].ToString();
+                if (idVendedor.Equals("")) idVendedor = "0";
+
+                if (usuario.modificaFiltroVendedor)
+                {
+                    factura.responsableComercial.idVendedor = int.Parse(idVendedor);
+                }
+                else
+                {
+                    if (usuario.esResponsableComercial)
+                    {
+                        factura.responsableComercial = usuario.vendedor;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            this.FacturaSession = factura;
+        }
+
 
         public ActionResult Crear()
         {
@@ -673,6 +703,9 @@ namespace Cotizador.Controllers
 
         private void instanciarfacturaBusqueda()
         {
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
             DocumentoVenta documentoVenta = new DocumentoVenta();
             DateTime fechaDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             DateTime fechaHasta = DateTime.Now.AddDays(1);
@@ -692,6 +725,14 @@ namespace Cotizador.Controllers
 
             documentoVenta.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
+            documentoVenta.responsableComercial = new Vendedor();
+
+            if (usuario.esResponsableComercial && !usuario.modificaFiltroVendedor)
+            {
+                documentoVenta.responsableComercial = usuario.vendedor;
+            }
+
+
             documentoVenta.cliente = new Cliente();
             documentoVenta.cliente.idCliente = Guid.Empty;
 
@@ -705,12 +746,6 @@ namespace Cotizador.Controllers
                 documentoVenta.ciudad = new Ciudad();
                 documentoVenta.ciudad.idCiudad = Guid.Empty;
             }
-
-
-
-
-
-
 
 
 

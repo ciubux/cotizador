@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using NPOI.HSSF.UserModel;
 using System.IO;
+using System.Linq;
 using NPOI.SS.UserModel;
 using Newtonsoft.Json;
 using NPOI.HSSF.Model;
@@ -61,11 +62,11 @@ namespace Cotizador.Controllers
             cotizacionTmp.fechaHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
             cotizacionTmp.ciudad = new Ciudad();
             cotizacionTmp.cliente = new Cliente();
-            cotizacionTmp.cliente.responsableComercial = new Vendedor();
+            cotizacionTmp.responsableComercial = new Vendedor();
 
-            if (usuario.vendedor.idVendedor > 0 && usuario.vendedor.esResponsableComercial && !usuario.vendedor.esSupervisorComercial)
+            if (usuario.esResponsableComercial && !usuario.modificaFiltroVendedor)
             {
-                cotizacionTmp.cliente.responsableComercial = usuario.vendedor;
+                cotizacionTmp.responsableComercial = usuario.vendedor;
             }
             
 
@@ -664,12 +665,26 @@ namespace Cotizador.Controllers
             this.CotizacionSession = cotizacion;
         }
 
-        public void updateResponsableComercialCotizacionBusqueda()
+        public void ChangeResponsableComercialCotizacionBusqueda()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
             Cotizacion cotizacion = this.CotizacionSession;
             try
             {
-                cotizacion.cliente.responsableComercial.idVendedor = int.Parse(this.Request.Params["idVendedor"]);
+                string idVendedor = this.Request.Params["idVendedor"].ToString();
+                if (idVendedor.Equals("")) idVendedor = "0";
+
+                if (usuario.modificaFiltroVendedor)
+                {
+                    cotizacion.responsableComercial.idVendedor = int.Parse(idVendedor);
+                } else
+                {
+                    if (usuario.esResponsableComercial)
+                    {
+                        cotizacion.responsableComercial = usuario.vendedor;
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1411,8 +1426,23 @@ namespace Cotizador.Controllers
             cli.IdUsuarioRegistro = usuario.idUsuario;
             cli.usuario = usuario;
 
-            
+            cli.responsableComercial = new Vendedor();
 
+            if (usuario.esResponsableComercial)
+            {
+                cli.responsableComercial = usuario.vendedor;
+
+                Vendedor asesor = usuario.vendedorList.Where(ve => ve.idVendedor == cli.responsableComercial.idVendedor).FirstOrDefault();
+                Vendedor supervisor = null;
+                if (asesor != null)
+                {
+                    supervisor = usuario.supervisorComercialList.Where(ve => ve.idVendedor == asesor.idSupervisorComercial).FirstOrDefault();
+                    if (supervisor != null)
+                    {
+                        cli.supervisorComercial = supervisor;
+                    }
+                }
+            }
 
             ClienteBL cliBl = new ClienteBL();
             cliBl.insertClienteLite(cli);
@@ -2082,7 +2112,7 @@ namespace Cotizador.Controllers
             cotizacion.codigo = codigo;
             cotizacion = cotizacionBL.GetCotizacion(cotizacion, usuario);
             GeneradorPDF gen = new GeneradorPDF();
-            String nombreArchivo = gen.generarPDFExtended(cotizacion);
+            String nombreArchivo = gen.generarPDFExtended(cotizacion, usuario);
             return nombreArchivo;
         }
        

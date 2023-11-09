@@ -59,6 +59,8 @@ namespace Cotizador.Controllers
             pedidoTmp.fechaProgramacionDesde = null;// new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
             pedidoTmp.fechaProgramacionHasta = null;// new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);
 
+            pedidoTmp.responsableComercial = new Vendedor();
+
             pedidoTmp.ciudad = new Ciudad();
             pedidoTmp.cliente = new Cliente();
             pedidoTmp.seguimientoPedido = new SeguimientoPedido();

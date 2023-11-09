@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
@@ -195,6 +196,24 @@ namespace Cotizador.Controllers
             cliente.plazoCreditoSolicitado = DocumentoVenta.TipoPago.Contado;
             cliente.FechaRegistro = DateTime.Now;
 
+            cliente.responsableComercial = new Vendedor();
+
+            if (usuario.esResponsableComercial)
+            {
+                cliente.responsableComercial = usuario.vendedor;
+
+                Vendedor asesor = usuario.vendedorList.Where(v => v.idVendedor == cliente.responsableComercial.idVendedor).FirstOrDefault();
+                Vendedor supervisor = null;
+                if (asesor != null)
+                {
+                    supervisor = usuario.supervisorComercialList.Where(v => v.idVendedor == asesor.idSupervisorComercial).FirstOrDefault();
+                    if (supervisor != null)
+                    {
+                        cliente.supervisorComercial = supervisor;
+                    }
+                }
+            }
+
             this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
         }
 
@@ -227,6 +246,13 @@ namespace Cotizador.Controllers
             cliente.rubro.padre = new Rubro();
             cliente.rubro.padre.idRubro = 0;
 
+            cliente.responsableComercial = new Vendedor();
+
+            /*if (usuario.esResponsableComercial && !usuario.modificaFiltroVendedor)
+            {
+                cliente.responsableComercial = usuario.vendedor;
+            }*/
+
             return cliente;
         }
 
@@ -245,6 +271,12 @@ namespace Cotizador.Controllers
 
             cliente.grupoCliente = new GrupoCliente();
             cliente.grupoCliente.idGrupoCliente = 0;
+
+
+            cliente.codigosClienteListRC = new List<string>();
+            cliente.rucsClienteListRC = new List<string>();
+            cliente.sedeRucsClienteListRC = new List<string>();
+            cliente.busquedaListasRC = false;
 
             cliente.fechaInicioVigencia = DateTime.Now;
             return cliente;
@@ -573,31 +605,51 @@ namespace Cotizador.Controllers
 
         public String Show()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
             DateTime fechaPrecios = (DateTime)this.Session[Constantes.VAR_SESSION_CLIENTE_BUSQUEDA_FECHA_PRECIOS_VER];
 
             Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
             ClienteBL clienteBl = new ClienteBL();
             Cliente cliente = clienteBl.getCliente(idCliente);
             cliente.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            List<DocumentoDetalle> listaPrecios = clienteBl.getPreciosVigentesCliente(idCliente, fechaPrecios);
-            cliente.listaPrecios = listaPrecios;
-            DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
-            List<DireccionEntrega> direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(idCliente);
-            cliente.direccionEntregaList = direccionEntregaList;
-            DomicilioLegalBL domicilioLegalBL = new DomicilioLegalBL();
-            List<DomicilioLegal> domicilioLegalList = domicilioLegalBL.getDomiciliosLegalesPorCliente(cliente);
 
-            ClienteContactoBL contactoBl = new ClienteContactoBL();
-            List<ClienteContacto> listaContactos = contactoBl.getContactos(idCliente);
+            String resultado = "";
+            if (usuario.modificaFiltroVendedor || (usuario.esVendedor && usuario.vendedor.idVendedor == cliente.responsableComercial.idVendedor))
+            {
+                List<DocumentoDetalle> listaPrecios = clienteBl.getPreciosVigentesCliente(idCliente, fechaPrecios);
+                cliente.listaPrecios = listaPrecios;
+                DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
+                List<DireccionEntrega> direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(idCliente);
+                cliente.direccionEntregaList = direccionEntregaList;
+                DomicilioLegalBL domicilioLegalBL = new DomicilioLegalBL();
+                List<DomicilioLegal> domicilioLegalList = domicilioLegalBL.getDomiciliosLegalesPorCliente(cliente);
+
+                ClienteContactoBL contactoBl = new ClienteContactoBL();
+                List<ClienteContacto> listaContactos = contactoBl.getContactos(idCliente);
 
 
-            String resultado = "{\"cliente\":" + JsonConvert.SerializeObject(cliente) + ", \"precios\":" + JsonConvert.SerializeObject(listaPrecios) + 
-                        ", \"direccionEntregaList\":" + JsonConvert.SerializeObject(direccionEntregaList) +
-                        ", \"contactoList\":" + JsonConvert.SerializeObject(listaContactos) +
-                        ", \"domicilioLegalList\":" + JsonConvert.SerializeObject(domicilioLegalList) + "}";
+                resultado = "{\"cliente\":" + JsonConvert.SerializeObject(cliente) + ", \"precios\":" + JsonConvert.SerializeObject(listaPrecios) +
+                            ", \"direccionEntregaList\":" + JsonConvert.SerializeObject(direccionEntregaList) +
+                            ", \"contactoList\":" + JsonConvert.SerializeObject(listaContactos) +
+                            ", \"domicilioLegalList\":" + JsonConvert.SerializeObject(domicilioLegalList) + "}";
 
-            this.Session[Constantes.VAR_SESSION_CLIENTE_VER] = cliente;
-            this.Session[Constantes.VAR_SESSION_CLIENTE_VER_CONTACTOS] = listaContactos;
+                this.Session[Constantes.VAR_SESSION_CLIENTE_VER] = cliente;
+                this.Session[Constantes.VAR_SESSION_CLIENTE_VER_CONTACTOS] = listaContactos;
+            } else
+            {
+                cliente = null;
+
+                this.Session[Constantes.VAR_SESSION_CLIENTE_VER] = null;
+                this.Session[Constantes.VAR_SESSION_CLIENTE_VER_CONTACTOS] = new List<ClienteContacto>();
+
+                resultado = "{\"cliente\":" + JsonConvert.SerializeObject(cliente) + ", \"precios\":" + JsonConvert.SerializeObject(null) +
+                            ", \"direccionEntregaList\":" + JsonConvert.SerializeObject(null) +
+                            ", \"contactoList\":" + JsonConvert.SerializeObject(null) +
+                            ", \"domicilioLegalList\":" + JsonConvert.SerializeObject(null) + "}";
+            }
+            
+            
 
             return resultado;
         }
@@ -1062,21 +1114,23 @@ namespace Cotizador.Controllers
         /*MANTENIMIENTO DE VENDEDORES*/
         public String ChangeIdResponsableComercial()
         {
+            Usuario usuario = ((Usuario)this.Session[Constantes.VAR_SESSION_USUARIO]);
+
             int idSupervisor = -1;
-            if (this.Request.Params["idResponsableComercial"] == null || this.Request.Params["idResponsableComercial"] == String.Empty)
+            int idVendedor = Int32.Parse(this.Request.Params["idResponsableComercial"]);
+
+            if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.MantenimientoCliente)
             {
-                ClienteSession.responsableComercial.idVendedor = 0;
-            }
-            else
-            {
-                int idVendedor = Int32.Parse(this.Request.Params["idResponsableComercial"]);
-                if ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA] == Constantes.paginas.MantenimientoCliente)
+                if (this.Request.Params["idResponsableComercial"] == null || this.Request.Params["idResponsableComercial"] == String.Empty)
                 {
-                    Usuario usuario = ((Usuario)this.Session[Constantes.VAR_SESSION_USUARIO]);
+                    ClienteSession.responsableComercial.idVendedor = 0;
+                }
+                else
+                {
                     Vendedor asesor = usuario.vendedorList.Where(v => v.idVendedor == idVendedor).FirstOrDefault();
                     Vendedor supervisor = null;
                     if (asesor != null && (ClienteSession.supervisorComercial == null || ClienteSession.supervisorComercial.idVendedor == 0
-                             || ClienteSession.supervisorComercial.idVendedor == 21 || ClienteSession.supervisorComercial.idVendedor == Constantes.ID_VENDEDOR_POR_ASIGNAR))
+                                || ClienteSession.supervisorComercial.idVendedor == 21 || ClienteSession.supervisorComercial.idVendedor == Constantes.ID_VENDEDOR_POR_ASIGNAR))
                     {
                         supervisor = usuario.supervisorComercialList.Where(v => v.idVendedor == asesor.idSupervisorComercial).FirstOrDefault();
                         if (supervisor != null)
@@ -1087,10 +1141,26 @@ namespace Cotizador.Controllers
                     }
 
                     ClienteSession.responsableComercial = asesor;
+                    ClienteSession.responsableComercial.idVendedor = idVendedor;
                 }
-                ClienteSession.responsableComercial.idVendedor = idVendedor;
-            }
+            } else
+            {
+                string idAsesor = this.Request.Params["idResponsableComercial"].ToString();
+                if (idAsesor.Equals("")) idAsesor = "0";
 
+                if (usuario.modificaFiltroVendedor)
+                {
+                    ClienteSession.responsableComercial.idVendedor = int.Parse(idAsesor);
+                }
+                else
+                {
+                    if (usuario.esResponsableComercial)
+                    {
+                        ClienteSession.responsableComercial = usuario.vendedor;
+                    }
+                }
+            }
+                
             return "{\"success\":\"true\",\"idSupervisor\":" + idSupervisor + "}";
         }
 
@@ -1610,13 +1680,20 @@ namespace Cotizador.Controllers
             List<Cliente> clientes = new List<Cliente>();
             if ((cliente.supervisorComercial != null && cliente.supervisorComercial.idVendedor > 0) ||
                 (cliente.asistenteServicioCliente != null && cliente.asistenteServicioCliente.idVendedor > 0) ||
-                (cliente.responsableComercial != null && cliente.responsableComercial.idVendedor > 0) || (cliente.esSubDistribuidor) || (cliente.grupoCliente.idGrupoCliente > 0))
+                (cliente.responsableComercial != null && cliente.responsableComercial.idVendedor > 0) || (cliente.esSubDistribuidor) || (cliente.grupoCliente.idGrupoCliente > 0) || cliente.busquedaListasRC)
             {
                 clientes = bl.BusquedaClientesCartera(cliente);
             }
 
+            cliente.busquedaListasRC = false;
+            this.Session[Constantes.VAR_SESSION_CLIENTE_REASIGNACION_CARTERA] = cliente;
+
+            CiudadBL ciudadBl = new CiudadBL();
+            List<Ciudad> ciudades = ciudadBl.getCiudades();
+
             ViewBag.cliente = cliente;
             ViewBag.clientes = clientes;
+            ViewBag.ciudades = ciudades;
             ViewBag.pagina = (int) this.Session[Constantes.VAR_SESSION_PAGINA];
 
             this.Session["s_reasignacion_cartera_clientes"] = clientes;
@@ -1769,6 +1846,104 @@ namespace Cotizador.Controllers
             }
             
             return "";
+        }
+
+        [HttpPost]
+        public String SearchClientesReasignarByExcel(HttpPostedFileBase file)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE_REASIGNACION_CARTERA];
+
+            try
+            {
+                HSSFWorkbook hssfwb;
+
+                ClienteBL clienteBL = new ClienteBL();
+
+                hssfwb = new HSSFWorkbook(file.InputStream);
+
+                ISheet sheet = hssfwb.GetSheetAt(0);
+                int row = 1;
+                int cantidad = sheet.LastRowNum;
+                List<Cliente> clientesTemp = new List<Cliente>();
+               
+                GrupoClienteBL grupoClienteBL = new GrupoClienteBL();
+                List<GrupoCliente> grupoClienteList = grupoClienteBL.getGruposCliente(usuario.idUsuario);
+
+                cliente.codigosClienteListRC = new List<string>();
+                cliente.rucsClienteListRC = new List<string>();
+                cliente.sedeRucsClienteListRC = new List<string>();
+                cliente.busquedaListasRC = true;
+
+                cliente.codigosClienteListRC.Add("XXXXXXXXXXX");
+                cliente.rucsClienteListRC.Add("XXXXXXXXXXX");
+                cliente.sedeRucsClienteListRC.Add("XXXXXXXXXXX");
+
+                for (row = 1; row <= cantidad; row++)
+                {
+                    if (sheet.GetRow(row) != null) 
+                    {
+                        try
+                        {
+                            /* 0 codigo 
+                             * 1 ruc  
+                             * 2 sede 
+                            */
+
+                            string datoFila = "";
+
+                            if (sheet.GetRow(row).GetCell(0) != null)
+                            {
+                                datoFila = sheet.GetRow(row).GetCell(0).ToString().Trim();
+                            }
+
+                            if (datoFila.Equals("") && sheet.GetRow(row).GetCell(1) != null)
+                            {
+                                datoFila = sheet.GetRow(row).GetCell(1).ToString().Trim();
+
+                                string datoSede = "";
+                                if (!datoFila.Equals("") && sheet.GetRow(row).GetCell(2) != null)
+                                {
+                                    datoSede = sheet.GetRow(row).GetCell(2).ToString().Trim();
+                                }
+
+                                if(datoSede.Equals(""))
+                                {
+                                    cliente.rucsClienteListRC.Add(datoFila);
+                                } else
+                                {
+                                    cliente.sedeRucsClienteListRC.Add(datoFila + datoSede);
+                                }
+
+                            } else
+                            {
+                                cliente.codigosClienteListRC.Add(datoFila);
+                            }
+
+                            if (datoFila.Equals(""))
+                            {
+                                row = cantidad;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                            LogBL logBL = new LogBL();
+                            logBL.insertLog(log);   
+                        }
+                    }
+                }
+
+                return "{\"success\":\"true\",\"message\":\"Se procesó el archivo correctamente.\"}";
+            }
+            catch (Exception ex)
+            {
+                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                LogBL logBL = new LogBL();
+                logBL.insertLog(log);
+
+                return "{\"success\":\"false\",\"message\":\"Error al cargar el fichero.\"}";
+            }
         }
 
         [HttpGet]

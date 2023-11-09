@@ -22,6 +22,7 @@ namespace Model
         [Display(Name = "Url Web:")]
         public String urlWeb { get; set; }
 
+        public bool atencionTerciarizada { get; set; }
 
         public override string ToString()
         {

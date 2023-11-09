@@ -572,7 +572,7 @@ namespace DataLayer
                     InputParameterAdd.Guid(objCommand, "id_usuario", cotizacion.usuarioBusqueda.idUsuario);
                 }*/
 
-            InputParameterAdd.Int(objCommand, "idAsesor", cotizacion.cliente.responsableComercial.idVendedor);
+            InputParameterAdd.Int(objCommand, "idAsesor", cotizacion.responsableComercial.idVendedor);
             InputParameterAdd.Guid(objCommand, "id_usuario", cotizacion.usuarioBusqueda.idUsuario);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fechaDesde", new DateTime(cotizacion.fechaDesde.Year, cotizacion.fechaDesde.Month, cotizacion.fechaDesde.Day, 0, 0, 0));

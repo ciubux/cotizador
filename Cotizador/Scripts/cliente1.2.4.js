@@ -467,20 +467,24 @@ jQuery(function ($) {
 
     function verificarSiExisteCliente() {
         var clienteLite = $("#esClienteLite").val();
-
+        var bloquearFiltroCliente = $("#bloqueaFiltroAsesor").val();
         if ($("#idCliente").length && $("#idCliente").val().trim() != GUID_EMPTY) {
             $("#idCiudad").attr("disabled", "disabled");
             if (clienteLite == "0") {
                 $("#tipoDocumentoIdentidad").attr("disabled", "disabled");
                 $("#cliente_ruc").attr("disabled", "disabled");
-                $("#idResponsableComercial").removeAttr("disabled");
+                if (bloquearFiltroCliente == "0") {
+                    $("#idResponsableComercial").removeAttr("disabled");
+                }
             }
             
             $("#btnFinalizarEdicionCliente").html('Finalizar Edición');            
         }
         else { 
             //Si recién se está creando el cliente, el usuario puede seleccionar el responsable comercial
-            $("#idResponsableComercial").removeAttr("disabled");
+            if (bloquearFiltroCliente == "0") {
+                $("#idResponsableComercial").removeAttr("disabled");
+            }
             $("#btnFinalizarEdicionCliente").html('Finalizar Creación');
         }
 
@@ -852,7 +856,10 @@ jQuery(function ($) {
 
                 if (cliente.usuario.defineResponsableComercial || !cliente.vendedoresAsignados)
                 {
-                    $("#idResponsableComercial").removeAttr("disabled");
+                    var bloquearFiltroCliente = $("#bloqueaFiltroAsesor").val();
+                    if (bloquearFiltroCliente == "0") {
+                        $("#idResponsableComercial").removeAttr("disabled");
+                    }
                 }
                 else
                 {
@@ -3186,334 +3193,346 @@ jQuery(function ($) {
                 var cliente = result.cliente;
                 idClienteView = idCliente;
                 $('body').loadingModal('hide')
-                $("#verCiudadNombre").html(cliente.ciudad.nombre);
-                $("#verCodigo").html(cliente.codigo);
-                $("#verRuc").html(cliente.ruc);
-                $("#verTipoDocumentoIdentidad").html(cliente.tipoDocumentoIdentidadToString);
-                $("#verNumeroDocumento").html(cliente.ruc);
-                $("#verNombreComercial").html(cliente.nombreComercial);
-                $("#verNombreCliente").html(cliente.nombreCliente);
-                $("#verContacto").html(cliente.contacto1);
-                $("#verTelefonoContacto").html(cliente.telefonoContacto1);
-                $("#verEmailContacto").html(cliente.emailContacto1);
-                $("#verCorreoEnvioFactura").html(cliente.correoEnvioFactura);
-                if (cliente.bloqueado) {
-                    $("#verBloqueado").html("Sí");
-                }
-                else {
-                    $("#verBloqueado").html("No");
-                }
 
-                $("#verObservaciones").html(cliente.observaciones);
-
-                /*Plazo Crédito*/
-                $("#verPlazoCreditoSolicitado").html(cliente.plazoCreditoSolicitadoToString);
-                $("#verPlazoCreditoAprobado").html(cliente.tipoPagoFacturaToString);
-                $("#verSobrePlazo").html(cliente.sobrePlazo);               
-
-                /*Montos de Crédito*/
-                $("#verCreditoSolicitado").html(cliente.creditoSolicitado.toFixed(cantidadDecimales));
-                $("#verCreditoAprobado").html(cliente.creditoAprobado.toFixed(cantidadDecimales));
-                $("#verSobreGiro").html(cliente.sobreGiro.toFixed(cantidadDecimales));
-
-                $("#verObservacionesCredito").html(cliente.observacionesCredito);
-                $("#verFormaPagoFactura").html(cliente.formaPagoFacturaToString);
-
-                /*Datos Sunat*/
-                $("#verRazonSocialSunat").html(cliente.razonSocialSunat);       
-                $("#verNombreComercialSunat").html(cliente.nombreComercialSunat);
-                $("#verDireccionDomicilioLegalSunat").html(cliente.direccionDomicilioLegalSunat);
-
-                $("#verObservacionHorarioEntrega").html(cliente.observacionHorarioEntrega);     
-
-
-                $("#verEstadoContribuyente").html(cliente.estadoContribuyente);
-                $("#verCondicionContribuyente").html(cliente.condicionContribuyente);
-                $("#verRubro").html(cliente.rubro.nombreCompleto);
-
-                /*
-                $("#cliente_ubigeo_Departamento").val(cliente.ubigeo.Departamento);
-                $("#cliente_ubigeo_Provincia").val(cliente.ubigeo.Provincia);
-                $("#cliente_ubigeo_Distrito").val(cliente.ubigeo.Distrito);*/
-                
-                $("#verHoraInicioPrimerTurnoEntrega").html(cliente.horaInicioPrimerTurnoEntregaFormat);
-                $("#verHoraFinPrimerTurnoEntrega").html(cliente.horaFinPrimerTurnoEntregaFormat);
-                $("#verHoraInicioSegundoTurnoEntrega").html(cliente.horaInicioSegundoTurnoEntregaFormat);
-                $("#verHoraFinSegundoTurnoEntrega").html(cliente.horaFinSegundoTurnoEntregaFormat);
-
-                /*Vendedores*/
-                $("#verResponsableComercial").html(cliente.responsableComercial.descripcion);
-                $("#verSupervisorComercial").html(cliente.supervisorComercial.descripcion);
-                $("#verAsistenteServicioCliente").html(cliente.asistenteServicioCliente.descripcion);
-
-                /*$("#insertCHRIdResponsableComercial option").show();
-                $("#insertCHRIdResponsableComercial option[value='" + cliente.responsableComercial.idVendedor + "']").hide();
-                $("#insertCHRIdSupervisorComercial option").show();
-                $("#insertCHRIdSupervisorComercial option[value='" + cliente.supervisorComercial.idVendedor + "']").hide();
-                $("#insertCHRIdAsistenteServicioCliente option").show();
-                $("#insertCHRIdAsistenteServicioCliente option[value='" + cliente.asistenteServicioCliente.idVendedor + "']").hide();*/
-
-                $("#spnVerOrigen").html(cliente.origen.nombre);
-
-                $("#verFechaActualizacionContactos").html(cliente.ultimaActualizacionContactosDesc);
-                
-                if (cliente.habilitadoNegociacionGrupal) {
-                    $("#verHabilitadoNegociacionGrupal").show();
-                    $("#verHabilitadoNegociacionGrupal").html("Este Cliente (" + cliente.codigo + ") hereda los precios del grupo.");
+                if (cliente == null) {
+                    $.alert({
+                        title: "RESTRICCIÓN DE VISUALIZACIÓN",
+                        type: 'orange',
+                        content: "No tiene acceso para visualizar este Cliente.",
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
                 } else {
-                    $("#verHabilitadoNegociacionGrupal").hide();
-                }
 
-                $("#verGrupoCliente").html(cliente.grupoCliente.nombre);
-                $("#spn_vercliente_mp_registracotizaciones").html(cliente.ciudad.nombre);
-                
-                if (cliente.perteneceCanalMultiregional) {
-                    $("#div_multiregional").show();
-                    $("#li_perteneceCanalMultiregional img").attr("src", "/images/check2.png");
-                } else {
-                    $("#div_multiregional").hide();
-                    $("#li_perteneceCanalMultiregional img").attr("src", "/images/equis.png");
-                }
-                
-                if (cliente.perteneceCanalLima) {
-                    $("#li_perteneceCanalLima img").attr("src", "/images/check2.png");
-                } else {
-                    $("#li_perteneceCanalLima img").attr("src", "/images/equis.png");
-                }
+                    $("#verCiudadNombre").html(cliente.ciudad.nombre);
+                    $("#verCodigo").html(cliente.codigo);
+                    $("#verRuc").html(cliente.ruc);
+                    $("#verTipoDocumentoIdentidad").html(cliente.tipoDocumentoIdentidadToString);
+                    $("#verNumeroDocumento").html(cliente.ruc);
+                    $("#verNombreComercial").html(cliente.nombreComercial);
+                    $("#verNombreCliente").html(cliente.nombreCliente);
+                    $("#verContacto").html(cliente.contacto1);
+                    $("#verTelefonoContacto").html(cliente.telefonoContacto1);
+                    $("#verEmailContacto").html(cliente.emailContacto1);
+                    $("#verCorreoEnvioFactura").html(cliente.correoEnvioFactura);
+                    if (cliente.bloqueado) {
+                        $("#verBloqueado").html("Sí");
+                    }
+                    else {
+                        $("#verBloqueado").html("No");
+                    }
 
-                if (cliente.perteneceCanalProvincias) {
-                    $("#li_perteneceCanalProvincias img").attr("src", "/images/check2.png");
-                } else {
-                    $("#li_perteneceCanalProvincias img").attr("src", "/images/equis.png");
-                }
+                    $("#verObservaciones").html(cliente.observaciones);
 
-                if (cliente.perteneceCanalPCP) {
-                    $("#li_perteneceCanalPCP img").attr("src", "/images/check2.png");
-                } else {
-                    $("#li_perteneceCanalPCP img").attr("src", "/images/equis.png");
-                }
-                
+                    /*Plazo Crédito*/
+                    $("#verPlazoCreditoSolicitado").html(cliente.plazoCreditoSolicitadoToString);
+                    $("#verPlazoCreditoAprobado").html(cliente.tipoPagoFacturaToString);
+                    $("#verSobrePlazo").html(cliente.sobrePlazo);
 
-                if (cliente.esSubDistribuidor) {
-                    $("#div_subdistribuidor").show();
-                    $("#verSubDistribuidor").html(cliente.subDistribuidor.nombre);
-                } else {
-                    $("#div_subdistribuidor").hide();
-                    $("#verSubDistribuidor").html(cliente.subDistribuidor.nombre);
-                }
+                    /*Montos de Crédito*/
+                    $("#verCreditoSolicitado").html(cliente.creditoSolicitado.toFixed(cantidadDecimales));
+                    $("#verCreditoAprobado").html(cliente.creditoAprobado.toFixed(cantidadDecimales));
+                    $("#verSobreGiro").html(cliente.sobreGiro.toFixed(cantidadDecimales));
 
+                    $("#verObservacionesCredito").html(cliente.observacionesCredito);
+                    $("#verFormaPagoFactura").html(cliente.formaPagoFacturaToString);
 
+                    /*Datos Sunat*/
+                    $("#verRazonSocialSunat").html(cliente.razonSocialSunat);
+                    $("#verNombreComercialSunat").html(cliente.nombreComercialSunat);
+                    $("#verDireccionDomicilioLegalSunat").html(cliente.direccionDomicilioLegalSunat);
 
-                if (cliente.negociacionMultiregional) {
-                    $("#li_negociacionMultiregional img").attr("src", "/images/check2.png");
-                } else {
-                    $("#li_negociacionMultiregional img").attr("src", "/images/equis.png");
-                }
-
-                if (cliente.sedePrincipal) {
-                    $("#li_sedePrincipal img").attr("src", "/images/check2.png");
-                } else {
-                    $("#li_sedePrincipal img").attr("src", "/images/equis.png");
-                }
+                    $("#verObservacionHorarioEntrega").html(cliente.observacionHorarioEntrega);
 
 
-                $("#nombreArchivos > li").remove().end();
+                    $("#verEstadoContribuyente").html(cliente.estadoContribuyente);
+                    $("#verCondicionContribuyente").html(cliente.condicionContribuyente);
+                    $("#verRubro").html(cliente.rubro.nombreCompleto);
+
+                    /*
+                    $("#cliente_ubigeo_Departamento").val(cliente.ubigeo.Departamento);
+                    $("#cliente_ubigeo_Provincia").val(cliente.ubigeo.Provincia);
+                    $("#cliente_ubigeo_Distrito").val(cliente.ubigeo.Distrito);*/
+
+                    $("#verHoraInicioPrimerTurnoEntrega").html(cliente.horaInicioPrimerTurnoEntregaFormat);
+                    $("#verHoraFinPrimerTurnoEntrega").html(cliente.horaFinPrimerTurnoEntregaFormat);
+                    $("#verHoraInicioSegundoTurnoEntrega").html(cliente.horaInicioSegundoTurnoEntregaFormat);
+                    $("#verHoraFinSegundoTurnoEntrega").html(cliente.horaFinSegundoTurnoEntregaFormat);
+
+                    /*Vendedores*/
+                    $("#verResponsableComercial").html(cliente.responsableComercial.descripcion);
+                    $("#verSupervisorComercial").html(cliente.supervisorComercial.descripcion);
+                    $("#verAsistenteServicioCliente").html(cliente.asistenteServicioCliente.descripcion);
+
+                    /*$("#insertCHRIdResponsableComercial option").show();
+                    $("#insertCHRIdResponsableComercial option[value='" + cliente.responsableComercial.idVendedor + "']").hide();
+                    $("#insertCHRIdSupervisorComercial option").show();
+                    $("#insertCHRIdSupervisorComercial option[value='" + cliente.supervisorComercial.idVendedor + "']").hide();
+                    $("#insertCHRIdAsistenteServicioCliente option").show();
+                    $("#insertCHRIdAsistenteServicioCliente option[value='" + cliente.asistenteServicioCliente.idVendedor + "']").hide();*/
+
+                    $("#spnVerOrigen").html(cliente.origen.nombre);
+
+                    $("#verFechaActualizacionContactos").html(cliente.ultimaActualizacionContactosDesc);
+
+                    if (cliente.habilitadoNegociacionGrupal) {
+                        $("#verHabilitadoNegociacionGrupal").show();
+                        $("#verHabilitadoNegociacionGrupal").html("Este Cliente (" + cliente.codigo + ") hereda los precios del grupo.");
+                    } else {
+                        $("#verHabilitadoNegociacionGrupal").hide();
+                    }
+
+                    $("#verGrupoCliente").html(cliente.grupoCliente.nombre);
+                    $("#spn_vercliente_mp_registracotizaciones").html(cliente.ciudad.nombre);
+
+                    if (cliente.perteneceCanalMultiregional) {
+                        $("#div_multiregional").show();
+                        $("#li_perteneceCanalMultiregional img").attr("src", "/images/check2.png");
+                    } else {
+                        $("#div_multiregional").hide();
+                        $("#li_perteneceCanalMultiregional img").attr("src", "/images/equis.png");
+                    }
+
+                    if (cliente.perteneceCanalLima) {
+                        $("#li_perteneceCanalLima img").attr("src", "/images/check2.png");
+                    } else {
+                        $("#li_perteneceCanalLima img").attr("src", "/images/equis.png");
+                    }
+
+                    if (cliente.perteneceCanalProvincias) {
+                        $("#li_perteneceCanalProvincias img").attr("src", "/images/check2.png");
+                    } else {
+                        $("#li_perteneceCanalProvincias img").attr("src", "/images/equis.png");
+                    }
+
+                    if (cliente.perteneceCanalPCP) {
+                        $("#li_perteneceCanalPCP img").attr("src", "/images/check2.png");
+                    } else {
+                        $("#li_perteneceCanalPCP img").attr("src", "/images/equis.png");
+                    }
 
 
-                for (var i = 0; i < cliente.clienteAdjuntoList.length; i++) {
-                    var liHTML = '<a href="javascript:mostrar();" class="descargar">' + cliente.clienteAdjuntoList[i].nombre + '</a>';
-                    $('<li />').html(liHTML).appendTo($('#nombreArchivos'));
-                }
+                    if (cliente.esSubDistribuidor) {
+                        $("#div_subdistribuidor").show();
+                        $("#verSubDistribuidor").html(cliente.subDistribuidor.nombre);
+                    } else {
+                        $("#div_subdistribuidor").hide();
+                        $("#verSubDistribuidor").html(cliente.subDistribuidor.nombre);
+                    }
 
 
-                $("#verNombreArchivos > li").remove().end();
+
+                    if (cliente.negociacionMultiregional) {
+                        $("#li_negociacionMultiregional img").attr("src", "/images/check2.png");
+                    } else {
+                        $("#li_negociacionMultiregional img").attr("src", "/images/equis.png");
+                    }
+
+                    if (cliente.sedePrincipal) {
+                        $("#li_sedePrincipal img").attr("src", "/images/check2.png");
+                    } else {
+                        $("#li_sedePrincipal img").attr("src", "/images/equis.png");
+                    }
 
 
-                for (var i = 0; i < cliente.clienteAdjuntoList.length; i++) {
-                    var liHTML = '<a href="javascript:mostrar();" class="descargar">' + cliente.clienteAdjuntoList[i].nombre + '</a>';
-                    //$('<li />').html(liHTML).appendTo($('#nombreArchivos'));
-                    $('#verNombreArchivos').append($('<li />').html(liHTML));
-                }     
+                    $("#nombreArchivos > li").remove().end();
 
 
-                if (cliente.configuraciones.agregarNombreSedeObservacionFactura) {
-                    $("#verChkConfigAgregarNombreSedeObservacionFactura_SI").show();
-                    $("#verChkConfigAgregarNombreSedeObservacionFactura_NO").hide();
-                } else {
-                    $("#verChkConfigAgregarNombreSedeObservacionFactura_SI").hide();
-                    $("#verChkConfigAgregarNombreSedeObservacionFactura_NO").show();
-                }
-
-                if (cliente.esAgenteRetencion) {
-                    $("#verChkEsAgenteRetencion_SI").show();
-                    $("#verChkEsAgenteRetencion_NO").hide();
-                } else {
-                    $("#verChkEsAgenteRetencion_SI").hide();
-                    $("#verChkEsAgenteRetencion_NO").show();
-                }
-
-                if (cliente.facturaUnica) {
-                    $("#verChkFacturaUnica_SI").show();
-                    $("#verChkFacturaUnica_NO").hide();
-                } else {
-                    $("#verChkFacturaUnica_SI").hide();
-                    $("#verChkFacturaUnica_NO").show();
-                }
+                    for (var i = 0; i < cliente.clienteAdjuntoList.length; i++) {
+                        var liHTML = '<a href="javascript:mostrar();" class="descargar">' + cliente.clienteAdjuntoList[i].nombre + '</a>';
+                        $('<li />').html(liHTML).appendTo($('#nombreArchivos'));
+                    }
 
 
-                if (cliente.configuraciones.facturacionCompleja) {
-                    $("#verChkConfigFacturacionCompleja_SI").show();
-                    $("#verChkConfigFacturacionCompleja_NO").hide();
-                } else {
-                    $("#verChkConfigFacturacionCompleja_SI").hide();
-                    $("#verChkConfigFacturacionCompleja_NO").show();
-                }
+                    $("#verNombreArchivos > li").remove().end();
 
 
-                var preciosList = result.precios;
-                var margenText = "";
-                var canastaText = "";
-                var spnSkuCliente = "";
-
-                if (cliente.modificaCanasta != 1) {
-                    disabledCanastaView = "disabled";
-                }
-
-                setTablePrecios(preciosList);
+                    for (var i = 0; i < cliente.clienteAdjuntoList.length; i++) {
+                        var liHTML = '<a href="javascript:mostrar();" class="descargar">' + cliente.clienteAdjuntoList[i].nombre + '</a>';
+                        //$('<li />').html(liHTML).appendTo($('#nombreArchivos'));
+                        $('#verNombreArchivos').append($('<li />').html(liHTML));
+                    }
 
 
-                /**
-                 * DIRECCIONES
-                 */
+                    if (cliente.configuraciones.agregarNombreSedeObservacionFactura) {
+                        $("#verChkConfigAgregarNombreSedeObservacionFactura_SI").show();
+                        $("#verChkConfigAgregarNombreSedeObservacionFactura_NO").hide();
+                    } else {
+                        $("#verChkConfigAgregarNombreSedeObservacionFactura_SI").hide();
+                        $("#verChkConfigAgregarNombreSedeObservacionFactura_NO").show();
+                    }
 
-                var arrayDireccionEntrega = new Array();
+                    if (cliente.esAgenteRetencion) {
+                        $("#verChkEsAgenteRetencion_SI").show();
+                        $("#verChkEsAgenteRetencion_NO").hide();
+                    } else {
+                        $("#verChkEsAgenteRetencion_SI").hide();
+                        $("#verChkEsAgenteRetencion_NO").show();
+                    }
 
-            //    $("#tableListaDireccionesEntrega > tbody").empty();
-                var direccionEntregaList = result.direccionEntregaList;
-                for (var i = 0; i < direccionEntregaList.length; i++) {
-                    var contacto = direccionEntregaList[i].contacto == null ? "" : direccionEntregaList[i].contacto;
-                    var telefono = direccionEntregaList[i].telefono == null ? "" : direccionEntregaList[i].telefono;
-                    var codigoCliente = direccionEntregaList[i].codigoCliente == null ? "" : direccionEntregaList[i].codigoCliente;
-                    var nombre = direccionEntregaList[i].nombre == null ? "" : direccionEntregaList[i].nombre;
-                    var codigoMP = direccionEntregaList[i].codigoMP == null ? "" : direccionEntregaList[i].codigoMP;
-                    var ubigeo = direccionEntregaList[i].ubigeo.Id == null ? "000000" : direccionEntregaList[i].ubigeo.Id;
-                    var departamento = direccionEntregaList[i].ubigeo.Departamento == null ? "" : direccionEntregaList[i].ubigeo.Departamento;
-                    var provincia = direccionEntregaList[i].ubigeo.Provincia == null ? "" : direccionEntregaList[i].ubigeo.Provincia;
-                    var distrito = direccionEntregaList[i].ubigeo.Distrito == null ? "" : direccionEntregaList[i].ubigeo.Distrito;
-                    var direccionDomicilioLegal = direccionEntregaList[i].direccionDomicilioLegal == null ? "" : direccionEntregaList[i].direccionDomicilioLegal;
-                    var emailRecepcionFacturas = direccionEntregaList[i].emailRecepcionFacturas == null ? "" : direccionEntregaList[i].emailRecepcionFacturas;
-
-                    var direccionEntregaRow = '<tr data-expanded="true">' +
-                        '<td>' + direccionEntregaList[i].idDireccionEntrega + '</td>' +
-                        '<td>' + direccionEntregaList[i].cliente.idCliente + '</td>' +
-                        '<td>' + direccionEntregaList[i].cliente.ciudad.idCiudad + '</td>' +
-                        '<td>' + direccionEntregaList[i].domicilioLegal.idDomicilioLegal + '</td>' +
-                        '<td>' + ubigeo + '</td>' +
-
-                        '<td>' + direccionEntregaList[i].codigo + '</td>' +
-                        '<td>' + direccionEntregaList[i].cliente.ciudad.sede + '</td>' +
-                        '<td>' + departamento + ' - ' + provincia + ' - ' + distrito + '</td>' +
-                        '<td>' + direccionEntregaList[i].descripcion + '</td>' +
-                        '<td>' + contacto + '</td>' +
-                        '<td>' + telefono + '</td>' +
-                        '<td>' + codigoCliente + '</td>' +
-                        '<td>' + nombre + '</td>' +
-                        '<td>' + codigoMP + '</td>' +
-                        '<td>' + emailRecepcionFacturas + '</td>' +
-                        '<td>' + direccionDomicilioLegal + '</td>' +
-
-                        '</tr>';
-
-                    //var rowtmp = $modal.data('row'),
-                    var values = {
-                        idDireccionEntrega: direccionEntregaList[i].idDireccionEntrega,
-                        idCliente: direccionEntregaList[i].cliente.idCliente,
-                        idCiudad: direccionEntregaList[i].cliente.ciudad.idCiudad,
-                        idDomicilioLegal: direccionEntregaList[i].domicilioLegal.idDomicilioLegal,
-                        codigoUbigeo: ubigeo,
-                        codigo: direccionEntregaList[i].codigo,
-                        sede: direccionEntregaList[i].cliente.ciudad.sede,
-                        ubigeo: departamento + ' - ' + provincia + ' - ' + distrito,
-                        direccionEntrega: direccionEntregaList[i].descripcion,
-                        contacto: contacto,
-                        telefono: telefono,
-                        codigoCliente: codigoCliente,
-                        nombre: nombre,
-                        emailRecepcionFacturas: emailRecepcionFacturas,
-                        direccionDomicilioLegal: direccionDomicilioLegal
-                    };
-
-                    arrayDireccionEntrega.push(values);
-                }
-
-                loadDireccionesEntrega(arrayDireccionEntrega);
-
-                $("#tableListaContactos > tbody").empty();
-                var contactoList = result.contactoList;
-                for (var i = 0; i < contactoList.length; i++) {
-                    var aplicaRUC = contactoList[i].aplicaRuc == 1 ? "SI" : "NO";
-                    
-                    var contactoRow = '<tr data-expanded="true" idClienteContacto="' + contactoList[i].idClienteContacto + '">' +
-                        '<td>' + contactoList[i].idClienteContacto + '</td>' +
-                        '<td>' + contactoList[i].idCliente + '</td>' +
-                        '<td>' + contactoList[i].nombre + '</td>' +
-                        '<td>' + contactoList[i].telefono + '</td>' +
-                        '<td>' + contactoList[i].correo  + '</td>' +
-                        '<td>' + contactoList[i].cargo + '</td>' +
-                        '<td>' + contactoList[i].tiposDescripcion + '</td>' +
-                        '<td>' + aplicaRUC + '</td>' +
-                        '<td>' + contactoList[i].FechaEdicionDesc + '</td>' +
-                        '<td>' + '<button type="button" class="btn btn-primary btnEditarClienteContacto" idClienteContacto="' + contactoList[i].idClienteContacto + '">Editar</button>' +
-                        '&nbsp; <button type="button" class="btn btn-danger btnEliminarClienteContacto" idClienteContacto="' + contactoList[i].idClienteContacto + '" nombreContacto="' + contactoList[i].nombre + '">Eliminar</button>' +
-                        '</td>' +
-                        '</tr>';      
-
-                    $("#tableListaContactos").append(contactoRow);
-                }
-
-                FooTable.init('#tableListaContactos');
+                    if (cliente.facturaUnica) {
+                        $("#verChkFacturaUnica_SI").show();
+                        $("#verChkFacturaUnica_NO").hide();
+                    } else {
+                        $("#verChkFacturaUnica_SI").hide();
+                        $("#verChkFacturaUnica_NO").show();
+                    }
 
 
-                $("#direccionEntrega_idDomicilioLegal").find('option')
-                .remove()
-                .end()
-                    ;
+                    if (cliente.configuraciones.facturacionCompleja) {
+                        $("#verChkConfigFacturacionCompleja_SI").show();
+                        $("#verChkConfigFacturacionCompleja_NO").hide();
+                    } else {
+                        $("#verChkConfigFacturacionCompleja_SI").hide();
+                        $("#verChkConfigFacturacionCompleja_NO").show();
+                    }
 
-                $('#direccionEntrega_idDomicilioLegal').append($('<option>', {
-                    value: "",
-                    text: "Seleccione Domicilio Legal"
-                }));
 
-                var domicilioLegalList = result.domicilioLegalList;
+                    var preciosList = result.precios;
+                    var margenText = "";
+                    var canastaText = "";
+                    var spnSkuCliente = "";
 
-                for (var i = 0; i < domicilioLegalList.length; i++) {
+                    if (cliente.modificaCanasta != 1) {
+                        disabledCanastaView = "disabled";
+                    }
 
-                    //var ubigeo = domicilioLegalList[i].direccionEntrega.ubigeo;
+                    setTablePrecios(preciosList);
+
+
+                    /**
+                     * DIRECCIONES
+                     */
+
+                    var arrayDireccionEntrega = new Array();
+
+                    //    $("#tableListaDireccionesEntrega > tbody").empty();
+                    var direccionEntregaList = result.direccionEntregaList;
+                    for (var i = 0; i < direccionEntregaList.length; i++) {
+                        var contacto = direccionEntregaList[i].contacto == null ? "" : direccionEntregaList[i].contacto;
+                        var telefono = direccionEntregaList[i].telefono == null ? "" : direccionEntregaList[i].telefono;
+                        var codigoCliente = direccionEntregaList[i].codigoCliente == null ? "" : direccionEntregaList[i].codigoCliente;
+                        var nombre = direccionEntregaList[i].nombre == null ? "" : direccionEntregaList[i].nombre;
+                        var codigoMP = direccionEntregaList[i].codigoMP == null ? "" : direccionEntregaList[i].codigoMP;
+                        var ubigeo = direccionEntregaList[i].ubigeo.Id == null ? "000000" : direccionEntregaList[i].ubigeo.Id;
+                        var departamento = direccionEntregaList[i].ubigeo.Departamento == null ? "" : direccionEntregaList[i].ubigeo.Departamento;
+                        var provincia = direccionEntregaList[i].ubigeo.Provincia == null ? "" : direccionEntregaList[i].ubigeo.Provincia;
+                        var distrito = direccionEntregaList[i].ubigeo.Distrito == null ? "" : direccionEntregaList[i].ubigeo.Distrito;
+                        var direccionDomicilioLegal = direccionEntregaList[i].direccionDomicilioLegal == null ? "" : direccionEntregaList[i].direccionDomicilioLegal;
+                        var emailRecepcionFacturas = direccionEntregaList[i].emailRecepcionFacturas == null ? "" : direccionEntregaList[i].emailRecepcionFacturas;
+
+                        var direccionEntregaRow = '<tr data-expanded="true">' +
+                            '<td>' + direccionEntregaList[i].idDireccionEntrega + '</td>' +
+                            '<td>' + direccionEntregaList[i].cliente.idCliente + '</td>' +
+                            '<td>' + direccionEntregaList[i].cliente.ciudad.idCiudad + '</td>' +
+                            '<td>' + direccionEntregaList[i].domicilioLegal.idDomicilioLegal + '</td>' +
+                            '<td>' + ubigeo + '</td>' +
+
+                            '<td>' + direccionEntregaList[i].codigo + '</td>' +
+                            '<td>' + direccionEntregaList[i].cliente.ciudad.sede + '</td>' +
+                            '<td>' + departamento + ' - ' + provincia + ' - ' + distrito + '</td>' +
+                            '<td>' + direccionEntregaList[i].descripcion + '</td>' +
+                            '<td>' + contacto + '</td>' +
+                            '<td>' + telefono + '</td>' +
+                            '<td>' + codigoCliente + '</td>' +
+                            '<td>' + nombre + '</td>' +
+                            '<td>' + codigoMP + '</td>' +
+                            '<td>' + emailRecepcionFacturas + '</td>' +
+                            '<td>' + direccionDomicilioLegal + '</td>' +
+
+                            '</tr>';
+
+                        //var rowtmp = $modal.data('row'),
+                        var values = {
+                            idDireccionEntrega: direccionEntregaList[i].idDireccionEntrega,
+                            idCliente: direccionEntregaList[i].cliente.idCliente,
+                            idCiudad: direccionEntregaList[i].cliente.ciudad.idCiudad,
+                            idDomicilioLegal: direccionEntregaList[i].domicilioLegal.idDomicilioLegal,
+                            codigoUbigeo: ubigeo,
+                            codigo: direccionEntregaList[i].codigo,
+                            sede: direccionEntregaList[i].cliente.ciudad.sede,
+                            ubigeo: departamento + ' - ' + provincia + ' - ' + distrito,
+                            direccionEntrega: direccionEntregaList[i].descripcion,
+                            contacto: contacto,
+                            telefono: telefono,
+                            codigoCliente: codigoCliente,
+                            nombre: nombre,
+                            emailRecepcionFacturas: emailRecepcionFacturas,
+                            direccionDomicilioLegal: direccionDomicilioLegal
+                        };
+
+                        arrayDireccionEntrega.push(values);
+                    }
+
+                    loadDireccionesEntrega(arrayDireccionEntrega);
+
+                    $("#tableListaContactos > tbody").empty();
+                    var contactoList = result.contactoList;
+                    for (var i = 0; i < contactoList.length; i++) {
+                        var aplicaRUC = contactoList[i].aplicaRuc == 1 ? "SI" : "NO";
+
+                        var contactoRow = '<tr data-expanded="true" idClienteContacto="' + contactoList[i].idClienteContacto + '">' +
+                            '<td>' + contactoList[i].idClienteContacto + '</td>' +
+                            '<td>' + contactoList[i].idCliente + '</td>' +
+                            '<td>' + contactoList[i].nombre + '</td>' +
+                            '<td>' + contactoList[i].telefono + '</td>' +
+                            '<td>' + contactoList[i].correo + '</td>' +
+                            '<td>' + contactoList[i].cargo + '</td>' +
+                            '<td>' + contactoList[i].tiposDescripcion + '</td>' +
+                            '<td>' + aplicaRUC + '</td>' +
+                            '<td>' + contactoList[i].FechaEdicionDesc + '</td>' +
+                            '<td>' + '<button type="button" class="btn btn-primary btnEditarClienteContacto" idClienteContacto="' + contactoList[i].idClienteContacto + '">Editar</button>' +
+                            '&nbsp; <button type="button" class="btn btn-danger btnEliminarClienteContacto" idClienteContacto="' + contactoList[i].idClienteContacto + '" nombreContacto="' + contactoList[i].nombre + '">Eliminar</button>' +
+                            '</td>' +
+                            '</tr>';
+
+                        $("#tableListaContactos").append(contactoRow);
+                    }
+
+                    FooTable.init('#tableListaContactos');
+
+
+                    $("#direccionEntrega_idDomicilioLegal").find('option')
+                        .remove()
+                        .end()
+                        ;
+
                     $('#direccionEntrega_idDomicilioLegal').append($('<option>', {
-                        value: domicilioLegalList[i].idDomicilioLegal,
-                        text: domicilioLegalList[i].direccion // + " " + ubigeo.Departamento + " - " + ubigeo.Provincia + " - " + ubigeo.Distrito
+                        value: "",
+                        text: "Seleccione Domicilio Legal"
                     }));
-                }
 
-             
-                if (cliente.vendedoresAsignados) {
+                    var domicilioLegalList = result.domicilioLegalList;
 
-                    $("#spanVendedoresAsignados").show();
-                    $("#spanVendedoresNoAsignados").hide();
-                }
-                else {
-                    $("#spanVendedoresAsignados").hide();
-                    $("#spanVendedoresNoAsignados").show();
-                }
+                    for (var i = 0; i < domicilioLegalList.length; i++) {
 
-                if (cliente.isOwner || cliente.usuario.modificaMaestroClientes) {
-                    $("#btnEditarCliente").show();
-                } else {
-                    $("#btnEditarCliente").hide();
-                }
-                        
-                $("#modalVerCliente").modal('show');
-                        
+                        //var ubigeo = domicilioLegalList[i].direccionEntrega.ubigeo;
+                        $('#direccionEntrega_idDomicilioLegal').append($('<option>', {
+                            value: domicilioLegalList[i].idDomicilioLegal,
+                            text: domicilioLegalList[i].direccion // + " " + ubigeo.Departamento + " - " + ubigeo.Provincia + " - " + ubigeo.Distrito
+                        }));
+                    }
+
+
+                    if (cliente.vendedoresAsignados) {
+
+                        $("#spanVendedoresAsignados").show();
+                        $("#spanVendedoresNoAsignados").hide();
+                    }
+                    else {
+                        $("#spanVendedoresAsignados").hide();
+                        $("#spanVendedoresNoAsignados").show();
+                    }
+
+                    if (cliente.isOwner || cliente.usuario.modificaMaestroClientes) {
+                        $("#btnEditarCliente").show();
+                    } else {
+                        $("#btnEditarCliente").hide();
+                    }
+
+                    $("#modalVerCliente").modal('show');
+                } 
             }
         });
     });

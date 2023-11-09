@@ -540,7 +540,8 @@ namespace Model
 
         public const String MODIFICA_PRECIOS_ESPECIALES = "P635";
 
-        
+        public const String MODIFICA_FILTRO_VENDEDOR = "P637";
+
         public const String REALIZA_CARGA_PRODUCTOS_WEB = "P740";
 
         public const String FIJA_VIGENCIA_PRECIOS_COTIZACION = "P221";

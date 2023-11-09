@@ -434,6 +434,18 @@ jQuery(function ($) {
     });
 
 
+    $("#idResponsableComercial").change(function () {
+        var idResponsableComercial = $("#idResponsableComercial").val();
+        $.ajax({
+            url: "/GuiaRemision/ChangeResponsableComercialGuiaRemisionBusqueda",
+            type: 'POST',
+            data: {
+                idVendedor: idResponsableComercial
+            },
+            success: function () {
+            }
+        });
+    });
 
 
     $('#modalAgregarCliente').on('shown.bs.modal', function () {
@@ -1201,7 +1213,7 @@ jQuery(function ($) {
 
 
                 $("#modalVerGuiaRemision").modal('show');
-
+                $('#btnEnviarNextSys').show();
                 //  window.location = '/Pedido/Index';
             }
         });

@@ -39,6 +39,7 @@ namespace DataLayer
                     direccionPuntoPartida = Converter.GetString(row, "direccion_punto_partida"),
                     serieGuiaRemision = Converter.GetString(row, "serie_guia_remision"),
                     sede = Converter.GetString(row, "sede"),
+                    codigoSede = Converter.GetString(row, "codigo_sede"),
                     correoCoordinador = Converter.GetString(row, "correo_coordinador")
                 };
                 ciudadList.Add(ciudad);

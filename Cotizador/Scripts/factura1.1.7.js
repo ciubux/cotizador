@@ -179,18 +179,18 @@ jQuery(function ($) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+    $("#idResponsableComercial").change(function () {
+        var idResponsableComercial = $("#idResponsableComercial").val();
+        $.ajax({
+            url: "/Factura/ChangeResponsableComercialFacturaBusqueda",
+            type: 'POST',
+            data: {
+                idVendedor: idResponsableComercial
+            },
+            success: function () {
+            }
+        });
+    });
 
 
 

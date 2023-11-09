@@ -245,6 +245,22 @@
 
                     </div>
                 </div>}
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => documentoVenta.responsableComercial, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idResponsableComercial" })
+
+                    <div class="col-xs-8">
+                        @Html.Action("GetResponsablesComerciales", "Vendedor",
+                                    new
+                                    {
+                                        vendedorSelectId = "idResponsableComercial",
+                                        selectedValue = documentoVenta.responsableComercial.idVendedor,
+                                        disabled = documentoVenta.usuario.modificaFiltroVendedor ? "" : "disabled"
+                                    })
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">

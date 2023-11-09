@@ -354,6 +354,11 @@ namespace Model
         }
 
         public Boolean fechaVentasEsModificada { get; set; }
+
+        public List<string> codigosClienteListRC { get; set; }
+        public List<string> rucsClienteListRC { get; set; }
+        public List<string> sedeRucsClienteListRC { get; set; }
+        public Boolean busquedaListasRC { get; set; }
     }
 
 }

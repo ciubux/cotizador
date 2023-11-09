@@ -4320,7 +4320,7 @@ jQuery(function ($) {
     $("#idResponsableComercial").change(function () {
         var idResponsableComercial = $("#idResponsableComercial").val();
         $.ajax({
-            url: "/Cotizacion/updateResponsableComercialCotizacionBusqueda",
+            url: "/Cotizacion/ChangeResponsableComercialCotizacionBusqueda",
             type: 'POST',
             data: {
                 idVendedor: idResponsableComercial

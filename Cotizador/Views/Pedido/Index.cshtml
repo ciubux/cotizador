@@ -354,6 +354,22 @@
                     </div>
                 </div>
             }
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(c => pedido.responsableComercial, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idResponsableComercial" })
+
+                    <div class="col-xs-8">
+                        @Html.Action("GetResponsablesComerciales", "Vendedor",
+                                new
+                                {
+                                    vendedorSelectId = "idResponsableComercial",
+                                    selectedValue = pedido.responsableComercial.idVendedor,
+                                    disabled = pedido.usuario.modificaFiltroVendedor ? "" : "disabled"
+                                })
+                    </div>
+                </div>
+            </div>
         </div>
 
 

@@ -88,7 +88,7 @@ namespace BusinessLayer
 
                 object dataSend = ConverterMPToNextSoft.toGuia(guiaRemision);
 
-                /*try
+                try
                 {
                     if (guiaRemision.serieDocumento.Substring(0, 2).Equals("T0") || guiaRemision.serieDocumento.Substring(0, 2).Equals("TI"))
                     {
@@ -137,9 +137,9 @@ namespace BusinessLayer
                     } 
                     {
                         if (guiaRemision.serieDocumento.Substring(0, 2).Equals("DF"))
-                        {*/
+                        {
                             dal.InsertMovimientoAlmacenSalida(guiaRemision);
-                        /*}
+                        }
                     }
                 }
                 catch (DuplicateNumberDocumentException ex)
@@ -149,7 +149,7 @@ namespace BusinessLayer
                         logDAL.insertLogWS("NEXTSYS_REGISTRO_GUIA_REMISION", JsonConvert.SerializeObject(dataSend), JsonConvert.SerializeObject(new {error = ex.Message }), guiaRemision.IdUsuarioRegistro);
                     }
                     throw ex;
-                }*/
+                }
             }
         }
 

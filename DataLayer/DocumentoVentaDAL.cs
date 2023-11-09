@@ -791,7 +791,7 @@ namespace DataLayer
             InputParameterAdd.BigInt(objCommand, "numeroGuiaRemision", documentoVenta.guiaRemision.numeroDocumento);
             InputParameterAdd.Int(objCommand, "tipoDocumento", (int)documentoVenta.tipoDocumento);
             InputParameterAdd.Varchar(objCommand, "sku", documentoVenta.sku);
-
+            InputParameterAdd.Int(objCommand, "idAsesor", documentoVenta.responsableComercial.idVendedor);
 
 
             //   InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);

@@ -50,6 +50,8 @@ namespace Cotizador.Controllers
         {
             try
             {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
                 Pedido pedidoTmp = new Pedido(Pedido.ClasesPedido.Venta);
                 DateTime fechaDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
                 DateTime fechaHasta = DateTime.Now.AddDays(1);
@@ -75,6 +77,12 @@ namespace Cotizador.Controllers
                 pedidoTmp.seguimientoPedido = new SeguimientoPedido();
                 pedidoTmp.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Todos;
 
+                pedidoTmp.responsableComercial = new Vendedor();
+
+                if (usuario.esResponsableComercial && !usuario.modificaFiltroVendedor)
+                {
+                    pedidoTmp.responsableComercial = usuario.vendedor;
+                }
 
                 //Si es un coordinador cargarán por defecto todos los pedidos pendientes de atención
                 if (pedidoTmp.usuario.creaGuias)
@@ -2047,13 +2055,35 @@ namespace Cotizador.Controllers
 
 
 
+        public void ChangeResponsableComercialPedidoBusqueda()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA];
 
+            try
+            {
+                string idVendedor = this.Request.Params["idVendedor"].ToString();
+                if (idVendedor.Equals("")) idVendedor = "0";
 
+                if (usuario.modificaFiltroVendedor)
+                {
+                    pedido.responsableComercial.idVendedor = int.Parse(idVendedor);
+                }
+                else
+                {
+                    if (usuario.esResponsableComercial)
+                    {
+                        pedido.responsableComercial = usuario.vendedor;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
 
-
-
-
+            this.Session[Constantes.VAR_SESSION_PEDIDO_BUSQUEDA] = pedido;
+        }
 
 
 

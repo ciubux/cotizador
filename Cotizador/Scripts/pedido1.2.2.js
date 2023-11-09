@@ -899,6 +899,18 @@ jQuery(function ($) {
 
 
 
+    $("#idResponsableComercial").change(function () {
+        var idResponsableComercial = $("#idResponsableComercial").val();
+        $.ajax({
+            url: "/Pedido/ChangeResponsableComercialPedidoBusqueda",
+            type: 'POST',
+            data: {
+                idVendedor: idResponsableComercial
+            },
+            success: function () {
+            }
+        });
+    });
 
 
     $("#pedido_direccionEntrega_descripcion").change(function () {

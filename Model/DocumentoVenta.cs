@@ -161,6 +161,10 @@ namespace Model
         public String descripcionError { get; set;  }
 
         public TiposErrorValidacion tiposErrorValidacion { get; set; }
+
+        [Display(Name = "Vendedor:")]
+        public Vendedor responsableComercial { get; set; }
+
         public String tiposErrorValidacionString
         {
             get

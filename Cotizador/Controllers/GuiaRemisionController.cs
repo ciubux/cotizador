@@ -128,6 +128,8 @@ namespace Cotizador.Controllers
 
         private void instanciarGuiaRemisionBusqueda()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
             GuiaRemision guiaRemision = new GuiaRemision();
             guiaRemision.motivoTrasladoBusqueda = GuiaRemision.motivosTrasladoBusqueda.Todos;
             guiaRemision.seguimientoMovimientoAlmacenSalida = new SeguimientoMovimientoAlmacenSalida();
@@ -136,6 +138,12 @@ namespace Cotizador.Controllers
             guiaRemision.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             guiaRemision.estadoFiltro = GuiaRemision.EstadoFiltro.Todos;
 
+            guiaRemision.responsableComercial = new Vendedor();
+
+            if (usuario.esResponsableComercial && !usuario.modificaFiltroVendedor)
+            {
+                guiaRemision.responsableComercial = usuario.vendedor;
+            }
 
             guiaRemision.pedido = new Pedido();
             guiaRemision.pedido.cliente = new Cliente();
@@ -534,7 +542,35 @@ namespace Cotizador.Controllers
         }
 
 
+        public void ChangeResponsableComercialGuiaRemisionBusqueda()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
+            GuiaRemision guiaRemision = this.GuiaRemisionSession;
+
+            try
+            {
+                string idVendedor = this.Request.Params["idVendedor"].ToString();
+                if (idVendedor.Equals("")) idVendedor = "0";
+
+                if (usuario.modificaFiltroVendedor)
+                {
+                    guiaRemision.responsableComercial.idVendedor = int.Parse(idVendedor);
+                }
+                else
+                {
+                    if (usuario.esResponsableComercial)
+                    {
+                        guiaRemision.responsableComercial = usuario.vendedor;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            this.GuiaRemisionSession = guiaRemision;
+        }
 
 
         [HttpGet]

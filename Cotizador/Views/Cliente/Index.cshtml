@@ -11,6 +11,7 @@
 </div>
 <div class="container">
     <input type="hidden" id="idPedido" value="" />
+    <input type="hidden" id="bloqueaFiltroAsesor" value="@(cliente.usuario.modificaFiltroVendedor || true ? "0" : "1")" />
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
     <input type="hidden" id="fechaHoy" value='@DateTime.Now.ToString("dd/MM/yyyy")' />
     <form class="form-horizontal">
@@ -67,6 +68,7 @@
                                 {
                                     vendedorSelectId = "idResponsableComercial",
                                     selectedValue = cliente.responsableComercial.idVendedor,
+                                    disabled = cliente.usuario.modificaFiltroVendedor ? "" : "disabled"
                                 })
 
                     </div>
@@ -322,7 +324,7 @@
             </div>
         </div>
 
-        
+
 
         <div class="row">
             <div class="col-sm-12 col-lg-12 container">

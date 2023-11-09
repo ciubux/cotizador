@@ -29,7 +29,7 @@ namespace cotizadorPDF
     }
     public class GeneradorPDF
     {
-        public String generarPDFExtended(Cotizacion cot)
+        public String generarPDFExtended(Cotizacion cot, Usuario usuario)
         {
             //try
             //{
@@ -41,7 +41,7 @@ namespace cotizadorPDF
                 PdfDocument doc = new PdfDocument();
                 PdfPageBase page = doc.Pages.Add(PdfPageSize.A4);
 
-                PdfImage image = PdfImage.FromFile(AppDomain.CurrentDomain.BaseDirectory + "\\images\\logos\\logo_" + cot.usuario.codigoEmpresa + ".png");
+                PdfImage image = PdfImage.FromFile(AppDomain.CurrentDomain.BaseDirectory + "\\images\\logos\\logo_" + usuario.codigoEmpresa + ".png");
                 float width = 62 * 2.4f;
                 float height = 26 * 2.4f;
                 page.Canvas.DrawImage(image, 0, 0, width, height);
@@ -637,7 +637,7 @@ namespace cotizadorPDF
                 y = y + sepLine * 2;
                 sectionObervaciones.Canvas.DrawString("Atentamente,", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 y = y + sepLine * 2;
-                sectionObervaciones.Canvas.DrawString(cot.usuario.razonSocialEmpresa, new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), xPage2, y);
+                sectionObervaciones.Canvas.DrawString(usuario.razonSocialEmpresa, new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), xPage2, y);
                 y = y + sepLine * 2;
 
 
@@ -663,13 +663,18 @@ namespace cotizadorPDF
                 y = y + sepLine;
                 sectionFirma.Canvas.DrawString(cot.usuario.contacto, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 y = y + sepLine;
-                sectionFirma.Canvas.DrawString(cot.usuario.email, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
-                y = y + sepLine;
-                sectionFirma.Canvas.DrawString(cot.usuario.urlEmpresa, new PdfFont(PdfFontFamily.Helvetica, 8f, PdfFontStyle.Underline), new PdfSolidBrush(Color.Blue), xPage2, y);
+
+                if (cot.usuario.codigoEmpresa.Equals(usuario.codigoEmpresa))
+                {
+                    sectionFirma.Canvas.DrawString(cot.usuario.email, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                    y = y + sepLine;
+                }
+
+                sectionFirma.Canvas.DrawString(usuario.urlEmpresa, new PdfFont(PdfFontFamily.Helvetica, 8f, PdfFontStyle.Underline), new PdfSolidBrush(Color.Blue), xPage2, y);
                 //page.Canvas.DrawString("www.mpinstitucional.com", new PdfFont(PdfFontFamily.Helvetica, 8f, PdfFontStyle.Underline), new PdfSolidBrush(Color.Blue), 0, y);
                 PdfTextWebLink link2 = new PdfTextWebLink();
-                link2.Text = cot.usuario.urlEmpresa;
-                link2.Url = cot.usuario.urlEmpresa;
+                link2.Text = usuario.urlEmpresa;
+                link2.Url = usuario.urlEmpresa;
                 link2.Font = new PdfFont(PdfFontFamily.Helvetica, 8f, PdfFontStyle.Underline);
                 link2.Brush = PdfBrushes.DarkSeaGreen;
                 link2.DrawTextWebLink(sectionFirma.Canvas, new PointF(xPage2, y));

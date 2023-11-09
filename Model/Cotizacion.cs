@@ -67,6 +67,8 @@ namespace Model
 
         public Usuario usuario { get; set; }
 
+        [Display(Name = "Vendedor:")]
+        public Vendedor responsableComercial { get; set; }
         public Boolean incluidoIGV { get; set; }
         public Decimal flete { get; set; }
         public String usuarioCreacion { get; set; }

@@ -2,6 +2,7 @@
     ViewBag.Title = "Reasignar Cartera de Clientes";
     Model.Cliente cliente = ViewBag.cliente;
     List<Model.Cliente> clientes = ViewBag.clientes;
+    List<Model.Ciudad> ciudades = ViewBag.ciudades;
 }
 
 <div class="page-header">
@@ -129,7 +130,7 @@
 
     <div class="row" style="margin-top: 10px;">
         <div class="col-xs-6 col-lg-4">
-            
+
         </div>
 
         <div class="col-sm-6 col-lg-4">
@@ -211,6 +212,7 @@
     </div>
 
     <div class="row text-right" style="margin-bottom:10px; margin-right:0px">
+        <button id="btnFiltrarPorExcel"  type="button" class="btn btn-primary  bouton-image botonExcel">Filtrar Por Excel</button>
         <button id="btnLimpiarBusquedaReasignacion" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
         <button id="btnBusquedaReasignacion" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
     </div>
@@ -272,65 +274,65 @@
                 <tbody>
                     @foreach (Model.Cliente item in clientes)
                     {
-                    <tr>
-                        <td>(@item.codigo) @item.nombreCliente</td>
+                        <tr>
+                            <td>(@item.codigo) @item.nombreCliente</td>
 
-                        <td>@item.ciudad.nombre</td>
-                        <td>
-                            @if (item.rubro.idRubro > 0)
-                            {
-                                @item.rubro.nombre
-                            }
-                            else
-                            {
-                                <span>-</span>
-                            }
-                        </td>
-                        <td>
-                            @if (item.grupoCliente.idGrupoCliente > 0)
-                            {
-                                <span>@item.grupoCliente.codigo - @item.grupoCliente.nombre</span>
-                            }
-                            else
-                            {
-                                <span>-</span>
-                            }
-                        </td>
-                        <td>
-                            @if (item.esSubDistribuidor)
-                            {
-                                <span>SI</span>
-                            }
-                            else
-                            {
-                                <span>-</span>
-                            }
-                        </td>
-                        <td>@item.responsableComercial.codigoDescripcion</td>
-                        <td class="td-reasignar-cartera-a">
-                            @Html.Action("GetResponsablesComerciales", "Vendedor",
-                                    new
-                                    {
-                                        vendedorSelectId = "idResignarSel_" + item.idCliente.ToString()
-                                    })
-                        </td>
-                        <td>@item.supervisorComercial.codigoDescripcion</td>
-                        <td class="td-reasignar-supervisor-a">
-                            @Html.Action("GetSupervisoresComerciales", "Vendedor",
-                                    new
-                                    {
-                                        vendedorSelectId = "idResignarSupSel_" + item.idCliente.ToString()
-                                    })
-                        </td>
-                        <td>@item.asistenteServicioCliente.codigoDescripcion</td>
-                        <td class="td-reasignar-asistente-a">
-                            @Html.Action("GetAsistentesServicioCliente", "Vendedor",
-                                    new
-                                    {
-                                        vendedorSelectId = "idResignarAsisSel_" + item.idCliente.ToString()
-                                    })
-                        </td>
-                    </tr>
+                            <td>@item.ciudad.nombre</td>
+                            <td>
+                                @if (item.rubro.idRubro > 0)
+                                {
+                                    @item.rubro.nombre
+                                }
+                                else
+                                {
+                                    <span>-</span>
+                                }
+                            </td>
+                            <td>
+                                @if (item.grupoCliente.idGrupoCliente > 0)
+                                {
+                                    <span>@item.grupoCliente.codigo - @item.grupoCliente.nombre</span>
+                                }
+                                else
+                                {
+                                    <span>-</span>
+                                }
+                            </td>
+                            <td>
+                                @if (item.esSubDistribuidor)
+                                {
+                                    <span>SI</span>
+                                }
+                                else
+                                {
+                                    <span>-</span>
+                                }
+                            </td>
+                            <td>@item.responsableComercial.codigoDescripcion</td>
+                            <td class="td-reasignar-cartera-a">
+                                @Html.Action("GetResponsablesComerciales", "Vendedor",
+                                        new
+                                        {
+                                            vendedorSelectId = "idResignarSel_" + item.idCliente.ToString()
+                                        })
+                            </td>
+                            <td>@item.supervisorComercial.codigoDescripcion</td>
+                            <td class="td-reasignar-supervisor-a">
+                                @Html.Action("GetSupervisoresComerciales", "Vendedor",
+                                        new
+                                        {
+                                            vendedorSelectId = "idResignarSupSel_" + item.idCliente.ToString()
+                                        })
+                            </td>
+                            <td>@item.asistenteServicioCliente.codigoDescripcion</td>
+                            <td class="td-reasignar-asistente-a">
+                                @Html.Action("GetAsistentesServicioCliente", "Vendedor",
+                                        new
+                                        {
+                                            vendedorSelectId = "idResignarAsisSel_" + item.idCliente.ToString()
+                                        })
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
@@ -473,7 +475,7 @@
             </div>
 
 
-            
+
             <div class="modal-footer">
                 <button type="button" id="btnCancelConfirmarReasginarCartera" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <button type="button" id="btnSaveConfirmarReasginarCartera" class="btn btn-primary">Registrar Reasignación Cartera</button>
@@ -482,7 +484,103 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalFiltroExcel" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalActualizarExcel"><b>Filtrar Clientes desde Excel</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
 
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-3">Subir Archivo:</label>
+                                <div class="col-xs-9">
+                                    <input id="fileUploadExcel" name="file" type="file" data-url-set-file="@Url.Action("SearchClientesReasignarByExcel", "Cliente")"
+                                           class="btn btn-primary" data-max-size="2097152" data-max-size-text="2MB"
+                                           accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <h4>Ejemplo de las 3 formas que puede optar cada fila del archivo excel para poder filtrar clientes para reasginar cartera. El archivo excel debe estar en formato ".xls"</h4>
+                        </div>
+                        <div class="col-sm-12 col-lg-12">
+                            <table class="table excel-format-table">
+                                <thead>
+                                    <tr>
+                                        <th>Código Cliente</th>
+                                        <th>RUC</th>
+                                        <th>Código Sede</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>L12424</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>20509411671</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>20509411671</td>
+                                        <td>L</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <h4>Códigos Sedes:</h4>
+                        </div>
+                        @foreach (Model.Ciudad ci in ciudades)
+                        {
+                            <div class="col-sm-4 col-lg-4">
+                                <p><b>@ci.codigoSede: </b> @ci.nombre</p>
+                            </div>
+                        }
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button id="btnFiltrarExcel" type="button" class="btn btn-primary" data-dismiss="modal">Filtrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+    .excel-format-table {
+        
+    }
+
+    .excel-format-table th {
+        border: 1px solid #000000;
+        font-weight: bold;
+        color: #ffffff;
+        background-color: #428bca;
+    }
+
+    .excel-format-table td {
+        border: 1px solid #000000;
+        color: #000000;
+    }
+</style>
 
 <script type="text/javascript">
 
@@ -534,6 +632,9 @@
             $("#idResignarAsis_" + uuid).attr("nombreNuevoAsistente", $("#idResignarAsisSel_" + uuid + " option:selected").text());
         });
 
+        $("#btnFiltrarPorExcel").click(function () {
+            $("#modalFiltroExcel").modal('show');
+        });
 
         $("#btnBusquedaReasignacion").click(function () {
             location.reload();
@@ -564,7 +665,7 @@
                     reasignaciones = reasignaciones + 1;
                     reasignacionesAsesores = reasignacionesAsesores + 1;
                     var dataRow = "|-*-|" + $(this).attr("nombreCliente") + "|*|" + $(this).attr("rucCliente") + "|*|" + $(this).attr("ciudadCliente")
-                              + "|*|" + $(this).attr("nombreAsesor") + "|*|" + $(this).attr("nombreNuevoAsesor") + "|*|" + uuid; 
+                        + "|*|" + $(this).attr("nombreAsesor") + "|*|" + $(this).attr("nombreNuevoAsesor") + "|*|" + uuid;
                     var itemRow = "<tr>" +
                         "<td>" + $(this).attr("nombreCliente") + "</td>" +
                         "<td>" + $(this).attr("rucCliente") + "</td>" +
@@ -651,7 +752,7 @@
                     type: 'orange',
                     buttons: {
                         OK: function () {
-                            
+
                         }
                     }
                 });
@@ -755,6 +856,111 @@
                 }
             });
         });
+
+
+        $(document).ready(function () {
+            $('#btnFiltrarExcel').click(function (event) {
+                var fileInput = $('#fileUploadExcel');
+                var maxSize = fileInput.data('max-size');
+                var maxSizeText = fileInput.data('max-size-text');
+                var imagenValida = true;
+                if (fileInput.get(0).files.length) {
+                    var fileSize = fileInput.get(0).files[0].size; // in bytes
+
+                    if (fileSize > maxSize) {
+                        $.alert({
+                            title: "Archivo Inválido",
+                            type: 'red',
+                            content: 'El tamaño del archivo debe ser como maximo ' + maxSizeText + '.',
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                        imagenValida = false;
+                    }
+
+
+                } else {
+                    $.alert({
+                        title: "Archivo Inválido",
+                        type: 'red',
+                        content: 'Seleccione un archivo por favor.',
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                    imagenValida = false;
+                }
+
+                if (imagenValida) {
+
+                    var that = document.getElementById('fileUploadExcel');
+                    var file = that.files[0];
+                    var form = new FormData();
+                    var url = $(that).data("urlSetFile");
+                    var reader = new FileReader();
+                    var mime = file.type;
+
+                    // read the image file as a data URL.
+                    reader.readAsDataURL(file);
+
+                    form.append('file', file);
+
+                    $('body').loadingModal({
+                        text: '...'
+                    });
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: form,
+                        dataType: 'JSON',
+                        beforeSend: function () {
+                            //$.blockUI();
+                        },
+                        success: function (response) {
+                            if (response.success == "true") {
+                                $.alert({
+                                    title: "Carga Exitosa!",
+                                    type: 'green',
+                                    content: response.message,
+                                    buttons: {
+                                        OK: function () { }
+                                    }
+                                });
+
+                                $('#btnBusquedaReasignacion').click();
+                            } else {
+                                $.alert({
+                                    title: "Carga fallida",
+                                    type: 'red',
+                                    content: response.message,
+                                    buttons: {
+                                        OK: function () { }
+                                    }
+                                });
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                            $.alert({
+                                title: "Carga fallida",
+                                type: 'red',
+                                content: 'Ocurrió un error al subir el archivo.',
+                                buttons: {
+                                    OK: function () { }
+                                }
+                            });
+                        }
+                    }).done(function () {
+                        $('body').loadingModal('hide')
+                    });
+                }
+            });
+        });
+
 
     }
     if (window.addEventListener) // W3C standard

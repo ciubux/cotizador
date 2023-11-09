@@ -11,6 +11,7 @@ namespace Model
         public Guid idCiudad { get; set; }
 
         public String nombre { get; set; }
+        public String codigoSede { get; set; }
 
         public int orden { get; set; }
 

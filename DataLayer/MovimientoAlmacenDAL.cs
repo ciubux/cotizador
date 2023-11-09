@@ -1083,6 +1083,7 @@ namespace DataLayer
             InputParameterAdd.Char(objCommand, "motivoTraslado", ((Char)guiaRemision.motivoTrasladoBusqueda).ToString());
             InputParameterAdd.Varchar(objCommand, "sku", guiaRemision.sku);
             InputParameterAdd.Varchar(objCommand, "nroFactura", guiaRemision.cpeNro);
+            InputParameterAdd.Int(objCommand, "idAsesor", guiaRemision.responsableComercial.idVendedor);
 
             DataTable dataTable = Execute(objCommand);           
 

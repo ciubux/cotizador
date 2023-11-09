@@ -317,8 +317,9 @@ namespace Cotizador.Controllers
             {
                 usuario.idEmpresa = obj.idEmpresa;
                 usuario.codigoEmpresa = obj.codigo;
-                usuario.razonSocialEmpresa= obj.nombre;
+                usuario.razonSocialEmpresa = obj.nombre;
                 usuario.urlEmpresa = obj.urlWeb;
+                usuario.atencionTerciarizadaEmpresa = obj.atencionTerciarizada;
 
                 this.Session[Constantes.VAR_SESSION_USUARIO] = usuario;
             }

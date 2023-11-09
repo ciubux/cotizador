@@ -156,6 +156,7 @@ namespace DataLayer
                 obj.factorEmpresa = Converter.GetDecimal(row, "factor_costo");
                 obj.pMargenMinimo = Converter.GetDecimal(row, "porcentaje_margen_minimo");
                 obj.pDescuentoInfraMargen = Converter.GetDecimal(row, "porcentaje_descuento_infra_margen");
+                obj.atencionTerciarizadaEmpresa = Converter.GetInt(row, "atencion_terciarizada") == 1 ? true : false;
             }
 
             return obj;
@@ -182,6 +183,8 @@ namespace DataLayer
                 usuario.idEmpresa = Converter.GetInt(row, "id_empresa");
                 usuario.codigoEmpresa = Converter.GetString(row, "codigo_empresa");
                 usuario.razonSocialEmpresa = Converter.GetString(row, "nombre_empresa");
+                usuario.urlEmpresa = Converter.GetString(row, "url_web");
+                usuario.atencionTerciarizadaEmpresa = Converter.GetInt(row, "atencion_terciarizada") == 1 ? true : false;
 
                 usuario.area = new Area();
                 usuario.area.idArea = Converter.GetInt(row, "id_area");
@@ -834,6 +837,7 @@ namespace DataLayer
                 obj.nombre = Converter.GetString(row, "nombre");
                 obj.razonSocial = Converter.GetString(row, "razon_social");
                 obj.urlWeb = Converter.GetString(row, "url_web");
+                obj.atencionTerciarizada = Converter.GetInt(row, "atencion_terciarizada") == 1 ? true : false;
                 obj.Estado = Converter.GetInt(row, "estado");
                 list.Add(obj);
             }

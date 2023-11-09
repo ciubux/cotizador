@@ -206,6 +206,9 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observacionSeguimientoCrediticioPedido", pedido.seguimientoCrediticioPedido.observacion);
             InputParameterAdd.Varchar(objCommand, "ubigeoEntrega", pedido.ubigeoEntrega.Id);
 
+            InputParameterAdd.Int(objCommand, "entregaTerciarizada", pedido.entregaTerciarizada ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "entregaATerceros", pedido.entregaATerceros ? 1 : 0);
+            InputParameterAdd.Guid(objCommand, "idClienteTercero", pedido.idClienteTercero);
 
             if (pedido.clasePedido == Pedido.ClasesPedido.Venta)
             {
@@ -714,6 +717,8 @@ namespace DataLayer
                 case Pedido.ClasesPedido.Almacen: InputParameterAdd.Char(objCommand, "tipoPedido", ((Char)pedido.tipoPedidoAlmacenBusqueda).ToString()); break;
             }
 
+            InputParameterAdd.Int(objCommand, "idAsesor", pedido.responsableComercial.idVendedor);
+
             InputParameterAdd.DateTime(objCommand, "fechaCreacionDesde", new DateTime(pedido.fechaCreacionDesde.Year, pedido.fechaCreacionDesde.Month, pedido.fechaCreacionDesde.Day, 0, 0, 0));
             InputParameterAdd.DateTime(objCommand, "fechaCreacionHasta", new DateTime(pedido.fechaCreacionHasta.Year, pedido.fechaCreacionHasta.Month, pedido.fechaCreacionHasta.Day, 23, 59, 59));
             InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde == null ? pedido.fechaEntregaDesde : new DateTime(pedido.fechaEntregaDesde.Value.Year, pedido.fechaEntregaDesde.Value.Month, pedido.fechaEntregaDesde.Value.Day, 0, 0, 0));
@@ -837,6 +842,10 @@ namespace DataLayer
                 pedido.horaEntregaHasta = Converter.GetString(row, "hora_entrega_hasta");
                 pedido.horaEntregaAdicionalDesde = Converter.GetString(row, "hora_entrega_adicional_desde");
                 pedido.horaEntregaAdicionalHasta = Converter.GetString(row, "hora_entrega_adicional_hasta");
+
+                pedido.entregaATerceros = Converter.GetInt(row, "entrega_terceros") == 1 ? true : false;
+                pedido.entregaTerciarizada = Converter.GetInt(row, "entrega_terciarizada") == 1 ? true : false;
+                pedido.idClienteTercero = Converter.GetGuid(row, "id_cliente_tercero");
 
                 pedido.idMPPedido = Converter.GetGuid(row, "id_pedido_mp");
                 pedido.numeroPedidoMP = Converter.GetLong(row, "numero_pedido_mp");

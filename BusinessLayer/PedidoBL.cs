@@ -298,7 +298,7 @@ namespace BusinessLayer
                 if (!pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP) && pedido.tipoPedido == Pedido.tiposPedido.Venta)
                 {
                     UsuarioDAL usuarioDal = new UsuarioDAL();
-                    Usuario usuarioEmpresa = usuarioDal.getUsuario(pedido.IdUsuarioRegistro); 
+                    Usuario usuarioEmpresa = usuarioDal.getUsuario(pedido.IdUsuarioRegistro);
 
                     foreach (PedidoDetalle det in pedido.pedidoDetalleList)
                     {
@@ -310,6 +310,9 @@ namespace BusinessLayer
                             det.tieneInfraMargenEmpresaExterna = true;
                         }
                     }
+
+                    pedido.entregaTerciarizada = pedido.usuario.atencionTerciarizadaEmpresa;
+
                 }
 
                 validarPedidoVenta(pedido);
@@ -1094,6 +1097,13 @@ namespace BusinessLayer
             pMP.usuario = usuarioZAS;
             pMP.IdUsuarioRegistro = usuarioZAS.idUsuario;
             pMP.esPagoContado = false;
+            pMP.entregaATerceros = usuarioZAS.atencionTerciarizadaEmpresa;
+
+            if (pMP.entregaATerceros)
+            {
+                pMP.idClienteTercero = pedido.cliente.idCliente;
+            }
+
             pMP.numeroRequerimiento = "";
             pMP.numeroReferenciaAdicional = "";
             pMP.numeroReferenciaCliente = "";

@@ -21,6 +21,8 @@ namespace Model
         public decimal factorEmpresa { get; set; }
         public decimal pMargenMinimo { get; set; }
         public decimal pDescuentoInfraMargen { get; set; }
+        public bool atencionTerciarizadaEmpresa { get; set; }
+
 
         public Vendedor vendedor { get; set; }
         public Area area { get; set; }
@@ -114,6 +116,14 @@ namespace Model
                 return false;
             }
         }
+
+        public bool esResponsableComercial
+        {
+            get { 
+                return this.vendedor != null && this.vendedor.idVendedor > 0 && this.vendedor.esResponsableComercial; 
+            }
+        }
+
 
         /*PERMISOS COTIZACION*/
         public bool apruebaCotizaciones { get { return apruebaCotizacionesLima || apruebaCotizacionesProvincias; } }
@@ -220,6 +230,7 @@ namespace Model
         public bool reasignaCarteraCliente { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REASIGNA_CARTERA_CLIENTE)).FirstOrDefault() != null; } }
 
         public bool modificaPreciosEspeciales { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_PRECIOS_ESPECIALES)).FirstOrDefault() != null; } }
+        public bool modificaFiltroVendedor { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_FILTRO_VENDEDOR)).FirstOrDefault() != null; } }
 
 
         /*Productos*/

@@ -71,6 +71,7 @@
 </div>
 <div class="container">
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" id="bloqueaFiltroAsesor" value="0" />
     <input type="hidden" value="@ViewBag.debug" />
     <input type="hidden" id="fechaRegistro" value='@cliente.FechaRegistro.ToString("dd/MM/yyyy")' />
     <input type="hidden" id="esClienteLite" value='@cliente.clienteLiteValue.ToString()' />
@@ -335,7 +336,7 @@
                                     new
                                     {
                                         rubroSelectId = "idRubroPadre",
-                                        selectedValue =  cliente.rubro.padre == null ? 0 : cliente.rubro.padre.idRubro,
+                                        selectedValue = cliente.rubro.padre == null ? 0 : cliente.rubro.padre.idRubro,
                                         sinNoAsignado = 1
                                     })
 
@@ -370,11 +371,11 @@
 
                     <div class="col-sm-6 col-lg-4">
                         @*<div class="form-group">
-                            @Html.LabelFor(c => cliente.contacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
-                            <div class="col-xs-8 col-sm-8 col-lg-8">
-                                @Html.TextBoxFor(c => cliente.contacto1, htmlAttributes: new { @class = "form-control" })
-                            </div>
-                        </div>*@
+                                @Html.LabelFor(c => cliente.contacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                                <div class="col-xs-8 col-sm-8 col-lg-8">
+                                    @Html.TextBoxFor(c => cliente.contacto1, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>*@
                     </div>
                 </div>
 
@@ -391,18 +392,18 @@
 
                     <div class="col-sm-6 col-lg-4">
                         @*<div class="form-group">
-                            @Html.LabelFor(c => cliente.telefonoContacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
-                            <div class="col-xs-8 col-sm-8 col-lg-8">
-                                @Html.TextBoxFor(c => cliente.telefonoContacto1, htmlAttributes: new { @class = "form-control" })
+                                @Html.LabelFor(c => cliente.telefonoContacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                                <div class="col-xs-8 col-sm-8 col-lg-8">
+                                    @Html.TextBoxFor(c => cliente.telefonoContacto1, htmlAttributes: new { @class = "form-control" })
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            @Html.LabelFor(c => cliente.emailContacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
-                            <div class="col-xs-8 col-sm-8 col-lg-8">
-                                @Html.TextBoxFor(c => cliente.emailContacto1, htmlAttributes: new { @class = "form-control" })
-                            </div>
-                        </div>*@
+                            <div class="form-group">
+                                @Html.LabelFor(c => cliente.emailContacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                                <div class="col-xs-8 col-sm-8 col-lg-8">
+                                    @Html.TextBoxFor(c => cliente.emailContacto1, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>*@
                     </div>
                 </div>
 
@@ -1042,78 +1043,78 @@
             }
 
 
-        <fieldset>
-            <legend>Configuración:</legend>
+            <fieldset>
+                <legend>Configuración:</legend>
 
-            <div class="row">
-                <div class="col-sm-12 col-lg-6">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <div class="onoffswitch">
-                                <input type="checkbox" name="onoffswitch" @(cliente.configuraciones.agregarNombreSedeObservacionFactura ? "checked" : "") class="onoffswitch-checkbox" id="chkConfigAgregarNombreSedeObservacionFactura">
-                                <label class="onoffswitch-label" for="chkConfigAgregarNombreSedeObservacionFactura"></label>
-                            </div>
-                            <h5 id="lblChkConfigAgregarNombreSedeObservacionFactura" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Agregar nombre de sede de dirección de entrega a observaciones de factura</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12 col-lg-6">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <div class="onoffswitch">
-                                <input type="checkbox" name="onoffswitch" @(cliente.esAgenteRetencion ? "checked" : "") class="onoffswitch-checkbox" id="chkEsAgenteRetencion">
-                                <label class="onoffswitch-label" for="chkEsAgenteRetencion"></label>
-                            </div>
-                            <h5 id="lblChkEsAgenteRetencion" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Es agente de retención</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12 col-lg-6">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <div class="onoffswitch">
-                                <input type="checkbox" name="onoffswitch" @(cliente.facturaUnica ? "checked" : "") class="onoffswitch-checkbox" id="chkFacturaUnica">
-                                <label class="onoffswitch-label" for="chkFacturaUnica"></label>
-                            </div>
-                            <h5 id="lblChkFacturaUnica" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Facturación única</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12 col-lg-6">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            @if (cliente.usuario.activaClienteFacturaCompleja)
-                            {
+                <div class="row">
+                    <div class="col-sm-12 col-lg-6">
+                        <div class="col-sm-12">
+                            <div class="form-group">
                                 <div class="onoffswitch">
-                                    <input type="checkbox" name="onoffswitch" @(cliente.configuraciones.facturacionCompleja ? "checked" : "") class="onoffswitch-checkbox" id="chkConfigFacturacionCompleja">
-                                    <label class="onoffswitch-label" for="chkConfigFacturacionCompleja"></label>
+                                    <input type="checkbox" name="onoffswitch" @(cliente.configuraciones.agregarNombreSedeObservacionFactura ? "checked" : "") class="onoffswitch-checkbox" id="chkConfigAgregarNombreSedeObservacionFactura">
+                                    <label class="onoffswitch-label" for="chkConfigAgregarNombreSedeObservacionFactura"></label>
                                 </div>
-                            }
-                            else
-                            {
-                                <div class="onoffswitch">
-                                    @if (cliente.configuraciones.facturacionCompleja)
-                                    {
-                                        <label style="color:#40b34f">SI</label>
-                                    }
-                                    else
-                                    {
-                                        <label style="color:#d81717">NO</label>
-                                    }
-                                </div>
-                            }
-                            <h5 id="lblChkConfigFacturacionCompleja" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Facturación compleja</h5>
+                                <h5 id="lblChkConfigAgregarNombreSedeObservacionFactura" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Agregar nombre de sede de dirección de entrega a observaciones de factura</h5>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </fieldset>
+                <div class="row">
+                    <div class="col-sm-12 col-lg-6">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="onoffswitch">
+                                    <input type="checkbox" name="onoffswitch" @(cliente.esAgenteRetencion ? "checked" : "") class="onoffswitch-checkbox" id="chkEsAgenteRetencion">
+                                    <label class="onoffswitch-label" for="chkEsAgenteRetencion"></label>
+                                </div>
+                                <h5 id="lblChkEsAgenteRetencion" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Es agente de retención</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-lg-6">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="onoffswitch">
+                                    <input type="checkbox" name="onoffswitch" @(cliente.facturaUnica ? "checked" : "") class="onoffswitch-checkbox" id="chkFacturaUnica">
+                                    <label class="onoffswitch-label" for="chkFacturaUnica"></label>
+                                </div>
+                                <h5 id="lblChkFacturaUnica" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Facturación única</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-lg-6">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                @if (cliente.usuario.activaClienteFacturaCompleja)
+                                {
+                                    <div class="onoffswitch">
+                                        <input type="checkbox" name="onoffswitch" @(cliente.configuraciones.facturacionCompleja ? "checked" : "") class="onoffswitch-checkbox" id="chkConfigFacturacionCompleja">
+                                        <label class="onoffswitch-label" for="chkConfigFacturacionCompleja"></label>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="onoffswitch">
+                                        @if (cliente.configuraciones.facturacionCompleja)
+                                        {
+                                            <label style="color:#40b34f">SI</label>
+                                        }
+                                        else
+                                        {
+                                            <label style="color:#d81717">NO</label>
+                                        }
+                                    </div>
+                                }
+                                <h5 id="lblChkConfigFacturacionCompleja" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Facturación compleja</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
         </fieldset>
 
         <div class="row">

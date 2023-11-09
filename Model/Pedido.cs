@@ -23,6 +23,8 @@ namespace Model
             this.ciudadASolicitar = new Ciudad();
             this.truncado = 0;
 
+            this.entregaATerceros = false;
+            this.entregaTerciarizada = false;
 
             this.idGrupoCliente = 0;
         }
@@ -41,6 +43,9 @@ namespace Model
             this.ciudadASolicitar = new Ciudad();
             this.truncado = 0;
             this.idGrupoCliente = 0;
+
+            this.entregaATerceros = false;
+            this.entregaTerciarizada = false;
         }
 
 
@@ -57,6 +62,11 @@ namespace Model
         public Int64 numeroPedido { get; set; }
         [Display(Name = "Número Grupo Pedido:")]
         public Int64? numeroGrupoPedido { get; set; }
+
+
+        public Guid idClienteTercero { get; set; }
+        public Boolean entregaATerceros { get; set; }
+        public Boolean entregaTerciarizada { get; set; }
 
         public int idGrupoCliente { get; set; }
 
@@ -80,6 +90,9 @@ namespace Model
 
         [Display(Name = "Cliente:")]
         public Cliente cliente { get; set; }
+
+        [Display(Name = "Vendedor:")]
+        public Vendedor responsableComercial { get; set; }
 
         [Display(Name = "Proveedor:")]
         public Proveedor proveedor { get; set; }

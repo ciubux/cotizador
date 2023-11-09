@@ -1220,6 +1220,50 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "idRubro", cliente.rubro.idRubro);
             InputParameterAdd.Int(objCommand, "idRubroPadre", cliente.rubro.padre.idRubro);
 
+            InputParameterAdd.Int(objCommand, "busquedaPorListas", cliente.busquedaListasRC ? 1 : 0);
+
+            DataTable dtcodigosCliente = new DataTable();
+            dtcodigosCliente.Columns.Add(new DataColumn("ID", typeof(string)));
+
+            foreach (string item in cliente.codigosClienteListRC)
+            {
+                DataRow rowObj = dtcodigosCliente.NewRow();
+                rowObj["ID"] = item;
+                dtcodigosCliente.Rows.Add(rowObj);
+            }
+
+            SqlParameter dtParamA = objCommand.Parameters.AddWithValue("@codigosCliente", dtcodigosCliente);
+            dtParamA.SqlDbType = SqlDbType.Structured;
+            dtParamA.TypeName = "dbo.VarcharCList";
+
+            DataTable dtrucsCliente = new DataTable();
+            dtrucsCliente.Columns.Add(new DataColumn("ID", typeof(string)));
+
+            foreach (string item in cliente.rucsClienteListRC)
+            {
+                DataRow rowObj = dtrucsCliente.NewRow();
+                rowObj["ID"] = item;
+                dtrucsCliente.Rows.Add(rowObj);
+            }
+
+            SqlParameter dtParamB = objCommand.Parameters.AddWithValue("@rucsCliente", dtrucsCliente);
+            dtParamB.SqlDbType = SqlDbType.Structured;
+            dtParamB.TypeName = "dbo.VarcharCList";
+
+            DataTable dtrucsSedeCliente = new DataTable();
+            dtrucsSedeCliente.Columns.Add(new DataColumn("ID", typeof(string)));
+
+            foreach (string item in cliente.sedeRucsClienteListRC)
+            {
+                DataRow rowObj = dtrucsSedeCliente.NewRow();
+                rowObj["ID"] = item;
+                dtrucsSedeCliente.Rows.Add(rowObj);
+            }
+
+            SqlParameter dtParamC = objCommand.Parameters.AddWithValue("@sedeRucsCliente", dtrucsSedeCliente);
+            dtParamC.SqlDbType = SqlDbType.Structured;
+            dtParamC.TypeName = "dbo.VarcharCList";
+
 
             DataTable dataTable = Execute(objCommand);
 

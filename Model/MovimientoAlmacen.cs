@@ -48,6 +48,9 @@ namespace Model
         
         public int ajusteAprobado { get; set; }
 
+        [Display(Name = "Vendedor:")]
+        public Vendedor responsableComercial { get; set; }
+
         public String ajusteAprobadoDesc { get
             {
                 String desc = "";
