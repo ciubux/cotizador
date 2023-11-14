@@ -299,10 +299,13 @@ namespace Model
         public static String MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS = "";
         public static String PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS = "";
 
+        public static String USER_EOL_DP = "";
+        public static String PASSWORD_EOL_DP = "";
 
         public static String EMPRESA_CODIGO_MP = "MP";
 
         public static String EMPRESA_CODIGO_TECNICA = "TC";
+        public static String EMPRESA_CODIGO_DISTRIPLUS = "DP";
 
         public static String RUC_MP = "";
         public static String RAZON_SOCIAL_MP = "";

@@ -8,19 +8,19 @@ namespace BusinessLayer
 {
     public class SerieDocumentoBL
     {
-        public List<SerieDocumentoElectronico> getSeriesDocumento(Guid idSede)
+        public List<SerieDocumentoElectronico> getSeriesDocumento(Guid idSede, int idEmpresa)
         {
             using (var dal = new SerieDocumentoDAL())
             {
-                return dal.selectSeriesDocumento(idSede);
+                return dal.selectSeriesDocumento(idSede, idEmpresa);
             }
         }
 
-        public SerieDocumentoElectronico getSerieDocumento(String tipo, Guid idSede)
+        public SerieDocumentoElectronico getSerieDocumento(String tipo, Guid idSede, int idEmpresa)
         {
             using (var dal = new SerieDocumentoDAL())
             {
-                return dal.selectSerieDocumento(tipo, idSede);
+                return dal.selectSerieDocumento(tipo, idSede, idEmpresa);
             }
         }
 

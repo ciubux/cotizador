@@ -18,14 +18,16 @@ namespace Model
         [Display(Name = "Pedido:")]
         public Pedido pedido { get; set; }
 
-
+        [Display(Name = "Cliente:")]
+        public Cliente clienteVer { get; set; }
         public Boolean estaAnulado { get; set; }
 
         public Boolean estaFacturado { get; set; }
 
         public Boolean estaNoEntregado { get; set; }
 
-
+        public Boolean entregaTerceros { get; set; }
+        public Guid idClienteTerceros { get; set; }
 
         public String comentarioAnulado { get; set; }
 

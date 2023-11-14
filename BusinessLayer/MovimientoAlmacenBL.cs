@@ -90,7 +90,9 @@ namespace BusinessLayer
 
                 try
                 {
-                    if (guiaRemision.serieDocumento.Substring(0, 2).Equals("T0") || guiaRemision.serieDocumento.Substring(0, 2).Equals("TI"))
+                    if (guiaRemision.serieDocumento.Substring(0, 2).Equals("T0") ||
+                        guiaRemision.serieDocumento.Substring(0, 2).Equals("TT") ||
+                        guiaRemision.serieDocumento.Substring(0, 2).Equals("TI"))
                     {
                         ClienteBL blCliente = new ClienteBL();
 
@@ -98,7 +100,7 @@ namespace BusinessLayer
                         wsCli.urlApi = Constantes.NEXTSOFT_API_URL;
                         wsCli.apiToken = Constantes.NEXTSOFT_API_TOKEN;
 
-                        Cliente clie = blCliente.getCliente(guiaRemision.pedido.cliente.idCliente);
+                        Cliente clie = blCliente.getCliente(guiaRemision.clienteVer.idCliente);
 
                         object resultCli = await wsCli.crearCliente(ConverterMPToNextSoft.toCliente(clie));
 

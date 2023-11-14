@@ -319,7 +319,7 @@ namespace BusinessLayer
                 dal.InsertPedido(pedido);
                 pedido.IdUsuarioRegistro = pedido.usuario.idUsuario;
 
-                if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && 
+                if (!pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP) && 
                     pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
                     pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
                 {
@@ -359,12 +359,12 @@ namespace BusinessLayer
                 
                 if (pedido.esVentaIndirecta && !pedido.esVentaIndirectaAnt)
                 {
-                    pedido.observacionesAlmacen = pedido.observacionesAlmacen + " // Venta indirecta a [RAZON_SOCIAL_CLIENTE_FINAL] a través de TECNICA SAC";
+                    pedido.observacionesAlmacen = pedido.observacionesAlmacen + " // Venta indirecta a [RAZON_SOCIAL_CLIENTE_FINAL] a través de " + pedido.usuario.razonSocialEmpresa;
                 }
 
                 dal.UpdatePedido(pedido);
                 pedido.IdUsuarioRegistro = pedido.usuario.idUsuario;
-                if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && 
+                if (!pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP) &&
                     pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
                     pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
                 {
@@ -1073,7 +1073,10 @@ namespace BusinessLayer
         {
             if (pedido.idMPPedido == null || pedido.idMPPedido.Equals(Guid.Empty))
             {
-                this.EnviarMailTecnica(pedido);
+                if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
+                {
+                    this.EnviarMailTecnica(pedido);
+                }
                 this.ReplicarPedidoEntornoMP(pedido);
             }
         }
@@ -1097,7 +1100,8 @@ namespace BusinessLayer
             pMP.usuario = usuarioZAS;
             pMP.IdUsuarioRegistro = usuarioZAS.idUsuario;
             pMP.esPagoContado = false;
-            pMP.entregaATerceros = usuarioZAS.atencionTerciarizadaEmpresa;
+            pMP.entregaATerceros = pedido.usuario.atencionTerciarizadaEmpresa;
+            pMP.entregaTerciarizada = false;
 
             if (pMP.entregaATerceros)
             {
@@ -1107,7 +1111,7 @@ namespace BusinessLayer
             pMP.numeroRequerimiento = "";
             pMP.numeroReferenciaAdicional = "";
             pMP.numeroReferenciaCliente = "";
-            pMP.observaciones = pMP.observaciones + " // N° Pedido Técnica: " + pedido.numeroPedido.ToString();
+            pMP.observaciones = pMP.observaciones + " // N° Pedido " + pedido.usuario.razonSocialEmpresa + ": " + pedido.numeroPedido.ToString();
 
             foreach (PedidoDetalle det in pMP.pedidoDetalleList)
             {
@@ -1156,7 +1160,14 @@ namespace BusinessLayer
             
             this.calcularMontosTotales(pMP);
 
-            pMP.observacionesGuiaRemision = pMP.observacionesGuiaRemision + " // Dejar en " + pedido.cliente.razonSocial;
+            if (pMP.entregaATerceros)
+            {
+                pMP.observacionesGuiaRemision = pMP.observacionesGuiaRemision + " // Entrega tercerizada por " + pedido.usuario.razonSocialEmpresa;
+            } else
+            {
+                pMP.observacionesGuiaRemision = pMP.observacionesGuiaRemision + " // Dejar en " + pedido.cliente.razonSocial;
+            }
+            
 
             this.InsertPedido(pMP);
             this.SetPedidoMP(idPedidoTec, pMP.idPedido, "// N° Pedido MP: " + pMP.numeroPedido.ToString());

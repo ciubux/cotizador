@@ -250,6 +250,8 @@ namespace Cotizador.Controllers
 
         private void instanciarNotaIngreso(Ciudad ciudad)
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
             NotaIngreso notaIngreso = new NotaIngreso();
             notaIngreso.fechaEmision = DateTime.Now;
             notaIngreso.fechaTraslado = DateTime.Now;
@@ -265,7 +267,7 @@ namespace Cotizador.Controllers
             //  notaIngreso.certificadoInscripcion = ".";
 
             SerieDocumentoBL serieDocumentoBL = new SerieDocumentoBL();
-            notaIngreso.ciudadDestino.serieDocumentoElectronicoList = serieDocumentoBL.getSeriesDocumento(ciudad.idCiudad);
+            notaIngreso.ciudadDestino.serieDocumentoElectronicoList = serieDocumentoBL.getSeriesDocumento(ciudad.idCiudad, usuario.idEmpresa);
             notaIngreso.serieDocumentoElectronico = notaIngreso.ciudadDestino.serieDocumentoElectronicoList[0];
             notaIngreso.serieDocumento = notaIngreso.serieDocumentoElectronico.serie;
             notaIngreso.numeroDocumento = notaIngreso.serieDocumentoElectronico.siguienteNumeroNotaIngreso;
@@ -633,7 +635,7 @@ namespace Cotizador.Controllers
             SerieDocumentoBL serieBL = new SerieDocumentoBL();
             NotaIngreso notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO];
 
-            SerieDocumentoElectronico serie = serieBL.getSerieDocumento("TRASLADOINTERNO", notaIngreso.ciudadDestino.idCiudad);
+            SerieDocumentoElectronico serie = serieBL.getSerieDocumento("TRASLADOINTERNO", notaIngreso.ciudadDestino.idCiudad, usuario.idEmpresa);
 
             if (serie.sedeMP != null)
             {

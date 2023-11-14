@@ -836,6 +836,7 @@ namespace Cotizador.Controllers
                 var tipo = Request.Params["tipo"];
                 this.Session["seAtiendeDiferidoVenta"] = false;
                 this.Session["seAtiendeTrasladoInterno"] = false;
+                this.Session["seAtiendeEntregaTerceros"] = false;
 
                 Pedido pedido = null;
                 if (tipo.ToString().Equals("VD"))
@@ -864,6 +865,21 @@ namespace Cotizador.Controllers
                 GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
                 guiaRemision.pedido = pedido;
 
+                if (pedido.entregaATerceros)
+                {
+                    ClienteBL blCliente = new ClienteBL();
+                    guiaRemision.clienteVer = blCliente.getCliente(pedido.idClienteTercero);
+                    guiaRemision.entregaTerceros = true;
+                    guiaRemision.idClienteTerceros = pedido.idClienteTercero;
+
+                    this.Session["seAtiendeEntregaTerceros"] = true;
+                } else
+                {
+                    guiaRemision.clienteVer = pedido.cliente;
+                    guiaRemision.entregaTerceros = false;
+                    guiaRemision.idClienteTerceros = Guid.Empty;
+                }
+
                 if ((Pedido.ClasesPedido)Char.Parse(tipo) == Pedido.ClasesPedido.Venta)
                 {
                     guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)(char)pedido.tipoPedido;
@@ -881,12 +897,12 @@ namespace Cotizador.Controllers
 
                     if (pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.TrasladoInterno)
                     {
-                        if (pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.TrasladoInterno && pedido.almacenOrigen.idCiudad.Equals(pedido.almacenDestino.idCiudad))
+                        /*if (pedido.tipoPedidoAlmacen == Pedido.tiposPedidoAlmacen.TrasladoInterno && pedido.almacenOrigen.idCiudad.Equals(pedido.almacenDestino.idCiudad))
                         {
                             this.Session["seAtiendeTrasladoInterno"] = true;
-                        } else {
+                        } else {*/
                             this.Session["seAtiendeTrasladoSedes"] = true;
-                        }
+                        //}
                     }
 
                     guiaRemision.direccionEntrega = pedido.direccionEntrega.descripcion;
@@ -1076,7 +1092,7 @@ namespace Cotizador.Controllers
             SerieDocumentoBL serieBL = new SerieDocumentoBL();
             GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
 
-            SerieDocumentoElectronico serie = serieBL.getSerieDocumento("TRASLADOINTERNO", guiaRemision.ciudadOrigen.idCiudad);
+            SerieDocumentoElectronico serie = serieBL.getSerieDocumento("TRASLADOINTERNO", guiaRemision.ciudadOrigen.idCiudad, usuario.idEmpresa);
 
             if (serie.sedeMP != null)
             {
@@ -1098,7 +1114,7 @@ namespace Cotizador.Controllers
             SerieDocumentoBL serieBL = new SerieDocumentoBL();
             GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
 
-            SerieDocumentoElectronico serie = serieBL.getSerieDocumento("TRASLADOSEDES", guiaRemision.ciudadOrigen.idCiudad);
+            SerieDocumentoElectronico serie = serieBL.getSerieDocumento("TRASLADOSEDES", guiaRemision.ciudadOrigen.idCiudad, usuario.idEmpresa);
 
             if (serie.sedeMP != null)
             {
@@ -1123,7 +1139,7 @@ namespace Cotizador.Controllers
                 SerieDocumentoBL serieBL = new SerieDocumentoBL();
                 GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
 
-                SerieDocumentoElectronico serie = serieBL.getSerieDocumento("DIFERIDA", guiaRemision.ciudadOrigen.idCiudad);
+                SerieDocumentoElectronico serie = serieBL.getSerieDocumento("DIFERIDA", guiaRemision.ciudadOrigen.idCiudad, usuario.idEmpresa);
 
                 if (serie.sedeMP != null)
                 {
@@ -1148,7 +1164,7 @@ namespace Cotizador.Controllers
                 SerieDocumentoBL serieBL = new SerieDocumentoBL();
                 GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
 
-                SerieDocumentoElectronico serie = serieBL.getSerieDocumento("VENTA", guiaRemision.ciudadOrigen.idCiudad);
+                SerieDocumentoElectronico serie = serieBL.getSerieDocumento("VENTA", guiaRemision.ciudadOrigen.idCiudad, usuario.idEmpresa);
 
                 if (serie.sedeMP != null)
                 {
@@ -1163,7 +1179,31 @@ namespace Cotizador.Controllers
             return response;
         }
 
-        
+        public String CambiarASerieEntregaTerceros()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            String response = "{\"success\": 0}";
+
+            if (usuario.creaGuias)
+            {
+                SerieDocumentoBL serieBL = new SerieDocumentoBL();
+                GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
+
+                SerieDocumentoElectronico serie = serieBL.getSerieDocumento("ENTREGATERCEROS", guiaRemision.ciudadOrigen.idCiudad, usuario.idEmpresa);
+
+                if (serie.sedeMP != null)
+                {
+                    guiaRemision.serieDocumento = serie.serie;
+                    guiaRemision.numeroDocumento = serie.siguienteNumeroGuiaRemision;
+                    this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
+
+                    response = "{\"success\": 1,  \"serie\":\"" + serie.serie + "\", \"numero\":\"" + serie.siguienteNumeroGuiaRemision.ToString() + "\", \"serieNumeroString\":\"" + guiaRemision.serieNumeroGuia + "\"}";
+                }
+            }
+
+            return response;
+        }
+
 
         public String CambiarASerieNormal()
         {
@@ -1272,9 +1312,14 @@ namespace Cotizador.Controllers
                 this.CambiarASerieTrasladoSedes();
             }
 
-            
 
-            if (!seAtiendeDiferido && !seAtiendeTrasladoInterno && !seAtiendeTrasladoSedes)
+            bool seAtiendeEntregaTerceros = this.Session["seAtiendeEntregaTerceros"] != null ? (bool)this.Session["seAtiendeEntregaTerceros"] : false;
+            if (seAtiendeEntregaTerceros)
+            {
+                this.CambiarASerieEntregaTerceros();
+            }
+
+            if (!seAtiendeDiferido && !seAtiendeTrasladoInterno && !seAtiendeTrasladoSedes && !seAtiendeEntregaTerceros)
             {
                 this.CambiarASerieElectronica();
             }
@@ -1308,6 +1353,7 @@ namespace Cotizador.Controllers
                 this.Session["seAtiendeDiferidoVenta"] = false;
                 this.Session["seAtiendeTrasladoInterno"] = false;
                 this.Session["seAtiendeTrasladoSedes"] = false;
+                this.Session["seAtiendeEntregaTerceros"] = false;
             }
             catch (DuplicateNumberDocumentException ex)
             {
@@ -1885,6 +1931,8 @@ namespace Cotizador.Controllers
             this.Session["seAtiendeDiferidoVenta"] = false;
             this.Session["seAtiendeTrasladoInterno"] = false;
             this.Session["seAtiendeTrasladoSedes"] = false;
+            this.Session["seAtiendeEntregaTerceros"] = false;
+
             //   usuarioBL.updateCotizacionSerializada(usuario, null);
             return RedirectToAction("Index");
         }

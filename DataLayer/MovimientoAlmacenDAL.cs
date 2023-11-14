@@ -313,6 +313,8 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idAlmacen", guiaRemision.idAlmacen);
             InputParameterAdd.Int(objCommand, "estado", (int)guiaRemision.seguimientoMovimientoAlmacenSalida.estado);
             InputParameterAdd.Varchar(objCommand, "observacionSeguimiento", guiaRemision.seguimientoMovimientoAlmacenSalida.observacion);
+            InputParameterAdd.Int(objCommand, "entregaATerceros", guiaRemision.entregaTerceros ? 1 : 0);
+            InputParameterAdd.Guid(objCommand, "idClienteTercero", guiaRemision.idClienteTerceros);
 
             if (guiaRemision.notaIngresoAExtornar != null)
             {

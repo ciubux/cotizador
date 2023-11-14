@@ -18,10 +18,11 @@ namespace DataLayer
         {
         }
 
-        public List<SerieDocumentoElectronico> selectSeriesDocumento(Guid idSede)
+        public List<SerieDocumentoElectronico> selectSeriesDocumento(Guid idSede, int idEmpresa)
         {
             var objCommand = GetSqlCommand("ps_seriesDocumentoPorSede");
-            InputParameterAdd.Guid(objCommand, "idSedeMP", idSede); 
+            InputParameterAdd.Guid(objCommand, "idSedeMP", idSede);
+            InputParameterAdd.Int(objCommand, "idEmpresa", idEmpresa);
 
             DataTable dataTable = Execute(objCommand);
 
@@ -47,19 +48,16 @@ namespace DataLayer
             return serieDocumentoElectronicoList;
         }
 
-        public SerieDocumentoElectronico selectSerieDocumento(String tipo, Guid idSede)
+        public SerieDocumentoElectronico selectSerieDocumento(String tipo, Guid idSede, int idEmpresa)
         {
             SqlCommand objCommand = null;
 
-            switch (tipo)
-            {
-                case "DIFERIDA": objCommand = GetSqlCommand("ps_serieDocumentoDiferidaPorSede"); break;
-                case "VENTA": objCommand = GetSqlCommand("ps_serieDocumentoElectronicoPorSede"); break;
-                case "TRASLADOINTERNO": objCommand = GetSqlCommand("ps_serieTrasladoInternoPorSede"); break;
-                case "TRASLADOSEDES": objCommand = GetSqlCommand("ps_serieTrasladoSedes"); break;
-            }
+            objCommand = GetSqlCommand("ps_serieDocumentoElectronicoPorSede");
+
 
             InputParameterAdd.Guid(objCommand, "idSedeMP", idSede);
+            InputParameterAdd.Int(objCommand, "idEmpresa", idEmpresa);
+            InputParameterAdd.Varchar(objCommand, "tipo", tipo);
 
             DataTable dataTable = Execute(objCommand);
 

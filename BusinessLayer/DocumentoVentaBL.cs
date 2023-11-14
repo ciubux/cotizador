@@ -327,6 +327,8 @@ namespace BusinessLayer
                     Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
                     client.Endpoint.Address = new EndpointAddress(uri);
 
+                    
+
                     documentoVenta.cPE_RESPUESTA_BE = client.callProcessOnline(Constantes.USER_EOL, Constantes.PASSWORD_EOL,
                         documentoVenta.cPE_CABECERA_BE,
                         documentoVenta.cPE_DETALLE_BEList.ToArray(),

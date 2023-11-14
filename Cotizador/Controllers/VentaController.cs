@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Reflection;
+using DataLayer;
 
 namespace Cotizador.Controllers
 {
@@ -54,20 +55,40 @@ namespace Cotizador.Controllers
             if (ciudad != null)
             {
                 List<SerieDocumentoElectronico> serieDocumentoElectronicoList = new List<SerieDocumentoElectronico>();
-                foreach(SerieDocumentoElectronico item in ciudad.serieDocumentoElectronicoList.OrderByDescending(x => x.esPrincipal).ToList())
-                {
-                    if (!item.serie.Substring(0,1).Equals("T"))
-                    {
-                        serieDocumentoElectronicoList.Add(item);
-                    }
-                }
+                SerieDocumentoBL serieDocumentoBL = new SerieDocumentoBL();
+                ciudad.serieDocumentoElectronicoList = serieDocumentoBL.getSeriesDocumento(ciudad.idCiudad, usuario.idEmpresa);
                 
-                jsonSeries = JsonConvert.SerializeObject(serieDocumentoElectronicoList);
+                jsonSeries = JsonConvert.SerializeObject(ciudad.serieDocumentoElectronicoList);
 
             }
             this.Session["s_cambioclientefactura_cambio"] = false;
             String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + "}";
             return json;
+        }
+
+        public String CambiarListadoSeries()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            String response = "{\"success\": 0}";
+
+            if (usuario.creaGuias)
+            {
+                SerieDocumentoBL serieBL = new SerieDocumentoBL();
+                GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
+
+                SerieDocumentoElectronico serie = serieBL.getSerieDocumento("VENTA", guiaRemision.ciudadOrigen.idCiudad, usuario.idEmpresa);
+
+                if (serie.sedeMP != null)
+                {
+                    guiaRemision.serieDocumento = serie.serie;
+                    guiaRemision.numeroDocumento = serie.siguienteNumeroGuiaRemision;
+                    this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
+
+                    response = "{\"success\": 1,  \"serie\":\"" + serie.serie + "\", \"numero\":\"" + serie.siguienteNumeroGuiaRemision.ToString() + "\", \"serieNumeroString\":\"" + guiaRemision.serieNumeroGuia + "\"}";
+                }
+            }
+
+            return response;
         }
 
         [HttpPost]

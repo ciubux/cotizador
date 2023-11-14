@@ -99,6 +99,9 @@ namespace Model.NextSoft
             List<object> listaDet = new List<object>();
             int numDet = 1;
 
+            //BORRAR
+            //obj.clienteVer = obj.pedido.cliente;
+
             foreach(DocumentoDetalle movDet in obj.documentoDetalle)
             {
                 int cantidadAtender = movDet.cantidadPorAtender; //movDet.cantidadPorAtender;
@@ -179,7 +182,7 @@ namespace Model.NextSoft
                 sucursal = obj.almacen.codigoSucursalNextSoft,
                 puntoventa = obj.almacen.codigoPuntoVentaNextSoft,
 
-                ruc = obj.pedido.cliente.ruc,
+                ruc = obj.clienteVer.ruc,
                 direcccion = obj.direccionEntrega,
                 ubigeo = obj.ubigeoEntrega.codigoSepPunto,
                 exportacion = false,
