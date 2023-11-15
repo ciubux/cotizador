@@ -26,7 +26,10 @@ namespace BusinessLayer
         {
             using (var dal = new DocumentoVentaDAL())
             {
-                dal.InsertarDocumentoVenta(documentoVenta);
+                ClienteBL clienteBL = new ClienteBL();
+                int idEmpresa = clienteBL.GetDataFacturacionEmpresaEOL(documentoVenta.cliente.idCliente);
+
+                dal.InsertarDocumentoVenta(documentoVenta, idEmpresa);
 
                 if (documentoVenta.tiposErrorValidacion == DocumentoVenta.TiposErrorValidacion.NoExisteError)
                 {
@@ -56,8 +59,10 @@ namespace BusinessLayer
                 //    documentoVenta.movimientoAlmacen = new MovimientoAlmacen();
                 //Se define el idMovimientoAlmacen como vacío para que tome el idventa
                 //   documentoVenta.movimientoAlmacen.idMovimientoAlmacen = Guid.Empty;
+                ClienteBL clienteBL = new ClienteBL();
+                int idEmpresa = clienteBL.GetDataFacturacionEmpresaEOL(documentoVenta.cliente.idCliente);
 
-                dal.InsertarDocumentoVentaNotaCreditoDebito(documentoVenta);
+                dal.InsertarDocumentoVentaNotaCreditoDebito(documentoVenta, idEmpresa);
 
                 if (documentoVenta.tiposErrorValidacion == DocumentoVenta.TiposErrorValidacion.NoExisteError)
                 {
@@ -88,8 +93,10 @@ namespace BusinessLayer
                 //    documentoVenta.movimientoAlmacen = new MovimientoAlmacen();
                 //Se define el idMovimientoAlmacen como vacío para que tome el idventa
                 //   documentoVenta.movimientoAlmacen.idMovimientoAlmacen = Guid.Empty;
+                ClienteBL clienteBL = new ClienteBL();
+                int idEmpresa = clienteBL.GetDataFacturacionEmpresaEOL(documentoVenta.cliente.idCliente);
 
-                dal.InsertarDocumentoVentaNotaCreditoAjustes(transaccion);
+                dal.InsertarDocumentoVentaNotaCreditoAjustes(transaccion, idEmpresa);
 
                 if (documentoVenta.tiposErrorValidacion == DocumentoVenta.TiposErrorValidacion.NoExisteError)
                 {
@@ -114,7 +121,12 @@ namespace BusinessLayer
             using (var dal = new DocumentoVentaDAL())
             {
                 documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaDébito;
-                dal.InsertarDocumentoVentaNotaCreditoDebito(documentoVenta);
+                //obtener user y password segun la empresa 
+
+                ClienteBL clienteBL = new ClienteBL();
+                int idEmpresa = clienteBL.GetDataFacturacionEmpresaEOL(documentoVenta.cliente.idCliente);
+
+                dal.InsertarDocumentoVentaNotaCreditoDebito(documentoVenta, idEmpresa);
 
                 if (documentoVenta.tiposErrorValidacion == DocumentoVenta.TiposErrorValidacion.NoExisteError)
                 {
@@ -276,6 +288,7 @@ namespace BusinessLayer
                     Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
                     client.Endpoint.Address = new EndpointAddress(uri);
 
+                    
 
                     documentoVenta.cPE_RESPUESTA_BE = client.callProcessOnline(Constantes.USER_EOL, Constantes.PASSWORD_EOL,
                         documentoVenta.cPE_CABECERA_BE,

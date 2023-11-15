@@ -492,8 +492,6 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
 
             notaIngreso.idMovimientoAlmacen = (Guid)objCommand.Parameters["@idMovimientoAlmacen"].Value;
-            notaIngreso.venta = new Venta();
-            notaIngreso.venta.idVenta = (Guid)objCommand.Parameters["@idVenta"].Value;
             int siguienteNumeroNotaIngreso = (int)objCommand.Parameters["@siguienteNumeroNotaIngreso"].Value;
 
             notaIngreso.notaIngresoValidacion = new NotaIngresoValidacion();
@@ -510,6 +508,10 @@ namespace DataLayer
 
                 this.InsertMovimientoAlmacenDetalle(notaIngreso);
             }
+
+            notaIngreso.venta = new Venta();
+            notaIngreso.venta.idVenta = (Guid)objCommand.Parameters["@idVenta"].Value;
+            
 
             objCommand = GetSqlCommand("pu_venta");
             InputParameterAdd.Guid(objCommand, "idVenta", notaIngreso.venta.idVenta);

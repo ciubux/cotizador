@@ -1419,6 +1419,29 @@ namespace DataLayer
 
             ExecuteNonQuery(objCommand);
         }
+
+        public int GetDataFacturacionEmpresaEOL(Guid idCliente)
+        {
+            var objCommand = GetSqlCommand("ps_user_eol_empresa");
+            InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
+
+
+            OutputParameterAdd.Int(objCommand, "idEmpresa");
+            OutputParameterAdd.Varchar(objCommand, "userEol", 500);
+            OutputParameterAdd.Varchar(objCommand, "passwordEol", 500);
+
+            ExecuteNonQuery(objCommand);
+
+            int idEmpresa = (Int32)objCommand.Parameters["@idEmpresa"].Value;
+            
+            string userEol = (string)objCommand.Parameters["@userEol"].Value;
+            string passwordEol = (string)objCommand.Parameters["@passwordEol"].Value;
+
+            Constantes.USER_EOL_PROD = userEol;
+            Constantes.PASSWORD_EOL_PROD = passwordEol; 
+
+            return idEmpresa;
+        }
     }
 }
 

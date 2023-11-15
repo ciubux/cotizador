@@ -270,6 +270,14 @@ namespace BusinessLayer
             }
         }
 
+        public int GetDataFacturacionEmpresaEOL(Guid idCliente)
+        {
+            using (var clienteDAL = new ClienteDAL())
+            {
+                return clienteDAL.GetDataFacturacionEmpresaEOL(idCliente);
+            }
+        }
+        
         public Model.ClienteSunat getClienteSunat(int idClienteSunat)
         {
             using (var clienteDAL = new ClienteDAL())

@@ -87,7 +87,7 @@ namespace DataLayer
         }
 
 
-        public void InsertarDocumentoVenta(DocumentoVenta documentoVenta)
+        public void InsertarDocumentoVenta(DocumentoVenta documentoVenta, int idEmpresa)
         {
             var objCommand = GetSqlCommand("pi_documentoVenta");
             //var objCommand = GetSqlCommand("pi_documentoVenta_vInafecto");
@@ -117,6 +117,7 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaVencimiento", documentoVenta.fechaVencimiento);
             InputParameterAdd.Int(objCommand, "tipoPago", (int)documentoVenta.tipoPago);
             InputParameterAdd.Int(objCommand, "formaPago", (int)documentoVenta.formaPago);
+            InputParameterAdd.Int(objCommand, "idEmpresa", idEmpresa);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "serie", documentoVenta.serie);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", null);
@@ -134,7 +135,7 @@ namespace DataLayer
             documentoVenta.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
         }
 
-        public void InsertarDocumentoVentaNotaCreditoDebito(DocumentoVenta documentoVenta)
+        public void InsertarDocumentoVentaNotaCreditoDebito(DocumentoVenta documentoVenta, int idEmpresa)
         {
             var objCommand = GetSqlCommand("pi_documentoVentaNotaCreditoDebito_b");
             InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
@@ -143,6 +144,7 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaVencimiento", documentoVenta.fechaVencimiento);
             InputParameterAdd.Int(objCommand, "tipoPago", (int)documentoVenta.tipoPago);
             InputParameterAdd.Int(objCommand, "formaPago", (int)documentoVenta.formaPago);
+            InputParameterAdd.Int(objCommand, "idEmpresa", idEmpresa);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoVenta.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "serie", documentoVenta.serie);
             InputParameterAdd.Guid(objCommand, "idDocumentoReferenciaVenta", documentoVenta.venta.documentoReferencia.idDocumentoReferenciaVenta);
@@ -160,7 +162,7 @@ namespace DataLayer
             documentoVenta.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
         }
 
-        public void InsertarDocumentoVentaNotaCreditoAjustes(Transaccion transaccion)
+        public void InsertarDocumentoVentaNotaCreditoAjustes(Transaccion transaccion, int idEmpresa)
         {
             DocumentoVenta documentoVenta = transaccion.documentoVenta;
             var objCommand = GetSqlCommand("pi_documentoVentaNotaCreditoAjustes");
@@ -170,6 +172,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "serie", documentoVenta.serie);
             InputParameterAdd.Varchar(objCommand, "serieReferencia", transaccion.documentoReferencia.serie);
             InputParameterAdd.Varchar(objCommand, "correlativoReferencia", transaccion.documentoReferencia.numero);
+            InputParameterAdd.Int(objCommand, "idEmpresa", idEmpresa);
 
             InputParameterAdd.Varchar(objCommand, "codigoCliente", documentoVenta.cliente.codigo);
             InputParameterAdd.Varchar(objCommand, "sustento", transaccion.sustento);
