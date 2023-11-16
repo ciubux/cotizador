@@ -1111,7 +1111,7 @@ namespace BusinessLayer
             pMP.numeroRequerimiento = "";
             pMP.numeroReferenciaAdicional = "";
             pMP.numeroReferenciaCliente = "";
-            pMP.observaciones = pMP.observaciones + " // N° Pedido " + pedido.usuario.razonSocialEmpresa + ": " + pedido.numeroPedido.ToString();
+            pMP.observaciones = pMP.observaciones + " N° Pedido " + pedido.usuario.razonSocialEmpresa + ": " + pedido.numeroPedido.ToString() + ". Cliente: " + pedido.cliente.nombreCliente;
 
             foreach (PedidoDetalle det in pMP.pedidoDetalleList)
             {
@@ -1162,7 +1162,7 @@ namespace BusinessLayer
 
             if (pMP.entregaATerceros)
             {
-                pMP.observacionesGuiaRemision = pMP.observacionesGuiaRemision + " // Entrega tercerizada por " + pedido.usuario.razonSocialEmpresa;
+                pMP.observacionesGuiaRemision = pMP.observacionesGuiaRemision + " // Entrega por encargo de " + pedido.usuario.razonSocialEmpresa;
             } else
             {
                 pMP.observacionesGuiaRemision = pMP.observacionesGuiaRemision + " // Dejar en " + pedido.cliente.razonSocial;

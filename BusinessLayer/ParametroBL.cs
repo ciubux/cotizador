@@ -65,5 +65,13 @@ namespace BusinessLayer
                 dal.modificarParametro(param,user);
             }
         }
+
+        public int GetDataFacturacionEmpresaEOL(string eolId)
+        {
+            using (var dal = new ParametroDAL())
+            {
+                return dal.GetDataFacturacionEmpresaEOL(eolId);
+            }
+        }
     }
 }

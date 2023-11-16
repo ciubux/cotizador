@@ -336,6 +336,8 @@ namespace BusinessLayer
                     documentoVenta.tipoPago = (DocumentoVenta.TipoPago)Int32.Parse(documentoVenta.cPE_CABECERA_BE.TIP_PAG);
 
                     documentoVenta.globalEnumTipoOnline = GlobalEnumTipoOnline.Normal;
+
+
                     IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
                     Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
                     client.Endpoint.Address = new EndpointAddress(uri);
@@ -521,6 +523,8 @@ namespace BusinessLayer
             Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
             client.Endpoint.Address = new EndpointAddress(uri);
 
+            ParametroBL parametroBL = new ParametroBL();
+            int idEmpresa = parametroBL.GetDataFacturacionEmpresaEOL(documentoVenta.cPE_CABECERA_BE.ID);
 
             List<CPE_DOC_BAJA> CPE_DOC_BAJAList = new List<CPE_DOC_BAJA>();
             CPE_DOC_BAJA CPE_DOC_BAJA = new CPE_DOC_BAJA();
@@ -533,7 +537,9 @@ namespace BusinessLayer
             CPE_DOC_BAJA.MTVO_BAJA = documentoVenta.comentarioAprobacionAnulacion;
             CPE_DOC_BAJAList.Add(CPE_DOC_BAJA);
 
-            RPTA_BE[] rPTA_BEArray = client.CallRequestLow(Constantes.CPE_CABECERA_BE_ID, Constantes.CPE_CABECERA_BE_COD_GPO, Constantes.USER_EOL, Constantes.PASSWORD_EOL, CPE_DOC_BAJAList.ToArray());
+
+            RPTA_BE[] rPTA_BEArray = client.CallRequestLow(documentoVenta.cPE_CABECERA_BE.ID, documentoVenta.cPE_CABECERA_BE.COD_GPO, 
+                                                    Constantes.USER_EOL, Constantes.PASSWORD_EOL, CPE_DOC_BAJAList.ToArray());
 
 
             documentoVenta.rPTA_BE = rPTA_BEArray[0];
