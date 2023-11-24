@@ -499,6 +499,8 @@ namespace DataLayer
             notaIngreso.notaIngresoValidacion.tipoErrorValidacion = (NotaIngresoValidacion.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
             notaIngreso.notaIngresoValidacion.descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
 
+            
+
             if (notaIngreso.notaIngresoValidacion.tipoErrorValidacion == NotaIngresoValidacion.TiposErrorValidacion.NoExisteError)
             {
                 if (notaIngreso.numeroDocumento != siguienteNumeroNotaIngreso)
@@ -506,12 +508,12 @@ namespace DataLayer
                     throw new DuplicateNumberDocumentException();
                 }
 
+                notaIngreso.venta = new Venta();
+                notaIngreso.venta.idVenta = (Guid)objCommand.Parameters["@idVenta"].Value;
+
                 this.InsertMovimientoAlmacenDetalle(notaIngreso);
             }
 
-            notaIngreso.venta = new Venta();
-            notaIngreso.venta.idVenta = (Guid)objCommand.Parameters["@idVenta"].Value;
-            
 
             objCommand = GetSqlCommand("pu_venta");
             InputParameterAdd.Guid(objCommand, "idVenta", notaIngreso.venta.idVenta);
@@ -531,13 +533,20 @@ namespace DataLayer
 
         public void InsertMovimientoAlmacenDetalle(MovimientoAlmacen movimientoAlmacen)
         {
+            Venta venta = movimientoAlmacen.venta;
+            if (venta == null)
+            {
+                venta = new Venta();
+                
+            }
+
             foreach (DocumentoDetalle documentoDetalle in movimientoAlmacen.documentoDetalle)
             {
                 if(documentoDetalle.cantidadPorAtender > 0)
                 { 
                     var objCommand = GetSqlCommand("pi_movimientoAlmacenDetalle");
-                    InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", movimientoAlmacen.idMovimientoAlmacen);
-                    InputParameterAdd.Guid(objCommand, "idVenta", movimientoAlmacen.venta.idVenta);
+                    InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", movimientoAlmacen.idMovimientoAlmacen);        
+                    InputParameterAdd.Guid(objCommand, "idVenta", venta.idVenta);
                     InputParameterAdd.Guid(objCommand, "idUsuario", movimientoAlmacen.usuario.idUsuario);
                     InputParameterAdd.Guid(objCommand, "idPedido", movimientoAlmacen.pedido.idPedido);
                     InputParameterAdd.Char(objCommand, "tipoPedido", ((char)movimientoAlmacen.pedido.tipoPedido).ToString());

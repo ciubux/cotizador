@@ -1,4 +1,5 @@
 ﻿using BusinessLayer;
+using DataLayer;
 using Model;
 using Model.ServiceReferencePSE;
 using Newtonsoft.Json;
@@ -240,9 +241,11 @@ namespace Cotizador.Controllers
             transaccionExtorno = ventaBL.GetNotaIngresoTransaccion(transaccionExtorno, notaIngreso, usuario);
 
             /*Se obtiene la ciudad para poder cargar las series del documento de pago*/
+            SerieDocumentoBL serieDocumentoBL = new SerieDocumentoBL();
             Ciudad ciudad = usuario.sedesMPPedidos.Where(s => s.idCiudad == transaccionExtorno.cliente.ciudad.idCiudad).FirstOrDefault();
-            List<SerieDocumentoElectronico> serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList.OrderByDescending(x => x.esPrincipal).ToList();
-            serieDocumentoElectronicoList = serieDocumentoElectronicoList.Where(x => x.serie.Substring(0, 1).Equals("0")).ToList();
+            List<SerieDocumentoElectronico> serieDocumentoElectronicoList = serieDocumentoBL.getSeriesDocumento(ciudad.idCiudad, usuario.idEmpresa);
+
+            //serieDocumentoElectronicoList = serieDocumentoElectronicoList.Where(x => x.serie.Substring(0, 1).Equals("0")).ToList();
             transaccionExtorno.cliente.ciudad.serieDocumentoElectronicoList = serieDocumentoElectronicoList;
 
             /*Se selecciona la primera serie de la lista*/

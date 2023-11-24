@@ -528,7 +528,7 @@ namespace BusinessLayer
 
             List<CPE_DOC_BAJA> CPE_DOC_BAJAList = new List<CPE_DOC_BAJA>();
             CPE_DOC_BAJA CPE_DOC_BAJA = new CPE_DOC_BAJA();
-            CPE_DOC_BAJA.NRO_DOC = Constantes.RUC_MP;
+            CPE_DOC_BAJA.NRO_DOC = documentoVenta.cPE_CABECERA_BE.NRO_DOC_EMI;
             CPE_DOC_BAJA.TIP_DOC = documentoVenta.cPE_CABECERA_BE.TIP_DOC_EMI;
             CPE_DOC_BAJA.TIP_CPE = documentoVenta.cPE_CABECERA_BE.TIP_CPE;
             CPE_DOC_BAJA.FEC_EMI = documentoVenta.cPE_CABECERA_BE.FEC_EMI;

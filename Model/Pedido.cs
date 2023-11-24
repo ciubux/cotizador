@@ -63,6 +63,9 @@ namespace Model
         [Display(Name = "Número Grupo Pedido:")]
         public Int64? numeroGrupoPedido { get; set; }
 
+        public Int64 numeroPedidoRelacionado { get; set; }
+        public string codigoEmpresaPedidoRelacionado { get; set; }
+
 
         public Guid idClienteTercero { get; set; }
         public Boolean entregaATerceros { get; set; }

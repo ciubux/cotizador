@@ -1094,7 +1094,8 @@ namespace BusinessLayer
             pMP.cliente = clienteEmp;
 
             UsuarioDAL usuarioDal = new UsuarioDAL();
-            Usuario usuarioEmpresa = usuarioDal.getUsuario(pedido.IdUsuarioRegistro);
+            EmpresaDAL empresaDal = new EmpresaDAL();
+            Empresa empresa = empresaDal.getEmpresaByCliente(pedido.cliente.idCliente);
 
             Usuario usuarioZAS = usuarioDal.getUsuario(Constantes.IDUSUARIOZAS);
             pMP.usuario = usuarioZAS;
@@ -1125,7 +1126,7 @@ namespace BusinessLayer
                 det.tieneInfraMargenEmpresaExterna = false;
 
 
-                if (margenDet < usuarioEmpresa.pMargenMinimo)
+                if (margenDet < empresa.porcentajeMargenMinimo)
                 {
                     // descuento es igual a un % del margen y ya no del total 
 
@@ -1142,11 +1143,11 @@ namespace BusinessLayer
                     if (det.esPrecioAlternativo)
                     {
                         //det.precioNeto = det.precioNeto * det.ProductoPresentacion.Equivalencia * ((100 - usuarioEmpresa.pDescuentoInfraMargen) / 100);
-                        det.precioNeto = det.producto.costoLista + ((det.precioNeto * det.ProductoPresentacion.Equivalencia) - det.producto.costoLista) * ((100 - usuarioEmpresa.pDescuentoInfraMargen) / 100);
+                        det.precioNeto = det.producto.costoLista + ((det.precioNeto * det.ProductoPresentacion.Equivalencia) - det.producto.costoLista) * ((100 - empresa.porcentajeDescuentoInframargen) / 100);
                     }
                     else
                     {
-                        det.precioNeto = det.producto.costoLista + (det.precioNeto - det.producto.costoLista) * ((100 - usuarioEmpresa.pDescuentoInfraMargen) / 100);
+                        det.precioNeto = det.producto.costoLista + (det.precioNeto - det.producto.costoLista) * ((100 - empresa.porcentajeDescuentoInframargen) / 100);
                     }
                     
                     pMP.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
@@ -1154,7 +1155,7 @@ namespace BusinessLayer
                     det.tieneInfraMargenEmpresaExterna = true;
                 } else
                 {
-                    det.precioNeto = det.producto.costoLista * usuarioEmpresa.factorEmpresa;
+                    det.precioNeto = det.producto.costoLista * empresa.factorCosto;
                 }
             }
             

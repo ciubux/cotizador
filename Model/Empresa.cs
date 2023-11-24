@@ -15,12 +15,23 @@ namespace Model
         [Display(Name = "Nombre:")]
         public String nombre { get; set; }
 
+        [Display(Name = "Ruc:")]
+        public String ruc { get; set; }
 
         [Display(Name = "Razon Social:")]
         public String razonSocial { get; set; }
 
         [Display(Name = "Url Web:")]
         public String urlWeb { get; set; }
+
+        [Display(Name = "Factor Costo:")]
+        public decimal factorCosto { get; set; }
+
+        [Display(Name = "Porcentaje Margen Mínimo:")]
+        public decimal porcentajeMargenMinimo { get; set; }
+
+        [Display(Name = "Porcentaje Descuento Infra Margen:")]
+        public decimal porcentajeDescuentoInframargen { get; set; }
 
         public bool atencionTerciarizada { get; set; }
 

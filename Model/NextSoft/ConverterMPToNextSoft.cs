@@ -177,6 +177,13 @@ namespace Model.NextSoft
                 ubigeo = obj.ubigeoEntrega.codigoSepPunto
             };
 
+            string codigoVendedor = obj.pedido.vendedor.codigoNextSoft;
+            if (codigoVendedor == null || codigoVendedor.Trim().Equals(""))
+            {
+                codigoVendedor = "07885378";
+            }
+
+
             var item = new
             {
                 sucursal = obj.almacen.codigoSucursalNextSoft,
@@ -192,7 +199,7 @@ namespace Model.NextSoft
                 fecemision = obj.fechaEmision.ToString("dd/MM/yyyy"),
                 observaciones = obj.observaciones,
                 //vendedor = "46124367",
-                vendedor = obj.pedido.vendedor.codigoNextSoft,
+                vendedor = codigoVendedor,
                 ordencompra = obj.pedido != null && obj.pedido.numeroReferenciaCliente != null && 
                             !obj.pedido.numeroReferenciaCliente.Trim().Equals("") && !obj.pedido.numeroReferenciaCliente.Substring(0,2).Equals("IF") ? 
                                 obj.pedido.numeroReferenciaCliente : "",

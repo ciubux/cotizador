@@ -47,5 +47,8 @@ namespace Cotizador.Models.DTOsSearch
         public String cliente_tipoDocumento { get; set; }
         public int truncado { get; set; }
 
+        public Int64 numeroPedidoRelacionado { get; set; }
+        public String codigoEmpresaPedidorelacionado { get; set; }
+
     }
 }

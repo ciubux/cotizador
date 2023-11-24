@@ -3453,7 +3453,7 @@ jQuery(function ($) {
                         $("#btnEditarPedido").html("Editar");
                     }
 
-                    if (usuario.codigoEmpresa == 'TC' && pedido.seguimientoPedido_estado == ESTADO_INGRESADO && pedido.seguimientoCrediticioPedido_estado == ESTADO_LIBERADO) {
+                    if (usuario.codigoEmpresa != 'MP' && pedido.seguimientoPedido_estado == ESTADO_INGRESADO && pedido.seguimientoCrediticioPedido_estado == ESTADO_LIBERADO) {
                         $("#btnEditarPedido").hide();
                     } else {
                         $("#btnEditarPedido").show();
@@ -5239,10 +5239,14 @@ jQuery(function ($) {
 
                     concatIdsPedido = concatIdsPedido + pedidoList[i].idPedido;
 
+                    var textoPedidoRelacionado = "";
+                    if (pedidoList[i].numeroPedidoRelacionado > 0) {
+                        textoPedidoRelacionado = "\n[" + pedidoList[i].codigoEmpresaPedidorelacionado + " " + pedidoList[i].numeroPedidoRelacionado + "]"
+                    }
 
                     var pedido = '<tr data-expanded="true" class="pedido-data" idPedido="' + pedidoList[i].idPedido + '">' +
-                        '<td>  ' + pedidoList[i].idPedido+'</td>' +
-                        '<td>  ' + pedidoList[i].numeroPedidoNumeroGrupoString + '  </td>' +
+                        '<td>  ' + pedidoList[i].idPedido + '</td>' +
+                        '<td>  ' + pedidoList[i].numeroPedidoNumeroGrupoString + textoPedidoRelacionado + '  </td>' +
                         '<td>  ' + pedidoList[i].ciudad_nombre + '  </td>' +
                         '<td>  ' + pedidoList[i].cliente_codigo + ' </td>' +
                         '<td>  ' + clienteRazonSocial + '</td>' +

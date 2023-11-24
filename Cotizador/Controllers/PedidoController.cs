@@ -480,6 +480,33 @@ namespace Cotizador.Controllers
                 if (pedido.cliente.idCliente != Guid.Empty)
                 {
                     existeCliente = 1;
+
+                    bool existeDireccionEntrega = false;
+                    foreach (DireccionEntrega dir in pedido.cliente.direccionEntregaList) {
+                        if (pedido.direccionEntrega.idDireccionEntrega.Equals(dir.idDireccionEntrega))
+                        {
+                            existeDireccionEntrega = true;
+                        }
+                    } 
+
+                    if (!existeDireccionEntrega)
+                    {
+                        pedido.cliente.direccionEntregaList.Add(pedido.direccionEntrega);
+                    }
+
+                    bool existeSolicitante = false;
+                    foreach (Solicitante sol in pedido.cliente.solicitanteList)
+                    {
+                        if (pedido.solicitante.idSolicitante.Equals(sol.idSolicitante))
+                        {
+                            existeSolicitante = true;
+                        }
+                    }
+
+                    if (!existeSolicitante)
+                    {
+                        pedido.cliente.solicitanteList.Add(pedido.solicitante);
+                    }
                 }
 
                 ViewBag.existeCliente = existeCliente;
