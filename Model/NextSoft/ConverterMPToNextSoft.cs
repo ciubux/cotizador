@@ -183,13 +183,15 @@ namespace Model.NextSoft
                 codigoVendedor = "07885378";
             }
 
+            Cliente cli = obj.clienteVer;
+            if (cli == null) cli = obj.pedido.cliente;
 
             var item = new
             {
                 sucursal = obj.almacen.codigoSucursalNextSoft,
                 puntoventa = obj.almacen.codigoPuntoVentaNextSoft,
 
-                ruc = obj.clienteVer.ruc,
+                ruc = cli.ruc,
                 direcccion = obj.direccionEntrega,
                 ubigeo = obj.ubigeoEntrega.codigoSepPunto,
                 exportacion = false,

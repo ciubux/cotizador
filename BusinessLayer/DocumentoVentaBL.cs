@@ -164,6 +164,9 @@ namespace BusinessLayer
 
                 foreach (DocumentoVenta documentoVenta in documentoVentaList)
                 {
+                    ParametroBL parametroBL = new ParametroBL();
+                    int idEmpresa = parametroBL.GetDataFacturacionEmpresaEOL(documentoVenta.cPE_CABECERA_BE.ID);
+
                     documentoVenta.usuario = usuario;
                     documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
                     this.consultarEstadoDocumentoVenta(documentoVenta);
@@ -180,13 +183,15 @@ namespace BusinessLayer
             {
                 try
                 {
+                    ParametroBL parametroBL = new ParametroBL();
+                    int idEmpresa = parametroBL.GetDataFacturacionEmpresaEOL(documentoVenta.cPE_CABECERA_BE.ID);
+
                     documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaDébito;
                     documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
                     documentoVenta.globalEnumTipoOnline = GlobalEnumTipoOnline.Normal;
                     IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
                     Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
                     client.Endpoint.Address = new EndpointAddress(uri);
-
 
                     documentoVenta.cPE_RESPUESTA_BE = client.callProcessOnline(Constantes.USER_EOL, Constantes.PASSWORD_EOL,
                         documentoVenta.cPE_CABECERA_BE,
@@ -230,6 +235,9 @@ namespace BusinessLayer
             {
                 try
                 {
+                    ParametroBL parametroBL = new ParametroBL();
+                    int idEmpresa = parametroBL.GetDataFacturacionEmpresaEOL(documentoVenta.cPE_CABECERA_BE.ID);
+
                     documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaCrédito;
                     documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
                     documentoVenta.globalEnumTipoOnline = GlobalEnumTipoOnline.Normal;
@@ -288,7 +296,9 @@ namespace BusinessLayer
                     Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
                     client.Endpoint.Address = new EndpointAddress(uri);
 
-                    
+                    ParametroBL parametroBL = new ParametroBL();
+                    int idEmpresa = parametroBL.GetDataFacturacionEmpresaEOL(documentoVenta.cPE_CABECERA_BE.ID);
+
 
                     documentoVenta.cPE_RESPUESTA_BE = client.callProcessOnline(Constantes.USER_EOL, Constantes.PASSWORD_EOL,
                         documentoVenta.cPE_CABECERA_BE,
@@ -331,18 +341,22 @@ namespace BusinessLayer
             {
                 //try
                 //{
+
+                    
+
                     documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
                     //Se recupera el clasePedido de pago registrado
                     documentoVenta.tipoPago = (DocumentoVenta.TipoPago)Int32.Parse(documentoVenta.cPE_CABECERA_BE.TIP_PAG);
 
                     documentoVenta.globalEnumTipoOnline = GlobalEnumTipoOnline.Normal;
 
+                    ParametroBL parametroBL = new ParametroBL();
+                    int idEmpresa = parametroBL.GetDataFacturacionEmpresaEOL(documentoVenta.cPE_CABECERA_BE.ID);
 
                     IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
                     Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
                     client.Endpoint.Address = new EndpointAddress(uri);
 
-                    
 
                     documentoVenta.cPE_RESPUESTA_BE = client.callProcessOnline(Constantes.USER_EOL, Constantes.PASSWORD_EOL,
                         documentoVenta.cPE_CABECERA_BE,
@@ -452,10 +466,9 @@ namespace BusinessLayer
         {
             IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
             Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
-            client.Endpoint.Address = new EndpointAddress(uri);
+            client.Endpoint.Address = new EndpointAddress(uri); 
 
-
-            documentoVenta.rPTA_BE = client.callStateCPE(Constantes.USER_EOL, Constantes.PASSWORD_EOL, Constantes.RUC_MP, "0" + (int)documentoVenta.tipoDocumento, documentoVenta.serie, documentoVenta.numero);
+            documentoVenta.rPTA_BE = client.callStateCPE(Constantes.USER_EOL, Constantes.PASSWORD_EOL, documentoVenta.cPE_CABECERA_BE.NRO_DOC_EMI, "0" + (int)documentoVenta.tipoDocumento, documentoVenta.serie, documentoVenta.numero);
 
             //El resultado se inserta a BD
             using (var dal = new DocumentoVentaDAL())
@@ -634,7 +647,11 @@ namespace BusinessLayer
             Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
             client.Endpoint.Address = new EndpointAddress(uri);
 
-            documentoVenta.rPTA_DOC_TRIB_BE = client.callExtractCPE(Constantes.USER_EOL, Constantes.PASSWORD_EOL, Constantes.RUC_MP, documentoVenta.cPE_CABECERA_BE.TIP_CPE, documentoVenta.cPE_CABECERA_BE.SERIE, documentoVenta.cPE_CABECERA_BE.CORRELATIVO, true, true, true);
+
+            ParametroBL parametroBL = new ParametroBL();
+            int idEmpresa = parametroBL.GetDataFacturacionEmpresaEOL(documentoVenta.cPE_CABECERA_BE.ID);
+
+            documentoVenta.rPTA_DOC_TRIB_BE = client.callExtractCPE(Constantes.USER_EOL, Constantes.PASSWORD_EOL, documentoVenta.cPE_CABECERA_BE.NRO_DOC_EMI, documentoVenta.cPE_CABECERA_BE.TIP_CPE, documentoVenta.cPE_CABECERA_BE.SERIE, documentoVenta.cPE_CABECERA_BE.CORRELATIVO, true, true, true);
             /*
             String pathrootsave = System.AppDomain.CurrentDomain.BaseDirectory + "\\pdf\\";
             String nombreArchivo = "FACTURA " + documentoVenta.serie + "-" + documentoVenta.numero + ".pdf";

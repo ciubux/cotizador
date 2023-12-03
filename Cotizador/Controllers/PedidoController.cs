@@ -480,14 +480,18 @@ namespace Cotizador.Controllers
                 if (pedido.cliente.idCliente != Guid.Empty)
                 {
                     existeCliente = 1;
+                }
 
+                if(!pedido.idPedido.Equals(Guid.Empty))
+                {
                     bool existeDireccionEntrega = false;
-                    foreach (DireccionEntrega dir in pedido.cliente.direccionEntregaList) {
+                    foreach (DireccionEntrega dir in pedido.cliente.direccionEntregaList)
+                    {
                         if (pedido.direccionEntrega.idDireccionEntrega.Equals(dir.idDireccionEntrega))
                         {
                             existeDireccionEntrega = true;
                         }
-                    } 
+                    }
 
                     if (!existeDireccionEntrega)
                     {

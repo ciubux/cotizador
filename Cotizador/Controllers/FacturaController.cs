@@ -596,6 +596,8 @@ namespace Cotizador.Controllers
 
             // documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
 
+            ParametroBL parametroBL = new ParametroBL();
+            int idEmpresa = parametroBL.GetDataFacturacionEmpresaEOL(documentoVenta.cPE_CABECERA_BE.ID);
 
             documentoVentaBL.consultarEstadoDocumentoVenta(documentoVenta);
 

@@ -31,9 +31,12 @@ namespace DataLayer
             foreach (DataRow row in dataTable.Rows)
             {
                 DocumentoVenta documentoVenta = new DocumentoVenta();
+                documentoVenta.cPE_CABECERA_BE = new CPE_CABECERA_BE();
                 documentoVenta.idDocumentoVenta = Converter.GetGuid(row, "id_documento_venta"); 
                 documentoVenta.serie = Converter.GetString(row, "SERIE");
                 documentoVenta.numero = Converter.GetString(row, "CORRELATIVO");
+                documentoVenta.cPE_CABECERA_BE.ID = Converter.GetString(row, "ID");
+                documentoVenta.cPE_CABECERA_BE.NRO_DOC_EMI = Converter.GetString(row, "NRO_DOC_EMI");
                 documentoVenta.estadoDocumentoSunat = (DocumentoVenta.EstadosDocumentoSunat)Converter.GetInt(row, "estado");
                 documentoVenta.tipoDocumento = (DocumentoVenta.TipoDocumento) Converter.GetInt(row, "tipo_documento");
                 
@@ -831,6 +834,9 @@ namespace DataLayer
                     documentoVenta.notaIngreso.numeroDocumento = Converter.GetLong(row, "numero_documento");
                 }
 
+                documentoVenta.cPE_CABECERA_BE = new CPE_CABECERA_BE();
+                documentoVenta.cPE_CABECERA_BE.ID = Converter.GetString(row, "ID");
+                documentoVenta.cPE_CABECERA_BE.NRO_DOC_EMI= Converter.GetString(row, "NRO_DOC_EMI");
 
                 documentoVenta.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
                 documentoVenta.fechaVencimiento = Converter.GetDateTime(row, "fecha_vencimiento");
