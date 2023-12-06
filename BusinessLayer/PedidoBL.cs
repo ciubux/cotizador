@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using ServiceLayer;
 using BusinessLayer.Email;
+using System.Net.Http.Headers;
 
 namespace BusinessLayer
 {
@@ -1309,6 +1310,36 @@ namespace BusinessLayer
             using (var dal = new PedidoDAL())
             {
                 return dal.SetPedidoMP(idPedido, idPedidoMP, agregarObservacion);
+            }
+        }
+
+        public string TextoNumerosGuiasPedidoEspejo(Guid idPedido, Guid idPUsuario)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                string texto = "";
+                List<List<String>> lista = dal.numerosGuiasPedidoEspejo(idPedido, idPUsuario);
+                foreach (List<String> numeroDoc in lista)
+                {
+                    if(!texto.Equals(""))
+                    {
+                        texto += ", ";
+                    }
+
+                    texto = texto + numeroDoc.ElementAt(0) + "-" + numeroDoc.ElementAt(1);
+                }
+                
+                if(lista.Count == 1)
+                {
+                    texto = "Guía MP " + texto;
+                }
+
+                if (lista.Count > 1)
+                {
+                    texto = "Guías MP " + texto;
+                }
+
+                return texto;
             }
         }
     }
