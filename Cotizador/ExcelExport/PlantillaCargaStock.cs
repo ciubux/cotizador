@@ -21,7 +21,7 @@ namespace Cotizador.ExcelExport
    
     public class PlantillaCargaStock
     {
-        public FileStreamResult generateExcel(List<Producto> list, Usuario usuario)
+        public FileStreamResult generateExcel(List<Producto> list, Usuario usuario, String nombreSede)
         {
             
             HSSFWorkbook wb;
@@ -37,7 +37,7 @@ namespace Cotizador.ExcelExport
                 HSSFFont formLabelFont = (HSSFFont)wb.CreateFont();
                 formLabelFont.FontHeightInPoints = (short)11;
                 formLabelFont.FontName = "Arial";
-                formLabelFont.Color = IndexedColors.Black.Index;
+                formLabelFont.Color = IndexedColors.White.Index;
                 formLabelFont.IsBold = true;
                 //  HSSFColor color = new HSSFColor(); // (new byte[] { 184, 212, 249 });
                 //     color.RGB.SetValue(new byte[] { 184, 212, 249 },0);
@@ -45,7 +45,7 @@ namespace Cotizador.ExcelExport
                 formLabelCellStyle.SetFont(formLabelFont);
                 formLabelCellStyle.Alignment = HorizontalAlignment.Right;
                 formLabelCellStyle.FillPattern = FillPattern.SolidForeground;
-                formLabelCellStyle.FillForegroundColor = HSSFColor.White.Index;
+                formLabelCellStyle.FillForegroundColor = HSSFColor.RoyalBlue.Index;
 
                 HSSFCellStyle boldTextCenterCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
                 boldTextCenterCellStyle.SetFont(formLabelFont);
@@ -144,6 +144,17 @@ namespace Cotizador.ExcelExport
 
                 int i = 1;
 
+
+                if (!nombreSede.Equals(""))
+                {
+                    UtilesHelper.combinarCeldas(sheet, i, i, "B", "C");
+                    UtilesHelper.setValorCelda(sheet, i, "B", "Sede:", formLabelCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "D", nombreSede.ToUpper());
+
+                    i = i + 2;
+                }
+
+
                 UtilesHelper.combinarCeldas(sheet, i, i + 1, "A", "A");
                 UtilesHelper.combinarCeldas(sheet, i, i + 1, "B", "B");
                 UtilesHelper.combinarCeldas(sheet, i, i + 1, "C", "C");
@@ -195,7 +206,7 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setColumnWidth(sheet, "N", 2000);
 
 
-                i = 3;
+                i = i + 2;
 
                 /*  for (int iii = 0; iii<50;iii++)
                   { */
@@ -311,7 +322,7 @@ namespace Cotizador.ExcelExport
                     ms.Position = 0;
                     FileStreamResult result = new FileStreamResult(ms, "application/vnd.ms-excel");
 
-                    result.FileDownloadName = "PlantilalCargaStock_" + DateTime.Now.ToString("yyyyMMddHHmmss") + " .xls";
+                    result.FileDownloadName = "PlantillaCargaStock" + nombreSede + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + " .xls";
 
                     return result;
                 }

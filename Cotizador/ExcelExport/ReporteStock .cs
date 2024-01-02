@@ -185,7 +185,7 @@ namespace Cotizador.ExcelExport
             int col = 0;
             decimal total = 0;
 
-            string[] colLetters = new string[13] { "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T" };
+            string[] colLetters = new string[19] { "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
             foreach (RegistroCargaStock obj in list)
             {
                 if (idSedeInicial.Equals(obj.ciudad.idCiudad))

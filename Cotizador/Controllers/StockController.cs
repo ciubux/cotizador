@@ -165,9 +165,14 @@ namespace Cotizador.Controllers
             PlantillaCargaStock excel = new PlantillaCargaStock();
             ProductoBL bl = new ProductoBL();
             List<Producto> lista = bl.getProductosPlantillaStock(obj, idSede);
-            
 
-            return excel.generateExcel(lista, usuario);
+            String nombreSede = "";
+            foreach (Ciudad sede in usuario.sedesMPPedidos)
+            {
+                if (sede.idCiudad.Equals(idSede)) { nombreSede = sede.nombre; }
+            }
+
+            return excel.generateExcel(lista, usuario, nombreSede);
         }
 
 
@@ -580,7 +585,7 @@ namespace Cotizador.Controllers
                         } else
                         {
                             invalidosConsecutivos++;
-                            if (invalidosConsecutivos > 5)
+                            if (invalidosConsecutivos > 7)
                             {
                                 row = sheet.LastRowNum;
                             }

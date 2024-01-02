@@ -1618,7 +1618,7 @@ namespace DataLayer
 
         public List<RegistroCargaStock> InventarioStock(int ajusteMercaderiaTransito, DateTime fechaReferencia, Guid idUsuario, Guid idCiudad, Producto producto)
         {
-            var objCommand = GetSqlCommand("ps_stock_global_nextsys");
+            var objCommand = GetSqlCommand("ps_stock_global");
             //var objCommand = GetSqlCommand("ps_stock_global");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
@@ -1676,9 +1676,9 @@ namespace DataLayer
                 item.fecha = Converter.GetDateTime(row, "fecha");
 
                 item.producto.familia = String.Format(Constantes.formatoCuatroDecimales, item.producto.costoAlternativo);
-                if (item.cantidadConteo > 0) { 
+                //if (item.cantidadConteo > 0) { 
                     productoList.Add(item);
-                }
+                //}
 
                 //productoList.Add(item);
             }
