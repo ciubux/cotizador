@@ -2685,6 +2685,29 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
 
             return lista;
         }
+
+        public List<List<String>> numerosGuiasPedidoEspejo(Guid idPedido, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_guias_pedido_espejo");
+            InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable dataTable = Execute(objCommand);
+
+            List<List<String>> lista = new List<List<String>>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                List<String> item = new List<String>();
+                //Guid idItem = Converter.GetGuid(row, "id_pedido");
+                item.Add(Converter.GetString(row, "serie_documento")); // 0
+                item.Add(Converter.GetString(row, "numero_documento")); // 1
+
+                lista.Add(item);
+            }
+
+            return lista;
+        }
     }
 }
 

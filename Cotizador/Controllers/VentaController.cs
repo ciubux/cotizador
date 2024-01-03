@@ -46,8 +46,6 @@ namespace Cotizador.Controllers
             venta = ventaBL.GetVenta(venta, usuario);
             this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta;
 
-            string jsonUsuario = JsonConvert.SerializeObject(usuario);
-            string jsonVenta = JsonConvert.SerializeObject(venta);
 
             Ciudad ciudad = usuario.sedesMPPedidos.Where(s => s.idCiudad == venta.pedido.ciudad.idCiudad).FirstOrDefault();
 
@@ -57,10 +55,24 @@ namespace Cotizador.Controllers
                 List<SerieDocumentoElectronico> serieDocumentoElectronicoList = new List<SerieDocumentoElectronico>();
                 SerieDocumentoBL serieDocumentoBL = new SerieDocumentoBL();
                 ciudad.serieDocumentoElectronicoList = serieDocumentoBL.getSeriesDocumento(ciudad.idCiudad, usuario.idEmpresa);
-                
+
                 jsonSeries = JsonConvert.SerializeObject(ciudad.serieDocumentoElectronicoList);
 
+
             }
+
+            if (usuario.idEmpresa != 1 && venta.pedido != null && !venta.pedido.Equals(Guid.Empty))
+            {
+                PedidoBL pedidoBL = new PedidoBL();
+                string textoNroGuiasPedidoEspejo = pedidoBL.TextoNumerosGuiasPedidoEspejo(venta.pedido.idPedido, usuario.idUsuario);
+                venta.pedido.observacionesFactura = venta.pedido.observacionesFactura.Trim().Equals("") ? 
+                                                        textoNroGuiasPedidoEspejo : 
+                                                        venta.pedido.observacionesFactura + " " +  textoNroGuiasPedidoEspejo;
+            }
+
+            string jsonUsuario = JsonConvert.SerializeObject(usuario);
+            string jsonVenta = JsonConvert.SerializeObject(venta);
+
             this.Session["s_cambioclientefactura_cambio"] = false;
             String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + "}";
             return json;
