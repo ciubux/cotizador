@@ -68,6 +68,7 @@ namespace Model
 
 
         public Guid idClienteTercero { get; set; }
+        public String nombreClienteTercero { get; set; }
         public Boolean entregaATerceros { get; set; }
         public Boolean entregaTerciarizada { get; set; }
 

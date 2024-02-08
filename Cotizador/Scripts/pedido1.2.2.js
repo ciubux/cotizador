@@ -5223,12 +5223,17 @@ jQuery(function ($) {
                             '<p><a id="' + idVermenos + '" class="' + pedidoList[i].idPedido + ' verMenos" href="javascript:mostrar();" style="display:none">Ver Menos</a></p>';
                     }
 
-                    var clienteRazonSocial;
+                    var clienteRazonSocial = "";
+
+                    if (pedidoList[i].clienteTercero_nombre != null && pedidoList[i].clienteTercero_nombre.length > 0) {
+                        clienteRazonSocial = '<span class="spn-nombre-cliente-relacionado">' + pedidoList[i].clienteTercero_nombre + '</span><br/>';
+                    }
+
                     if (pedidoList[i].cliente_tipoDocumento == "RUC" && pedidoList[i].cliente_nombreComercial != "" && pedidoList[i].cliente_nombreComercial != "null") {
-                        clienteRazonSocial = pedidoList[i].cliente_razonSocial + '<br/><span class="spn-nombre-comercial">' + pedidoList[i].cliente_nombreComercial + '</span>';
+                        clienteRazonSocial = clienteRazonSocial + pedidoList[i].cliente_razonSocial + '<br/><span class="spn-nombre-comercial">' + pedidoList[i].cliente_nombreComercial + '</span>';
                     }
                     else {
-                        clienteRazonSocial = pedidoList[i].cliente_razonSocial;
+                        clienteRazonSocial = clienteRazonSocial + pedidoList[i].cliente_razonSocial;
                     }
 
                     var grupoCliente = pedidoList[i].grupoCliente_nombre == null ? "" : pedidoList[i].grupoCliente_nombre;

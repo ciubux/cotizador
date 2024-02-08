@@ -41,6 +41,8 @@ jQuery(function ($) {
 
     var MENSAJE_CANCELAR_EDICION = '¿Está seguro de cancelar la creación/edición; no se guardarán los cambios?';
 
+    var COTIZACIONVERVENCIDA = false;
+
     $(document).ready(function () {
         if ($("#productosInactivosRemovidos").length) {
             var removioProductosInactivos = $("#productosInactivosRemovidos").val();
@@ -2289,10 +2291,15 @@ jQuery(function ($) {
                 else
                     $("#verFechaInicioVigenciaPrecios").html(invertirFormatoFecha(cotizacion.fechaInicioVigenciaPrecios.substr(0, 10)));
 
-                if (cotizacion.fechaFinVigenciaPrecios == null)
+                 
+                if (cotizacion.fechaFinVigenciaPrecios == null) {
                     $("#verFechaFinVigenciaPrecios").html("No Definida");
-                else
+                }
+                else {
                     $("#verFechaFinVigenciaPrecios").html(invertirFormatoFecha(cotizacion.fechaFinVigenciaPrecios.substr(0, 10)));
+                }
+
+                COTIZACIONVERVENCIDA = cotizacion.estaVencida;
 
                 $("#verEstado").html(cotizacion.seguimientoCotizacion_estadoString);
                 $("#verModificadoPor").html(cotizacion.seguimientoCotizacion_usuario_nombre);
@@ -2996,6 +3003,8 @@ jQuery(function ($) {
 
     $("#btnGenerarPedido").click(function () {
         desactivarBotonesVer();
+
+
         //Se identifica si existe cotizacion en curso, la consulta es sincrona
         $.ajax({
             url: "/Pedido/ConsultarSiExistePedido",
@@ -3010,7 +3019,19 @@ jQuery(function ($) {
                         type: 'POST',
                         error: function (detalle) { alert("Ocurrió un problema al iniciar la edición del pedido."); },
                         success: function (fileName) {
-                            window.location = '/Pedido/Pedir';
+                            
+                            if (COTIZACIONVERVENCIDA) {
+                                $.alert({
+                                    title: "COTIZACIÓN VENCIDA",
+                                    type: 'orange',
+                                    content: "La cotización puntual ya venció. Se iniciará la creación del pedido, pero no estará vinculado a la cotización.",
+                                    buttons: {
+                                        OK: function () { window.location = '/Pedido/Pedir'; }
+                                    }
+                                });
+                            } else {
+                                window.location = '/Pedido/Pedir';
+                            }
                         }
                     });
 

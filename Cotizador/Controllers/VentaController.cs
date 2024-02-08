@@ -201,7 +201,10 @@ namespace Cotizador.Controllers
             string jsonSeries = "[]";
             if (ciudad != null)
             {
+                SerieDocumentoBL serieDocumentoBL = new SerieDocumentoBL();
+                ciudad.serieDocumentoElectronicoList = serieDocumentoBL.getSeriesDocumento(ciudad.idCiudad, usuario.idEmpresa);
                 var serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList.OrderByDescending(x => x.esPrincipal).ToList();
+
                 jsonSeries = JsonConvert.SerializeObject(serieDocumentoElectronicoList);
 
             }

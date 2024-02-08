@@ -27,6 +27,8 @@ namespace Cotizador.Models.DTOs
         public String ciudadOrigen_nombre { get; set; }
         public bool estaNoEntregado { get; set; }
         
+        public bool entregaTerceros { get; set; }
+        public string nombreClienteTercero { get; set; }
 
         public String estadoDescripcion { get; set; }
       

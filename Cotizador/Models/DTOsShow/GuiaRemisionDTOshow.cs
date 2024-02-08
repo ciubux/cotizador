@@ -51,8 +51,10 @@ namespace Cotizador.Models.DTOshow
         public Model.GuiaRemision.motivosTraslado motivoTraslado { get; set; }
         public bool ingresado { get; set; }
         public List<Model.DocumentoDetalle> documentoDetalle { get; set; }
-        
-       public bool esGuiaDiferida { get; set; }
+
+        public bool entregaTerceros { get; set; }
+        public string nombreClienteTercero { get; set; }
+        public bool esGuiaDiferida { get; set; }
 
     }
 }

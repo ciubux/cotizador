@@ -1,4 +1,5 @@
-﻿using Cotizador.Models.DTOshow;
+﻿using Cotizador.Models.DTOs;
+using Cotizador.Models.DTOshow;
 using Model;
 using Model.UTILES;
 using System;
@@ -96,6 +97,7 @@ namespace Cotizador.Models.DTOsShow
             cotizacionDTOshow.cliente_nombreComercial = cotizacion.cliente.nombreComercial == null ? "" : cotizacion.cliente.nombreComercial;
             cotizacionDTOshow.cliente_tipoDocumento = cotizacion.cliente.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC ? "RUC" : "DNI";
 
+            cotizacionDTOshow.estaVencida = cotizacion.estaVencida;
 
             if (cotizacion.cliente.grupoCliente != null && cotizacion.cliente.grupoCliente.idGrupoCliente > 0)
             {
@@ -196,6 +198,8 @@ namespace Cotizador.Models.DTOsShow
             guiaRemisionDTOshow.ingresado = guiaRemision.ingresado;
             guiaRemisionDTOshow.documentoDetalle = guiaRemision.documentoDetalle;
             guiaRemisionDTOshow.esGuiaDiferida = guiaRemision.esGuiaDiferida;
+            guiaRemisionDTOshow.entregaTerceros = guiaRemision.pedido == null ? false : guiaRemision.pedido.entregaATerceros;
+            guiaRemisionDTOshow.nombreClienteTercero = guiaRemisionDTOshow.entregaTerceros ? guiaRemision.pedido.nombreClienteTercero : "";
             return guiaRemisionDTOshow;
         }
 

@@ -215,6 +215,9 @@ namespace DataLayer
 
                 item.Add(Converter.GetString(row, "X")); /* 39: */
 
+                item.Add(Converter.GetString(row, "codigo_empresa")); /* 40: */
+                item.Add(Converter.GetString(row, "nombre_empresa")); /* 41: */
+                
                 resultados.Add(item);
             }
 

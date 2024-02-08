@@ -767,7 +767,10 @@ namespace DataLayer
 
                 pedido.numeroPedidoRelacionado = Converter.GetInt(row, "numero_pedido_rel");
                 pedido.codigoEmpresaPedidoRelacionado = Converter.GetString(row, "codigo_empresa_pedido_rel");
-
+                pedido.entregaATerceros = Converter.GetInt(row, "entrega_terceros") == 1 ? true : false;
+                if(pedido.entregaATerceros) { 
+                    pedido.nombreClienteTercero = Converter.GetString(row, "nombre_cliente_rel");
+                }
                 pedido.cliente = new Cliente();
                 pedido.cliente.codigo = Converter.GetString(row, "codigo");
                 pedido.cliente.idCliente = Converter.GetGuid(row, "id_cliente");

@@ -979,6 +979,10 @@ jQuery(function ($) {
                 var guiaRemision = resultado.guiaRemision;
                 var usuario = resultado.usuario;
 
+                var clienteRazonSocial = guiaRemision.pedido_cliente_razonSocial;
+                if (guiaRemision.entregaTerceros) {
+                    clienteRazonSocial = guiaRemision.pedido_cliente_razonSocial + '<br/><span class="spn-nombre-cliente-relacionado" style="font-size:11px;">' + guiaRemision.nombreClienteTercero + '</span>' ;
+                }
 
                 $("#btnVerGuiasPedido").attr("idPedido", guiaRemision.pedido_idPedido);
                 $("#idPedido").val(guiaRemision.pedido_idPedido);
@@ -999,7 +1003,7 @@ jQuery(function ($) {
 
                 //   $("#ver_guiaRemision_numeroDocumento").html(guiaRemision.numeroDocumentoString);
                 $("#ver_guiaRemision_pedido_numeroPedido").html(guiaRemision.pedido_numeroPedidoString);
-                $("#ver_guiaRemision_pedido_cliente").html(guiaRemision.pedido_cliente_razonSocial);
+                $("#ver_guiaRemision_pedido_cliente").html(clienteRazonSocial);
                 $("#ver_guiaRemision_pedido_numeroReferenciaCliente").html(guiaRemision.pedido_numeroReferenciaCliente);
                 $("#ver_guiaRemision_motivoTraslado").html(guiaRemision.motivoTrasladoString);
                 motivoTraslado = guiaRemision.motivoTraslado;
@@ -2369,6 +2373,11 @@ jQuery(function ($) {
                         noEntregadoLectura = '<input disabled type="checkbox"></input>'
                     }
 
+                    var clienteRazonSocial = guiaRemisionList[i].pedido_cliente_razonSocial;
+                    if (guiaRemisionList[i].entregaTerceros) {
+                        clienteRazonSocial = '<span class="spn-nombre-cliente-relacionado">' + guiaRemisionList[i].nombreClienteTercero + '</span><br/>' + guiaRemisionList[i].pedido_cliente_razonSocial ;
+                    }
+
                     var guiaRemision = '<tr data-expanded="false">' +
                         '<td>  ' + guiaRemisionList[i].idMovimientoAlmacen + '</td>' +
                         '<td>  ' + guiaRemisionList[i].serieNumeroGuia + '</td>' +
@@ -2377,7 +2386,7 @@ jQuery(function ($) {
                         '<td>  ' + guiaRemisionList[i].usuario_nombre + '</td>' +
                         '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaEmision.substr(0, 10)) + '</td>' +
                         '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaTraslado.substr(0, 10)) + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].pedido_cliente_razonSocial + '</td>' +
+                        '<td>  ' + clienteRazonSocial + '</td>' +
                         '<td>  ' + guiaRemisionList[i].pedido_cliente_ruc + '</td>' +
                         '<td>  ' + guiaRemisionList[i].ciudadOrigen_nombre + '</td>' +
                         '<td ' + styleEstado + '>  ' + guiaRemisionList[i].estadoDescripcion + '</td>' +

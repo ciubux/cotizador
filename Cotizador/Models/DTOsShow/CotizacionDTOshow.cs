@@ -40,6 +40,7 @@ namespace Cotizador.Models.DTOshow
         public String monedaCodigo { get; set; }
         public String monedaNombre { get; set; }
         public bool aplicaSedes { get; set; }
+        public bool estaVencida { get; set; }
         public String cliente_sedeListWebString { get; set; }
         public Decimal montoSubTotal { get; set; }
         public Decimal montoIGV { get; set; }

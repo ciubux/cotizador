@@ -123,7 +123,8 @@ namespace Cotizador.Models.DTOsSearch
                 guiaremisionDTO.estaAnulado = guiaremisionTmp.estaAnulado;
 
                 guiaremisionDTO.estaFacturado = guiaremisionTmp.estaFacturado;
-
+                guiaremisionDTO.entregaTerceros = guiaremisionTmp.pedido == null ? false : guiaremisionTmp.pedido.entregaATerceros;
+                guiaremisionDTO.nombreClienteTercero = guiaremisionDTO.entregaTerceros ? guiaremisionTmp.pedido.nombreClienteTercero : "";
                 guiaremisionDTO.estadoDescripcion = guiaremisionTmp.estadoDescripcion;
                 guiaremisionDTO.tipoExtornoToString = guiaremisionTmp.tipoExtornoToString;
                 guiaremisionDTO.pedido_cliente_ruc = guiaremisionTmp.pedido.cliente.ruc;
@@ -263,6 +264,7 @@ namespace Cotizador.Models.DTOsSearch
                 pedidoDTO.idPedido = pedidoTmp.idPedido;
                 pedidoDTO.numeroPedido = pedidoTmp.numeroPedido;
                 pedidoDTO.numeroPedidoNumeroGrupoString = pedidoTmp.numeroPedidoNumeroGrupoString;
+                pedidoDTO.clienteTercero_nombre = pedidoTmp.nombreClienteTercero;
                 pedidoDTO.ciudad_nombre = pedidoTmp.ciudad.nombre;
                 pedidoDTO.cliente_codigo = pedidoTmp.cliente.codigo;
                 pedidoDTO.cliente_razonSocial = pedidoTmp.cliente.razonSocial;

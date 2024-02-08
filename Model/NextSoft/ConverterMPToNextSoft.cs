@@ -185,12 +185,17 @@ namespace Model.NextSoft
 
             Cliente cli = obj.clienteVer;
             if (cli == null) cli = obj.pedido.cliente;
+            string rucComprador = obj.entregaTerceros ? obj.pedido.cliente.ruc : "";
+            if (obj.entregaTerceros)
+            {
+                motivoTraslado = "014";
+            }
 
             var item = new
             {
                 sucursal = obj.almacen.codigoSucursalNextSoft,
                 puntoventa = obj.almacen.codigoPuntoVentaNextSoft,
-
+                ruccomprador = rucComprador,
                 ruc = cli.ruc,
                 direcccion = obj.direccionEntrega,
                 ubigeo = obj.ubigeoEntrega.codigoSepPunto,
@@ -217,6 +222,7 @@ namespace Model.NextSoft
                 ubigeollegada = obj.ubigeoEntrega.codigoSepPunto,
                 partida = obj.almacen.direccion,
                 llegada = obj.direccionEntrega,
+
                 //usuario = nombreUsuario,
                 usuario = "nextsoft",
                 peso = 1,

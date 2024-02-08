@@ -898,7 +898,11 @@ namespace DataLayer
                 guiaRemision.pedido.vendedor.idVendedor = Converter.GetInt(row, "id_vendedor");
                 guiaRemision.pedido.vendedor.codigoNextSoft = Converter.GetString(row, "codigo_nextsoft_vendedor");
 
-
+                guiaRemision.pedido.entregaATerceros = Converter.GetInt(row, "entrega_terceros") == 1 ? true : false;
+                if (guiaRemision.pedido.entregaATerceros)
+                {
+                    guiaRemision.pedido.nombreClienteTercero = Converter.GetString(row, "nombre_cliente_rel");
+                }
 
                 //CLIENTE
                 guiaRemision.pedido.cliente = new Cliente();
@@ -1126,6 +1130,12 @@ namespace DataLayer
                 guiaRemision.pedido.idPedido = Converter.GetGuid(row, "id_pedido");
                 guiaRemision.pedido.numeroPedido = Converter.GetLong(row, "numero_pedido");
                 guiaRemision.pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
+                guiaRemision.pedido.entregaATerceros = Converter.GetInt(row, "entrega_terceros") == 1 ? true : false;
+                if (guiaRemision.pedido.entregaATerceros)
+                {
+                    guiaRemision.pedido.nombreClienteTercero = Converter.GetString(row, "nombre_cliente_rel");
+                }
+
                 //CLIENTE
                 guiaRemision.pedido.cliente = new Cliente();
                 guiaRemision.pedido.cliente.codigo = Converter.GetString(row, "codigo");

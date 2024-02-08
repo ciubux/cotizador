@@ -560,9 +560,14 @@ namespace Cotizador.Controllers
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
 
             Cotizacion cotizacion = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_VER];
-            pedido.cotizacion = new Cotizacion();
-            pedido.cotizacion.idCotizacion = cotizacion.idCotizacion;
-            pedido.cotizacion.codigo = cotizacion.codigo;
+
+            if (cotizacion.tipoCotizacion != Cotizacion.TiposCotizacion.Transitoria || !cotizacion.estaVencida)
+            {
+                pedido.cotizacion = new Cotizacion();
+                pedido.cotizacion.idCotizacion = cotizacion.idCotizacion;
+                pedido.cotizacion.codigo = cotizacion.codigo;
+            }
+
             pedido.ciudad = cotizacion.ciudad;
             pedido.cliente = cotizacion.cliente;
             pedido.esPagoContado = cotizacion.esPagoContado;
@@ -600,7 +605,7 @@ namespace Cotizador.Controllers
             pedido.cliente.direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(cotizacion.cliente.idCliente);
             pedido.direccionEntrega = new DireccionEntrega();
 
-            pedido.observaciones = String.Empty;
+            pedido.observaciones = "Pedido generado desde la cotización " + cotizacion.codigo + ".";
 
             pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             pedido.seguimientoPedido = new SeguimientoPedido();
@@ -626,60 +631,69 @@ namespace Cotizador.Controllers
                 pedidoDetalle.producto = documentoDetalle.producto;
 
 
-
+                ProductoBL productoBl = new ProductoBL();
 
                 if (cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Transitoria)
                 {
-                    if (pedidoDetalle.producto.precioClienteProducto == null)
-                    {
-                        pedidoDetalle.producto.precioClienteProducto = new PrecioClienteProducto();
-                    }
-                    //Se le asigna un id temporal solo para que no se rechaza el precio en la validación
-                    pedidoDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Guid.NewGuid();
-                    pedidoDetalle.producto.precioClienteProducto.fechaInicioVigencia = cotizacion.fechaInicioVigenciaPrecios;
-                    pedidoDetalle.producto.precioClienteProducto.fechaFinVigencia = 
-                        cotizacion.fechaFinVigenciaPrecios.HasValue ? 
-                            cotizacion.fechaFinVigenciaPrecios.Value : 
-                            cotizacion.fechaInicioVigenciaPrecios.HasValue ? 
-                                cotizacion.fechaInicioVigenciaPrecios.Value.AddDays(Constantes.DIAS_MAX_VALIDEZ_OFERTA_COTIZACION_PUNTUAL) : 
-                                DateTime.Now.AddDays(Constantes.DIAS_MAX_VALIDEZ_OFERTA_COTIZACION_PUNTUAL);
-                    //pedidoDetalle.producto.precioClienteProducto.cliente.idCliente = cotizacion.cliente.idCliente;
-                    pedidoDetalle.producto.precioClienteProducto.precioUnitario = documentoDetalle.precioUnitario;
-                    pedidoDetalle.producto.precioClienteProducto.precioNeto = documentoDetalle.precioNeto;
-                    pedidoDetalle.producto.precioClienteProducto.esUnidadAlternativa = documentoDetalle.esPrecioAlternativo;
-
-                    int diaFinVigenciaCot = int.Parse(pedidoDetalle.producto.precioClienteProducto.fechaFinVigencia.Value.ToString("yyyyMMdd"));
-                    int diaFechaHoy = int.Parse(DateTime.Now.ToString("yyyyMMdd"));
-
-                    if (diaFinVigenciaCot < diaFechaHoy)
-                    {
-                        ProductoBL productoBL = new ProductoBL();
-                        Producto producto = productoBL.getProducto(pedidoDetalle.producto.idProducto, pedido.ciudad.esProvincia, pedido.incluidoIGV, pedido.cliente.idCliente);
-
-                        int diaFinVigProd = 0;
-                        if (producto.precioClienteProducto != null && producto.precioClienteProducto.fechaInicioVigencia != null)
+                    if (!cotizacion.estaVencida) {
+                        if (pedidoDetalle.producto.precioClienteProducto == null)
                         {
-                            if (producto.precioClienteProducto.fechaFinVigencia == null)
-                            {
-                                diaFinVigProd = int.Parse(producto.precioClienteProducto.fechaInicioVigencia.Value.AddDays(Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION).ToString("yyyyMMdd"));
-                            } else {
-                                diaFinVigProd = int.Parse(producto.precioClienteProducto.fechaFinVigencia.Value.ToString("yyyyMMdd"));
-                            }
-                            //decimal precioProd = producto.precioClienteProducto.precioNeto * producto.precioClienteProducto.equivalencia;
-                            //decimal precioCot = pedidoDetalle.producto.precioClienteProducto.precioNeto * pedidoDetalle.producto.precioClienteProducto.equivalencia;
+                            pedidoDetalle.producto.precioClienteProducto = new PrecioClienteProducto();
+                        }
+                        //Se le asigna un id temporal solo para que no se rechaza el precio en la validación
+                        pedidoDetalle.producto.precioClienteProducto.idPrecioClienteProducto = Guid.NewGuid();
+                        pedidoDetalle.producto.precioClienteProducto.fechaInicioVigencia = cotizacion.fechaInicioVigenciaPrecios;
+                        pedidoDetalle.producto.precioClienteProducto.fechaFinVigencia =
+                            cotizacion.fechaFinVigenciaPrecios.HasValue ?
+                                cotizacion.fechaFinVigenciaPrecios.Value :
+                                cotizacion.fechaInicioVigenciaPrecios.HasValue ?
+                                    cotizacion.fechaInicioVigenciaPrecios.Value.AddDays(Constantes.DIAS_MAX_VALIDEZ_OFERTA_COTIZACION_PUNTUAL) :
+                                    DateTime.Now.AddDays(Constantes.DIAS_MAX_VALIDEZ_OFERTA_COTIZACION_PUNTUAL);
+                        //pedidoDetalle.producto.precioClienteProducto.cliente.idCliente = cotizacion.cliente.idCliente;
+                        pedidoDetalle.producto.precioClienteProducto.precioUnitario = documentoDetalle.precioUnitario;
+                        pedidoDetalle.producto.precioClienteProducto.precioNeto = documentoDetalle.precioNeto;
+                        pedidoDetalle.producto.precioClienteProducto.esUnidadAlternativa = documentoDetalle.esPrecioAlternativo;
 
-                            if (diaFinVigProd > diaFinVigenciaCot)
-                            {
-                                pedidoDetalle.producto = producto;
-                            }
+                        int diaFinVigenciaCot = int.Parse(pedidoDetalle.producto.precioClienteProducto.fechaFinVigencia.Value.ToString("yyyyMMdd"));
+                        int diaFechaHoy = int.Parse(DateTime.Now.ToString("yyyyMMdd"));
 
-                            if (pedidoDetalle.esPrecioAlternativo)
+                        if (diaFinVigenciaCot < diaFechaHoy)
+                        {
+                            ProductoBL productoBL = new ProductoBL();
+                            Producto producto = productoBL.getProducto(pedidoDetalle.producto.idProducto, pedido.ciudad.esProvincia, pedido.incluidoIGV, pedido.cliente.idCliente);
+
+                            int diaFinVigProd = 0;
+                            if (producto.precioClienteProducto != null && producto.precioClienteProducto.fechaInicioVigencia != null)
                             {
-                                pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.precioClienteProducto.equivalencia;
+                                if (producto.precioClienteProducto.fechaFinVigencia == null)
+                                {
+                                    diaFinVigProd = int.Parse(producto.precioClienteProducto.fechaInicioVigencia.Value.AddDays(Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION).ToString("yyyyMMdd"));
+                                } else {
+                                    diaFinVigProd = int.Parse(producto.precioClienteProducto.fechaFinVigencia.Value.ToString("yyyyMMdd"));
+                                }
+                                //decimal precioProd = producto.precioClienteProducto.precioNeto * producto.precioClienteProducto.equivalencia;
+                                //decimal precioCot = pedidoDetalle.producto.precioClienteProducto.precioNeto * pedidoDetalle.producto.precioClienteProducto.equivalencia;
+
+                                if (diaFinVigProd > diaFinVigenciaCot)
+                                {
+                                    pedidoDetalle.producto = producto;
+                                }
+
+                                if (pedidoDetalle.esPrecioAlternativo)
+                                {
+                                    pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.precioClienteProducto.equivalencia;
+                                }
                             }
                         }
+                    } else
+                    {
+                        Producto producto = productoBl.getProducto(documentoDetalle.producto.idProducto, pedido.ciudad.esProvincia, pedido.incluidoIGV, pedido.cliente.idCliente);
+                        pedidoDetalle.producto = producto;
+                        if (documentoDetalle.esPrecioAlternativo)
+                        {
+                            pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / documentoDetalle.ProductoPresentacion.Equivalencia;
+                        }
                     }
-
                 }
                 else if (cotizacion.tipoCotizacion == Cotizacion.TiposCotizacion.Trivial)
                 {
@@ -696,7 +710,7 @@ namespace Cotizador.Controllers
                 {
                     if (pedidoDetalle.producto.precioClienteProducto.esUnidadAlternativa)
                     {
-                        pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / pedidoDetalle.producto.precioClienteProducto.equivalencia;
+                        pedidoDetalle.producto.precioClienteProducto.precioUnitario = pedidoDetalle.producto.precioClienteProducto.precioUnitario / documentoDetalle.ProductoPresentacion.Equivalencia;
                     }
 
 

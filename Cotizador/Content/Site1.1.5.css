@@ -1406,3 +1406,8 @@ $darkred: darken($red, 0.2);*/
 .promocionesContainer > div.row{
     margin-bottom: 5px;
 }
+
+.spn-nombre-cliente-relacionado {
+    color: #999999;
+    font-size: 9px;
+}

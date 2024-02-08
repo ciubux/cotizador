@@ -34,7 +34,12 @@ namespace Model
         };
 
         public Guid idCotizacion { get; set; }
-
+        public bool estaVencida { get
+            {
+                DateTime fechaHoy = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                return this.fechaFinVigenciaPrecios.HasValue && this.fechaFinVigenciaPrecios.Value < fechaHoy ? true : false;
+            }
+        }
         public Guid idCotizacionAntecedente { get; set; }
 
         public bool productosInactivosRemovidos { get; set; }
