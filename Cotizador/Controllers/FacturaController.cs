@@ -95,6 +95,15 @@ namespace Cotizador.Controllers
             documentoVenta.venta.pedido.numeroReferenciaCliente = this.Request.Params["numeroReferenciaCliente"];
             documentoVenta.observaciones = this.Request.Params["observaciones"];
 
+            if (usuario.codigoEmpresa.Equals("DP"))
+            {
+                ParametroBL parametroBL = new ParametroBL();
+                string observacionDP = parametroBL.getParametro("DISTRIPLUS_OBSERVACION_FACTURA");
+                documentoVenta.observaciones = 
+                    documentoVenta.observaciones == null || documentoVenta.observaciones.Trim().Equals("") ? 
+                            observacionDP : documentoVenta.observaciones + ". " + observacionDP;
+            }
+
             DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
 
             if (documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_RUC)
