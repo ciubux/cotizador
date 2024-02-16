@@ -1852,12 +1852,13 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             return true;
         }
 
-        public bool SetPedidoMP(Guid idPedido, Guid idPedidoMP, String agregarObservacion)
+        public bool SetPedidoMP(Guid idPedido, Guid idPedidoMP, String agregarObservacion, bool duplicarArchivos = false)
         {
             var objCommand = GetSqlCommand("pu_set_pedido_mp");
             InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
             InputParameterAdd.Guid(objCommand, "idPedidoMP", idPedidoMP);
             InputParameterAdd.VarcharEmpty(objCommand, "agregarObservacion", agregarObservacion);
+            InputParameterAdd.Int(objCommand, "duplicarArchivos", duplicarArchivos ? 1: 0);
 
             ExecuteNonQuery(objCommand);
 

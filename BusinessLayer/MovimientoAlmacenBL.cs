@@ -90,7 +90,7 @@ namespace BusinessLayer
 
                 try
                 {
-                    if (guiaRemision.serieDocumento.Substring(0, 2).Equals("T0") ||
+                    if (/*guiaRemision.serieDocumento.Substring(0, 2).Equals("T0") ||*/
                         guiaRemision.serieDocumento.Substring(0, 2).Equals("TT") ||
                         guiaRemision.serieDocumento.Substring(0, 2).Equals("TI"))
                     {
@@ -137,12 +137,12 @@ namespace BusinessLayer
 
                         //return JsonConvert.SerializeObject(new { success = success, dataSend = dataSend, result = result });
                     } 
-                    {
+                    /*{
                         if (guiaRemision.serieDocumento.Substring(0, 2).Equals("DF"))
-                        {
+                        {*/
                             dal.InsertMovimientoAlmacenSalida(guiaRemision);
-                        }
-                    }
+                        /*}
+                    }*/
                 }
                 catch (DuplicateNumberDocumentException ex)
                 {

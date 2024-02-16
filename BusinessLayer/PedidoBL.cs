@@ -1173,7 +1173,7 @@ namespace BusinessLayer
 
             this.InsertPedido(pMP);
             this.SetPedidoMP(idPedidoTec, pMP.idPedido, "// N° Pedido MP: " + pMP.numeroPedido.ToString());
-            this.SetPedidoMP(pMP.idPedido, idPedidoTec, "");
+            this.SetPedidoMP(pMP.idPedido, idPedidoTec, "", true);
 
             pedido.idMPPedido = pMP.idPedido;
             pedido.numeroPedidoMP = pMP.numeroPedido;

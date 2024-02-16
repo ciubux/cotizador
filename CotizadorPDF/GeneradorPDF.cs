@@ -346,7 +346,7 @@ namespace cotizadorPDF
                 int xPage2a = 0;
                 String reiniciarY = "";
 
-                xPage2 = margenLeft;
+                xPage2 = 0;
 
                 if (y < 600)
                 {
@@ -354,12 +354,14 @@ namespace cotizadorPDF
                     sectionObervaciones = doc.Pages[countPages-1];
                     sectionFirma = doc.Pages[countPages-1];
                     y = y + 35;
+                    xPage2a = 0;
                 }
                 else
                 {
                     SizeF size = page.Size;
-                    PdfPageBase newPage = doc.Pages.Add(size, new PdfMargins(0));
-
+                    //PdfPageBase newPage = doc.Pages.Add(size, new PdfMargins(0));
+                    PdfPageBase newPage = doc.Pages.Add(PdfPageSize.A4);
+                
                     sectionTotales = doc.Pages[countPages];
                     sectionObervaciones = doc.Pages[countPages];
                     sectionFirma = doc.Pages[countPages];
@@ -367,6 +369,7 @@ namespace cotizadorPDF
                     //Y se agrega 150 porque en la siguiente instrucción se restán 150 para que no haya mucho margen entre
                     //el fin de la tabla y la observación.
                     y =  margenTop +150;
+                    xPage2a = -margenLeft;
                 }
                 countPages = doc.Pages.Count;
                 if (countPages > 1)
@@ -411,32 +414,37 @@ namespace cotizadorPDF
 
 
                     DataTable dataTable2 = new DataTable();
+                    dataTable2.Columns.Add("Pre");
                     dataTable2.Columns.Add("Descripcion");
                     dataTable2.Columns.Add("monto");
 
                     String subtotal = "Subtotal " + cot.moneda.simbolo + ":";
                     String montoSubtotal = String.Format(Constantes.formatoDosDecimalesSeparadorMiles, cot.montoSubTotal);
-                    dataTable2.Rows.Add(new object[] { subtotal, montoSubtotal });
+                    dataTable2.Rows.Add(new object[] { "", subtotal, montoSubtotal });
 
                     String igv = "IGV 18% " + cot.moneda.simbolo + ":";
                     String montoIGV = String.Format(Constantes.formatoDosDecimalesSeparadorMiles, cot.montoIGV);
-                    dataTable2.Rows.Add(new object[] { igv, montoIGV });
+                    dataTable2.Rows.Add(new object[] { "", igv, montoIGV });
 
                     String total = "Total " + cot.moneda.simbolo + ":";
                     String montoTotal = String.Format(Constantes.formatoDosDecimalesSeparadorMiles, cot.montoTotal);
-                    dataTable2.Rows.Add(new object[] { total, montoTotal });
+                    dataTable2.Rows.Add(new object[] { "", total, montoTotal });
 
                     tableTotales.DataSource = dataTable2;
 
-                    float width2   = sectionTotales.Canvas.ClientSize.Width
+                    float width2 = sectionTotales.Canvas.ClientSize.Width
                       - (tableTotales.Columns.Count + 1) * tableTotales.Style.BorderPen.Width;
 
-                    tableTotales.Columns[0].Width = width2 * 0.25f;
-                    tableTotales.Columns[0].StringFormat
+                    tableTotales.Columns[0].Width = width2 * 0.78f;
+                     tableTotales.Columns[0].StringFormat
                         = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
 
-                    tableTotales.Columns[1].Width = width2 * 0.30f;
+                    tableTotales.Columns[1].Width = width2 * 0.12f;
                     tableTotales.Columns[1].StringFormat
+                        = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+
+                    tableTotales.Columns[2].Width = width2 * 0.1f;
+                    tableTotales.Columns[2].StringFormat
                         = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
 
                    // tableTotales.BeginRowLayout += new BeginRowLayoutEventHandler(table_BeginRowLayout);
@@ -549,7 +557,8 @@ namespace cotizadorPDF
                 if (y > 600)
                 {
                     SizeF size = page.Size;
-                    PdfPageBase newPage = doc.Pages.Add(size, new PdfMargins(0));
+                    //PdfPageBase newPage = doc.Pages.Add(size, new PdfMargins(0));
+                    PdfPageBase newPage = doc.Pages.Add(PdfPageSize.A4);
 
                     sectionObervaciones = doc.Pages[countPages];
                     sectionFirma = doc.Pages[countPages];
@@ -558,29 +567,34 @@ namespace cotizadorPDF
                     //Y se agrega 150 porque en la siguiente instrucción se restán 150 para que no haya mucho margen entre
                     //el fin de la tabla y la observación.
                     y = margenTop;
+                    xPage2 = margenLeft;
+                }
+                else
+                {
+                    xPage2 = 0;
                 }
 
-                //if (cot.promocion != null && cot.promocion.idPromocion != Guid.Empty)
-                //{
-                //    string[] linesPromocion = cot.promocion.textoPresentacion.Split(stringSeparators, StringSplitOptions.None);
+            //if (cot.promocion != null && cot.promocion.idPromocion != Guid.Empty)
+            //{
+            //    string[] linesPromocion = cot.promocion.textoPresentacion.Split(stringSeparators, StringSplitOptions.None);
 
-                //    PdfPen promoPen = new PdfPen(Color.Black, 1f);
-                //    int boxPromoHeight = 0;
-                //    int boxPromoWidth = 375;
+            //    PdfPen promoPen = new PdfPen(Color.Black, 1f);
+            //    int boxPromoHeight = 0;
+            //    int boxPromoWidth = 375;
 
-                //    Point boxPromoInitPoint = new Point(xPage2 - 4, ((int)y) - 1);
+            //    Point boxPromoInitPoint = new Point(xPage2 - 4, ((int)y) - 1);
 
-                //    foreach (string line in linesPromocion)
-                //    {
-                //        sectionObervaciones.Canvas.DrawString(line, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
-                //        y = y + sepLine;
-                //        boxPromoHeight += sepLine;
-                //    }
+            //    foreach (string line in linesPromocion)
+            //    {
+            //        sectionObervaciones.Canvas.DrawString(line, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+            //        y = y + sepLine;
+            //        boxPromoHeight += sepLine;
+            //    }
 
-                //    sectionObervaciones.Canvas.DrawRectangle(promoPen, new Rectangle(boxPromoInitPoint, new Size(boxPromoWidth, boxPromoHeight)));
-                //}
+            //    sectionObervaciones.Canvas.DrawRectangle(promoPen, new Rectangle(boxPromoInitPoint, new Size(boxPromoWidth, boxPromoHeight)));
+            //}
 
-                foreach(Promocion prom in cot.promociones)
+            foreach (Promocion prom in cot.promociones)
                 {
                     string[] linesPromocion = prom.textoPresentacion.Split(stringSeparators, StringSplitOptions.None);
 
@@ -604,7 +618,8 @@ namespace cotizadorPDF
                     if (y > 600)
                     {
                         SizeF size = page.Size;
-                        PdfPageBase newPage = doc.Pages.Add(size, new PdfMargins(0));
+                        //PdfPageBase newPage = doc.Pages.Add(size, new PdfMargins(0));
+                        PdfPageBase newPage = doc.Pages.Add(PdfPageSize.A4);
 
                         sectionObervaciones = doc.Pages[countPages];
                         sectionFirma = doc.Pages[countPages];
@@ -613,6 +628,11 @@ namespace cotizadorPDF
                         //Y se agrega 150 porque en la siguiente instrucción se restán 150 para que no haya mucho margen entre
                         //el fin de la tabla y la observación.
                         y = margenTop;
+                        xPage2 = margenLeft;
+                    }
+                    else
+                    {
+                        xPage2 = 0;
                     }
                 }
 
@@ -622,7 +642,8 @@ namespace cotizadorPDF
                 if (y > 600)
                 {
                     SizeF size = page.Size;
-                    PdfPageBase newPage = doc.Pages.Add(size, new PdfMargins(0));
+                    //PdfPageBase newPage = doc.Pages.Add(size, new PdfMargins(0));
+                    PdfPageBase newPage = doc.Pages.Add(PdfPageSize.A4);
 
                     sectionObervaciones = doc.Pages[countPages];
                     sectionFirma = doc.Pages[countPages];
@@ -631,13 +652,18 @@ namespace cotizadorPDF
                     //Y se agrega 150 porque en la siguiente instrucción se restán 150 para que no haya mucho margen entre
                     //el fin de la tabla y la observación.
                     y = margenTop;
+                    xPage2 = margenLeft;
+                }
+                else
+                {
+                    xPage2 = 0;
                 }
 
                 sectionObervaciones.Canvas.DrawString("Sin otro particular, quedamos de ustedes.", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 y = y + sepLine * 2;
                 sectionObervaciones.Canvas.DrawString("Atentamente,", new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 y = y + sepLine * 2;
-                sectionObervaciones.Canvas.DrawString(usuario.razonSocialEmpresa, new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), xPage2, y);
+                sectionObervaciones.Canvas.DrawString(cot.empresa.razonSocial, new PdfFont(PdfFontFamily.Helvetica, 9f, PdfFontStyle.Bold), new PdfSolidBrush(Color.Black), xPage2, y);
                 y = y + sepLine * 2;
 
 
@@ -659,7 +685,14 @@ namespace cotizadorPDF
 
                 sectionFirma.Canvas.DrawString(cot.usuario.nombre, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 y = y + sepLine;
-                sectionFirma.Canvas.DrawString(cot.usuario.cargo, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                if (cot.usuario.codigoEmpresa.Equals(cot.empresa.codigo))
+                {
+                    sectionFirma.Canvas.DrawString(cot.usuario.cargo, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                } else
+                {
+                    sectionFirma.Canvas.DrawString("Por encargo de " + cot.usuario.razonSocialEmpresa, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
+                }
+
                 y = y + sepLine;
                 sectionFirma.Canvas.DrawString(cot.usuario.contacto, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                 y = y + sepLine;
@@ -669,6 +702,7 @@ namespace cotizadorPDF
                     sectionFirma.Canvas.DrawString(cot.usuario.email, new PdfFont(PdfFontFamily.Helvetica, 8f), new PdfSolidBrush(Color.Black), xPage2, y);
                     y = y + sepLine;
                 }
+
 
                 sectionFirma.Canvas.DrawString(usuario.urlEmpresa, new PdfFont(PdfFontFamily.Helvetica, 8f, PdfFontStyle.Underline), new PdfSolidBrush(Color.Blue), xPage2, y);
                 //page.Canvas.DrawString("www.mpinstitucional.com", new PdfFont(PdfFontFamily.Helvetica, 8f, PdfFontStyle.Underline), new PdfSolidBrush(Color.Blue), 0, y);

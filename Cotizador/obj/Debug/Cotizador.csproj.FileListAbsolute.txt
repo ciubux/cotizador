@@ -3194,7 +3194,6 @@ D:\Repo\freelos\cotizador\Cotizador\bin\WebGrease.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\Spire.Pdf.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\Framework.DAL.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\Framework.DAL.Settings.dll
-D:\Repo\freelos\cotizador\Cotizador\bin\Spire.License.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.mshtml.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\Framework.WebCommon.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\BusinessLayer.pdb
@@ -3271,3 +3270,4 @@ F:\Repo\freelos\cotizador\Cotizador\bin\NPOI.OOXML.dll
 F:\Repo\freelos\cotizador\Cotizador\bin\NPOI.OpenXml4Net.dll
 F:\Repo\freelos\cotizador\Cotizador\bin\NPOI.OpenXmlFormats.dll
 F:\Repo\freelos\cotizador\Cotizador\bin\NPOI.xml
+D:\Repo\freelos\cotizador\Cotizador\bin\Spire.Pdf.xml

@@ -52,6 +52,8 @@ namespace Model
 
         public Guid idCliente { get; set; }
 
+        public Empresa empresa { get; set; }
+
         public List<Cliente> sedeList { get; set; }
 
         public List<DocumentoDetalle> listaPrecios { get; set; }

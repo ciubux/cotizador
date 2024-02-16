@@ -333,6 +333,11 @@ namespace DataLayer
                 cotizacion.cliente.esClienteLite = Converter.GetInt(row, "cliente_lite") == 1 ? true : false;
                 cotizacion.cliente.esSubDistribuidor = Converter.GetBool(row, "cliente_es_sub_distribuidor");
 
+                cotizacion.empresa = new Empresa();
+                cotizacion.empresa.idEmpresa = Converter.GetInt(row, "id_empresa");
+                cotizacion.empresa.codigo = Converter.GetString(row, "empresa_codigo");
+                cotizacion.empresa.razonSocial = Converter.GetString(row, "empresa_razon_social"); 
+
                 cotizacion.cliente.grupoCliente = new GrupoCliente();
                 cotizacion.cliente.grupoCliente.idGrupoCliente = Converter.GetInt(row, "cliente_id_grupo_cliente");
                 cotizacion.cliente.grupoCliente.codigo = Converter.GetString(row, "cliente_codigo_grupo");
@@ -384,9 +389,9 @@ namespace DataLayer
                 cotizacion.usuario.contacto = Converter.GetString(row, "contacto_usuario"); 
                 cotizacion.usuario.firmaImagen = Converter.GetBytes(row, "usuario_firma_imagen");
                 cotizacion.usuario.email = Converter.GetString(row, "email");
-                cotizacion.usuario.codigoEmpresa = Converter.GetString(row, "codigo_empresa");
-                cotizacion.usuario.razonSocialEmpresa = Converter.GetString(row, "razon_social_empresa");
-                cotizacion.usuario.urlEmpresa = Converter.GetString(row, "url_web_empresa");
+                cotizacion.usuario.codigoEmpresa = Converter.GetString(row, "usuario_codigo_empresa");
+                cotizacion.usuario.razonSocialEmpresa = Converter.GetString(row, "usuario_razon_social_empresa");
+                cotizacion.usuario.urlEmpresa = Converter.GetString(row, "usuario_url_web_empresa");
 
                 //ESTADO
                 cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();

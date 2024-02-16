@@ -33,6 +33,7 @@ namespace Model
             Trivial = 2
         };
 
+        public Empresa empresa { get; set; }
         public Guid idCotizacion { get; set; }
         public bool estaVencida { get
             {

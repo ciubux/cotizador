@@ -623,7 +623,6 @@ D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\CotizadorPDF.dll
 D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\CotizadorPDF.pdb
 D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\BusinessLayer.dll
 D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Model.dll
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Spire.License.dll
 D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Spire.Pdf.dll
 D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\DataLayer.dll
 D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\ServiceLayer.dll
@@ -641,7 +640,6 @@ D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\DataLayer.pdb
 D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\DataLayer.dll.config
 D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\ServiceLayer.pdb
 D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\NPOI.xml
-D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Newtonsoft.Json.xml
 D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.pdb
 D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.DAL.Settings.pdb
 D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Framework.WebCommon.pdb
@@ -649,3 +647,5 @@ D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.csproj.CopyComplet
 D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.dll
 D:\Repo\freelos\cotizador\CotizadorPDF\obj\Debug\CotizadorPDF.pdb
 F:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\NPOI.xml
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Spire.Pdf.xml
+D:\Repo\freelos\cotizador\CotizadorPDF\bin\Debug\Newtonsoft.Json.xml

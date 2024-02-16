@@ -51,9 +51,7 @@ namespace Cotizador.Controllers
             //try
             //{
             Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
-
-
-
+            
             DocumentoVenta documentoVenta = new DocumentoVenta();
 
             String[] fecha = this.Request.Params["fechaEmision"].Split('/');
