@@ -1023,7 +1023,8 @@ jQuery(function ($) {
                 $("#btnRefacturar").hide();
                 $("#btnGenerarGuiaAtencion").hide();
                 $("#btnFacturarGuiaRemision").hide();
-
+                $("#btnFacturarPedidoRelacionado").hide();
+                
                 /*Si la guía de remisión se encuentra ANULADA no se puede extornar, ni imprimir, ni facturar*/
                 if (guiaRemision.estaAnulado == 1) {
                     $("#ver_guiaRemision_estadoDescripcion").attr("style", "color:red")
@@ -1154,6 +1155,11 @@ jQuery(function ($) {
                     $("#ver_guiaRemision_atencionParcial").html("Atención Final");
                 }
 
+                if (guiaRemision.habilitaFacturaPedidoRelacionado) {
+                    $("#btnFacturarPedidoRelacionado").show();
+                }
+                
+
                 if (!usuario.creaFacturaCompleja && guiaRemision.pedido_cliente_configuraciones.facturacionCompleja) {
                     $("#btnFacturarGuiaRemision").hide();
                 }
@@ -1223,7 +1229,51 @@ jQuery(function ($) {
         });
     }
 
-    
+    $("#btnFacturarPedidoRelacionado").click(function () {
+        if (confirm("¿Esta seguro que desea emitir una factura con los productos de la guía al pedido original?")) {
+            $("#btnFacturarPedidoRelacionado").attr('disabled', 'disabled');
+
+            $('body').loadingModal('text', 'Generando Factura...');
+            $('body').loadingModal('show')
+
+            
+            $.ajax({
+                url: "/Factura/FacturarAPedidoRelacionado",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                },
+                error: function (resultado) {
+                    $('body').loadingModal('hide')
+                    mostrarMensajeErrorProceso(MENSAJE_ERROR);
+                    $("#btnFacturarPedidoRelacionado").removeAttr('disabled');
+                },
+                success: function (resultado) {
+                    $('body').loadingModal('hide')
+
+                    if (resultado.CPE_RESPUESTA_BE.CODIGO == "001") {
+                        $.alert({
+                            //icon: 'fa fa-warning',
+                            title: 'REGISTRO EXITOSO',
+                            content: 'Se generó el documento electrónico: ' + resultado.serieNumero + '.',
+                            type: 'green',
+                            buttons: {
+                                OK: function () { location.reload(); }
+                            }
+                        });
+                    }
+                    else {
+                        mostrarMensajeErrorProceso(MENSAJE_ERROR + ".\n" + "Detalle Error: " + resultado.CPE_RESPUESTA_BE.DETALLE);
+                        //$("#btnAceptarFacturarPedido").removeAttr("disabled");
+                        
+                    }
+
+                    $("#btnFacturarPedidoRelacionado").removeAttr('disabled');
+                }
+            });
+        }
+    });
+
 
     $("#btnCancelarGuiaRemision").click(function () {
         if (confirm(MENSAJE_CANCELAR_EDICION)) {

@@ -31,6 +31,7 @@ namespace Model
 
         public String comentarioAnulado { get; set; }
 
+        public Guid idMovimientoRelacionado { get; set; }
         public long numero { get; set; }
 
         public enum tiposMovimiento {

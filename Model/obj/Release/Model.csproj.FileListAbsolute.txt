@@ -63,3 +63,6 @@ D:\Repo\freelos\cotizador\Model\obj\Release\Model.dll
 D:\Repo\freelos\cotizador\Model\obj\Release\Model.pdb
 =======
 >>>>>>> Andre/Vendedor
+D:\Repo\freelos\cotizador\Model\bin\Release\Newtonsoft.Json.dll
+D:\Repo\freelos\cotizador\Model\bin\Release\Newtonsoft.Json.xml
+D:\Repo\freelos\cotizador\Model\obj\Release\Model.csproj.AssemblyReference.cache

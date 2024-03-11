@@ -49,6 +49,33 @@ namespace BusinessLayer
             }
         }
 
+        public DocumentoVenta IniciarFacturaPedidoRelacionado(Guid idGuiaOriginal, Guid idUsuario, out Guid idGuiaFic, out Guid idVentaFic,
+            out Guid idCPE)
+        {
+            DocumentoVenta documentoVenta = new DocumentoVenta();   
+            using (var dal = new DocumentoVentaDAL())
+            {
+                DocumentoVenta.TiposErrorValidacion TipoError = DocumentoVenta.TiposErrorValidacion.NoExisteError;
+                string descripcionError = "";
+
+                dal.IniciarFacturaPedidoRelacionado(idGuiaOriginal, idUsuario, out idGuiaFic, out idVentaFic, out idCPE, 
+                        out TipoError, out descripcionError);
+
+                if (TipoError == DocumentoVenta.TiposErrorValidacion.NoExisteError)
+                {
+                    //Se recupera el documento de venta creado para poder visualizarlo
+                    documentoVenta.idDocumentoVenta = idCPE;
+                    documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
+                    documentoVenta.tipoPago = (DocumentoVenta.TipoPago)Int32.Parse(documentoVenta.cPE_CABECERA_BE.TIP_PAG);
+                }
+
+                documentoVenta.tiposErrorValidacion = TipoError;
+                documentoVenta.descripcionError = descripcionError;
+
+                return documentoVenta;
+            }
+        }
+
 
         public DocumentoVenta InsertarNotaCredito(DocumentoVenta documentoVenta)
         {

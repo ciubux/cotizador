@@ -44,3 +44,6 @@ D:\Repo\freelos\cotizador\Framework.DAL\obj\Release\Framework.DAL.dll
 D:\Repo\freelos\cotizador\Framework.DAL\obj\Release\Framework.DAL.pdb
 =======
 >>>>>>> Andre/Vendedor
+D:\Repo\freelos\cotizador\Framework.DAL\bin\Release\Newtonsoft.Json.dll
+D:\Repo\freelos\cotizador\Framework.DAL\bin\Release\Newtonsoft.Json.xml
+D:\Repo\freelos\cotizador\Framework.DAL\obj\Release\Framework.DAL.csproj.AssemblyReference.cache

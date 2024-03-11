@@ -1210,5 +1210,30 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "respuesta", resultText);
             ExecuteNonQuery(objCommand);
         }
+
+        public void IniciarFacturaPedidoRelacionado(Guid idGuiaOriginal, Guid idUsuario, out Guid idGuiaFic, out Guid idVentaFic, out Guid idCPE, 
+                out DocumentoVenta.TiposErrorValidacion TipoError, out string descripcionError)
+        {
+            var objCommand = GetSqlCommand("pi_iniciaFacturacionPedidoRelacionadoDesdeGuiaAtencion");
+            //var objCommand = GetSqlCommand("pi_documentoVenta_vInafecto");
+
+            Guid idVenta;
+
+            InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", idGuiaOriginal);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idGuiaFic");
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idVentaFic");
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idDocumentoVenta");
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idVentaSalida");
+            OutputParameterAdd.Int(objCommand, "tipoError");
+            OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
+            ExecuteNonQuery(objCommand);
+            idGuiaFic = (Guid)objCommand.Parameters["@idGuiaFic"].Value;
+            idVentaFic = (Guid)objCommand.Parameters["@idVentaFic"].Value;
+            idCPE = (Guid)objCommand.Parameters["@idDocumentoVenta"].Value;
+            idVenta = (Guid)objCommand.Parameters["@idVentaSalida"].Value;
+            TipoError = (DocumentoVenta.TiposErrorValidacion) (int)objCommand.Parameters["@tipoError"].Value;
+            descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
+        }
     }
 }

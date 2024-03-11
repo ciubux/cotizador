@@ -34,3 +34,4 @@ D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.dl
 D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.pdb
 =======
 >>>>>>> Andre/Vendedor
+D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Release\Framework.WebCommon.csproj.AssemblyReference.cache

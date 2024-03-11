@@ -53,6 +53,7 @@ namespace Cotizador.Models.DTOshow
         public List<Model.DocumentoDetalle> documentoDetalle { get; set; }
 
         public bool entregaTerceros { get; set; }
+        public bool habilitaFacturaPedidoRelacionado { get; set; }
         public string nombreClienteTercero { get; set; }
         public bool esGuiaDiferida { get; set; }
 

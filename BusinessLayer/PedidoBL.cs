@@ -1159,7 +1159,7 @@ namespace BusinessLayer
                     det.precioNeto = det.producto.costoLista * empresa.factorCosto;
                 }
             }
-            
+
             this.calcularMontosTotales(pMP);
 
             if (pMP.entregaATerceros)
@@ -1305,11 +1305,11 @@ namespace BusinessLayer
             }
         }
 
-        public bool SetPedidoMP(Guid idPedido, Guid idPedidoMP, String agregarObservacion)
+        public bool SetPedidoMP(Guid idPedido, Guid idPedidoMP, String agregarObservacion, bool duplicarArchivos = false)
         {
             using (var dal = new PedidoDAL())
             {
-                return dal.SetPedidoMP(idPedido, idPedidoMP, agregarObservacion);
+                return dal.SetPedidoMP(idPedido, idPedidoMP, agregarObservacion, duplicarArchivos);
             }
         }
 

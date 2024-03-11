@@ -89,3 +89,4 @@ D:\Repo\freelos\cotizador\DataLayer\obj\Release\DataLayer.dll
 D:\Repo\freelos\cotizador\DataLayer\obj\Release\DataLayer.pdb
 =======
 >>>>>>> Andre/Vendedor
+D:\Repo\freelos\cotizador\DataLayer\obj\Release\DataLayer.csproj.AssemblyReference.cache

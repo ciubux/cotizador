@@ -875,7 +875,8 @@ namespace DataLayer
                 guiaRemision.estaFacturado = Converter.GetBool(row, "facturado");
                 guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado) Char.Parse(Converter.GetString(row, "motivo_traslado"));
                 guiaRemision.direccionEntrega = Converter.GetString(row, "direccion_entrega");
-                
+                guiaRemision.idMovimientoRelacionado = Converter.GetGuid(row, "id_movimiento_relacionado");
+                guiaRemision.facturaPedidoRelacionado = Converter.GetInt(row, "factura_pedido_relacionado") == 1 ? true : false;
 
                 //PEDIDO
                 guiaRemision.pedido = new Pedido();
@@ -886,6 +887,7 @@ namespace DataLayer
                 guiaRemision.pedido.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
                 guiaRemision.pedido.facturaUnica = Converter.GetInt(row, "factura_unica") == 1 ? true : false;
                 guiaRemision.pedido.numeroGrupoPedido = Converter.GetLong(row, "numero_grupo");
+
                 //UBIGEO
                 guiaRemision.pedido.ubigeoEntrega = new Ubigeo();
                 guiaRemision.pedido.ubigeoEntrega.Id = Converter.GetString(row, "id_ubigeo_entrega");

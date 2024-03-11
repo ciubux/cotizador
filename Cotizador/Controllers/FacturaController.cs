@@ -385,6 +385,69 @@ namespace Cotizador.Controllers
             }
         }
 
+        public String FacturarAPedidoRelacionado()
+        {
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            MovimientoAlmacen movimientoAlmacen = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+
+            try
+            {
+                // CREAR GUIA, VENTA Y CPE
+
+                Guid idGuiaFic = Guid.Empty;
+                Guid idVentaFic = Guid.Empty;
+                Guid idCPE = Guid.Empty;
+
+                DocumentoVenta documentoVenta = new DocumentoVenta();
+
+                DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
+                documentoVenta = documentoVentaBL.IniciarFacturaPedidoRelacionado(movimientoAlmacen.idMovimientoAlmacen, usuario.idUsuario, 
+                                           out idGuiaFic, out idVentaFic, out idCPE);
+                // ENVIAR CPE
+
+                VentaBL ventaBL = new VentaBL();
+
+                Venta venta = new Venta();
+                venta.guiaRemision = new GuiaRemision();
+                venta.guiaRemision.idMovimientoAlmacen = idGuiaFic;
+                venta = ventaBL.GetVenta(venta, usuario);
+
+                documentoVenta.venta = venta;
+                documentoVenta.idDocumentoVenta = idCPE;
+                documentoVenta.cliente = venta.pedido.cliente;
+                documentoVenta.usuario = usuario;
+
+                if (documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_RUC)
+                    documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
+                else if (documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_DNI ||
+                     documentoVenta.venta.pedido.cliente.tipoDocumento == Constantes.TIPO_DOCUMENTO_CLIENTE_CARNET_EXTRANJERIA)
+                    documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.BoletaVenta;
+                else
+                    throw new Exception("No se ha identificado el clasePedido de documento electrónico a crear.");
+
+
+                CPE_RESPUESTA_BE cPE_RESPUESTA_BE = documentoVentaBL.procesarCPE(documentoVenta);
+
+                var otmp = new
+                {
+                    CPE_RESPUESTA_BE = cPE_RESPUESTA_BE,
+                    serieNumero = documentoVenta.serieNumero,
+                    idDocumentoVenta = documentoVenta.idDocumentoVenta
+                };
+
+                return JsonConvert.SerializeObject(otmp);
+            }
+            catch (Exception ex)
+            {
+                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                LogBL logBL = new LogBL();
+                logBL.insertLog(log);
+                return ex.ToString();
+            }
+        }
+
+
 
         public String ConfirmarCreacionFacturaConsolidada()
         {

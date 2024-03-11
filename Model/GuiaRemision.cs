@@ -37,6 +37,9 @@ namespace Model
 
         public Ubigeo ubigeoEntrega { get; set; }
 
+        public Boolean facturaPedidoRelacionado { get; set; }
+
+
         [Display(Name = "Atención Parcial:")]
         public Boolean atencionParcial { get; set; }
 
