@@ -208,7 +208,8 @@ namespace Model.NextSoft
                 //vendedor = "46124367",
                 vendedor = codigoVendedor,
                 ordencompra = obj.pedido != null && obj.pedido.numeroReferenciaCliente != null && 
-                            !obj.pedido.numeroReferenciaCliente.Trim().Equals("") && !obj.pedido.numeroReferenciaCliente.Substring(0,2).Equals("IF") ? 
+                            !obj.pedido.numeroReferenciaCliente.Trim().Equals("") && 
+                            !(obj.pedido.numeroReferenciaCliente.Length > 2 && obj.pedido.numeroReferenciaCliente.Substring(0,2).Equals("IF")) ? 
                                 obj.pedido.numeroReferenciaCliente : "",
                 motivotraslado = motivoTraslado,
                 modalidadtraslado = "",

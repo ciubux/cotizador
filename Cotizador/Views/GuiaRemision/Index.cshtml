@@ -753,9 +753,13 @@
                         <button type="button" id="btnDescargarPDFGuia" class="btn btn-primary bouton-image pdfBoton">PDF</button>
 
                     }
-                    @if (guiaRemision.usuario.creaDocumentosVenta)
+                    @if (guiaRemision.usuario.facturaPedidoRelacionado)
                     {
                         <button type="button" id="btnFacturarPedidoRelacionado" class="btn btn-warning">Facturar Pedido Relacionado</button>
+                    }
+                    <button type="button" id="btnDescargarFacturaPedidoRelacionado" class="btn btn-warning bouton-image pdfBoton">PDF Factura Pedido Relacionado</button>
+                    @if (guiaRemision.usuario.creaDocumentosVenta)
+                    {
                         <button type="button" id="btnFacturarGuiaRemision" class="btn btn-success">Facturar</button>
                     }
                     @if (guiaRemision.usuario.creaGuias)

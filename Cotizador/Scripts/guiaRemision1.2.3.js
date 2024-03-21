@@ -288,46 +288,62 @@ jQuery(function ($) {
             }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
     }
 
-    $("#btnDescargarPDFGuia").click(function () {
-        descargarPDF();
-    });
+    $("#btnDescargarFacturaPedidoRelacionado").click(function () {
+        var idMovimientoAlmacen = $(this).attr("idMovimientoAlmacen");
+        
+        $('body').loadingModal('show');
+        $('body').loadingModal({
+            text: 'Cargando...'
+        });
 
-    function descargarPDF() {
         $.ajax({
-            url: "/GuiaRemision/DescargarArchivoPDF",
-            data: {
-            },
+            url: "/GuiaRemision/GetIdFacturaRelacionada",
             type: 'POST',
             dataType: 'JSON',
-            error: function (detalle) {
+            data: {
+                idMovimientoAlmacen: idMovimientoAlmacen
+            },
+            error: function () {
+                $('body').loadingModal('hide');
+
                 $.alert({
+                    title: "Error",
                     type: 'red',
-                    title: "ERROR",
-                    content: 'Ocurrió un problema al descargar la guía de remisión en formato PDF.',
+                    content: "Ocurrió un error. Si persiste, contacte con TI.",
                     buttons: {
                         OK: function () { }
                     }
                 });
             },
-            success: function (result) {
-
-                if (result.success == 1) {
-                    var filePDF = base64ToArrayBuffer(result.result.ConsultarComprobanteResult.Archivo);
-                    saveByteArray(result.dataSend.Serie + "-" + result.dataSend.Numero + ".pdf", filePDF);
+            success: function (res) {
+                if (res.success == 1) { 
+                    descargarPDFCPE(res.idDocumentoVentaRelacionado, "");
+                    
+                    $.alert({
+                        title: "Operación Existosa",
+                        type: 'green',
+                        content: "Se descargó el PDF.",
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
                 } else {
                     $.alert({
+                        title: "Se encontró un problema",
                         type: 'red',
-                        title: "GUIA NO REGISTRADA EN SUNAT",
-                        content: 'No se puede descargar el archivo ya que la guía aún no ha sido registrada y validada en SUNAT.',
+                        content: res.msgError,
                         buttons: {
                             OK: function () { }
                         }
                     });
                 }
 
+                $('body').loadingModal('hide');
             }
-        });
-    }
+        }); 
+
+        
+    });
 
     /**
     *################################## INICIO CONTROLES CIUDAD
@@ -1024,7 +1040,9 @@ jQuery(function ($) {
                 $("#btnGenerarGuiaAtencion").hide();
                 $("#btnFacturarGuiaRemision").hide();
                 $("#btnFacturarPedidoRelacionado").hide();
+                $("#btnDescargarFacturaPedidoRelacionado").hide();
                 
+
                 /*Si la guía de remisión se encuentra ANULADA no se puede extornar, ni imprimir, ni facturar*/
                 if (guiaRemision.estaAnulado == 1) {
                     $("#ver_guiaRemision_estadoDescripcion").attr("style", "color:red")
@@ -1158,8 +1176,12 @@ jQuery(function ($) {
                 if (guiaRemision.habilitaFacturaPedidoRelacionado) {
                     $("#btnFacturarPedidoRelacionado").show();
                 }
-                
 
+                if (guiaRemision.habilitaDescargarFacturaPedidoRelacionado) {
+                    $("#btnDescargarFacturaPedidoRelacionado").show();
+                    $("#btnDescargarFacturaPedidoRelacionado").attr("idMovimientoAlmacen", idMovimientoAlmacen);
+                }
+                
                 if (!usuario.creaFacturaCompleja && guiaRemision.pedido_cliente_configuraciones.facturacionCompleja) {
                     $("#btnFacturarGuiaRemision").hide();
                 }
@@ -3877,5 +3899,5 @@ jQuery(function ($) {
     });
 
 
-
+    
 });

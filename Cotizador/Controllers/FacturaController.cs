@@ -734,14 +734,16 @@ namespace Cotizador.Controllers
         public String descargarArchivoDocumentoVenta()
         {
             DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
-            List<DocumentoVenta> documentoVentaList = (List<DocumentoVenta>)this.Session[Constantes.VAR_SESSION_FACTURA_LISTA];
+            //List<DocumentoVenta> documentoVentaList = (List<DocumentoVenta>)this.Session[Constantes.VAR_SESSION_FACTURA_LISTA];
             Guid idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
 
             String ruta = String.Empty;
 
 
-            DocumentoVenta documentoVenta = documentoVentaList.Where(d => d.idDocumentoVenta == idDocumentoVenta).FirstOrDefault();
+            //DocumentoVenta documentoVenta = documentoVentaList.Where(d => d.idDocumentoVenta == idDocumentoVenta).FirstOrDefault();
             //documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.Factura;
+            DocumentoVenta documentoVenta = new DocumentoVenta();
+            documentoVenta.idDocumentoVenta = idDocumentoVenta;
             documentoVenta = documentoVentaBL.GetDocumentoVenta(documentoVenta);
             documentoVenta = documentoVentaBL.descargarArchivoDocumentoVenta(documentoVenta);
 

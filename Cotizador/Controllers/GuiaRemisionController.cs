@@ -1564,18 +1564,43 @@ namespace Cotizador.Controllers
 
         public String Anular()
         {
-
-
-            //   if (guiaRemision.fechaEmision.Month == DateTime.Now.Month)
-            //   {
             GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+
+            if (guiaRemision.fechaEmision.Month == DateTime.Now.Month)
+            {
+            
             guiaRemision.comentarioAnulado = Request["comentarioAnulado"];
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
             movimientoAlmacenBL.AnularMovimientoAlmacen(guiaRemision);
-            //  }
+            }
 
 
             return JsonConvert.SerializeObject(guiaRemision);
+        }
+
+        public String GetIdFacturaRelacionada()
+        {
+            Guid idMov = Guid.Parse(Request["idMovimientoAlmacen"].ToString()); 
+            MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
+            Guid idDocVentaRel = movimientoAlmacenBL.getIdDocumentoVentaRelacionado(idMov);
+
+            int success = 0;
+            string msgError = "Error";
+
+            if (!idDocVentaRel.Equals(Guid.Empty))
+            {
+                success = 1;
+            } else
+            {
+                msgError = "No se encontró factura aceptada de pedido relacionado.";
+            }
+
+            var result = new { success = success,
+                msgError = msgError,
+                idDocumentoVentaRelacionado = idDocVentaRel
+            };
+
+            return JsonConvert.SerializeObject(result);
         }
 
         public void CambioClienteFactura()

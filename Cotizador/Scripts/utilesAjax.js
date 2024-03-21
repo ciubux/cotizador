@@ -251,3 +251,21 @@ $(document).on('click', ".btnLogAnularDatoHistorico", function () {
 });
 
 
+function descargarPDFCPE(idDocumentoVenta, serieNumero) {
+    $.ajax({
+        url: "/Factura/descargarArchivoDocumentoVenta",
+        data: {
+            idDocumentoVenta: idDocumentoVenta
+        },
+        type: 'POST',
+        dataType: 'JSON',
+        error: function (detalle) {
+            alert("Ocurrió un problema al descargar la factura " + serieNumero + " en formato PDF.");
+        },
+        success: function (documentos) {
+            var filePDF = base64ToArrayBuffer(documentos.pdf);
+            saveByteArray(documentos.nombreArchivo + ".pdf", filePDF);
+        }
+    });
+
+}

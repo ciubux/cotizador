@@ -1405,6 +1405,22 @@ namespace DataLayer
             return guiaRemisionList;
         }
 
+        public Guid getIdDocumentoVentaRelacionado(Guid idGuiaRemision)
+        {
+
+            var objCommand = GetSqlCommand("ps_idDocumentoVentaMovRelacionado");
+            InputParameterAdd.Guid(objCommand, "idMov", idGuiaRemision);
+            DataTable dataTable = Execute(objCommand);
+            Guid idDocumentoVenta = Guid.Empty;
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                idDocumentoVenta = Converter.GetGuid(row, "id_documento_venta");
+            }
+
+
+            return idDocumentoVenta;
+        }
 
 
 

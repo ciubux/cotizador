@@ -598,11 +598,11 @@
 
                                 <div class="col-sm-6 col-lg-4">
                                     @*<div class="form-group">
-                                        @Html.LabelFor(c => cliente.contacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
-                                        <div class="col-xs-8 col-sm-8 col-lg-8">
-                                            <p class="form-control-static" id="verContacto"></p>
-                                        </div>
-                                    </div>*@
+                                            @Html.LabelFor(c => cliente.contacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                                            <div class="col-xs-8 col-sm-8 col-lg-8">
+                                                <p class="form-control-static" id="verContacto"></p>
+                                            </div>
+                                        </div>*@
                                 </div>
                             </div>
 
@@ -620,11 +620,11 @@
 
                                 <div class="col-sm-6 col-lg-4">
                                     @*<div class="form-group">
-                                        @Html.LabelFor(c => cliente.telefonoContacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
-                                        <div class="col-xs-8 col-sm-8 col-lg-8">
-                                            <p class="form-control-static" id="verTelefonoContacto"></p>
-                                        </div>
-                                    </div>*@
+                                            @Html.LabelFor(c => cliente.telefonoContacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                                            <div class="col-xs-8 col-sm-8 col-lg-8">
+                                                <p class="form-control-static" id="verTelefonoContacto"></p>
+                                            </div>
+                                        </div>*@
                                 </div>
 
 
@@ -641,11 +641,11 @@
                                 </div>
                                 <div class="col-sm-6 col-lg-4">
                                     @*<div class="form-group">
-                                        @Html.LabelFor(c => cliente.emailContacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
-                                        <div class="col-xs-8 col-sm-8 col-lg-8">
-                                            <p class="form-control-static" id="verEmailContacto"></p>
-                                        </div>
-                                    </div>*@
+                                            @Html.LabelFor(c => cliente.emailContacto1, htmlAttributes: new { @class = "control-label col-xs-4 col-sm-4 col-lg-4" })
+                                            <div class="col-xs-8 col-sm-8 col-lg-8">
+                                                <p class="form-control-static" id="verEmailContacto"></p>
+                                            </div>
+                                        </div>*@
 
                                 </div>
                             </div>
@@ -1042,7 +1042,7 @@
                                     <div class="form-group" style="padding-right: 15px;">
                                         <label class="control-label">Última Actualización:</label>
                                         <span class="form-control-static" id="verFechaActualizacionContactos"></span>
-                                    </div>                                    
+                                    </div>
                                 </div>
                             </div>
                             <table id="tableListaContactos" class="table" data-editing="false"
@@ -1124,12 +1124,36 @@
             </div>
 
             <div class="modal-footer">
+                <div class="pull-left">
+                    <button type="button" id="btnVerExportarOtraEmpresa" class="btn btn-warning">Exportar a otra empresa</button>
+                </div>
                 <div class="pull-right">
                     <button type="button" id="btnCancelarVerCliente" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     <button type="button" id="btnEditarCliente" class="btn btn-primary ">Editar</button>
                 </div>
             </div>
 
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalExportarClienteEmpresa" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalExportarClienteEmpresa"><b>Exportar cliente a otra empresa</b></h4>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <div class="row" id="meceListaEmpresas">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button id="btnExportarOtraEmpresaCancel" type="button" class="btn btn-secondary">Cancelar</button>
+                <button id="btnExportarOtraEmpresa" type="button" class="btn btn-primary">Exportar</button>
+            </div>
         </div>
     </div>
 </div>

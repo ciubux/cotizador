@@ -202,6 +202,8 @@ namespace Model
         public bool cambiaClienteFactura { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CAMBIA_CLIENTE_FACTURA)).FirstOrDefault() != null; } }
         public bool creaFacturaCompleja { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_FACTURA_COMPLEJA)).FirstOrDefault() != null; } }
 
+        public bool facturaPedidoRelacionado { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.FACTURA_PEDIDO_RELACIONADO)).FirstOrDefault() != null; } }
+
         /*Grupo Clientes*/
         public bool modificaGrupoClientes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_GRUPO_CLIENTES)).FirstOrDefault() != null; } }
         public bool visualizaGrupoClientes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_GRUPO_CLIENTES)).FirstOrDefault() != null; } }

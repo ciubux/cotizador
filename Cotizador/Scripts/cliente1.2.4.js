@@ -3531,7 +3531,10 @@ jQuery(function ($) {
                         $("#btnEditarCliente").hide();
                     }
 
+                    $("#btnVerExportarOtraEmpresa").attr('idCliente', idCliente);
+
                     $("#modalVerCliente").modal('show');
+
                 } 
             }
         });
@@ -4368,8 +4371,125 @@ jQuery(function ($) {
     });
 
 
+    $("#btnVerExportarOtraEmpresa").click(function () {
+        $('body').loadingModal({
+            text: 'Cargando...'
+        });
+        $('body').loadingModal('show');
+
+        var idCliente = $(this).attr("idCliente");
+
+        $.ajax({
+            url: "/Cliente/getEmpresasExisteCliente",
+            data: {
+                idCliente: idCliente
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function () {
+                $('body').loadingModal('hide');
+
+                $.alert({
+                    title: "Error",
+                    type: 'red',
+                    content: "Ocurrió un error. Si persiste, contacte con TI.",
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            },
+            success: function (resultado) {
+
+                var htmlSelect = "";
+                var radioItemBase = '<div class="col-sm-12 col-lg-12"><div class="form-group"><label class="radio-label">' + 
+                            '<input class="radio-input" type="radio" name="cemeRadioListaEmpresa" value="__IDEMPRESA__" nombreEmpresa="__NOMBREEMPRESA__"> __NOMBREEMPRESA__' +
+                            '</label></div></div>';
+                var existeItemBase = '<div class="col-sm-12 col-lg-12"><div class="form-group"><label class="radio-label">' +
+                    '__NOMBREEMPRESA__ - Ya existe con el código: __CODIGOCLIENTE__' +
+                    '</label></div></div>';
+                var lista = resultado.empresas;
 
 
+                for (var i = 0; i < lista.length; i++) {
+                    if (lista[i][3] == null || lista[i][3] == "") {
+                        htmlSelect = htmlSelect + radioItemBase.replaceAll("__NOMBREEMPRESA__", lista[i][2]).replaceAll("__IDEMPRESA__", lista[i][0]);
+                    } else {
+                        htmlSelect = htmlSelect + existeItemBase.replaceAll("__NOMBREEMPRESA__", lista[i][2]).replaceAll("__CODIGOCLIENTE__", lista[i][3]);
+                    }
+                }
+                
+                $("#meceListaEmpresas").html(htmlSelect);
+                $("#btnExportarOtraEmpresa").attr('idCliente', idCliente);
+
+                $('body').loadingModal('hide');
+
+                $("#modalExportarClienteEmpresa").modal('show');
+
+            }
+        });
+    });
+
+    
+    $("#btnExportarOtraEmpresaCancel").click(function () {
+        $("#modalExportarClienteEmpresa").modal('hide');
+    });
+    $("#btnExportarOtraEmpresa").click(function () {
+        
+        var idCliente = $(this).attr("idCliente");
+        var idEmpresaDestino = $('input[name="cemeRadioListaEmpresa"]:checked').val();
+        var nombreEmpresadestino = $('input[name="cemeRadioListaEmpresa"]:checked').attr("nombreEmpresa");
+
+        if (idEmpresaDestino > 1) {
+            $('body').loadingModal('show');
+            $('body').loadingModal({
+                text: 'Cargando...'
+            });
+
+            $.ajax({
+                url: "/Cliente/ExportarClienteEmpresa",
+                data: {
+                    idCliente: idCliente,
+                    idEmpresaDestino: idEmpresaDestino
+                },
+                type: 'POST',
+                dataType: 'JSON',
+                error: function () {
+                    $('body').loadingModal('hide');
+
+                    $.alert({
+                        title: "Error",
+                        type: 'red',
+                        content: "Ocurrió un error. Si persiste, contacte con TI.",
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                },
+                success: function (resultado) {
+                    if (resultado.success == 1) {
+                        $('body').loadingModal('hide');
+                        $.alert({
+                            title: "Registro Exitoso",
+                            type: 'green',
+                            content: "Se exportó el cliente a la empresa " + nombreEmpresadestino + " con el código: " + resultado.codigo + ".",
+                            buttons: {
+                                OK: function () { $("#modalExportarClienteEmpresa").modal('hide'); }
+                            }
+                        });
+                    }
+                }
+            });
+        } else {
+            $.alert({
+                title: "Faltan datos",
+                type: 'orange',
+                content: "Seleccione una empresa destino.",
+                buttons: {
+                    OK: function () { }
+                }
+            });
+        }
+    });
 });
 
 
@@ -4423,7 +4543,7 @@ $(document).ready(function () {
             form.append('file', file);
 
             $('body').loadingModal({
-                text: '...'
+                text: 'Cargando...'
             });
             $.ajax({
                 url: url,

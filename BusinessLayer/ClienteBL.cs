@@ -12,6 +12,8 @@ using System.Text;
 using ServiceLayer;
 using Model.NextSoft;
 using Newtonsoft.Json;
+using Framework.DAL;
+using System.Data;
 
 namespace BusinessLayer
 {
@@ -285,6 +287,22 @@ namespace BusinessLayer
                 Model.ClienteSunat clie = clienteDAL.getClienteSunat(idClienteSunat);
 
                 return clie;
+            }
+        }
+
+        public String exportarClienteEmpresa(Guid idCliente, int idEmpresaDestino, Guid idUsuario)
+        {
+            using (ClienteDAL dal = new ClienteDAL())
+            {
+                return dal.exportarClienteEmpresa(idCliente, idEmpresaDestino, idUsuario);
+            }
+        }
+
+        public List<List<String>> getEmpresasExisteCliente(Guid idCliente)
+        {
+            using (ClienteDAL dal = new ClienteDAL())
+            {
+                return dal.getEmpresasExisteCliente(idCliente);
             }
         }
 

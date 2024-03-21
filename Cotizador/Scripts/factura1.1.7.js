@@ -356,30 +356,6 @@ jQuery(function ($) {
         });
     });
 
-
-
-    function base64ToArrayBuffer(base64) {
-        var binaryString = window.atob(base64);
-        var binaryLen = binaryString.length;
-        var bytes = new Uint8Array(binaryLen);
-        for (var i = 0; i < binaryLen; i++) {
-            var ascii = binaryString.charCodeAt(i);
-            bytes[i] = ascii;
-        }
-        return bytes;
-    }
-
-    function saveByteArray(fileName, byte) {
-        var blob = new Blob([byte]);
-        var link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        // var fileName = reportName + ".pdf";
-        link.download = fileName;
-        link.click();
-    };
-
-
-
     $(document).on('click', "button.btnDescargarPDF", function () {
         var arrrayClass = event.target.getAttribute("class").split(" ");
         var idDocumentoVenta = arrrayClass[0];
@@ -408,8 +384,6 @@ jQuery(function ($) {
                 alert("Ocurrió un problema al descargar la factura " + serieNumero + " en formato PDF.");
             },
             success: function (documentos) {
-
-
                 var filePDF = base64ToArrayBuffer(documentos.pdf);
                 saveByteArray(documentos.nombreArchivo + ".pdf", filePDF);
 
@@ -425,9 +399,6 @@ jQuery(function ($) {
                 // window.location = '/Cotizacion/CancelarCreacionCotizacion';
             }
         });
-
-
-
 
     }
 

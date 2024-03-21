@@ -307,6 +307,10 @@ textarea {
     #modalVerPrecioEspecial .modal-dialog {
         width: 800px;
     }
+
+    #modalExportarClienteEmpresa > .modal-dialog {
+        width: 500px;
+    }
 }
 
 

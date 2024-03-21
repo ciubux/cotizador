@@ -282,6 +282,31 @@ namespace DataLayer
             return idCliente;
         }
 
+        public List<List<String>> getEmpresasExisteCliente(Guid idCliente)
+        {
+            var objCommand = GetSqlCommand("ps_empresas_existe_cliente");
+            InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
+
+            DataTable dataTable = Execute(objCommand);
+
+            List <List<String>> empresas = new List<List<String>>();
+
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                List<String> fila = new List<String>();
+
+                fila.Add(Converter.GetInt(row, "id_empresa").ToString());
+                fila.Add(Converter.GetString(row, "codigo"));
+                fila.Add(Converter.GetString(row, "nombre"));
+                fila.Add(Converter.GetString(row, "codigo_cliente"));
+
+                empresas.Add(fila);
+            }
+
+            return empresas;
+        }
+
         public Cliente getCliente(Guid idCliente)
         {
             var objCommand = GetSqlCommand("ps_cliente");
@@ -859,6 +884,24 @@ namespace DataLayer
             return cliente;
 
         }*/
+
+
+
+        public String exportarClienteEmpresa(Guid idCliente, int idEmpresaDestino, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pi_exportar_cliente_empresa");
+
+            InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Int(objCommand, "idEmpresaDestino", idEmpresaDestino);
+  
+            OutputParameterAdd.Varchar(objCommand, "codigo", 6);
+            ExecuteNonQuery(objCommand);
+
+            String codigo = (String) objCommand.Parameters["@codigo"].Value;
+
+            return codigo;
+        }
 
         public Cliente insertClienteLite(Cliente cliente)
         {

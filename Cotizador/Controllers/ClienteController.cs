@@ -297,7 +297,7 @@ namespace Cotizador.Controllers
             return RedirectToAction("Index", "Cliente");
         }
 
-        public ActionResult Editar(Guid? idCliente = null )
+        public ActionResult Editar(Guid? idCliente = null)
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoCliente;
             Usuario usuario = null;
@@ -306,7 +306,7 @@ namespace Cotizador.Controllers
                 return RedirectToAction("Login", "Account");
             }
             usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            
+
 
             if (this.Session[Constantes.VAR_SESSION_CLIENTE] == null || idCliente == Guid.Empty)
             {
@@ -328,7 +328,7 @@ namespace Cotizador.Controllers
                 this.Session[Constantes.VAR_SESSION_CLIENTE] = cliente;
             }
 
-            if (cliente.idCliente != null && cliente.idCliente != Guid.Empty )
+            if (cliente.idCliente != null && cliente.idCliente != Guid.Empty)
             {
                 if (!usuario.modificaMaestroClientes && !cliente.isOwner)
                 {
@@ -368,11 +368,11 @@ namespace Cotizador.Controllers
             ClienteBL bl = new ClienteBL();
 
             bool soloCanastaHabitual = false;
-            switch(tipoDescarga)
+            switch (tipoDescarga)
             {
                 case 1: obj.listaPrecios = bl.getPreciosVigentesCliente(obj.idCliente); break;
                 case 2: soloCanastaHabitual = true; break;
-                case 3: obj.listaPrecios = bl.getPreciosHistoricoCliente(obj.idCliente);break;
+                case 3: obj.listaPrecios = bl.getPreciosHistoricoCliente(obj.idCliente); break;
                 case 4: obj.listaPrecios = bl.getPreciosVigentesCliente(obj.idCliente, fechaPrecios); break;
             }
 
@@ -413,7 +413,7 @@ namespace Cotizador.Controllers
 
 
             ClienteContactoBL ccBl = new ClienteContactoBL();
-            
+
             if (idClienteContacto.IsEmpty())
             {
                 obj.idCliente = cliente.idCliente;
@@ -451,7 +451,7 @@ namespace Cotizador.Controllers
 
             ClienteContactoBL ccBl = new ClienteContactoBL();
 
-            
+
             Guid idObj = Guid.Parse(idClienteContacto);
 
             List<ClienteContacto> listaContactos = (List<ClienteContacto>)this.Session[Constantes.VAR_SESSION_CLIENTE_VER_CONTACTOS];
@@ -519,7 +519,7 @@ namespace Cotizador.Controllers
             //return JsonConvert.SerializeObject(clienteList);
             int success = 1;
             string jsonLista = JsonConvert.SerializeObject(lista);
-            
+
             return "{\"success\": " + success.ToString() + ",\"message\": \"" + "" + "\", \"lista\": " + jsonLista + "}";
         }
 
@@ -562,11 +562,11 @@ namespace Cotizador.Controllers
                 crh.fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
                 String campo = this.Request.Params["tipo"];
 
-                
+
                 crh.usuario = usuario;
                 crh.observacion = observacion;
                 crh.idCliente = cliente.idCliente;
-                
+
                 crh.campo = "supervisorComercial";
                 crh.fechaInicioVigencia = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
                 crh.valor = this.Request.Params["idVendedor"].ToString();
@@ -590,7 +590,7 @@ namespace Cotizador.Controllers
         }
         public String GetCliente()
         {
-            Cliente cliente = this.ClienteSession; 
+            Cliente cliente = this.ClienteSession;
             Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
             ClienteBL clienteBl = new ClienteBL();
             Ciudad ciudad = cliente.ciudad;
@@ -648,8 +648,8 @@ namespace Cotizador.Controllers
                             ", \"contactoList\":" + JsonConvert.SerializeObject(null) +
                             ", \"domicilioLegalList\":" + JsonConvert.SerializeObject(null) + "}";
             }
-            
-            
+
+
 
             return resultado;
         }
@@ -667,6 +667,35 @@ namespace Cotizador.Controllers
 
 
             return resultado;
+        }
+
+        public String GetEmpresasExisteCliente()
+        {
+            Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
+
+            ClienteBL bl = new ClienteBL();
+            List<List<String>> lista = bl.getEmpresasExisteCliente(idCliente);
+
+            String resultado = "{\"empresas\":" + JsonConvert.SerializeObject(lista) + "}";
+
+            return resultado;
+        }
+
+        public String ExportarClienteEmpresa ()
+        {
+            Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
+            int idEmpresaDestino = int.Parse(Request["idEmpresaDestino"].ToString());
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            int success = 0;
+
+            ClienteBL bl = new ClienteBL();
+            String codigo = bl.exportarClienteEmpresa(idCliente, idEmpresaDestino, usuario.idUsuario);
+            success = 1;
+
+            var result = new { codigo = codigo, success = success };
+            
+            return JsonConvert.SerializeObject(result);
         }
 
         public void ChangeFechaVigenciaPrecios()
