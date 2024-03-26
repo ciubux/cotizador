@@ -432,6 +432,11 @@ namespace Cotizador.Controllers
             }
         }
 
+        public ActionResult ErrorSesion()
+        {
+            return View();
+        }
+
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]

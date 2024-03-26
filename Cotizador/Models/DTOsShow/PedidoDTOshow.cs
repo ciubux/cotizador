@@ -89,5 +89,6 @@ namespace Cotizador.Models.DTOshow
 
         public Boolean facturaUnica { get; set; }
 
+        public Boolean emiteFacturaAnticipada { get; set; }
     }
 }

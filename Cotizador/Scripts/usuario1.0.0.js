@@ -286,7 +286,29 @@ jQuery(function ($) {
         });
     }
 
-    
+    $("#idEmpresa").change(function () {
+        changeInputInt("idEmpresa", $("#idEmpresa").val());
+    });
+
+    $("#idArea").change(function () {
+        var idArea = $("#idArea").val();
+
+        $.ajax({
+            url: "/Usuario/ChangeIdArea",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idArea: idArea
+            },
+            error: function (detalle) {
+
+            },
+            success: function (area) {
+            }
+        });
+    });
+
+
     $("#usuario_nombre").change(function () {
         changeInputString("nombre", $("#usuario_nombre").val());
     });
@@ -635,6 +657,32 @@ jQuery(function ($) {
             });
             return false;
         }
+
+        if ($("#idEmpresa").val() === "" || $("#idEmpresa").val() == 0) {
+            $.alert({
+                title: "Empresa Inválida",
+                type: 'orange',
+                content: 'Debe seleccionar una empresa para el usuario.',
+                buttons: {
+                    OK: function () { $('#idEmpresa').focus(); }
+                }
+            });
+            return false;
+        }
+
+
+        if ($("#idArea").val() === "" || $("#idArea").val() == 0) {
+            $.alert({
+                title: "Área Inválida",
+                type: 'orange',
+                content: 'Debe seleccionar un área para el usuario.',
+                buttons: {
+                    OK: function () { $('#idArea').focus(); }
+                }
+            });
+            return false;
+        }
+
         
         if (($("#usuario_password").val().length < 5 && $("#idUsuarioMantenimiento").val() == '00000000-0000-0000-0000-000000000000') || ($("#usuario_password").val().length > 0 && $("#usuario_password").val().length < 5  && $("#idUsuarioMantenimiento").val() != '00000000-0000-0000-0000-000000000000') ) {
             $.alert({

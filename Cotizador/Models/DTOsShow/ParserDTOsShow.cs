@@ -447,6 +447,8 @@ namespace Cotizador.Models.DTOsShow
             pedidoDTOshow.margenFleteVisible = pedido.margenFleteVisible;
 
             pedidoDTOshow.facturaUnica = pedido.facturaUnica;
+            pedidoDTOshow.emiteFacturaAnticipada = (pedido.numeroPedidoMP > 0 && pedido.numeroPedido < pedido.numeroPedidoMP) && 
+                    (pedido.usuario == null || !pedido.usuario.emiteFacturaAnticipadaPedidoRelacionado)  ? false : true;
 
             return pedidoDTOshow;
         }

@@ -3594,7 +3594,10 @@ jQuery(function ($) {
                                 $("#btnTruncarPedido").show();
                             }
 
-                            $("#btnAtenderDiferidoPedidoVenta").show();
+                            
+                            if (pedido.emiteFacturaAnticipada) {
+                                $("#btnAtenderDiferidoPedidoVenta").show();
+                            }
 
                             if (
                                 pedido.seguimientoCrediticioPedido_estado == ESTADO_PENDIENTE_LIBERACION ||

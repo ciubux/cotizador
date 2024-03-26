@@ -162,10 +162,26 @@ namespace DataLayer
             return obj;
         }
 
+        public bool validarSesionToken(Usuario us)
+        {
+            var objCommand = GetSqlCommand("ps_validarTokenSesion");
+            InputParameterAdd.Guid(objCommand, "idUsuario", us.idUsuario);
+            InputParameterAdd.Varchar(objCommand, "sesionToken", us.sessionToken);
+            DataTable dataTable = Execute(objCommand);
+
+            bool esValido = false;
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                esValido = Converter.GetInt(row, "token_valido") == 1 ? true : false;
+            }
+
+            return esValido;
+        }
 
         public Usuario getUsuarioLogin(Usuario usuario)
         {
-            var objCommand = GetSqlCommand("ps_usuario_b");
+            var objCommand = GetSqlCommand("ps_usuario");
             InputParameterAdd.Varchar(objCommand, "email", usuario.email);
             InputParameterAdd.Varchar(objCommand, "password", usuario.password);
             InputParameterAdd.Varchar(objCommand, "ip_login", usuario.ipAddress);
@@ -185,6 +201,7 @@ namespace DataLayer
                 usuario.razonSocialEmpresa = Converter.GetString(row, "nombre_empresa");
                 usuario.urlEmpresa = Converter.GetString(row, "url_web");
                 usuario.atencionTerciarizadaEmpresa = Converter.GetInt(row, "atencion_terciarizada") == 1 ? true : false;
+                usuario.sessionToken = Converter.GetString(row, "sesion_token");
 
                 usuario.area = new Area();
                 usuario.area.idArea = Converter.GetInt(row, "id_area");
@@ -763,8 +780,8 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "email", usuario.email);
             InputParameterAdd.Varchar(objCommand, "pass", usuario.password);
             InputParameterAdd.Guid(objCommand, "id_ciudad", usuario.sedeMP.idCiudad);
-            
-
+            InputParameterAdd.Int(objCommand, "idArea", usuario.area.idArea);
+            InputParameterAdd.Int(objCommand, "idEmpresa", usuario.idEmpresa);
 
             ExecuteNonQuery(objCommand);
             return usuario;
@@ -784,6 +801,8 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "pass", usuario.password);
             InputParameterAdd.Guid(objCommand, "id_ciudad", usuario.sedeMP.idCiudad);
             InputParameterAdd.Decimal(objCommand, "max_por_des_apro", usuario.maximoPorcentajeDescuentoAprobacion);
+            InputParameterAdd.Int(objCommand, "idArea", usuario.area.idArea);
+            InputParameterAdd.Int(objCommand, "idEmpresa", usuario.idEmpresa);
             ExecuteNonQuery(objCommand);
             return usuario;
         }

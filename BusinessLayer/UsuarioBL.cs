@@ -35,6 +35,13 @@ namespace BusinessLayer
             return usuario;
         }
 
+        public bool validarSesionToken(Usuario us)
+        {
+            using (UsuarioDAL dal = new UsuarioDAL())
+            {
+                return dal.validarSesionToken(us);
+            }
+        }
 
         public Usuario getUsuario(Guid idUsuario)
         {

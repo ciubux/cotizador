@@ -267,6 +267,8 @@ namespace Model
 
         public static String VAR_SESSION_EMPRESA_LISTA = "empresaList";
 
+        public static String VAR_SESSION_AREA_LISTA = "areaList";
+
         public static String VAR_SESSION_PERMISO_LISTA = "permisoList";
 
         public static String VAR_SESSION_PERMISO = "permiso";
@@ -514,6 +516,7 @@ namespace Model
         public const String CREA_FACTURA_COMPLEJA = "P582";
 
         public const String FACTURA_PEDIDO_RELACIONADO = "P551";
+        public const String EMITE_FACTURA_ANTICIPADA_PEDIDO_RELACIONADO = "P555";
 
         public const String BUSCA_NOTAS_INGRESO_TODAS_SEDES = "P320";
         public const String SALTA_VALIDACION_STOCK = "P326";

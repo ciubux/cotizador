@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AreaBL.cs" />
     <Compile Include="CierreStockBL.cs" />
     <Compile Include="AlmacenBL.cs" />
     <Compile Include="ClienteContactoTipoBL.cs" />

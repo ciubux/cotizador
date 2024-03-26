@@ -38,6 +38,7 @@ namespace Model
         public string cargo { get; set; }
         [Display(Name = "Contacto:")]
         public string contacto { get; set; }
+        public string sessionToken { get; set; }
 
         [Display(Name = "Descuento Maximo (%):")]
         public Decimal maximoPorcentajeDescuentoAprobacion { get; set; }
@@ -203,6 +204,7 @@ namespace Model
         public bool creaFacturaCompleja { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CREA_FACTURA_COMPLEJA)).FirstOrDefault() != null; } }
 
         public bool facturaPedidoRelacionado { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.FACTURA_PEDIDO_RELACIONADO)).FirstOrDefault() != null; } }
+        public bool emiteFacturaAnticipadaPedidoRelacionado { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.EMITE_FACTURA_ANTICIPADA_PEDIDO_RELACIONADO)).FirstOrDefault() != null; } }
 
         /*Grupo Clientes*/
         public bool modificaGrupoClientes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_GRUPO_CLIENTES)).FirstOrDefault() != null; } }

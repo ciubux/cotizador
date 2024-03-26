@@ -425,6 +425,9 @@ namespace Cotizador.Controllers
 
             obj.sedeMP.idCiudad = Guid.Empty;
 
+            obj.area = new Area();
+            
+
             Usuario user = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             obj.idUsuarioModificacion = user.idUsuarioModificacion;
             
@@ -513,7 +516,20 @@ namespace Cotizador.Controllers
             return "{\"idCiudad\": \"" + idCiudad + "\"}";
 
         }
+        public String ChangeIdArea()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
 
+            if (usuario.area == null) { usuario.area = new Area(); }
+
+            if (this.Request.Params["idArea"] != null && !this.Request.Params["idArea"].Equals(""))
+            {
+                usuario.area.idArea = int.Parse(this.Request.Params["idArea"]);
+            }
+            
+            this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] = usuario;
+            return "{\"idArea\": \"" + usuario.area.idArea.ToString() + "\"}";
+        }
 
         public void ChangeInputBooleanMantenedor()
         {

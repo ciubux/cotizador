@@ -345,6 +345,47 @@ jQuery(function ($) {
         
     });
 
+    $("#btnDescargarPDFGuia").click(function () {
+        descargarPDF();
+    });
+
+    function descargarPDF() {
+        $.ajax({
+            url: "/GuiaRemision/DescargarArchivoPDF",
+            data: {
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) {
+                $.alert({
+                    type: 'red',
+                    title: "ERROR",
+                    content: 'Ocurrió un problema al descargar la guía de remisión en formato PDF.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            },
+            success: function (result) {
+
+                if (result.success == 1) {
+                    var filePDF = base64ToArrayBuffer(result.result.ConsultarComprobanteResult.Archivo);
+                    saveByteArray(result.dataSend.Serie + "-" + result.dataSend.Numero + ".pdf", filePDF);
+                } else {
+                    $.alert({
+                        type: 'red',
+                        title: "GUIA NO REGISTRADA EN SUNAT",
+                        content: 'No se puede descargar el archivo ya que la guía aún no ha sido registrada y validada en SUNAT.',
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                }
+
+            }
+        });
+    }
+
     /**
     *################################## INICIO CONTROLES CIUDAD
     */

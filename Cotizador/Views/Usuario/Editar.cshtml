@@ -18,6 +18,34 @@
             <input type="hidden" id="idUsuarioMantenimiento" name="idVendedor" value="@usuario.idUsuario" />
             <div class="row">
 
+                <div class="col-sm-12 col-lg-8">
+                    <div class="form-group">
+                        <label class="control-label col-xs-3">Empresa:</label>
+                        <div class="col-xs-7">
+                            @Html.Action("GetEmpresasVisualizacion", "Empresa",
+                            new
+                            {
+                                empresaSelectId = "idEmpresa",
+                                selectedValue = usuario.idEmpresa
+                            })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-lg-8">
+                    <div class="form-group">
+                        <label class="control-label col-xs-3">Area:</label>
+                        <div class="col-xs-7">
+                            @Html.Action("GetAreasVisualizacion", "Area",
+                            new
+                            {
+                                selectId = "idArea",
+                                selectedValue = usuario.area.idArea
+                            })
+                        </div>
+                    </div>
+                </div>
+
 
                 <div class="col-sm-12 col-lg-8">
                     <div class="form-group">
@@ -32,8 +60,6 @@
                         </div>
                     </div>
                 </div>
-
-
 
 
                 <div class="col-sm-12 col-lg-8">

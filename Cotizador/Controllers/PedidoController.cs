@@ -2574,6 +2574,8 @@ namespace Cotizador.Controllers
             ClienteBL clienteBl = new ClienteBL();
             Cliente cliente = clienteBl.getCliente(pedido.cliente.idCliente);
             cliente.usuario = usuario;
+            
+            pedido.usuario = usuario;
 
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
 

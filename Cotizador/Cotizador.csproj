@@ -225,12 +225,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionFilters\SesionTokenFilter.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Controllers\PrecioEspecialController.cs" />
     <Compile Include="Controllers\ArchivoAdjuntoController.cs" />
     <Compile Include="Controllers\AlmacenController.cs" />
@@ -328,6 +330,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\DTOsShow\CierreStockDetalleDTOshow.cs" />
     <Compile Include="Models\DTOsShow\CierreStockDTOshow.cs" />
+    <Compile Include="Models\AreaViewModels.cs" />
     <Compile Include="Models\MotivoAjusteAlmacenViewModels.cs" />
     <Compile Include="Models\EmpresaViewModels.cs" />
     <Compile Include="Models\DTOsSearch\ClienteDTO.cs" />
@@ -767,6 +770,8 @@
     <Content Include="Views\Promocion\_ModalSelectAdd.cshtml" />
     <Content Include="Views\PrecioEspecial\List.cshtml" />
     <Content Include="Views\PrecioEspecial\Editar.cshtml" />
+    <Content Include="Views\Account\ErrorSesion.cshtml" />
+    <Content Include="Views\Shared\_Area.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

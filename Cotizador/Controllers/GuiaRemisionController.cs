@@ -1592,7 +1592,7 @@ namespace Cotizador.Controllers
                 success = 1;
             } else
             {
-                msgError = "No se encontró factura aceptada de pedido relacionado.";
+                msgError = "No se encontró factura aceptada de pedido relacionado. Recuerde que la factura se acepta hasta 10 minutos despues de haber sido emitida.";
             }
 
             var result = new { success = success,
