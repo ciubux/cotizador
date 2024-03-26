@@ -1,0 +1,24 @@
+﻿@model Cotizador.Models.AreaViewModels
+
+@if (Model.incluirSeleccione)
+{
+@Html.DropDownList(
+            Model.AreaSelectId,
+            Model.Areas, "Seleccione el Area",
+            new
+            {
+                id = Model.AreaSelectId,
+                @class = "form-control"
+            })
+}
+else
+{
+@Html.DropDownList(
+        Model.AreaSelectId,
+        Model.Areas,
+        new
+        {
+            id = Model.AreaSelectId,
+            @class = "form-control"
+        })
+}
