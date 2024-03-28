@@ -35,7 +35,6 @@
     <form class="form-horizontal" method="post">
         <div class="row" style="margin-top: 10px;">
             <div class="col-sm-6 col-lg-4">
-                <!--Fecha Entrega-->
                 <div class="form-group">
                     <label class="control-label col-xs-4" for="skuProducto">SKU:</label>
                     <div class="col-xs-8">
@@ -190,9 +189,35 @@
                 <!--USUARIO-->
                 <div class="form-group">
                     @*<label for="usuario" class="control-label col-xs-4">Creado Por:</label>
-                        <div class="col-xs-8">
-                            @Html.Action("usuariosPedidoList", "Usuario")
-                        </div>*@
+                    <div class="col-xs-8">
+                        @Html.Action("usuariosPedidoList", "Usuario")
+                    </div>*@
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!--GRUPO CLIENTE-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="idGrupo">Grupo Cliente:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("GetGruposCliente", "GrupoCliente",
+                            new
+                            {
+                                grupoClienteSelectId = "idGrupo",
+                                selectedValue = item.idGrupo
+                            })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="skuProducto">RUC:</label>
+                    <div class="col-xs-8">
+                        <input class="form-control" type="text" id="rucCliente" name="rucCliente" value="@item.ruc">
+                    </div>
                 </div>
             </div>
         </div>
@@ -393,6 +418,15 @@
             changeInputFiltro("idAsistenteComercial", valor, "int");
         });
 
+        $("#idGrupo").change(function () {
+            var valor = $("#idGrupo").val();
+            changeInputFiltro("idGrupo", valor, "int");
+        });
+
+        $("#rucCliente").change(function () {
+            var valor = $(this).val();
+            changeInputFiltro("ruc", valor, "string");
+        });
 
         $("#chkIncluirVentasExcluidas").change(function () {
             if ($("#chkIncluirVentasExcluidas").is(":checked"));

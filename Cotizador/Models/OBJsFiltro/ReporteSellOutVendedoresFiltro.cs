@@ -16,6 +16,7 @@ namespace Cotizador.Models.OBJsFiltro
         public String sku { get; set; }
         public String familia { get; set; }
         public String proveedor { get; set; }
+        public String ruc { get; set; }
 
         public DateTime fechaInicio { get; set; }
         public DateTime fechaFin { get; set; }
@@ -24,6 +25,7 @@ namespace Cotizador.Models.OBJsFiltro
         public int trimestre { get; set; }
 
         public int idResponsableComercial { get; set; }
+        public int idGrupo { get; set; }
 
         public int idAsistenteComercial { get; set; }
 
