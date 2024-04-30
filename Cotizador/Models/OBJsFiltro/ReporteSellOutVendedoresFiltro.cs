@@ -35,6 +35,11 @@ namespace Cotizador.Models.OBJsFiltro
 
         public int incluirVentasExcluidas { get; set; }
 
+        public bool integraEmpresas { get; set; }
+
+        public bool excluirVentasRelacionadasHijas { get; set; }
+
+
         public void changeDatoParametro(string propiedad, string valor, string tipo)
         {
             PropertyInfo propertyInfo = this.GetType().GetProperty(propiedad);
@@ -46,6 +51,9 @@ namespace Cotizador.Models.OBJsFiltro
                     break;
                 case "int":
                     propertyInfo.SetValue(this, int.Parse(valor.Trim().Equals("") ? "0" : valor));
+                    break;
+                case "bool":
+                    propertyInfo.SetValue(this, bool.Parse(valor.Trim().Equals("") ? "false" : valor));
                     break;
                 case "date":
                     if (!valor.Trim().Equals(""))

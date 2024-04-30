@@ -1675,7 +1675,7 @@ namespace DataLayer
 
                 item.fecha = Converter.GetDateTime(row, "fecha");
 
-                item.producto.familia = String.Format(Constantes.formatoCuatroDecimales, item.producto.costoAlternativo);
+                //item.producto.familia = String.Format(Constantes.formatoCuatroDecimales, item.producto.costoAlternativo);
                 //if (item.cantidadConteo > 0) { 
                     productoList.Add(item);
                 //}

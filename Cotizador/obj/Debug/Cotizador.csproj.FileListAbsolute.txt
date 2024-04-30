@@ -3125,8 +3125,11 @@ F:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs
 F:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CopyComplete
 F:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.dll
 F:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.pdb
-D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.AssemblyReference.cache
-D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
+F:\Repo\freelos\cotizador\Cotizador\bin\NPOI.dll
+F:\Repo\freelos\cotizador\Cotizador\bin\NPOI.OOXML.dll
+F:\Repo\freelos\cotizador\Cotizador\bin\NPOI.OpenXml4Net.dll
+F:\Repo\freelos\cotizador\Cotizador\bin\NPOI.OpenXmlFormats.dll
+F:\Repo\freelos\cotizador\Cotizador\bin\NPOI.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\ApplicationInsights.config
 D:\Repo\freelos\cotizador\Cotizador\bin\roslyn\csc.exe
 D:\Repo\freelos\cotizador\Cotizador\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -3215,6 +3218,7 @@ D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.ApplicationInsights.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\Moq.pdb
 D:\Repo\freelos\cotizador\Cotizador\bin\Moq.xml
+D:\Repo\freelos\cotizador\Cotizador\bin\Newtonsoft.Json.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\NLog.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\NPOI.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\System.Runtime.CompilerServices.Unsafe.xml
@@ -3227,7 +3231,6 @@ D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.WebPages.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.WebPages.Deployment.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\System.Web.WebPages.Razor.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\Antlr3.Runtime.pdb
-D:\Repo\freelos\cotizador\Cotizador\bin\Newtonsoft.Json.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AspNet.Identity.Core.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AspNet.Identity.Owin.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.AspNet.Identity.EntityFramework.xml
@@ -3240,6 +3243,7 @@ D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.OAuth.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.Google.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.Twitter.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+D:\Repo\freelos\cotizador\Cotizador\bin\Spire.Pdf.xml
 D:\Repo\freelos\cotizador\Cotizador\bin\Framework.DAL.pdb
 D:\Repo\freelos\cotizador\Cotizador\bin\Framework.DAL.Settings.pdb
 D:\Repo\freelos\cotizador\Cotizador\bin\Framework.WebCommon.pdb
@@ -3262,12 +3266,8 @@ D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Facebook.reso
 D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Google.resources.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
 D:\Repo\freelos\cotizador\Cotizador\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
-D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CopyComplete
+D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.AssemblyReference.cache
+D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs.cache
+D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.Up2Date
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.dll
 D:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.pdb
-F:\Repo\freelos\cotizador\Cotizador\bin\NPOI.dll
-F:\Repo\freelos\cotizador\Cotizador\bin\NPOI.OOXML.dll
-F:\Repo\freelos\cotizador\Cotizador\bin\NPOI.OpenXml4Net.dll
-F:\Repo\freelos\cotizador\Cotizador\bin\NPOI.OpenXmlFormats.dll
-F:\Repo\freelos\cotizador\Cotizador\bin\NPOI.xml
-D:\Repo\freelos\cotizador\Cotizador\bin\Spire.Pdf.xml

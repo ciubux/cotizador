@@ -577,6 +577,8 @@ namespace DataLayer
                     InputParameterAdd.Guid(objCommand, "id_usuario", cotizacion.usuarioBusqueda.idUsuario);
                 }*/
 
+            InputParameterAdd.Int(objCommand, "verTodasEmpresas", cotizacion.integraEmpresas ? 1 : 0);
+
             InputParameterAdd.Int(objCommand, "idAsesor", cotizacion.responsableComercial.idVendedor);
             InputParameterAdd.Guid(objCommand, "id_usuario", cotizacion.usuarioBusqueda.idUsuario);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
@@ -613,7 +615,8 @@ namespace DataLayer
                 
 
                 cotizacion.observaciones = Converter.GetString(row, "observaciones");
-
+                cotizacion.empresa = new Empresa();
+                cotizacion.empresa.codigo = Converter.GetString(row, "codigo_empresa");
 
                 cotizacion.contacto = Converter.GetString(row, "contacto");
                 cotizacion.cliente = new Cliente();

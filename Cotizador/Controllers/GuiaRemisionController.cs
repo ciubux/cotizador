@@ -2,6 +2,7 @@
 using Cotizador.ExcelExport;
 using Cotizador.Models.DTOsSearch;
 using Cotizador.Models.DTOsShow;
+using DataLayer;
 using Model;
 using Model.EXCEPTION;
 using Model.NextSoft;
@@ -11,6 +12,8 @@ using Newtonsoft.Json.Linq;
 using NPOI.HSSF.Model;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
+//using NPOI.SS.Formula.Functions;
+
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
@@ -217,7 +220,13 @@ namespace Cotizador.Controllers
                  }
 
                  ViewBag.mostrarGuia = mostrarGuia;*/
+
+            ParametroBL parametroBL = new ParametroBL();
+            int diasRezagoFactura = int.Parse(parametroBL.getParametro("DIAS_REZAGO_EMISION_FACTURA"));
+
             ViewBag.idMovimientoAlmacen = idMovimientoAlmacen;
+            ViewBag.docVentaFechaEmisionMin = DateTime.Now.AddDays(-1 * diasRezagoFactura).ToString(Constantes.formatoFecha);
+
 
             this.Session["s_cambioclientefactura_cambio"] = false;
             this.Session["s_cambioclientefactura_ciudad"] = null;
@@ -988,6 +997,8 @@ namespace Cotizador.Controllers
             try
             {
                 instanciarGuiaRemision();
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
                 GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
 
                 //new NotaIngreso();
@@ -996,7 +1007,12 @@ namespace Cotizador.Controllers
 
                 guiaRemision.notaIngresoAExtornar = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO_VER];
 
-                guiaRemision.pedido = guiaRemision.notaIngresoAExtornar.pedido;
+                PedidoBL pedidoBL = new PedidoBL();
+                guiaRemision.pedido  = pedidoBL.GetPedido(guiaRemision.notaIngresoAExtornar.pedido, usuario);
+                guiaRemision.almacen = guiaRemision.notaIngresoAExtornar.almacen;
+                //guiaRemision.pedido = guiaRemision.notaIngresoAExtornar.pedido;
+
+                guiaRemision.clienteVer = guiaRemision.notaIngresoAExtornar.pedido.cliente;
 
                 if (guiaRemision.notaIngresoAExtornar.almacen.idAlmacen != null && !guiaRemision.notaIngresoAExtornar.almacen.idAlmacen.Equals(Guid.Empty))
                 {
@@ -1244,7 +1260,7 @@ namespace Cotizador.Controllers
                 }
             }
 
-
+            
 
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoGuiaRemision;
             try
@@ -1259,6 +1275,15 @@ namespace Cotizador.Controllers
 
                 ViewBag.fechaTrasladotmp = guiaRemision.fechaTraslado.ToString(Constantes.formatoFecha);
                 ViewBag.fechaEmisiontmp = guiaRemision.fechaEmision.ToString(Constantes.formatoFecha);
+                ViewBag.fechaEmisionMinDate = DateTime.Now.ToString(Constantes.formatoFecha);
+
+                ParametroBL parametroBL = new ParametroBL();
+                int diasRezago = int.Parse(parametroBL.getParametro("DIAS_REZAGO_EMISION_GUIA"));
+
+                if (diasRezago > 0)
+                {
+                    ViewBag.fechaEmisionMinDate = DateTime.Now.AddDays(-1*diasRezago).ToString(Constantes.formatoFecha);
+                }
 
                 if (guiaRemision.almacenes == null || guiaRemision.almacenes.Count == 0)
                 {
@@ -1337,6 +1362,8 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             int continuarLuego = int.Parse(Request["continuarLuego"].ToString());
 
+            ParametroBL parametroBL = new ParametroBL();
+            int diasRezago = int.Parse(parametroBL.getParametro("DIAS_REZAGO_EMISION_GUIA"));
 
             GuiaRemision guiaRemision = this.GuiaRemisionSession;
             guiaRemision.usuario = usuario;
@@ -1345,15 +1372,29 @@ namespace Cotizador.Controllers
                 guiaRemision.placaVehiculo = guiaRemision.placaVehiculo.Replace("-", "").Replace(" ", "").Replace(".", "");
             }
 
+            bool errorRezago = false;
+            if (diasRezago >= 0) {
+                int numeroFechaMin = int.Parse(DateTime.Now.AddDays(-1 * diasRezago).ToString(Constantes.formatoFechaNumero));
+                int numeroFechaEmision = int.Parse(guiaRemision.fechaEmision.ToString(Constantes.formatoFechaNumero));
+                
+                if (numeroFechaEmision < numeroFechaMin) { errorRezago = true; }
+            }
+
             String error = String.Empty;
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
             try
             {
-                await movimientoAlmacenBL.InsertMovimientoAlmacenSalida(guiaRemision);
-                this.Session["seAtiendeDiferidoVenta"] = false;
-                this.Session["seAtiendeTrasladoInterno"] = false;
-                this.Session["seAtiendeTrasladoSedes"] = false;
-                this.Session["seAtiendeEntregaTerceros"] = false;
+                if (errorRezago)
+                {
+                    throw new Exception("La fecha de emisión no puede tener más de " + diasRezago.ToString() + " días de retraso.");
+                } else
+                {
+                    await movimientoAlmacenBL.InsertMovimientoAlmacenSalida(guiaRemision);
+                    this.Session["seAtiendeDiferidoVenta"] = false;
+                    this.Session["seAtiendeTrasladoInterno"] = false;
+                    this.Session["seAtiendeTrasladoSedes"] = false;
+                    this.Session["seAtiendeEntregaTerceros"] = false;
+                }
             }
             catch (DuplicateNumberDocumentException ex)
             {
@@ -1457,8 +1498,10 @@ namespace Cotizador.Controllers
                 guiaRemision.pedido.ubigeoEntrega = guiaRemision.pedido.direccionEntrega.ubigeo;
 
             }
-
+            
             guiaRemision.pedido.existeCambioDireccionEntrega = false;
+            guiaRemision.direccionEntrega = guiaRemision.pedido.direccionEntrega.descripcion;
+            guiaRemision.ubigeoEntrega = guiaRemision.pedido.direccionEntrega.ubigeo;
             this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
             return JsonConvert.SerializeObject(guiaRemision.pedido.direccionEntrega);
         }
@@ -1566,14 +1609,13 @@ namespace Cotizador.Controllers
         {
             GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
 
-            if (guiaRemision.fechaEmision.Month == DateTime.Now.Month)
+            if (guiaRemision.fechaEmision.Month == DateTime.Now.Month || 
+                (DateTime.Now - guiaRemision.fechaEmision).TotalDays < 3)
             {
-            
-            guiaRemision.comentarioAnulado = Request["comentarioAnulado"];
-            MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
-            movimientoAlmacenBL.AnularMovimientoAlmacen(guiaRemision);
+                guiaRemision.comentarioAnulado = Request["comentarioAnulado"];
+                MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
+                movimientoAlmacenBL.AnularMovimientoAlmacen(guiaRemision);
             }
-
 
             return JsonConvert.SerializeObject(guiaRemision);
         }

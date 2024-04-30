@@ -255,6 +255,6 @@ D:\Repo\freelos\cotizador\Framework.DAL.Settings\bin\Debug\Framework.DAL.pdb
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\bin\Debug\Framework.WebCommon.pdb
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.AssemblyReference.cache
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CoreCompileInputs.cache
-D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.csproj.CopyComplete
+D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framewor.801CAF30.Up2Date
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.dll
 D:\Repo\freelos\cotizador\Framework.DAL.Settings\obj\Debug\Framework.DAL.Settings.pdb

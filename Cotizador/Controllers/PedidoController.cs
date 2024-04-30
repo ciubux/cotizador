@@ -16,6 +16,7 @@ using Cotizador.Models.DTOsSearch;
 using NLog;
 using Cotizador.Models.DTOsShow;
 using Model.UTILES;
+using NPOI.SS.Formula.Functions;
 
 namespace Cotizador.Controllers
 {
@@ -58,7 +59,8 @@ namespace Cotizador.Controllers
                 pedidoTmp.cotizacion = new Cotizacion();
                 pedidoTmp.solicitante = new Solicitante();
                 pedidoTmp.direccionEntrega = new DireccionEntrega();
-
+                pedidoTmp.integraEmpresas = false;
+                
                 pedidoTmp.fechaCreacionDesde = new DateTime(fechaDesde.Year, fechaDesde.Month, fechaDesde.Day, 0, 0, 0);
                 pedidoTmp.fechaCreacionHasta = fechaHasta;
 
@@ -2073,6 +2075,24 @@ namespace Cotizador.Controllers
             pedido.usuario = usuario;
             pedido.UsuarioRegistro = usuario;
             PedidoBL bl = new PedidoBL();
+
+            Usuario usuarioWork = (Usuario)usuario.Clone();
+
+            List<Empresa> empresas = (List<Empresa>)this.Session[Constantes.VAR_SESSION_EMPRESA_LISTA];
+
+            Empresa obj = empresas.Where(e => (e.idEmpresa == pedido.empresa.idEmpresa)).FirstOrDefault();
+
+            if (obj != null)
+            {
+                usuario.idEmpresa = obj.idEmpresa;
+                usuario.codigoEmpresa = obj.codigo;
+                usuario.razonSocialEmpresa = obj.nombre;
+                usuario.urlEmpresa = obj.urlWeb;
+                usuario.atencionTerciarizadaEmpresa = obj.atencionTerciarizada;
+
+                this.Session[Constantes.VAR_SESSION_USUARIO] = usuario;
+            }
+
             bl.UpdatePedido(pedido);
             long numeroPedido = pedido.numeroPedido;
             String numeroPedidoString = pedido.numeroPedidoString;
@@ -2147,7 +2167,7 @@ namespace Cotizador.Controllers
             if (estadosSeguimientoPedido == SeguimientoPedido.estadosSeguimientoPedido.Ingresado)
             {
                 Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-
+                Usuario usuarioWork = (Usuario) usuario.Clone();
                 PedidoBL pedidoBL = new PedidoBL();
 
                 List<Guid> idDetalles = (List<Guid>)this.Session["pedidoDRIds"];
@@ -2159,14 +2179,30 @@ namespace Cotizador.Controllers
                 Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
                 pedido.idPedido = idPedido;
                 pedido = pedidoBL.GetPedido(pedido, usuario);
-                pedido.usuario = usuario;
+                pedido.usuario = usuarioWork;
 
-                if (!pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP) && 
+                
+                List<Empresa> empresas = (List<Empresa>)this.Session[Constantes.VAR_SESSION_EMPRESA_LISTA];
+
+                Empresa obj = empresas.Where(e => (e.idEmpresa == pedido.empresa.idEmpresa)).FirstOrDefault();
+
+                if (obj != null)
+                {
+                    pedido.usuario.idEmpresa = obj.idEmpresa;
+                    pedido.usuario.codigoEmpresa = obj.codigo;
+                    pedido.usuario.razonSocialEmpresa = obj.nombre;
+                    pedido.usuario.urlEmpresa = obj.urlWeb;
+                    pedido.usuario.atencionTerciarizadaEmpresa = obj.atencionTerciarizada;
+                }
+
+
+                if (!pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_MP) && 
                     pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado && 
                     pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
                 {
                     pedidoBL.ProcesarPedidoAprobadoTecnica(pedido);
                 }
+
             }
         }
 
@@ -2178,15 +2214,29 @@ namespace Cotizador.Controllers
             updateEstadoSeguimientoCrediticioPedido(idPedido, estadosSeguimientoCrediticioPedido, observacion);
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Usuario usuarioWork = (Usuario)usuario.Clone();
 
             PedidoBL pedidoBL = new PedidoBL();
 
             Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
             pedido.idPedido = idPedido;
             pedido = pedidoBL.GetPedido(pedido, usuario);
-            pedido.usuario = usuario;
+            pedido.usuario = usuarioWork;
 
-            if (!pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP) &&
+            List<Empresa> empresas = (List<Empresa>)this.Session[Constantes.VAR_SESSION_EMPRESA_LISTA];
+
+            Empresa obj = empresas.Where(e => (e.idEmpresa == pedido.empresa.idEmpresa)).FirstOrDefault();
+
+            if (obj != null)
+            {
+                pedido.usuario.idEmpresa = obj.idEmpresa;
+                pedido.usuario.codigoEmpresa = obj.codigo;
+                pedido.usuario.razonSocialEmpresa = obj.nombre;
+                pedido.usuario.urlEmpresa = obj.urlWeb;
+                pedido.usuario.atencionTerciarizadaEmpresa = obj.atencionTerciarizada;
+            }
+
+            if (!pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_MP) &&
                 pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
                 pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
             {

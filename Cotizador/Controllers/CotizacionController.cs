@@ -64,6 +64,8 @@ namespace Cotizador.Controllers
             cotizacionTmp.cliente = new Cliente();
             cotizacionTmp.responsableComercial = new Vendedor();
 
+            cotizacionTmp.integraEmpresas = false;
+
             if (usuario.esResponsableComercial && !usuario.modificaFiltroVendedor)
             {
                 cotizacionTmp.responsableComercial = usuario.vendedor;

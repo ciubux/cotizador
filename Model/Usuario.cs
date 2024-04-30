@@ -322,6 +322,8 @@ namespace Model
         public bool modificaDireccionEntrega { get; set; }
 
         public bool multiEmpresa { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MULTI_EMPRESA)).FirstOrDefault() != null; } }
+        public bool vistaIntegradaMultiEmpresa { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISTA_INTEGRADA_MULTIEMPRESA)).FirstOrDefault() != null; } }
+        public bool reporteIntegradoMultiEmpresa { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REPORTE_INTEGRADO_MULTIEMPRESA)).FirstOrDefault() != null; } }
 
         /*Roles*/
         public bool modificaRol { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_ROL)).FirstOrDefault() != null; } }
@@ -338,6 +340,12 @@ namespace Model
         public bool visualizaReporteProductosPendientesAtencion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_REPORTE_PRODUCTOS_PENDIENTES_ATENCION)).FirstOrDefault() != null; } }
 
         public bool visualizaReporteSellOutVendedores { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_REPORTE_SELLOUT_VENDEDORES)).FirstOrDefault() != null; } }
+
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
 }
 

@@ -273,6 +273,6 @@ D:\Repo\freelos\cotizador\Model\bin\Debug\EntityFramework.SqlServer.xml
 D:\Repo\freelos\cotizador\Model\bin\Debug\Newtonsoft.Json.xml
 D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.AssemblyReference.cache
 D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache
-D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.CopyComplete
+D:\Repo\freelos\cotizador\Model\obj\Debug\Model.csproj.Up2Date
 D:\Repo\freelos\cotizador\Model\obj\Debug\Model.dll
 D:\Repo\freelos\cotizador\Model\obj\Debug\Model.pdb

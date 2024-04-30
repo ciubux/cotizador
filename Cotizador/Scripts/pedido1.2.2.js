@@ -4512,6 +4512,42 @@ jQuery(function ($) {
     });
 
 
+    $("#chkIntegrarEmpresas").change(function () {
+        if ($("#chkIntegrarEmpresas").is(":checked"));
+        cambioChkIntegrarEmpresas();
+    });
+
+
+    $("#lblChkIntegrarEmpresas").click(function () {
+        if ($("#chkIntegrarEmpresas").is(":checked")) {
+            $("#chkIntegrarEmpresas").prop("checked", false);
+        } else {
+            $("#chkIntegrarEmpresas").prop("checked", true);
+        }
+
+        cambioChkIntegrarEmpresas();
+    });
+
+
+    function cambioChkIntegrarEmpresas() {
+
+        var valor = 0;
+
+        if ($("#chkIntegrarEmpresas").is(":checked")) {
+            valor = 1;
+        }
+
+        changeInputBool("integraEmpresas", valor);
+
+        if ($("#chkIntegrarEmpresas").is(":checked")) {
+            $("#lblChkIntegrarEmpresas").addClass("lbl-ajuste-calculo-precios");
+            $("#lblChkIntegrarEmpresas").removeClass("text-muted");
+        } else {
+            $("#lblChkIntegrarEmpresas").addClass("text-muted");
+            $("#lblChkIntegrarEmpresas").removeClass("lbl-ajuste-calculo-precios");
+        }
+    }
+
     $("#truncado").change(function () {
         changeInputInt("truncado", $("#truncado").val())
     });
@@ -5255,6 +5291,7 @@ jQuery(function ($) {
                     var pedido = '<tr data-expanded="true" class="pedido-data" idPedido="' + pedidoList[i].idPedido + '">' +
                         '<td>  ' + pedidoList[i].idPedido + '</td>' +
                         '<td>  ' + pedidoList[i].numeroPedidoNumeroGrupoString + textoPedidoRelacionado + '  </td>' +
+                        '<td>  ' + pedidoList[i].empresa_codigo + '</td>' +
                         '<td>  ' + pedidoList[i].ciudad_nombre + '  </td>' +
                         '<td>  ' + pedidoList[i].cliente_codigo + ' </td>' +
                         '<td>  ' + clienteRazonSocial + '</td>' +

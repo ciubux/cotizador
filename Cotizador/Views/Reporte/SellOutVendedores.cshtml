@@ -2,6 +2,7 @@
     ViewBag.Title = "Reporte Sell Out Vendedores";
 
 
+    Model.Usuario usuario = ViewBag.usuario;
     Cotizador.Models.OBJsFiltro.ReporteSellOutVendedoresFiltro item = ViewBag.filtros;
     List<List<String>> resultados = ViewBag.resultados;
 
@@ -23,6 +24,24 @@
     {
         iveTextClass = "lbl-ajuste-calculo-precios";
         iveChecked = "checked";
+    }
+
+    var allEmpresasClass = "text-muted";
+    var allEmpresasChecked = "";
+
+    if (item.integraEmpresas)
+    {
+        allEmpresasClass = "lbl-ajuste-calculo-precios";
+        allEmpresasChecked = "checked";
+    }
+
+    var excluirVentasRelacionadasHijasClass = "text-muted";
+    var excluirVentasRelacionadasHijasChecked = "";
+
+    if (item.excluirVentasRelacionadasHijas)
+    {
+        excluirVentasRelacionadasHijasClass = "lbl-ajuste-calculo-precios";
+        excluirVentasRelacionadasHijasChecked = "checked";
     }
 }
 
@@ -222,6 +241,33 @@
             </div>
         </div>
 
+        <div class="row" style="margin-top: 10px">
+            @if (usuario.reporteIntegradoMultiEmpresa || usuario.vistaIntegradaMultiEmpresa)
+            {
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <div class="onoffswitch" title="Considera todas las empresas en los resultados de búsqueda.">
+                                <input type="checkbox" name="onoffswitch" @allEmpresasChecked class="onoffswitch-checkbox" id="chkIntegrarEmpresas">
+                                <label class="onoffswitch-label" for="chkIntegrarEmpresas"></label>
+                            </div>
+                            <h5 id="lblChkIntegrarEmpresas" for="chkIntegrarEmpresas" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;" class="@allEmpresasClass" title="Considera todas las empresas en los resultados de búsqueda.">Integrar todas empresas</h5>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <div class="onoffswitch" title="Excluye de los resultados las ventas de pedidos generados desde otro pedido de otra empresa.">
+                            <input type="checkbox" name="onoffswitch" @excluirVentasRelacionadasHijasChecked class="onoffswitch-checkbox" id="chkExcluirVentasRelacionadasHijas">
+                            <label class="onoffswitch-label" for="chkExcluirVentasRelacionadasHijas"></label>
+                        </div>
+                        <h5 id="lblChkExcluirVentasRelacionadasHijas" for="chkExcluirVentasRelacionadasHijas" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;" class="@excluirVentasRelacionadasHijasClass" title="Excluye de los resultados las ventas de pedidos generados desde otro pedido de otra empresa.">Excluir ventas cruzadas</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row pull-left" style="margin-top: 20px; margin-bottom: 10px; margin-left: 0px">
 
         </div>
@@ -464,6 +510,77 @@
             }
         }
 
+        $("#chkIntegrarEmpresas").change(function () {
+            if ($("#chkIntegrarEmpresas").is(":checked"));
+            cambioChkSwitchBool("chkIntegrarEmpresas", "lblChkIntegrarEmpresas", "integraEmpresas");
+        });
+
+
+        $("#lblChkIntegrarEmpresas").click(function () {
+            if ($("#chkIntegrarEmpresas").is(":checked")) {
+                $("#chkIntegrarEmpresas").prop("checked", false);
+            } else {
+                $("#chkIntegrarEmpresas").prop("checked", true);
+            }
+
+            cambioChkSwitchBool("chkIntegrarEmpresas", "lblChkIntegrarEmpresas", "integraEmpresas");
+        });
+
+
+        function cambioChkIntegrarEmpresas() {
+
+            var valor = "false";
+
+            if ($("#chkIntegrarEmpresas").is(":checked")) {
+                valor = "true";
+            }
+
+            changeInputFiltro("integraEmpresas", valor, "bool");
+
+            if ($("#chkIntegrarEmpresas").is(":checked")) {
+                $("#lblChkIntegrarEmpresas").addClass("lbl-ajuste-calculo-precios");
+                $("#lblChkIntegrarEmpresas").removeClass("text-muted");
+            } else {
+                $("#lblChkIntegrarEmpresas").addClass("text-muted");
+                $("#lblChkIntegrarEmpresas").removeClass("lbl-ajuste-calculo-precios");
+            }
+        }
+
+        $("#chkExcluirVentasRelacionadasHijas").change(function () {
+            if ($("#chkExcluirVentasRelacionadasHijas").is(":checked"));
+            cambioChkSwitchBool("chkExcluirVentasRelacionadasHijas", "lblChkExcluirVentasRelacionadasHijas", "excluirVentasRelacionadasHijas");
+        });
+
+
+        $("#lblChkExcluirVentasRelacionadasHijas").click(function () {
+            if ($("#chkExcluirVentasRelacionadasHijas").is(":checked")) {
+                $("#chkExcluirVentasRelacionadasHijas").prop("checked", false);
+            } else {
+                $("#chkExcluirVentasRelacionadasHijas").prop("checked", true);
+            }
+
+            cambioChkSwitchBool("chkExcluirVentasRelacionadasHijas", "lblChkExcluirVentasRelacionadasHijas", "excluirVentasRelacionadasHijas");
+        });
+
+
+        function cambioChkSwitchBool(chkId, lblId, dataName) {
+
+            var valor = "false";
+
+            if ($("#" + chkId).is(":checked")) {
+                valor = "true";
+            }
+
+            changeInputFiltro(dataName, valor, "bool");
+
+            if ($("#" + chkId).is(":checked")) {
+                $("#" + lblId).addClass("lbl-ajuste-calculo-precios");
+                $("#" + lblId).removeClass("text-muted");
+            } else {
+                $("#" + lblId).addClass("text-muted");
+                $("#" + lblId).removeClass("lbl-ajuste-calculo-precios");
+            }
+        }
 
         $(document).on('click', ".btnDetallesResultadosVendedorExcel", function () {
             var codigoVendedor = $(this).attr("codVendedor");

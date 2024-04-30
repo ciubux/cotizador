@@ -4168,6 +4168,41 @@ jQuery(function ($) {
         window.location.href = $(this).attr("actionLink");
     });
 
+    $("#chkIntegrarEmpresas").change(function () {
+        if ($("#chkIntegrarEmpresas").is(":checked"));
+        cambioChkIntegrarEmpresas();
+    });
+
+
+    $("#lblChkIntegrarEmpresas").click(function () {
+        if ($("#chkIntegrarEmpresas").is(":checked")) {
+            $("#chkIntegrarEmpresas").prop("checked", false);
+        } else {
+            $("#chkIntegrarEmpresas").prop("checked", true);
+        }
+
+        cambioChkIntegrarEmpresas();
+    });
+
+
+    function cambioChkIntegrarEmpresas() {
+
+        var valor = 0;
+
+        if ($("#chkIntegrarEmpresas").is(":checked")) {
+            valor = 1;
+        }
+
+        changeInputBoolean("integraEmpresas", valor);
+
+        if ($("#chkIntegrarEmpresas").is(":checked")) {
+            $("#lblChkIntegrarEmpresas").addClass("lbl-ajuste-calculo-precios");
+            $("#lblChkIntegrarEmpresas").removeClass("text-muted");
+        } else {
+            $("#lblChkIntegrarEmpresas").addClass("text-muted");
+            $("#lblChkIntegrarEmpresas").removeClass("lbl-ajuste-calculo-precios");
+        }
+    }
 
 
     $("#btnBusquedaCotizaciones").click(function () {
@@ -4249,6 +4284,9 @@ jQuery(function ($) {
                     var cotizacion = '<tr data-expanded="false">' +
                         '<td>' + cotizacionList[i].idCotizacion + '</td>' +
                         '<td>' + cotizacionList[i].codigo + '</td>' +
+
+                        '<td>' + cotizacionList[i].empresa_codigo + '</td>' +
+
                         '<td>' + cotizacionList[i].usuario_nombre + '</td>' +
                         //ToString("dd/MM/yyyy")
                         '<td>' + invertirFormatoFecha(cotizacionList[i].fecha.substr(0, 10)) + '</td>' +

@@ -6,6 +6,17 @@
     Model.GuiaRemision guiaRemision = ViewBag.guiaRemision;
     List<Model.Pedido> pedidoList = ViewBag.pedidoList;
     Model.DocumentoVenta documentoVenta = ViewBag.documentoVenta;
+
+    var allEmpresasClass = "text-muted";
+    var allEmpresasChecked = "";
+
+    if (pedido.integraEmpresas)
+    {
+        allEmpresasClass = "lbl-ajuste-calculo-precios";
+        allEmpresasChecked = "checked";
+    }
+
+
 }
 
 <div class="page-header">
@@ -215,17 +226,17 @@
                     </div>
 
                     @*<div class="form-group">
-                            @Html.LabelFor(p => pedido.truncado, htmlAttributes: new { @class = "control-label col-xs-4" })
+                        @Html.LabelFor(p => pedido.truncado, htmlAttributes: new { @class = "control-label col-xs-4" })
 
-                            <div class="col-xs-8">
-                                <select id="truncado" class="form-control">
-                                    <option value="-1">Seleccione</option>
-                                    <option value="1">SI</option>
-                                    <option value="0">NO</option>
-                                </select>
-                            </div>
+                        <div class="col-xs-8">
+                            <select id="truncado" class="form-control">
+                                <option value="-1">Seleccione</option>
+                                <option value="1">SI</option>
+                                <option value="0">NO</option>
+                            </select>
+                        </div>
 
-                        </div>*@
+                    </div>*@
                 </div>
             </div>
         }
@@ -372,8 +383,22 @@
             </div>
         </div>
 
-
-
+        @if (pedido.usuario.vistaIntegradaMultiEmpresa)
+        {
+        <div class="row" style="margin-top: 10px">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <div class="onoffswitch" title="Considera todas las empresas en los resultados de búsqueda.">
+                            <input type="checkbox" name="onoffswitch" @allEmpresasChecked class="onoffswitch-checkbox" id="chkIntegrarEmpresas">
+                            <label class="onoffswitch-label" for="chkIntegrarEmpresas"></label>
+                        </div>
+                        <h5 id="lblChkIntegrarEmpresas" for="chkIntegrarEmpresas" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;" class="@allEmpresasClass" title="Considera todas las empresas en los resultados de búsqueda.">Integrar todas empresas</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
 
         <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
             <button id="btnLimpiarBusquedaPedidos" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
@@ -413,6 +438,7 @@
                 <tr>
                     <th data-name="idPedido" data-visible="false"></th>
                     <th data-name="numero" data-visible="true">N°</th>
+                    <th data-name="empresa" data-visible="true">Emp</th>
                     <th data-name="sedeMP" data-sortable="false" data-breakpoints="xs">Sede MP</th>
                     <th data-name="codigo" data-visible="true" data-sortable="false" data-breakpoints="xs">Cod. Cliente</th>
                     <th data-name="razonSocial" data-visible="true" data-sortable="true">Razón Social</th>
@@ -428,7 +454,7 @@
                     <th data-name="distrito" data-sortable="true" data-breakpoints="xs">Distrito Entrega</th>
                     <th data-name="estado" data-sortable="true" data-breakpoints="xs">Estado Atención</th>
                     <!--   <th data-name="aprobador" data-sortable="true" data-breakpoints="xs">Modificado última vez por</th>
-                    <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>-->
+                <th data-name="observacion" data-sortable="true" data-breakpoints="xs">Comentario Estado</th>-->
                     <th data-name="estadoCrediticio" data-sortable="true" data-breakpoints="xs">Estado Crediticio</th>
                     <th data-name="observaciones" data-sortable="true" data-breakpoints="xs">Obs. Uso Interno</th>
 

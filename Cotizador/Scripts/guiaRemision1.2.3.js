@@ -288,9 +288,18 @@ jQuery(function ($) {
             }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
     }
 
+    $(document).on('click', ".btnDescargarFacturaPedidoRelacionado", function () {
+        var idMovimientoAlmacen = $(this).attr("idMovimientoAlmacen")
+        actionDescargarPDFFacturaRelacionado(idMovimientoAlmacen);
+    });
+
+
     $("#btnDescargarFacturaPedidoRelacionado").click(function () {
         var idMovimientoAlmacen = $(this).attr("idMovimientoAlmacen");
-        
+        actionDescargarPDFFacturaRelacionado(idMovimientoAlmacen);
+    });
+
+    function actionDescargarPDFFacturaRelacionado(idMovimientoAlmacen) {
         $('body').loadingModal('show');
         $('body').loadingModal({
             text: 'Cargando...'
@@ -316,9 +325,9 @@ jQuery(function ($) {
                 });
             },
             success: function (res) {
-                if (res.success == 1) { 
+                if (res.success == 1) {
                     descargarPDFCPE(res.idDocumentoVentaRelacionado, "");
-                    
+
                     $.alert({
                         title: "Operación Existosa",
                         type: 'green',
@@ -341,9 +350,7 @@ jQuery(function ($) {
                 $('body').loadingModal('hide');
             }
         }); 
-
-        
-    });
+    }
 
     $("#btnDescargarPDFGuia").click(function () {
         descargarPDF();
@@ -586,8 +593,9 @@ jQuery(function ($) {
     $("#guiaRemision_fechaTraslado").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaTraslado);
 
     var fechaEmision = $("#fechaEmisiontmp").val();
-    $("#guiaRemision_fechaEmision").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEmision);
+    var fechaEmisionMin = $("#fechaEmisionMinDate").val();
 
+    $("#guiaRemision_fechaEmision").datepicker({ dateFormat: "dd/mm/yy", minDate: fechaEmisionMin }).datepicker("setDate", fechaEmision);
 
     var fechaTrasladoDesde = $("#fechaTrasladoDesdetmp").val();
     $("#guiaRemision_fechaTrasladoDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaTrasladoDesde);
@@ -597,7 +605,8 @@ jQuery(function ($) {
 
 
     var documentoVenta_fechaEmision = $("#documentoVenta_fechaEmisiontmp").val();
-    $("#documentoVenta_fechaEmision").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", documentoVenta_fechaEmision);
+    var documentoVenta_fechaEmisionMin = $("#documentoVenta_fechaEmisionMin").val();
+    $("#documentoVenta_fechaEmision").datepicker({ dateFormat: "dd/mm/yy", minDate: documentoVenta_fechaEmisionMin }).datepicker("setDate", documentoVenta_fechaEmision);
 
     var documentoVenta_fechaVencimiento = $("#documentoVenta_fechaVencimientotmp").val();
     $("#documentoVenta_fechaVencimiento").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", documentoVenta_fechaVencimiento);
@@ -1321,7 +1330,7 @@ jQuery(function ($) {
                             content: 'Se generó el documento electrónico: ' + resultado.serieNumero + '.',
                             type: 'green',
                             buttons: {
-                                OK: function () { location.reload(); }
+                                OK: function () { $("#btnFacturarPedidoRelacionado").hide(); }
                             }
                         });
                     }
@@ -2491,6 +2500,13 @@ jQuery(function ($) {
                         clienteRazonSocial = '<span class="spn-nombre-cliente-relacionado">' + guiaRemisionList[i].nombreClienteTercero + '</span><br/>' + guiaRemisionList[i].pedido_cliente_razonSocial ;
                     }
 
+                    var btnDescargarFactura = "";
+                    if (guiaRemisionList[i].habilitaDescargarFacturaPedidoRelacionado) {
+                        btnDescargarFactura = '<br><button type="button" idMovimientoAlmacen="' + guiaRemisionList[i].idMovimientoAlmacen +
+                            '" class="btnDescargarFacturaPedidoRelacionado btn btn-primary bouton-image pdfBoton">' +
+                            'Fact. Ped. Origen</button > ';
+                    }
+
                     var guiaRemision = '<tr data-expanded="false">' +
                         '<td>  ' + guiaRemisionList[i].idMovimientoAlmacen + '</td>' +
                         '<td>  ' + guiaRemisionList[i].serieNumeroGuia + '</td>' +
@@ -2506,7 +2522,8 @@ jQuery(function ($) {
                         '<td>' + guiaRemisionList[i].tipoExtornoToString + '</td>' +
                         '<td>' + noEntregado + '</td>' +
                         '<td>' + noEntregadoLectura + '</td>' +
-                        '<td> <button type="button" class="' + guiaRemisionList[i].idMovimientoAlmacen + ' ' + guiaRemisionList[i].numeroDocumento + ' btnVerGuiaRemision btn btn-primary ">Ver</button></td > ' +
+                        '<td> <button type="button" class="' + guiaRemisionList[i].idMovimientoAlmacen + ' ' + guiaRemisionList[i].numeroDocumento + ' btnVerGuiaRemision btn btn-primary ">Ver</button>'
+                        + btnDescargarFactura + '</td > ' +
                         '</tr>';
 
                     $("#tableGuiasRemision").append(guiaRemision);

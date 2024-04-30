@@ -3,6 +3,14 @@
     Model.Cotizacion cotizacion = ViewBag.cotizacion;
     List<Model.Cotizacion> cotizacionList = ViewBag.cotizacionList;
 
+    var allEmpresasClass = "text-muted";
+    var allEmpresasChecked = "";
+
+    if (cotizacion.integraEmpresas)
+    {
+        allEmpresasClass = "lbl-ajuste-calculo-precios";
+        allEmpresasChecked = "checked";
+    }
 }
 
 <div class="page-header">
@@ -159,7 +167,7 @@
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
                     @Html.LabelFor(c => cotizacion.responsableComercial, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idResponsableComercial" })
-                    
+
                     <div class="col-xs-8">
                         @Html.Action("GetResponsablesComerciales", "Vendedor",
                                     new
@@ -197,6 +205,23 @@
             </div>
         </div>
 
+        @if (cotizacion.usuario.vistaIntegradaMultiEmpresa)
+        {
+            <div class="row" style="margin-top: 10px">
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <div class="onoffswitch" title="Considera todas las empresas en los resultados de búsqueda.">
+                                <input type="checkbox" name="onoffswitch" @allEmpresasChecked class="onoffswitch-checkbox" id="chkIntegrarEmpresas">
+                                <label class="onoffswitch-label" for="chkIntegrarEmpresas"></label>
+                            </div>
+                            <h5 id="lblChkIntegrarEmpresas" for="chkIntegrarEmpresas" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;" class="@allEmpresasClass" title="Considera todas las empresas en los resultados de búsqueda.">Integrar todas empresas</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
 
         <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
             <button id="btnLimpiarBusquedaCotizaciones" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
@@ -221,6 +246,7 @@
                 <tr>
                     <th data-name="idCotizacion" data-visible="false"></th>
                     <th data-name="codigo" data-visible="true">N°</th>
+                    <th data-name="empresa" data-visible="true">Emp</th>
                     <th data-name="usuario" data-visible="true">Creado por</th>
                     <th data-name="fecha" data-sortable="true">Fecha Última Edición</th>
                     <th data-name="esGrupal" data-sortable="true">Creado Para</th>

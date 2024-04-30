@@ -19,7 +19,8 @@ namespace Model.NextSoft
         protected async Task<object> callService(object sendData, string  nombreServicio) {
 
             var httpClient = new HttpClient();
-            var content = new StringContent(JsonConvert.SerializeObject(sendData), Encoding.UTF8, "application/json");
+            String sendJson = JsonConvert.SerializeObject(sendData);
+            var content = new StringContent(sendJson, Encoding.UTF8, "application/json");
             var result = await httpClient.PostAsync(this.fullUrl(nombreServicio), content);
             string resultContent = await result.Content.ReadAsStringAsync();
 

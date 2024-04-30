@@ -41,6 +41,8 @@ namespace Model
                 return this.fechaFinVigenciaPrecios.HasValue && this.fechaFinVigenciaPrecios.Value < fechaHoy ? true : false;
             }
         }
+
+        public bool integraEmpresas { get; set; }
         public Guid idCotizacionAntecedente { get; set; }
 
         public bool productosInactivosRemovidos { get; set; }

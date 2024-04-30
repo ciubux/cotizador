@@ -71,6 +71,8 @@
                     @Html.LabelFor(g => guiaRemision.fechaEmision, htmlAttributes: new { @class = "control-label col-xs-4" })
                     <div class="col-xs-8">
                         <input type="hidden" id="fechaEmisiontmp" value="@ViewBag.fechaEmisiontmp" />
+                        <input type="hidden" id="fechaEmisionMinDate" value="@ViewBag.fechaEmisionMinDate" />
+                        
                         <input class="form-control" type="text" id="guiaRemision_fechaEmision" name="guiaRemision_fechaEmision">
                     </div>
                 </div>

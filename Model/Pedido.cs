@@ -66,6 +66,7 @@ namespace Model
         public Int64 numeroPedidoRelacionado { get; set; }
         public string codigoEmpresaPedidoRelacionado { get; set; }
 
+        public Empresa empresa { get; set; }
 
         public Guid idClienteTercero { get; set; }
         public String nombreClienteTercero { get; set; }

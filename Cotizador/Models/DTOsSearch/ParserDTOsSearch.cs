@@ -1,4 +1,5 @@
 ﻿using Cotizador.Models.DTOs;
+using Cotizador.Models.DTOshow;
 using Model;
 using System;
 using System.Collections.Generic;
@@ -53,6 +54,7 @@ namespace Cotizador.Models.DTOsSearch
                 cotizacionDTO.usuario_nombre = cotizacionTmp.usuario.nombre;
                 cotizacionDTO.fecha = cotizacionTmp.fecha;
                 cotizacionDTO.grupo_nombre = cotizacionTmp.grupo.nombre;
+                cotizacionDTO.empresa_codigo = cotizacionTmp.empresa.codigo;
                 cotizacionDTO.cliente_idCliente = cotizacionTmp.cliente.idCliente;
                 cotizacionDTO.cliente_razonSocial = cotizacionTmp.cliente.razonSocial;
                 cotizacionDTO.ciudad_nombre = cotizacionTmp.ciudad.nombre;
@@ -129,6 +131,7 @@ namespace Cotizador.Models.DTOsSearch
                 guiaremisionDTO.tipoExtornoToString = guiaremisionTmp.tipoExtornoToString;
                 guiaremisionDTO.pedido_cliente_ruc = guiaremisionTmp.pedido.cliente.ruc;
                 guiaremisionDTO.pedido_cliente_razonSocial = guiaremisionTmp.pedido.cliente.razonSocial;
+                guiaremisionDTO.habilitaDescargarFacturaPedidoRelacionado = guiaremisionTmp.idMovimientoRelacionado.Equals(Guid.Empty) ? false : true;
                 guiaremisionDTO.ciudadOrigen_nombre = guiaremisionTmp.ciudadOrigen.nombre;
 
                 guiaremisionDTOList.Add(guiaremisionDTO);
@@ -268,6 +271,7 @@ namespace Cotizador.Models.DTOsSearch
                 pedidoDTO.ciudad_nombre = pedidoTmp.ciudad.nombre;
                 pedidoDTO.cliente_codigo = pedidoTmp.cliente.codigo;
                 pedidoDTO.cliente_razonSocial = pedidoTmp.cliente.razonSocial;
+                pedidoDTO.empresa_codigo = pedidoTmp.empresa.codigo; 
                 pedidoDTO.cliente_tipoDocumento = pedidoTmp.cliente.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC ? "RUC" : "DNI";
                 pedidoDTO.cliente_nombreComercial = pedidoTmp.cliente.nombreComercial == null ? "" : pedidoTmp.cliente.nombreComercial;
                 pedidoDTO.numeroReferenciaCliente = pedidoTmp.numeroReferenciaCliente;

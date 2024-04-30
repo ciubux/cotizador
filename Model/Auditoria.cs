@@ -19,6 +19,8 @@ namespace Model
         public DateTime fechaInicioVigencia { get; set; }
         public bool CargaMasiva { get; set; }
 
+        public bool integraEmpresas { get; set; }
+
         public string EstadoDesc => Estado == 1 ? "Activo" : "Inactivo";
 
         public bool EstadoCheck

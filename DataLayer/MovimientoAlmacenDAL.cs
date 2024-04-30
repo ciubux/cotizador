@@ -1122,6 +1122,7 @@ namespace DataLayer
                 guiaRemision.estaFacturado = Converter.GetBool(row, "facturado");
                 guiaRemision.estaNoEntregado = Converter.GetBool(row, "no_entregado");
                 guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)Char.Parse(Converter.GetString(row, "motivo_traslado"));
+                guiaRemision.idMovimientoRelacionado = Converter.GetGuid(row, "id_movimiento_relacionado");
 
                 guiaRemision.cpeNro = Converter.GetString(row, "serie_factura") + "-" + Converter.GetString(row, "correlativo_factura");
                 guiaRemision.cpeFechaEmision = Converter.GetString(row, "fecha_emision_factura");
@@ -1495,6 +1496,11 @@ namespace DataLayer
                 notaIngreso.almacen = new Almacen();
                 notaIngreso.almacen.idAlmacen = Converter.GetGuid(row, "id_almacen");
                 notaIngreso.almacen.direccion = Converter.GetString(row, "direccion_almacen");
+                notaIngreso.almacen.ubigeo = new Ubigeo();
+                notaIngreso.almacen.ubigeo.Id = Converter.GetString(row, "ubigeo_almacen");
+                notaIngreso.almacen.codigoSucursalNextSoft = Converter.GetString(row, "codigo_sucursal_nextsoft_almacen");
+                notaIngreso.almacen.codigoPuntoVentaNextSoft = Converter.GetString(row, "codigo_punto_venta_nextsoft_almacen");
+                notaIngreso.almacen.codigoAlmacenNextSoft = Converter.GetString(row, "codigo_almacen_nextsoft_almacen");
 
                 //TRANSPORTISTA
                 notaIngreso.transportista = new Transportista();
@@ -1539,16 +1545,39 @@ namespace DataLayer
                 documentoDetalle.idDocumentoDetalle = Converter.GetGuid(row, "id_movimiento_almacen_detalle");
                 documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
                 documentoDetalle.unidad = Converter.GetString(row, "unidad");
+                documentoDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
+
+                if (documentoDetalle.esPrecioAlternativo)
+                {
+                    documentoDetalle.ProductoPresentacion = new ProductoPresentacion();
+                    documentoDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+                    documentoDetalle.ProductoPresentacion.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion");
+                }
+
+
                 documentoDetalle.producto = new Producto();
                 documentoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
                 documentoDetalle.producto.sku = Converter.GetString(row, "sku");
                 documentoDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
                 documentoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
+
+                documentoDetalle.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia_alternativa");
+                documentoDetalle.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+
+                documentoDetalle.producto.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo_producto"); 
+                documentoDetalle.producto.codigoNextSoft = Converter.GetString(row, "codigo_nextsoft");
+                documentoDetalle.producto.codigoFactorUnidadMP = Converter.GetString(row, "codigo_factor_unidad_mp");
+                documentoDetalle.producto.codigoFactorUnidadAlternativa = Converter.GetString(row, "codigo_factor_unidad_alternativa");
+                documentoDetalle.producto.codigoFactorUnidadProveedor = Converter.GetString(row, "codigo_factor_unidad_proveedor");
+                documentoDetalle.producto.codigoFactorUnidadConteo = Converter.GetString(row, "codigo_factor_unidad_conteo");
+
                 notaIngreso.documentoDetalle.Add(documentoDetalle);
             }
 
             return notaIngreso;
         }
+
+ 
 
         public List<NotaIngreso> SelectNotasIngreso(NotaIngreso notaIngreso)
         {

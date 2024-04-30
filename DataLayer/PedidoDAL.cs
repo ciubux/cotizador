@@ -709,6 +709,9 @@ namespace DataLayer
             InputParameterAdd.Bit(objCommand, "buscaSedesGrupoCliente", pedido.buscarSedesGrupoCliente);
             InputParameterAdd.Int(objCommand, "idGrupoCliente", pedido.idGrupoCliente);
             InputParameterAdd.Int(objCommand, "truncado", pedido.truncado);
+            
+            InputParameterAdd.Int(objCommand, "verTodasEmpresas", pedido.integraEmpresas? 1 : 0);
+            
 
             switch (pedido.clasePedido)
             {
@@ -783,6 +786,9 @@ namespace DataLayer
 
                 pedido.cliente.grupoCliente = new GrupoCliente();
                 pedido.cliente.grupoCliente.nombre = Converter.GetString(row, "nombre_grupo");
+
+                pedido.empresa = new Empresa();
+                pedido.empresa.codigo = Converter.GetString(row, "codigo_empresa");
 
                 pedido.usuario = new Usuario();
                 pedido.usuario.nombre = Converter.GetString(row, "nombre_usuario");
@@ -993,6 +999,9 @@ namespace DataLayer
                 pedido.vendedor.idVendedor = Converter.GetInt(row, "id_vendedor_usuario");
                 pedido.vendedor.codigoNextSoft = Converter.GetString(row, "codigo_nextsoft_vendedor");
 
+                pedido.empresa = new Empresa();
+                pedido.empresa.idEmpresa = Converter.GetInt(row, "id_empresa");
+                pedido.empresa.codigo = Converter.GetString(row, "codigo_empresa");
 
                 pedido.promocion = new Promocion();
                 pedido.promocion.idPromocion = Converter.GetGuid(row, "id_promocion");
@@ -1469,6 +1478,10 @@ namespace DataLayer
                 pedido.cliente.habilitadoModificarDireccionEntrega = Converter.GetBool(row, "habilitado_modificar_direccion_entrega");
                 pedido.cliente.tipoLiberacionCrediticia = (Persona.TipoLiberacionCrediticia)Converter.GetInt(row, "estado_liberacion_creditica");
                 pedido.cliente.esSubDistribuidor = Converter.GetBool(row, "cliente_es_sub_distribuidor");
+
+                pedido.empresa = new Empresa();
+                pedido.empresa.idEmpresa = Converter.GetInt(row, "id_empresa");
+                pedido.empresa.codigo = Converter.GetString(row, "codigo_empresa");
 
                 pedido.ciudad = new Ciudad();
                 pedido.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");

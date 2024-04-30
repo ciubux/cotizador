@@ -220,6 +220,6 @@ D:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Model.dll.config
 D:\Repo\freelos\cotizador\Framework.DAL\bin\Debug\Newtonsoft.Json.xml
 D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.AssemblyReference.cache
 D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CoreCompileInputs.cache
-D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.csproj.CopyComplete
+D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framewor.C903D24E.Up2Date
 D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.dll
 D:\Repo\freelos\cotizador\Framework.DAL\obj\Debug\Framework.DAL.pdb

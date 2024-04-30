@@ -36,10 +36,10 @@ namespace Cotizador.Models.DTOs
 
         public bool estaAnulado { get; set; }
         public bool estaFacturado { get; set; }
-        
+
+        public bool habilitaDescargarFacturaPedidoRelacionado { get; set; }
 
 
-        
 
 
     }

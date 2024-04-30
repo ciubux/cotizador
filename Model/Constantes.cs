@@ -19,6 +19,7 @@ namespace Model
         public static String formatoOchoDecimales = "{0:0.00000000}";
         public static String formatoFecha = "dd/MM/yyyy";
         public static String formatoFechaCPE = "yyyy-MM-dd";
+        public static String formatoFechaNumero = "yyyyMMdd";
         public static String formatoHora = "HH:mm";
         public static String MENSAJE_SI = "Sí";
         public static String MENSAJE_NO = "No";
@@ -494,6 +495,8 @@ namespace Model
         public const String MODIFICA_PARAMETRO = "P890";
         public const String VER_ARCHIVO = "P870";
 
+        public const String REPORTE_INTEGRADO_MULTIEMPRESA = "P162";
+        public const String VISTA_INTEGRADA_MULTIEMPRESA = "P161";
         public const String MULTI_EMPRESA = "P160";
 
         public const String EXPORTAR_VENTAS_CONTABILIDAD = "P590";
