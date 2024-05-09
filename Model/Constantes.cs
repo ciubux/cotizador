@@ -33,6 +33,10 @@ namespace Model
         public static int DIAS_MAX_VALIDEZ_OFERTA_COTIZACION_PUNTUAL = 15;
         public static Guid ID_SEDE_LIMA = Guid.Parse("15526227-2108-4113-B46A-1C8AB5C0E581");
 
+        public static long CODIGO_ZAS_EXCEL_PLANTILLA_STOCK_ID = 542;
+        public static String CODIGO_ZAS_EXCEL_PLANTILLA_STOCK_VALOR = "KOMS21S4";
+
+
         public static String URL_VER_PEDIDO = "http://cotizadormp.azurewebsites.net/Pedido?idPedido=";
 
         public static int IDROLJEFEFACTURACION = 3;
@@ -495,7 +499,7 @@ namespace Model
         public const String MODIFICA_PARAMETRO = "P890";
         public const String VER_ARCHIVO = "P870";
 
-        public const String REPORTE_INTEGRADO_MULTIEMPRESA = "P162";
+        public const String REPORTE_INTEGRADO_MULTIEMPRESA = "P990";
         public const String VISTA_INTEGRADA_MULTIEMPRESA = "P161";
         public const String MULTI_EMPRESA = "P160";
 

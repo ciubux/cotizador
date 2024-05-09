@@ -92,6 +92,11 @@ namespace Cotizador.Controllers
                     pedidoTmp.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.NoAtendidos;
                 }
 
+                if (pedidoTmp.usuario.vistaIntegradaMultiEmpresa)
+                {
+                    pedidoTmp.integraEmpresas = true;
+                }
+
                 pedidoTmp.seguimientoCrediticioPedido = new SeguimientoCrediticioPedido();
                 pedidoTmp.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Todos;
 
@@ -446,6 +451,8 @@ namespace Cotizador.Controllers
         {
             try
             {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
                 this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoPedido;
 
                 //Si no hay usuario, se dirige el logueo
@@ -455,7 +462,7 @@ namespace Cotizador.Controllers
                 }
                 else
                 {
-                    Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                    
                     if (!usuario.tomaPedidos)
                     {
                         return RedirectToAction("Login", "Account");
@@ -477,6 +484,7 @@ namespace Cotizador.Controllers
                 }
                 Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
 
+                
 
                 int existeCliente = 0;
                 if (pedido.cliente.idCliente != Guid.Empty)
@@ -484,7 +492,15 @@ namespace Cotizador.Controllers
                     existeCliente = 1;
                 }
 
-                if(!pedido.idPedido.Equals(Guid.Empty))
+                if (pedido.idPedido.Equals(Guid.Empty) && existeCliente == 0)
+                {
+                    List<Empresa> empresas = (List<Empresa>)this.Session[Constantes.VAR_SESSION_EMPRESA_LISTA];
+
+                    pedido.empresa = empresas.Where(e => (e.idEmpresa == usuario.idEmpresa)).FirstOrDefault();
+                    this.PedidoSession = pedido;
+                }
+
+                if (!pedido.idPedido.Equals(Guid.Empty))
                 {
                     bool existeDireccionEntrega = false;
                     foreach (DireccionEntrega dir in pedido.cliente.direccionEntregaList)
@@ -574,6 +590,7 @@ namespace Cotizador.Controllers
             pedido.cliente = cotizacion.cliente;
             pedido.esPagoContado = cotizacion.esPagoContado;
             pedido.moneda = cotizacion.moneda;
+            pedido.empresa = cotizacion.empresa;
 
             if (cotizacion.cliente.horaInicioPrimerTurnoEntrega != null && !cotizacion.cliente.horaInicioPrimerTurnoEntrega.Equals("00:00:00"))
             {

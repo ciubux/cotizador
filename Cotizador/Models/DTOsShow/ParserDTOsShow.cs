@@ -68,6 +68,8 @@ namespace Cotizador.Models.DTOsShow
             cotizacionDTOshow.fechaFinVigenciaPreciosExtendida = cotizacion.fechaFinVigenciaPreciosExtendida;
             cotizacionDTOshow.estadoExtendida = cotizacion.estadoExtendida;
 
+            cotizacionDTOshow.empresa_codigo = cotizacion.empresa == null ? "" : cotizacion.empresa.codigo;
+
             cotizacionDTOshow.monedaCodigo = cotizacion.moneda.codigo;
             cotizacionDTOshow.monedaSimbolo = cotizacion.moneda.simbolo;
             cotizacionDTOshow.monedaNombre = cotizacion.moneda.nombre;
@@ -389,6 +391,7 @@ namespace Cotizador.Models.DTOsShow
             pedidoDTOshow.cliente_nombreComercial = pedido.cliente.nombreComercial == null ? "" : pedido.cliente.nombreComercial;
             pedidoDTOshow.cliente_tipoDocumento = pedido.cliente.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC ? "RUC" : "DNI";
             pedidoDTOshow.esVentaIndirecta = pedido.esVentaIndirecta;
+            pedidoDTOshow.empresa_codigo = pedido.empresa == null ? "" : pedido.empresa.codigo;
 
 
             pedidoDTOshow.textoCondicionesPago = pedido.textoCondicionesPago;

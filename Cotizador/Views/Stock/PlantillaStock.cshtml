@@ -144,6 +144,22 @@
         </div>
 
         <div class="row">
+            <div class="col-sm-12 col-lg-8">
+                
+            </div>
+            
+            <div class="col-sm-12 col-lg-8">
+                <div class="form-group">
+                    <label class="control-label col-xs-2" for="idCiudad">SKU Listado:</label>
+                    <div class="col-xs-10">
+                        @Html.TextBoxFor(c => producto.skuList, htmlAttributes: new { @class = "form-control" })
+                        <span style="margin-right: 20px; font-size:12px; color: darkred; font-weight: normal " class="has-error">*Ingrese los SKUs separado por "," Ej.: HH2S81, HK5F45, SN2R05<br />*Si se llena este filtro, se omitirán los otros.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-sm-6 col-lg-4">
 
             </div>

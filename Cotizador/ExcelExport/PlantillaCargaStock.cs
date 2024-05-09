@@ -15,6 +15,11 @@ using NPOI.SS.Util;
 using BusinessLayer;
 
 using System.Web.Mvc;
+using Model.MASTERS;
+using NPOI.Util.Collections;
+using NPOI.HPSF;
+using NPOI;
+using NPOI.XSSF.Streaming;
 
 namespace Cotizador.ExcelExport
 {
@@ -311,7 +316,21 @@ namespace Cotizador.ExcelExport
 
                     i++;
                 }
+
+                Property prop = new Property(42, 30, "MPCODE");
+
+                var newDocInfo = NPOI.HPSF.PropertySetFactory.CreateDocumentSummaryInformation();
+
+                SummaryInformation newInfo = NPOI.HPSF.PropertySetFactory.CreateSummaryInformation();
+                newInfo.FirstSection.Dictionary = new Dictionary<long, string>();
+                newInfo.FirstSection.Dictionary.Add(Constantes.CODIGO_ZAS_EXCEL_PLANTILLA_STOCK_ID, 
+                            Constantes.CODIGO_ZAS_EXCEL_PLANTILLA_STOCK_VALOR);
                 
+                wb.DocumentSummaryInformation = newDocInfo;
+                wb.SummaryInformation = newInfo;
+
+
+
                 MemoryStream ms = new MemoryStream();
                 using (MemoryStream tempStream = new MemoryStream())
                 {

@@ -59,6 +59,8 @@ namespace Cotizador.Controllers
 
         public ReporteSellOutVendedoresFiltro instanciarFiltroSellOutVendedores()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
             ReporteSellOutVendedoresFiltro obj = new ReporteSellOutVendedoresFiltro();
             obj.proveedor = "Todos";
             obj.familia = "Todas";
@@ -77,6 +79,12 @@ namespace Cotizador.Controllers
             obj.idGrupo = 0;
             obj.ruc = string.Empty;
             obj.integraEmpresas = false;
+            obj.excluirVentasRelacionadasHijas = true;
+
+            if (usuario.vistaIntegradaMultiEmpresa || usuario.reporteIntegradoMultiEmpresa)
+            {
+                obj.integraEmpresas = true;
+            }
 
             return obj;
         }

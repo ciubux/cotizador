@@ -70,7 +70,11 @@ namespace Cotizador.Controllers
             {
                 cotizacionTmp.responsableComercial = usuario.vendedor;
             }
-            
+
+            if (usuario.vistaIntegradaMultiEmpresa)
+            {
+                cotizacionTmp.integraEmpresas = true;
+            }
 
             cotizacionTmp.grupo = new GrupoCliente();
             cotizacionTmp.seguimientoCotizacion = new SeguimientoCotizacion();
@@ -316,6 +320,15 @@ namespace Cotizador.Controllers
                     instanciarCotizacion();
                 }
                 Cotizacion cotizacion = this.CotizacionSession;
+                
+
+                if (cotizacion.idCotizacion == Guid.Empty && (cotizacion.cliente == null || cotizacion.cliente.idCliente == Guid.Empty))
+                {
+                    List<Empresa> empresas = (List<Empresa>)this.Session[Constantes.VAR_SESSION_EMPRESA_LISTA];
+
+                    cotizacion.empresa = empresas.Where(e => (e.idEmpresa == usuario.idEmpresa)).FirstOrDefault();
+                    this.CotizacionSession = cotizacion;
+                }
 
                 ViewBag.productosInactivosRemovidos = 0;
                 if (cotizacion.productosInactivosRemovidos)
@@ -382,6 +395,7 @@ namespace Cotizador.Controllers
 
             try
             {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 //Si no hay usuario, se dirige el logueo
                 if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
                 {
@@ -389,7 +403,6 @@ namespace Cotizador.Controllers
                 }
                 else
                 {
-                    Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                     if (!usuario.creaCotizacionesGrupales)
                     {
                         return RedirectToAction("Login", "Account");
@@ -411,6 +424,14 @@ namespace Cotizador.Controllers
                     instanciarCotizacion();
                 }
                 Cotizacion cotizacion = this.CotizacionSession;
+
+                if (cotizacion.idCotizacion == Guid.Empty && (cotizacion.grupo == null || cotizacion.grupo.idGrupoCliente == 0))
+                {
+                    List<Empresa> empresas = (List<Empresa>)this.Session[Constantes.VAR_SESSION_EMPRESA_LISTA];
+
+                    cotizacion.empresa = empresas.Where(e => (e.idEmpresa == usuario.idEmpresa)).FirstOrDefault();
+                    this.CotizacionSession = cotizacion;
+                }
 
                 ViewBag.productosInactivosRemovidos = 0;
                 if (cotizacion.productosInactivosRemovidos)

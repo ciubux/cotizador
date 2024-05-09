@@ -35,6 +35,7 @@ namespace DataLayer
                 obj.factorCosto = Converter.GetDecimal(row, "factor_costo");
                 obj.porcentajeMargenMinimo = Converter.GetDecimal(row, "porcentaje_margen_minimo");
                 obj.porcentajeDescuentoInframargen = Converter.GetDecimal(row, "porcentaje_descuento_infra_margen");
+                obj.porcentajeMDGanaciaMax = Converter.GetDecimal(row, "porcentaje_md_ganancia_max");
             }
 
             return obj;

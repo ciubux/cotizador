@@ -40,7 +40,7 @@
 
 </script>
 <div class="page-header">
-    <h3>@ViewBag.Title</h3>
+    <h3><img src="~/images/logos/logo_@(cotizacion.empresa.codigo).png" id="verImagenLogoPedido" height="35" style="margin-top: -8px; margin-left: 25px; margin-right: 5px;" />@ViewBag.Title</h3>
 </div>
 <div class="container">
     <input type="hidden" id="codigoCotizacion" value="" />
@@ -78,15 +78,32 @@
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
                     <label for="cliente" class="control-label col-xs-4"> Grupo:</label>
+                    @if (cotizacion.empresa.idEmpresa == cotizacion.usuario.idEmpresa)
+                    {
+                        <div class="col-xs-8">
+                            @Html.Action("GetGruposCliente", "GrupoCliente",
+                               new
+                               {
+                                   grupoClienteSelectId = "idGrupoCliente",
+                                   selectedValue = cotizacion.grupo.idGrupoCliente
+                               })
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-xs-8">
+                            @if (cotizacion.grupo.idGrupoCliente > 0)
+                            {
+                                <input type="hidden" id="idGrupoCliente" value="@cotizacion.grupo.idGrupoCliente" />
+                                <p class="form-control-static">@cotizacion.grupo.codigoNombre</p>
+                            }
+                            else
+                            {
+                                <p class="form-control-static text-danger">*NO SELECCIONADO</p>
+                            }
+                        </div>
+                    }
 
-                    <div class="col-xs-8">
-                        @Html.Action("GetGruposCliente", "GrupoCliente",
-       new
-       {
-           grupoClienteSelectId = "idGrupoCliente",
-           selectedValue = cotizacion.grupo.idGrupoCliente
-       })
-                    </div>
                 </div>
             </div>
 

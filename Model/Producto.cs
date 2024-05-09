@@ -51,6 +51,7 @@ namespace Model
 
         public String codigoFactorUnidadConteo { get; set; }
 
+        public String skuList { get; set; }
         ///<summary>
         ///Identifica si el producto se encuentra exonerado de IGV
         ///</summary>

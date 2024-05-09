@@ -81,10 +81,10 @@ jQuery(function ($) {
     };
 
     function verificarSiExisteCliente() {
-        if ($("#esCliente").val() == 0) {
+        //if ($("#esCliente").val() == 0) {
             if ($("#idCliente").val().trim() != "" && $("#pagina").val() == PAGINA_MANTENIMIENTO_PEDIDO_VENTA)
                 $("#idCiudad").attr("disabled", "disabled");
-        }
+        //}
     }
    
 
@@ -160,7 +160,7 @@ jQuery(function ($) {
 
     function cargarChosenCliente() {
 
-        $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
+        $("select#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
             if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
                 alert("Debe seleccionar la sede MP previamente.");
                 $("#idCliente").trigger('chosen:close');
@@ -169,7 +169,7 @@ jQuery(function ($) {
             }
         });
 
-        $("#idCliente").ajaxChosen({
+        $("select#idCliente").ajaxChosen({
             dataType: "json",
             type: "GET",
             minTermLength: 5,
@@ -3016,6 +3016,8 @@ jQuery(function ($) {
                 $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaHasta.substr(0, 10)));
                 $("#fechaProgramaciontmp").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
                 //Important
+
+                $("#verImagenLogoPedido").attr("src", "/images/logos/logo_" + pedido.empresa_codigo + ".png");
 
                 $("#idPedido").val(pedido.idPedido);
 

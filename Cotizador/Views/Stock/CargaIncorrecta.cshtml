@@ -1,0 +1,6 @@
+﻿<div class="container">
+    @if (ViewBag.tipoError == "version_archivo_plantilla_stock")
+    {
+        <h1><span class="text-danger">¡¡ERROR!!</span> El archivo no es una plantilla descargada desde el ZAS o es una versión anterior. Descargue la plantilla <a href="@Url.Action("PlantillaStock", "Stock")">desde aquí.</a></h1>
+    }
+</div>

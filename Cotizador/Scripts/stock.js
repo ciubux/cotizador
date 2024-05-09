@@ -82,6 +82,10 @@ jQuery(function ($) {
         changeInputString("sku", $("#producto_sku").val());
     });
 
+    $("#producto_skuList").change(function () {
+        changeInputString("skuList", $("#producto_skuList").val());
+    });
+
     $("#producto_descripcion").change(function () {
         changeInputString("descripcion", $("#producto_descripcion").val());
     });

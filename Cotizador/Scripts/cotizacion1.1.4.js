@@ -144,8 +144,12 @@ jQuery(function ($) {
 
 
     function verificarSiExisteCliente() {
-        if ($("#idCliente").val().trim() != "" && $("#pagina").val() == PAGINA_MANTENIMIENTO_COTIZACION)
+        try {
+            if ($("#idCliente").val().trim() != "" && $("#pagina").val() == PAGINA_MANTENIMIENTO_COTIZACION)
+                $("#idCiudad").attr("disabled", "disabled");
+        } catch (e) {
             $("#idCiudad").attr("disabled", "disabled");
+        }
     }
 
     function obtenerConstantes() {
@@ -454,7 +458,7 @@ jQuery(function ($) {
 
     function cargarChosenCliente() {
 
-        $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
+        $("select#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
             if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
                 alert("Debe seleccionar la sede MP previamente.");
                 $("#idCliente").trigger('chosen:close');
@@ -463,7 +467,7 @@ jQuery(function ($) {
             }
         });
 
-        $("#idCliente").ajaxChosen({
+        $("select#idCliente").ajaxChosen({
             dataType: "json",
             type: "GET",
             minTermLength: 5,
@@ -2234,6 +2238,8 @@ jQuery(function ($) {
                     numeroCot = numeroCot + " (Recotizado desde " + cotizacion.codigoAntecedente + ")";
                 }
 
+                $("#verImagenLogoCot").attr("src", "/images/logos/logo_" + cotizacion.empresa_codigo + ".png");
+                
                 $("#verIdGrupoCliente").val(cotizacion.grupo_idGrupoCliente);
                 $("#verNumero").html(numeroCot);
                 $("#verCiudad").html(cotizacion.ciudad_nombre);

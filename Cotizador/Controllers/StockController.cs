@@ -94,6 +94,7 @@ namespace Cotizador.Controllers
             producto.tipoVentaRestringidaBusqueda = -1;
             producto.descontinuado = -1;
             producto.ConImagen = -1;
+            producto.skuList = String.Empty;
 
             this.Session["familia"] = "Todas";
             this.Session["proveedor"] = "Todos";
@@ -495,6 +496,22 @@ namespace Cotizador.Controllers
             bool agregar = false;
 
             List<RegistroCargaStock> listaStock = new List<RegistroCargaStock>();
+
+            bool esUltimaVersionZAS = false;
+            if(hssfwb.SummaryInformation != null)
+            {
+                if (hssfwb.SummaryInformation.FirstSection.Dictionary[Constantes.CODIGO_ZAS_EXCEL_PLANTILLA_STOCK_ID] != null &&
+                    hssfwb.SummaryInformation.FirstSection.Dictionary[Constantes.CODIGO_ZAS_EXCEL_PLANTILLA_STOCK_ID].ToString().Equals(Constantes.CODIGO_ZAS_EXCEL_PLANTILLA_STOCK_VALOR))
+                {
+                    esUltimaVersionZAS = true;
+                }
+            }
+
+            if (!esUltimaVersionZAS)
+            {
+                ViewBag.tipoError = "version_archivo_plantilla_stock";
+                return View("CargaIncorrecta");
+            }
 
             for (row = 1; row <= cantidad; row++)
             {

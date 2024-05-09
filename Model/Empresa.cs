@@ -27,11 +27,15 @@ namespace Model
         [Display(Name = "Factor Costo:")]
         public decimal factorCosto { get; set; }
 
-        [Display(Name = "Porcentaje Margen Mínimo:")]
+        [Display(Name = "Porcentaje Margen Mínimo(Mk Down):")]
         public decimal porcentajeMargenMinimo { get; set; }
 
-        [Display(Name = "Porcentaje Descuento Infra Margen:")]
+        [Display(Name = "Porcentaje Descuento Infra Margen(Mk Down):")]
         public decimal porcentajeDescuentoInframargen { get; set; }
+
+        [Display(Name = "Porcentaje Ganancia Máxima(Mk Down):")]
+        public decimal porcentajeMDGanaciaMax { get; set; }
+
 
         public bool atencionTerciarizada { get; set; }
 

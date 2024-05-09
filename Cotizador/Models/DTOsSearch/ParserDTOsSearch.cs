@@ -271,7 +271,7 @@ namespace Cotizador.Models.DTOsSearch
                 pedidoDTO.ciudad_nombre = pedidoTmp.ciudad.nombre;
                 pedidoDTO.cliente_codigo = pedidoTmp.cliente.codigo;
                 pedidoDTO.cliente_razonSocial = pedidoTmp.cliente.razonSocial;
-                pedidoDTO.empresa_codigo = pedidoTmp.empresa.codigo; 
+                pedidoDTO.empresa_codigo = pedidoTmp.empresa != null ? pedidoTmp.empresa.codigo : ""; 
                 pedidoDTO.cliente_tipoDocumento = pedidoTmp.cliente.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC ? "RUC" : "DNI";
                 pedidoDTO.cliente_nombreComercial = pedidoTmp.cliente.nombreComercial == null ? "" : pedidoTmp.cliente.nombreComercial;
                 pedidoDTO.numeroReferenciaCliente = pedidoTmp.numeroReferenciaCliente;

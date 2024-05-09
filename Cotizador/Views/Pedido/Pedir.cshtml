@@ -2,13 +2,13 @@
     ViewBag.Title = "Crear/Modificar Pedido Venta";
     Model.Pedido pedido = ViewBag.pedido;
     Model.DireccionEntrega direccionEntrega = ViewBag.direccionEntrega;
-    Model.Solicitante solicitante = ViewBag.solicitante;
+    Model.Solicitante solicitante = pedido.solicitante;
     // Model.pedido.OpcionesConsiderarCantidades opcionesConsiderarCantidades;
     // @model Enum;
 }
 
 <div class="page-header">
-    <h3>@ViewBag.Title</h3>
+    <h3><img src="~/images/logos/logo_@(pedido.empresa.codigo).png" id="verImagenLogoPedido" height="35" style="margin-top: -8px; margin-left: 25px; margin-right: 5px;" /> @ViewBag.Title</h3>
 </div>
 <div class="container">
     <input type="hidden" id="idPedido" />
@@ -104,22 +104,41 @@
                 <div class="form-group">
                     <label for="idCliente" class="control-label col-xs-4">Cliente:</label>
 
-                    <div class="col-xs-6">
-                        <select class="form-control input-sm" id="idCliente" name="idCliente" required>
+                    @if (pedido.empresa.idEmpresa == pedido.usuario.idEmpresa)
+                    {
+                        <div class="col-xs-6">
+                            <select class="form-control input-sm" id="idCliente" name="idCliente" required>
+                                @if (ViewBag.existeCliente == 1)
+                                {
+                                    <option selected value="@pedido.cliente.idCliente ">@pedido.cliente</option>
+                                }
+                                else
+                                {
+                                    <option value=""></option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-xs-2">
+                            <button id="btnAgregarCliente" type="button" class="btn btn-primary bouton-image-add addBouton"></button>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-xs-8">
                             @if (ViewBag.existeCliente == 1)
                             {
-                                <option selected value="@pedido.cliente.idCliente ">@pedido.cliente</option>
+                                <input type="hidden" id="idCliente" value="@pedido.cliente.idCliente" />
+                                <p class="form-control-static">@pedido.cliente</p>
                             }
                             else
                             {
-                                <option value=""></option>
+                                <p class="form-control-static text-danger">*NO SELECCIONADO</p>
                             }
-                        </select>
-                    </div>
+                        </div>
+                    }
 
-                    <div class="col-xs-2">
-                        <button id="btnAgregarCliente" type="button" class="btn btn-primary bouton-image-add addBouton"></button>
-                    </div>
+
 
                 </div>
             </div>

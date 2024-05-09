@@ -1129,18 +1129,17 @@ namespace BusinessLayer
 
                 if (margenDet < empresa.porcentajeMargenMinimo)
                 {
-                    // descuento es igual a un % del margen y ya no del total 
-
-                    /* Formula descuento inframargen
-                     if (det.esPrecioAlternativo)
+                    
+                    // Formula descuento inframargen
+                    if (det.esPrecioAlternativo)
                     {
-                        det.precioNeto = det.precioNeto * det.ProductoPresentacion.Equivalencia * ((100 - usuarioEmpresa.pDescuentoInfraMargen) / 100);
+                        det.precioNeto = det.precioNeto * det.ProductoPresentacion.Equivalencia * ((100 - empresa.porcentajeDescuentoInframargen) / 100);
                     } else
                     {
-                        det.precioNeto = det.precioNeto * ((100 - usuarioEmpresa.pDescuentoInfraMargen) / 100);
+                        det.precioNeto = det.precioNeto * ((100 - empresa.porcentajeDescuentoInframargen) / 100);
                     }
-                    */
-
+                    
+                    /* Descuento a la ganancia
                     if (det.esPrecioAlternativo)
                     {
                         //det.precioNeto = det.precioNeto * det.ProductoPresentacion.Equivalencia * ((100 - usuarioEmpresa.pDescuentoInfraMargen) / 100);
@@ -1150,13 +1149,28 @@ namespace BusinessLayer
                     {
                         det.precioNeto = det.producto.costoLista + (det.precioNeto - det.producto.costoLista) * ((100 - empresa.porcentajeDescuentoInframargen) / 100);
                     }
-                    
+                    */
+
                     pMP.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
 
                     det.tieneInfraMargenEmpresaExterna = true;
                 } else
                 {
-                    det.precioNeto = det.producto.costoLista * empresa.factorCosto;
+                    decimal precioVentaMP = det.producto.costoLista * empresa.factorCosto;
+                    decimal precioVentaGanMax = det.precioNeto * (100 - empresa.porcentajeMDGanaciaMax) / 100;
+
+                    if (det.esPrecioAlternativo)
+                    {
+                        precioVentaGanMax = det.precioNeto * det.ProductoPresentacion.Equivalencia * (100 - empresa.porcentajeMDGanaciaMax) / 100;
+                    }
+
+                    if (precioVentaMP >= precioVentaGanMax)
+                    { // Escenario Primavera
+                        det.precioNeto = precioVentaMP;
+                    } else
+                    { // Escenario Verano
+                        det.precioNeto = precioVentaGanMax;
+                    }
                 }
             }
 

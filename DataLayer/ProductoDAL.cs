@@ -1152,6 +1152,36 @@ namespace DataLayer
                 InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
             }
 
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(String)));
+
+            if (producto.skuList == null || producto.skuList.Trim().Equals(String.Empty))
+            {
+                InputParameterAdd.Int(objCommand, "buscarListaSKU", 0);
+            }
+            else
+            {
+                InputParameterAdd.Int(objCommand, "buscarListaSKU", 1);
+
+                String[] listaSKUC = producto.skuList.Split(',');
+
+                foreach (String itemC in listaSKUC)
+                {
+                    String[] listaSKUPC = itemC.Split(';');
+                    foreach (String item in listaSKUPC)
+                    {
+                        DataRow rowObj = tvp.NewRow();
+                        rowObj["ID"] = item.Trim();
+                        tvp.Rows.Add(rowObj);
+                    }
+                }
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@skuList", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.VarcharCList";
+
+
             DataTable dataTable = Execute(objCommand);
 
             List<Producto> productoList = new List<Producto>();

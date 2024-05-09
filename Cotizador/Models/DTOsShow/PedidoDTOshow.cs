@@ -16,6 +16,8 @@ namespace Cotizador.Models.DTOshow
         public List<Promocion> promocionesList { get; set; }
         public DateTime? fechaEntregaDesde { get; set; }
         public DateTime? fechaEntregaHasta { get; set; }
+
+        public String empresa_codigo { get; set; }
         public String numeroPedidoString { get; set; }
         public String numeroGrupoPedidoString { get; set; }
         public String cotizacion_numeroCotizacionString { get; set; }
