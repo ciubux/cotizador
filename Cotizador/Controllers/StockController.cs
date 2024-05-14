@@ -452,8 +452,9 @@ namespace Cotizador.Controllers
 
             int tipoCarga = int.Parse(this.Request.Params["tipoCarga"].ToString());
             Guid idSede = Guid.Parse(this.Request.Params["idCiudad"].ToString());
-            String[] fiv = this.Request.Params["fechaCierre"].Split('/');
-            DateTime fechaCierre = new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]));
+            DateTime fechaCierre = DateTime.Now;
+            String observaciones = String.Empty;
+            
 
             ArchivoAdjuntoBL arcBL = new ArchivoAdjuntoBL();
             ArchivoAdjunto arAd = new ArchivoAdjunto();
@@ -505,6 +506,11 @@ namespace Cotizador.Controllers
                 {
                     esUltimaVersionZAS = true;
                 }
+
+                if (hssfwb.SummaryInformation.Author.Equals(Constantes.CODIGO_ZAS_EXCEL_PLANTILLA_STOCK_VALOR))
+                {
+                    esUltimaVersionZAS = true;
+                }
             }
 
             if (!esUltimaVersionZAS)
@@ -512,8 +518,37 @@ namespace Cotizador.Controllers
                 ViewBag.tipoError = "version_archivo_plantilla_stock";
                 return View("CargaIncorrecta");
             }
+            
 
-            for (row = 1; row <= cantidad; row++)
+            int filaIniciar = 1;
+            int filasCabecera = 8;
+
+            for (row = 0; row <= filasCabecera; row++)
+            {
+                if (sheet.GetRow(row) != null && sheet.GetRow(row).GetCell(1) != null)
+                {
+                    String labelText = sheet.GetRow(row).GetCell(1).ToString().Trim();
+
+                    switch(labelText)
+                    {
+                        case "Fecha":
+                            String[] fiv = sheet.GetRow(row).GetCell(3) != null ?
+                                            sheet.GetRow(row).GetCell(3).ToString().Trim().Split('/') 
+                                            : String.Empty.Split('/');
+                            fechaCierre = fiv.Length > 2 ? 
+                                            new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]))
+                                            : DateTime.Now;
+                            filaIniciar = filaIniciar + 2;
+                            break;
+                        case "Observaciones":
+                            observaciones = sheet.GetRow(row).GetCell(3) != null ? sheet.GetRow(row).GetCell(3).ToString().Trim() : "";
+                            filaIniciar = filaIniciar + 2;
+                            break;
+                    }
+                }
+            }
+
+            for (row = filaIniciar; row <= cantidad; row++)
             {
                 if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
                 {
@@ -618,7 +653,7 @@ namespace Cotizador.Controllers
             }
 
             
-            productoBL.RegistroCierreStock(listaStock, fechaCierre, idSede, usuario.idUsuario, arAd.idArchivoAdjunto, tipoCarga);
+            productoBL.RegistroCierreStock(listaStock, fechaCierre, idSede, usuario.idUsuario, arAd.idArchivoAdjunto, tipoCarga, observaciones);
 
             ViewBag.tipoCarga = "archivo";
 

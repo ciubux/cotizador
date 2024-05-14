@@ -1607,7 +1607,7 @@ namespace DataLayer
         }
 
 
-        public bool RegistroCierreStock(List<RegistroCargaStock> stock, DateTime fechaCierre, Guid idCiudad, Guid idUsuario, Guid idArchivoAdjunto, int tipoCarga)
+        public bool RegistroCierreStock(List<RegistroCargaStock> stock, DateTime fechaCierre, Guid idCiudad, Guid idUsuario, Guid idArchivoAdjunto, int tipoCarga, String observaciones)
         {
             var objCommand = GetSqlCommand("pi_cierre_stock");
 
@@ -1616,6 +1616,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             InputParameterAdd.Int(objCommand, "inventarioTotal", tipoCarga);
             InputParameterAdd.Guid(objCommand, "idArchivoAdjunto", idArchivoAdjunto);
+            InputParameterAdd.VarcharEmpty(objCommand, "observaciones", observaciones);
 
             DataTable tvp = new DataTable();
             tvp.Columns.Add(new DataColumn("SKU", typeof(string)));

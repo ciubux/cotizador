@@ -20,6 +20,7 @@ using NPOI.Util.Collections;
 using NPOI.HPSF;
 using NPOI;
 using NPOI.XSSF.Streaming;
+using static System.Net.WebRequestMethods;
 
 namespace Cotizador.ExcelExport
 {
@@ -58,7 +59,13 @@ namespace Cotizador.ExcelExport
 
                 HSSFCellStyle formDataCenterCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
                 formDataCenterCellStyle.Alignment = HorizontalAlignment.Center;
-                
+
+                HSSFCellStyle formDataText = (HSSFCellStyle)wb.CreateCellStyle();
+                formDataText.WrapText = true;
+
+                HSSFCellStyle formDataTextEditable = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, formDataText);
+                formDataTextEditable.IsLocked = false;
+
                 HSSFCellStyle tableDataCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
                 tableDataCellStyle.WrapText = true;
                 tableDataCellStyle.VerticalAlignment = VerticalAlignment.Center;
@@ -108,6 +115,9 @@ namespace Cotizador.ExcelExport
                 HSSFCellStyle tableDataCenterCellStyle = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataCellStyle);
                 tableDataCenterCellStyle.Alignment = HorizontalAlignment.Center;
 
+                HSSFCellStyle tableDataCenterEditableCellStyle = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataCenterCellStyle);
+                tableDataCenterEditableCellStyle.IsLocked = false;
+
                 HSSFCellStyle tableDataCellStyleB = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataCellStyle);
                 tableDataCellStyleB.Alignment = HorizontalAlignment.Left;
                 tableDataCellStyleB.FillPattern = FillPattern.SolidForeground;
@@ -117,13 +127,18 @@ namespace Cotizador.ExcelExport
                 tableDataCenterCellStyleB.FillPattern = FillPattern.SolidForeground;
                 tableDataCenterCellStyleB.FillForegroundColor = HSSFColor.Grey25Percent.Index;
 
+                HSSFCellStyle tableDataCenterEditableCellStyleB = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataCenterCellStyleB);
+                tableDataCenterEditableCellStyleB.IsLocked = false;
+
                 HSSFCellStyle tableDataLastCenterCellStyle = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, tableDataLastCellStyle);
                 tableDataLastCenterCellStyle.Alignment = HorizontalAlignment.Center;
 
                 IDataFormat format = wb.CreateDataFormat();
                 ICellStyle dateFormatStyle = wb.CreateCellStyle();
-                dateFormatStyle.DataFormat = format.GetFormat("yyyy-mm-dd");
+                dateFormatStyle.DataFormat = format.GetFormat("dd/mm/yyyy");
 
+                ICellStyle dateFormatEditableStyle = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, dateFormatStyle);
+                dateFormatEditableStyle.IsLocked = false;
 
 
                 // create sheet
@@ -153,11 +168,30 @@ namespace Cotizador.ExcelExport
                 if (!nombreSede.Equals(""))
                 {
                     UtilesHelper.combinarCeldas(sheet, i, i, "B", "C");
-                    UtilesHelper.setValorCelda(sheet, i, "B", "Sede:", formLabelCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "B", "Sede", formLabelCellStyle);
                     UtilesHelper.setValorCelda(sheet, i, "D", nombreSede.ToUpper());
 
                     i = i + 2;
                 }
+
+                UtilesHelper.combinarCeldas(sheet, i, i, "B", "C");
+                UtilesHelper.setValorCelda(sheet, i, "B", "Fecha", formLabelCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "D", DateTime.Now.ToString(Constantes.formatoFecha), dateFormatEditableStyle);
+                UtilesHelper.setValorCelda(sheet, i, "E", "Formato: DIA/MES/AÑO");
+
+                i = i + 2;
+
+                UtilesHelper.combinarCeldas(sheet, i, i, "B", "C");
+                UtilesHelper.setValorCelda(sheet, i, "B", "Observaciones", formLabelCellStyle);
+                UtilesHelper.combinarCeldas(sheet, i, i, "D", "E");
+                UtilesHelper.setValorCelda(sheet, i, "D", "", formDataTextEditable);
+                UtilesHelper.setValorCelda(sheet, i, "E", "", formDataTextEditable);
+
+                UtilesHelper.setRowHeight(sheet, i, 520);
+
+                i = i + 2;
+
+                
 
 
                 UtilesHelper.combinarCeldas(sheet, i, i + 1, "A", "A");
@@ -189,7 +223,7 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i + 1, "M", "Unidad", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i + 1, "N", "Stock", titleDataCellStyle);
 
-
+                sheet.ProtectSheet(Constantes.PÄSSWORD_ZAS_EXCEL_PLANTILLA_STOCK_VALOR);
 
 
                 UtilesHelper.setColumnWidth(sheet, "A", 10000);
@@ -209,7 +243,6 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setColumnWidth(sheet, "L", 500);
                 UtilesHelper.setColumnWidth(sheet, "M", 6000);
                 UtilesHelper.setColumnWidth(sheet, "N", 2000);
-
 
                 i = i + 2;
 
@@ -242,16 +275,16 @@ namespace Cotizador.ExcelExport
                         if (obj.equivalenciaProveedor > 1)
                         {
                             UtilesHelper.setValorCelda(sheet, i, "G", obj.unidadProveedor, tableDataCellStyleB);
-                            UtilesHelper.setValorCelda(sheet, i, "H", "", tableDataCenterCellStyleB);
+                            UtilesHelper.setValorCelda(sheet, i, "H", "", tableDataCenterEditableCellStyleB);
                         }
 
                         UtilesHelper.setValorCelda(sheet, i, "J", obj.unidad, tableDataCellStyleB);
-                        UtilesHelper.setValorCelda(sheet, i, "K", "", tableDataCenterCellStyleB);
+                        UtilesHelper.setValorCelda(sheet, i, "K", "", tableDataCenterEditableCellStyleB);
 
                         if (obj.equivalenciaAlternativa > 1)
                         {
                             UtilesHelper.setValorCelda(sheet, i, "M", obj.unidad_alternativa, tableDataCellStyleB);
-                            UtilesHelper.setValorCelda(sheet, i, "N", "", tableDataCenterCellStyleB);
+                            UtilesHelper.setValorCelda(sheet, i, "N", "", tableDataCenterEditableCellStyleB);
                         }
 
                         if (obj.equivalenciaProveedor <= 1)
@@ -281,16 +314,16 @@ namespace Cotizador.ExcelExport
                         if (obj.equivalenciaProveedor > 1)
                         {
                             UtilesHelper.setValorCelda(sheet, i, "G", obj.unidadProveedor, tableDataCellStyle);
-                            UtilesHelper.setValorCelda(sheet, i, "H", "", tableDataCenterCellStyle);
+                            UtilesHelper.setValorCelda(sheet, i, "H", "", tableDataCenterEditableCellStyle);
                         }
 
                         UtilesHelper.setValorCelda(sheet, i, "J", obj.unidad, tableDataCellStyle);
-                        UtilesHelper.setValorCelda(sheet, i, "K", "", tableDataCenterCellStyle);
+                        UtilesHelper.setValorCelda(sheet, i, "K", "", tableDataCenterEditableCellStyle);
 
                         if (obj.equivalenciaAlternativa > 1)
                         {
                             UtilesHelper.setValorCelda(sheet, i, "M", obj.unidad_alternativa, tableDataCellStyle);
-                            UtilesHelper.setValorCelda(sheet, i, "N", "", tableDataCenterCellStyle);
+                            UtilesHelper.setValorCelda(sheet, i, "N", "", tableDataCenterEditableCellStyle);
                         }
 
                         if (obj.equivalenciaProveedor <= 1)
@@ -313,15 +346,18 @@ namespace Cotizador.ExcelExport
 
 
                     if (bStyle) { bStyle = false; } else { bStyle = true; }
-
                     i++;
                 }
+
+                
+
 
                 Property prop = new Property(42, 30, "MPCODE");
 
                 var newDocInfo = NPOI.HPSF.PropertySetFactory.CreateDocumentSummaryInformation();
 
                 SummaryInformation newInfo = NPOI.HPSF.PropertySetFactory.CreateSummaryInformation();
+                newInfo.Author = Constantes.CODIGO_ZAS_EXCEL_PLANTILLA_STOCK_VALOR;
                 newInfo.FirstSection.Dictionary = new Dictionary<long, string>();
                 newInfo.FirstSection.Dictionary.Add(Constantes.CODIGO_ZAS_EXCEL_PLANTILLA_STOCK_ID, 
                             Constantes.CODIGO_ZAS_EXCEL_PLANTILLA_STOCK_VALOR);

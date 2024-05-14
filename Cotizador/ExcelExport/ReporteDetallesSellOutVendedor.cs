@@ -88,7 +88,7 @@ namespace Cotizador.ExcelExport
 
                 /*Cabecera, Sub total*/
                 int rTotal = (list.Count) + 12;
-                int cTotal = 53 + 2;
+                int cTotal = 56 + 2;
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
@@ -172,38 +172,43 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i, "M", "N° GRUPO PEDIDO", titleCellStyle); /* 12 */
                 UtilesHelper.setValorCelda(sheet, i, "N", "GUÍA", titleCellStyle); /* 13 */
                 UtilesHelper.setValorCelda(sheet, i, "O", "FECHA EMISIÓN GUÍA", titleCellStyle); /* 14 */
-                UtilesHelper.setValorCelda(sheet, i, "P", "FAMILIA PROD", titleCellStyle); /* 15 */
-                UtilesHelper.setValorCelda(sheet, i, "Q", "PROVEEDOR", titleCellStyle); /* 16 */
-                UtilesHelper.setValorCelda(sheet, i, "R", "SKU MP", titleCellStyle); /* 17 */
-                UtilesHelper.setValorCelda(sheet, i, "S", "SKU PROV", titleCellStyle); /* 18 */
-                UtilesHelper.setValorCelda(sheet, i, "T", "DESCRIPCIÓN PROD", titleCellStyle); /* 19 */
-                UtilesHelper.setValorCelda(sheet, i, "U", "UNIDAD VENTA", titleCellStyle); /* 20 */
 
-                UtilesHelper.setValorCelda(sheet, i, "V", "CANTIDAD", titleCellStyle); /* 21 */
-                UtilesHelper.setValorCelda(sheet, i, "W", "VALOR UNIT", titleCellStyle); /* 22 */
-                UtilesHelper.setValorCelda(sheet, i, "X", "SUBTOTAL", titleCellStyle); /* 23 */
-                UtilesHelper.setValorCelda(sheet, i, "Y", "COSTO UNIT", titleCellStyle); /* 24 */
-                UtilesHelper.setValorCelda(sheet, i, "Z", "MK UP%", titleCellStyle); /* 25 */
-                UtilesHelper.setValorCelda(sheet, i, "AA", "GP S/", titleCellStyle); /* 26 */
-                UtilesHelper.setValorCelda(sheet, i, "AB", "GP %", titleCellStyle); /* 27 */
+                UtilesHelper.setValorCelda(sheet, i, "P", "TIPO CPE", titleCellStyle); /* 43 */
+                UtilesHelper.setValorCelda(sheet, i, "Q", "N° CPE", titleCellStyle); /* 44 */
+                UtilesHelper.setValorCelda(sheet, i, "R", "FECHA EMISIÓN CPE", titleCellStyle); /* 45 */
 
-                UtilesHelper.setValorCelda(sheet, i, "AC", "UNIDAD MP", titleCellStyle); /* 33 */
-                UtilesHelper.setValorCelda(sheet, i, "AD", "EQUIVALENCIA MP", titleCellStyle); /* 34 */
-                UtilesHelper.setValorCelda(sheet, i, "AE", "CANTIDAD MP", titleCellStyle); /* 35 */
+                UtilesHelper.setValorCelda(sheet, i, "S", "FAMILIA PROD", titleCellStyle); /* 15 */
+                UtilesHelper.setValorCelda(sheet, i, "T", "PROVEEDOR", titleCellStyle); /* 16 */
+                UtilesHelper.setValorCelda(sheet, i, "U", "SKU MP", titleCellStyle); /* 17 */
+                UtilesHelper.setValorCelda(sheet, i, "V", "SKU PROV", titleCellStyle); /* 18 */
+                UtilesHelper.setValorCelda(sheet, i, "W", "DESCRIPCIÓN PROD", titleCellStyle); /* 19 */
+                UtilesHelper.setValorCelda(sheet, i, "X", "UNIDAD VENTA", titleCellStyle); /* 20 */
 
-                UtilesHelper.setValorCelda(sheet, i, "AF", "UNIDAD PROV", titleCellStyle); /* 36 */
-                UtilesHelper.setValorCelda(sheet, i, "AG", "EQUIVALENCIA PROV", titleCellStyle); /* 37 */
-                UtilesHelper.setValorCelda(sheet, i, "AH", "CANTIDAD PROV", titleCellStyle); /* 38 */
+                UtilesHelper.setValorCelda(sheet, i, "Y", "CANTIDAD", titleCellStyle); /* 21 */
+                UtilesHelper.setValorCelda(sheet, i, "Z", "VALOR UNIT", titleCellStyle); /* 22 */
+                UtilesHelper.setValorCelda(sheet, i, "AA", "SUBTOTAL", titleCellStyle); /* 23 */
+                UtilesHelper.setValorCelda(sheet, i, "AB", "COSTO UNIT", titleCellStyle); /* 24 */
+                UtilesHelper.setValorCelda(sheet, i, "AC", "MK UP%", titleCellStyle); /* 25 */
+                UtilesHelper.setValorCelda(sheet, i, "AD", "GP S/", titleCellStyle); /* 26 */
+                UtilesHelper.setValorCelda(sheet, i, "AE", "GP %", titleCellStyle); /* 27 */
+            
+                UtilesHelper.setValorCelda(sheet, i, "AF", "UNIDAD MP", titleCellStyle); /* 33 */
+                UtilesHelper.setValorCelda(sheet, i, "AG", "EQUIVALENCIA MP", titleCellStyle); /* 34 */
+                UtilesHelper.setValorCelda(sheet, i, "AH", "CANTIDAD MP", titleCellStyle); /* 35 */
 
-                UtilesHelper.setValorCelda(sheet, i, "AI", "CÓDIGO SUPERVISOR COMERCIAL", titleCellStyle); /* 28 */
-                UtilesHelper.setValorCelda(sheet, i, "AJ", "SUPERVISOR COMERCIAL", titleCellStyle); /* 29 */
-                UtilesHelper.setValorCelda(sheet, i, "AK", "CÓDIGO ASISTENTE COMERCIAL", titleCellStyle); /* 30 */
-                UtilesHelper.setValorCelda(sheet, i, "AL", "ASISTENTE COMERCIAL", titleCellStyle); /* 31 */
-                UtilesHelper.setValorCelda(sheet, i, "AM", "PEDIDO CREADO POR", titleCellStyle); /* 32 */
+                UtilesHelper.setValorCelda(sheet, i, "AI", "UNIDAD PROV", titleCellStyle); /* 36 */
+                UtilesHelper.setValorCelda(sheet, i, "AJ", "EQUIVALENCIA PROV", titleCellStyle); /* 37 */
+                UtilesHelper.setValorCelda(sheet, i, "AK", "CANTIDAD PROV", titleCellStyle); /* 38 */
 
-                UtilesHelper.setValorCelda(sheet, i, "AN", "VENTA EXCLUIDA", titleCellStyle); /* 39 */
-                UtilesHelper.setValorCelda(sheet, i, "AO", "EMPRESA", titleCellStyle); /* 41 */
-                UtilesHelper.setValorCelda(sheet, i, "AP", "N° PEDIDO RELACIONADO", titleCellStyle); /* 42 */
+                UtilesHelper.setValorCelda(sheet, i, "AL", "CÓDIGO SUPERVISOR COMERCIAL", titleCellStyle); /* 28 */
+                UtilesHelper.setValorCelda(sheet, i, "AM", "SUPERVISOR COMERCIAL", titleCellStyle); /* 29 */
+                UtilesHelper.setValorCelda(sheet, i, "AN", "CÓDIGO ASISTENTE COMERCIAL", titleCellStyle); /* 30 */
+                UtilesHelper.setValorCelda(sheet, i, "AO", "ASISTENTE COMERCIAL", titleCellStyle); /* 31 */
+                UtilesHelper.setValorCelda(sheet, i, "AP", "PEDIDO CREADO POR", titleCellStyle); /* 32 */
+
+                UtilesHelper.setValorCelda(sheet, i, "AQ", "VENTA EXCLUIDA", titleCellStyle); /* 39 */
+                UtilesHelper.setValorCelda(sheet, i, "AR", "EMPRESA", titleCellStyle); /* 41 */
+                UtilesHelper.setValorCelda(sheet, i, "AS", "N° PEDIDO RELACIONADO", titleCellStyle); /* 42 */
 
                 i = i + 1;
 
@@ -227,36 +232,42 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "M", obj.ElementAt(12));
                     UtilesHelper.setValorCelda(sheet, i, "N", obj.ElementAt(13));
                     UtilesHelper.setValorCelda(sheet, i, "O", obj.ElementAt(14));
-                    UtilesHelper.setValorCelda(sheet, i, "P", obj.ElementAt(15));
-                    UtilesHelper.setValorCelda(sheet, i, "Q", obj.ElementAt(16));
-                    UtilesHelper.setValorCelda(sheet, i, "R", obj.ElementAt(17));
-                    UtilesHelper.setValorCelda(sheet, i, "S", obj.ElementAt(18));
-                    UtilesHelper.setValorCelda(sheet, i, "T", obj.ElementAt(19));
-                    UtilesHelper.setValorCelda(sheet, i, "U", obj.ElementAt(20));
 
-                    UtilesHelper.setValorCelda(sheet, i, "V", int.Parse(obj.ElementAt(21)));
-                    UtilesHelper.setValorCelda(sheet, i, "W", double.Parse(obj.ElementAt(22)), fourDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "X", double.Parse(obj.ElementAt(23)), twoDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "Y", double.Parse(obj.ElementAt(24)), fourDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "Z", double.Parse(obj.ElementAt(25)), fourDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "AA", double.Parse(obj.ElementAt(26)), fourDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "AB", double.Parse(obj.ElementAt(27)), fourDecCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "P", obj.ElementAt(43));
+                    UtilesHelper.setValorCelda(sheet, i, "Q", obj.ElementAt(44));
+                    UtilesHelper.setValorCelda(sheet, i, "R", obj.ElementAt(45));
 
-                    UtilesHelper.setValorCelda(sheet, i, "AC", obj.ElementAt(33));
-                    UtilesHelper.setValorCelda(sheet, i, "AD", double.Parse(obj.ElementAt(34)), twoDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "AE", double.Parse(obj.ElementAt(35)), twoDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "AF", obj.ElementAt(36));
-                    UtilesHelper.setValorCelda(sheet, i, "AG", double.Parse(obj.ElementAt(37)), twoDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "AH", double.Parse(obj.ElementAt(38)), twoDecCellStyle);
 
-                    UtilesHelper.setValorCelda(sheet, i, "AI", obj.ElementAt(28));
-                    UtilesHelper.setValorCelda(sheet, i, "AJ", obj.ElementAt(29));
-                    UtilesHelper.setValorCelda(sheet, i, "AK", obj.ElementAt(30));
-                    UtilesHelper.setValorCelda(sheet, i, "AL", obj.ElementAt(31));
-                    UtilesHelper.setValorCelda(sheet, i, "AM", obj.ElementAt(32));
-                    UtilesHelper.setValorCelda(sheet, i, "AN", obj.ElementAt(39));
-                    UtilesHelper.setValorCelda(sheet, i, "AO", obj.ElementAt(41));
-                    UtilesHelper.setValorCelda(sheet, i, "AP", obj.ElementAt(42));
+                    UtilesHelper.setValorCelda(sheet, i, "S", obj.ElementAt(15));
+                    UtilesHelper.setValorCelda(sheet, i, "T", obj.ElementAt(16));
+                    UtilesHelper.setValorCelda(sheet, i, "U", obj.ElementAt(17));
+                    UtilesHelper.setValorCelda(sheet, i, "V", obj.ElementAt(18));
+                    UtilesHelper.setValorCelda(sheet, i, "W", obj.ElementAt(19));
+                    UtilesHelper.setValorCelda(sheet, i, "X", obj.ElementAt(20));
+
+                    UtilesHelper.setValorCelda(sheet, i, "Y", int.Parse(obj.ElementAt(21)));
+                    UtilesHelper.setValorCelda(sheet, i, "Z", double.Parse(obj.ElementAt(22)), fourDecCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "AA", double.Parse(obj.ElementAt(23)), twoDecCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "AB", double.Parse(obj.ElementAt(24)), fourDecCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "AC", double.Parse(obj.ElementAt(25)), fourDecCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "AD", double.Parse(obj.ElementAt(26)), fourDecCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "AE", double.Parse(obj.ElementAt(27)), fourDecCellStyle);
+
+                    UtilesHelper.setValorCelda(sheet, i, "AF", obj.ElementAt(33));
+                    UtilesHelper.setValorCelda(sheet, i, "AG", double.Parse(obj.ElementAt(34)), twoDecCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "AH", double.Parse(obj.ElementAt(35)), twoDecCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "AI", obj.ElementAt(36));
+                    UtilesHelper.setValorCelda(sheet, i, "AJ", double.Parse(obj.ElementAt(37)), twoDecCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "AK", double.Parse(obj.ElementAt(38)), twoDecCellStyle);
+
+                    UtilesHelper.setValorCelda(sheet, i, "AL", obj.ElementAt(28));
+                    UtilesHelper.setValorCelda(sheet, i, "AM", obj.ElementAt(29));
+                    UtilesHelper.setValorCelda(sheet, i, "AN", obj.ElementAt(30));
+                    UtilesHelper.setValorCelda(sheet, i, "AO", obj.ElementAt(31));
+                    UtilesHelper.setValorCelda(sheet, i, "AP", obj.ElementAt(32));
+                    UtilesHelper.setValorCelda(sheet, i, "AQ", obj.ElementAt(39));
+                    UtilesHelper.setValorCelda(sheet, i, "AR", obj.ElementAt(41));
+                    UtilesHelper.setValorCelda(sheet, i, "AS", obj.ElementAt(42));
 
                     i++;
                 }

@@ -179,15 +179,15 @@ jQuery(function ($) {
     $("#btnCargarStock").click(function () {
         var idCiudad = $("#idCiudad").val();
         var sede = $("#idCiudad option:selected").text();
-        var fecha = $("#fechaCierre").val();
+        //var fecha = $("#fechaCierre").val();
 
         var tipoCarga = $("#tipoCarga").val();
         var valido = true;
 
-        if (fecha.trim() == "") {
+        /*if (fecha.trim() == "") {
             alert("Debe ingresar la fecha de cierre stock");
             valido = false;
-        }
+        }*/
 
         if (idCiudad.trim() == "") {
             alert("Debe seleccionar la sede");
@@ -202,7 +202,7 @@ jQuery(function ($) {
         if (valido) {
             $.confirm({
                 title: 'Confirmar Carga',
-                content: '¿Está seguro de subir el cierre de stock del almacén de ' + sede + ' a la fecha ' + fecha + '?',
+                content: '¿Está seguro de subir el cierre de stock del almacén de ' + sede /*+ ' a la fecha ' + fecha*/ + '?',
                 type: 'orange',
                 buttons: {
                     aplica: {

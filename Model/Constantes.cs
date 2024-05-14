@@ -35,6 +35,7 @@ namespace Model
 
         public static long CODIGO_ZAS_EXCEL_PLANTILLA_STOCK_ID = 542;
         public static String CODIGO_ZAS_EXCEL_PLANTILLA_STOCK_VALOR = "KOMS21S4";
+        public static String PÄSSWORD_ZAS_EXCEL_PLANTILLA_STOCK_VALOR = "W0r1D_Z4S";
 
 
         public static String URL_VER_PEDIDO = "http://cotizadormp.azurewebsites.net/Pedido?idPedido=";

@@ -233,6 +233,11 @@ namespace DataLayer
 
                 item.Add(Converter.GetString(row, "NUMERO_PEDREL")); /* 42: */
 
+                item.Add(Converter.GetString(row, "TIPO_CPE")); /* 43: */
+                item.Add(Converter.GetString(row, "CPE")); /* 44: */
+                item.Add(Converter.GetString(row, "FECHA_EMISION_CPE")); /* 45: */
+
+
                 resultados.Add(item);
             }
 
