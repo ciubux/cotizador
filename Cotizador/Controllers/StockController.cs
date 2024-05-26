@@ -497,7 +497,7 @@ namespace Cotizador.Controllers
             bool agregar = false;
 
             List<RegistroCargaStock> listaStock = new List<RegistroCargaStock>();
-
+            
             bool esUltimaVersionZAS = false;
             if(hssfwb.SummaryInformation != null)
             {

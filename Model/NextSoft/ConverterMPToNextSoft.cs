@@ -214,7 +214,7 @@ namespace Model.NextSoft
                 motivotraslado = motivoTraslado,
                 modalidadtraslado = "",
                 fectraslado = obj.fechaTraslado.ToString("dd/MM/yyyy"),
-                ructransportista = obj.transportista.ruc,
+                ructransportista = obj.transportista.ruc.Trim(),
                 placa = (obj.placaVehiculo == null || obj.placaVehiculo.Length < 6) ? "" : obj.placaVehiculo.Trim(),
                 docconductor = (obj.transportista.brevete == null || obj.transportista.brevete.Length < 9) ? "" : obj.transportista.brevete.Substring(1,8), 
                 licconductor = (obj.transportista.brevete == null || obj.transportista.brevete.Length < 9) ? "" : obj.transportista.brevete,

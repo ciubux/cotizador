@@ -18,6 +18,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -1243,7 +1244,7 @@ namespace Cotizador.Controllers
         {
             //this.Session[Constantes.VAR_SESSION_GUIA] = null;
             //return RedirectToAction("Index", "Pedido");
-            
+
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoGuiaRemision;
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -1260,7 +1261,7 @@ namespace Cotizador.Controllers
                 }
             }
 
-            
+
 
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoGuiaRemision;
             try
@@ -1282,7 +1283,7 @@ namespace Cotizador.Controllers
 
                 if (diasRezago > 0)
                 {
-                    ViewBag.fechaEmisionMinDate = DateTime.Now.AddDays(-1*diasRezago).ToString(Constantes.formatoFecha);
+                    ViewBag.fechaEmisionMinDate = DateTime.Now.AddDays(-1 * diasRezago).ToString(Constantes.formatoFecha);
                 }
 
                 if (guiaRemision.almacenes == null || guiaRemision.almacenes.Count == 0)
@@ -1350,6 +1351,8 @@ namespace Cotizador.Controllers
             }
 
             ViewBag.pagina = (int)Constantes.paginas.MantenimientoGuiaRemision;
+            ViewBag.esGuiaDiferida = seAtiendeDiferido;
+
             return View();
         }
 
@@ -1367,7 +1370,7 @@ namespace Cotizador.Controllers
 
             GuiaRemision guiaRemision = this.GuiaRemisionSession;
             guiaRemision.usuario = usuario;
-            if (guiaRemision.transportista.ruc.Equals(Constantes.RUC_MP))
+            if (!guiaRemision.esGuiaDiferida && guiaRemision.transportista.ruc.Equals(Constantes.RUC_MP))
             {
                 guiaRemision.placaVehiculo = guiaRemision.placaVehiculo.Replace("-", "").Replace(" ", "").Replace(".", "");
             }
@@ -1419,7 +1422,7 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
-        public String AtenderGuiaDiferida()
+        public async System.Threading.Tasks.Task<string> AtenderGuiaDiferida()
         {
             
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -1432,6 +1435,24 @@ namespace Cotizador.Controllers
                 GuiaRemision gr = new GuiaRemision();
                 gr.idMovimientoAlmacen = idGuiaDiferida;
                 gr = movimientoAlmacenBL.GetGuiaRemision(gr);
+                int successRegistro = 0;
+                int successNextSoft = 0;
+
+                Guid idTransportista = Guid.Parse(Request["idTransportista"].ToString());
+                string rucTransportista = Request["rucTransportista"].ToString();
+                string nombreTransportista = Request["nombreTransportista"].ToString();
+                string breveteTransportista = Request["breveteTransportista"].ToString();
+                string direccionTransportista = Request["direccionTransportista"].ToString();
+                string placaVehiculo = Request["placaVehiculo"].ToString();
+                string observaciones = Request["observaciones"].ToString();
+                gr.transportista.idTransportista = idTransportista;
+                gr.transportista.ruc = rucTransportista;
+                gr.transportista.descripcion = nombreTransportista;
+                gr.transportista.brevete = breveteTransportista;
+                gr.transportista.direccion = direccionTransportista;
+
+                gr.placaVehiculo = placaVehiculo;
+                gr.observaciones = observaciones;
 
                 if (gr.pedido.seguimientoCrediticioPedido.estado != SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
                 {
@@ -1440,14 +1461,51 @@ namespace Cotizador.Controllers
                 }
 
                 String error = String.Empty;
-                GuiaRemision guiaRemision = movimientoAlmacenBL.InsertMovimientoAlmacenSalidaDesdeGuiaDiferida(idGuiaDiferida, usuario.idUsuario);
+                GuiaRemision guiaRemision = movimientoAlmacenBL.InsertMovimientoAlmacenSalidaDesdeGuiaDiferida(gr, usuario.idUsuario);
 
                 if (guiaRemision.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
                 {
-                    resultado = "{\"success\":true, \"serieNumeroGuia\":\"" + guiaRemision.serieNumeroGuia + "\"}";
+                    guiaRemision.usuario = usuario;
+                    successRegistro = 1;
+
+                    GuiaWS ws = new GuiaWS();
+                    ws.urlApi = Constantes.NEXTSOFT_API_URL;
+                    ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
+
+                    object dataSend = ConverterMPToNextSoft.toGuia(guiaRemision);
+                    object result = await ws.crearGuia(dataSend);
+
+                    JObject dataResult = (JObject)result;
+                    int codigo = dataResult["crearguiaResult"]["codigo"].Value<int>();
+
+                    string resultText = JsonConvert.SerializeObject(result);
+
+                    //int codigo = 1; var result = new { codigo = "PRUEBA" };
+
+                    MovimientoAlmacenBL bl = new MovimientoAlmacenBL();
+                    if (codigo == 0)
+                    {
+                        successNextSoft = 1;
+                    }
+
+                    bl.GuardarRespuestaNextSys(guiaRemision.idMovimientoAlmacen, successNextSoft, resultText);
+
+                    return JsonConvert.SerializeObject(new { 
+                        success = successNextSoft == 1 ? true : false, 
+                        successRegistro = successRegistro,  
+                        successNextSoft = successNextSoft, 
+                        serieNumeroGuia = guiaRemision.serieNumeroGuia, 
+                        dataSend = dataSend, 
+                        result = result });
                 } else
                 {
-                    resultado = "{\"success\":false, \"message\":\"" + guiaRemision.guiaRemisionValidacion.tipoErrorValidacionString + "\"}";
+                    return JsonConvert.SerializeObject(new
+                    {
+                        success = false,
+                        successRegistro = successRegistro,
+                        successNextSoft = successNextSoft,
+                        messageRegistro = guiaRemision.guiaRemisionValidacion.tipoErrorValidacionString
+                    });
                 }
             }
 
@@ -1934,8 +1992,16 @@ namespace Cotizador.Controllers
 
         public String ChangeTransportista()
         {
-            GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
+            GuiaRemision guiaRemision = this.GuiaRemisionSession;
 
+            bool esGenerarGuiaReal = this.Request.Params["esGeneracionGuiaReal"] != null && int.Parse(this.Request.Params["esGeneracionGuiaReal"].ToString()) == 1;
+
+            if (esGenerarGuiaReal)
+            {
+                guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+            }
+
+            Transportista transportista = null;
             if (this.Request.Params["idTransportista"] == null || this.Request.Params["idTransportista"].Equals(String.Empty))
             {
                 guiaRemision.transportista = new Transportista();
@@ -1943,11 +2009,20 @@ namespace Cotizador.Controllers
             else
             {
                 Guid idTransportista = Guid.Parse(this.Request.Params["idTransportista"]);
-                guiaRemision.transportista = guiaRemision.ciudadOrigen.transportistaList.Where(t => t.idTransportista == idTransportista).FirstOrDefault();
+                transportista = guiaRemision.ciudadOrigen.transportistaList.Where(t => t.idTransportista == idTransportista).FirstOrDefault();
+                guiaRemision.transportista = transportista;
             }
 
-            this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
-            String jsonTransportista = JsonConvert.SerializeObject(guiaRemision.transportista);
+            if (esGenerarGuiaReal)
+            {
+                this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
+            }
+            else
+            {
+                this.Session[Constantes.VAR_SESSION_GUIA_VER] = guiaRemision;
+            }
+
+            String jsonTransportista = JsonConvert.SerializeObject(transportista);
             return jsonTransportista;
         }
 
@@ -1960,6 +2035,20 @@ namespace Cotizador.Controllers
 
 
         #endregion
+
+        public String TransportistasSede()
+        {
+            GuiaRemision guiaRemision = (GuiaRemision) this.Session[Constantes.VAR_SESSION_GUIA_VER];
+            Guid idCiudad = guiaRemision.ciudadOrigen.idCiudad;
+
+            guiaRemision.transportista = new Transportista();
+            TransportistaBL transportistaBL = new TransportistaBL();
+            List<Transportista> transportistaList = transportistaBL.getTransportistas(idCiudad);
+            guiaRemision.ciudadOrigen.transportistaList = transportistaList;
+            this.Session[Constantes.VAR_SESSION_GUIA_VER] = guiaRemision;
+
+            return JsonConvert.SerializeObject(new { success = 1, lista = transportistaList });
+        }
 
 
 

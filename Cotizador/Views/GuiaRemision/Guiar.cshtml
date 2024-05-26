@@ -16,7 +16,7 @@
     <input type="hidden" value="@ViewBag.debug" />
     <input type="hidden" id="esGuiaDiferida" value="@(guiaRemision.esGuiaDiferida ? "1" : "0")" />
     <input type="hidden" id="saltaValidacionStock" value="@(guiaRemision.usuario.saltaValidacionStock ? "1" : "0")"  />
-    
+
     <form class="form-horizontal">
         <input type="hidden" id="idGuiaRemision" name="idGuiaRemision" value="2" />
 
@@ -419,7 +419,8 @@
 
         }
 
-
+        @if (!guiaRemision.esGuiaDiferida)
+        {
         <fieldset>
             <legend id="divpedido_transportista">Transporte:</legend>
             <div class="row">
@@ -430,9 +431,9 @@
                         @Html.LabelFor(g => guiaRemision.transportista, htmlAttributes: new { @class = "control-label col-xs-2" })
                         <div class="col-xs-9">
                             @Html.DropDownList("guiaRemision_transportista",
-                                     new SelectList(guiaRemision.ciudadOrigen.transportistaList as IEnumerable<Model.Transportista>, "idTransportista", "descripcion", guiaRemision.transportista.idTransportista, null),
-                                     "Seleccione Transportista",
-                                     new { @class = "form-control" })
+                          new SelectList(guiaRemision.ciudadOrigen.transportistaList as IEnumerable<Model.Transportista>, "idTransportista", "descripcion", guiaRemision.transportista.idTransportista, null),
+                          "Seleccione Transportista",
+                          new { @class = "form-control" })
                         </div>
                         <div class="col-xs-2 col-lg-1">
                             <button id="btnAgregarTransportista" type="button" class="btn btn-primary bouton-image-add addTransportista" data-toggle="modal" data-target="#modalAgregarTransportista"></button>
@@ -524,6 +525,7 @@
 
             </div>
         </fieldset>
+        }
 
         @if (guiaRemision.notaIngresoAExtornar != null)
         {

@@ -197,6 +197,10 @@ textarea {
         width: 1200px;
     }
 
+    #modalGenerarGuiaReal .modal-dialog {
+        width: 800px;
+    }
+    
 
     #modalIngresarDatosVentaConsolidada .modal-dialog {
         width: 1100px;

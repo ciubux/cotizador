@@ -177,8 +177,32 @@ jQuery(function ($) {
         $.ajax({
             url: "/GuiaRemision/CleanBusqueda",
             type: 'POST',
+           
             success: function () {
                 location.reload();
+            }
+        });
+    });
+
+    
+
+    $("#btnGenerarGuiaReal").click(function () {
+        $.ajax({
+            url: "/GuiaRemision/TransportistasSede",
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (res) {
+                if (res.success == 1) {
+                    var options = "";
+                    for (var i = 0; i < res.lista.length; i++) {
+                        options = options + '<option value="' + res.lista[i].idTransportista + '">' + res.lista[i].descripcion + '</option>';
+                    }
+
+                    $("#guiaRemision_transportista").html(options);
+
+                    $("#generarGuiaRemision_observaciones").val($("#ver_guiaRemision_observaciones").html());
+                    
+                }
             }
         });
     });
@@ -645,13 +669,16 @@ jQuery(function ($) {
     $("#guiaRemision_transportista").change(function () {
         toggleControlesTransportista();
         var idTransportista = $("#guiaRemision_transportista").val();
+        var esGeneracionGuiaReal = $("#guiaRemision_transportista").attr("generandoGuiaReal");
+        if (esGeneracionGuiaReal != 1) { esGeneracionGuiaReal = 0; }
 
         $.ajax({
             url: "/GuiaRemision/ChangeTransportista",
             type: 'POST',
             dataType: "JSON",
             data: {
-                idTransportista: idTransportista
+                idTransportista: idTransportista,
+                esGeneracionGuiaReal: esGeneracionGuiaReal
             },
             success: function (transportista) {
 
@@ -901,42 +928,46 @@ jQuery(function ($) {
 
 
     function validarIngresoDatosObligatoriosGuiaRemision() {
-             
-        if ($("#guiaRemision_transportista").val() == null || $("#guiaRemision_transportista").val().trim() == "") {
-            alert('Debe seleccionar el transportista.');
-            $('#guiaRemision_transportista').focus();
-            return false;
+        var esGuiaFicticia = $("#esGuiaDiferida").val();
+
+        if (esGuiaFicticia == "0") {
+            if ($("#guiaRemision_transportista").val() == null || $("#guiaRemision_transportista").val().trim() == "") {
+                alert('Debe seleccionar el transportista.');
+                $('#guiaRemision_transportista').focus();
+                return false;
+            }
+
+            if ($("#guiaRemision_transportista_descripcion").val() == null || $("#guiaRemision_transportista_descripcion").val().trim() == "") {
+                alert('Debe ingresar el nombre del transportista.');
+                $('#guiaRemision_transportista_descripcion').focus();
+                return false;
+            }
+
+            if ($("#guiaRemision_transportista_ruc").val().trim().length < 11) {
+                alert('Debe ingresar el ruc del transportista.');
+                $('#guiaRemision_transportista_ruc').focus();
+                return false;
+            }
+
+            if ($("#guiaRemision_transportista_ruc").val() == RUC_MP && $("#guiaRemision_transportista_brevete").val().trim().length < 9) {
+                alert('Debe ingresar el brevete del transportista.');
+                $('#guiaRemision_transportista_brevete').focus();
+                return false;
+            }
+
+            if ($("#guiaRemision_transportista_direccion").val() == null || $("#guiaRemision_transportista_direccion").val().trim() == "") {
+                alert('Debe ingresar la dirección del transportista.');
+                $('#guiaRemision_transportista_direccion').focus();
+                return false;
+            }
+
+            if ($("#guiaRemision_transportista_ruc").val() == RUC_MP && $("#guiaRemision_placaVehiculo").val().trim().length < 6) {
+                alert('Debe ingresar la placa del vehículo.');
+                $('#guiaRemision_placaVehiculo').focus();
+                return false;
+            }
         }
 
-        if ($("#guiaRemision_transportista_descripcion").val() == null || $("#guiaRemision_transportista_descripcion").val().trim() == "") {
-            alert('Debe ingresar el nombre del transportista.');
-            $('#guiaRemision_transportista_descripcion').focus();
-            return false;
-        }
-
-        if ($("#guiaRemision_transportista_ruc").val().trim().length < 11) {
-            alert('Debe ingresar el ruc del transportista.');
-            $('#guiaRemision_transportista_ruc').focus();
-            return false;
-        }
-
-        if ($("#guiaRemision_transportista_ruc").val() == RUC_MP && $("#guiaRemision_transportista_brevete").val().trim().length < 9) {
-            alert('Debe ingresar el brevete del transportista.');
-            $('#guiaRemision_transportista_brevete').focus();
-            return false;
-        }
-
-        if ($("#guiaRemision_transportista_direccion").val() == null || $("#guiaRemision_transportista_direccion").val().trim() == "") {
-            alert('Debe ingresar la dirección del transportista.');
-            $('#guiaRemision_transportista_direccion').focus();
-            return false;
-        }
-
-        if ($("#guiaRemision_transportista_ruc").val() == RUC_MP && $("#guiaRemision_placaVehiculo").val().trim().length < 6) {
-            alert('Debe ingresar la placa del vehículo.');
-            $('#guiaRemision_placaVehiculo').focus();
-            return false;
-        }
         /*
         if ($("#guiaRemision_certificadoInscripcion").val() == null || $("#guiaRemision_certificadoInscripcion").val().trim() == "") {
             alert('Debe ingresar el certificado de inscripción.');
@@ -1354,12 +1385,56 @@ jQuery(function ($) {
     });
 
     $("#btnGenerarGuiaAtencion").click(function () {
+
+        if ($("#guiaRemision_transportista").val() == null || $("#guiaRemision_transportista").val().trim() == "") {
+            alert('Debe seleccionar el transportista.');
+            $('#guiaRemision_transportista').focus();
+            return false;
+        }
+
+        if ($("#guiaRemision_transportista_descripcion").val() == null || $("#guiaRemision_transportista_descripcion").val().trim() == "") {
+            alert('Debe ingresar el nombre del transportista.');
+            $('#guiaRemision_transportista_descripcion').focus();
+            return false;
+        }
+
+        if ($("#guiaRemision_transportista_ruc").val().trim().length < 11) {
+            alert('Debe ingresar el ruc del transportista.');
+            $('#guiaRemision_transportista_ruc').focus();
+            return false;
+        }
+
+        if ($("#guiaRemision_transportista_ruc").val() == RUC_MP && $("#guiaRemision_transportista_brevete").val().trim().length < 9) {
+            alert('Debe ingresar el brevete del transportista.');
+            $('#guiaRemision_transportista_brevete').focus();
+            return false;
+        }
+
+        if ($("#guiaRemision_transportista_direccion").val() == null || $("#guiaRemision_transportista_direccion").val().trim() == "") {
+            alert('Debe ingresar la dirección del transportista.');
+            $('#guiaRemision_transportista_direccion').focus();
+            return false;
+        }
+
+        if ($("#guiaRemision_transportista_ruc").val() == RUC_MP && $("#guiaRemision_placaVehiculo").val().trim().length < 6) {
+            alert('Debe ingresar la placa del vehículo.');
+            $('#guiaRemision_placaVehiculo').focus();
+            return false;
+        }
+        
         if (confirm("¿Esta seguro que desea generar la guía de atención?")) {
             var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
             $.ajax({
                 url: "/GuiaRemision/AtenderGuiaDiferida",
                 data: {
-                    idMovimientoAlmacen: idMovimientoAlmacen
+                    idMovimientoAlmacen: idMovimientoAlmacen,
+                    idTransportista: $("#guiaRemision_transportista").val(),
+                    rucTransportista: $("#guiaRemision_transportista_ruc").val(),
+                    nombreTransportista: $("#guiaRemision_transportista_descripcion").val(),
+                    breveteTransportista: $("#guiaRemision_transportista_brevete").val(),
+                    direccionTransportista: $("#guiaRemision_transportista_direccion").val(),
+                    placaVehiculo: $("#guiaRemision_placaVehiculo").val(),
+                    observaciones: $("#generarGuiaRemision_observaciones").val()
                 },
                 type: 'POST',
                 dataType: 'JSON',
@@ -1370,22 +1445,34 @@ jQuery(function ($) {
                     if (res.success) {
                         $.alert({
                             title: 'Operación Exitosa',
-                            content: "Se generó la guía " + res.serieNumeroGuia,
+                            content: "Se generó la guía " + res.serieNumeroGuia + " y se envió a NextSoft.",
                             type: 'green',
                             buttons: {
                                 OK: function () { location.reload(); }
                             }
                         });
                     } else {
-                        
-                        $.alert({
-                            title: 'ERROR',
-                            content: res.message,
-                            type: 'red',
-                            buttons: {
-                                OK: function () { }
+                        if (res.successRegistro == 0) {
+                            $.alert({
+                                title: 'ERROR',
+                                content: res.message,
+                                type: 'red',
+                                buttons: {
+                                    OK: function () { }
+                                }
+                            });
+                        } else {
+                            if (res.successNextSoft == 0) {
+                                $.alert({
+                                    title: 'ERROR',
+                                    content: "La guía se registró con el número " + res.serieNumeroGuia + ", pero no se envió a NextSoft. Contacte con TI.",
+                                    type: 'red',
+                                    buttons: {
+                                        OK: function () { location.reload(); }
+                                    }
+                                });
                             }
-                        });
+                        }
                     }
                 }
             });

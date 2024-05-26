@@ -163,11 +163,11 @@ namespace BusinessLayer
             }
         }
 
-        public GuiaRemision InsertMovimientoAlmacenSalidaDesdeGuiaDiferida(Guid idGuiaDiferida, Guid idUsuario)
+        public GuiaRemision InsertMovimientoAlmacenSalidaDesdeGuiaDiferida(GuiaRemision guiaRemision, Guid idUsuario)
         {
             using (var dal = new MovimientoALmacenDAL())
             {
-                return dal.InsertMovimientoAlmacenSalidaDesdeGuiaDiferida(idGuiaDiferida, idUsuario);
+                return dal.InsertMovimientoAlmacenSalidaDesdeGuiaDiferida(guiaRemision, idUsuario);
             }
         }
 

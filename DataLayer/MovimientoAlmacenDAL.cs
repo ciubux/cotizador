@@ -280,7 +280,7 @@ namespace DataLayer
         {
 
             this.BeginTransaction(IsolationLevel.ReadCommitted);
-            var objCommand = GetSqlCommand("pi_movimientoAlmacenSalida_b");
+            var objCommand = GetSqlCommand("pi_movimientoAlmacenSalida");
             InputParameterAdd.DateTime(objCommand, "fechaEmision", guiaRemision.fechaEmision);
             InputParameterAdd.DateTime(objCommand, "fechaTraslado", guiaRemision.fechaTraslado);
             InputParameterAdd.Varchar(objCommand, "serieDocumento", guiaRemision.serieDocumento); //puede ser null
@@ -301,12 +301,6 @@ namespace DataLayer
             InputParameterAdd.Char(objCommand, "ubigeoEntrega", guiaRemision.pedido.ubigeoEntrega.Id);
             InputParameterAdd.Varchar(objCommand, "direccionEntrega", guiaRemision.pedido.direccionEntrega.descripcion);
             InputParameterAdd.Char(objCommand, "motivoTraslado", ((char)guiaRemision.motivoTraslado).ToString());
-            InputParameterAdd.Guid(objCommand, "idTransportista", guiaRemision.transportista.idTransportista);
-            InputParameterAdd.Varchar(objCommand, "nombreTransportista", guiaRemision.transportista.descripcion);
-            InputParameterAdd.Varchar(objCommand, "rucTransportista", guiaRemision.transportista.ruc);
-            InputParameterAdd.Varchar(objCommand, "breveteTransportista", guiaRemision.transportista.brevete);
-            InputParameterAdd.Varchar(objCommand, "direccionTransportista", guiaRemision.transportista.direccion);
-            InputParameterAdd.Varchar(objCommand, "placaVehiculo", guiaRemision.placaVehiculo);
             InputParameterAdd.Varchar(objCommand, "observaciones", guiaRemision.observaciones);
             InputParameterAdd.Varchar(objCommand, "certificadoInscripcion", guiaRemision.certificadoInscripcion);
             InputParameterAdd.Guid(objCommand, "idUsuario", guiaRemision.usuario.idUsuario);
@@ -315,6 +309,23 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observacionSeguimiento", guiaRemision.seguimientoMovimientoAlmacenSalida.observacion);
             InputParameterAdd.Int(objCommand, "entregaATerceros", guiaRemision.entregaTerceros ? 1 : 0);
             InputParameterAdd.Guid(objCommand, "idClienteTercero", guiaRemision.idClienteTerceros);
+
+            if (guiaRemision.esGuiaDiferida)
+            {
+                InputParameterAdd.Guid(objCommand, "idTransportista", guiaRemision.transportista.idTransportista);
+                InputParameterAdd.Varchar(objCommand, "nombreTransportista", guiaRemision.transportista.descripcion);
+                InputParameterAdd.Varchar(objCommand, "rucTransportista", guiaRemision.transportista.ruc);
+                InputParameterAdd.Varchar(objCommand, "breveteTransportista", guiaRemision.transportista.brevete);
+                InputParameterAdd.Varchar(objCommand, "direccionTransportista", guiaRemision.transportista.direccion);
+                InputParameterAdd.Varchar(objCommand, "placaVehiculo", guiaRemision.placaVehiculo);
+            } else
+            {
+                InputParameterAdd.VarcharEmpty(objCommand, "nombreTransportista", "");
+                InputParameterAdd.VarcharEmpty(objCommand, "rucTransportista", "");
+                InputParameterAdd.VarcharEmpty(objCommand, "breveteTransportista", "");
+                InputParameterAdd.VarcharEmpty(objCommand, "direccionTransportista", "");
+                InputParameterAdd.VarcharEmpty(objCommand, "placaVehiculo", "");
+            }
 
             if (guiaRemision.notaIngresoAExtornar != null)
             {
@@ -383,13 +394,21 @@ namespace DataLayer
 
         }
 
-        public GuiaRemision InsertMovimientoAlmacenSalidaDesdeGuiaDiferida(Guid idGuiaDiferida, Guid idUsuario)
+        public GuiaRemision InsertMovimientoAlmacenSalidaDesdeGuiaDiferida(GuiaRemision guiaRemision, Guid idUsuario)
         {
             var objCommand = GetSqlCommand("pi_movimientoAlmacenSalidaDesdeGuiaDiferida");
-            InputParameterAdd.Guid(objCommand, "idGuiaDiferida", idGuiaDiferida);
+            InputParameterAdd.Guid(objCommand, "idGuiaDiferida", guiaRemision.idMovimientoAlmacen);
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
 
-            
+
+            InputParameterAdd.Guid(objCommand, "idTransportista", guiaRemision.transportista.idTransportista);
+            InputParameterAdd.Varchar(objCommand, "nombreTransportista", guiaRemision.transportista.descripcion);
+            InputParameterAdd.Varchar(objCommand, "rucTransportista", guiaRemision.transportista.ruc);
+            InputParameterAdd.Varchar(objCommand, "breveteTransportista", guiaRemision.transportista.brevete);
+            InputParameterAdd.Varchar(objCommand, "direccionTransportista", guiaRemision.transportista.direccion);
+            InputParameterAdd.Varchar(objCommand, "placaVehiculo", guiaRemision.placaVehiculo);
+            InputParameterAdd.Varchar(objCommand, "observaciones", guiaRemision.observaciones);
+
             OutputParameterAdd.UniqueIdentifier(objCommand, "idMovimientoAlmacen");
             OutputParameterAdd.Int(objCommand, "siguienteNumeroGuiaRemision");
             OutputParameterAdd.Int(objCommand, "tipoError");
