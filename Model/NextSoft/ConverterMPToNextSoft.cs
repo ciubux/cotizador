@@ -191,6 +191,13 @@ namespace Model.NextSoft
                 motivoTraslado = "014";
             }
 
+            if(obj.esGuiaDiferida)
+            {
+                obj.transportista.ruc = "";
+                obj.transportista.descripcion = "";
+                obj.transportista.brevete = "";
+            }
+
             var item = new
             {
                 sucursal = obj.almacen.codigoSucursalNextSoft,

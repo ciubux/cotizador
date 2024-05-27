@@ -738,12 +738,16 @@ jQuery(function ($) {
     });
 
     function changeInputStringTransportista(propiedad, valor) {
+        var esGeneracionGuiaReal = $("#guiaRemision_transportista").attr("generandoGuiaReal");
+        if (esGeneracionGuiaReal != 1) { esGeneracionGuiaReal = 0; }
+
         $.ajax({
             url: "/GuiaRemision/ChangeInputStringTransportista",
             type: 'POST',
             data: {
                 propiedad: propiedad,
-                valor: valor
+                valor: valor,
+                esGeneracionGuiaReal: esGeneracionGuiaReal
             },
             success: function () { }
         });
@@ -2980,6 +2984,9 @@ jQuery(function ($) {
         var ruc = $("#transportista_ruc").val().trim();
         var telefono = $("#transportista_telefono").val().trim();
 
+        var esGeneracionGuiaReal = $("#guiaRemision_transportista").attr("generandoGuiaReal");
+        if (esGeneracionGuiaReal != 1) { esGeneracionGuiaReal = 0; }
+        
         $.ajax({
             url: "/GuiaRemision/CreateTransportistaTemporal",
             type: 'POST',
@@ -2988,7 +2995,8 @@ jQuery(function ($) {
                 descripcion: descripcion,
                 direccion: direccion,
                 ruc: ruc,
-                telefono: telefono
+                telefono: telefono,
+                esGeneracionGuiaReal: esGeneracionGuiaReal
           //      estado: estado
             },
             error: function (detalle) { alert("Se generó un error al intentar crear el transportista."); },

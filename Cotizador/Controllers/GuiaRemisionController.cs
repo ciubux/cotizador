@@ -1515,15 +1515,33 @@ namespace Cotizador.Controllers
         public String CreateTransportistaTemporal()
         {
             GuiaRemision guiaRemision = this.GuiaRemisionSession;
+
+            bool esGenerarGuiaReal = this.Request.Params["esGeneracionGuiaReal"] != null && int.Parse(this.Request.Params["esGeneracionGuiaReal"].ToString()) == 1;
+
+            if (esGenerarGuiaReal)
+            {
+                guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+            }
+
+
             Transportista transportista = new Transportista();
             transportista.descripcion = Request["descripcion"];
             transportista.direccion = Request["direccion"];
             transportista.ruc = Request["ruc"];
             transportista.telefono = Request["telefono"];
             transportista.idTransportista = Guid.Empty;
-            GuiaRemisionSession.ciudadOrigen.transportistaList.Add(transportista);
-            GuiaRemisionSession.transportista = transportista;
-            this.GuiaRemisionSession = guiaRemision;
+            guiaRemision.ciudadOrigen.transportistaList.Add(transportista);
+            guiaRemision.transportista = transportista;
+
+            if (esGenerarGuiaReal)
+            {
+                this.Session[Constantes.VAR_SESSION_GUIA_VER] = guiaRemision;
+            } else
+            {
+                this.GuiaRemisionSession = guiaRemision;
+            }
+
+           
             return JsonConvert.SerializeObject(transportista);
         }
 
@@ -1917,9 +1935,26 @@ namespace Cotizador.Controllers
         public void ChangeInputStringTransportista()
         {
             GuiaRemision guiaRemision = this.GuiaRemisionSession;
+            bool esGenerarGuiaReal = this.Request.Params["esGeneracionGuiaReal"] != null && int.Parse(this.Request.Params["esGeneracionGuiaReal"].ToString()) == 1;
+
+            if (esGenerarGuiaReal)
+            {
+                guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+            }
+
             PropertyInfo propertyInfo = guiaRemision.transportista.GetType().GetProperty(this.Request.Params["propiedad"]);
             propertyInfo.SetValue(guiaRemision.transportista, this.Request.Params["valor"]);
-            this.GuiaRemisionSession = guiaRemision;
+            
+
+            if (esGenerarGuiaReal)
+            {
+                this.Session[Constantes.VAR_SESSION_GUIA_VER] = guiaRemision;
+            } else
+            {
+                this.GuiaRemisionSession = guiaRemision;
+            }
+
+
         }
 
         public void ChangeInputStringPedido()
