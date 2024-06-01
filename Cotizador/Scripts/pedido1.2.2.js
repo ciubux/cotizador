@@ -1682,8 +1682,19 @@ jQuery(function ($) {
                     $("#verCostoProveedor").html(producto.costoProveedor);
                     $("#verCostoMP").html(producto.costo);
                     $("#verCostoAlternativa").html(producto.costoAlternativa);
+
+                    if (producto.tieneCostoEspecial == 1) {
+                        $(".pVerCostoEspecial").show();
+                        $("#verCostoEspecialProveedor").html(producto.costoEspecialProveedor);
+                        $("#verCostoEspecialMP").html(producto.costoEspecial);
+                        $("#verCostoEspecialAlternativa").html(producto.costoEspecialAlternativa);
+                    } else {
+                        $(".pVerCostoEspecial").hide();
+                    }
                 }
 
+                $("#spnVerNombreCliente").html(producto.nombreCliente);
+                
                 var precioListaList = producto.precioLista;
 
                 // var producto = $.parseJSON(respuesta);
@@ -3273,7 +3284,7 @@ jQuery(function ($) {
                             htmlAdicionalCosto = htmlAdicionalCosto + '<br/><span class="spnMargenCostoFlete">' + lista[i].costoEspecialFleteVisible.toFixed(cantidadDecimales) + '</span>';
                         }
 
-                        htmlAdicionalCosto = htmlAdicionalCosto + '<br/><label class="lbl-vigencia-corregida">Especial</label>';
+                        htmlAdicionalMargen = htmlAdicionalMargen + '<br/><label class="lbl-vigencia-corregida">Especial</label>';
                     } else {
 
                         htmlAdicionalCosto = lista[i].costoListaVisible.toFixed(cantidadDecimales);

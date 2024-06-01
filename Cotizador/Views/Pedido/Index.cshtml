@@ -1878,7 +1878,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modalMostrarPreciosTitle"><b>Precios Registrados en Facturación </b></h4>
+                <h4 class="modal-title" id="modalMostrarPreciosTitle"><b>Precios Registrados en Facturación - Cliente: <span id="spnVerNombreCliente"></span> </b></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -1922,6 +1922,7 @@
                                     @if (pedido.usuario.visualizaCostos)
                                     {
                                         <p class="form-control-static text-center"><b>Costo: </b> S/ <span id="verCostoProveedor"></span></p>
+                                        <p class="form-control-static text-center pVerCostoEspecial"><b>Costo Esp.: </b> S/ <span id="verCostoEspecialProveedor"></span></p>
                                     }
                                 </div>
                             </div>
@@ -1938,6 +1939,7 @@
                                     @if (pedido.usuario.visualizaCostos)
                                     {
                                         <p class="form-control-static text-center"><b>Costo: </b> S/ <span id="verCostoMP"></span></p>
+                                        <p class="form-control-static text-center pVerCostoEspecial"><b>Costo Esp.: </b> S/ <span id="verCostoEspecialMP"></span></p>
                                     }
                                     <p class="form-control-static text-center">
                                         <button id="lnkMostrarLogPrecioProducto" type="button" class="btn btn-link lnkAction lnkActionLabel" data-toggle="modal" data-target="#modalLogPrecioProducto">Ver Historial de Precios</button>
@@ -1957,6 +1959,7 @@
                                     @if (pedido.usuario.visualizaCostos)
                                     {
                                         <p class="form-control-static text-center"><b>Costo: </b> S/ <span id="verCostoAlternativa"></span></p>
+                                        <p class="form-control-static text-center pVerCostoEspecial"><b>Costo Esp.: </b> S/ <span id="verCostoEspecialAlternativa"></span></p>
                                     }
                                 </div>
                             </div>

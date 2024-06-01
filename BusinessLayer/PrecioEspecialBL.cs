@@ -57,5 +57,13 @@ namespace BusinessLayer
                 return dal.ActualizarCabecera(obj);
             }
         }
+
+        public PrecioEspecialDetalle GetCostoEspecialVigente(Guid idCliente, int idGrupo, Guid idProducto, int idEmpresa)
+        {
+            using (var dal = new PrecioEspecialDAL())
+            {
+                return dal.GetCostoEspecialVigente(idCliente, idGrupo, idProducto, idEmpresa);
+            }
+        }
     }
 }

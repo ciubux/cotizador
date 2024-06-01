@@ -27,6 +27,12 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             //Para recuperar el producto se envia si la sede seleccionada es provincia o no
+            PrecioEspecialBL precioEspecialBl = new PrecioEspecialBL();
+            PrecioEspecialDetalle costoEsp = precioEspecialBl.GetCostoEspecialVigente(idCliente, 0, idProducto, usuario.idEmpresa);
+
+            ClienteBL clienteBL = new ClienteBL();
+            Cliente cli = clienteBL.getCliente(idCliente);
+
             PrecioClienteProductoBL precioClienteProductoBL = new PrecioClienteProductoBL();
             List<PrecioClienteProducto> precioClienteProductoList = precioClienteProductoBL.getPreciosRegistrados(idProducto, idCliente);
             String nombreProducto = String.Empty;
@@ -50,19 +56,31 @@ namespace Cotizador.Controllers
             nombreProducto = producto.descripcion;
             skuProducto = producto.sku;
 
+            int tieneCostoEspecial = 0;
+
             String jsonPrecioLista = JsonConvert.SerializeObject(precioClienteProductoList);
 
-            String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto +
+            String json = "{\"nombreCliente\":\"" + cli.razonSocial + "\", \"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto +
                 "\", \"unidad\":\"" + producto.unidad + "\", \"precio\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioSinIgv) + "\", \"precioProvincia\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProvinciaSinIgv) +
                 "\", \"unidadAlternativa\":\"" + producto.unidad_alternativa + "\", \"precioAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioAlternativo) + "\", \"precioProvinciaAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProvinciaAlternativo) +
-                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor) + "\", \"precioProvinciaProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProvinciaProveedor);
+                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor) + "\", \"precioProvinciaProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProvinciaProveedor) + "\"";
 
             if (usuario.visualizaCostos)
             {
-                json = json + "\", \"costo\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoSinIgv) + "\", \"costoAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoAlternativo) + "\", \"costoProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoProveedor);
+                json = json + ", \"costo\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoSinIgv) + "\", \"costoAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoAlternativo) + "\", \"costoProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoProveedor) + "\"";
+
+                if (costoEsp.idPrecioEspecialDetalle != null && !costoEsp.idPrecioEspecialDetalle.Equals(Guid.Empty))
+                {
+                    json = json + ", \"costoEspecial\":\"" + String.Format(Constantes.formatoDosDecimales, costoEsp.unidadCosto.CostoSinIGV) +
+                        "\", \"costoEspecialAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, costoEsp.unidadCosto.CostoSinIGV / producto.equivalenciaAlternativa) +
+                        "\", \"costoEspecialProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, costoEsp.unidadCosto.CostoSinIGV * producto.equivalenciaProveedor) + "\"";
+                    tieneCostoEspecial = 1;
+                }
+
+                json = json + ", \"tieneCostoEspecial\":" + tieneCostoEspecial;
             }
 
-            json = json + "\", \"precioLista\": " + jsonPrecioLista + "}";
+            json = json + ", \"precioLista\": " + jsonPrecioLista + "}";
 
             return json;
         }
@@ -73,6 +91,11 @@ namespace Cotizador.Controllers
             int idGrupoCliente = int.Parse(Request["idGrupoCliente"].ToString());
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
+            GrupoClienteBL grupoBl = new GrupoClienteBL();
+            GrupoCliente grupo = grupoBl.getGrupo(idGrupoCliente);
+
+            PrecioEspecialBL precioEspecialBl = new PrecioEspecialBL();
+            PrecioEspecialDetalle costoEsp = precioEspecialBl.GetCostoEspecialVigente(Guid.Empty, idGrupoCliente, idProducto, usuario.idEmpresa);
 
             //Para recuperar el producto se envia si la sede seleccionada es provincia o no
             PrecioClienteProductoBL precioClienteProductoBL = new PrecioClienteProductoBL();
@@ -96,19 +119,31 @@ namespace Cotizador.Controllers
                 
             }
 
+            int tieneCostoEspecial = 0;
+
             String jsonPrecioLista = JsonConvert.SerializeObject(precioGrupoClienteProductoList);
 
-            String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto +
+            String json = "{\"nombreGrupo\":\"" + grupo.nombre + "\", \"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto +
                 "\", \"unidad\":\"" + producto.unidad + "\", \"precio\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioSinIgv) + "\", \"precioProvincia\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProvinciaSinIgv) +
                 "\", \"unidadAlternativa\":\"" + producto.unidad_alternativa + "\", \"precioAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioAlternativo) + "\", \"precioProvinciaAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProvinciaAlternativo) +
-                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor) + "\", \"precioProvinciaProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProvinciaProveedor);
+                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor) + "\", \"precioProvinciaProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProvinciaProveedor) + "\"";
             
             if (usuario.visualizaCostos)
             {
-                json = json + "\", \"costo\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoSinIgv) + "\", \"costoAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoAlternativo) + "\", \"costoProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoProveedor);
+                json = json + ", \"costo\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoSinIgv) + "\", \"costoAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoAlternativo) + "\", \"costoProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoProveedor) + "\"";
+
+                if (costoEsp.idPrecioEspecialDetalle != null && !costoEsp.idPrecioEspecialDetalle.Equals(Guid.Empty))
+                {
+                    json = json + ", \"costoEspecial\":\"" + String.Format(Constantes.formatoDosDecimales, costoEsp.unidadCosto.CostoSinIGV) +
+                        "\", \"costoEspecialAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, costoEsp.unidadCosto.CostoSinIGV / producto.equivalenciaAlternativa) +
+                        "\", \"costoEspecialProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, costoEsp.unidadCosto.CostoSinIGV * producto.equivalenciaProveedor) + "\"";
+                    tieneCostoEspecial = 1;
+                }
+
+                json = json + ", \"tieneCostoEspecial\":" + tieneCostoEspecial;
             }
 
-            json = json + "\", \"precioLista\": " + jsonPrecioLista + "}";
+            json = json + ", \"precioLista\": " + jsonPrecioLista + "}";
 
             return json;
         }
@@ -119,6 +154,9 @@ namespace Cotizador.Controllers
             Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
             Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            PrecioEspecialBL precioEspecialBl = new PrecioEspecialBL();
+            PrecioEspecialDetalle costoEsp = precioEspecialBl.GetCostoEspecialVigente(idCliente, 0, idProducto, usuario.idEmpresa);
 
 
             //Para recuperar el producto se envia si la sede seleccionada es provincia o no
@@ -141,19 +179,31 @@ namespace Cotizador.Controllers
                 }
             }
 
+            int tieneCostoEspecial = 0;
+
             String jsonPrecioLista = JsonConvert.SerializeObject(precioClienteProductoList);
 
             String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto +
                 "\", \"unidad\":\"" + producto.unidad + "\", \"precio\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioSinIgv) +
                 "\", \"unidadAlternativa\":\"" + producto.unidad_alternativa + "\", \"precioAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioAlternativo) +
-                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor);
+                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor) + "\"";
 
             if (usuario.visualizaCostos)
             {
-                json = json + "\", \"costo\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoSinIgv) + "\", \"costoAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoAlternativo) + "\", \"costoProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoProveedor);
+                json = json + ", \"costo\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoSinIgv) + "\", \"costoAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoAlternativo) + "\", \"costoProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoProveedor) + "\"";
+
+                if (costoEsp.idPrecioEspecialDetalle != null && !costoEsp.idPrecioEspecialDetalle.Equals(Guid.Empty))
+                {
+                    json = json + ", \"costoEspecial\":\"" + String.Format(Constantes.formatoDosDecimales, costoEsp.unidadCosto.CostoSinIGV) +
+                        "\", \"costoEspecialAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, costoEsp.unidadCosto.CostoSinIGV / producto.equivalenciaAlternativa) +
+                        "\", \"costoEspecialProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, costoEsp.unidadCosto.CostoSinIGV * producto.equivalenciaProveedor) + "\"";
+                    tieneCostoEspecial = 1;
+                }
+
+                json = json + ", \"tieneCostoEspecial\":" + tieneCostoEspecial;
             }
 
-            json = json + "\", \"precioLista\": " + jsonPrecioLista + "}";
+            json = json + ", \"precioLista\": " + jsonPrecioLista + "}";
 
             return json;
         }
@@ -165,6 +215,8 @@ namespace Cotizador.Controllers
             Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA];
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
+            PrecioEspecialBL precioEspecialBl = new PrecioEspecialBL();
+            PrecioEspecialDetalle costoEsp = precioEspecialBl.GetCostoEspecialVigente(idCliente, 0, idProducto, usuario.idEmpresa);
 
             IDocumento documento = (IDocumento)venta.pedido;
 
@@ -186,19 +238,31 @@ namespace Cotizador.Controllers
             ProductoBL productoBL = new ProductoBL();
             Producto producto = productoBL.getProductoById(idProducto);
 
+            int tieneCostoEspecial = 0;
+
             String jsonPrecioLista = JsonConvert.SerializeObject(precioClienteProductoList);
 
             String json = "{\"sku\":\"" + skuProducto + "\", \"nombre\":\"" + nombreProducto +
                 "\", \"unidad\":\"" + producto.unidad + "\", \"precio\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioSinIgv) +
                 "\", \"unidadAlternativa\":\"" + producto.unidad_alternativa + "\", \"precioAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioAlternativo) +
-                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor);
+                "\", \"unidadProveedor\":\"" + producto.unidadProveedor + "\", \"precioProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.precioProveedor) + "\"";
 
             if (usuario.visualizaCostos)
             {
-                json = json + "\", \"costo\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoSinIgv) + "\", \"costoAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoAlternativo) + "\", \"costoProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoProveedor);
+                json = json + ", \"costo\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoSinIgv) + "\", \"costoAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoAlternativo) + "\", \"costoProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, producto.costoProveedor) + "\"";
+
+                if (costoEsp.idPrecioEspecialDetalle != null && !costoEsp.idPrecioEspecialDetalle.Equals(Guid.Empty))
+                {
+                    json = json + ", \"costoEspecial\":\"" + String.Format(Constantes.formatoDosDecimales, costoEsp.unidadCosto.CostoSinIGV) +
+                        "\", \"costoEspecialAlternativa\":\"" + String.Format(Constantes.formatoDosDecimales, costoEsp.unidadCosto.CostoSinIGV / producto.equivalenciaAlternativa) +
+                        "\", \"costoEspecialProveedor\":\"" + String.Format(Constantes.formatoDosDecimales, costoEsp.unidadCosto.CostoSinIGV * producto.equivalenciaProveedor) + "\"";
+                    tieneCostoEspecial = 1;
+                }
+
+                json = json + ", \"tieneCostoEspecial\":" + tieneCostoEspecial;
             }
 
-            json = json + "\", \"precioLista\": " + jsonPrecioLista + "}";
+            json = json + ", \"precioLista\": " + jsonPrecioLista + "}";
 
             return json;
         }

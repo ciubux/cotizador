@@ -116,7 +116,35 @@ namespace DataLayer
             return obj;
         }
 
+        public PrecioEspecialDetalle GetCostoEspecialVigente(Guid idCliente, int idGrupo, Guid idProducto, int idEmpresa)
+        {
+            var objCommand = GetSqlCommand("ps_costoEspecialVigente");
+            InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
+            InputParameterAdd.Int(objCommand, "idEmpresa", idEmpresa);
 
+            if (idGrupo == 0)
+            {
+                InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
+            } else
+            {
+                InputParameterAdd.Int(objCommand, "idGrupo", idGrupo);
+            }
+
+            DataTable dataTable = Execute(objCommand);
+
+            PrecioEspecialDetalle item = new PrecioEspecialDetalle();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                item.idPrecioEspecialDetalle = Converter.GetGuid(row, "id_precio_especial_detalle");
+                item.unidadCosto = new ProductoPresentacion();
+                item.unidadCosto.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion");
+                item.unidadCosto.CostoSinIGV = Converter.GetDecimal(row, "costo_unitario_mp");
+                item.unidadCosto.Equivalencia = 1;
+            }
+
+            return item;
+        }
 
         public List<PrecioEspecialDetalle> ValidarPrecios(PrecioEspecialCabecera obj)
         {

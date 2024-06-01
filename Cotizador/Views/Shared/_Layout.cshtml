@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "133";
+    TempData["ScriptVersion"] = "140";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -88,7 +88,7 @@
                         var linkBusquedaGrupoCliente = "";
                         var linkMantenimientoGrupoCliente = "";
                         var linkReasignarCarteraCliente = "";
-
+                        var linkCostosEspeciales = "";
 
                         var linkBusquedaProducto = "";
                         var linkCargaMasivaProducto = "";
@@ -179,7 +179,7 @@
                             case 6: linkBusquedaFactura = "ative"; linkDocumentosVenta = "active"; break;
                             case 19: linkCrearFacturaConsolidada = "ative"; linkDocumentosVenta = "active"; break;
                             case 40: linkBusquedaDocumentosCompra = "ative"; linkDocumentosVenta = "active"; break;
-
+                            case 46: linkBusquedaVentas = "active"; linkDocumentosVenta = "active"; break;
 
                             case 410: linkExportarCPEs = "ative"; linkDocumentosVenta = "active"; break;
 
@@ -239,29 +239,26 @@
 
 
                             case 38: linkAsignacionPermisos = "active"; linkSistema = "active"; break;
-
                             case 41: linkBusquedaVendedor = "active"; linkSistema = "active"; break;
                             case 42: linkMantenimientoVendedor = "active"; linkSistema = "active"; break;
-
                             case 43: linkMantenimientoLogCampo = "active"; linkSistema = "active"; break;
-
-                            case 45: linkCrearMensaje = "active"; linkMaestros = "active"; break;
-                            case 46: linkBusquedaVentas = "active"; linkMaestros = "active"; break;
-
                             case 101: linkBusquedaRol = "active"; linkSistema = "active"; break;
                             case 102: linkMantenimientoRol = "active"; linkSistema = "active"; break;
                             case 103: linkBusquedaUsuario = "active"; linkSistema = "active"; break;
                             case 104: linkMantenimientoUsuario = "active"; linkSistema = "active"; break;
 
-                            case 220: linkBusquedaPrecioEspecial = "active"; linkCotizaciones = "active"; break;
-                            case 221: linkRegistroPrecioEspecial = "active"; linkCotizaciones = "active"; break;
+
+                            case 220: linkBusquedaPrecioEspecial = "active"; linkCostosEspeciales = "active"; break;
+                            case 221: linkRegistroPrecioEspecial = "active"; linkCostosEspeciales = "active"; break;
+
 
                             case 710: linkBusquedaClienteLite = "active"; linkMaestros = "active"; break;
-
                             case 761: linkMantenimientoTipoContactoCliente = "active"; linkMaestros = "active"; break;
-
                             case 770: linkBusquedaPromocion = "active"; linkMaestros = "active"; break;
                             case 771: linkMantenimientoPromocion = "active"; linkMaestros = "active"; break;
+                            case 45: linkCrearMensaje = "active"; linkMaestros = "active"; break;
+
+
 
                             case 901: linkReporteSellOutPersonalizado = "active"; linkReportes = "active"; break;
                             case 920: linkResultadosKPI = "active"; linkReportes = "active"; break;
@@ -289,11 +286,7 @@
                                     {
                                         <li id="linkMantenimientoCotizacionGrupal" class="@linkMantenimientoCotizacionGrupal">@Html.ActionLink("Cotización Grupal - Crear/Modificar", "CotizarGrupo", "Cotizacion")</li>
                                     }
-                                    @if (usuario.modificaPreciosEspeciales)
-                                    {
-                                        <li id="linkBusquedaPrecioEspecial" class="@linkBusquedaPrecioEspecial">@Html.ActionLink("Precios Especiales - Búsqueda", "List", "PrecioEspecial")</li>
-                                        <li id="linkRegistroPrecioEspecial" class="@linkRegistroPrecioEspecial">@Html.ActionLink("Precios Especiales - Registro", "Editar", "PrecioEspecial")</li>
-                                    }
+                                    
                                 </ul>
                             </li>
                         }
@@ -362,7 +355,7 @@
 
                             <li class="@linkMovimientosAlmacen">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
-                                    Movimientos de Almacén
+                                    Almacén
                                     <span class="caret"></span>
                                 </a>
 
@@ -404,7 +397,7 @@
 
                             <li class="@linkDocumentosVenta">
                                 <a class="dropdown-toggle" data-toggle="dropdown">
-                                    Docs. de Venta/Compra
+                                    Ventas/Compras
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
@@ -443,6 +436,26 @@
                                     {
                                         <li id="linkExportarVentasContabilidad" class="@linkExportarVentasContabilidad">@Html.ActionLink("Exportar Ventas Contabilidad", "ExportarVentasContabilidad", "DocumentoVenta")</li>
                                     }
+                                </ul>
+                            </li>
+                        }
+
+                        
+                        if (usuario.creaDocumentosVenta || usuario.administraDocumentosVenta || usuario.visualizaDocumentosVenta || usuario.creaDocumentosCompra || usuario.visualizaVentas || usuario.exportarVentasContabilidad)
+                        {
+
+                            <li class="@linkCostosEspeciales">
+                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                    Costos Esp.
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    @if (usuario.modificaPreciosEspeciales)
+                                    {
+                                        <li id="linkBusquedaPrecioEspecial" class="@linkBusquedaPrecioEspecial">@Html.ActionLink("Precios Especiales - Búsqueda", "List", "PrecioEspecial")</li>
+                                        <li id="linkRegistroPrecioEspecial" class="@linkRegistroPrecioEspecial">@Html.ActionLink("Precios Especiales - Registro", "Editar", "PrecioEspecial")</li>
+                                    }
+
                                 </ul>
                             </li>
                         }

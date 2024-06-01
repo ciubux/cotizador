@@ -1123,6 +1123,8 @@ jQuery(function ($) {
 
                 $("#btnRefacturar").hide();
                 $("#btnGenerarGuiaAtencion").hide();
+                $("#btnGenerarGuiaReal").hide();
+                
                 $("#btnFacturarGuiaRemision").hide();
                 $("#btnFacturarPedidoRelacionado").hide();
                 $("#btnDescargarFacturaPedidoRelacionado").hide();
@@ -1144,6 +1146,7 @@ jQuery(function ($) {
                         $("#btnImprimirGuiaRemision").hide();
                         $("#btnFacturarGuiaRemision").show();
                         $("#btnGenerarGuiaAtencion").show();
+                        $("#btnGenerarGuiaReal").show();
                     }
 
                     $("#guiaRemision_tipoExtorno").val(guiaRemision.tipoExtorno);

@@ -1158,8 +1158,24 @@ jQuery(function ($) {
                     $("#verCostoProveedor").html(producto.costoProveedor);
                     $("#verCostoMP").html(producto.costo);
                     $("#verCostoAlternativa").html(producto.costoAlternativa);
+
+                    if (producto.tieneCostoEspecial == 1) {
+                        $(".pVerCostoEspecial").show();
+                        $("#verCostoEspecialProveedor").html(producto.costoEspecialProveedor);
+                        $("#verCostoEspecialMP").html(producto.costoEspecial);
+                        $("#verCostoEspecialAlternativa").html(producto.costoEspecialAlternativa);
+                    } else {
+                        $(".pVerCostoEspecial").hide();
+                    }
+                }
+
+                if (idGrupoCliente > 0) {
+                    $("#spnVerNombreCliente").html(" Grupo: " + producto.nombreGrupo);
+                } else {
+                    $("#spnVerNombreCliente").html(" Cliente: " + producto.nombreCliente);
                 }
                 
+
                 var precioListaList = producto.precioLista;
 
                 // var producto = $.parseJSON(respuesta);

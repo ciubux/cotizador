@@ -1306,7 +1306,7 @@ namespace DataLayer
             foreach (DataRow row in preciosEspecialesDataTable.Rows)
             {
                 Guid idProducto = Converter.GetGuid(row, "id_producto");
-                decimal costoEspecial = Converter.GetDecimal(row, "precio_unitario");
+                decimal costoEspecial = Converter.GetDecimal(row, "costo_unitario");
                 int idProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion");
 
                 PedidoDetalle det = pedido.pedidoDetalleList.Where(d => d.producto.idProducto.Equals(idProducto)).First();
@@ -1319,7 +1319,7 @@ namespace DataLayer
                             det.tieneCostoEspecial = true;
                             break;
                         case 1:
-                            det.costoEspecial = costoEspecial * ((decimal)det.producto.equivalenciaProveedor);
+                            det.costoEspecial = costoEspecial * ((decimal)det.producto.equivalenciaAlternativa);
                             det.tieneCostoEspecial = true;
                             break;
                         case 2:
