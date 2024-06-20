@@ -578,5 +578,17 @@ namespace DataLayer
 
             return obj;
         }
+
+        public bool ActualizarCostosEspeciales(Guid idUsuario, DateTime fechaInicio, DateTime fechaFin)
+        {
+            var objCommand = GetSqlCommand("pu_actualizar_costos_especiales_ventas");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Varchar(objCommand, "fechaInicio", fechaInicio.ToString("yyyy-MM-dd"));
+            InputParameterAdd.Varchar(objCommand, "fechaFin", fechaFin.ToString("yyyy-MM-dd"));
+
+            ExecuteNonQuery(objCommand);
+
+            return true;
+        }
     }
 }

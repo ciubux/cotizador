@@ -790,6 +790,9 @@ namespace Model
             RegistrarPrecioEspecial = 221,
             [Display(Name = "BÚSQUEDA PRECIOS ESPECIALES")]
             BusquedaPrecioEspecial = 220,
+
+            [Display(Name = "ACTUALIZAR COSTOS ESPECIALES")]
+            ActualizarCostosEspeciales = 226,
         };
 
 

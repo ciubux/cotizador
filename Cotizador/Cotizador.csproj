@@ -773,6 +773,8 @@
     <Content Include="Views\Account\ErrorSesion.cshtml" />
     <Content Include="Views\Shared\_Area.cshtml" />
     <Content Include="Views\Stock\CargaIncorrecta.cshtml" />
+    <Content Include="Views\PrecioEspecial\ActualizarCostosEspeciales.cshtml" />
+    <Content Include="Views\PrecioEspecial\ActualizacionCorrectaCostosEspeciales.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

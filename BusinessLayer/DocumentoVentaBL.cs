@@ -876,19 +876,19 @@ namespace BusinessLayer
             }
         }
 
-        public List<List<String>> getCPEsExportStarsoft(DateTime fechaInicio, DateTime fechaFin)
+        public List<List<String>> getCPEsExportStarsoft(DateTime fechaInicio, DateTime fechaFin, Guid idUsuario)
         {
             using (var dal = new DocumentoVentaDAL())
             {
-                return dal.getExportStarsoft(fechaInicio, fechaFin);
+                return dal.getExportStarsoft(fechaInicio, fechaFin, idUsuario);
             }
         }
 
-        public List<List<CPE_CABECERA_BE>> getVentasContabilidadReporte(DateTime fechaInicio, DateTime fechaFin,string mes)
+        public List<List<CPE_CABECERA_BE>> getVentasContabilidadReporte(DateTime fechaInicio, DateTime fechaFin,string mes, Guid idUsuario)
         {
             using (var dal = new DocumentoVentaDAL())
             {
-                return dal.getVentasContabilidadReporte(fechaInicio, fechaFin, mes);
+                return dal.getVentasContabilidadReporte(fechaInicio, fechaFin, mes, idUsuario);
             }
         }
 

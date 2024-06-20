@@ -956,13 +956,14 @@ namespace DataLayer
         }
 
 
-        public List<List<String>> getExportStarsoft(DateTime fechaInicio, DateTime fechaFin) 
+        public List<List<String>> getExportStarsoft(DateTime fechaInicio, DateTime fechaFin, Guid idUsuario) 
         {
             List<List<String>> cpes = new List<List<String>>();
 
             var objCommand = GetSqlCommand("ps_cpe_rango_fecha");
             InputParameterAdd.Varchar(objCommand, "fechaInicio", fechaInicio.ToString("yyyy-MM-dd"));
             InputParameterAdd.Varchar(objCommand, "fechaFin", fechaFin.ToString("yyyy-MM-dd"));
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
 
             DataSet dataSet = ExecuteDataSet(objCommand);
 
@@ -1072,7 +1073,7 @@ namespace DataLayer
             return cpes;
         }
 
-        public List<List<CPE_CABECERA_BE>> getVentasContabilidadReporte(DateTime fechaInicio, DateTime fechaFin,string mes)
+        public List<List<CPE_CABECERA_BE>> getVentasContabilidadReporte(DateTime fechaInicio, DateTime fechaFin,string mes, Guid idUsuario)
         {
 
             var objCommand = GetSqlCommand("ps_reporte_contabilidad");
@@ -1080,6 +1081,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "final_mes", fechaFin.ToString("yyyy-MM-dd"));
             InputParameterAdd.Varchar(objCommand, "year", fechaInicio.ToString("yyyy"));
             InputParameterAdd.Varchar(objCommand, "mounth", mes);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
 
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable DataTable1 = dataSet.Tables[0];

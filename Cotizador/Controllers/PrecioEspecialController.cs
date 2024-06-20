@@ -14,6 +14,7 @@ using System.Web;
 using System.Web.Mvc;
 using Model.UTILES;
 using NPOI.XWPF.UserModel;
+using Model.ServiceReferencePSE;
 
 namespace Cotizador.Controllers
 {
@@ -139,6 +140,40 @@ namespace Cotizador.Controllers
 
             return excel.generateExcel(lista);
         }
+
+        [HttpGet]
+        public ActionResult ActualizarCostosEspeciales()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (usuario == null || !usuario.modificaPreciosEspeciales)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.ActualizarCostosEspeciales;
+
+            ViewBag.pagina = (int)Constantes.paginas.ActualizarCostosEspeciales;
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ActualizaCostosEspecialesVenta()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            String[] fechai = this.Request.Params["fechaInicio"].Split('/');
+            DateTime fechaInicio = new DateTime(Int32.Parse(fechai[2]), Int32.Parse(fechai[1]), Int32.Parse(fechai[0]), 0, 0, 0);
+            
+            String[] fechaf = this.Request.Params["fechaFin"].Split('/');
+            DateTime fechaFin = new DateTime(Int32.Parse(fechaf[2]), Int32.Parse(fechaf[1]), Int32.Parse(fechaf[0]), 23, 59, 59);
+
+            PrecioEspecialBL bl = new PrecioEspecialBL();
+            bl.ActualizarCostosEspeciales(usuario.idUsuario, fechaInicio, fechaFin);
+
+            return View("ActualizacionCorrectaCostosEspeciales");
+        }
+
 
         public ActionResult Editar(Guid? idPrecioEspecialCabecera = null)
         {

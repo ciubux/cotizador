@@ -254,6 +254,8 @@ namespace Cotizador.Controllers
         
         public ActionResult exportarVentasContabilidadReporte()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
             String[] fechai = this.Request.Params["fechaInicio"].Split('/');            
             DateTime fechaInicio = new DateTime(Int32.Parse(fechai[2]), Int32.Parse(fechai[1]), Int32.Parse(fechai[0]), 0, 0, 0);
             string mes = "";                        
@@ -277,7 +279,7 @@ namespace Cotizador.Controllers
             DateTime fechaFin = new DateTime(Int32.Parse(fechaf[2]), Int32.Parse(fechaf[1]), Int32.Parse(fechaf[0]), 23, 59, 59);
             
             DocumentoVentaBL bl = new DocumentoVentaBL();
-            List<List<CPE_CABECERA_BE>> ListExcel = bl.getVentasContabilidadReporte(fechaInicio, fechaFin,mes);
+            List<List<CPE_CABECERA_BE>> ListExcel = bl.getVentasContabilidadReporte(fechaInicio, fechaFin, mes, usuario.idUsuario);
             VentasContabilidadExcel excel = new VentasContabilidadExcel();
             return excel.generateExcel(ListExcel, mes);
         }
@@ -300,7 +302,7 @@ namespace Cotizador.Controllers
             DateTime fechaFin = new DateTime(Int32.Parse(fechaf[2]), Int32.Parse(fechaf[1]), Int32.Parse(fechaf[0]), 23, 59, 59);
 
             DocumentoVentaBL bl = new DocumentoVentaBL();
-            List<List<String>> cpes = bl.getCPEsExportStarsoft(fechaInicio, fechaFin);
+            List<List<String>> cpes = bl.getCPEsExportStarsoft(fechaInicio, fechaFin, usuario.idUsuario);
 
             string mes = "";
             //switch (fechaInicio.Month())

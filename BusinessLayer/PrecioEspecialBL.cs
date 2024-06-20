@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using Model;
 using System.IO;
+using Framework.DAL;
 
 namespace BusinessLayer
 {
@@ -11,7 +12,7 @@ namespace BusinessLayer
     {
         public PrecioEspecialCabecera GetPrecioEspcial(Guid idObj, Guid idUsuario)
         {
-            using (var dal = new PrecioEspecialDAL())
+            using (PrecioEspecialDAL dal = new PrecioEspecialDAL())
             {
                 return dal.GetPrecioEspecial(idObj, idUsuario);
             }
@@ -19,7 +20,7 @@ namespace BusinessLayer
 
         public List<PrecioEspecialCabecera> BuscarCabeceras(PrecioEspecialCabecera obj)
         {
-            using (var dal = new PrecioEspecialDAL())
+            using (PrecioEspecialDAL dal = new PrecioEspecialDAL())
             {
                 return dal.BuscarCabeceras(obj);
             }
@@ -27,7 +28,7 @@ namespace BusinessLayer
 
         public List<PrecioEspecialCabecera> BuscarCabecerasDetalles(PrecioEspecialCabecera obj)
         {
-            using (var dal = new PrecioEspecialDAL())
+            using (PrecioEspecialDAL dal = new PrecioEspecialDAL())
             {
                 return dal.BuscarCabecerasDetalles(obj);
             }
@@ -36,7 +37,7 @@ namespace BusinessLayer
 
         public List<PrecioEspecialDetalle> ValidarDetalles(PrecioEspecialCabecera obj)
         {
-            using (var dal = new PrecioEspecialDAL())
+            using (PrecioEspecialDAL dal = new PrecioEspecialDAL())
             {
                 return dal.ValidarPrecios(obj);
             }
@@ -44,7 +45,7 @@ namespace BusinessLayer
 
         public PrecioEspecialCabecera InsertarCabecera(PrecioEspecialCabecera obj)
         {
-            using (var dal = new PrecioEspecialDAL())
+            using (PrecioEspecialDAL dal = new PrecioEspecialDAL())
             {
                 return dal.InsertarCabecera(obj);
             }
@@ -52,7 +53,7 @@ namespace BusinessLayer
 
         public PrecioEspecialCabecera ActualizarCabecera(PrecioEspecialCabecera obj)
         {
-            using (var dal = new PrecioEspecialDAL())
+            using (PrecioEspecialDAL dal = new PrecioEspecialDAL())
             {
                 return dal.ActualizarCabecera(obj);
             }
@@ -60,9 +61,17 @@ namespace BusinessLayer
 
         public PrecioEspecialDetalle GetCostoEspecialVigente(Guid idCliente, int idGrupo, Guid idProducto, int idEmpresa)
         {
-            using (var dal = new PrecioEspecialDAL())
+            using (PrecioEspecialDAL dal = new PrecioEspecialDAL())
             {
                 return dal.GetCostoEspecialVigente(idCliente, idGrupo, idProducto, idEmpresa);
+            }
+        }
+
+        public bool ActualizarCostosEspeciales(Guid idUsuario, DateTime fechaInicio, DateTime fechaFin)
+        {
+            using (PrecioEspecialDAL dal = new PrecioEspecialDAL())
+            {
+                return dal.ActualizarCostosEspeciales(idUsuario, fechaInicio, fechaFin);
             }
         }
     }

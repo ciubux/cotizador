@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "Actualizar costos Especiales";
+
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-lg-12">
+            <form id="frmActualizarCostosEspeciales" action="" method="post">
+                <div class="row">
+                    <div class="col-sm-12 col-lg-8">
+                        <!--Fecha Inicio-->
+                        <label class="control-label col-xs-3" for="file">Fecha Inicio:</label>
+                        <div class="col-xs-3">
+                            <input id="fechaIniciotmp" type="hidden" value="@DateTime.Now.ToString("dd/MM/yyyy")" />
+                            <input class="form-control" type="text" id="fechaInicio" name="fechaInicio">
+                        </div>
+
+                        <!--Fecha Fin-->
+                        <label class="control-label col-xs-3" for="file">Fecha Fin:</label>
+                        <div class="col-xs-3">
+                            <input id="fechaFintmp" type="hidden" value="@DateTime.Now.ToString("dd/MM/yyyy")" />
+                            <input class="form-control" type="text" id="fechaFin" name="fechaFin">
+                        </div>
+                    </div>
+                </div>
+            </form>
+            
+
+            <br />
+            
+            <div class="row">
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <button id="btnExportStarsoft" type="button" class="btn btn-primary">Actualizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        $.datepicker.regional['es'] = {
+            closeText: 'Cerrar',
+            prevText: '< Ant',
+            nextText: 'Sig >',
+            currentText: 'Hoy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        var fecha = $("#fechaIniciotmp").val();
+        $("#fechaInicio").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fecha);
+
+        var fecha = $("#fechaFintmp").val();
+        $("#fechaFin").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fecha);
+
+        $("#btnExportStarsoft").click(function () {
+            $('#frmActualizarCostosEspeciales').attr("action", '/PrecioEspecial/ActualizaCostosEspecialesVenta');
+            $('#frmActualizarCostosEspeciales').submit();
+        });
+
+    }, false);    
+</script>
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/producto")
+}

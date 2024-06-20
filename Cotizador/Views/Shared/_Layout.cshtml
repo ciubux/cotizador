@@ -161,6 +161,7 @@
 
                         var linkRegistrarAjusteStock = "";
                         var linkBusquedaAjusteStock = "";
+                        var linkActualizarCostosEspeciales = "";
 
                     }
                     @if (this.Session["pagina"] != null)
@@ -250,6 +251,7 @@
 
                             case 220: linkBusquedaPrecioEspecial = "active"; linkCostosEspeciales = "active"; break;
                             case 221: linkRegistroPrecioEspecial = "active"; linkCostosEspeciales = "active"; break;
+                            case 226: linkActualizarCostosEspeciales = "active"; linkCostosEspeciales = "active"; break;
 
 
                             case 710: linkBusquedaClienteLite = "active"; linkMaestros = "active"; break;
@@ -441,7 +443,7 @@
                         }
 
                         
-                        if (usuario.creaDocumentosVenta || usuario.administraDocumentosVenta || usuario.visualizaDocumentosVenta || usuario.creaDocumentosCompra || usuario.visualizaVentas || usuario.exportarVentasContabilidad)
+                        if (usuario.modificaPreciosEspeciales)
                         {
 
                             <li class="@linkCostosEspeciales">
@@ -454,6 +456,7 @@
                                     {
                                         <li id="linkBusquedaPrecioEspecial" class="@linkBusquedaPrecioEspecial">@Html.ActionLink("Precios Especiales - Búsqueda", "List", "PrecioEspecial")</li>
                                         <li id="linkRegistroPrecioEspecial" class="@linkRegistroPrecioEspecial">@Html.ActionLink("Precios Especiales - Registro", "Editar", "PrecioEspecial")</li>
+                                        <li id="linkRegistroPrecioEspecial" class="@linkActualizarCostosEspeciales">@Html.ActionLink("Costos Especiales - Actualizar Costos Especiales", "ActualizarCostosEspeciales", "PrecioEspecial")</li>
                                     }
 
                                 </ul>
