@@ -231,10 +231,11 @@ namespace DataLayer
             return clienteList;
         }
 
-        public List<Cliente> getClientesBusquedaRUC(String textoBusqueda)
+        public List<Cliente> getClientesBusquedaRUC(String textoBusqueda, Guid idUsuario)
         {
             var objCommand = GetSqlCommand("ps_getclientesruc_allsearch");
             InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
 
             DataTable dataTable = Execute(objCommand);
             List<Cliente> clienteList = new List<Cliente>();

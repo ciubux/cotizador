@@ -83,6 +83,9 @@ namespace BusinessLayer
                 Producto producto = dal.getProducto(idProducto, idCliente, esCompra, soloActivos, idUsuario);
                 //Si es Provincia automaticamente se considera el precioProvincia como precioSinIGV
 
+                if (producto.monedaProveedor.Equals("PEN")) { producto.monedaProveedor = "S"; }
+                if (producto.monedaProveedor.Equals("USD")) { producto.monedaProveedor = "D"; }
+
                 if (tc != null)
                 {
                     if (moneda.Equals("USD"))

@@ -38,6 +38,7 @@ namespace DataLayer
             {
                 obj.idPrecioEspecialCabecera = Converter.GetGuid(row, "id_precio_especial_cabecera");
                 obj.codigo = Converter.GetString(row, "codigo");
+                obj.codigoListaProveedor = Converter.GetString(row, "codigo_lista_proveedor");
                 obj.fechaInicio = Converter.GetDateTime(row, "fecha_inicio");
                 obj.fechaFin = Converter.GetDateTime(row, "fecha_fin");
 
@@ -467,13 +468,14 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo);
             InputParameterAdd.Varchar(objCommand, "tipoNegociacion", obj.tipoNegociacion);
             InputParameterAdd.Varchar(objCommand, "titulo", obj.titulo);
+            InputParameterAdd.Varchar(objCommand, "codigoListaProveedor", obj.codigoListaProveedor);
             InputParameterAdd.Varchar(objCommand, "observaciones", obj.observaciones);
             InputParameterAdd.DateTime(objCommand, "fechaInicio", obj.fechaInicio);
             InputParameterAdd.DateTime(objCommand, "fechaFin", obj.fechaFin);
             InputParameterAdd.Int(objCommand, "idClienteSunat", obj.clienteSunat.idClienteSunat);
             InputParameterAdd.Int(objCommand, "idGrupo", obj.grupoCliente.idGrupoCliente);
             InputParameterAdd.Int(objCommand, "estado", obj.Estado);
-
+            
             DataTable tvp = new DataTable();
             tvp.Columns.Add(new DataColumn("ID_PRODUCTO", typeof(Guid)));
             tvp.Columns.Add(new DataColumn("MONEDA", typeof(string)));
@@ -526,6 +528,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idPrecioEspecialCabecera", obj.idPrecioEspecialCabecera);
             InputParameterAdd.Guid(objCommand, "idUsuario", obj.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo);
+            InputParameterAdd.Varchar(objCommand, "codigoListaProveedor", obj.codigoListaProveedor);
             InputParameterAdd.Varchar(objCommand, "tipoNegociacion", obj.tipoNegociacion);
             InputParameterAdd.Varchar(objCommand, "titulo", obj.titulo);
             InputParameterAdd.Varchar(objCommand, "observaciones", obj.observaciones);

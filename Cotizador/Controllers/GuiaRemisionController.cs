@@ -1610,6 +1610,16 @@ namespace Cotizador.Controllers
 
             int success = 0;
 
+            ClienteBL blCliente = new ClienteBL();
+
+            ClienteWS wsCli = new ClienteWS();
+            wsCli.urlApi = Constantes.NEXTSOFT_API_URL;
+            wsCli.apiToken = Constantes.NEXTSOFT_API_TOKEN;
+
+            Cliente clie = blCliente.getCliente(guiaRemision.pedido.cliente.idCliente);
+
+            object resultCli = await wsCli.crearCliente(ConverterMPToNextSoft.toCliente(clie));
+
             GuiaWS ws = new GuiaWS();
             ws.urlApi = Constantes.NEXTSOFT_API_URL;
             ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;

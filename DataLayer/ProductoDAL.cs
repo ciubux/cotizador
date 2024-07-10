@@ -124,7 +124,16 @@ namespace DataLayer
             DataTable productoDataSet = dataSet.Tables[0];
             DataTable preciosDataSet = dataSet.Tables[1];
             DataTable productoPresentacionDataSet = dataSet.Tables[2];
+            DataTable costoEspecialDataSet = dataSet.Tables[3];
 
+            Decimal costoEspecial = 0;
+            String monedaCostoEspecial = Constantes.MONEDA_DEFECTO;
+
+            foreach (DataRow row in productoPresentacionDataSet.Rows)
+            {
+                costoEspecial = Converter.GetDecimal(row, "costo_unitario_mp");
+                monedaCostoEspecial = Converter.GetString(row, "moneda");
+            }
 
             Producto producto = new Producto();
             foreach (DataRow row in productoDataSet.Rows)
@@ -142,6 +151,14 @@ namespace DataLayer
 
                 producto.costoSinIgv = Converter.GetDecimal(row, "costo");
                 producto.costoOriginal = Converter.GetDecimal(row, "costo_original");
+
+                if (costoEspecial > 0)
+                {
+                    producto.costoSinIgv = costoEspecial;
+                    producto.monedaProveedor = monedaCostoEspecial;
+                    producto.costoOriginal = costoEspecial;
+                }
+
                 if (esCompra)
                 {
                     producto.precioSinIgv = producto.costoSinIgv;
@@ -189,6 +206,8 @@ namespace DataLayer
 
                 producto.Stock = Converter.GetInt(row, "stock");
                 producto.topeDescuento = Converter.GetDecimal(row, "tope_descuento");
+
+                
 
                 /*Obtenido a partir de precio Lista*/
                 if (row["precio_neto"] != DBNull.Value && !esCompra)
@@ -290,13 +309,22 @@ namespace DataLayer
                 productoPresentacion.UnidadInternacional = Converter.GetString(row, "unidad_internacional");
                 productoPresentacion.Stock = Converter.GetInt(row, "stock");
 
+                
+                if (costoEspecial > 0)
+                {
+                    productoPresentacion.CostoSinIGV = costoEspecial / productoPresentacion.Equivalencia;
+                    productoPresentacion.CostoOriginalSinIGV = costoEspecial / productoPresentacion.Equivalencia;
+                }
+
                 if (esCompra)
                 {
                     productoPresentacion.PrecioLimaSinIGV = productoPresentacion.CostoSinIGV;
                     productoPresentacion.PrecioProvinciasSinIGV = productoPresentacion.CostoSinIGV;
                 }
+
                 producto.ProductoPresentacionList.Add(productoPresentacion);
             }
+
 
             return producto;
         }

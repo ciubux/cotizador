@@ -39,6 +39,10 @@ namespace Model
         [Display(Name = "Fecha Fin:")]
         public DateTime fechaFin { get; set; }
 
+        [Display(Name = "Código Registro Proveedor:")]
+        public String codigoListaProveedor { get; set; }
+
+        
         public string FechaInicioDesc
         {
             get { return fechaInicio.ToString("dd/MM/yyyy"); }

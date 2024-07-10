@@ -1153,6 +1153,7 @@ namespace Cotizador.Controllers
             Producto producto = bl.getProducto(idProducto, cotizacion.ciudad.esProvincia , cotizacion.incluidoIGV, 
                 cotizacion.cliente.idCliente, false, cotizacion.moneda.codigo, tc, true, usuario.idUsuario);
 
+            //Verificar si esta activado el uso de unidad proveedor para cotizaciones de clientes subdistribuidores
             ParametroBL parametroBL = new ParametroBL();
             string activaUnidProvSub = parametroBL.getParametro("COTIZACION_UNID_PROV_SUBDISTRIBUIDOR");
 
@@ -1742,8 +1743,8 @@ namespace Cotizador.Controllers
             cotizacion.codigo = Int64.Parse(Request["numero"].ToString());
             cotizacion = cotizacionBL.GetCotizacion(cotizacion, usuario);
             cotizacion.usuarioBusqueda = usuario;
-            cotizacion.escalasComision = this.GetEscalasComision();
-            cotizacion.asignarEscalasComisionADetalles();
+            //cotizacion.escalasComision = this.GetEscalasComision();
+            //cotizacion.asignarEscalasComisionADetalles();
 
             this.Session[Constantes.VAR_SESSION_COTIZACION_VER] = cotizacion;
 

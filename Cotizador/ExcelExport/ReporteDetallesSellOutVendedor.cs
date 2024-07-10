@@ -157,58 +157,74 @@ namespace Cotizador.ExcelExport
 
                 i = i + 2;
 
-                UtilesHelper.setValorCelda(sheet, i, "A", "id_venta_detalle", titleCellStyle); /* 0 */
-                UtilesHelper.setValorCelda(sheet, i, "B", "CÓDIGO RESPONSABLE COMERCIAL", titleCellStyle); /* 1 */
-                UtilesHelper.setValorCelda(sheet, i, "C", "RESPONSABLE COMERCIAL", titleCellStyle); /* 2 */
-                UtilesHelper.setValorCelda(sheet, i, "D", "CIUDAD", titleCellStyle); /* 3 */
-                UtilesHelper.setValorCelda(sheet, i, "E", "CÓDIGO GRUPO", titleCellStyle); /* 4 */
-                UtilesHelper.setValorCelda(sheet, i, "F", "GRUPO", titleCellStyle); /* 5 */
-                UtilesHelper.setValorCelda(sheet, i, "G", "N° DOC CLIENTE", titleCellStyle); /* 6 */
-                UtilesHelper.setValorCelda(sheet, i, "H", "CLIENTE", titleCellStyle); /* 7 */
-                UtilesHelper.setValorCelda(sheet, i, "I", "CÓDIGO CLIENTE", titleCellStyle); /* 8 */
-                UtilesHelper.setValorCelda(sheet, i, "J", "TIPO MOVIMIENTO", titleCellStyle); /* 9 */
-                UtilesHelper.setValorCelda(sheet, i, "K", "FECHA TRANSACCIÓN", titleCellStyle); /* 10 */
-                UtilesHelper.setValorCelda(sheet, i, "L", "N° PEDIDO", titleCellStyle); /* 11 */
-                UtilesHelper.setValorCelda(sheet, i, "M", "N° GRUPO PEDIDO", titleCellStyle); /* 12 */
-                UtilesHelper.setValorCelda(sheet, i, "N", "GUÍA", titleCellStyle); /* 13 */
-                UtilesHelper.setValorCelda(sheet, i, "O", "FECHA EMISIÓN GUÍA", titleCellStyle); /* 14 */
+                int indexColumn = 0;
 
-                UtilesHelper.setValorCelda(sheet, i, "P", "TIPO CPE", titleCellStyle); /* 43 */
-                UtilesHelper.setValorCelda(sheet, i, "Q", "N° CPE", titleCellStyle); /* 44 */
-                UtilesHelper.setValorCelda(sheet, i, "R", "FECHA EMISIÓN CPE", titleCellStyle); /* 45 */
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "id_venta_detalle", titleCellStyle); /* 0 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "CÓDIGO RESPONSABLE COMERCIAL", titleCellStyle); /* 1 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "RESPONSABLE COMERCIAL", titleCellStyle); /* 2 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "CIUDAD", titleCellStyle); /* 3 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "CÓDIGO GRUPO", titleCellStyle); /* 4 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "GRUPO", titleCellStyle); /* 5 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "N° DOC CLIENTE", titleCellStyle); /* 6 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "CLIENTE", titleCellStyle); /* 7 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "CÓDIGO CLIENTE", titleCellStyle); /* 8 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "TIPO MOVIMIENTO", titleCellStyle); /* 9 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "FECHA TRANSACCIÓN", titleCellStyle); /* 10 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "N° PEDIDO", titleCellStyle); /* 11 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "N° GRUPO PEDIDO", titleCellStyle); /* 12 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "GUÍA", titleCellStyle); /* 13 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "FECHA EMISIÓN GUÍA", titleCellStyle); /* 14 */ indexColumn++;
 
-                UtilesHelper.setValorCelda(sheet, i, "S", "FAMILIA PROD", titleCellStyle); /* 15 */
-                UtilesHelper.setValorCelda(sheet, i, "T", "PROVEEDOR", titleCellStyle); /* 16 */
-                UtilesHelper.setValorCelda(sheet, i, "U", "SKU MP", titleCellStyle); /* 17 */
-                UtilesHelper.setValorCelda(sheet, i, "V", "SKU PROV", titleCellStyle); /* 18 */
-                UtilesHelper.setValorCelda(sheet, i, "W", "DESCRIPCIÓN PROD", titleCellStyle); /* 19 */
-                UtilesHelper.setValorCelda(sheet, i, "X", "UNIDAD VENTA", titleCellStyle); /* 20 */
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "TIPO CPE", titleCellStyle); /* 43 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "N° CPE", titleCellStyle); /* 44 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "FECHA EMISIÓN CPE", titleCellStyle); /* 45 */ indexColumn++;
 
-                UtilesHelper.setValorCelda(sheet, i, "Y", "CANTIDAD", titleCellStyle); /* 21 */
-                UtilesHelper.setValorCelda(sheet, i, "Z", "VALOR UNIT", titleCellStyle); /* 22 */
-                UtilesHelper.setValorCelda(sheet, i, "AA", "SUBTOTAL", titleCellStyle); /* 23 */
-                UtilesHelper.setValorCelda(sheet, i, "AB", "COSTO UNIT", titleCellStyle); /* 24 */
-                UtilesHelper.setValorCelda(sheet, i, "AC", "MK UP%", titleCellStyle); /* 25 */
-                UtilesHelper.setValorCelda(sheet, i, "AD", "GP S/", titleCellStyle); /* 26 */
-                UtilesHelper.setValorCelda(sheet, i, "AE", "GP %", titleCellStyle); /* 27 */
-            
-                UtilesHelper.setValorCelda(sheet, i, "AF", "UNIDAD MP", titleCellStyle); /* 33 */
-                UtilesHelper.setValorCelda(sheet, i, "AG", "EQUIVALENCIA MP", titleCellStyle); /* 34 */
-                UtilesHelper.setValorCelda(sheet, i, "AH", "CANTIDAD MP", titleCellStyle); /* 35 */
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "FAMILIA PROD", titleCellStyle); /* 15 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "PROVEEDOR", titleCellStyle); /* 16 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "SKU MP", titleCellStyle); /* 17 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "SKU PROV", titleCellStyle); /* 18 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "DESCRIPCIÓN PROD", titleCellStyle); /* 19 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "UNIDAD VENTA", titleCellStyle); /* 20 */ indexColumn++;
 
-                UtilesHelper.setValorCelda(sheet, i, "AI", "UNIDAD PROV", titleCellStyle); /* 36 */
-                UtilesHelper.setValorCelda(sheet, i, "AJ", "EQUIVALENCIA PROV", titleCellStyle); /* 37 */
-                UtilesHelper.setValorCelda(sheet, i, "AK", "CANTIDAD PROV", titleCellStyle); /* 38 */
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "CANTIDAD", titleCellStyle); /* 21 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "VALOR UNIT", titleCellStyle); /* 22 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "SUBTOTAL", titleCellStyle); /* 23 */ indexColumn++;
+                
+                if(usuario.visualizaCostos)
+                {
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "COSTO UNIT", titleCellStyle); /* 24 */ indexColumn++;
+                }
+                
+                if (usuario.visualizaMargen)
+                {
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "MK UP%", titleCellStyle); /* 25 */ indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "GP S/", titleCellStyle); /* 26 */ indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "GP %", titleCellStyle); /* 27 */ indexColumn++;
+                }
 
-                UtilesHelper.setValorCelda(sheet, i, "AL", "CÓDIGO SUPERVISOR COMERCIAL", titleCellStyle); /* 28 */
-                UtilesHelper.setValorCelda(sheet, i, "AM", "SUPERVISOR COMERCIAL", titleCellStyle); /* 29 */
-                UtilesHelper.setValorCelda(sheet, i, "AN", "CÓDIGO ASISTENTE COMERCIAL", titleCellStyle); /* 30 */
-                UtilesHelper.setValorCelda(sheet, i, "AO", "ASISTENTE COMERCIAL", titleCellStyle); /* 31 */
-                UtilesHelper.setValorCelda(sheet, i, "AP", "PEDIDO CREADO POR", titleCellStyle); /* 32 */
+                if (usuario.visualizaCostos)
+                {
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "COSTO ESPECIAL", titleCellStyle); /* 46 */ indexColumn++;
+                }
+                
 
-                UtilesHelper.setValorCelda(sheet, i, "AQ", "VENTA EXCLUIDA", titleCellStyle); /* 39 */
-                UtilesHelper.setValorCelda(sheet, i, "AR", "EMPRESA", titleCellStyle); /* 41 */
-                UtilesHelper.setValorCelda(sheet, i, "AS", "N° PEDIDO RELACIONADO", titleCellStyle); /* 42 */
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "UNIDAD MP", titleCellStyle); /* 33 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "EQUIVALENCIA MP", titleCellStyle); /* 34 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "CANTIDAD MP", titleCellStyle); /* 35 */ indexColumn++;
+
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "UNIDAD PROV", titleCellStyle); /* 36 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "EQUIVALENCIA PROV", titleCellStyle); /* 37 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "CANTIDAD PROV", titleCellStyle); /* 38 */ indexColumn++;
+
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "CÓDIGO SUPERVISOR COMERCIAL", titleCellStyle); /* 28 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "SUPERVISOR COMERCIAL", titleCellStyle); /* 29 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "CÓDIGO ASISTENTE COMERCIAL", titleCellStyle); /* 30 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "ASISTENTE COMERCIAL", titleCellStyle); /* 31 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "PEDIDO CREADO POR", titleCellStyle); /* 32 */ indexColumn++;
+
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "VENTA EXCLUIDA", titleCellStyle); /* 39 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "EMPRESA", titleCellStyle); /* 41 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "N° PEDIDO RELACIONADO", titleCellStyle); /* 42 */ indexColumn++;
 
                 i = i + 1;
 
@@ -217,57 +233,71 @@ namespace Cotizador.ExcelExport
 
                 foreach (List<String> obj in list)
                 {
-                    UtilesHelper.setValorCelda(sheet, i, "A", obj.ElementAt(0));
-                    UtilesHelper.setValorCelda(sheet, i, "B", obj.ElementAt(1));
-                    UtilesHelper.setValorCelda(sheet, i, "C", obj.ElementAt(2));
-                    UtilesHelper.setValorCelda(sheet, i, "D", obj.ElementAt(3));
-                    UtilesHelper.setValorCelda(sheet, i, "E", obj.ElementAt(4));
-                    UtilesHelper.setValorCelda(sheet, i, "F", obj.ElementAt(5));
-                    UtilesHelper.setValorCelda(sheet, i, "G", obj.ElementAt(6));
-                    UtilesHelper.setValorCelda(sheet, i, "H", obj.ElementAt(7));
-                    UtilesHelper.setValorCelda(sheet, i, "I", obj.ElementAt(8));
-                    UtilesHelper.setValorCelda(sheet, i, "J", obj.ElementAt(9));
-                    UtilesHelper.setValorCelda(sheet, i, "K", obj.ElementAt(10));
-                    UtilesHelper.setValorCelda(sheet, i, "L", obj.ElementAt(11));
-                    UtilesHelper.setValorCelda(sheet, i, "M", obj.ElementAt(12));
-                    UtilesHelper.setValorCelda(sheet, i, "N", obj.ElementAt(13));
-                    UtilesHelper.setValorCelda(sheet, i, "O", obj.ElementAt(14));
+                    indexColumn = 0;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(0)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(1)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(2)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(3)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(4)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(5)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(6)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(7)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(8)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(9)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(10)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(11)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(12)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(13)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(14)); indexColumn++;
 
-                    UtilesHelper.setValorCelda(sheet, i, "P", obj.ElementAt(43));
-                    UtilesHelper.setValorCelda(sheet, i, "Q", obj.ElementAt(44));
-                    UtilesHelper.setValorCelda(sheet, i, "R", obj.ElementAt(45));
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(43)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(44)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(45)); indexColumn++;
 
 
-                    UtilesHelper.setValorCelda(sheet, i, "S", obj.ElementAt(15));
-                    UtilesHelper.setValorCelda(sheet, i, "T", obj.ElementAt(16));
-                    UtilesHelper.setValorCelda(sheet, i, "U", obj.ElementAt(17));
-                    UtilesHelper.setValorCelda(sheet, i, "V", obj.ElementAt(18));
-                    UtilesHelper.setValorCelda(sheet, i, "W", obj.ElementAt(19));
-                    UtilesHelper.setValorCelda(sheet, i, "X", obj.ElementAt(20));
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(15)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(16)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(17)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(18)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(19)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(20)); indexColumn++;
 
-                    UtilesHelper.setValorCelda(sheet, i, "Y", int.Parse(obj.ElementAt(21)));
-                    UtilesHelper.setValorCelda(sheet, i, "Z", double.Parse(obj.ElementAt(22)), fourDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "AA", double.Parse(obj.ElementAt(23)), twoDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "AB", double.Parse(obj.ElementAt(24)), fourDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "AC", double.Parse(obj.ElementAt(25)), fourDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "AD", double.Parse(obj.ElementAt(26)), fourDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "AE", double.Parse(obj.ElementAt(27)), fourDecCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], int.Parse(obj.ElementAt(21))); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], double.Parse(obj.ElementAt(22)), fourDecCellStyle); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], double.Parse(obj.ElementAt(23)), twoDecCellStyle); indexColumn++;
 
-                    UtilesHelper.setValorCelda(sheet, i, "AF", obj.ElementAt(33));
-                    UtilesHelper.setValorCelda(sheet, i, "AG", double.Parse(obj.ElementAt(34)), twoDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "AH", double.Parse(obj.ElementAt(35)), twoDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "AI", obj.ElementAt(36));
-                    UtilesHelper.setValorCelda(sheet, i, "AJ", double.Parse(obj.ElementAt(37)), twoDecCellStyle);
-                    UtilesHelper.setValorCelda(sheet, i, "AK", double.Parse(obj.ElementAt(38)), twoDecCellStyle);
+                    if (usuario.visualizaCostos)
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], double.Parse(obj.ElementAt(24)), fourDecCellStyle); indexColumn++;
+                    }
 
-                    UtilesHelper.setValorCelda(sheet, i, "AL", obj.ElementAt(28));
-                    UtilesHelper.setValorCelda(sheet, i, "AM", obj.ElementAt(29));
-                    UtilesHelper.setValorCelda(sheet, i, "AN", obj.ElementAt(30));
-                    UtilesHelper.setValorCelda(sheet, i, "AO", obj.ElementAt(31));
-                    UtilesHelper.setValorCelda(sheet, i, "AP", obj.ElementAt(32));
-                    UtilesHelper.setValorCelda(sheet, i, "AQ", obj.ElementAt(39));
-                    UtilesHelper.setValorCelda(sheet, i, "AR", obj.ElementAt(41));
-                    UtilesHelper.setValorCelda(sheet, i, "AS", obj.ElementAt(42));
+                    if (usuario.visualizaMargen)
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], double.Parse(obj.ElementAt(25)), fourDecCellStyle); indexColumn++;
+                        UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], double.Parse(obj.ElementAt(26)), fourDecCellStyle); indexColumn++;
+                        UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], double.Parse(obj.ElementAt(27)), fourDecCellStyle); indexColumn++;
+                    }
+
+                    if (usuario.visualizaCostos)
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], double.Parse(obj.ElementAt(46)), fourDecCellStyle); indexColumn++;
+                    }
+
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(33)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], double.Parse(obj.ElementAt(34)), twoDecCellStyle); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], double.Parse(obj.ElementAt(35)), twoDecCellStyle); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(36)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], double.Parse(obj.ElementAt(37)), twoDecCellStyle); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], double.Parse(obj.ElementAt(38)), twoDecCellStyle); indexColumn++;
+
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(28)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(29)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(30)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(31)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(32)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(39)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(41)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(42)); indexColumn++;
 
                     i++;
                 }

@@ -984,6 +984,10 @@ jQuery(function ($) {
                         botonGenerarNotaCredito = '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnGenerarNotaCredito  btn btn-danger" data-toggle="modal" data-target="#modalGenerarNotaCredito">Generar Nota Crédito</button >';
                     }
 
+                    var btnPDF = "";
+                    if (facturaList[i].estadoDocumentoSunat == '102' || facturaList[i].estadoDocumentoSunat == '103') {
+                        btnPDF = '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnDescargarPDF btn btn-primary bouton-image pdfBoton">PDF</button>'; 
+                    }
 
 
                     var botonDescargarXML = '';
@@ -1022,7 +1026,7 @@ jQuery(function ($) {
 
 
                         '<td> <button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnVerDocumentoVenta btn btn-primary">Ver</button>' +
-                        '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnDescargarPDF btn btn-primary bouton-image pdfBoton">PDF</button>' +
+                        btnPDF +
                         '<button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnActualizarEstado  btn btn-success">Act. Estado</button >' +
                         /*      '<td> <button type="button"  class="' + facturaList[i].idDocumentoVenta + ' ' + facturaList[i].serieNumero + ' btnDescargarPDF btn btn-primary">Descargar PDF</button>' +
                               botonDescargarXML +
@@ -1204,6 +1208,19 @@ jQuery(function ($) {
                     $('#btnIniciarAprobacion').hide();
                     $('#btnRechazarAprobacion').hide();
                 }
+
+                if (documentoVenta.estadoDocumentoSunat == '102' || documentoVenta.estadoDocumentoSunat == '103')
+                {
+                    $('#btnDescargarPDF').show();
+                    $('#btnDescargarXML').show();
+                    $('#btnDescargarCDR').show();
+                }
+                else {
+                    $('#btnDescargarPDF').hide();
+                    $('#btnDescargarXML').hide();
+                    $('#btnDescargarCDR').hide();
+                }
+
 
                 //Nota de Crédito
                 if ((documentoVenta.estadoDocumentoSunat == '102'

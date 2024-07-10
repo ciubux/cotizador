@@ -196,6 +196,7 @@ namespace DataLayer
                 Decimal valUnit = Converter.GetDecimal(row, "VALOR_UNIT");
                 Decimal subtotal = Converter.GetDecimal(row, "SUBTOTAL");
                 Decimal costoUnit = Converter.GetDecimal(row, "COSTO_UNIT");
+                Decimal costoEspecial = Converter.GetDecimal(row, "COSTO_ESPECIAL");
                 Decimal mkUp = Converter.GetDecimal(row, "MK_UP%");
                 Decimal gpS = Converter.GetDecimal(row, "GP_S/");
                 Decimal gpP = Converter.GetDecimal(row, "GP_%");
@@ -236,6 +237,8 @@ namespace DataLayer
                 item.Add(Converter.GetString(row, "TIPO_CPE")); /* 43: */
                 item.Add(Converter.GetString(row, "CPE")); /* 44: */
                 item.Add(Converter.GetString(row, "FECHA_EMISION_CPE")); /* 45: */
+
+                item.Add(String.Format(Constantes.formatoCuatroDecimales, costoEspecial)); /* 46: */
 
 
                 resultados.Add(item);

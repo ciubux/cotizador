@@ -608,16 +608,18 @@ namespace Cotizador.Controllers
         public String SearchClientes()
         {
             String data = this.Request.Params["data[q]"];
-            ClienteBL clienteBL = new ClienteBL();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            return clienteBL.getCLientesBusqueda(data);
+            ClienteBL clienteBL = new ClienteBL();
+            return clienteBL.getCLientesBusqueda(data, usuario.idUsuario);
         }
         public String SearchClientesRuc()
         {
             String data = this.Request.Params["data[q]"];
-            ClienteBL clienteBL = new ClienteBL();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            return clienteBL.getCLientesBusquedaRUC(data);
+            ClienteBL clienteBL = new ClienteBL();
+            return clienteBL.getCLientesBusquedaRUC(data, usuario.idUsuario);
         }
 
         [HttpPost]

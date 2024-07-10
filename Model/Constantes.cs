@@ -23,6 +23,8 @@ namespace Model
         public static String formatoHora = "HH:mm";
         public static String MENSAJE_SI = "Sí";
         public static String MENSAJE_NO = "No";
+
+        public static String MONEDA_DEFECTO = "PEN";
         public static Char PAD = '0';
         public static int LONGITUD_NUMERO = 6;
         public static int LONGITUD_NUMERO_GRUPO = 4;

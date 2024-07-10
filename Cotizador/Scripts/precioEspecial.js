@@ -188,6 +188,10 @@ jQuery(function ($) {
             }
         });
     }
+    
+    $("#obj_codigoListaProveedor").change(function () {
+        changeInputString("codigoListaProveedor", $(this).val());
+    });
 
     $("#obj_codigo").change(function () {
         changeInputString("codigo", $(this).val());
@@ -346,6 +350,7 @@ jQuery(function ($) {
                 var usuario = resultado.usuario;
 
                 $("#ver_codigo").html(obj.codigo);
+                $("#ver_codigoListaProveedor").html(obj.codigoListaProveedor);
                 $("#ver_titulo").html(obj.titulo);
                 $("#ver_tipo_negociacion").html(obj.tipoNegociacion);
                 $("#ver_grupo").html(obj.grupoCliente.codigoNombre);
@@ -355,8 +360,7 @@ jQuery(function ($) {
                 $("#ver_registradoPor").html(obj.UsuarioRegistro.nombre);
                 $("#ver_fechaRegistro").html(obj.FechaRegistroDesc);
                 $("#ver_observaciones").html(obj.observaciones);
-
-              
+                
 
                 if (obj.tipoNegociacion == "RUC") {
                     $("#divVerGrupo").hide();

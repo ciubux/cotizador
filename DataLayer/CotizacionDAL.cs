@@ -423,6 +423,7 @@ namespace DataLayer
                     cotizacionDetalle.ProductoPresentacion.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion");
                 }
 
+                cotizacionDetalle.escalaComision = Converter.GetString(row, "categoria_margen");
                 cotizacionDetalle.unidad = Converter.GetString(row, "unidad");
                 cotizacionDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
                 cotizacionDetalle.producto.sku = Converter.GetString(row, "sku");

@@ -4439,7 +4439,7 @@ jQuery(function ($) {
         var idEmpresaDestino = $('input[name="cemeRadioListaEmpresa"]:checked').val();
         var nombreEmpresadestino = $('input[name="cemeRadioListaEmpresa"]:checked').attr("nombreEmpresa");
 
-        if (idEmpresaDestino > 1) {
+        if (idEmpresaDestino > 0) {
             $('body').loadingModal('show');
             $('body').loadingModal({
                 text: 'Cargando...'

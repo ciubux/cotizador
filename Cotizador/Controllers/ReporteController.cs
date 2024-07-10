@@ -81,6 +81,12 @@ namespace Cotizador.Controllers
             obj.integraEmpresas = false;
             obj.excluirVentasRelacionadasHijas = true;
 
+
+            if (usuario.esResponsableComercial && !usuario.modificaFiltroVendedor)
+            {
+                obj.idResponsableComercial = usuario.vendedor.idVendedor;
+            }
+
             if (usuario.vistaIntegradaMultiEmpresa || usuario.reporteIntegradoMultiEmpresa)
             {
                 obj.integraEmpresas = true;
@@ -142,7 +148,7 @@ namespace Cotizador.Controllers
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.visualizaReporteProductosPendientesAtencion)
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.visualizaReporteSellOutVendedores)
             {
                 return RedirectToAction("Login", "Account");
             }

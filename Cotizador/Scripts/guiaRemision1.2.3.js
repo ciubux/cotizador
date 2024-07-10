@@ -1263,6 +1263,11 @@ jQuery(function ($) {
 
                 if (guiaRemision.habilitaFacturaPedidoRelacionado) {
                     $("#btnFacturarPedidoRelacionado").show();
+                    if (guiaRemision.estaFacturado) {
+                        $("#btnFacturarPedidoRelacionado").remove("disabled");
+                    } else {
+                        $("#btnFacturarPedidoRelacionado").attr("disabled", "disabled");
+                    }
                 }
 
                 if (guiaRemision.habilitaDescargarFacturaPedidoRelacionado) {
