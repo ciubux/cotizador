@@ -809,6 +809,21 @@ namespace BusinessLayer
             }
         }
 
+        public List<Cliente> SelectClienteEmpresasRelacionadas(String ruc, Guid idSede, Guid idUsuario)
+        {
+            using (ClienteDAL dal = new ClienteDAL())
+            {
+                return dal.SelectClienteEmpresasRelacionadas(ruc, idSede, idUsuario);
+            }
+        }
+
+        public bool ExisteClienteSede(String ruc, Guid idSede, Guid idUsuario)
+        {
+            using (ClienteDAL dal = new ClienteDAL())
+            {
+                return dal.ExisteClienteSede(ruc, idSede, idUsuario);
+            }
+        }
 
         private void enviarNotificacionSolicitudCredito(Cliente cliente)
         {

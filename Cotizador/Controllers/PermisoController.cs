@@ -7,6 +7,9 @@ using Newtonsoft.Json;
 using System.Web;
 using System.Web.Mvc;
 using System.Reflection;
+using Cotizador.ExcelExport;
+using Cotizador.Models.OBJsFiltro;
+using Model.UTILES;
 
 namespace Cotizador.Controllers
 {
@@ -198,6 +201,48 @@ namespace Cotizador.Controllers
             }
         }
 
+
+        [HttpGet]
+        public ActionResult ExportMatrizPermisosUsuarios()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.administraPermisos)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            PermisoBL bl = new PermisoBL();
+
+            ReporteMatriz matriz = new ReporteMatriz(); 
+
+            matriz = bl.ListaPermisosUsuarios(usuario.idUsuario);
+
+            ReporteMatrizDatos excel = new ReporteMatrizDatos();
+
+            return excel.generateExcel(matriz);
+        }
+
+        [HttpGet]
+        public ActionResult ExportMatrizPermisosRoles()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.administraPermisos)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            PermisoBL bl = new PermisoBL();
+
+            ReporteMatriz matriz = new ReporteMatriz();
+
+            matriz = bl.ListaPermisosRoles(usuario.idUsuario);
+
+            ReporteMatrizDatos excel = new ReporteMatrizDatos();
+
+            return excel.generateExcel(matriz);
+        }
 
         public string Update()
         {

@@ -34,6 +34,13 @@ namespace BusinessLayer
             }
         }
 
+        public List<PrecioEspecialCabecera> CabecerasDetalles(PrecioEspecialCabecera search)
+        {
+            using (PrecioEspecialDAL dal = new PrecioEspecialDAL())
+            {
+                return dal.CabecerasDetalles(search);
+            }
+        }
 
         public List<PrecioEspecialDetalle> ValidarDetalles(PrecioEspecialCabecera obj)
         {
@@ -72,6 +79,14 @@ namespace BusinessLayer
             using (PrecioEspecialDAL dal = new PrecioEspecialDAL())
             {
                 return dal.ActualizarCostosEspeciales(idUsuario, fechaInicio, fechaFin);
+            }
+        }
+
+        public bool ActualizarTodos(Guid idUsuario, List<PrecioEspecialCabecera> listas)
+        {
+            using (PrecioEspecialDAL dal = new PrecioEspecialDAL())
+            {
+                return dal.ActualizarTodos(idUsuario, listas);
             }
         }
     }

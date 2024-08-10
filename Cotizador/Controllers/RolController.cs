@@ -12,6 +12,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using Model.UTILES;
 
 namespace Cotizador.Controllers
 {
@@ -162,6 +163,27 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_ROL_BUSQUEDA] = obj;
         }
 
+
+        [HttpGet]
+        public ActionResult ExportMatrizRolesUsuarios()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.visualizaRoles)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            RolBL bl = new RolBL();
+
+            ReporteMatriz matriz = new ReporteMatriz();
+
+            matriz = bl.ListaRolesUsuarios(usuario.idUsuario);
+
+            ReporteMatrizDatos excel = new ReporteMatrizDatos();
+
+            return excel.generateExcel(matriz);
+        }
 
         //[HttpGet]
         //public ActionResult ExportLastSearchExcel()

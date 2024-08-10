@@ -1119,7 +1119,10 @@
                     {
                         <button type="button" id="btnBloquearPedido" class="btn btn-danger" data-toggle='modal' data-target='#modalLiberacion'>Bloquear</button>
                     }
-
+                    @if (pedido.usuario.modificaPreciosEspeciales)
+                    {
+                        <button type="button" id="btnActualizarCostosEspeciales" class="btn btn-warning">Actualizar Costos Especiales</button>
+                    }                    
                 </div>
 
 
@@ -1141,11 +1144,13 @@
                         <button type="button" id="btnActualizarPedido" class="btn btn-primary" data-toggle='modal' data-target='#modalActualizarPedido'>Observaciones y Adjuntos</button>
                         <button type="button" id="btnEditarPedido" class="btn btn-primary ">Editar</button>
                     }
+
                     @if (pedido.usuario.apruebaPedidos)
                     {
                         <button type="button" id="btnAprobarIngresoPedido" class="btn btn-success" data-toggle='modal' data-target='#modalAprobacion'>Aprobar</button>
                         <button type="button" id="btnRestringirAtencionPedido" class="btn btn-danger" data-toggle='modal' data-target='#modalDetallesRestriccion'>Restringir Atención</button>
                     }
+
                     @if (pedido.usuario.apruebaPedidos)
                     {
                         <button type="button" id="btnDenegarIngresoPedido" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Denegar</button>
@@ -1160,6 +1165,7 @@
                     {
                         <button type="button" id="btnCancelarProgramacionPedido" class="btn btn-danger" data-toggle='modal' data-target='#modalAprobacion'>Cancelar Programación</button>
                     }
+
                     @if (pedido.usuario.creaGuias)
                     {
                         if (pedido.usuario.creaGuiasDiferidas)
@@ -1169,7 +1175,6 @@
                         <button type="button" id="btnAtenderPedidoVenta" class="btn btn-success">Generar Guía Remisión</button>
                         <button type="button" id="btnIngresarPedidoVenta" class="btn btn-success">Generar Nota de Ingreso</button>
                     }
-
 
 
                     @if (pedido.usuario.visualizaGuias && pedido.usuario.visualizaDocumentosVenta

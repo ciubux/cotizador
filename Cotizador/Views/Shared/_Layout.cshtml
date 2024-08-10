@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "145";
+    TempData["ScriptVersion"] = "175";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -120,7 +120,9 @@
 
                         var linkBusquedaPrecioEspecial = "";
                         var linkRegistroPrecioEspecial = "";
+                        var linkCargaMasivaPrecioEspecial = "";
                         
+
                         var linkBusquedaVendedor = "";
                         var linkMantenimientoVendedor = "";
 
@@ -251,6 +253,7 @@
 
                             case 220: linkBusquedaPrecioEspecial = "active"; linkCostosEspeciales = "active"; break;
                             case 221: linkRegistroPrecioEspecial = "active"; linkCostosEspeciales = "active"; break;
+                            case 224: linkCargaMasivaPrecioEspecial = "active"; linkCostosEspeciales = "active"; break;
                             case 226: linkActualizarCostosEspeciales = "active"; linkCostosEspeciales = "active"; break;
 
 
@@ -456,6 +459,7 @@
                                     {
                                         <li id="linkBusquedaPrecioEspecial" class="@linkBusquedaPrecioEspecial">@Html.ActionLink("Precios Especiales - Búsqueda", "List", "PrecioEspecial")</li>
                                         <li id="linkRegistroPrecioEspecial" class="@linkRegistroPrecioEspecial">@Html.ActionLink("Precios Especiales - Registro", "Editar", "PrecioEspecial")</li>
+                                        <li id="linkRegistroPrecioEspecial" class="@linkCargaMasivaPrecioEspecial">@Html.ActionLink("Precios Especiales - Carga Masiva", "CargaMasiva", "PrecioEspecial")</li>
                                         <li id="linkRegistroPrecioEspecial" class="@linkActualizarCostosEspeciales">@Html.ActionLink("Costos Especiales - Actualizar Costos Especiales", "ActualizarCostosEspeciales", "PrecioEspecial")</li>
                                     }
 

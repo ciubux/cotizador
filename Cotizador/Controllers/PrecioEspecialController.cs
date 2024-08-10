@@ -15,6 +15,7 @@ using System.Web.Mvc;
 using Model.UTILES;
 using NPOI.XWPF.UserModel;
 using Model.ServiceReferencePSE;
+using static NPOI.HSSF.Util.HSSFColor;
 
 namespace Cotizador.Controllers
 {
@@ -134,6 +135,28 @@ namespace Cotizador.Controllers
 
             PrecioEspecialBL bL = new PrecioEspecialBL();
             List<PrecioEspecialCabecera> lista = bL.BuscarCabecerasDetalles(objSearch);
+
+
+            PrecioEspecialCabecerasDetallesExcel excel = new PrecioEspecialCabecerasDetallesExcel();
+
+            return excel.generateExcel(lista);
+        }
+
+        [HttpGet]
+        public ActionResult ExportAllBD()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.modificaPreciosEspeciales)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            PrecioEspecialCabecera objSearch = (PrecioEspecialCabecera)this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL_BUSQUEDA];
+
+            objSearch.usuario = usuario;
+            PrecioEspecialBL bL = new PrecioEspecialBL();
+            List<PrecioEspecialCabecera> lista = bL.CabecerasDetalles(objSearch);
 
 
             PrecioEspecialCabecerasDetallesExcel excel = new PrecioEspecialCabecerasDetallesExcel();
@@ -402,6 +425,22 @@ namespace Cotizador.Controllers
             return View();
 
         }
+
+        [HttpGet]
+        public ActionResult CargaMasiva()
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPrecioEspecial;
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (!usuario.modificaPreciosEspeciales)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            return View();
+
+        }
+
 
         public String ConsultarSiExistePrecioEspecial()
         {
@@ -766,6 +805,282 @@ namespace Cotizador.Controllers
 
 
             return RedirectToAction("Editar", "PrecioEspecial");
+        }
+
+        [HttpPost]
+        public ActionResult LoadAll(HttpPostedFileBase file)
+        {
+            Usuario usuario = (Usuario)this.Session["usuario"];
+
+            HSSFWorkbook hssfwb;
+
+            ProductoBL productoBL = new ProductoBL();
+
+            hssfwb = new HSSFWorkbook(file.InputStream);
+
+            ISheet sheet = hssfwb.GetSheetAt(0);
+            int row = 1;
+
+            int posicionInicial = 0;
+            int pos = 0;
+            bool agregar = false;
+            bool finaliza = false;
+
+            List<PrecioEspecialCabecera> listas = new List<PrecioEspecialCabecera>();
+            PrecioEspecialCabecera cabecera = new PrecioEspecialCabecera();
+            cabecera.codigo = "";
+            string tipoNegociación = "";
+            string codigo = "";
+
+
+            while (!finaliza)
+            {
+                int a = 1;
+                if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
+                {
+                   
+                    /*  A 0  TIPO NEGOCIACIÓN
+                        B 1  CÓDIGO NEGOCIACIÓN
+                        C 2  TÍTULO LISTA
+                        D 3  RUC
+                        F 5  CODIGO GRUPO
+                        J 9  CÓDIGO REGISTRO PROVEEDOR
+                        K 10 OBSERVACIONES LISTA
+                        L 11 SKU
+                        N 13  MONEDA
+                        O 14 TIPO UNIDAD PRECIO
+                        Q 16 PRECIO
+                        S 18 TIPO UNIDAD COSTO
+                        U 20 COSTO
+                        W 22 FECHA INICIO
+                        X 23 FECHA FIN
+                        Y 24 OBSERVACIONES
+                     */
+
+                    agregar = true;
+                    posicionInicial = 0;
+
+                    try
+                    {
+
+                        pos = posicionInicial + 0;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            tipoNegociación = "";
+                        }
+                        else
+                        {
+                            tipoNegociación = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                        }
+
+                        pos = posicionInicial + 1;
+                        if (sheet.GetRow(row).GetCell(pos) == null)
+                        {
+                            codigo = "";
+                        }
+                        else
+                        {
+                            codigo = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                        }
+
+                        if(tipoNegociación.Equals(string.Empty) || codigo.Equals(string.Empty)) { 
+                            agregar = false; 
+                        }
+
+                        if (agregar)
+                        {
+                            if(!cabecera.codigo.Equals(codigo))
+                            {
+                                cabecera = new PrecioEspecialCabecera();
+                                cabecera.codigo = codigo;
+                                cabecera.tipoNegociacion = tipoNegociación;
+                                cabecera.precios = new List<PrecioEspecialDetalle>();
+
+                                pos = posicionInicial + 2;
+                                cabecera.titulo = "";
+                                if (sheet.GetRow(row).GetCell(pos) != null)
+                                {
+                                    cabecera.titulo = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                                }
+
+                                pos = posicionInicial + 3;
+                                cabecera.clienteSunat = new ClienteSunat();
+                                cabecera.clienteSunat.ruc = "";
+                                if (sheet.GetRow(row).GetCell(pos) != null)
+                                {
+                                    cabecera.clienteSunat.ruc = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                                }
+
+
+                                pos = posicionInicial + 5;
+                                cabecera.grupoCliente = new GrupoCliente();
+                                cabecera.grupoCliente.codigo = "";
+                                if (sheet.GetRow(row).GetCell(pos) != null)
+                                {
+                                    cabecera.grupoCliente.codigo = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                                }
+
+                                pos = posicionInicial + 9;
+                                cabecera.codigoListaProveedor = "";
+                                if (sheet.GetRow(row).GetCell(pos) != null)
+                                {
+                                    cabecera.codigoListaProveedor = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                                }
+
+                                pos = posicionInicial + 10;
+                                cabecera.observaciones = "";
+                                if (sheet.GetRow(row).GetCell(pos) != null)
+                                {
+                                    cabecera.observaciones = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                                }
+
+                                pos = posicionInicial + 22;
+                                cabecera.fechaInicio = DateTime.MinValue;
+                                if (sheet.GetRow(row).GetCell(pos) != null && !sheet.GetRow(row).GetCell(pos).ToString().Trim().Equals("")
+                                    && sheet.GetRow(row).GetCell(pos).CellType == CellType.Numeric
+                                    && DateUtil.IsCellDateFormatted(sheet.GetRow(row).GetCell(pos)))
+                                {
+                                    cabecera.fechaInicio = sheet.GetRow(row).GetCell(pos).DateCellValue;
+                                }
+
+                                pos = posicionInicial + 23;
+                                cabecera.fechaFin = DateTime.MinValue;
+                                if (sheet.GetRow(row).GetCell(pos) != null && !sheet.GetRow(row).GetCell(pos).ToString().Trim().Equals("")
+                                    && sheet.GetRow(row).GetCell(pos).CellType == CellType.Numeric
+                                    && DateUtil.IsCellDateFormatted(sheet.GetRow(row).GetCell(pos)))
+                                {
+                                    cabecera.fechaFin = sheet.GetRow(row).GetCell(pos).DateCellValue;
+                                }
+
+
+                                listas.Add(cabecera);
+                            }
+
+
+                            PrecioEspecialDetalle obj = new PrecioEspecialDetalle();
+                            obj.producto = new Producto();
+                            obj.unidadPrecio = new ProductoPresentacion();
+                            obj.unidadCosto = new ProductoPresentacion();
+                            obj.moneda = new Moneda();
+
+                            pos = posicionInicial + 11;
+                            obj.producto.sku = "";
+                            if (sheet.GetRow(row).GetCell(pos) != null)
+                            {
+                                obj.producto.sku = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 13;
+                            obj.moneda.codigo = "";
+                            if (sheet.GetRow(row).GetCell(pos) != null)
+                            {
+                                obj.moneda.codigo = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
+                            pos = posicionInicial + 14;
+                            obj.unidadPrecio.IdProductoPresentacion = 0;
+                            if (sheet.GetRow(row).GetCell(pos) != null)
+                            {
+                                string unidad = sheet.GetRow(row).GetCell(pos).ToString();
+                                unidad = unidad.ToLower();
+
+                                switch (unidad)
+                                {
+                                    case "alternativa": obj.unidadPrecio.IdProductoPresentacion = 1; break;
+                                    case "proveedor": obj.unidadPrecio.IdProductoPresentacion = 2; break;
+                                    case "conteo": obj.unidadPrecio.IdProductoPresentacion = 3; break;
+                                }
+                            }
+
+                            pos = posicionInicial + 16;
+                            obj.unidadPrecio.PrecioSinIGV = 0;
+                            if (sheet.GetRow(row).GetCell(pos) != null && !sheet.GetRow(row).GetCell(pos).ToString().Trim().Equals(""))
+                            {
+                                obj.unidadPrecio.PrecioSinIGV = decimal.Parse(sheet.GetRow(row).GetCell(pos).ToString());
+                            }
+
+                            pos = posicionInicial + 18;
+                            obj.unidadCosto.IdProductoPresentacion = 0;
+                            if (sheet.GetRow(row).GetCell(pos) != null)
+                            {
+                                string unidad = sheet.GetRow(row).GetCell(pos).ToString();
+                                unidad = unidad.ToLower();
+
+                                switch (unidad)
+                                {
+                                    case "alternativa": obj.unidadCosto.IdProductoPresentacion = 1; break;
+                                    case "proveedor": obj.unidadCosto.IdProductoPresentacion = 2; break;
+                                    case "conteo": obj.unidadCosto.IdProductoPresentacion = 3; break;
+                                }
+                            }
+
+                            pos = posicionInicial + 20;
+                            obj.unidadCosto.CostoSinIGV = 0;
+                            if (sheet.GetRow(row).GetCell(pos) != null && !sheet.GetRow(row).GetCell(pos).ToString().Trim().Equals(""))
+                            {
+                                obj.unidadCosto.CostoSinIGV = decimal.Parse(sheet.GetRow(row).GetCell(pos).ToString());
+                            }
+
+
+                            pos = posicionInicial + 22;
+                            obj.fechaInicio = DateTime.MinValue;
+                            if (sheet.GetRow(row).GetCell(pos) != null && !sheet.GetRow(row).GetCell(pos).ToString().Trim().Equals("")
+                                && sheet.GetRow(row).GetCell(pos).CellType == CellType.Numeric
+                                && DateUtil.IsCellDateFormatted(sheet.GetRow(row).GetCell(pos)))
+                            {
+                                obj.fechaInicio = sheet.GetRow(row).GetCell(pos).DateCellValue;
+                            }
+
+                            pos = posicionInicial + 23;
+                            obj.fechaFin = DateTime.MinValue;
+                            if (sheet.GetRow(row).GetCell(pos) != null && !sheet.GetRow(row).GetCell(pos).ToString().Trim().Equals("")
+                                && sheet.GetRow(row).GetCell(pos).CellType == CellType.Numeric
+                                && DateUtil.IsCellDateFormatted(sheet.GetRow(row).GetCell(pos)))
+                            {
+                                obj.fechaFin = sheet.GetRow(row).GetCell(pos).DateCellValue;
+                            }
+
+                            pos = posicionInicial + 24;
+                            obj.observaciones = "";
+                            if (sheet.GetRow(row).GetCell(pos) != null)
+                            {
+                                obj.observaciones = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+                            
+                            cabecera.precios.Add(obj);
+                        }
+                        else
+                        {
+                            finaliza = true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log log = new Log("Excel Precio Especial Detalle: " + ex.ToString() + " paso:" + pos, TipoLog.Error, usuario);
+                        LogBL logBL = new LogBL();
+                        logBL.insertLog(log);
+                    }
+                }
+                else
+                {
+                    finaliza = true;
+                }
+
+                row++;
+            }
+
+            if (listas.Count > 0)
+            {
+                PrecioEspecialBL bl = new PrecioEspecialBL();
+                bl.ActualizarTodos(usuario.idUsuario, listas);
+            }
+
+            return RedirectToAction("ActualizacionCorrectaTodos", "PrecioEspecial");
+        }
+
+        public ActionResult ActualizacionCorrectaTodos()
+        {
+            return View();
         }
     }
 }

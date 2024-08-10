@@ -617,6 +617,11 @@
                     {
                         <button type="button" id="btnExcelCotizacion" actionLink="@Url.Action("ExportLastViewExcel", "Cotizacion")" class="btn btn-primary bouton-image botonExcel">Excel</button>
                     }
+
+                    @if (cotizacion.usuario.modificaPreciosEspeciales)
+                    {
+                        <button type="button" id="btnActualizarCostosEspeciales" class="btn btn-warning">Actualizar Costos Especiales</button>
+                    }
                 </div>
 
 

@@ -2139,10 +2139,31 @@ namespace Cotizador.Controllers
             String nombreArchivo = gen.generarPDFExtended(cotizacion, usuario);
             return nombreArchivo;
         }
-       
 
+        [HttpPost]
+        public String ActualizarPreciosEspeciales()
+        {
+            int success = 0;
 
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Cotizacion obj = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_VER];
 
+            CotizacionBL bl = new CotizacionBL();
+
+            bool result = bl.ActualizarCostosEspeciales(obj.idCotizacion, usuario.idUsuario);
+
+            if (result)
+            {
+                success = 1;
+            }
+
+            var response = new
+            {
+                success = success
+            };
+
+            return JsonConvert.SerializeObject(response);
+        }
 
         public void autoGuardarCotizacion()
         {

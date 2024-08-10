@@ -2963,7 +2963,7 @@ jQuery(function ($) {
         });
         $('body').loadingModal('show');
 
-        var arrrayClass = event.target.getAttribute("class").split(" ");
+        var arrrayClass = $(this).attr("class").split(" ");
         var idPedido = arrrayClass[0];
         var numeroPedido = arrrayClass[1];
       //  $("#tableDetalleCotizacion > tbody").empty();
@@ -3046,7 +3046,7 @@ jQuery(function ($) {
                 }
 
                 $("#verNumero").html(numeroPedido);
-
+                
 
                 $("#verLnkDFCotizacion").hide();
 
@@ -3775,7 +3775,73 @@ jQuery(function ($) {
         ConfirmDialog(MENSAJE_CANCELAR_EDICION, '/Pedido/CancelarCreacionPedido', null)
     })
 
+    $("#btnActualizarCostosEspeciales").click(function () {
 
+        $.confirm({
+            title: 'CONFIRMAR ACTUALIZACIÓN',
+            content: '¿Está seguro de realizar una revisión de los costos especiales y actualizarlos en el pedido?',
+            type: 'orange',
+            buttons: {
+                aplica: {
+                    text: 'NO',
+                    btnClass: 'btn-success',
+                    action: function () {
+                        abrirEditorCliente();
+                    }
+                },
+                noAplica: {
+                    text: 'SI',
+                    btnClass: 'btn-warning',
+                    action: function () {
+                        $.ajax({
+                            url: "/Pedido/ActualizarPreciosEspeciales",
+                            dataType: 'JSON',
+                            type: 'POST',
+                            data: {
+                            },
+                            error: function () {
+                                $.alert({
+                                    title: "ERROR",
+                                    type: 'red',
+                                    content: 'Ocurrió un error al actualizar.',
+                                    buttons: {
+                                        OK: function () {
+                                        }
+                                    }
+                                });
+                            },
+                            success: function (response) {
+                                if (response.success == 1) {
+                                    $.alert({
+                                        title: "ACTUALIZACIÓN CORRECTA",
+                                        type: 'green',
+                                        content: 'Se actualizaron los costos especiales correctamente.',
+                                        buttons: {
+                                            OK: function () {
+                                                var idPedido = $("#verIdPedido").val();
+                                                $(".btnVerPedido." + idPedido).click();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    $.alert({
+                                        title: "ERROR",
+                                        type: 'red',
+                                        content: 'Ocurrió un error al actualizar.',
+                                        buttons: {
+                                            OK: function () {
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+
+    });
     
 
     $("#btnFacturarPedido").click(function () {

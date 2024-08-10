@@ -1063,6 +1063,30 @@ namespace Cotizador.Controllers
             }
         }
 
+        [HttpPost]
+        public String ActualizarPreciosEspeciales()
+        {
+            int success = 0;
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Pedido obj = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
+
+            PedidoBL bl = new PedidoBL();
+
+            bool result = bl.ActualizarCostosEspeciales(obj.idPedido, usuario.idUsuario);
+
+            if (result)
+            {
+                success = 1;
+            }
+
+            var response = new
+            {
+                success = success
+            };
+
+            return JsonConvert.SerializeObject(response);
+        }
 
 
         #region CONTROLES CHOOSEN

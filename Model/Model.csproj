@@ -89,6 +89,9 @@
     <Compile Include="UTILES\MovimientoKardexCabecera.cs" />
     <Compile Include="UTILES\MovimientoKardexDetalle.cs" />
     <Compile Include="UTILES\FilaProductoPendienteAtencion.cs" />
+    <Compile Include="UTILES\ReporteMatrizCabecera.cs" />
+    <Compile Include="UTILES\ReporteMatrizDato.cs" />
+    <Compile Include="UTILES\ReporteMatriz.cs" />
     <Compile Include="UTILES\RegistroCargaStock.cs" />
     <Compile Include="UTILES\LogRegistroCampoDato.cs" />
     <Compile Include="UTILES\LogRegistroCampos.cs" />

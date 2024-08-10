@@ -1786,6 +1786,18 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             ExecuteNonQuery(objCommand);
         }
 
+        public bool ActualizarCostosEspeciales(Guid idPedido, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pu_actualizar_costos_especiales_pedido");
+
+            InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            ExecuteNonQuery(objCommand);
+
+            return true;
+        }
+
         public Pedido UpdateTruncado(Pedido pedido)
         {
             var objCommand = GetSqlCommand("pu_pedidotruncar");

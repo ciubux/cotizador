@@ -109,6 +109,37 @@ namespace Cotizador.Controllers
             return "";
         }
 
+        public String GetClienteEmpresasRelacionadas()
+        {
+            try
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+                Cliente cliente = (Cliente)this.Session[Constantes.VAR_SESSION_CLIENTE];
+                string ruc = this.Request.Params["ruc"].ToString().Trim();
+                Guid idCiudad = Guid.Parse(this.Request.Params["idCiudad"].ToString());
+                ClienteBL clienteBL = new ClienteBL();
+                List<Cliente> lista = clienteBL.SelectClienteEmpresasRelacionadas(ruc, idCiudad, usuario.idUsuario);
+
+                bool existeOtraEmpresa = false;
+                if(lista.Count > 0) { existeOtraEmpresa = true; }
+
+                bool existeClienteSede = clienteBL.ExisteClienteSede(ruc, idCiudad, usuario.idUsuario); 
+
+                String resultado = JsonConvert.SerializeObject(new { existeClienteSede = existeClienteSede, existeOtraEmpresa = existeOtraEmpresa, lista = lista, idEmpresaDestino = usuario.idEmpresa });
+                return resultado;
+            }
+            catch (Exception ex)
+            {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                LogBL logBL = new LogBL();
+                logBL.insertLog(log);
+            }
+            return "";
+        }
+
+       
 
 
         public void ChangeInputString()
@@ -681,7 +712,7 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
-        public String ExportarClienteEmpresa ()
+        public String ExportarClienteEmpresa()
         {
             Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
             int idEmpresaDestino = int.Parse(Request["idEmpresaDestino"].ToString());

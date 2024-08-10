@@ -7,6 +7,9 @@ using Model;
 using System.Data.SqlClient;
 using System.Runtime.Remoting;
 using System.Security.Cryptography;
+using Model.NextSoft;
+using Model.ServiceSunatPadron;
+using System.Reflection;
 
 namespace DataLayer
 {
@@ -46,7 +49,7 @@ namespace DataLayer
                 obj.titulo = Converter.GetString(row, "titulo");
                 obj.observaciones = Converter.GetString(row, "observaciones");
 
-                obj.clienteSunat = new ClienteSunat();
+                obj.clienteSunat = new Model.ClienteSunat();
                 obj.clienteSunat.idClienteSunat = Converter.GetInt(row, "id_cliente_sunat");
                 obj.clienteSunat.ruc = Converter.GetString(row, "ruc");
                 obj.clienteSunat.nombreComercial = Converter.GetString(row, "nombre_comercial");
@@ -338,7 +341,7 @@ namespace DataLayer
                     item.tipoNegociacion = Converter.GetString(row, "tipo_negociacion");
                     item.titulo = Converter.GetString(row, "titulo");
 
-                    item.clienteSunat = new ClienteSunat();
+                    item.clienteSunat = new Model.ClienteSunat();
                     item.clienteSunat.idClienteSunat = Converter.GetInt(row, "id_cliente_sunat");
                     item.clienteSunat.nombreComercial = Converter.GetString(row, "nombre_comercial");
                     item.clienteSunat.razonSocial = Converter.GetString(row, "razon_social");
@@ -435,7 +438,7 @@ namespace DataLayer
                 item.tipoNegociacion = Converter.GetString(row, "tipo_negociacion");
                 item.titulo = Converter.GetString(row, "titulo");
 
-                item.clienteSunat = new ClienteSunat();
+                item.clienteSunat = new Model.ClienteSunat();
                 item.clienteSunat.idClienteSunat = Converter.GetInt(row, "id_cliente_sunat");
                 item.clienteSunat.nombreComercial = Converter.GetString(row, "nombre_comercial");
                 item.clienteSunat.razonSocial = Converter.GetString(row, "razon_social");
@@ -453,6 +456,89 @@ namespace DataLayer
 
                 lista.Add(item);
             }
+
+            return lista;
+        }
+
+        public List<PrecioEspecialCabecera> CabecerasDetalles(PrecioEspecialCabecera search)
+        {
+            var objCommand = GetSqlCommand("ps_precio_especial_cabecera_detalles");
+            InputParameterAdd.Guid(objCommand, "idUsuario", search.usuario.idUsuario);
+
+            DataTable dataTable = Execute(objCommand);
+
+            List<PrecioEspecialCabecera> lista = new List<PrecioEspecialCabecera>();
+            String codigo = "";
+            PrecioEspecialCabecera obj = new PrecioEspecialCabecera();
+            obj.codigo = "";
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                codigo = Converter.GetString(row, "codigo");
+
+                if (!codigo.Equals(obj.codigo))
+                {
+                    if (!obj.codigo.Equals(""))
+                    {
+                        lista.Add(obj);
+                    }
+
+                    obj = new PrecioEspecialCabecera();
+
+                    obj.codigo = Converter.GetString(row, "codigo");
+                    obj.titulo = Converter.GetString(row, "titulo");
+                    obj.fechaInicio = Converter.GetDateTime(row, "fecha_inicio_cabecera");
+                    obj.fechaFin = Converter.GetDateTime(row, "fecha_fin_cabecera");
+
+                    obj.tipoNegociacion = Converter.GetString(row, "tipo_negociacion");
+                    obj.codigoListaProveedor = Converter.GetString(row, "codigo_lista_proveedor");
+                    obj.observaciones = Converter.GetString(row, "observaciones_cabecera");
+
+                    obj.clienteSunat = new Model.ClienteSunat();
+                    obj.clienteSunat.razonSocial = Converter.GetString(row, "razon_social");
+                    obj.clienteSunat.ruc = Converter.GetString(row, "ruc");
+
+                    obj.grupoCliente = new GrupoCliente();
+                    obj.grupoCliente.codigo = Converter.GetString(row, "codigo_grupo");
+                    obj.grupoCliente.nombre = Converter.GetString(row, "nombre_grupo");
+                    obj.precios = new List<PrecioEspecialDetalle>();
+                }
+
+                PrecioEspecialDetalle det = new PrecioEspecialDetalle();
+
+
+                det.producto = new Producto();
+                det.producto.sku = Converter.GetString(row, "sku");
+                det.producto.descripcion = Converter.GetString(row, "nombre_producto");
+
+                det.fechaInicio = Converter.GetDateTime(row, "fecha_inicio");
+                det.fechaFin = Converter.GetDateTime(row, "fecha_fin");
+                det.observaciones = Converter.GetString(row, "observaciones");
+
+                det.moneda = new Moneda();
+                det.moneda.codigo = Converter.GetString(row, "moneda");
+
+                det.unidadPrecio = new ProductoPresentacion();
+                det.unidadPrecio.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion_precio");
+                det.unidadPrecio.Presentacion = Converter.GetString(row, "unidad_precio");
+                det.unidadPrecio.PrecioSinIGV = Converter.GetDecimal(row, "precio_unitario");
+                det.unidadPrecio.Equivalencia = Converter.GetDecimal(row, "equivalencia_precio");
+
+                det.unidadCosto = new ProductoPresentacion();
+                det.unidadCosto.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion_costo");
+                det.unidadCosto.Presentacion = Converter.GetString(row, "unidad_costo");
+                det.unidadCosto.CostoSinIGV = Converter.GetDecimal(row, "costo_unitario");
+                det.unidadCosto.Equivalencia = Converter.GetDecimal(row, "equivalencia_costo");
+
+                obj.precios.Add(det);
+                                
+            }
+
+            if (!obj.codigo.Equals(""))
+            {
+                lista.Add(obj);
+            }
+
 
             return lista;
         }
@@ -588,6 +674,72 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             InputParameterAdd.Varchar(objCommand, "fechaInicio", fechaInicio.ToString("yyyy-MM-dd"));
             InputParameterAdd.Varchar(objCommand, "fechaFin", fechaFin.ToString("yyyy-MM-dd"));
+
+            ExecuteNonQuery(objCommand);
+
+            return true;
+        }
+
+        public bool ActualizarTodos(Guid idUsuario, List<PrecioEspecialCabecera> listas)
+        {
+            var objCommand = GetSqlCommand("pi_precio_especial_fill");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("CODIGO", typeof(string)));
+            tvp.Columns.Add(new DataColumn("CODIGO_LISTA_PROVEEDOR", typeof(string)));
+            tvp.Columns.Add(new DataColumn("TITULO", typeof(string)));
+            tvp.Columns.Add(new DataColumn("TIPO_NEGOCIACION", typeof(string)));
+            tvp.Columns.Add(new DataColumn("RUC", typeof(string)));
+            tvp.Columns.Add(new DataColumn("CODIGO_GRUPO", typeof(string)));
+            tvp.Columns.Add(new DataColumn("FECHA_INICIO_CABECERA", typeof(DateTime)));
+            tvp.Columns.Add(new DataColumn("FECHA_FIN_CABECERA", typeof(DateTime)));
+            tvp.Columns.Add(new DataColumn("OBSERVACIONES_CABECERA", typeof(string)));
+
+            tvp.Columns.Add(new DataColumn("SKU", typeof(string)));
+            tvp.Columns.Add(new DataColumn("MONEDA", typeof(string)));
+            tvp.Columns.Add(new DataColumn("PRECIO_ID_PRESENTACION", typeof(int)));
+            tvp.Columns.Add(new DataColumn("PRECIO_UNITARIO", typeof(decimal)));
+            tvp.Columns.Add(new DataColumn("COSTO_ID_PRESENTACION", typeof(int)));
+            tvp.Columns.Add(new DataColumn("COSTO_UNITARIO", typeof(decimal)));
+            tvp.Columns.Add(new DataColumn("FECHA_INICIO", typeof(DateTime)));
+            tvp.Columns.Add(new DataColumn("FECHA_FIN", typeof(DateTime)));
+            tvp.Columns.Add(new DataColumn("OBSERVACIONES", typeof(string)));
+
+            foreach (PrecioEspecialCabecera obj in listas)
+            {
+                foreach (PrecioEspecialDetalle item in obj.precios)
+                {
+                    DataRow rowObj = tvp.NewRow();
+
+                    rowObj["CODIGO"] = obj.codigo;
+                    rowObj["CODIGO_LISTA_PROVEEDOR"] = obj.codigoListaProveedor;
+                    rowObj["TITULO"] = obj.titulo;
+                    rowObj["TIPO_NEGOCIACION"] = obj.tipoNegociacion;
+                    rowObj["CODIGO_GRUPO"] = obj.grupoCliente.codigo;
+                    rowObj["RUC"] = obj.clienteSunat.ruc;
+                    rowObj["FECHA_INICIO_CABECERA"] = obj.fechaInicio;
+                    rowObj["FECHA_FIN_CABECERA"] = obj.fechaFin;
+                    rowObj["OBSERVACIONES_CABECERA"] = obj.observaciones;
+
+
+                    rowObj["SKU"] = item.producto.sku;
+                    rowObj["MONEDA"] = item.moneda.codigo;
+                    rowObj["PRECIO_ID_PRESENTACION"] = item.unidadPrecio.IdProductoPresentacion;
+                    rowObj["PRECIO_UNITARIO"] = item.unidadPrecio.PrecioSinIGV;
+                    rowObj["COSTO_ID_PRESENTACION"] = item.unidadCosto.IdProductoPresentacion;
+                    rowObj["COSTO_UNITARIO"] = item.unidadCosto.CostoSinIGV;
+                    rowObj["FECHA_INICIO"] = item.fechaInicio;
+                    rowObj["FECHA_FIN"] = item.fechaFin;
+                    rowObj["OBSERVACIONES"] = item.observaciones;
+
+                    tvp.Rows.Add(rowObj);
+                }
+            }
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@items", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.PrecioEspecialCabeceraDetalleList";
+
 
             ExecuteNonQuery(objCommand);
 

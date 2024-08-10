@@ -571,7 +571,7 @@ namespace DataLayer
                     InputParameterAdd.Char(objCommand, "tipoPedido", ((char)movimientoAlmacen.pedido.tipoPedido).ToString());
                     InputParameterAdd.Guid(objCommand, "idProducto", documentoDetalle.producto.idProducto);
                     InputParameterAdd.Int(objCommand, "cantidad", documentoDetalle.cantidadPorAtender);
-                    InputParameterAdd.Varchar(objCommand, "observaciones", documentoDetalle.observacion);
+                    InputParameterAdd.VarcharEmpty(objCommand, "observaciones", documentoDetalle.observacion == null ? "" : documentoDetalle.observacion);
                     InputParameterAdd.Int(objCommand, "tipoProducto", (int)documentoDetalle.producto.tipoProducto);
                     OutputParameterAdd.UniqueIdentifier(objCommand, "idMovimientoAlmacenDetalle");
                     ExecuteNonQuery(objCommand);

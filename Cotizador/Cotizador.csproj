@@ -311,6 +311,7 @@
     <Compile Include="ExcelExport\ReasignacionCarteraCliente.cs" />
     <Compile Include="ExcelExport\PedidoOCExcel.cs" />
     <Compile Include="ExcelExport\ReporteCargaStock .cs" />
+    <Compile Include="ExcelExport\ReporteMatrizDatos.cs" />
     <Compile Include="ExcelExport\ReporteDetallesSellOutVendedor.cs" />
     <Compile Include="ExcelExport\ProductoWebCarga.cs" />
     <Compile Include="ExcelExport\ReporteStockPendienteAtencion.cs" />
@@ -774,7 +775,8 @@
     <Content Include="Views\Shared\_Area.cshtml" />
     <Content Include="Views\Stock\CargaIncorrecta.cshtml" />
     <Content Include="Views\PrecioEspecial\ActualizarCostosEspeciales.cshtml" />
-    <Content Include="Views\PrecioEspecial\ActualizacionCorrectaCostosEspeciales.cshtml" />
+    <Content Include="Views\PrecioEspecial\ActualizacionCorrectaTodos.cshtml" />
+    <Content Include="Views\PrecioEspecial\CargaMasiva.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

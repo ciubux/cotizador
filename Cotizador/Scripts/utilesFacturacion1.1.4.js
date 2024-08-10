@@ -410,7 +410,15 @@ $("#btnConfirmarFacturarPedido").click(function () {
                     content: 'Se generó el documento electrónico: ' + resultado.serieNumero + '.',
                     type: 'green',
                     buttons: {
-                        OK: function () { location.reload(); }
+                        OK: function () {
+                            var actionPostCPE = $("#actionPostCPE").val();
+
+                            if (actionPostCPE.length > 3) {
+                                execActionPostCPE(actionPostCPE);
+                            } else {
+                                location.reload();
+                            }
+                        }
                     }
                 });
                 activarBotonesFacturar();
@@ -561,4 +569,16 @@ function calcularSubtotalGrilla(idproducto, cantidad, precioUnitario, subTotalDo
     $('#montoTotal').html(total.toFixed(cantidadDecimales));
 };
 
+
+
+function execActionPostCPE(actionPostCPE) {
+    if (actionPostCPE == "recargarGuia") {
+        $('.modal').modal('hide');
+
+        setTimeout(function () {
+            var idGuia = $("#actionPostCPE").attr("idGuia");
+            $(".btnVerGuiaRemision." + idGuia).click();
+        }, 500);
+    }
+};
 

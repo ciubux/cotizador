@@ -269,8 +269,18 @@ namespace DataLayer
 
         }
 
+        public bool ActualizarCostosEspeciales(Guid idCotizacion, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pu_actualizar_costos_especiales_cotizacion");
 
-       
+            InputParameterAdd.Guid(objCommand, "idCotizacion", idCotizacion);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            ExecuteNonQuery(objCommand);
+
+            return true;
+        }
+
 
 
 

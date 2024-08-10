@@ -1055,7 +1055,7 @@ jQuery(function ($) {
         $('body').loadingModal('show');
 
         activarBotonesVer();
-        var arrrayClass = event.target.getAttribute("class").split(" ");
+        var arrrayClass = this.getAttribute("class").split(" ");
         var idMovimientoAlmacen = arrrayClass[0];
         var numeroDocumento = arrrayClass[1];     
 
@@ -1080,9 +1080,12 @@ jQuery(function ($) {
                 var guiaRemision = resultado.guiaRemision;
                 var usuario = resultado.usuario;
 
+                $("#actionPostCPE").val("");
                 var clienteRazonSocial = guiaRemision.pedido_cliente_razonSocial;
                 if (guiaRemision.entregaTerceros) {
-                    clienteRazonSocial = guiaRemision.pedido_cliente_razonSocial + '<br/><span class="spn-nombre-cliente-relacionado" style="font-size:11px;">' + guiaRemision.nombreClienteTercero + '</span>' ;
+                    clienteRazonSocial = guiaRemision.pedido_cliente_razonSocial + '<br/><span class="spn-nombre-cliente-relacionado" style="font-size:11px;">' + guiaRemision.nombreClienteTercero + '</span>';
+                    $("#actionPostCPE").attr("idGuia", idMovimientoAlmacen);
+                    $("#actionPostCPE").val("recargarGuia");
                 }
 
                 $("#btnVerGuiasPedido").attr("idPedido", guiaRemision.pedido_idPedido);
@@ -1128,7 +1131,7 @@ jQuery(function ($) {
                 $("#btnFacturarGuiaRemision").hide();
                 $("#btnFacturarPedidoRelacionado").hide();
                 $("#btnDescargarFacturaPedidoRelacionado").hide();
-                
+                $("#btnExtornar").hide();
 
                 /*Si la guía de remisión se encuentra ANULADA no se puede extornar, ni imprimir, ni facturar*/
                 if (guiaRemision.estaAnulado == 1) {
@@ -1154,7 +1157,7 @@ jQuery(function ($) {
                     if (guiaRemision.tipoExtorno == MOV_TIPO_EXTORNO_SIN_EXTORNO) {
                         $("#btnAnularGuiaRemision").show();
 
-                        if (!guiaRemision.esGuiaDiferida) {
+                        if (!guiaRemision.esGuiaDiferida || usuario.extornaFicticias) {
                             $("#btnExtornar").show();
                         }
                         
@@ -1173,7 +1176,9 @@ jQuery(function ($) {
                         $("#ver_guiaRemision_tipoExtorno").html(guiaRemision.tipoExtornoToString);
                         if (guiaRemision.tipoExtorno == MOV_TIPO_EXTORNO_EXTORNO_PARCIAL) {
                             /*Si la guía de remisión ha sido extornada parcialmente, se puede extornar para culminar con el extorno, no se puede anular y tampoco facturar*/
-                            $("#btnExtornar").show();
+                            if (!guiaRemision.esGuiaDiferida || usuario.extornaFicticias) {
+                                $("#btnExtornar").show();
+                            }
                         }
                         else {
                             $("#btnExtornar").hide();

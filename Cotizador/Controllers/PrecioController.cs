@@ -363,6 +363,10 @@ namespace Cotizador.Controllers
 
         }
 
+        public ActionResult ActualizacionCorrectaTodos()
+        {
+            return View();
+        }
 
         [HttpPost]
         public ActionResult Load(HttpPostedFileBase file)

@@ -1716,8 +1716,73 @@ jQuery(function ($) {
         });
     });
 
+    function validarExisteCliente(ruc, idCiudad) {
+        $.ajax({
+            url: "/Cliente/GetClienteEmpresasRelacionadas", type: 'POST',
+            data: {
+                ruc: ruc,
+                idCiudad: idCiudad
+            },
+            error: function () { },
+            dataType: 'JSON',
+            success: function (res) {
+                if (res.existeClienteSede) {
+                    $.alert({
+                        title: "Cliente ya existe",
+                        type: 'orange',
+                        content: 'El ruc ya se encuentra registrado en la sede seleccionada.',
+                        buttons: {
+                            OK: function () {
+                                $.ajax({
+                                    url: "/Cliente/ChangeIdCiudad",
+                                    type: 'POST',
+                                    dataType: 'JSON',
+                                    data: {
+                                        idCiudad: ""
+                                    },
+                                    error: function (detalle) {
+                                        location.reload();
+                                    },
+                                    success: function (ciudad) {
+                                    }
+                                });
+                                $("#idCiudad").val("");
+                            }
+                        }
+                    });
+                } else {
+                    if (res.existeOtraEmpresa) {
+                        var htmlSelect = "";
+                        var radioItemBase = '<div class="col-sm-12 col-lg-12"><div class="form-group"><label class="radio-label">' +
+                            '<input class="radio-input" type="radio" name="cimeRadioListaEmpresa" value="__IDCLIENTE__" idEmpresa="__IDEMPRESA__" nombreEmpresa="__NOMBREEMPRESA__"> __NOMBREEMPRESA__' +
+                            '</label></div></div>';
+                        var lista = res.lista;
+
+
+                        for (var i = 0; i < lista.length; i++) {
+                            htmlSelect = htmlSelect + radioItemBase
+                                .replaceAll("__NOMBREEMPRESA__", lista[i].empresa.nombre)
+                                .replaceAll("__IDEMPRESA__", res.idEmpresaDestino)
+                                .replaceAll("__IDCLIENTE__", lista[i].idCliente);
+                        }
+
+                        $("#miceListaEmpresas").html(htmlSelect);
+
+                        $('body').loadingModal('hide');
+
+                        $("#formularioConArchivos").hide();
+                        $("#modalImportarClienteEmpresa").modal('show');
+                    }
+                }
+            }
+        });
+    }
+
     $("#cliente_ruc").change(function () {
-        changeInputString("ruc", $("#cliente_ruc").val())
+        var ruc = $("#cliente_ruc").val();
+        changeInputString("ruc", ruc);
+
+        validarExisteCliente(ruc, $("#idCiudad").val());
     });
 
     $("#cliente_razonSocial").change(function () {
@@ -2239,6 +2304,8 @@ jQuery(function ($) {
                 changeInputBoolean('perteneceCanalProvincias', 1);
             }
             */
+
+            validarExisteCliente($("#cliente_ruc").val(), $("#idCiudad").val());
         }
 
         $("#spn_vercliente_mp_registracotizaciones").html($("#idCiudad option:selected").text());
@@ -4370,6 +4437,66 @@ jQuery(function ($) {
         });
     });
 
+    $("#btnImportarOtraEmpresaCancel").click(function () {
+        window.location = "/Cliente/CancelarCreacionCliente";
+    });
+    $("#btnImportarOtraEmpresa").click(function () {
+
+        var idEmpresaDestino = $('input[name="cimeRadioListaEmpresa"]:checked').attr("idEmpresa");
+        var idCliente = $('input[name="cimeRadioListaEmpresa"]:checked').val(); 
+        var nombreEmpresadestino = $('input[name="cimeRadioListaEmpresa"]:checked').attr("nombreEmpresa");
+
+        if (idEmpresaDestino > 0) {
+            $('body').loadingModal('show');
+            $('body').loadingModal({
+                text: 'Cargando...'
+            });
+
+            $.ajax({
+                url: "/Cliente/ExportarClienteEmpresa",
+                data: {
+                    idCliente: idCliente,
+                    idEmpresaDestino: idEmpresaDestino
+                },
+                type: 'POST',
+                dataType: 'JSON',
+                error: function () {
+                    $('body').loadingModal('hide');
+
+                    $.alert({
+                        title: "Error",
+                        type: 'red',
+                        content: "Ocurrió un error. Si persiste, contacte con TI.",
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                },
+                success: function (resultado) {
+                    if (resultado.success == 1) {
+                        $('body').loadingModal('hide');
+                        $.alert({
+                            title: "Registro Exitoso",
+                            type: 'green',
+                            content: "Se importó el cliente desde la empresa " + nombreEmpresadestino + " con el código: " + resultado.codigo + ".",
+                            buttons: {
+                                OK: function () { window.location = "/Cliente/CancelarCreacionCliente"; }
+                            }
+                        });
+                    }
+                }
+            });
+        } else {
+            $.alert({
+                title: "Faltan datos",
+                type: 'orange',
+                content: "Seleccione una empresa desde donde importar.",
+                buttons: {
+                    OK: function () { }
+                }
+            });
+        }
+    });
 
     $("#btnVerExportarOtraEmpresa").click(function () {
         $('body').loadingModal({

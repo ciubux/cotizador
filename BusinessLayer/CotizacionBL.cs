@@ -5,6 +5,7 @@ using System;
 using Model;
 using System.IO;
 using System.Linq;
+using Framework.DAL;
 
 namespace BusinessLayer
 {
@@ -483,7 +484,14 @@ namespace BusinessLayer
             return cotizacion;
         }
 
-
+        public bool ActualizarCostosEspeciales(Guid idCotizacion, Guid idUsuario)
+        {
+            
+            using (CotizacionDAL dal = new CotizacionDAL())
+            {
+                return dal.ActualizarCostosEspeciales(idCotizacion, idUsuario);
+            }
+        }
 
         public Cotizacion GetReCotizacion(Cotizacion cotizacion, Usuario usuario, Boolean mantenerPorcentajeDescuento)
         {

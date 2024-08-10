@@ -476,6 +476,10 @@ jQuery(function ($) {
         window.location.href = $(this).attr("actionLink");
     });
 
+    $("#btnExportExcelAllBD").click(function () {
+        window.location.href = $(this).attr("actionLink");
+    });
+
     $("#btnCancelarPrecioEspecial").click(function () {
         ConfirmDialog(MENSAJE_CANCELAR_EDICION, '/PrecioEspecial/CancelarCreacion', null)
     })

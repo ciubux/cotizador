@@ -566,6 +566,8 @@ namespace Model
 
         public const String ANULA_GUIAS_REMISION = "P331";
 
+        public const String EXTORNA_FICTICIAS = "P336";
+
 
         public enum paginas
         {
@@ -792,6 +794,8 @@ namespace Model
             RegistrarPrecioEspecial = 221,
             [Display(Name = "BÚSQUEDA PRECIOS ESPECIALES")]
             BusquedaPrecioEspecial = 220,
+            [Display(Name = "CARGA MASIVA PRECIOS ESPECIALES")]
+            CargaMasivaPrecioEspecial = 224,
 
             [Display(Name = "ACTUALIZAR COSTOS ESPECIALES")]
             ActualizarCostosEspeciales = 226,

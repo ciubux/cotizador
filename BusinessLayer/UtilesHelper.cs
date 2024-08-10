@@ -42,7 +42,13 @@ namespace BusinessLayer
             NPOI.SS.Util.CellRangeAddress cra = new NPOI.SS.Util.CellRangeAddress(filaInicio - 1, filaFin - 1, columnas.FindIndex(x => x.StartsWith(columnaInicio)), columnas.FindIndex(x => x.StartsWith(columnaFin)));
             sheet.AddMergedRegion(cra);
         }
-        
+
+        public static void combinarCeldas(ISheet sheet, int filaInicio, int filaFin, int columnaInicio, int columnaFin)
+        {
+            NPOI.SS.Util.CellRangeAddress cra = new NPOI.SS.Util.CellRangeAddress(filaInicio - 1, filaFin - 1, columnaInicio - 1, columnaFin - 1);
+            sheet.AddMergedRegion(cra);
+        }
+
         public static void setValorCelda(ISheet sheet, int fila, string columna, string valor, ICellStyle cellStyle = null, bool autoSizeColumn = false)
         {
             sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).SetCellValue(valor);

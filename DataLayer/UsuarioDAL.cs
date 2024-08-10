@@ -762,7 +762,12 @@ namespace DataLayer
                 obj.sedeMP.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 obj.maximoPorcentajeDescuentoAprobacion = Converter.GetDecimal(row, "maximo_porcentaje_descuento_aprobacion");
 
+                obj.idEmpresa = Converter.GetInt(row, "id_empresa");
+                obj.codigoEmpresa = Converter.GetString(row, "codigo_empresa");
 
+                obj.area = new Area();
+                obj.area.idArea = Converter.GetInt(row, "id_area");
+                obj.area.nombre = Converter.GetString(row, "nombre_area");
             }
 
             return obj;

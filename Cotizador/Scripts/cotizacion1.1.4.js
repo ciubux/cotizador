@@ -436,8 +436,74 @@ jQuery(function ($) {
     /**
      * ################################ INICIO CONTROLES DE CLIENTE
      */
+    
+    $("#btnActualizarCostosEspeciales").click(function () {
 
-
+        $.confirm({
+            title: 'CONFIRMAR ACTUALIZACIÓN',
+            content: '¿Está seguro de realizar una revisión de los costos especiales y actualizarlos en la cotización?',
+            type: 'orange',
+            buttons: {
+                aplica: {
+                    text: 'NO',
+                    btnClass: 'btn-success',
+                    action: function () {
+                        abrirEditorCliente();
+                    }
+                },
+                noAplica: {
+                    text: 'SI',
+                    btnClass: 'btn-warning',
+                    action: function () {
+                        $.ajax({
+                            url: "/Cotizacion/ActualizarPreciosEspeciales",
+                            dataType: 'JSON',
+                            type: 'POST',
+                            data: {
+                            },
+                            error: function () {
+                                $.alert({
+                                    title: "ERROR",
+                                    type: 'red',
+                                    content: 'Ocurrió un error al actualizar.',
+                                    buttons: {
+                                        OK: function () {
+                                        }
+                                    }
+                                });
+                            },
+                            success: function (response) {
+                                if (response.success == 1) {
+                                    $.alert({
+                                        title: "ACTUALIZACIÓN CORRECTA",
+                                        type: 'green',
+                                        content: 'Se actualizaron los costos especiales correctamente.',
+                                        buttons: {
+                                            OK: function () {
+                                                var codigoCot = $("#btnActualizarCostosEspeciales").attr("codigo");
+                                                $(".btnVerCotizacion." + codigoCot).click();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    $.alert({
+                                        title: "ERROR",
+                                        type: 'red',
+                                        content: 'Ocurrió un error al actualizar.',
+                                        buttons: {
+                                            OK: function () {
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+        
+    });
 
     $("#idGrupoCliente").change(function () {
         var idGrupoCliente = $("#idGrupoCliente").val();
@@ -2215,7 +2281,7 @@ jQuery(function ($) {
         $('body').loadingModal('show');
 
         activarBotonesVer();
-        var codigo = event.target.getAttribute("class").split(" ")[0];
+        var codigo = $(this).attr("class").split(" ")[0];
 
 
         $.ajax({
@@ -2296,6 +2362,8 @@ jQuery(function ($) {
                     $("#esTransitoria").hide();
                     $("#esTrivial").show();
                 }
+
+                $("#btnActualizarCostosEspeciales").attr("codigo", cotizacion.codigo);
 
                 if (cotizacion.estadoExtendida == 1 && usuario.apruebaCotizaciones) {
                     $("#btnAprobarExtensionVigencia").show();

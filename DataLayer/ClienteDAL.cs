@@ -904,6 +904,52 @@ namespace DataLayer
             return codigo;
         }
 
+        public List<Cliente> SelectClienteEmpresasRelacionadas(String ruc, Guid idSede, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_cliente_empresas_relacionadas");
+            InputParameterAdd.Varchar(objCommand, "ruc", ruc);
+            InputParameterAdd.Guid(objCommand, "idCiudad", idSede);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Varchar(objCommand, "tipo", "GRUPOEMPRESARIAL");
+
+            DataTable dataTable = Execute(objCommand);
+            //cl.id_cliente, e.id_empresa, e.codigo, e.nombre
+            List<Cliente> clienteList = new List<Cliente>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Cliente item = new Cliente();
+                item.idCliente = Converter.GetGuid(row, "id_cliente");
+
+                item.empresa = new Empresa();
+                item.empresa.idEmpresa = Converter.GetInt(row, "id_empresa");
+                item.empresa.codigo = Converter.GetString(row, "codigo");
+                item.empresa.nombre = Converter.GetString(row, "nombre");
+
+                clienteList.Add(item);
+            }
+
+            return clienteList;
+        }
+
+        public bool ExisteClienteSede(String ruc, Guid idSede, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_cliente_existe");
+            InputParameterAdd.Varchar(objCommand, "ruc", ruc);
+            InputParameterAdd.Guid(objCommand, "idCiudad", idSede);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable dataTable = Execute(objCommand);
+            //cl.id_cliente, e.id_empresa, e.codigo, e.nombre
+
+            int cantidadEncontrada = 0;
+            foreach (DataRow row in dataTable.Rows)
+            {
+                cantidadEncontrada = Converter.GetInt(row, "cantidadEncontrada");
+            }
+
+            return cantidadEncontrada > 0 ? true : false;
+        }
+
         public Cliente insertClienteLite(Cliente cliente)
         {
             var objCommand = GetSqlCommand("pi_cliente_lite");

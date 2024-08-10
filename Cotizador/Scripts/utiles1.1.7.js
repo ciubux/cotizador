@@ -328,3 +328,7 @@ function cargarArchivosAdjuntos(files) {
         link.click();
     };
 }
+
+$(document).on('click', ".botonExcelExportAction", function () {
+    window.location.href = $(this).attr("actionLink");
+});

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System;
 using Model;
 using System.IO;
+using Model.UTILES;
+using NPOI.SS.UserModel;
 
 namespace BusinessLayer
 {
@@ -83,6 +85,14 @@ namespace BusinessLayer
             using (var dal = new RolDAL())
             {
                 return dal.getUsuariosRoles(idRol);
+            }
+        }
+
+        public ReporteMatriz ListaRolesUsuarios(Guid idUsuario)
+        {
+            using (RolDAL dal = new RolDAL())
+            {
+                return dal.ListaRolesUsuarios(idUsuario);
             }
         }
     }

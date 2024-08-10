@@ -374,6 +374,14 @@ namespace BusinessLayer
             }
         }
 
+        public bool ActualizarCostosEspeciales(Guid idPedido, Guid idUsuario)
+        {
+            using (PedidoDAL dal = new PedidoDAL())
+            {
+                return dal.ActualizarCostosEspeciales(idPedido, idUsuario);
+            }
+        }
+
         public void UpdateStockConfirmado(Pedido pedido)
         {
             using (var dal = new PedidoDAL())

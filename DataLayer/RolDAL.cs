@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using Model;
+using Model.UTILES;
 
 namespace DataLayer
 {
@@ -247,6 +248,58 @@ namespace DataLayer
             }
 
             return lista;
+        }
+
+        public ReporteMatriz ListaRolesUsuarios(Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_roles_usuarios_list");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataSet dataSet = ExecuteDataSet(objCommand);
+            DataTable rolesDataTable = dataSet.Tables[0];
+            DataTable usuariosDataTable = dataSet.Tables[1];
+            DataTable valoresDataTable = dataSet.Tables[2];
+
+            ReporteMatriz matriz = new ReporteMatriz();
+            matriz.filas = new List<ReporteMatrizCabecera>();
+            matriz.columnas = new List<ReporteMatrizCabecera>();
+            matriz.datos = new List<ReporteMatrizDato>();
+            matriz.agrupaColumnas = false;
+            matriz.tieneDescripcionColumnas = false;
+            matriz.concatenaValores = false;
+            matriz.etiquetaColumnas = "Roles";
+            matriz.etiquetaFilas = "Usuarios";
+
+            
+            foreach (DataRow row in rolesDataTable.Rows)
+            {
+                ReporteMatrizCabecera obj = new ReporteMatrizCabecera();
+                obj.codigo = Converter.GetString(row, "id_rol");
+                obj.nombre = Converter.GetString(row, "nombre");
+
+                matriz.columnas.Add(obj);
+            }
+
+            foreach (DataRow row in usuariosDataTable.Rows)
+            {
+                ReporteMatrizCabecera obj = new ReporteMatrizCabecera();
+                obj.codigo = Converter.GetString(row, "id_usuario");
+                obj.nombre = Converter.GetString(row, "nombre");
+
+                matriz.filas.Add(obj);
+            }
+
+            foreach (DataRow row in valoresDataTable.Rows)
+            {
+                ReporteMatrizDato obj = new ReporteMatrizDato();
+                obj.codigoColumna = Converter.GetString(row, "id_rol");
+                obj.codigoFila = Converter.GetString(row, "id_usuario");
+                obj.valor = "X";
+
+                matriz.datos.Add(obj);
+            }
+
+            return matriz;
         }
     }
 }
