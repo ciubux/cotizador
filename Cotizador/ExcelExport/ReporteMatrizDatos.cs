@@ -104,7 +104,7 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, iniFil + i, iniCol - 1, fila.nombre, titleDataCellStyle);
                     i++;
                 }
-                sheet.AutoSizeColumn(iniCol - 2);
+                //sheet.AutoSizeColumn(iniCol - 2);
 
                 int tmpIniAgrupador = 0;
                 string tmpAgrupador = "";
@@ -115,7 +115,7 @@ namespace Cotizador.ExcelExport
                     codigosColumnas.Add(col.codigo);
 
                     UtilesHelper.setValorCelda(sheet, iniFil - 1, iniCol + i, col.nombre, titleDataCellStyle);
-                    sheet.AutoSizeColumn(iniCol + i - 1);
+                    //sheet.AutoSizeColumn(iniCol + i - 1);
 
                     if (matriz.agrupaColumnas)
                     {

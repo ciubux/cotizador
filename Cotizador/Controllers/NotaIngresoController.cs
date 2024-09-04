@@ -449,7 +449,11 @@ namespace Cotizador.Controllers
                     notaIngreso.motivoTraslado = NotaIngreso.motivosTraslado.DevolucionPrestamoEntregado;
                 }
 
-                
+                if (notaIngreso.guiaRemisionAExtornar.esGuiaDiferida)
+                {
+                    this.Session["seAtiendeFicticia"] = true;
+                }
+
 
                 notaIngreso.observaciones = String.Empty;
                
@@ -599,11 +603,29 @@ namespace Cotizador.Controllers
                     }
                 }
 
+                this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] = notaIngreso;
 
-                
+                bool seAtiendeTrasladoInterno = this.Session["seAtiendeTrasladoInterno"] != null ? (bool)this.Session["seAtiendeTrasladoInterno"] : false;
+
+                if (seAtiendeTrasladoInterno)
+                {
+                    this.CambiarASerieTrasladoInterno();
+                    notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO];
+                    this.Session["seAtiendeTrasladoInterno"] = false;
+                }
+
+                bool seAtiendeFicticia = this.Session["seAtiendeFicticia"] != null ? (bool)this.Session["seAtiendeFicticia"] : false;
+
+                if (seAtiendeFicticia)
+                {
+                    this.CambiarASerieFicticia();
+                    notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO];
+                    this.Session["seAtiendeFicticia"] = false;
+                }
+
                 ViewBag.notaIngreso = notaIngreso;
 
-                this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] = notaIngreso;
+
                 //   ViewBag.serieDocumentoElectronicoList = ciudad.serieDocumentoElectronicoList;
 
             }
@@ -615,13 +637,7 @@ namespace Cotizador.Controllers
                 logBL.insertLog(log);
             }
 
-            bool seAtiendeTrasladoInterno = this.Session["seAtiendeTrasladoInterno"] != null ? (bool)this.Session["seAtiendeTrasladoInterno"] : false;
-
-            if (seAtiendeTrasladoInterno)
-            {
-                this.CambiarASerieTrasladoInterno();
-                this.Session["seAtiendeTrasladoInterno"] = false;
-            }
+           
 
             ViewBag.pagina = (int)Constantes.paginas.MantenimientoNotaIngreso;
             return View();
@@ -650,6 +666,28 @@ namespace Cotizador.Controllers
             return response;
         }
 
+        public String CambiarASerieFicticia()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            String response = "{\"success\": 0}";
+
+            SerieDocumentoBL serieBL = new SerieDocumentoBL();
+            NotaIngreso notaIngreso = (NotaIngreso)this.Session[Constantes.VAR_SESSION_NOTA_INGRESO];
+
+            SerieDocumentoElectronico serie = serieBL.getSerieDocumento("DIFERIDA", notaIngreso.ciudadDestino.idCiudad, usuario.idEmpresa);
+
+            if (serie.sedeMP != null)
+            {
+                notaIngreso.serieDocumento = serie.serie;
+                notaIngreso.numeroDocumento = serie.siguienteNumeroNotaIngreso;
+                notaIngreso.serieDocumentoElectronico = serie;
+                this.Session[Constantes.VAR_SESSION_NOTA_INGRESO] = notaIngreso;
+
+                response = "{\"success\": 1,  \"serie\":\"" + serie.serie + "\", \"numero\":\"" + serie.siguienteNumeroNotaIngreso.ToString() + "\", \"serieNumeroString\":\"" + notaIngreso.serieNumeroNotaIngreso + "\"}";
+            }
+
+            return response;
+        }
 
         public String Create()
         {

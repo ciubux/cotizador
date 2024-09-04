@@ -1461,9 +1461,9 @@ namespace Cotizador.Controllers
                 }
 
                 String error = String.Empty;
-                GuiaRemision guiaRemision = movimientoAlmacenBL.InsertMovimientoAlmacenSalidaDesdeGuiaDiferida(gr, usuario.idUsuario);
+                GuiaRemision guiaRemision = movimientoAlmacenBL.InsertMovimientoAlmacenSalidaDesdeGuiaDiferida(gr, usuario.idUsuario); 
 
-                if (guiaRemision.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
+                /*if (guiaRemision.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
                 {
                     guiaRemision.usuario = usuario;
                     successRegistro = 1;
@@ -1498,15 +1498,15 @@ namespace Cotizador.Controllers
                         dataSend = dataSend, 
                         result = result });
                 } else
-                {
-                    return JsonConvert.SerializeObject(new
+                {*/
+                return JsonConvert.SerializeObject(new
                     {
                         success = false,
                         successRegistro = successRegistro,
                         successNextSoft = successNextSoft,
                         messageRegistro = guiaRemision.guiaRemisionValidacion.tipoErrorValidacionString
                     });
-                }
+                //}
             }
 
 

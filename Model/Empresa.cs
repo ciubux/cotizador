@@ -38,7 +38,7 @@ namespace Model
 
 
         public bool atencionTerciarizada { get; set; }
-
+        public bool facturacionHabilitada { get; set; }
         public override string ToString()
         {
             return this.codigo + " - " + this.nombre;

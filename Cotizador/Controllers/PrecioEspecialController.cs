@@ -139,7 +139,7 @@ namespace Cotizador.Controllers
 
             PrecioEspecialCabecerasDetallesExcel excel = new PrecioEspecialCabecerasDetallesExcel();
 
-            return excel.generateExcel(lista);
+            return excel.generateExcel(lista, "");
         }
 
         [HttpGet]
@@ -161,7 +161,7 @@ namespace Cotizador.Controllers
 
             PrecioEspecialCabecerasDetallesExcel excel = new PrecioEspecialCabecerasDetallesExcel();
 
-            return excel.generateExcel(lista);
+            return excel.generateExcel(lista, "Global");
         }
 
         [HttpGet]

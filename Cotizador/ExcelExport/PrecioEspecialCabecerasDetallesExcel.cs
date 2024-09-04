@@ -26,7 +26,7 @@ namespace Cotizador.ExcelExport
         protected int cantFilasRegistrosAdicionales = 20;
         public static int filaInicioDatos { get { return 2; } }
 
-        public FileStreamResult generateExcel(List<PrecioEspecialCabecera> lista)
+        public FileStreamResult generateExcel(List<PrecioEspecialCabecera> lista, string tipo)
         {
 
             HSSFWorkbook wb;
@@ -222,11 +222,11 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i, "O", "TIPO UNIDAD PRECIO", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "P", "UNIDAD PRECIO", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "Q", "PRECIO", titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "R", "PRECIO MP", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "R", "PRECIO UND MP", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "S", "TIPO UNIDAD COSTO", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "T", "UNIDAD COSTO", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "U", "COSTO", titleDataCellStyle);
-                UtilesHelper.setValorCelda(sheet, i, "V", "COSTO MP", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "V", "COSTO UND MP", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "W", "FECHA INICIO", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "X", "FECHA FIN", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "Y", "OBSERVACIONES", titleDataCellStyle);
@@ -296,10 +296,10 @@ namespace Cotizador.ExcelExport
                         }
                     }
 
-                    marcarUnidades(sheet, i - 1, obj.precios.Count, 7);
-                    marcarUnidades(sheet, i - 1, obj.precios.Count, 11);
+                    marcarUnidades(sheet, i - 1, obj.precios.Count, 14);
+                    marcarUnidades(sheet, i - 1, obj.precios.Count, 18);
 
-                    marcarMonedas(sheet, i - 1, obj.precios.Count, 6);
+                    marcarMonedas(sheet, i - 1, obj.precios.Count, 13);
 
                     foreach (PrecioEspecialDetalle det in obj.precios)
                     {
@@ -314,6 +314,10 @@ namespace Cotizador.ExcelExport
                         {
                             UtilesHelper.setValorCelda(sheet, i, "F", obj.grupoCliente.codigo, tableDataCenterCellStyle);
                             UtilesHelper.setValorCelda(sheet, i, "G", obj.grupoCliente.nombre, blockedTDCenterCS);
+                        } else
+                        {
+                            UtilesHelper.setValorCelda(sheet, i, "F", "", tableDataCenterCellStyle);
+                            UtilesHelper.setValorCelda(sheet, i, "G", "", blockedTDCenterCS);
                         }
 
                         UtilesHelper.setValorCelda(sheet, i, "H", obj.fechaInicio, blockedTDDateCS);
@@ -396,7 +400,7 @@ namespace Cotizador.ExcelExport
                     ms.Position = 0;
                     FileStreamResult result = new FileStreamResult(ms, "application/vnd.ms-excel");
 
-                    result.FileDownloadName = "ListaPreciosEspecialesGlobal" + DateTime.Now.ToString("yyyyMMdd")+ " .xls";
+                    result.FileDownloadName = "ListaPreciosEspeciales" + tipo + DateTime.Now.ToString("yyyyMMdd")+ " .xls";
 
                     return result;
                 }

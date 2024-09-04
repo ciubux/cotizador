@@ -6,6 +6,7 @@ using System.Data;
 using Model;
 using System.Linq;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 
 namespace DataLayer
 {
@@ -414,6 +415,11 @@ namespace DataLayer
                     transaccion.cliente.formaPagoFactura = (DocumentoVenta.FormaPago)Converter.GetInt(row, "forma_pago_factura");
                     transaccion.cliente.ciudad = new Ciudad();
                     transaccion.cliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                    transaccion.cliente.empresa = new Empresa();
+                    transaccion.cliente.empresa.idEmpresa = Converter.GetInt(row, "id_empresa");
+                    transaccion.cliente.empresa.atencionTerciarizada = Converter.GetInt(row, "empresa_atencion_terciarizada") == 1;
+                    transaccion.cliente.empresa.facturacionHabilitada = Converter.GetInt(row, "empresa_facturacion_habilitada") == 1;
+
                     transaccion.documentoVenta.serie = Converter.GetString(row, "serie");
                     transaccion.documentoVenta.numero = Converter.GetInt(row, "correlativo").ToString().PadLeft(8, '0');
                     transaccion.pedido.numeroReferenciaAdicional = Converter.GetString(row, "numero_referencia_adicional");

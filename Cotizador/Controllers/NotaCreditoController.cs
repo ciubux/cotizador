@@ -423,6 +423,35 @@ namespace Cotizador.Controllers
                 DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
                 documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaCrédito;
                 CPE_RESPUESTA_BE cPE_RESPUESTA_BE = documentoVentaBL.procesarCPE(documentoVenta);
+                
+                if(cPE_RESPUESTA_BE.CODIGO.Equals(Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK)
+                    && venta.documentoVenta.cliente != null && venta.documentoVenta.cliente.empresa != null
+                    && venta.documentoVenta.cliente.empresa.atencionTerciarizada && venta.documentoVenta.cliente.empresa.facturacionHabilitada)
+                {
+
+                    Guid idMovIngreso = Guid.Empty;
+                    Guid idVentaIngreso = Guid.Empty;
+                    Guid idCPE = Guid.Empty;
+
+                    DocumentoVenta documentoVentaRel = new DocumentoVenta();
+
+                    documentoVentaRel = documentoVentaBL.IniciarExtornoGuiaRealPedidoRelacionado(venta.documentoVenta.movimientoAlmacen.idMovimientoAlmacen, usuario.idUsuario,
+                                               out idMovIngreso, out idVentaIngreso, out idCPE);
+
+                    Venta ventaIngreso = new Venta();
+                    ventaIngreso.idVenta = idVentaIngreso;
+
+                    
+                    documentoVentaRel.idDocumentoVenta = idCPE;
+                    documentoVentaRel.venta = ventaIngreso;
+                    //documentoVentaRel.cliente = venta.cliente;
+                    documentoVentaRel.usuario = usuario;
+
+                    documentoVentaRel.tipoDocumento = DocumentoVenta.TipoDocumento.NotaCrédito;
+                    CPE_RESPUESTA_BE cPE_RESPUESTA_BE_INGRESO = documentoVentaBL.procesarCPE(documentoVenta);
+
+                }
+
 
                 var otmp = new
                 {

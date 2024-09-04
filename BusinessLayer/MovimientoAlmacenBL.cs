@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Data;
 using Framework.DAL;
+using System.Web.UI;
 
 namespace BusinessLayer
 {
@@ -311,6 +312,13 @@ namespace BusinessLayer
             using (var dal = new MovimientoALmacenDAL())
             {
                 guiaRemision = dal.SelectGuiaRemision(guiaRemision);
+                if (guiaRemision.pedido.entregaATerceros)
+                {
+                    guiaRemision.entregaTerceros = guiaRemision.pedido.entregaATerceros;
+                    guiaRemision.clienteVer = guiaRemision.pedido.cliente;
+                    ClienteBL blCliente = new ClienteBL();
+                    guiaRemision.clienteVer = blCliente.getCliente(guiaRemision.pedido.idClienteTercero);
+                }
             }
             return guiaRemision;
         }

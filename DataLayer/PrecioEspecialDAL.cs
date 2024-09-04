@@ -523,12 +523,14 @@ namespace DataLayer
                 det.unidadPrecio.Presentacion = Converter.GetString(row, "unidad_precio");
                 det.unidadPrecio.PrecioSinIGV = Converter.GetDecimal(row, "precio_unitario");
                 det.unidadPrecio.Equivalencia = Converter.GetDecimal(row, "equivalencia_precio");
+                det.unidadPrecio.PrecioOriginalSinIGV = Converter.GetDecimal(row, "precio_unitario_mp");
 
                 det.unidadCosto = new ProductoPresentacion();
                 det.unidadCosto.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion_costo");
                 det.unidadCosto.Presentacion = Converter.GetString(row, "unidad_costo");
                 det.unidadCosto.CostoSinIGV = Converter.GetDecimal(row, "costo_unitario");
                 det.unidadCosto.Equivalencia = Converter.GetDecimal(row, "equivalencia_costo");
+                det.unidadCosto.CostoOriginalSinIGV = Converter.GetDecimal(row, "costo_unitario_mp");
 
                 obj.precios.Add(det);
                                 

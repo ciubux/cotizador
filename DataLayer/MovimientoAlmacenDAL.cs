@@ -312,19 +312,19 @@ namespace DataLayer
 
             if (guiaRemision.esGuiaDiferida)
             {
+                InputParameterAdd.VarcharEmpty(objCommand, "nombreTransportista", "");
+                InputParameterAdd.VarcharEmpty(objCommand, "rucTransportista", "");
+                InputParameterAdd.VarcharEmpty(objCommand, "breveteTransportista", "");
+                InputParameterAdd.VarcharEmpty(objCommand, "direccionTransportista", "");
+                InputParameterAdd.VarcharEmpty(objCommand, "placaVehiculo", "");
+            } else
+            {
                 InputParameterAdd.Guid(objCommand, "idTransportista", guiaRemision.transportista.idTransportista);
                 InputParameterAdd.Varchar(objCommand, "nombreTransportista", guiaRemision.transportista.descripcion);
                 InputParameterAdd.Varchar(objCommand, "rucTransportista", guiaRemision.transportista.ruc);
                 InputParameterAdd.Varchar(objCommand, "breveteTransportista", guiaRemision.transportista.brevete);
                 InputParameterAdd.Varchar(objCommand, "direccionTransportista", guiaRemision.transportista.direccion);
                 InputParameterAdd.Varchar(objCommand, "placaVehiculo", guiaRemision.placaVehiculo);
-            } else
-            {
-                InputParameterAdd.VarcharEmpty(objCommand, "nombreTransportista", "");
-                InputParameterAdd.VarcharEmpty(objCommand, "rucTransportista", "");
-                InputParameterAdd.VarcharEmpty(objCommand, "breveteTransportista", "");
-                InputParameterAdd.VarcharEmpty(objCommand, "direccionTransportista", "");
-                InputParameterAdd.VarcharEmpty(objCommand, "placaVehiculo", "");
             }
 
             if (guiaRemision.notaIngresoAExtornar != null)
@@ -439,7 +439,7 @@ namespace DataLayer
         public void InsertMovimientoAlmacenEntrada(NotaIngreso notaIngreso)
         {
             this.BeginTransaction(IsolationLevel.ReadCommitted);
-            var objCommand = GetSqlCommand("pi_movimientoAlmacenEntrada_b");
+            var objCommand = GetSqlCommand("pi_movimientoAlmacenEntrada");
             InputParameterAdd.DateTime(objCommand, "fechaEmision", notaIngreso.fechaEmision);
             InputParameterAdd.DateTime(objCommand, "fechaTraslado", notaIngreso.fechaTraslado);
             InputParameterAdd.Varchar(objCommand, "serieDocumento", notaIngreso.serieDocumento); //puede ser null
@@ -923,6 +923,7 @@ namespace DataLayer
                 guiaRemision.pedido.entregaATerceros = Converter.GetInt(row, "entrega_terceros") == 1 ? true : false;
                 if (guiaRemision.pedido.entregaATerceros)
                 {
+                    guiaRemision.pedido.idClienteTercero = Converter.GetGuid(row, "id_cliente_rel");
                     guiaRemision.pedido.nombreClienteTercero = Converter.GetString(row, "nombre_cliente_rel");
                 }
 

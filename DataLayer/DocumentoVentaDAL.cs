@@ -140,7 +140,7 @@ namespace DataLayer
 
         public void InsertarDocumentoVentaNotaCreditoDebito(DocumentoVenta documentoVenta, int idEmpresa)
         {
-            var objCommand = GetSqlCommand("pi_documentoVentaNotaCreditoDebito_b");
+            var objCommand = GetSqlCommand("pi_documentoVentaNotaCreditoDebito");
             InputParameterAdd.Guid(objCommand, "idVenta", documentoVenta.venta.idVenta);
             InputParameterAdd.Int(objCommand, "tipoDocumento", (int)documentoVenta.tipoDocumento);
             InputParameterAdd.DateTime(objCommand, "fechaEmision", documentoVenta.fechaEmision);
@@ -1235,6 +1235,28 @@ namespace DataLayer
             idCPE = (Guid)objCommand.Parameters["@idDocumentoVenta"].Value;
             idVenta = (Guid)objCommand.Parameters["@idVentaSalida"].Value;
             TipoError = (DocumentoVenta.TiposErrorValidacion) (int)objCommand.Parameters["@tipoError"].Value;
+            descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
+        }
+
+
+        public void IniciarExtornoGuiaRealPedidoRelacionado(Guid idMovIngresoFicticio, Guid idUsuario, out Guid idNotaIngreso, out Guid idVentaIngreso, out Guid idCPE,
+                out DocumentoVenta.TiposErrorValidacion TipoError, out string descripcionError)
+        {
+            var objCommand = GetSqlCommand("pi_iniciaExtornoGuiaRelacionadaDesdeGuiaFicticia");
+            //var objCommand = GetSqlCommand("pi_documentoVenta_vInafecto");
+
+            InputParameterAdd.Guid(objCommand, "idMovIngresoFicticio", idMovIngresoFicticio);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idNotaIngreso");
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idVentaIngreso");
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idNotaCredito");
+            OutputParameterAdd.Int(objCommand, "tipoError");
+            OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
+            ExecuteNonQuery(objCommand);
+            idNotaIngreso = (Guid)objCommand.Parameters["@idNotaIngreso"].Value;
+            idVentaIngreso = (Guid)objCommand.Parameters["@idVentaIngreso"].Value;
+            idCPE = (Guid)objCommand.Parameters["@idNotaCredito"].Value;
+            TipoError = (DocumentoVenta.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
             descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
         }
     }
