@@ -240,6 +240,51 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <div class="onoffswitch" title="Considera en el reporte las ventas que fueron excluidas.">
+                                <input type="checkbox" name="onoffswitch" @(item.esSubDistribuidor ? "checked" : "") class="onoffswitch-checkbox chkSubDistribuidorFilter" id="chkSoloSudistribuidor">
+                                <label class="onoffswitch-label" for="chkSoloSudistribuidor"></label>
+                            </div>
+                            <h5 id="lblchkSoloSudistribuidor" for="chkSoloSudistribuidor" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;" class="@(item.esSubDistribuidor? "lbl-ajuste-calculo-precios":"text-muted")" title="Excluye los clientes que no son subdistribuidores.">Solo Subdistribuidor</h5>
+                        </div>
+
+                        <div class="col-xs-12 subDistribuidorFilterChkDepend" style="display: inline-flex">
+                            <label class="control-label" for="idSubDistribuidor">Categoría:</label>
+                            <div style="margin-left: 20px;">
+                                @Html.Action("GetSubDistribuidores", "SubDistribuidor",
+                                new
+                                {
+                                    subDistribuidorSelectId = "idSubDistribuidor",
+                                    selectedValue = item.idSubDistribuidor,
+                                })
+                            </div>
+                        </div>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                if (@(item.esSubDistribuidor? "1" : "0") == 1) {
+                                    document.querySelector('.subDistribuidorFilterChkDepend').style.display = 'block';
+                                } else {
+                                    document.querySelector('.subDistribuidorFilterChkDepend').style.display = 'none';
+                                }
+
+                                document.querySelector('.chkSubDistribuidorFilter').addEventListener('change', function () {
+                                    var boxSubDistribuidorFilterChkDepend = document.querySelector('.subDistribuidorFilterChkDepend');
+                                    if (this.checked) {
+                                        boxSubDistribuidorFilterChkDepend.style.display = 'block';
+                                    } else {
+                                        boxSubDistribuidorFilterChkDepend.style.display = 'none';
+                                    }
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+
+            </div>
         </div>
 
         <div class="row" style="margin-top: 10px">
@@ -440,6 +485,11 @@
             changeInputFiltro("idCiudad", valor, "guid");
         });
 
+        $("#idSubDistribuidor").change(function () {
+            var valor = $(this).val();
+            changeInputFiltro("idSubDistribuidor", valor, "int");
+        });
+
         $("#fechaInicio").change(function () {
             var valor = $(this).val();
             changeInputFiltro("fechaInicio", valor, "date");
@@ -474,6 +524,22 @@
             var valor = $(this).val();
             changeInputFiltro("ruc", valor, "string");
         });
+
+        $("#chkSoloSudistribuidor").change(function () {
+            cambioChkSwitchBool("chkSoloSudistribuidor", "lblchkSoloSudistribuidor", "esSubDistribuidor");
+        });
+
+        $("#lblchkSoloSudistribuidor").click(function () {
+            if ($("#chkSoloSudistribuidor").is(":checked")) {
+                $("#chkSoloSudistribuidor").prop("checked", false);
+            } else {
+                $("#chkSoloSudistribuidor").prop("checked", true);
+            }
+
+            var event = new Event('change');
+            document.getElementById('chkSoloSudistribuidor').dispatchEvent(event);
+        });
+
 
         $("#chkIncluirVentasExcluidas").change(function () {
             if ($("#chkIncluirVentasExcluidas").is(":checked"));

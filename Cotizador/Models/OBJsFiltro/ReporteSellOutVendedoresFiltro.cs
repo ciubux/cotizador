@@ -36,6 +36,8 @@ namespace Cotizador.Models.OBJsFiltro
         public int incluirVentasExcluidas { get; set; }
 
         public bool integraEmpresas { get; set; }
+        public bool esSubDistribuidor { get; set; }
+        public int idSubDistribuidor { get; set; }
 
         public bool excluirVentasRelacionadasHijas { get; set; }
 

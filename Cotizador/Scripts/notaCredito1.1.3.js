@@ -756,10 +756,16 @@ jQuery(function ($) {
                 $('body').loadingModal('hide')
 
                 if (resultado.CPE_RESPUESTA_BE.CODIGO == "001") {
+                    var mensaje = 'Se generó la Nota de Crédito ' + resultado.serieNumero + '.';
+
+                    if (resultado.serieNumero_relacionado.length > 0) {
+                        mensae = mensaje + " Tambien se emitió la NC " + resultado.serieNumero_relacionado + " con una nota de ingreso al pedido relacionado.";
+                    }
+
                     $.alert({
                         //icon: 'fa fa-warning',
                         title: TITLE_EXITO,
-                        content: 'Se generó la Nota de Crédito ' + resultado.serieNumero + '.',
+                        content: mensaje,
                         type: 'green',
                         buttons: {
                             OK: function () {

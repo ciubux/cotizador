@@ -1132,6 +1132,7 @@ jQuery(function ($) {
                 $("#btnFacturarPedidoRelacionado").hide();
                 $("#btnDescargarFacturaPedidoRelacionado").hide();
                 $("#btnExtornar").hide();
+                $("#btnExtornar").attr("requiereExtornoRelacionado", "0");
 
                 /*Si la guía de remisión se encuentra ANULADA no se puede extornar, ni imprimir, ni facturar*/
                 if (guiaRemision.estaAnulado == 1) {
@@ -1276,6 +1277,7 @@ jQuery(function ($) {
                 }
 
                 if (guiaRemision.habilitaDescargarFacturaPedidoRelacionado) {
+                    $("#btnExtornar").attr("requiereExtornoRelacionado","1");
                     $("#btnDescargarFacturaPedidoRelacionado").show();
                     $("#btnDescargarFacturaPedidoRelacionado").attr("idMovimientoAlmacen", idMovimientoAlmacen);
                 }
@@ -3220,6 +3222,24 @@ jQuery(function ($) {
     $('#btnExtornar').click(function () {
         var documentosVentaString = $("#documentosVenta").val();
 
+        var requiereExtornoRelacionado = $("#btnExtornar").attr("requiereExtornoRelacionado");
+
+        if (requiereExtornoRelacionado == "1") {
+            $.alert({
+                //icon: 'fa fa-warning',
+                title: "EXTORNO RESTRINGIDO",
+                content: "Debe extornar la guía del pedido relacionado, al hacerlo se generará automáticamente el extorno y NC de esta guía.",
+                type: 'orange',
+                buttons: {
+                    OK: function () {
+
+                    }
+                }
+            });
+            return false;
+        }
+
+
         $("#li_motivoExtornoGuiaRemision7").hide();
         /*Si no se cuenta con documentos de venta */
         if (documentosVentaString.length == 0) {
@@ -3255,11 +3275,7 @@ jQuery(function ($) {
                 $("#divDocumentoVenta").show();
                 $("#li_motivoExtornoGuiaRemision7").show();
             }
-
-
-
         }
-
 
         $("#serieNumeroDocumentoParaNotaIngreso").val($("#ver_guiaRemision_serieNumeroDocumento").html());
         if ($("#guiaRemision_tipoExtorno").val() == MOV_TIPO_EXTORNO_EXTORNO_PARCIAL) {
@@ -3270,9 +3286,7 @@ jQuery(function ($) {
             $("#li_motivoExtornoGuiaRemision1").show();
             $("#li_motivoExtornoGuiaRemision6").show();
         }
-
-
-
+        
         $("#modalGenerarNotaIngreso").modal();
     });
 

@@ -2283,6 +2283,41 @@ jQuery(function ($) {
        
     });*/
 
+    $("#chkSoloSudistribuidor").change(function () {
+        cambioChkSoloSubdistribuidor();
+    });
+
+    $("#lblchkSoloSudistribuidor").click(function () {
+        if ($("#chkSoloSudistribuidor").is(":checked")) {
+            $("#chkSoloSudistribuidor").prop("checked", false);
+        } else {
+            $("#chkSoloSudistribuidor").prop("checked", true);
+        }
+
+        var event = new Event('change');
+        document.getElementById('chkSoloSudistribuidor').dispatchEvent(event);
+    });
+
+
+    function cambioChkSoloSubdistribuidor() {
+
+        var valor = 0;
+
+        if ($("#chkSoloSudistribuidor").is(":checked")) {
+            valor = 1;
+        }
+
+        changeInputBoolean('esSubDistribuidor', valor)
+
+        if ($("#chkSoloSudistribuidor").is(":checked")) {
+            $("#lblchkSoloSudistribuidor").addClass("lbl-ajuste-calculo-precios");
+            $("#lblchkSoloSudistribuidor").removeClass("text-muted");
+        } else {
+            $("#lblchkSoloSudistribuidor").addClass("text-muted");
+            $("#lblchkSoloSudistribuidor").removeClass("lbl-ajuste-calculo-precios");
+        }
+    }
+
 
     $("#idCiudad").change(function () {
         var idCiudad = $("#idCiudad").val();

@@ -413,6 +413,7 @@ namespace Cotizador.Controllers
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             try
             {
+                String serieDocumentoRelacionado = "";
                 Transaccion venta = (Transaccion)this.Session[Constantes.VAR_SESSION_NOTA_CREDITO];
                 DocumentoVenta documentoVenta = new DocumentoVenta();
                 documentoVenta.venta = (Venta)venta;
@@ -446,16 +447,17 @@ namespace Cotizador.Controllers
                     documentoVentaRel.venta = ventaIngreso;
                     //documentoVentaRel.cliente = venta.cliente;
                     documentoVentaRel.usuario = usuario;
-
+                   
                     documentoVentaRel.tipoDocumento = DocumentoVenta.TipoDocumento.NotaCrédito;
-                    CPE_RESPUESTA_BE cPE_RESPUESTA_BE_INGRESO = documentoVentaBL.procesarCPE(documentoVenta);
-
+                    CPE_RESPUESTA_BE cPE_RESPUESTA_BE_INGRESO = documentoVentaBL.procesarCPE(documentoVentaRel);
+                    serieDocumentoRelacionado = documentoVenta.serieNumero;
                 }
 
 
                 var otmp = new
                 {
                     CPE_RESPUESTA_BE = cPE_RESPUESTA_BE,
+                    serieNumero_relacionado = serieDocumentoRelacionado,
                     serieNumero = documentoVenta.serieNumero,
                     idDocumentoVenta = documentoVenta.idDocumentoVenta
                 };

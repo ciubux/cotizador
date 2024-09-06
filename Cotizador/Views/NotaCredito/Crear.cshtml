@@ -23,8 +23,8 @@
         <input type="hidden" id="considerarCantidades" name="considerarCantidades" value="2" />
 
         <!--    <fieldset>
-    <legend>Datos de Nota Crédito:</legend>
-    DATOS DEL CLIENTE-->
+        <legend>Datos de Nota Crédito:</legend>
+        DATOS DEL CLIENTE-->
 
         <div class="row">
 
@@ -57,9 +57,9 @@
                     <div class="col-xs-8">
                         @Html.DropDownListFor(x => venta.documentoVenta.serieDocumentoElectronico,
                          new SelectList(
-                            venta.cliente.ciudad.serieDocumentoElectronicoList.Where(x => x.serie.Substring(0, 1).Equals("0")).ToList(), 
-                            "serie", "serie", 
-                            venta.documentoVenta.serieDocumentoElectronico), 
+                            venta.cliente.ciudad.serieDocumentoElectronicoList.Where(x => x.serie.Substring(0, 1).Equals("0")).ToList(),
+                            "serie", "serie",
+                            venta.documentoVenta.serieDocumentoElectronico),
                          htmlAttributes: new { @class = "form-control", id = "documentoVenta_serie" })
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                     @Html.LabelFor(v => venta.documentoVenta.fechaEmision, htmlAttributes: new { @class = "control-label col-xs-4 col-lg-4" })
                     <div class="col-xs-8">
                         <!--<input type="hidden" id="fechaEmision" value="" />
-                <input type="hidden" id="fechaEntregaHastaProgramacion" value="" />-->
+                        <input type="hidden" id="fechaEntregaHastaProgramacion" value="" />-->
                         <input type="hidden" id="documentoVenta_fechaEmisiontmp" value="@ViewBag.fechaEmision" />
                         <input class="form-control" type="text" id="documentoVenta_fechaEmision" name="documentoVenta_fechaEmision">
                     </div>
@@ -96,7 +96,7 @@
                     <div class="col-xs-10">
                         @Html.TextBoxFor(v => venta.documentoVenta.cPE_CABECERA_BE.NOM_RCT, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
                         <!--
-                    <p class="form-control-static" id="verRazonSocialSunat"></p>-->
+                        <p class="form-control-static" id="verRazonSocialSunat"></p>-->
                     </div>
                 </div>
             </div>
@@ -178,61 +178,61 @@
 
 
         @if (venta.documentoVenta.movimientoAlmacen != null)
-    {
-        <fieldset>
-            <legend>Datos de Nota Ingreso:</legend>
-            <div class="row">
+        {
+            <fieldset>
+                <legend>Datos de Nota Ingreso:</legend>
+                <div class="row">
 
-                <div class="col-sm-6 col-lg-4">
-                    <div class="form-group">
-                        <label for="venta_documentoVenta_movimientoAlmacen_sustentoExtorno" class="control-label col-xs-4">Número:</label>
-                        <div class="col-xs-8">
-                            <input class="form-control" disabled value="@( ((Model.NotaIngreso)venta.documentoVenta.movimientoAlmacen).serieNumeroNotaIngreso)">
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="form-group">
+                            <label for="venta_documentoVenta_movimientoAlmacen_sustentoExtorno" class="control-label col-xs-4">Número:</label>
+                            <div class="col-xs-8">
+                                <input class="form-control" disabled value="@( ((Model.NotaIngreso)venta.documentoVenta.movimientoAlmacen).serieNumeroNotaIngreso)">
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-sm-6 col-lg-8">
-                    <div class="form-group">
-                        <label for="venta_documentoVenta_movimientoAlmacen_sustentoExtorno" class="control-label col-xs-2">Sustento:</label>
-                        <div class="col-xs-10">
-                            @Html.TextBoxFor(p => venta.documentoVenta.movimientoAlmacen.sustentoExtorno, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                    <div class="col-sm-6 col-lg-8">
+                        <div class="form-group">
+                            <label for="venta_documentoVenta_movimientoAlmacen_sustentoExtorno" class="control-label col-xs-2">Sustento:</label>
+                            <div class="col-xs-10">
+                                @Html.TextBoxFor(p => venta.documentoVenta.movimientoAlmacen.sustentoExtorno, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                            </div>
                         </div>
                     </div>
+
                 </div>
+            </fieldset>
 
-            </div>
-        </fieldset>
-
-}
+        }
 
 
 
         <!-- </fieldset>-->
         @{ var detalleEditable = "false";
-        var detalleAllowDelete = "false";}
+            var detalleAllowDelete = "false";}
 
         <!--Si no existe movimiento de almacen quiere decir que se estrá creando la nota de crédito
-    directamente desde la factura-->
+        directamente desde la factura-->
         @if (venta.documentoVenta.movimientoAlmacen == null)
-    {
-
-        if (venta.permiteEditarCantidades
-        || venta.permiteEditarPrecios
-        || venta.permiteEliminarLineas)
         {
-            detalleEditable = "true";
-            if (venta.permiteEliminarLineas)
+
+            if (venta.permiteEditarCantidades
+            || venta.permiteEditarPrecios
+            || venta.permiteEliminarLineas)
             {
-                detalleAllowDelete = "true";
-            }
+                detalleEditable = "true";
+                if (venta.permiteEliminarLineas)
+                {
+                    detalleAllowDelete = "true";
+                }
 
+            }
+            else
+            {
+                detalleEditable = "false";
+            }
         }
-        else
-        {
-            detalleEditable = "false";
-        }
-    }
 
 
 
@@ -278,42 +278,42 @@
 
                 @{int contador = 0;}
                 @foreach (var documentoDetalle in venta.pedido.pedidoDetalleList)
-            {
-                contador++;
-                <tr data-expanded="true">
-                    <td>  @documentoDetalle.producto.idProducto  </td>
-                    <td>  @documentoDetalle.esPrecioAlternativo  </td>
-                    <td>  @documentoDetalle.producto.proveedor  </td>
-                    <td>  @documentoDetalle.producto.sku  </td>
-                    <td>  @documentoDetalle.producto.descripcion</td>
+                {
+                    contador++;
+                    <tr data-expanded="true">
+                        <td>  @documentoDetalle.producto.idProducto  </td>
+                        <td>  @documentoDetalle.esPrecioAlternativo  </td>
+                        <td>  @documentoDetalle.producto.proveedor  </td>
+                        <td>  @documentoDetalle.producto.sku  </td>
+                        <td>  @documentoDetalle.producto.descripcion</td>
 
-                    <td>  @documentoDetalle.unidad  </td>
-                    <td>  @documentoDetalle.unidadInternacional  </td>
-                    <td class="@documentoDetalle.producto.idProducto detprecioLista" style="text-align:right">@documentoDetalle.precioLista</td>
-                    <td class="@documentoDetalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@documentoDetalle.porcentajeDescuento %</td>
-                    <td class="@documentoDetalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@documentoDetalle.porcentajeDescuentoMostrar %</td>
-                    <td class="@documentoDetalle.producto.idProducto detprecio" style="text-align:right">@documentoDetalle.precioNeto</td>
-                    <td class="@documentoDetalle.producto.idProducto detcostoLista">@documentoDetalle.costoLista  </td>
-                    <td class="@documentoDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@documentoDetalle.margen %</td>
+                        <td>  @documentoDetalle.unidad  </td>
+                        <td>  @documentoDetalle.unidadInternacional  </td>
+                        <td class="@documentoDetalle.producto.idProducto detprecioLista" style="text-align:right">@documentoDetalle.precioLista</td>
+                        <td class="@documentoDetalle.producto.idProducto detporcentajedescuento" style="width:95px; text-align:right; ">@documentoDetalle.porcentajeDescuento %</td>
+                        <td class="@documentoDetalle.producto.idProducto detporcentajedescuentoMostrar" style="width:75px; text-align:right; ">@documentoDetalle.porcentajeDescuentoMostrar %</td>
+                        <td class="@documentoDetalle.producto.idProducto detprecio" style="text-align:right">@documentoDetalle.precioNeto</td>
+                        <td class="@documentoDetalle.producto.idProducto detcostoLista">@documentoDetalle.costoLista  </td>
+                        <td class="@documentoDetalle.producto.idProducto detmargen" style="width:70px; text-align:right">@documentoDetalle.margen %</td>
 
-                    <td class="@documentoDetalle.producto.idProducto detflete" style="text-align:right">@documentoDetalle.flete</td>
+                        <td class="@documentoDetalle.producto.idProducto detflete" style="text-align:right">@documentoDetalle.flete</td>
 
-                    <td class="@documentoDetalle.producto.idProducto detprecioUnitario" style="text-align:right; font-weight:bold">@documentoDetalle.precioUnitario </td>
-                    <td class="@documentoDetalle.producto.idProducto detprecioUnitarioRegistrado" style="text-align:right">@documentoDetalle.producto.precioClienteProducto.precioUnitario </td>
+                        <td class="@documentoDetalle.producto.idProducto detprecioUnitario" style="text-align:right; font-weight:bold">@documentoDetalle.precioUnitario </td>
+                        <td class="@documentoDetalle.producto.idProducto detprecioUnitarioRegistrado" style="text-align:right">@documentoDetalle.producto.precioClienteProducto.precioUnitario </td>
 
 
 
-                    <td class="@documentoDetalle.producto.idProducto detcantidad" style="text-align:right" font-weight:bold">@documentoDetalle.cantidad</td>
-                    <td class="@documentoDetalle.producto.idProducto detsubtotal" style="text-align:right">@documentoDetalle.subTotal</td>
-                    <td class="@documentoDetalle.producto.idProducto detobservacion" style="text-align:left">@documentoDetalle.observacion</td>
-                    <td class="@documentoDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@documentoDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
+                        <td class="@documentoDetalle.producto.idProducto detcantidad" style="text-align:right" font-weight:bold">@documentoDetalle.cantidad</td>
+                        <td class="@documentoDetalle.producto.idProducto detsubtotal" style="text-align:right">@documentoDetalle.subTotal</td>
+                        <td class="@documentoDetalle.producto.idProducto detobservacion" style="text-align:left">@documentoDetalle.observacion</td>
+                        <td class="@documentoDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@documentoDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
 
-                    <td class="@documentoDetalle.producto.idProducto detCantidadOriginal">@documentoDetalle.cantidadOriginal</td>
-                    <td class="@documentoDetalle.producto.idProducto detPrecioUnitarioOriginal">@documentoDetalle.precioUnitarioOriginal</td>
-                    <td class="@documentoDetalle.producto.idProducto detordenamiento"></td>
+                        <td class="@documentoDetalle.producto.idProducto detCantidadOriginal">@documentoDetalle.cantidadOriginal</td>
+                        <td class="@documentoDetalle.producto.idProducto detPrecioUnitarioOriginal">@documentoDetalle.precioUnitarioOriginal</td>
+                        <td class="@documentoDetalle.producto.idProducto detordenamiento"></td>
 
-                </tr>
-        }
+                    </tr>
+                }
 
             </tbody>
         </table>
@@ -330,7 +330,7 @@
                 </div>
             </div>
 
-           
+
         </div>
 
         <div class="row">
@@ -842,5 +842,5 @@
 
 
 @section Scripts {
-    @Scripts.Render("~/bundles/notaCredito")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/notaCredito")
 }

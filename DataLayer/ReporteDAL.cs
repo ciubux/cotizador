@@ -75,7 +75,7 @@ namespace DataLayer
 
         public List<List<String>> sellOutVendedores(String sku, String familia, String proveedor, String codVRC, String codVSC, String codVAC, 
             DateTime fechaInicio, DateTime fechaFin, int anio, int trimestre, String ciudad, int incluirVentasExcluidas, Guid idUsuario,
-            int idGrupo, string ruc, bool integraEmpresas, bool excluirVentasRelacionadasHijas)
+            int idGrupo, string ruc, bool integraEmpresas, bool excluirVentasRelacionadasHijas, bool esSubDistribuidor, int idSubDistribuidor)
         {
             var objCommand = GetSqlCommand("ps_sellout_vendedores");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
@@ -92,6 +92,9 @@ namespace DataLayer
 
             InputParameterAdd.Int(objCommand, "verTodasEmpresas", integraEmpresas ? 1: 0);
             InputParameterAdd.Int(objCommand, "excluirVentasRelacionadasHijas", excluirVentasRelacionadasHijas ? 1 : 0);
+
+            InputParameterAdd.Int(objCommand, "esSubdistribuidor", esSubDistribuidor ? 1 : -1);
+            InputParameterAdd.Int(objCommand, "idSubdistribuidor", idSubDistribuidor);
 
             InputParameterAdd.VarcharEmpty(objCommand, "sku", sku);
             InputParameterAdd.Varchar(objCommand, "familia", familia);
@@ -129,7 +132,7 @@ namespace DataLayer
 
         public List<List<String>> sellOutVendedoresDetalles(String codVendedor, String sku, String familia, String proveedor, String codVRC, String codVSC, String codVAC, 
             DateTime fechaInicio, DateTime fechaFin, int anio, int trimestre, String ciudad, int incluirVentasExcluidas, Guid idUsuario,
-            int idGrupo, string ruc, bool integraEmpresas, bool excluirVentasRelacionadasHijas)
+            int idGrupo, string ruc, bool integraEmpresas, bool excluirVentasRelacionadasHijas, bool esSubDistribuidor, int idSubDistribuidor)
         {
             var objCommand = GetSqlCommand("ps_sellout_vendedores_detalles");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
@@ -143,6 +146,9 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "incluirVentasExcluidas", incluirVentasExcluidas);
             InputParameterAdd.Int(objCommand, "verTodasEmpresas", integraEmpresas ? 1 : 0);
             InputParameterAdd.Int(objCommand, "excluirVentasRelacionadasHijas", excluirVentasRelacionadasHijas ? 1 : 0);
+
+            InputParameterAdd.Int(objCommand, "esSubdistribuidor", esSubDistribuidor ? 1 : -1);
+            InputParameterAdd.Int(objCommand, "idSubdistribuidor", idSubDistribuidor);
 
             InputParameterAdd.VarcharEmpty(objCommand, "codVRC", codVRC);
             InputParameterAdd.VarcharEmpty(objCommand, "codVSC", codVSC);

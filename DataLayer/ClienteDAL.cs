@@ -736,6 +736,8 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "perteneceCanalProvincias", cliente.perteneceCanalProvincias ? 1 : 0);
             InputParameterAdd.Int(objCommand, "perteneceCanalMultiregional", cliente.perteneceCanalMultiregional ? 1 : 0);
             InputParameterAdd.Int(objCommand, "perteneceCanalPCP", cliente.perteneceCanalPCP ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "esSubdistribuidor", cliente.esSubDistribuidor ? 1 : -1);
+            InputParameterAdd.Int(objCommand, "idSubdistribuidor", cliente.subDistribuidor.idSubDistribuidor);
             InputParameterAdd.VarcharEmpty(objCommand, "sku", cliente.sku);
             if (cliente.fechaVentasDesde != null)
                 InputParameterAdd.DateTime(objCommand, "fechaVentasDesde", cliente.fechaVentasDesde.Value);
