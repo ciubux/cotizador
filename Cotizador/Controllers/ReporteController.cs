@@ -26,6 +26,110 @@ namespace Cotizador.Controllers
             return View();
         }
 
+        public ReporteSellInProveedoresFiltro instanciarFiltroSellInProveedores()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            ReporteSellInProveedoresFiltro obj = new ReporteSellInProveedoresFiltro();
+            obj.fabricante = "Todos";
+            obj.familia = "Todas";
+            
+            ParametroBL parametroBL = new ParametroBL();
+
+            obj.fechaInicio = DateTime.Now;
+            obj.fechaFin = DateTime.Now;
+            obj.sku = string.Empty;
+            obj.idCiudad = Guid.Empty;
+            obj.ciudad = new Ciudad();
+            obj.ciudad.idCiudad = Guid.Empty;
+            obj.ciudad.nombre = "TODOS";
+            obj.anio = 0;
+            obj.trimestre = 0;
+            obj.ruc = string.Empty;
+            obj.integraEmpresas = false;
+
+            if (usuario.vistaIntegradaMultiEmpresa || usuario.reporteIntegradoMultiEmpresa)
+            {
+                obj.integraEmpresas = true;
+            }
+
+            return obj;
+        }
+
+        public ActionResult LimpiarFiltroSellInProveedores()
+        {
+            ReporteSellInProveedoresFiltro obj = (ReporteSellInProveedoresFiltro)this.Session["s_rSellInProveedoresFiltro"];
+
+            obj = instanciarFiltroSellInProveedores();
+            this.Session["s_rSellInProveedoresFiltro"] = obj;
+
+            return RedirectToAction("SellInProveedores", "Reporte");
+        }
+
+        public void changeFiltroSellInProveedores(string propiedad, string valor, string tipo)
+        {
+            ReporteSellInProveedoresFiltro obj = (ReporteSellInProveedoresFiltro)this.Session["s_rSellInProveedoresFiltro"];
+
+            obj.changeDatoParametro(propiedad, valor, tipo);
+
+            if (propiedad.Equals("idCiudad") && obj.idCiudad != null && !obj.idCiudad.Equals(Guid.Empty))
+            {
+                CiudadBL blCiudad = new CiudadBL();
+                obj.ciudad = blCiudad.getCiudad(obj.idCiudad);
+            }
+            else
+            {
+                if (propiedad.Equals("idCiudad"))
+                {
+                    obj.ciudad = new Ciudad();
+                    obj.ciudad.idCiudad = Guid.Empty;
+                    obj.ciudad.nombre = "TODOS";
+                }
+            }
+
+            this.Session["s_rSellInProveedoresFiltro"] = obj;
+        }
+
+        public ActionResult SellInProveedores()
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.ReporteSellInProveedores;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.visualizaReporteSellInProveedores)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            ReporteSellInProveedoresFiltro obj = (ReporteSellInProveedoresFiltro)this.Session["s_rSellInProveedoresFiltro"];
+            if (obj == null)
+            {
+                obj = instanciarFiltroSellInProveedores();
+                this.Session["s_rSellInProveedoresFiltro"] = obj;
+            }
+
+            ReporteBL bl = new ReporteBL();
+            List<List<String>> resultados = new List<List<String>>();
+
+            if (Request.HttpMethod.Equals("POST"))
+            {
+                //Usuario us = usuario.usuarioTomaPedidoList.Where(u => u.idUsuario == obj.idUsuarioCreador).FirstOrDefault();
+
+
+                resultados = bl.sellInProveedores(obj.sku, obj.familia, obj.fabricante,
+                    obj.fechaInicio, obj.fechaFin, obj.anio, obj.trimestre, obj.ciudad.nombre,
+                    usuario.idUsuario, obj.ruc, obj.integraEmpresas);
+                this.Session["s_rSellInProveedoresFiltroLastF"] = obj;
+                this.Session["s_rSellInProveedoresFiltroLastS"] = resultados;
+            }
+
+            ViewBag.filtros = obj;
+            ViewBag.resultados = resultados;
+            ViewBag.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            ViewBag.usuarios = usuario.usuarioTomaPedidoList;
+
+            return View();
+        }
+
         public ActionResult LimpiarFiltroSellOutVendedores()
         {
             ReporteSellOutVendedoresFiltro obj = (ReporteSellOutVendedoresFiltro)this.Session["s_rSellOutVendedoresFiltro"];

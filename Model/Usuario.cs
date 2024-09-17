@@ -342,6 +342,7 @@ namespace Model
 
         public bool visualizaReporteSellOutVendedores { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_REPORTE_SELLOUT_VENDEDORES)).FirstOrDefault() != null; } }
 
+        public bool visualizaReporteSellInProveedores { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_REPORTE_SELLIN_PROVEEDORES)).FirstOrDefault() != null; } }
 
         public object Clone()
         {

@@ -1259,6 +1259,8 @@ namespace Cotizador.Controllers
                 {
                     return RedirectToAction("Login", "Account");
                 }
+
+               
             }
 
 
@@ -1273,6 +1275,12 @@ namespace Cotizador.Controllers
                 }
                 GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
                 guiaRemision.usuario = usuario;
+
+                if (guiaRemision.pedido != null && usuario.idEmpresa != guiaRemision.pedido.empresa.idEmpresa)
+                {
+                    CancelarCreacionGuiaRemision();
+                    return RedirectToAction("Login", "Account");
+                }
 
                 ViewBag.fechaTrasladotmp = guiaRemision.fechaTraslado.ToString(Constantes.formatoFecha);
                 ViewBag.fechaEmisiontmp = guiaRemision.fechaEmision.ToString(Constantes.formatoFecha);

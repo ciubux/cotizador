@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "180";
+    TempData["ScriptVersion"] = "186";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -121,7 +121,7 @@
                         var linkBusquedaPrecioEspecial = "";
                         var linkRegistroPrecioEspecial = "";
                         var linkCargaMasivaPrecioEspecial = "";
-                        
+
 
                         var linkBusquedaVendedor = "";
                         var linkMantenimientoVendedor = "";
@@ -160,6 +160,8 @@
                         var linkResultadosKPI = "";
                         var linkReporteProductosPendientesAtencion = "";
                         var linkReporteSellOutVendedores = "";
+                        var linkReporteSellInProveedores = "";
+                        
 
                         var linkRegistrarAjusteStock = "";
                         var linkBusquedaAjusteStock = "";
@@ -269,6 +271,7 @@
                             case 920: linkResultadosKPI = "active"; linkReportes = "active"; break;
                             case 910: linkReporteProductosPendientesAtencion = "active"; linkReportes = "active"; break;
                             case 911: linkReporteSellOutVendedores = "active"; linkReportes = "active"; break;
+                            case 912: linkReporteSellInProveedores = "active"; linkReportes = "active"; break;
                         }
 
                         if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
@@ -709,6 +712,10 @@
                                         <li id="linkReporteSellOutVendedores" class="@linkReporteSellOutVendedores">@Html.ActionLink("SellOut Vendedores", "SellOutVendedores", "Reporte")</li>
                                     }
 
+                                    @if (usuario.visualizaReporteSellInProveedores)
+                                    {
+                                        <li id="linkReporteSellInProveedores" class="@linkReporteSellInProveedores">@Html.ActionLink("SellIn Proveedores", "SellInProveedores", "Reporte")</li>
+                                    }
                                 </ul>
                             </li>
                         }

@@ -3590,6 +3590,15 @@ jQuery(function ($) {
                 $("#btnVerAtenciones").hide();
                 $("#btnVerIngresos").hide();
 
+                if (pedido.empresa_codigo == usuario.codigoEmpresa) {
+                    $("#btnAtenderPedidoVenta").attr("mismaEmpresa", "1");
+                    $("#btnAtenderDiferidoPedidoVenta").attr("mismaEmpresa", "1");
+                    
+                } else {
+                    $("#btnAtenderPedidoVenta").attr("mismaEmpresa", "0");
+                    $("#btnAtenderDiferidoPedidoVenta").attr("mismaEmpresa", "0");
+                }
+
 
                 if (pedido.seguimientoPedido_estado == ESTADO_INGRESADO ||
                     pedido.seguimientoPedido_estado == ESTADO_PROGRAMADO ||
@@ -3612,8 +3621,8 @@ jQuery(function ($) {
                                 $("#btnAtenderDiferidoPedidoVenta").show();
                             }
 
-                            if (
-                                pedido.seguimientoCrediticioPedido_estado == ESTADO_PENDIENTE_LIBERACION ||
+                            
+                            if (pedido.seguimientoCrediticioPedido_estado == ESTADO_PENDIENTE_LIBERACION ||
                                 pedido.seguimientoCrediticioPedido_estado == ESTADO_BLOQUEADO
                             ) {
                                 $("#btnAtenderPedidoVenta").hide();

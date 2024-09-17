@@ -71,6 +71,25 @@ function btnAtenderPedido(tipo) {
     desactivarBotonesVer();
     var idPedido = $("#idPedido").val();
 
+    var bloqueoEmpresa = false;
+    
+    if ($("#btnAtenderPedidoVenta").is("[mismaEmpresa]") && !($("#btnAtenderPedidoVenta").attr("mismaEmpresa") == "1")) {
+        bloqueoEmpresa = true;
+    }
+    
+    if (bloqueoEmpresa) {
+        $.alert({
+            title: "ACCIÓN RESTRINGIDA",
+            type: 'orange',
+            content: 'No puede guíar un pedido de una empresa diferente a la empresa en visualización.',
+            buttons: {
+                OK: function () {
+                }
+            }
+        });
+        return false;
+    }
+
     $.ajax({
         url: "/GuiaRemision/ConsultarSiExisteGuiaRemision",
         type: 'POST',

@@ -358,6 +358,7 @@
     <Compile Include="Models\GrupoClienteViewModels.cs" />
     <Compile Include="Models\LogCampoViewModels.cs" />
     <Compile Include="Models\MonedaViewModels.cs" />
+    <Compile Include="Models\OBJsFiltro\ReporteSellInProveedoresFiltro.cs" />
     <Compile Include="Models\OBJsFiltro\ReporteSellOutVendedoresFiltro.cs" />
     <Compile Include="Models\OBJsFiltro\ReportePendientesAtencionFiltro.cs" />
     <Compile Include="Models\RolViewModels.cs" />
@@ -777,6 +778,7 @@
     <Content Include="Views\PrecioEspecial\ActualizarCostosEspeciales.cshtml" />
     <Content Include="Views\PrecioEspecial\ActualizacionCorrectaTodos.cshtml" />
     <Content Include="Views\PrecioEspecial\CargaMasiva.cshtml" />
+    <Content Include="Views\Reporte\SellInProveedores.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

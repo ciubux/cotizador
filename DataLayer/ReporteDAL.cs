@@ -252,5 +252,53 @@ namespace DataLayer
 
             return resultados;
         }
+
+        public List<List<String>> sellInProveedores(String sku, String familia, String fabricante, DateTime fechaInicio, DateTime fechaFin, 
+            int anio, int trimestre, String ciudad, Guid idUsuario, string ruc, bool integraEmpresas)
+        {
+            var objCommand = GetSqlCommand("ps_sellin_proveedores");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            InputParameterAdd.Varchar(objCommand, "ciudad", ciudad);
+
+            InputParameterAdd.Int(objCommand, "anio", anio);
+            InputParameterAdd.Int(objCommand, "trimestre", trimestre);
+
+            InputParameterAdd.Int(objCommand, "verTodasEmpresas", integraEmpresas ? 1 : 0);
+
+
+            InputParameterAdd.VarcharEmpty(objCommand, "sku", sku);
+            InputParameterAdd.Varchar(objCommand, "familia", familia);
+            InputParameterAdd.Varchar(objCommand, "fabricante", fabricante);
+
+            InputParameterAdd.VarcharEmpty(objCommand, "ruc", ruc);
+
+            fechaInicio = new DateTime(fechaInicio.Year, fechaInicio.Month, fechaInicio.Day, 0, 0, 0);
+            fechaFin = new DateTime(fechaFin.Year, fechaFin.Month, fechaFin.Day, 23, 59, 59);
+
+            InputParameterAdd.DateTime(objCommand, "fechaDesde", fechaInicio);
+            InputParameterAdd.DateTime(objCommand, "fechaHasta", fechaFin);
+
+            DataTable dataTable = Execute(objCommand);
+
+            List<List<String>> resultados = new List<List<String>>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                List<String> item = new List<String>();
+
+                item.Add(Converter.GetString(row, "DOC_PROVEEDOR"));
+                item.Add(Converter.GetString(row, "PROVEEDOR"));
+
+                Decimal subtotal = Converter.GetDecimal(row, "SUBTOTAL_ACUM");
+
+                item.Add(String.Format(Constantes.formatoDosDecimales, subtotal));
+
+                resultados.Add(item);
+            }
+
+            return resultados;
+        }
     }
 }
+ 

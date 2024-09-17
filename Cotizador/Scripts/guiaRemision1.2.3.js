@@ -1276,7 +1276,7 @@ jQuery(function ($) {
                     }
                 }
 
-                if (guiaRemision.habilitaDescargarFacturaPedidoRelacionado) {
+                if (guiaRemision.habilitaDescargarFacturaPedidoRelacionado && guiaRemision.entregaTerceros) {
                     $("#btnExtornar").attr("requiereExtornoRelacionado","1");
                     $("#btnDescargarFacturaPedidoRelacionado").show();
                     $("#btnDescargarFacturaPedidoRelacionado").attr("idMovimientoAlmacen", idMovimientoAlmacen);
