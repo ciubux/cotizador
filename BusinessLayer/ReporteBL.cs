@@ -60,5 +60,16 @@ namespace BusinessLayer
                 return list;
             }
         }
+        public List<List<String>> sellInProveedoresDetalles(String rucProveedor, String sku, String familia, String fabricante, DateTime fechaInicio, DateTime fechaFin,
+            int anio, int trimestre, String ciudad, Guid idUsuario, string ruc, bool integraEmpresas)
+        {
+            using (var dal = new ReporteDAL())
+            {
+                List<List<String>> list = dal.sellInProveedoresDetalles(rucProveedor, sku, familia, fabricante, fechaInicio, fechaFin,
+                                                anio, trimestre, ciudad, idUsuario, ruc, integraEmpresas);
+
+                return list;
+            }
+        }
     }
 }

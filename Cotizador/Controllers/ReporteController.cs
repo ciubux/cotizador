@@ -115,9 +115,8 @@ namespace Cotizador.Controllers
                 //Usuario us = usuario.usuarioTomaPedidoList.Where(u => u.idUsuario == obj.idUsuarioCreador).FirstOrDefault();
 
 
-                resultados = bl.sellInProveedores(obj.sku, obj.familia, obj.fabricante,
-                    obj.fechaInicio, obj.fechaFin, obj.anio, obj.trimestre, obj.ciudad.nombre,
-                    usuario.idUsuario, obj.ruc, obj.integraEmpresas);
+                resultados = bl.sellInProveedores(obj.sku, obj.familia, obj.fabricante, obj.fechaInicio, obj.fechaFin, 
+                    obj.anio, obj.trimestre, obj.ciudad.nombre, usuario.idUsuario, obj.ruc, obj.integraEmpresas);
                 this.Session["s_rSellInProveedoresFiltroLastF"] = obj;
                 this.Session["s_rSellInProveedoresFiltroLastS"] = resultados;
             }
@@ -128,6 +127,28 @@ namespace Cotizador.Controllers
             ViewBag.usuarios = usuario.usuarioTomaPedidoList;
 
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult ExportDetallesReporteSellInProveedor(String rucProveedor)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.visualizaReporteSellOutVendedores)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            ReporteBL bl = new ReporteBL();
+
+            ReporteSellInProveedoresFiltro obj = (ReporteSellInProveedoresFiltro)this.Session["s_rSellInProveedoresFiltro"];
+
+            List<List<String>> resultados = bl.sellInProveedoresDetalles(rucProveedor, obj.sku, obj.familia, obj.fabricante, 
+                obj.fechaInicio, obj.fechaFin, obj.anio, obj.trimestre, obj.ciudad.nombre, usuario.idUsuario, obj.ruc, obj.integraEmpresas);
+
+            ReporteDetallesSellInProveedor excel = new ReporteDetallesSellInProveedor();
+
+            return excel.generateExcel(resultados, obj, usuario);
         }
 
         public ActionResult LimpiarFiltroSellOutVendedores()

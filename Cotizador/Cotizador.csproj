@@ -311,6 +311,7 @@
     <Compile Include="ExcelExport\ReasignacionCarteraCliente.cs" />
     <Compile Include="ExcelExport\PedidoOCExcel.cs" />
     <Compile Include="ExcelExport\ReporteCargaStock .cs" />
+    <Compile Include="ExcelExport\ReporteDetallesSellInProveedor.cs" />
     <Compile Include="ExcelExport\ReporteMatrizDatos.cs" />
     <Compile Include="ExcelExport\ReporteDetallesSellOutVendedor.cs" />
     <Compile Include="ExcelExport\ProductoWebCarga.cs" />

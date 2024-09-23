@@ -708,6 +708,8 @@ namespace DataLayer
             tvp.Columns.Add(new DataColumn("FECHA_FIN", typeof(DateTime)));
             tvp.Columns.Add(new DataColumn("OBSERVACIONES", typeof(string)));
 
+
+
             foreach (PrecioEspecialCabecera obj in listas)
             {
                 foreach (PrecioEspecialDetalle item in obj.precios)
@@ -716,13 +718,13 @@ namespace DataLayer
 
                     rowObj["CODIGO"] = obj.codigo;
                     rowObj["CODIGO_LISTA_PROVEEDOR"] = obj.codigoListaProveedor;
-                    rowObj["TITULO"] = obj.titulo;
+                    rowObj["TITULO"] = obj.titulo.Length > 99 ? obj.titulo.Substring(0, 99) : obj.titulo;
                     rowObj["TIPO_NEGOCIACION"] = obj.tipoNegociacion;
                     rowObj["CODIGO_GRUPO"] = obj.grupoCliente.codigo;
                     rowObj["RUC"] = obj.clienteSunat.ruc;
                     rowObj["FECHA_INICIO_CABECERA"] = obj.fechaInicio;
                     rowObj["FECHA_FIN_CABECERA"] = obj.fechaFin;
-                    rowObj["OBSERVACIONES_CABECERA"] = obj.observaciones;
+                    rowObj["OBSERVACIONES_CABECERA"] = obj.observaciones.Length > 499 ? obj.observaciones.Substring(0, 499) : obj.observaciones; 
 
 
                     rowObj["SKU"] = item.producto.sku;
@@ -733,7 +735,7 @@ namespace DataLayer
                     rowObj["COSTO_UNITARIO"] = item.unidadCosto.CostoSinIGV;
                     rowObj["FECHA_INICIO"] = item.fechaInicio;
                     rowObj["FECHA_FIN"] = item.fechaFin;
-                    rowObj["OBSERVACIONES"] = item.observaciones;
+                    rowObj["OBSERVACIONES"] = item.observaciones.Length > 499 ? item.observaciones.Substring(0, 499) : item.observaciones;  
 
                     tvp.Rows.Add(rowObj);
                 }

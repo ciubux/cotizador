@@ -299,6 +299,93 @@ namespace DataLayer
 
             return resultados;
         }
+
+        public List<List<String>> sellInProveedoresDetalles(String rucProveedor, String sku, String familia, String fabricante, DateTime fechaInicio, DateTime fechaFin,
+            int anio, int trimestre, String ciudad, Guid idUsuario, string ruc, bool integraEmpresas)
+        {
+            var objCommand = GetSqlCommand("ps_sellin_proveedores_detalles");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            InputParameterAdd.VarcharEmpty(objCommand, "rucProveedor", rucProveedor);
+            InputParameterAdd.Varchar(objCommand, "ciudad", ciudad);
+
+            InputParameterAdd.Int(objCommand, "anio", anio);
+            InputParameterAdd.Int(objCommand, "trimestre", trimestre);
+
+            InputParameterAdd.Int(objCommand, "verTodasEmpresas", integraEmpresas ? 1 : 0);
+            
+            InputParameterAdd.VarcharEmpty(objCommand, "sku", sku);
+            InputParameterAdd.Varchar(objCommand, "familia", familia);
+            InputParameterAdd.Varchar(objCommand, "fabricante", fabricante);
+
+            fechaInicio = new DateTime(fechaInicio.Year, fechaInicio.Month, fechaInicio.Day, 0, 0, 0);
+            fechaFin = new DateTime(fechaFin.Year, fechaFin.Month, fechaFin.Day, 23, 59, 59);
+
+            InputParameterAdd.DateTime(objCommand, "fechaDesde", fechaInicio);
+            InputParameterAdd.DateTime(objCommand, "fechaHasta", fechaFin);
+
+            InputParameterAdd.VarcharEmpty(objCommand, "ruc", ruc);
+
+            DataTable dataTable = Execute(objCommand);
+
+            List<List<String>> resultados = new List<List<String>>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                List<String> item = new List<String>();
+
+                item.Add(Converter.GetString(row, "id_venta_detalle")); /* 0: */
+                item.Add(Converter.GetString(row, "DOC_PROVEEDOR")); /* 1: */
+                item.Add(Converter.GetString(row, "PROVEEDOR")); /* 2: */
+                item.Add(Converter.GetString(row, "COD_PROVEEDOR")); /* 3: */
+                item.Add(Converter.GetString(row, "CIUDAD")); /* 4: */
+
+                item.Add(Converter.GetString(row, "TIPO")); /* 5: */
+                item.Add(Converter.GetString(row, "FECHA_TRANSACCION")); /* 6: */
+                item.Add(Converter.GetString(row, "NUMERO_PEDIDO")); /* 7: */
+                item.Add(Converter.GetString(row, "PEDIDO_CREADO_POR")); /* 8: */
+                item.Add(Converter.GetString(row, "NOTA_INGRESO")); /* 9: */
+                item.Add(Converter.GetString(row, "FECHA_EMISION_NI")); /* 10: */
+
+                item.Add(Converter.GetString(row, "TIPO_CPE")); /* 11: */
+                item.Add(Converter.GetString(row, "CPE")); /* 12: */
+                item.Add(Converter.GetString(row, "FECHA_EMISION_CPE")); /* 13: */
+
+                item.Add(Converter.GetString(row, "FAMILIA_PROD")); /* 14: */
+                item.Add(Converter.GetString(row, "COD_FABRICANTE")); /* 15: */
+                item.Add(Converter.GetString(row, "SKU_MP")); /* 16: */
+                item.Add(Converter.GetString(row, "SKU_FABRICANTE")); /* 17: */
+                item.Add(Converter.GetString(row, "DESCRIPCION_PROD")); /* 18: */
+                item.Add(Converter.GetString(row, "UNIDAD_VENTA")); /* 19: */
+                item.Add(Converter.GetString(row, "CANTIDAD")); /* 20: */
+
+                Decimal valUnit = Converter.GetDecimal(row, "VALOR_UNIT");
+                Decimal subtotal = Converter.GetDecimal(row, "SUBTOTAL");
+                
+                item.Add(String.Format(Constantes.formatoCuatroDecimales, valUnit)); /* 21: */
+                item.Add(String.Format(Constantes.formatoDosDecimales, subtotal)); /* 22: */
+
+                item.Add(Converter.GetString(row, "UNIDAD_MP")); /* 23: */
+                Decimal eqMP = Converter.GetDecimal(row, "EQUIV_MP");
+                Decimal cantidadMP = Converter.GetDecimal(row, "CANT_UND_MP");
+                item.Add(String.Format(Constantes.formatoCuatroDecimales, eqMP)); /* 24: */
+                item.Add(String.Format(Constantes.formatoDosDecimales, cantidadMP)); /* 25: */
+
+                item.Add(Converter.GetString(row, "UNIDAD_PROV")); /* 26: */
+                Decimal eqProv = Converter.GetDecimal(row, "EQUIV_PROV");
+                Decimal cantidadProv = Converter.GetDecimal(row, "CANT_UND_PROV");
+                item.Add(String.Format(Constantes.formatoDosDecimales, eqProv)); /* 27: */
+                item.Add(String.Format(Constantes.formatoDosDecimales, cantidadProv)); /* 28: */
+
+                item.Add(Converter.GetString(row, "codigo_empresa")); /* 29: */
+                item.Add(Converter.GetString(row, "nombre_empresa")); /* 30: */
+
+                resultados.Add(item);
+            }
+
+            return resultados;
+        }
+
     }
 }
  

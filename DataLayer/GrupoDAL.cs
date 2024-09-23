@@ -167,11 +167,11 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observacionesCredito", grupoCliente.observacionesCredito);
             InputParameterAdd.Varchar(objCommand, "observaciones", grupoCliente.observaciones);
 
-            InputParameterAdd.Varchar(objCommand, "codigo", grupoCliente.codigo);
+            //InputParameterAdd.Varchar(objCommand, "codigo", grupoCliente.codigo);
             //InputParameterAdd.Int(objCommand, "estado", grupoCliente.Estado);
 
             OutputParameterAdd.Int(objCommand, "newId");
-            //OutputParameterAdd.Varchar(objCommand, "codigo", 4);
+            OutputParameterAdd.Varchar(objCommand, "codigoGenerado", 4);
 
             ExecuteNonQuery(objCommand);
 
@@ -186,6 +186,7 @@ namespace DataLayer
             }
             
             grupoCliente.idGrupoCliente = (int)objCommand.Parameters["@newId"].Value;
+            grupoCliente.codigo = (string)objCommand.Parameters["@codigoGenerado"].Value;
             return grupoCliente;
 
         }
@@ -229,7 +230,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "observacionesCredito", grupoCliente.observacionesCredito);
             InputParameterAdd.Varchar(objCommand, "observaciones", grupoCliente.observaciones);
 
-            InputParameterAdd.Varchar(objCommand, "codigo", grupoCliente.codigo);
+            //InputParameterAdd.Varchar(objCommand, "codigo", grupoCliente.codigo);
             InputParameterAdd.Int(objCommand, "estado", grupoCliente.Estado);
 
             //OutputParameterAdd.Varchar(objCommand, "codigo", 4);

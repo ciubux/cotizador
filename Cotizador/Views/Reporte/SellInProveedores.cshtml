@@ -188,7 +188,7 @@
                    data-show-toggle="false">
                 <thead class="thead-dark">
                     <tr>
-                        <th>CODIGO PROVEEDOR</th>
+                        <th>RUC PROVEEDOR</th>
                         <th>NOMBRE PROVEEDOR</th>
                         <th>
                             TOTAL COMPRAS
@@ -200,8 +200,8 @@
                         <th>
                             @if (resultados.Count > 0)
                             {
-                                <button type="button" class="btn btn-primary bouton-image botonExcel btnDetallesResultadosVendedorExcel" codVendedor=""
-                                        actionLink="@Url.Action("ExportDetallesReporteSellOutVendedor", "Reporte")">
+                                <button type="button" class="btn btn-primary bouton-image botonExcel btnDetallesResultadosProveedorExcel" rucProveedor=""
+                                        actionLink="@Url.Action("ExportDetallesReporteSellInProveedor", "Reporte")">
                                     TODOS LOS DETALLES
                                 </button>
                             }
@@ -216,8 +216,8 @@
                             <td>@fila.ElementAt(1)</td>
                             <td>@fila.ElementAt(2)</td>
                             <td>
-                                <button type="button" class="btn btn-primary bouton-image botonExcel btnDetallesResultadosVendedorExcel" codVendedor="@fila.ElementAt(0)"
-                                        actionLink="@Url.Action("ExportDetallesReporteSellOutVendedor", "Reporte")">
+                                <button type="button" class="btn btn-primary bouton-image botonExcel btnDetallesResultadosProveedorExcel" rucProveedor="@fila.ElementAt(0)"
+                                        actionLink="@Url.Action("ExportDetallesReporteSellInProveedor", "Reporte")">
                                     Detalles
                                 </button>
                             </td>
@@ -236,7 +236,7 @@
 <script type="text/javascript">
 
 
-    function funcionesModalProductosPendientesAtencion() {
+    function funcionesModalReporteSellInProveedores() {
         var ID_SEDE_TODOS = "@Guid.Empty.ToString()";
         var selFiltroCiudad = "@item.idCiudad.ToString()";
         $.datepicker.regional['es'] = {
@@ -389,9 +389,9 @@
             }
         }
 
-        $(document).on('click', ".btnDetallesResultadosVendedorExcel", function () {
-            var codigoVendedor = $(this).attr("codVendedor");
-            window.location.href = $(this).attr("actionLink") + "?codigoVendedor=" + codigoVendedor;
+        $(document).on('click', ".btnDetallesResultadosProveedorExcel", function () {
+            var rucProveedor = $(this).attr("rucProveedor");
+            window.location.href = $(this).attr("actionLink") + "?rucProveedor=" + rucProveedor;
         });
 
         function changeInputFiltro(propiedad, valor, tipo) {
@@ -410,11 +410,11 @@
 
     if (window.addEventListener) // W3C standard
     {
-        window.addEventListener('load', funcionesModalProductosPendientesAtencion, false); // NB **not** 'onload'
+        window.addEventListener('load', funcionesModalReporteSellInProveedores, false); // NB **not** 'onload'
     }
     else if (window.attachEvent) // Microsoft
     {
-        window.attachEvent('onload', funcionesModalProductosPendientesAtencion);
+        window.attachEvent('onload', funcionesModalReporteSellInProveedores);
     }
 
 </script>

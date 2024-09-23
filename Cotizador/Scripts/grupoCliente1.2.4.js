@@ -298,23 +298,6 @@ jQuery(function ($) {
             return false;
         }
         
-        var codigo = $("#grupoCliente_codigo").val().trim();
-        var nCodigo = codigo.length;
-
-        if (nCodigo != 4) {
-            $.alert({
-                title: "Código inválido.",
-                type: 'orange',
-                content: 'El código del grupo debe ser de 4 dígitos.',
-                buttons: {
-                    OK: function () { }
-                }
-            });
-            $("#idCiudad").focus()
-            return false;
-        }
-        
-
         if ($("#plazoCreditoSolicitado").is(':enabled')) {
 
             if ($("#plazoCreditoSolicitado").val() == "0") {
@@ -815,9 +798,6 @@ jQuery(function ($) {
         changeInputString("nombre", $("#grupoCliente_nombre").val())
     });
 
-    $("#grupoCliente_codigo").change(function () {
-        changeInputString("codigo", $("#grupoCliente_codigo").val())
-    });
 
     $("#formaPagoCliente").change(function () {
         var formaPagoFactura = $("#formaPagoCliente").val();
