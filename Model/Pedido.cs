@@ -67,6 +67,7 @@ namespace Model
         public string codigoEmpresaPedidoRelacionado { get; set; }
 
         public Empresa empresa { get; set; }
+        public Empresa empresaRelacionada { get; set; }
 
         public Guid idClienteTercero { get; set; }
         public String nombreClienteTercero { get; set; }

@@ -1471,7 +1471,7 @@ namespace Cotizador.Controllers
                 String error = String.Empty;
                 GuiaRemision guiaRemision = movimientoAlmacenBL.InsertMovimientoAlmacenSalidaDesdeGuiaDiferida(gr, usuario.idUsuario); 
 
-                /*if (guiaRemision.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
+                if (guiaRemision.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
                 {
                     guiaRemision.usuario = usuario;
                     successRegistro = 1;
@@ -1480,7 +1480,7 @@ namespace Cotizador.Controllers
                     ws.urlApi = Constantes.NEXTSOFT_API_URL;
                     ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
 
-                    object dataSend = ConverterMPToNextSoft.toGuia(guiaRemision);
+                    object dataSend = ConverterMPToNextSoft.toGuia(guiaRemision, new List<DetalleVenta>());
                     object result = await ws.crearGuia(dataSend);
 
                     JObject dataResult = (JObject)result;
@@ -1506,7 +1506,7 @@ namespace Cotizador.Controllers
                         dataSend = dataSend, 
                         result = result });
                 } else
-                {*/
+                {
                 return JsonConvert.SerializeObject(new
                     {
                         success = false,
@@ -1514,7 +1514,7 @@ namespace Cotizador.Controllers
                         successNextSoft = successNextSoft,
                         messageRegistro = guiaRemision.guiaRemisionValidacion.tipoErrorValidacionString
                     });
-                //}
+                }
             }
 
 
@@ -1632,7 +1632,7 @@ namespace Cotizador.Controllers
             ws.urlApi = Constantes.NEXTSOFT_API_URL;
             ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
 
-            object dataSend = ConverterMPToNextSoft.toGuia(guiaRemision);
+            object dataSend = ConverterMPToNextSoft.toGuia(guiaRemision, new List<DetalleVenta>());
             object result = await ws.crearGuia(dataSend);
 
             JObject dataResult = (JObject)result;
@@ -1714,25 +1714,84 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(guiaRemision);
         }
 
-        public String GetIdFacturaRelacionada()
+        public async System.Threading.Tasks.Task<string> GetFacturaRelacionada()
         {
-            Guid idMov = Guid.Parse(Request["idMovimientoAlmacen"].ToString()); 
+            Guid idMov = Guid.Parse(Request["idMovimientoAlmacen"].ToString());
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            string tipo = "";
+            string serie = "";
+            string correlativo = "";
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
-            Guid idDocVentaRel = movimientoAlmacenBL.getIdDocumentoVentaRelacionado(idMov);
+            GuiaRemision guiaRemision = new GuiaRemision();
+            guiaRemision.idMovimientoAlmacen = idMov;
+            guiaRemision = movimientoAlmacenBL.GetGuiaRemision(guiaRemision);
 
             int success = 0;
             string msgError = "Error";
+            Guid idDocVentaRel = Guid.Empty;
+            object resultWS = null;
 
-            if (!idDocVentaRel.Equals(Guid.Empty))
+            Empresa empRel = guiaRemision.pedido.empresaRelacionada;
+            if(!empRel.facturacionHabilitada && empRel.entornoFacturacion == Empresa.EntornoFacturacion.NEXTSOFT)
             {
-                success = 1;
-            } else
-            {
-                msgError = "No se encontró factura aceptada de pedido relacionado. Recuerde que la factura se acepta hasta 10 minutos despues de haber sido emitida.";
+                tipo = "NEXTSOFT_CPE";
+
+                DocumentoExternoBL blDocExterno = new DocumentoExternoBL();
+                List<DocumentoExterno> lista = blDocExterno.getDocumentosRegistro(usuario.idUsuario, idMov, DocumentoExterno.TIPO_FACTURA_RELACIONADA);
+                
+                if(lista.Count >= 1)
+                {
+                    serie = lista.ElementAt(0).serie;
+                    correlativo = lista.ElementAt(0).correlativo;
+                    //TODO: consultar servicio archivo nextsoft
+
+                    
+                    ComprobanteVentaWS ws = new ComprobanteVentaWS();
+                    ws.urlApi = Constantes.NEXTSOFT_API_URL;
+                    ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
+
+                    resultWS = await ws.consultarComprobanteTecnica(serie, correlativo);
+
+                    JObject dataResult = (JObject)resultWS;
+                    int codigo = dataResult["crearguiaResult"]["codigo"].Value<int>();
+
+                    if (codigo == 0)
+                    {
+                        success = 1;
+                    } else
+                    {
+                        msgError = "Error al consultar archivo del CPE.";
+                    }
+                }
+                else
+                {
+                    msgError = "No se encontró factura relacionada.";
+                }               
             }
+
+            if (empRel.facturacionHabilitada && empRel.entornoFacturacion == Empresa.EntornoFacturacion.EOL)
+            {
+                tipo = "ZAS_CPE";
+                idDocVentaRel = movimientoAlmacenBL.getIdDocumentoVentaRelacionado(idMov);
+
+                if (!idDocVentaRel.Equals(Guid.Empty))
+                {
+                    success = 1;
+                }
+                else
+                {
+                    msgError = "No se encontró factura aceptada de pedido relacionado. Recuerde que la factura se acepta hasta 10 minutos despues de haber sido emitida.";
+                }
+            }
+            
 
             var result = new { success = success,
                 msgError = msgError,
+                tipo = tipo,
+                serie = serie,
+                correlativo = correlativo,
+                resultWS = resultWS,
                 idDocumentoVentaRelacionado = idDocVentaRel
             };
 

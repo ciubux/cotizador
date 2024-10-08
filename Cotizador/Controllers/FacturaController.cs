@@ -402,7 +402,7 @@ namespace Cotizador.Controllers
                 DocumentoVenta documentoVenta = new DocumentoVenta();
 
                 DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
-                documentoVenta = documentoVentaBL.IniciarFacturaPedidoRelacionado(movimientoAlmacen.idMovimientoAlmacen, usuario.idUsuario, 
+                documentoVenta = documentoVentaBL.FacturacionPedidoRelacionado(movimientoAlmacen.idMovimientoAlmacen, usuario.idUsuario, 
                                            out idGuiaFic, out idVentaFic, out idCPE);
                 // ENVIAR CPE
 

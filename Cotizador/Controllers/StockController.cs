@@ -15,6 +15,8 @@ using NPOI.SS.UserModel;
 using System.IO;
 using Cotizador.Models.DTOshow;
 using Cotizador.Models.DTOsShow;
+using NPOI.XWPF.UserModel;
+using System.Globalization;
 
 namespace Cotizador.Controllers
 {
@@ -532,12 +534,30 @@ namespace Cotizador.Controllers
                     switch(labelText)
                     {
                         case "Fecha":
-                            String[] fiv = sheet.GetRow(row).GetCell(3) != null ?
-                                            sheet.GetRow(row).GetCell(3).ToString().Trim().Split('/') 
-                                            : String.Empty.Split('/');
-                            fechaCierre = fiv.Length > 2 ? 
-                                            new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]))
-                                            : DateTime.Now;
+                            NPOI.SS.UserModel.ICell cell = sheet.GetRow(row).GetCell(3);
+                            if (cell.CellType == CellType.Numeric && DateUtil.IsCellDateFormatted(cell))
+                            {
+                                // Obtener el estilo de la celda
+                                ICellStyle cellStyle = cell.CellStyle;
+
+                                // Obtener el formato de datos de la celda
+                                short formatIndex = cellStyle.DataFormat;
+                                string dataFormatString = cellStyle.GetDataFormatString();
+
+                                // Obtener la fecha y formatearla según el formato de la celda
+                                fechaCierre = cell.DateCellValue;
+                            }
+                            else
+                            {
+                                string fechaTexto = sheet.GetRow(row).GetCell(3) != null ?
+                                            sheet.GetRow(row).GetCell(3).ToString().Trim()
+                                            : String.Empty;
+                                String[] fiv = fechaTexto.Split('/');
+                                fechaCierre = fiv.Length > 2 ?
+                                                new DateTime(Int32.Parse(fiv[2]), Int32.Parse(fiv[1]), Int32.Parse(fiv[0]))
+                                                : DateTime.Now;
+                            }
+
                             filaIniciar = filaIniciar + 2;
                             break;
                         case "Observaciones":

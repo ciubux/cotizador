@@ -182,7 +182,9 @@ namespace Model
             [Display(Name = "Guía de Remisión ya se encuentra facturada")]
             ExisteGuiaRemision = 2,
             [Display(Name = "Usario no tiene permisos para crear facturas")]
-            UsuarioNoAutorizado = 3
+            UsuarioNoAutorizado = 3,
+            [Display(Name = "No existe guía relacionada a la que facturar")]
+            NoExisteGuiaRelacionada = 11
         }
 
         public TiposErrorSolicitudAnulacion tipoErrorSolicitudAnulacion { get; set; }

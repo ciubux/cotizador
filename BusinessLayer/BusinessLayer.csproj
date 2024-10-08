@@ -73,6 +73,7 @@
     <Compile Include="KpiBL.cs" />
     <Compile Include="MotivoAjusteAlmacenBL.cs" />
     <Compile Include="EscalaComisionBL.cs" />
+    <Compile Include="NextSoftBL.cs" />
     <Compile Include="RolBL.cs" />
     <Compile Include="ParametroBL.cs" />
     <Compile Include="DocumentoVentaBL.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="PermisoBL.cs" />
     <Compile Include="PromocionBL.cs" />
     <Compile Include="PrecioEspecialBL.cs" />
+    <Compile Include="DocumentoExternoBL.cs" />
     <Compile Include="RubroBL.cs" />
     <Compile Include="ClienteContactoBL.cs" />
     <Compile Include="SubDistribuidorBL.cs" />

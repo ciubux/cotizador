@@ -36,9 +36,22 @@ namespace Model
         [Display(Name = "Porcentaje Ganancia Máxima(Mk Down):")]
         public decimal porcentajeMDGanaciaMax { get; set; }
 
-
+        
         public bool atencionTerciarizada { get; set; }
         public bool facturacionHabilitada { get; set; }
+
+        public enum EntornoFacturacion
+        {
+            [Display(Name = "NINGUNO")]
+            NINGUNO,
+            [Display(Name = "EOL")]
+            EOL,
+            [Display(Name = "NEXTSOFT")]
+            NEXTSOFT
+        }
+
+        public EntornoFacturacion entornoFacturacion { get; set; }
+
         public override string ToString()
         {
             return this.codigo + " - " + this.nombre;

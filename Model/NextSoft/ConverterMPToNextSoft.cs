@@ -1,4 +1,5 @@
 ﻿using Model.ServiceReferencePSE;
+using Model.UTILES;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -94,7 +95,7 @@ namespace Model.NextSoft
             return item;
         }
 
-        public static object toGuia(GuiaRemision obj)
+        public static object toGuia(GuiaRemision obj, List<DetalleVenta> detallesVentaRelacionada)
         {
             List<object> listaDet = new List<object>();
             int numDet = 1;
@@ -112,6 +113,15 @@ namespace Model.NextSoft
                 {
                     string codFactor = "";
                     int nFactor = 1;
+                    decimal totalItem = 0;
+
+                    foreach(DetalleVenta detv in detallesVentaRelacionada)
+                    {
+                        if (detv.sku.Equals(movDet.producto.sku)) {
+                            totalItem = cantidadAtender * (detv.precioUnitario + detv.igvUnitario);
+                        }
+                    }
+
                     switch (movDet.idProductoPresentacion)
                     {
                         case 0:
@@ -144,7 +154,8 @@ namespace Model.NextSoft
                         fcv = nFactor, // REVISAR
                         listaprecio = codListaPreciosLim,
                         //comprobante = "001-F001-22029",
-                        peso = 1
+                        peso = 1,
+                        totalitem = totalItem
                     };
 
                     listaDet.Add(det);
@@ -183,6 +194,14 @@ namespace Model.NextSoft
                 codigoVendedor = "07885378";
             }
 
+            bool comprobanteComprador = false;
+
+            if (!obj.pedido.empresaRelacionada.facturacionHabilitada && 
+                obj.pedido.empresaRelacionada.entornoFacturacion == Empresa.EntornoFacturacion.NEXTSOFT)
+            {
+                comprobanteComprador = true;
+            }
+
             Cliente cli = obj.clienteVer;
             if (cli == null) cli = obj.pedido.cliente;
             string rucComprador = obj.entregaTerceros ? obj.pedido.cliente.ruc : "";
@@ -203,6 +222,7 @@ namespace Model.NextSoft
                 sucursal = obj.almacen.codigoSucursalNextSoft,
                 puntoventa = obj.almacen.codigoPuntoVentaNextSoft,
                 ruccomprador = rucComprador,
+                comprobantecomprador = comprobanteComprador,
                 ruc = cli.ruc,
                 direcccion = obj.direccionEntrega,
                 ubigeo = obj.ubigeoEntrega.codigoSepPunto,
@@ -529,6 +549,30 @@ namespace Model.NextSoft
 
             return listaResult;
         }
+
+        public static object toProductoValidar(String sku, int factor)
+        {
+            var item = new
+            {
+                CodigoMP = sku,
+                FactorMP = factor
+            };
+
+            return item;
+        }
+
+        public static List<object> toProductoValidarList(List<String> skus, List<int> factores)
+        {
+            List<object> listaResult = new List<object>();
+
+            for (int i = 0; i < skus.Count; i++)
+            {
+                listaResult.Add(ConverterMPToNextSoft.toProductoValidar(skus.ElementAt(i),factores.ElementAt(i)));
+            }
+
+            return listaResult;
+        }
+
         /* CONVIERTE UNA FECHA EN STRING DE AÑO-MES-DIA A DIA/MES/AÑO */
         private static string cambiarFormatoFechaV1(string fecha) {
             string[] aFecha = fecha.Split('-');

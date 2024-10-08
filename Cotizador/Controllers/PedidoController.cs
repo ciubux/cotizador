@@ -17,6 +17,8 @@ using NLog;
 using Cotizador.Models.DTOsShow;
 using Model.UTILES;
 using NPOI.SS.Formula.Functions;
+using System.Threading.Tasks;
+using Model.NextSoft;
 
 namespace Cotizador.Controllers
 {
@@ -2057,7 +2059,7 @@ namespace Cotizador.Controllers
 
 
 
-        public String Create()
+        public async Task<String> Create()
         {
 
             //RUC_MP
@@ -2075,7 +2077,7 @@ namespace Cotizador.Controllers
                 throw new System.Exception("Pedido ya se encuentra creado");
             }
 
-            pedidoBL.InsertPedido(pedido);
+            await pedidoBL.InsertPedido(pedido);
             long numeroPedido = pedido.numeroPedido;
             String numeroPedidoString = pedido.numeroPedidoString;
             Guid idPedido = pedido.idPedido;
@@ -2105,7 +2107,7 @@ namespace Cotizador.Controllers
 
 
 
-        public String Update()
+        public async Task<String> Update()
         {
             UsuarioBL usuarioBL = new UsuarioBL();
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -2134,7 +2136,7 @@ namespace Cotizador.Controllers
                 this.Session[Constantes.VAR_SESSION_USUARIO] = usuario;
             }
 
-            bl.UpdatePedido(pedido);
+            await bl.UpdatePedido(pedido);
             long numeroPedido = pedido.numeroPedido;
             String numeroPedidoString = pedido.numeroPedidoString;
             Guid idPedido = pedido.idPedido;
@@ -2192,9 +2194,16 @@ namespace Cotizador.Controllers
         }
 
 
+        public async Task<String> ValidarProductosTecnica()
+        {
+            PedidoBL bl = new PedidoBL();
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
+            ServiceResponse res = await bl.validarProductosNextSoftTecnica(pedido);
 
+            return JsonConvert.SerializeObject(res);
+        }
 
-        public void updateEstadoPedido()
+        public async Task updateEstadoPedido()
         {
             /*Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
             SeguimientoPedido.estadosSeguimientoPedido estadosSeguimientoPedido = (SeguimientoPedido.estadosSeguimientoPedido)Int32.Parse(Request["estado"].ToString());
@@ -2203,6 +2212,9 @@ namespace Cotizador.Controllers
             Guid idPedido = Guid.Parse(Request["idPedido"].ToString());
             SeguimientoPedido.estadosSeguimientoPedido estadosSeguimientoPedido = (SeguimientoPedido.estadosSeguimientoPedido)Int32.Parse(Request["estado"].ToString());
             String observacion = Request["observacion"].ToString();
+
+            
+
             updateEstadoSeguimientoPedido(idPedido, estadosSeguimientoPedido, observacion);
 
             if (estadosSeguimientoPedido == SeguimientoPedido.estadosSeguimientoPedido.Ingresado)
@@ -2241,13 +2253,13 @@ namespace Cotizador.Controllers
                     pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado && 
                     pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
                 {
-                    pedidoBL.ProcesarPedidoAprobadoTecnica(pedido);
+                    await pedidoBL.ProcesarPedidoAprobadoTecnica(pedido);
                 }
 
             }
         }
 
-        public void updateEstadoPedidoCrediticio()
+        public async Task updateEstadoPedidoCrediticio()
         {
             Guid idPedido = Guid.Parse(Request["idPedido"].ToString());
             SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido estadosSeguimientoCrediticioPedido = (SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido)Int32.Parse(Request["estado"].ToString());
@@ -2281,7 +2293,7 @@ namespace Cotizador.Controllers
                 pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
                 pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
             {
-                pedidoBL.ProcesarPedidoAprobadoTecnica(pedido);
+                await pedidoBL.ProcesarPedidoAprobadoTecnica(pedido);
             }
             
         }
@@ -3223,7 +3235,7 @@ namespace Cotizador.Controllers
 
 
         [HttpPost]
-        public ActionResult Load(HttpPostedFileBase file)
+        public async Task<ActionResult> Load(HttpPostedFileBase file)
         {
             /*try
             {*/
@@ -3389,7 +3401,7 @@ namespace Cotizador.Controllers
                 
                 foreach (Pedido pedido in pedidoList)
                 {
-                    pedidoBL.InsertPedido(pedido);
+                    await pedidoBL.InsertPedido(pedido);
                     numerosPedido = numerosPedido + pedido.numeroPedidoString;
                     if (pedido.montoSubTotal != subTotales[contadorPedidos])
                     {

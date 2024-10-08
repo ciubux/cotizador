@@ -8,6 +8,10 @@ using System.Linq;
 using ServiceLayer;
 using BusinessLayer.Email;
 using System.Net.Http.Headers;
+using System.Web.UI;
+using Model.NextSoft;
+using NPOI.SS.Formula.Functions;
+using System.Threading.Tasks;
 
 namespace BusinessLayer
 {
@@ -15,7 +19,7 @@ namespace BusinessLayer
     {
 
         #region Pedidos de VENTA
-        private void validarPedidoVenta(Pedido pedido)
+        private async Task validarPedidoVenta(Pedido pedido)
         {
             bool enviaAprobacion = false;
             ParametroBL blParametro = new ParametroBL();
@@ -229,6 +233,17 @@ namespace BusinessLayer
                 pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
             }
 
+            if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
+            {
+                ServiceResponse res = await this.validarProductosNextSoftTecnica(pedido);
+
+                if (res.code != 0)
+                {
+                    pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                    pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + " " + res.message;
+                }
+            }
+
             if (!pedido.guardadoParcialmente && pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.PendienteLiberación && pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
             {
                 pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado;
@@ -240,8 +255,8 @@ namespace BusinessLayer
                 pedidoAdjunto.idCliente = pedido.cliente.idCliente;
             }
         }
-                
-        public void InsertPedido(Pedido pedido)
+
+        public async Task InsertPedido(Pedido pedido)
         {
             using (var dal = new PedidoDAL())
             {
@@ -316,7 +331,7 @@ namespace BusinessLayer
 
                 }
 
-                validarPedidoVenta(pedido);
+                await validarPedidoVenta(pedido);
                 dal.InsertPedido(pedido);
                 pedido.IdUsuarioRegistro = pedido.usuario.idUsuario;
 
@@ -324,12 +339,12 @@ namespace BusinessLayer
                     pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
                     pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
                 {
-                    ProcesarPedidoAprobadoTecnica(pedido);
+                    await ProcesarPedidoAprobadoTecnica(pedido);
                 }
             }
         }
 
-        public void UpdatePedido(Pedido pedido)
+        public async Task UpdatePedido(Pedido pedido)
         {
             using (var dal = new PedidoDAL())
             {
@@ -356,7 +371,7 @@ namespace BusinessLayer
                     }
                 }
 
-                validarPedidoVenta(pedido);
+                await validarPedidoVenta(pedido);
                 
                 if (pedido.esVentaIndirecta && !pedido.esVentaIndirectaAnt)
                 {
@@ -369,7 +384,7 @@ namespace BusinessLayer
                     pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
                     pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
                 {
-                    ProcesarPedidoAprobadoTecnica(pedido);
+                    await ProcesarPedidoAprobadoTecnica(pedido);
                 }
             }
         }
@@ -1078,7 +1093,7 @@ namespace BusinessLayer
             }
         }
 
-        public void ProcesarPedidoAprobadoTecnica(Pedido pedido)
+        public async Task ProcesarPedidoAprobadoTecnica(Pedido pedido)
         {
             if (pedido.idMPPedido == null || pedido.idMPPedido.Equals(Guid.Empty))
             {
@@ -1086,11 +1101,11 @@ namespace BusinessLayer
                 {
                     this.EnviarMailTecnica(pedido);
                 }
-                this.ReplicarPedidoEntornoMP(pedido);
+                await this.ReplicarPedidoEntornoMP(pedido);
             }
         }
 
-        public void ReplicarPedidoEntornoMP(Pedido pedido)
+        public async Task ReplicarPedidoEntornoMP(Pedido pedido)
         {
             Pedido pMP = (Pedido)pedido.Clone();
             Guid idPedidoTec = pedido.idPedido;
@@ -1193,7 +1208,7 @@ namespace BusinessLayer
             }
             
 
-            this.InsertPedido(pMP);
+            await this.InsertPedido(pMP);
             this.SetPedidoMP(idPedidoTec, pMP.idPedido, "// N° Pedido MP: " + pMP.numeroPedido.ToString());
             this.SetPedidoMP(pMP.idPedido, idPedidoTec, "", true);
 
@@ -1363,6 +1378,37 @@ namespace BusinessLayer
 
                 return texto;
             }
+        }
+
+        public async Task<ServiceResponse> validarProductosNextSoftTecnica(Pedido ped)
+        {
+            List<String> skus = new List<String>();
+            List<int> factores = new List<int>();
+
+            foreach (PedidoDetalle det in ped.pedidoDetalleList) {
+                skus.Add(det.producto.sku);
+                int factor = 1;
+                switch (det.idProductoPresentacion)
+                {
+                    case 0:
+                        factor = det.producto.equivalenciaAlternativa;
+                        break;
+                    case 1:
+                        factor = 1;
+                        break;
+                    case 2:
+                        factor = det.producto.equivalenciaAlternativa * det.producto.equivalenciaProveedor;
+                        break;
+                    case 3:;
+                        factor = 1;
+                        break;
+
+                }
+                factores.Add(factor);
+            }
+
+            NextSoftBL nsBL = new NextSoftBL();
+            return await nsBL.validarProductos(skus, factores);
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Model;
 using System.Linq;
+using Model.UTILES;
 
 namespace DataLayer
 {
@@ -1003,6 +1004,21 @@ namespace DataLayer
                 pedido.empresa.idEmpresa = Converter.GetInt(row, "id_empresa");
                 pedido.empresa.codigo = Converter.GetString(row, "codigo_empresa");
 
+                pedido.empresaRelacionada = new Empresa();
+                pedido.empresaRelacionada.idEmpresa = Converter.GetInt(row, "id_empresa_rel");
+                pedido.empresaRelacionada.codigo = Converter.GetString(row, "codigo_empresa_rel");
+                pedido.empresaRelacionada.facturacionHabilitada = Converter.GetInt(row, "facturacion_habilitada_empresa_rel") == 1;
+
+                Empresa.EntornoFacturacion emrelenfac;
+                if (Enum.TryParse<Empresa.EntornoFacturacion>(Converter.GetString(row, "entorno_facturacion_empresa_rel"), true, out emrelenfac))
+                {
+                    pedido.empresaRelacionada.entornoFacturacion = emrelenfac;
+                } else
+                {
+                    pedido.empresaRelacionada.entornoFacturacion = Empresa.EntornoFacturacion.NINGUNO;
+                }
+                
+                
                 pedido.promocion = new Promocion();
                 pedido.promocion.idPromocion = Converter.GetGuid(row, "id_promocion");
                 pedido.promocion.codigo = Converter.GetString(row, "codigo_promocion");
@@ -2731,6 +2747,30 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
                 //Guid idItem = Converter.GetGuid(row, "id_pedido");
                 item.Add(Converter.GetString(row, "serie_documento")); // 0
                 item.Add(Converter.GetString(row, "numero_documento")); // 1
+
+                lista.Add(item);
+            }
+
+            return lista;
+        }
+
+        public List<DetalleVenta> getDetallesPedidoRelacionado(Guid idPedido, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_detalles_pedido_relacionado");
+            List<DetalleVenta> lista = new List<DetalleVenta>();
+
+            InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable dataTable = Execute(objCommand);
+            foreach (DataRow row in dataTable.Rows)
+            {
+                DetalleVenta item = new DetalleVenta();
+
+                item.idProducto = Converter.GetGuid(row, "id_producto");
+                item.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
+                item.igvUnitario = Converter.GetDecimal(row, "igv_precio_unitario");
+                item.equivalencia = Converter.GetDecimal(row, "equivalencia");
 
                 lista.Add(item);
             }

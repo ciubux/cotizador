@@ -55,5 +55,20 @@ namespace Model.NextSoft
 
             return resultContent;
         }
+
+        public async Task<object> validarProductoTecnicaLista(List<object> dataProductos)
+        {
+            string nombreServicio = "validarproductos";
+
+            var sendData = new
+            {
+                token = this.apiToken,
+                productos = dataProductos.ToArray()
+            };
+
+            object resultContent = await this.callService(sendData, nombreServicio);
+
+            return resultContent;
+        }
     }
 }

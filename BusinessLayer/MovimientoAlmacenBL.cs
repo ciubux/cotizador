@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System.Data;
 using Framework.DAL;
 using System.Web.UI;
+using Model.UTILES;
 
 namespace BusinessLayer
 {
@@ -94,8 +95,17 @@ namespace BusinessLayer
                     guiaRemision.ultimaAtencionParcial = true;
                 }
 
+                List<DetalleVenta> detallesVenta = new List<DetalleVenta>();
 
-                object dataSend = ConverterMPToNextSoft.toGuia(guiaRemision);
+                if (guiaRemision.entregaTerceros && !guiaRemision.pedido.empresaRelacionada.facturacionHabilitada
+                    && guiaRemision.pedido.empresaRelacionada.entornoFacturacion == Empresa.EntornoFacturacion.NEXTSOFT)
+                {
+                    // obtener info ventas
+                    PedidoDAL dalPedido = new PedidoDAL();
+                    detallesVenta = dalPedido.getDetallesPedidoRelacionado(guiaRemision.pedido.idPedido, guiaRemision.usuario.idUsuario);
+                }
+
+                object dataSend = ConverterMPToNextSoft.toGuia(guiaRemision, detallesVenta);
 
                 try
                 {
@@ -142,6 +152,18 @@ namespace BusinessLayer
                             dal.InsertMovimientoAlmacenSalida(guiaRemision);
 
                             bl.GuardarRespuestaNextSys(guiaRemision.idMovimientoAlmacen, success, resultText);
+                        }
+
+                        if (guiaRemision.entregaTerceros)
+                        {
+                            Guid idGuiaRelacionada = new Guid();
+                            Guid idVentaRelacionada = new Guid();
+                            DocumentoVenta.TiposErrorValidacion tipoErrorRelacionado = DocumentoVenta.TiposErrorValidacion.NoExisteError;
+                            String mensajeErrorRelacionado = "";
+
+                            dal.GuiaFicticiaPedidoRelacionado(guiaRemision.idMovimientoAlmacen, guiaRemision.IdUsuarioRegistro, 
+                                out idGuiaRelacionada, out idVentaRelacionada, out tipoErrorRelacionado, out mensajeErrorRelacionado);
+                            guiaRemision.idMovimientoRelacionado = idGuiaRelacionada;
                         }
 
                         //return JsonConvert.SerializeObject(new { success = success, dataSend = dataSend, result = result });

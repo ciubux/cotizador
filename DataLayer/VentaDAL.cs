@@ -7,6 +7,7 @@ using Model;
 using System.Linq;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
+using Model.UTILES;
 
 namespace DataLayer
 {
@@ -1310,5 +1311,29 @@ namespace DataLayer
             return obj;
         }
 
+        public List<DetalleVenta> getDetallesVentaRelacionado(Guid idGuia, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_detalles_venta_relacionada");
+            List<DetalleVenta> lista = new List<DetalleVenta>();
+
+            InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", idGuia);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable dataTable = Execute(objCommand);
+            foreach (DataRow row in dataTable.Rows)
+            {
+                DetalleVenta item = new DetalleVenta();
+
+                item.idProducto = Converter.GetGuid(row, "id_producto");
+                item.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
+                item.igvUnitario = Converter.GetDecimal(row, "igv_precio_unitario");
+                item.equivalencia = Converter.GetDecimal(row, "equivalencia");
+                item.cantidad = Converter.GetInt(row, "cantidad");
+
+                lista.Add(item);
+            }
+
+            return lista;
+        }
     }
 }

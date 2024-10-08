@@ -3503,6 +3503,11 @@ jQuery(function ($) {
                     $("#pedido_observacionesFactura").removeAttr("disabled");
                 }
 
+                if (pedido.empresa_codigo == "TC") {
+                    $("#btnAprobarIngresoPedido").attr("validarproductosns", "1");
+                } else {
+                    $("#btnAprobarIngresoPedido").attr("validarproductosns", "0");
+                }
 
                 if (pedido.moneda == null) {
                     $("#verMoneda").html("No asignado");
@@ -4203,14 +4208,56 @@ jQuery(function ($) {
     });
 
     $("#btnAprobarIngresoPedido").click(function () {
+        var validarProductosNextsoft = $(this).attr("validarproductosns");
+
+        if (validarProductosNextsoft == "1") {
+            $.ajax({
+                url: "/Pedido/ValidarProductosNextSoft",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                },
+                error: function () {
+                    $.alert({
+                        title: 'ERROR',
+                        content: "Ocurrió un error al validar los productos.",
+                        type: 'red',
+                        buttons: {
+                            OK: function () {
+                            }
+                        }
+                    });
+                },
+                success: function (res) {
+                    if (res.code == 0) {
+                        abrirModalAprobacion();
+                    } else {
+                        $.alert({
+                            title: 'ERROR',
+                            content: res.message,
+                            type: 'red',
+                            buttons: {
+                                OK: function () {
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        } else {
+            abrirModalAprobacion();
+        }
+    });
+
+    function abrirModalAprobacion() {
+        $("#modalAprobacion").modal('show');
         $("#modalAprobacionTitle").html(TITULO_APROBAR_INGRESO);
         $("#labelNuevoEstado").html(ESTADO_INGRESADO_STR);
         $("#estadoId").val(ESTADO_INGRESADO);
         limpiarComentario();
         mostrarItemsRestringidos();
-    });
+    }
 
-    
     $("#btnRestringirAtencionPedido").click(function () {
         mostrarItemsRestringidos();
     });

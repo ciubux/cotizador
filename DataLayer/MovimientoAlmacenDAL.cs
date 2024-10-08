@@ -669,6 +669,23 @@ namespace DataLayer
 
         }
 
+        public void GuiaFicticiaPedidoRelacionado(Guid idGuiaOriginal, Guid idUsuario, out Guid idGuiaFic, out Guid idVentaFic, 
+                out DocumentoVenta.TiposErrorValidacion TipoError, out string descripcionError)
+        {
+            var objCommand = GetSqlCommand("pi_guiaFicticiaPedidoRelacionadoDesdeGuiaAtencion");
+            
+            InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", idGuiaOriginal);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idGuiaFic");
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idVentaFic");
+            OutputParameterAdd.Int(objCommand, "tipoError");
+            OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
+            ExecuteNonQuery(objCommand);
+            idGuiaFic = (Guid)objCommand.Parameters["@idGuiaFic"].Value;
+            idVentaFic = (Guid)objCommand.Parameters["@idVentaFic"].Value;
+            TipoError = (DocumentoVenta.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
+            descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
+        }
 
 
         public void UpdateMovimientoAlmacenSalida(Pedido pedido)
@@ -947,6 +964,22 @@ namespace DataLayer
                 {
                     guiaRemision.pedido.cliente.configuraciones = new ClienteConfiguracion();
                 }
+
+                guiaRemision.pedido.empresaRelacionada = new Empresa();
+                guiaRemision.pedido.empresaRelacionada.idEmpresa = Converter.GetInt(row, "id_empresa_rel");
+                guiaRemision.pedido.empresaRelacionada.codigo = Converter.GetString(row, "codigo_empresa_rel");
+                guiaRemision.pedido.empresaRelacionada.facturacionHabilitada = Converter.GetInt(row, "facturacion_habilitada_empresa_rel") == 1;
+
+                Empresa.EntornoFacturacion emrelenfac;
+                if (Enum.TryParse<Empresa.EntornoFacturacion>(Converter.GetString(row, "entorno_facturacion_empresa_rel"), true, out emrelenfac))
+                {
+                    guiaRemision.pedido.empresaRelacionada.entornoFacturacion = emrelenfac;
+                }
+                else
+                {
+                    guiaRemision.pedido.empresaRelacionada.entornoFacturacion = Empresa.EntornoFacturacion.NINGUNO;
+                }
+
 
                 //USUARIO
                 guiaRemision.usuario = new Usuario();

@@ -330,7 +330,7 @@ jQuery(function ($) {
         });
 
         $.ajax({
-            url: "/GuiaRemision/GetIdFacturaRelacionada",
+            url: "/GuiaRemision/GetFacturaRelacionada",
             type: 'POST',
             dataType: 'JSON',
             data: {
@@ -350,7 +350,15 @@ jQuery(function ($) {
             },
             success: function (res) {
                 if (res.success == 1) {
-                    descargarPDFCPE(res.idDocumentoVentaRelacionado, "");
+
+                    if (res.tipo == "ZAS_CPE") {
+                        descargarPDFCPE(res.idDocumentoVentaRelacionado, "");
+                    }
+
+                    if (res.tipo == "NEXTSOFT_CPE") {
+                        var filePDF = base64ToArrayBuffer(result.resultWS.Archivo);
+                        saveByteArray(result.serie + "-" + result.correlativo + ".pdf", filePDF);
+                    }
 
                     $.alert({
                         title: "Operación Existosa",
@@ -416,6 +424,7 @@ jQuery(function ($) {
             }
         });
     }
+
 
     /**
     *################################## INICIO CONTROLES CIUDAD
@@ -1443,6 +1452,7 @@ jQuery(function ($) {
         
         if (confirm("¿Esta seguro que desea generar la guía de atención?")) {
             var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
+            $("#btnGenerarGuiaAtencion").attr("disabled", "disabled");
             $.ajax({
                 url: "/GuiaRemision/AtenderGuiaDiferida",
                 data: {
@@ -1459,6 +1469,7 @@ jQuery(function ($) {
                 dataType: 'JSON',
                 error: function (detalle) {
                     mostrarMensajeErrorProceso();
+                    $("#btnGenerarGuiaAtencion").removeAttr("disabled");
                 },
                 success: function (res) {
                     if (res.success) {
@@ -1493,6 +1504,7 @@ jQuery(function ($) {
                             }
                         }
                     }
+                    $("#btnGenerarGuiaAtencion").removeAttr("disabled");
                 }
             });
         }

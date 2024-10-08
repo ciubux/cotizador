@@ -58,6 +58,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlertaValidacion.cs" />
+    <Compile Include="DocumentoExterno.cs" />
+    <Compile Include="NextSoft\ServiceResponse.cs" />
     <Compile Include="PrecioEspecialDetalle.cs" />
     <Compile Include="PrecioEspecialCabecera.cs" />
     <Compile Include="NextSoft\FactorNS.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="UTILES\MovimientoKardexDetalle.cs" />
     <Compile Include="UTILES\FilaProductoPendienteAtencion.cs" />
     <Compile Include="UTILES\ReporteMatrizCabecera.cs" />
+    <Compile Include="UTILES\DetalleVenta.cs" />
     <Compile Include="UTILES\ReporteMatrizDato.cs" />
     <Compile Include="UTILES\ReporteMatriz.cs" />
     <Compile Include="UTILES\RegistroCargaStock.cs" />
