@@ -148,6 +148,19 @@ namespace BusinessLayer
                         MovimientoAlmacenBL bl = new MovimientoAlmacenBL();
                         if (codigo == 0)
                         {
+                            string serieCorrelativo = dataResult["crearguiaResult"]["facturatecnica"].Value<string>();
+
+                            if (!serieCorrelativo.Trim().Equals(""))
+                            {
+                                string[] partesDoc = serieCorrelativo.Split('-');
+                                DocumentoExterno docExt = new DocumentoExterno();
+                                docExt.serie = partesDoc[0].Trim();
+                                docExt.correlativo = partesDoc[1].Trim();
+                                docExt.tipo = DocumentoExterno.TIPO_FACTURA_RELACIONADA;
+
+                                guiaRemision.documentosExternos.Add(docExt);
+                            }
+
                             success = 1;
                             dal.InsertMovimientoAlmacenSalida(guiaRemision);
 

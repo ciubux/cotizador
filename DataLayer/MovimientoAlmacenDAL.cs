@@ -350,6 +350,30 @@ namespace DataLayer
             }
 
 
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+            tvp.Columns.Add(new DataColumn("ID_REGISTRO", typeof(Guid)));
+            tvp.Columns.Add(new DataColumn("TIPO", typeof(string)));
+            tvp.Columns.Add(new DataColumn("SERIE", typeof(string)));
+            tvp.Columns.Add(new DataColumn("CORRELATIVO", typeof(string)));
+            tvp.Columns.Add(new DataColumn("NOMBRE", typeof(string)));
+
+            foreach (DocumentoExterno item in guiaRemision.documentosExternos)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = Guid.Empty;
+                rowObj["ID_REGISTRO"] = Guid.Empty;
+                rowObj["TIPO"] = item.tipo;
+                rowObj["SERIE"] = item.serie;
+                rowObj["CORRELATIVO"] = item.correlativo;
+                rowObj["NOMBRE"] = item.nombre;
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@docsExternos", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.DocumentoExternoList";
+
             OutputParameterAdd.UniqueIdentifier(objCommand, "idMovimientoAlmacen");
             OutputParameterAdd.UniqueIdentifier(objCommand, "idVenta");
             OutputParameterAdd.BigInt(objCommand, "numeroMovimientoAlmacen");
@@ -500,7 +524,6 @@ namespace DataLayer
             {
                 InputParameterAdd.Guid(objCommand, "idMovimientoAlmacenIngresado", null);
             }
-
 
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "idMovimientoAlmacen");

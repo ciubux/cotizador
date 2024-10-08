@@ -16,10 +16,11 @@ namespace Model
             this.tipoExtorno = TiposExtorno.SinExtorno;
             this.motivoExtornoNotaIngreso = MotivosExtornoNotaIngreso.DevolucionTotal;
             this.estadoFiltro = EstadoFiltro.Todos;
+            this.documentosExternos = new List<DocumentoExterno>(); 
         }
 
 
-        
+        public List<DocumentoExterno> documentosExternos {  get; set; }
         
         [Display(Name = "Sede MP:")]
         public Ciudad ciudadOrigen { get; set; }
