@@ -41,11 +41,12 @@
             <thead>
                 <tr>
                     <th data-name="idCierreStock" data-visible="false"></th>
-                    <th data-name="fecha" data-visible="true">Fecha Toma<br /> Inventario</th>
+                    <th data-name="fecha" data-sortable="true" data-visible="true">Fecha Toma<br /> Inventario</th>
                     <th data-name="sede" data-visible="true">Sede</th>
+                    <th data-name="tipoCarga" data-visible="true">Tipo<br />Carga</th>
                     <th data-name="usuario" data-visible="true">Usuario</th>
                     <th data-name="usuario" data-visible="true">Archivo</th>
-                    <th data-name="usuario" data-visible="true">Fecha Creación</th>
+                    <th data-name="usuario" data-sortable="true" data-visible="true">Fecha Creación</th>
                     <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
                 </tr>
             </thead>
@@ -54,11 +55,12 @@
                 {
                     <tr>
                         <td>@item.idCierreStock.ToString()</td>
-                        <td>@item.fecha.ToString("dd/MM/yyyy")</td>
+                        <td data-sort-value="@item.fecha.ToString("yyyyMMdd")">@item.fecha.ToString("dd/MM/yyyy")</td>
                         <td>@item.ciudad.nombre</td>
+                        <td>@item.tipoCargaInventario</td>
                         <td>@item.UsuarioRegistro.nombre</td>
                         <td><a href="#" class="btnDescargarArchivoAdjunto" idArchivoAdjunto="@item.archivo.idArchivoAdjunto.ToString()">Descargar</a></td>
-                        <td>@item.FechaRegistroDesc</td>
+                        <td data-sort-value="@item.FechaRegistro.ToString("yyyyMMddHHmmss")">@item.FechaRegistroDesc</td>
                         <td>
                             <button type="button" class="btn btn-success btnVerRVS" idCierreStock="@item.idCierreStock.ToString()">Validación Stock</button>
                         </td>

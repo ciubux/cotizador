@@ -2,6 +2,9 @@
     @if (ViewBag.tipoCarga == "archivo")
     {
         <h1>La carga del archivo de stock se realizó correctamente.</h1>
+        <h2>Fecha Inventario: @ViewBag.fechaInventario</h2>
+        <h2>Sede: @ViewBag.nombreSede</h2>
+        <h2>Tipo Inventario: @ViewBag.tipoInventario</h2>
     }
     else if (ViewBag.tipoCarga == "tipo_cambio")
     {

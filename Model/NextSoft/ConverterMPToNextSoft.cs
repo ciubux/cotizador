@@ -196,7 +196,7 @@ namespace Model.NextSoft
 
             bool comprobanteComprador = false;
 
-            if (!obj.pedido.empresaRelacionada.facturacionHabilitada && 
+            if (!obj.pedido.empresaRelacionada.facturacionHabilitada && obj.entregaTerceros &&
                 obj.pedido.empresaRelacionada.entornoFacturacion == Empresa.EntornoFacturacion.NEXTSOFT)
             {
                 comprobanteComprador = true;

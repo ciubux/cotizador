@@ -456,7 +456,9 @@ namespace Cotizador.Controllers
             Guid idSede = Guid.Parse(this.Request.Params["idCiudad"].ToString());
             DateTime fechaCierre = DateTime.Now;
             String observaciones = String.Empty;
-            
+            String sedeExcel = String.Empty;
+
+            Ciudad sede = usuario.sedesMP.Where(c => c.idCiudad == idSede).FirstOrDefault();
 
             ArchivoAdjuntoBL arcBL = new ArchivoAdjuntoBL();
             ArchivoAdjunto arAd = new ArchivoAdjunto();
@@ -514,6 +516,7 @@ namespace Cotizador.Controllers
                     esUltimaVersionZAS = true;
                 }
             }
+            ViewBag.sede = sede;
 
             if (!esUltimaVersionZAS)
             {
@@ -531,8 +534,20 @@ namespace Cotizador.Controllers
                 {
                     String labelText = sheet.GetRow(row).GetCell(1).ToString().Trim();
 
-                    switch(labelText)
+                    switch (labelText)
                     {
+                        case "Sede":
+                            sedeExcel = sheet.GetRow(row).GetCell(3) != null ? sheet.GetRow(row).GetCell(3).ToString().Trim() : "";
+                            filaIniciar = filaIniciar + 2;
+
+                            if (!sedeExcel.ToLower().Equals(sede.nombre.ToLower()))
+                            {
+                                ViewBag.sedeExcel = sedeExcel;
+                                ViewBag.tipoError = "sede_excel_no_coincide";
+                                return View("CargaIncorrecta");
+                            }
+
+                            break;
                         case "Fecha":
                             NPOI.SS.UserModel.ICell cell = sheet.GetRow(row).GetCell(3);
                             if (cell.CellType == CellType.Numeric && DateUtil.IsCellDateFormatted(cell))
@@ -677,6 +692,11 @@ namespace Cotizador.Controllers
 
             ViewBag.tipoCarga = "archivo";
 
+             
+
+            ViewBag.tipoInventario = tipoCarga;
+            ViewBag.nombreSede = sede.nombre;
+            ViewBag.fechaInventario = fechaCierre.ToString("dd/MM/yyyy");
             return View("CargaCorrecta");
         }
 

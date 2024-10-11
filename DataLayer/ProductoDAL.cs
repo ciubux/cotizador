@@ -1845,6 +1845,7 @@ namespace DataLayer
                 item.idCierreStock = Converter.GetGuid(row, "id_cierre_stock");
                 item.fecha = Converter.GetDateTime(row, "fecha");
                 item.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
+                item.tipoCargaInventario = Converter.GetString(row, "tipo_inventario");
 
                 item.ciudad = new Ciudad();
                 item.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");

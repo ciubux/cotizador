@@ -280,7 +280,7 @@ namespace DataLayer
         {
 
             this.BeginTransaction(IsolationLevel.ReadCommitted);
-            var objCommand = GetSqlCommand("pi_movimientoAlmacenSalida");
+            var objCommand = GetSqlCommand("pi_movimientoAlmacenSalida_b");
             InputParameterAdd.DateTime(objCommand, "fechaEmision", guiaRemision.fechaEmision);
             InputParameterAdd.DateTime(objCommand, "fechaTraslado", guiaRemision.fechaTraslado);
             InputParameterAdd.Varchar(objCommand, "serieDocumento", guiaRemision.serieDocumento); //puede ser null

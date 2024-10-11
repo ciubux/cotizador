@@ -148,9 +148,9 @@ namespace BusinessLayer
                         MovimientoAlmacenBL bl = new MovimientoAlmacenBL();
                         if (codigo == 0)
                         {
-                            string serieCorrelativo = dataResult["crearguiaResult"]["facturatecnica"].Value<string>();
+                            string serieCorrelativo = dataResult["crearguiaResult"]["numcomprobante2"].Value<string>();
 
-                            if (!serieCorrelativo.Trim().Equals(""))
+                            if (!(serieCorrelativo == null) &&  !serieCorrelativo.Trim().Equals(""))
                             {
                                 string[] partesDoc = serieCorrelativo.Split('-');
                                 DocumentoExterno docExt = new DocumentoExterno();
@@ -182,13 +182,13 @@ namespace BusinessLayer
                         //return JsonConvert.SerializeObject(new { success = success, dataSend = dataSend, result = result });
                     } 
                     {
-                        if (guiaRemision.serieDocumento.Substring(0, 2).Equals("DF"))
+                        if (/*guiaRemision.serieDocumento.Substring(0, 2).Equals("T0") ||*/ guiaRemision.serieDocumento.Substring(0, 2).Equals("DF"))
                         {
                             dal.InsertMovimientoAlmacenSalida(guiaRemision);
                         }
                     }
                 }
-                catch (DuplicateNumberDocumentException ex)
+                catch (Exception ex)
                 {
                     using (var logDAL = new LogDAL())
                     {

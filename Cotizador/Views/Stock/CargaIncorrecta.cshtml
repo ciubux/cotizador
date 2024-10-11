@@ -3,4 +3,9 @@
     {
         <h1><span class="text-danger">¡¡ERROR!!</span> El archivo no es una plantilla descargada desde el ZAS o es una versión anterior. Descargue la plantilla <a href="@Url.Action("PlantillaStock", "Stock")">desde aquí.</a></h1>
     }
+
+    @if (ViewBag.tipoError == "sede_excel_no_coincide")
+    {
+        <h1><span class="text-danger">¡¡ERROR!!</span> El la sede del archivo no coincide con la sede indicada en el formulario de carga de inventario.</h1>
+    }
 </div>

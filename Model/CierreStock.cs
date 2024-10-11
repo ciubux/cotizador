@@ -9,9 +9,14 @@ namespace Model
 {
     public class CierreStock : Auditoria
     {
+        public const string TIPO_CARGA_TOTAL = "Total";
+        public const string TIPO_CARGA_PARCIAL = "Parcial";
+
         public Guid idCierreStock { get; set; }
 
         public Ciudad ciudad { get; set; }
+
+        public String tipoCargaInventario { get; set; }
 
         public Usuario UsuarioReporteValidacion { get; set; }
         public DateTime fecha { get; set; }
