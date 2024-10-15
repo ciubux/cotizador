@@ -6,6 +6,6 @@
 
     @if (ViewBag.tipoError == "sede_excel_no_coincide")
     {
-        <h1><span class="text-danger">¡¡ERROR!!</span> El la sede del archivo no coincide con la sede indicada en el formulario de carga de inventario.</h1>
+        <h1><span class="text-danger">¡¡ERROR!!</span> La sede del archivo(@ViewBag.sedeExcel) no coincide con la sede indicada en el formulario de carga de inventario(@ViewBag.nombreSede).</h1>
     }
 </div>

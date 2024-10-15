@@ -88,7 +88,6 @@ namespace BusinessLayer
 
                 }
 
-
                 if (!existeCantidadPendienteAtencion)
                 {
                     guiaRemision.atencionParcial = false;
@@ -173,7 +172,6 @@ namespace BusinessLayer
                             Guid idVentaRelacionada = new Guid();
                             DocumentoVenta.TiposErrorValidacion tipoErrorRelacionado = DocumentoVenta.TiposErrorValidacion.NoExisteError;
                             String mensajeErrorRelacionado = "";
-
                             dal.GuiaFicticiaPedidoRelacionado(guiaRemision.idMovimientoAlmacen, guiaRemision.IdUsuarioRegistro, 
                                 out idGuiaRelacionada, out idVentaRelacionada, out tipoErrorRelacionado, out mensajeErrorRelacionado);
                             guiaRemision.idMovimientoRelacionado = idGuiaRelacionada;

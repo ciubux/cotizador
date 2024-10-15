@@ -25,9 +25,7 @@ namespace Cotizador.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaGrupoClientes;
-
 
             if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
             {
@@ -459,6 +457,7 @@ namespace Cotizador.Controllers
             String sedeExcel = String.Empty;
 
             Ciudad sede = usuario.sedesMP.Where(c => c.idCiudad == idSede).FirstOrDefault();
+            ViewBag.nombreSede = sede.nombre;
 
             ArchivoAdjuntoBL arcBL = new ArchivoAdjuntoBL();
             ArchivoAdjunto arAd = new ArchivoAdjunto();
@@ -695,7 +694,6 @@ namespace Cotizador.Controllers
              
 
             ViewBag.tipoInventario = tipoCarga;
-            ViewBag.nombreSede = sede.nombre;
             ViewBag.fechaInventario = fechaCierre.ToString("dd/MM/yyyy");
             return View("CargaCorrecta");
         }

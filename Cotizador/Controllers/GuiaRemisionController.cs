@@ -1378,6 +1378,8 @@ namespace Cotizador.Controllers
 
             GuiaRemision guiaRemision = this.GuiaRemisionSession;
             guiaRemision.usuario = usuario;
+            guiaRemision.IdUsuarioRegistro = usuario.idUsuario;
+
             if (!guiaRemision.esGuiaDiferida && guiaRemision.transportista.ruc.Equals(Constantes.RUC_MP))
             {
                 guiaRemision.placaVehiculo = guiaRemision.placaVehiculo.Replace("-", "").Replace(" ", "").Replace(".", "");
