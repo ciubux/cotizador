@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "186";
+    TempData["ScriptVersion"] = "190";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -161,11 +161,13 @@
                         var linkReporteProductosPendientesAtencion = "";
                         var linkReporteSellOutVendedores = "";
                         var linkReporteSellInProveedores = "";
-                        
+
 
                         var linkRegistrarAjusteStock = "";
                         var linkBusquedaAjusteStock = "";
                         var linkActualizarCostosEspeciales = "";
+
+                        var linkMantenimientoFabricante = "";
 
                     }
                     @if (this.Session["pagina"] != null)
@@ -204,7 +206,10 @@
 
                             case 17: linkBusquedaCliente = "active"; linkMaestros = "active"; break;
                             case 18: linkMantenimientoCliente = "active"; linkMaestros = "active"; break;
+
                             case 27: linkBusquedaProducto = "active"; linkMaestros = "active"; break;
+                            case 1710: linkMantenimientoFabricante = "active"; linkMaestros = "active"; break;
+
                             case 28: linkCargaMasivaProducto = "active"; linkMaestros = "active"; break;
                             case 29: linkMantenimientoProducto = "active"; linkMaestros = "active"; break;
 
@@ -294,7 +299,7 @@
                                     {
                                         <li id="linkMantenimientoCotizacionGrupal" class="@linkMantenimientoCotizacionGrupal">@Html.ActionLink("Cotización Grupal - Crear/Modificar", "CotizarGrupo", "Cotizacion")</li>
                                     }
-                                    
+
                                 </ul>
                             </li>
                         }
@@ -448,7 +453,7 @@
                             </li>
                         }
 
-                        
+
                         if (usuario.modificaPreciosEspeciales)
                         {
 
@@ -515,8 +520,11 @@
                                         <li id="linkMantenimientoGrupoCliente" class="@linkMantenimientoGrupoCliente">@Html.ActionLink("Grupo Cliente - Crear/Modificar", "Editar", "GrupoCliente")</li>
                                     }
 
-                                   
 
+                                    @if (usuario.modificaMaestroFabricantes)
+                                    {
+                                        <li id="linkMantenimientoFabricante" class="@linkMantenimientoFabricante">@Html.ActionLink("Fabricante - Búsqueda", "List", "Fabricante")</li>
+                                    }
                                     @if (usuario.modificaMaestroProductos || usuario.visualizaProductos || usuario.realizaCargaMasivaProductos)
                                     {
                                         <li id="linkBusquedaProducto" class="@linkBusquedaProducto">@Html.ActionLink("Producto - Búsqueda", "List", "Producto")</li>
@@ -751,6 +759,7 @@
     @Scripts.Render("~/bundles/jquery-ui")
     @Scripts.Render("~/bundles/footable")
     @Scripts.Render("~/bundles/jquery-chosen")
+    @Scripts.Render("~/bundles/excellib")
     @RenderSection("scripts", required: false)
     @Scripts.Render("~/bundles/loadingModal")
     @Scripts.Render("~/bundles/confirm")

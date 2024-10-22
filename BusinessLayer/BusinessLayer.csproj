@@ -88,6 +88,7 @@
     <Compile Include="DocumentoExternoBL.cs" />
     <Compile Include="RubroBL.cs" />
     <Compile Include="ClienteContactoBL.cs" />
+    <Compile Include="FabricanteBL.cs" />
     <Compile Include="SubDistribuidorBL.cs" />
     <Compile Include="OrigenBL.cs" />
     <Compile Include="SerieDocumentoBL.cs" />

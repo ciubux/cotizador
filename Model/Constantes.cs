@@ -174,6 +174,9 @@ namespace Model
         public static String VAR_SESSION_SUBDISTRIBUIDOR_LISTA = "subDistribuidorList";
         public static String VAR_SESSION_SUBDISTRIBUIDOR_VER = "subDistribuidorVer";
 
+        public static String VAR_SESSION_FABRICANTE = "fabricante";
+        public static String VAR_SESSION_FABRICANTE_BUSQUEDA = "fabricanteBusqueda";
+        public static String VAR_SESSION_FABRICANTE_LISTA = "fabricanteList";
 
         public static String VAR_SESSION_RUBRO = "rubro";
         public static String VAR_SESSION_RUBRO_BUSQUEDA = "rubroBusqueda";
@@ -567,6 +570,8 @@ namespace Model
 
         public const String ANULA_GUIAS_REMISION = "P331";
 
+        public const String MODIFICA_MAESTRO_FABRICANTES = "P710";
+
         public const String EXTORNA_FICTICIAS = "P336";
 
 
@@ -803,6 +808,9 @@ namespace Model
 
             [Display(Name = "ACTUALIZAR COSTOS ESPECIALES")]
             ActualizarCostosEspeciales = 226,
+
+            [Display(Name = "BUSQUEDA FABRICANTES")]
+            BusquedaFabricantes = 1710,
         };
 
 

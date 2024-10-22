@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "Fabricantes";
+    Model.Fabricante search = ViewBag.fabricante;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="idFabricante" value="" />
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+
+    <form class="form-horizontal">
+
+        <div class="row">
+
+        </div>
+
+        <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
+            <button id="btnLimpiarBusqueda" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
+            <button id="btnBusqueda" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
+        </div>
+
+        <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px; display: none;">
+            <button id="btnAgregarFabricante" type="button" class="btn btn-primary">Registrar Nuevo Fabricante</button>
+            <button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel">Exportar</button>
+        </div>
+
+        <table id="tableFabricantes" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
+               data-editing-allow-add="false"
+               data-editing-allow-delete="false"
+               data-editing-allow-edit="false"
+               data-sorting="true"
+               data-show-toggle="false"
+               data-editing-hide-text="Finalizar edición"
+               data-editing-add-text="Descartar cambios">
+            <thead>
+                <tr>
+                    <th data-name="idFabricante" data-visible="false"></th>
+                    <th data-name="codigo" data-visible="true">Código</th>
+                    <th data-name="nombre" data-visible="true" data-sortable="true">Nombre</th>
+
+                    <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </form>
+</div>
+
+
+<div class="modal fade" id="modalEditarFabricante" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalEditarFabricanteTitle"></h4>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <input type="hidden" id="fabricante_id" />
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="form-group">
+                                @Html.LabelFor(g => search.codigo, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                <div class="col-xs-10">
+                                    @Html.TextBoxFor(g => search.codigo, htmlAttributes: new { @id = "fabricante_codigo", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="form-group">
+                                @Html.LabelFor(g => search.nombreUsual, htmlAttributes: new { @class = "control-label col-xs-2" })
+                                <div class="col-xs-10">
+                                    @Html.TextBoxFor(g => search.nombreUsual, htmlAttributes: new { @id = "fabricante_nombreUsual", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnCancelarFabricante" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnFinalizarEdicionFabricante" class="btn btn-primary"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/fabricante")
+}

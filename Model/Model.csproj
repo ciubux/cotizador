@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlertaValidacion.cs" />
+    <Compile Include="Fabricante.cs" />
     <Compile Include="DocumentoExterno.cs" />
     <Compile Include="NextSoft\ServiceResponse.cs" />
     <Compile Include="PrecioEspecialDetalle.cs" />

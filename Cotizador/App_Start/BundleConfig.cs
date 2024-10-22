@@ -27,6 +27,10 @@ namespace Cotizador
                         "~/Scripts/factura1.1.7.js"
                         ));
 
+            bundles.Add(new ScriptBundle("~/bundles/fabricante").Include(
+                        "~/Scripts/fabricante.js"
+                        ));
+
             bundles.Add(new ScriptBundle("~/bundles/documentoCompra").Include(
                         "~/Scripts/documentoCompra1.1.1.js"
                         ));
@@ -262,6 +266,9 @@ namespace Cotizador
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-chosen").Include(
                        "~/Scripts/chosen/chosen.jquery.min.js", "~/Scripts/chosen/chosen.ajaxaddition.jquery.js", "~/Scripts/chosen/PrintArea.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/excellib").Include(
+                       "~/Scripts/excellib/xlsx.full.min.js"));
         }
     }
 }

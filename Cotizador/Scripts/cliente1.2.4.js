@@ -3339,6 +3339,8 @@ jQuery(function ($) {
 
                     $("#verObservacionesCredito").html(cliente.observacionesCredito);
                     $("#verFormaPagoFactura").html(cliente.formaPagoFacturaToString);
+                    $("#verTipoLiberacionCrediticia").html(cliente.tipoLiberacionCrediticiaString);
+
 
                     /*Datos Sunat*/
                     $("#verRazonSocialSunat").html(cliente.razonSocialSunat);
