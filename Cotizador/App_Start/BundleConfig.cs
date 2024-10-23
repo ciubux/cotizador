@@ -268,7 +268,7 @@ namespace Cotizador
                        "~/Scripts/chosen/chosen.jquery.min.js", "~/Scripts/chosen/chosen.ajaxaddition.jquery.js", "~/Scripts/chosen/PrintArea.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/excellib").Include(
-                       "~/Scripts/excellib/xlsx.full.min.js"));
+                       "~/Scripts/excellib/exceljs.min.js"));
         }
     }
 }

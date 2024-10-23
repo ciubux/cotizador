@@ -173,40 +173,10 @@ jQuery(function ($) {
             var ItemRow = [FABRICANTE_LAST_SEARCH[i].codigo, FABRICANTE_LAST_SEARCH[i].nombreUsual];
             dataExcelDescargar.push(ItemRow);
         }
-
-        
-
-        // Crear un libro de trabajo (workbook) y una hoja de trabajo (worksheet)
-        const worksheet = XLSX.utils.aoa_to_sheet(dataExcelDescargar);
-
-        const headerStyle = {
-            font: { bold: true, color: { rgb: "FFFFFF" } }, // Texto blanco y negrita
-            fill: { fgColor: { rgb: "0066CC" } }  // Fondo azul
-        };
-
-        const range = XLSX.utils.decode_range(worksheet['!ref']);
-        for (let col = range.s.c; col <= range.e.c; col++) {
-            const cellRef = XLSX.utils.encode_cell({ r: 0, c: col }); // Encodificar la celda (primera fila)
-            if (worksheet[cellRef]) {
-                worksheet[cellRef].s = headerStyle;  // Aplicar el estilo
-            }
-        }
-
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Fabricantes");
-
-        // Generar el archivo Excel
-        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-
-        // Crear un blob y generar el enlace de descarga
-        const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'fabricantes.xlsx';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        ExportarTablaExcelJs(dataExcelDescargar, "Fabricantes", "FABRICANTES");
+       
     });
+
 
     $("#btnBusqueda").click(function () {
         

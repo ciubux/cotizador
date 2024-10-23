@@ -329,6 +329,42 @@ function cargarArchivosAdjuntos(files) {
     };
 }
 
+async function ExportarTablaExcelJs(dataExcel, nombreArchivo, nombreHoja) {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet(nombreHoja);
+
+    dataExcel.forEach(row => worksheet.addRow(row));
+
+    // Estilos para la cabecera
+    worksheet.getRow(1).eachCell((cell) => {
+        cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };  // Texto blanco en negrita
+        cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'ff0066cc' }  // Fondo azul
+        };
+        cell.alignment = { horizontal: 'center' };  // Alineación centrada
+    });
+
+    // Obtener la fecha y hora actual para el nombre del archivo
+    const now = new Date();
+    const formattedDate = now.toISOString().slice(0, 10).replace(/-/g, "");  // yyyymmdd
+    const formattedTime = now.toTimeString().slice(0, 8).replace(/:/g, "");  // hhmmss
+    const fileName = `${nombreArchivo}_${formattedDate}${formattedTime}.xlsx`;
+
+    // Generar el archivo Excel como un blob
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+    // Crear un enlace de descarga y simular el clic
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
 $(document).on('click', ".botonExcelExportAction", function () {
     window.location.href = $(this).attr("actionLink");
 });
