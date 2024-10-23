@@ -4648,7 +4648,6 @@ jQuery(function ($) {
 
 
     $("#chkIntegrarEmpresas").change(function () {
-        if ($("#chkIntegrarEmpresas").is(":checked"));
         cambioChkIntegrarEmpresas();
     });
 
@@ -4670,6 +4669,11 @@ jQuery(function ($) {
 
         if ($("#chkIntegrarEmpresas").is(":checked")) {
             valor = 1;
+            $("#divExcluirYaReplicados").show();
+        } else {
+            $("#chkExcluirYaReplicados").prop("checked", false);
+            $("#divExcluirYaReplicados").hide();
+            cambioChkExcluirYaReplicados();
         }
 
         changeInputBool("integraEmpresas", valor);
@@ -4680,6 +4684,40 @@ jQuery(function ($) {
         } else {
             $("#lblChkIntegrarEmpresas").addClass("text-muted");
             $("#lblChkIntegrarEmpresas").removeClass("lbl-ajuste-calculo-precios");
+        }
+    }
+
+    $("#chkExcluirYaReplicados").change(function () {
+        cambioChkExcluirYaReplicados();
+    });
+
+
+    $("#lblChkExcluirYaReplicados").click(function () {
+        if ($("#chkExcluirYaReplicados").is(":checked")) {
+            $("#chkExcluirYaReplicados").prop("checked", false);
+        } else {
+            $("#chkExcluirYaReplicados").prop("checked", true);
+        }
+
+        cambioChkExcluirYaReplicados();
+    });
+
+    function cambioChkExcluirYaReplicados() {
+
+        var valor = 0;
+
+        if ($("#chkExcluirYaReplicados").is(":checked") && $("#chkIntegrarEmpresas").is(":checked")) {
+            valor = 1;
+        }
+
+        changeInputBool("excluirPedidosYaReplicados", valor);
+
+        if ($("#chkExcluirYaReplicados").is(":checked")) {
+            $("#lblChkExcluirYaReplicados").addClass("lbl-ajuste-calculo-precios");
+            $("#lblChkExcluirYaReplicados").removeClass("text-muted");
+        } else {
+            $("#lblChkExcluirYaReplicados").addClass("text-muted");
+            $("#lblChkExcluirYaReplicados").removeClass("lbl-ajuste-calculo-precios");
         }
     }
 
@@ -5426,7 +5464,7 @@ jQuery(function ($) {
                     var pedido = '<tr data-expanded="true" class="pedido-data" idPedido="' + pedidoList[i].idPedido + '">' +
                         '<td>  ' + pedidoList[i].idPedido + '</td>' +
                         '<td>  ' + pedidoList[i].numeroPedidoNumeroGrupoString + textoPedidoRelacionado + '  </td>' +
-                        '<td>  ' + pedidoList[i].empresa_codigo + '</td>' +
+                        '<td><img src="/images/logos/icon_' + pedidoList[i].empresa_codigo + '.png" height="27"/></td>' +
                         '<td>  ' + pedidoList[i].ciudad_nombre + '  </td>' +
                         '<td>  ' + pedidoList[i].cliente_codigo + ' </td>' +
                         '<td>  ' + clienteRazonSocial + '</td>' +

@@ -48,6 +48,7 @@ namespace Model
             this.entregaTerciarizada = false;
         }
 
+        public bool excluirPedidosYaReplicados { get; set; }
 
         [Display(Name = "Truncado:")]
         public int truncado { get; set; }

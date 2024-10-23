@@ -83,6 +83,11 @@ namespace Cotizador.Controllers
 
                 pedidoTmp.responsableComercial = new Vendedor();
 
+                if (pedidoTmp.usuario.vistaIntegradaMultiEmpresa)
+                {
+                    pedidoTmp.integraEmpresas = true;
+                }
+
                 if (usuario.esResponsableComercial && !usuario.modificaFiltroVendedor)
                 {
                     pedidoTmp.responsableComercial = usuario.vendedor;
@@ -92,12 +97,10 @@ namespace Cotizador.Controllers
                 if (pedidoTmp.usuario.creaGuias)
                 {
                     pedidoTmp.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.NoAtendidos;
+                    pedidoTmp.excluirPedidosYaReplicados = pedidoTmp.integraEmpresas;
                 }
 
-                if (pedidoTmp.usuario.vistaIntegradaMultiEmpresa)
-                {
-                    pedidoTmp.integraEmpresas = true;
-                }
+                
 
                 pedidoTmp.seguimientoCrediticioPedido = new SeguimientoCrediticioPedido();
                 pedidoTmp.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Todos;

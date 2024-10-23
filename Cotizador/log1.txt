@@ -155,3 +155,6 @@ The statement has been terminated.
 Nombre del parámetro: source
 2024-05-02 12:58:28.7906|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / El valor no puede ser nulo.
 Nombre del parámetro: source
+2024-10-22 23:16:09.5760|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2024-10-22 23:16:12.0048|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.
+2024-10-22 23:16:13.9103|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Referencia a objeto no establecida como instancia de un objeto.

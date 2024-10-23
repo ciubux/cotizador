@@ -21,7 +21,7 @@ namespace Model
 
         /* Filtro de búsqueda */
         public bool integraEmpresas { get; set; }
-
+        
         public string EstadoDesc => Estado == 1 ? "Activo" : "Inactivo";
 
         public bool EstadoCheck

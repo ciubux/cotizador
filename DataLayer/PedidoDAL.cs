@@ -712,7 +712,8 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "truncado", pedido.truncado);
             
             InputParameterAdd.Int(objCommand, "verTodasEmpresas", pedido.integraEmpresas? 1 : 0);
-            
+            InputParameterAdd.Int(objCommand, "excluirYaReplicados", pedido.excluirPedidosYaReplicados? 1 : 0);
+
 
             switch (pedido.clasePedido)
             {

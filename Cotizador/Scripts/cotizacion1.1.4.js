@@ -4374,9 +4374,7 @@ jQuery(function ($) {
                     var cotizacion = '<tr data-expanded="false">' +
                         '<td>' + cotizacionList[i].idCotizacion + '</td>' +
                         '<td>' + cotizacionList[i].codigo + '</td>' +
-
-                        '<td>' + cotizacionList[i].empresa_codigo + '</td>' +
-
+                        '<td><img src="/images/logos/icon_' + cotizacionList[i].empresa_codigo + '.png" height="27"/></td>' +
                         '<td>' + cotizacionList[i].usuario_nombre + '</td>' +
                         //ToString("dd/MM/yyyy")
                         '<td>' + invertirFormatoFecha(cotizacionList[i].fecha.substr(0, 10)) + '</td>' +
