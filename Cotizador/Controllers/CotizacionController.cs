@@ -1181,12 +1181,12 @@ namespace Cotizador.Controllers
             {
                 if (producto.tipoDescuentoBaseEmpresa != null)
                 {
-                    if (producto.tipoDescuentoBaseEmpresa.Equals("MONTO"))
+                    if (producto.tipoDescuentoBaseEmpresa.Equals(EmpresaDescuento.TIPO_DESCUENTO_MONTO))
                     {
                         porcentajeDescuento = 100 - ((producto.precioLista - producto.descuentoBaseEmpresa) * 100 / producto.precioLista);
                     }
 
-                    if (producto.tipoDescuentoBaseEmpresa.Equals("PORCENTAJE"))
+                    if (producto.tipoDescuentoBaseEmpresa.Equals(EmpresaDescuento.TIPO_DESCUENTO_PORCENTAJE))
                     {
                         porcentajeDescuento = producto.descuentoBaseEmpresa;
                     }

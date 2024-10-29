@@ -19,7 +19,7 @@ namespace BusinessLayer
     {
 
         #region Pedidos de VENTA
-        private async Task validarPedidoVenta(Pedido pedido)
+        private async Task validarPedidoVenta(Pedido pedido, bool forzarAprobacion = false)
         {
             bool enviaAprobacion = false;
             ParametroBL blParametro = new ParametroBL();
@@ -34,7 +34,7 @@ namespace BusinessLayer
             pedido.seguimientoCrediticioPedido.observacion = String.Empty;
             //Cambio Temporal
             pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado;
-           
+
             if (pedido.tipoPedido != Pedido.tiposPedido.Venta)
             {
                 pedido.montoIGV = 0;
@@ -81,7 +81,7 @@ namespace BusinessLayer
                     pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.PendienteLiberación;
                 }*/
             }
-           
+
 
 
             if (pedido.cliente.tipoLiberacionCrediticia == Persona.TipoLiberacionCrediticia.bloqueado)
@@ -89,16 +89,16 @@ namespace BusinessLayer
                 pedido.seguimientoCrediticioPedido.observacion = "El cliente se encuentra BLOQUEADO."; // Agregar quien bloquea
                 pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.BLoqueado;
             }
-            
+
 
             foreach (PedidoDetalle pedidoDetalle in pedido.pedidoDetalleList)
             {
                 if (pedido.tipoPedido != Pedido.tiposPedido.Venta)
                 {
                     pedidoDetalle.precioNeto = 0;
-                }               
+                }
 
-               // pedidoDetalle.usuario = pedido.usuario;
+                // pedidoDetalle.usuario = pedido.usuario;
                 pedidoDetalle.idPedido = pedido.idPedido;
 
                 /*Si es venta se valida los precios de lo contrario pasa directamente sin aprobacion*/
@@ -181,7 +181,7 @@ namespace BusinessLayer
                                         {
                                             pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista. El precio unitario registrado en facturación se registro hace más de " + Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION + " días.\n";
                                             pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
-                                            if(pedidoDetalle.indicadorAprobacion != PedidoDetalle.IndicadorAprobacion.RechazadoSinPrecio)
+                                            if (pedidoDetalle.indicadorAprobacion != PedidoDetalle.IndicadorAprobacion.RechazadoSinPrecio)
                                                 pedidoDetalle.indicadorAprobacion = PedidoDetalle.IndicadorAprobacion.RechazadoSinVigencia;
                                         }
                                         if (evaluarVariacion == 4)
@@ -212,7 +212,7 @@ namespace BusinessLayer
 
                     if (pedidoDetalle.producto.descontinuado == 1 && !pedido.usuario.apruebaPedidosVentaRestringida)
                     {
-                        if (pedidoDetalle.producto.cantidadMaximaPedidoRestringido < (pedidoDetalle.cantidad / (pedidoDetalle.ProductoPresentacion == null ? 1 : (pedidoDetalle.ProductoPresentacion.Equivalencia > 0 ? pedidoDetalle.ProductoPresentacion.Equivalencia : 1) )))
+                        if (pedidoDetalle.producto.cantidadMaximaPedidoRestringido < (pedidoDetalle.cantidad / (pedidoDetalle.ProductoPresentacion == null ? 1 : (pedidoDetalle.ProductoPresentacion.Equivalencia > 0 ? pedidoDetalle.ProductoPresentacion.Equivalencia : 1))))
                         {
                             pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El producto " + pedidoDetalle.producto.sku + " es de venta restringida.";
                             pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
@@ -228,9 +228,17 @@ namespace BusinessLayer
                 pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
             }
 
-            if (!pedido.guardadoParcialmente && pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion && pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
+            
+            /* APROBAR AUTOMATICAMENTE PEDIDOS TECNICA */
+            /*if (!pedido.guardadoParcialmente && pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion && pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
             {
                 pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
+            }*/
+
+            /* LIBERAR AUTOMATICAMENTE PEDIDOS TECNICA */
+            if (!pedido.guardadoParcialmente && pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.PendienteLiberación && pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
+            {
+                pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado;
             }
 
             if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
@@ -244,9 +252,9 @@ namespace BusinessLayer
                 }
             }
 
-            if (!pedido.guardadoParcialmente && pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.PendienteLiberación && pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
+            if (pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion && forzarAprobacion)
             {
-                pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado;
+                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
             }
 
             foreach (PedidoAdjunto pedidoAdjunto in pedido.pedidoAdjuntoList)
@@ -256,7 +264,7 @@ namespace BusinessLayer
             }
         }
 
-        public async Task InsertPedido(Pedido pedido)
+        public async Task InsertPedido(Pedido pedido, bool forzarAprobacion = false)
         {
             using (var dal = new PedidoDAL())
             {
@@ -331,7 +339,7 @@ namespace BusinessLayer
 
                 }
 
-                await validarPedidoVenta(pedido);
+                await validarPedidoVenta(pedido, forzarAprobacion);
                 dal.InsertPedido(pedido);
                 pedido.IdUsuarioRegistro = pedido.usuario.idUsuario;
 
@@ -1208,7 +1216,7 @@ namespace BusinessLayer
             }
             
 
-            await this.InsertPedido(pMP);
+            await this.InsertPedido(pMP, true);
             this.SetPedidoMP(idPedidoTec, pMP.idPedido, "// N° Pedido MP: " + pMP.numeroPedido.ToString());
             this.SetPedidoMP(pMP.idPedido, idPedidoTec, "", true);
 

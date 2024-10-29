@@ -244,6 +244,9 @@ namespace Model
 
         public bool modificaMaestroFabricantes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_MAESTRO_FABRICANTES)).FirstOrDefault() != null; } }
 
+        public bool modificaMaestroEmpresaDescuento { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_MAESTRO_EMPRESADESCUENTO)).FirstOrDefault() != null; } }
+
+        
 
         public bool modificaRestriccionVentaProducto { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_RESTRICCION_VENTA_PRODUCTO)).FirstOrDefault() != null; } }
         

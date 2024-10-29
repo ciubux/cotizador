@@ -207,7 +207,7 @@ jQuery(function ($) {
                         '<td>' + list[i].codigo + '</td>' +
                         '<td>' + list[i].nombreUsual + '</td>' +
                         '<td>' +
-                        '<button type="button" class="btnEditarFabricante btn btn-primary ">Editar</button>' +
+                        '<button type="button" class="btnEditarFabricante btn btn-primary" idFabricante="' + list[i].idFabricante + '">Editar</button>' +
                         '</td>' +
                         '</tr>';
 
@@ -215,7 +215,7 @@ jQuery(function ($) {
 
                 }
 
-                if (ItemRow.length > 0) {
+                if (list.length > 0) {
                     $("#msgBusquedaSinResultados").hide();
                     $("#divExportButton").show();
                 }
@@ -231,7 +231,7 @@ jQuery(function ($) {
 
     $(document).on('click', "button.btnEditarFabricante", function () {
         
-        var idFabricante = $(this).closest("tr").find("td[dataAttr='idFabricante']").html();
+        var idFabricante = $(this).attr("idFabricante");
         var codigo;
         var nombreUsual;
 

@@ -178,6 +178,12 @@ namespace Model
         public static String VAR_SESSION_FABRICANTE_BUSQUEDA = "fabricanteBusqueda";
         public static String VAR_SESSION_FABRICANTE_LISTA = "fabricanteList";
 
+        public static String VAR_SESSION_EMPRESADESCUENTO = "empresaDescuento";
+        public static String VAR_SESSION_EMPRESADESCUENTO_BUSQUEDA = "empresaDescuentoBusqueda";
+        public static String VAR_SESSION_EMPRESADESCUENTO_LISTA = "empresaDescuentoList";
+
+        
+
         public static String VAR_SESSION_RUBRO = "rubro";
         public static String VAR_SESSION_RUBRO_BUSQUEDA = "rubroBusqueda";
         public static String VAR_SESSION_RUBRO_LISTA = "rubroList";
@@ -571,6 +577,7 @@ namespace Model
         public const String ANULA_GUIAS_REMISION = "P331";
 
         public const String MODIFICA_MAESTRO_FABRICANTES = "P710";
+        public const String MODIFICA_MAESTRO_EMPRESADESCUENTO = "P712";
 
         public const String EXTORNA_FICTICIAS = "P336";
 
@@ -811,6 +818,9 @@ namespace Model
 
             [Display(Name = "BUSQUEDA FABRICANTES")]
             BusquedaFabricantes = 1710,
+
+            [Display(Name = "BUSQUEDA EMPRESA DESCUENTO")]
+            BusquedaEmpresaDescuento = 712
         };
 
 

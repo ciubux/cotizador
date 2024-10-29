@@ -329,7 +329,7 @@ function cargarArchivosAdjuntos(files) {
     };
 }
 
-async function ExportarTablaExcelJs(dataExcel, nombreArchivo, nombreHoja) {
+async function ExportarTablaExcelJs(dataExcel, nombreArchivo, nombreHoja, dataValidations = []) {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet(nombreHoja);
 
@@ -345,6 +345,25 @@ async function ExportarTablaExcelJs(dataExcel, nombreArchivo, nombreHoja) {
         };
         cell.alignment = { horizontal: 'center' };  // Alineación centrada
     });
+
+    // Agregar validaciones
+    dataValidations.forEach(
+        function (itemVal) {
+            worksheet.getColumn(itemVal[0]).eachCell((cell, rowNumber) => {
+                if (rowNumber > 1) {  // Excluir la cabecera
+                    cell.dataValidation = {
+                        type: 'list',
+                        allowBlank: itemVal[1],
+                        formulae: [itemVal[2]], // Lista de opciones en formato adecuado
+                        showErrorMessage: true,
+                        errorTitle: 'Valor inválido',
+                        error: itemVal[3]
+                    };
+                }
+            });
+        }
+    );
+    
 
     // Obtener la fecha y hora actual para el nombre del archivo
     const now = new Date();

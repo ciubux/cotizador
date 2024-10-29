@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "199";
+    TempData["ScriptVersion"] = "206";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -168,6 +168,7 @@
                         var linkActualizarCostosEspeciales = "";
 
                         var linkMantenimientoFabricante = "";
+                        var linkMantenimientoEmpresaDescuento = "";
 
                     }
                     @if (this.Session["pagina"] != null)
@@ -209,6 +210,7 @@
 
                             case 27: linkBusquedaProducto = "active"; linkMaestros = "active"; break;
                             case 1710: linkMantenimientoFabricante = "active"; linkMaestros = "active"; break;
+                            case 712: linkMantenimientoEmpresaDescuento = "active"; linkMaestros = "active"; break;
 
                             case 28: linkCargaMasivaProducto = "active"; linkMaestros = "active"; break;
                             case 29: linkMantenimientoProducto = "active"; linkMaestros = "active"; break;
@@ -525,6 +527,7 @@
                                     {
                                         <li id="linkMantenimientoFabricante" class="@linkMantenimientoFabricante">@Html.ActionLink("Fabricante - Búsqueda", "List", "Fabricante")</li>
                                     }
+
                                     @if (usuario.modificaMaestroProductos || usuario.visualizaProductos || usuario.realizaCargaMasivaProductos)
                                     {
                                         <li id="linkBusquedaProducto" class="@linkBusquedaProducto">@Html.ActionLink("Producto - Búsqueda", "List", "Producto")</li>
@@ -546,6 +549,11 @@
                                     @if (usuario.realizaCargaProductosWEB)
                                     {
                                         <li id="linkCProductoWeb" class="@linkCargaProductosWeb">@Html.ActionLink("Producto - Carga WEB", "CargaProductosWeb", "Producto")</li>
+                                    }
+
+                                    @if (usuario.modificaMaestroEmpresaDescuento)
+                                    {
+                                        <li id="linkMantenimientoEmpresaDescuento" class="@linkMantenimientoEmpresaDescuento">@Html.ActionLink("Producto - Descuento Base", "List", "EmpresaDescuento")</li>
                                     }
 
                                     @if (usuario.modificaPromocion)
