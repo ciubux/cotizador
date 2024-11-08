@@ -102,6 +102,9 @@ namespace Cotizador.ExcelExport
                 titleDataCellStyle.BorderRight = BorderStyle.Thin;
                 titleDataCellStyle.BorderBottom = BorderStyle.Thin;
 
+                HSSFCellStyle titleDataEditableCellStyle = (HSSFCellStyle)UtilesHelper.GetCloneStyleWithHCenter(wb, titleDataCellStyle);
+                titleDataEditableCellStyle.IsLocked = false;
+
                 HSSFCellStyle familiaCellStyle = (HSSFCellStyle)wb.CreateCellStyle();
                 familiaCellStyle.SetFont(formLabelFont);
                 familiaCellStyle.VerticalAlignment = VerticalAlignment.Center;
@@ -223,8 +226,10 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i + 1, "M", "Unidad", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i + 1, "N", "Stock", titleDataCellStyle);
 
-                sheet.ProtectSheet(Constantes.PÄSSWORD_ZAS_EXCEL_PLANTILLA_STOCK_VALOR);
+                sheet.ProtectSheet(Constantes.PASSWORD_ZAS_EXCEL_PLANTILLA_STOCK_VALOR);
 
+                int filaCabecera = i + 1;
+                sheet.CreateFreezePane(0, filaCabecera);
 
                 UtilesHelper.setColumnWidth(sheet, "A", 10000);
                 UtilesHelper.setColumnWidth(sheet, "B", 2700);
@@ -349,9 +354,10 @@ namespace Cotizador.ExcelExport
                     i++;
                 }
 
+                CellRangeAddress filterRangeDatos = new CellRangeAddress(filaCabecera - 1, i, 0, 13);
+                sheet.SetAutoFilter(filterRangeDatos);
                 
-
-
+                
                 Property prop = new Property(42, 30, "MPCODE");
 
                 var newDocInfo = NPOI.HPSF.PropertySetFactory.CreateDocumentSummaryInformation();

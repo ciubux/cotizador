@@ -2197,7 +2197,7 @@ namespace Cotizador.Controllers
         }
 
 
-        public async Task<String> ValidarProductosTecnica()
+        public async Task<String> ValidarProductosNextSoft()
         {
             PedidoBL bl = new PedidoBL();
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];

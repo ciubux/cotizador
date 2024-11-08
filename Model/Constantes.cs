@@ -37,7 +37,7 @@ namespace Model
 
         public static long CODIGO_ZAS_EXCEL_PLANTILLA_STOCK_ID = 542;
         public static String CODIGO_ZAS_EXCEL_PLANTILLA_STOCK_VALOR = "KOMS21S4";
-        public static String PÄSSWORD_ZAS_EXCEL_PLANTILLA_STOCK_VALOR = "W0r1D_Z4S";
+        public static String PASSWORD_ZAS_EXCEL_PLANTILLA_STOCK_VALOR = "W0r1D_Z4S";
 
 
         public static String URL_VER_PEDIDO = "http://cotizadormp.azurewebsites.net/Pedido?idPedido=";
@@ -375,6 +375,8 @@ namespace Model
         public static int MILISEGUNDOS_AUTOGUARDADO = 5000;
         public static int DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION = 180;
         public static int DIAS_MAX_VIGENCIA_PRECIOS_PEDIDO = 365;
+
+        public static int DIAS_VALIDO_EXTORNO_GUIA_MES_ANTERIOR = 5;
         //public static 
         public static String OBSERVACION_E = "* Condiciones de pago: al contado.\n" +
                                        "* Entrega sujeta a confirmación de disponibilidad luego de recibido el pedido u orden de compra.\n" +

@@ -98,23 +98,50 @@ namespace Cotizador.Controllers
             return View();
 
         }
-        /*
-        public String Create()
+
+        [HttpPost]
+        public String CargaMasiva(string[][] datosCarga)
         {
             EmpresaDescuentoBL bL = new EmpresaDescuentoBL();
-            EmpresaDescuento obj = new EmpresaDescuento();
+            List<EmpresaDescuento> lista = new List<EmpresaDescuento>();
+            
+            foreach (string[] item in datosCarga) {
+                if (!item[1].Trim().Equals(string.Empty))
+                {
+                    EmpresaDescuento obj = new EmpresaDescuento();
 
-            obj.codigo = Request["codigo"].ToString();
-            obj.nombreUsual = Request["nombreUsual"].ToString();
-            obj.IdUsuarioRegistro = Logueado.idUsuario; 
+                    string sedeTxt = item[0].Trim().ToLower();
 
-            obj = bL.Insert(obj);
-            this.Session[Constantes.VAR_SESSION_EMPRESADESCUENTO] = null;
-            String resultado = JsonConvert.SerializeObject(obj);
+                    obj.ciudad = Logueado.sedesMP.Where(c => (c.nombre.ToLower().Equals(sedeTxt))).FirstOrDefault();
+
+                    if (obj.ciudad == null)
+                    {
+                        obj.ciudad = new Ciudad();
+                        obj.ciudad.idCiudad = Guid.Empty;
+                    }
+
+                    obj.producto = new Producto();
+                    obj.producto.sku = item[1];
+
+                    obj.tipoDescuento = item[3];
+                    try
+                    {
+                        obj.descuento = Decimal.Parse(item[4]);
+                    } catch (Exception ex) { obj.descuento = 0; }
+
+                    lista.Add(obj);
+                }
+            }
+
+            bool success = bL.CargaMasiva(Logueado.idUsuario, Logueado.idEmpresa, lista);
+            string message = "Se cargó el archivo.";
+
+            var respuesta = new { success = success, message  = message };
+            String resultado = JsonConvert.SerializeObject(respuesta);
             return resultado;
         }
 
-        */
+        
 
         private EmpresaDescuento EmpresaDescuentoSession
         {

@@ -1142,6 +1142,8 @@ jQuery(function ($) {
                 $("#btnDescargarFacturaPedidoRelacionado").hide();
                 $("#btnExtornar").hide();
                 $("#btnExtornar").attr("requiereExtornoRelacionado", "0");
+                $("#btnExtornar").attr("requiereFacturar", "0");
+                $("#btnAnularGuiaRemision").attr("requiereAnularFacturaRelacionada", "0");
 
                 /*Si la guía de remisión se encuentra ANULADA no se puede extornar, ni imprimir, ni facturar*/
                 if (guiaRemision.estaAnulado == 1) {
@@ -1286,9 +1288,13 @@ jQuery(function ($) {
                 }
 
                 if (guiaRemision.habilitaDescargarFacturaPedidoRelacionado && guiaRemision.entregaTerceros) {
-                    $("#btnExtornar").attr("requiereExtornoRelacionado","1");
+                    $("#btnExtornar").attr("requiereExtornoRelacionado", "1");
+                    $("#btnAnularGuiaRemision").attr("requiereAnularFacturaRelacionada", "1");
                     $("#btnDescargarFacturaPedidoRelacionado").show();
                     $("#btnDescargarFacturaPedidoRelacionado").attr("idMovimientoAlmacen", idMovimientoAlmacen);
+                }
+                if (guiaRemision.extornoRequiereFacturar) {
+                    $("#btnExtornar").attr("requiereFacturar", "1");
                 }
                 
                 if (!usuario.creaFacturaCompleja && guiaRemision.pedido_cliente_configuraciones.facturacionCompleja) {
@@ -1411,6 +1417,28 @@ jQuery(function ($) {
             window.location = '/GuiaRemision/CancelarCreacionGuiaRemision';
         }
     });
+
+    $("#btnAnularGuiaRemision").click(function () {
+        var requiereAnularFacturaRelacionada = $("#btnAnularGuiaRemision").attr("requiereAnularFacturaRelacionada");
+        
+        if (requiereAnularFacturaRelacionada == "1") {
+            $.alert({
+                //icon: 'fa fa-warning',
+                title: "ANULACIÓN RESTRINGIDA",
+                content: "Debe anular la factura del pedido de origen para poder anular esta guía.",
+                type: 'orange',
+                buttons: {
+                    OK: function () {
+
+                    }
+                }
+            });
+            return false;
+        }
+
+        $("#modalAnulacion").modal();
+    });
+    
 
     $("#btnGenerarGuiaAtencion").click(function () {
 
@@ -3235,6 +3263,7 @@ jQuery(function ($) {
         var documentosVentaString = $("#documentosVenta").val();
 
         var requiereExtornoRelacionado = $("#btnExtornar").attr("requiereExtornoRelacionado");
+        var requiereFacturar = $("#btnExtornar").attr("requiereFacturar");
 
         if (requiereExtornoRelacionado == "1") {
             $.alert({
@@ -3251,6 +3280,20 @@ jQuery(function ($) {
             return false;
         }
 
+        if (requiereFacturar == "1") {
+            $.alert({
+                //icon: 'fa fa-warning',
+                title: "EXTORNO RESTRINGIDO",
+                content: "Debe facturar la guía antes de extornarla ya que es una venta del mes pasado.",
+                type: 'orange',
+                buttons: {
+                    OK: function () {
+
+                    }
+                }
+            });
+            return false;
+        }
 
         $("#li_motivoExtornoGuiaRemision7").hide();
         /*Si no se cuenta con documentos de venta */

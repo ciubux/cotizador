@@ -58,6 +58,7 @@ namespace Cotizador.Models.DTOshow
         
         public string nombreClienteTercero { get; set; }
         public bool esGuiaDiferida { get; set; }
+        public bool extornoRequiereFacturar { get; set; }
 
     }
 }

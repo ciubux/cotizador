@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using Model;
 using System.Linq;
+using System.Data.SqlClient;
 
 namespace DataLayer
 {
@@ -56,6 +57,40 @@ namespace DataLayer
             }
 
             return lista;
+        }
+
+        public bool CargaMasiva(Guid idUsuario, int idEmpresa, List<EmpresaDescuento> lista)
+        {
+            var objCommand = GetSqlCommand("pi_empresaDescuentoProducto");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Int(objCommand, "idEmpresa", idEmpresa);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID_CIUDAD", typeof(Guid)));
+            tvp.Columns.Add(new DataColumn("SKU", typeof(string)));
+            tvp.Columns.Add(new DataColumn("TIPO_DESCUENTO", typeof(string)));
+            tvp.Columns.Add(new DataColumn("DESCUENTO", typeof(decimal)));
+
+
+            foreach (EmpresaDescuento obj in lista)
+            {
+                DataRow rowObj = tvp.NewRow();
+
+                rowObj["ID_CIUDAD"] = obj.ciudad.idCiudad;
+                rowObj["SKU"] = obj.producto.sku;
+                rowObj["TIPO_DESCUENTO"] = obj.tipoDescuento;
+                rowObj["DESCUENTO"] = obj.descuento;
+
+                tvp.Rows.Add(rowObj);
+            }
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@items", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.EmpresaDescuentoProductoList";
+
+
+            ExecuteNonQuery(objCommand);
+
+            return true;
         }
 
     }

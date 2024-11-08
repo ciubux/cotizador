@@ -22,7 +22,7 @@ namespace BusinessLayer
             ws.urlApi = Constantes.NEXTSOFT_API_URL;
             ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
 
-            object result = await ws.validarProductoTecnicaLista(ConverterMPToNextSoft.toProductoValidarList(skus, factores));
+            //object result = await ws.validarProductoTecnicaLista(ConverterMPToNextSoft.toProductoValidarList(skus, factores));
 
             /*
             JObject dataResult = (JObject)result;
