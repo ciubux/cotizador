@@ -55,7 +55,8 @@ namespace Cotizador.Models.DTOshow
         public bool entregaTerceros { get; set; }
         public bool habilitaFacturaPedidoRelacionado { get; set; }
         public bool habilitaDescargarFacturaPedidoRelacionado { get; set; }
-        
+        public bool existeMovRelacionado { get; set; }
+
         public string nombreClienteTercero { get; set; }
         public bool esGuiaDiferida { get; set; }
         public bool extornoRequiereFacturar { get; set; }

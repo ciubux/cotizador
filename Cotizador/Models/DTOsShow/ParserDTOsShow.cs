@@ -202,9 +202,9 @@ namespace Cotizador.Models.DTOsShow
             guiaRemisionDTOshow.esGuiaDiferida = guiaRemision.esGuiaDiferida;
             guiaRemisionDTOshow.entregaTerceros = guiaRemision.pedido == null ? false : guiaRemision.pedido.entregaATerceros;
             guiaRemisionDTOshow.habilitaFacturaPedidoRelacionado = guiaRemision.facturaPedidoRelacionado && 
-                                        guiaRemision.idMovimientoRelacionado.Equals(Guid.Empty) ? true : false;
-            
-            guiaRemisionDTOshow.habilitaDescargarFacturaPedidoRelacionado = guiaRemision.idMovimientoRelacionado.Equals(Guid.Empty) ? false: true;
+                                        !guiaRemision.idMovimientoRelacionado.Equals(Guid.Empty) && !guiaRemision.movimientoRelacionadoFacturado ? true : false;
+            guiaRemisionDTOshow.existeMovRelacionado = !guiaRemision.idMovimientoRelacionado.Equals(Guid.Empty);
+            guiaRemisionDTOshow.habilitaDescargarFacturaPedidoRelacionado = guiaRemision.movimientoRelacionadoFacturado;
             guiaRemisionDTOshow.nombreClienteTercero = guiaRemisionDTOshow.entregaTerceros ? guiaRemision.pedido.nombreClienteTercero : "";
 
             guiaRemisionDTOshow.extornoRequiereFacturar = guiaRemision.fechaEmision.AddDays(Constantes.DIAS_VALIDO_EXTORNO_GUIA_MES_ANTERIOR).CompareTo(DateTime.Now) < 0 && 

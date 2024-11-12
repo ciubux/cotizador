@@ -1144,6 +1144,7 @@ jQuery(function ($) {
                 $("#btnExtornar").attr("requiereExtornoRelacionado", "0");
                 $("#btnExtornar").attr("requiereFacturar", "0");
                 $("#btnAnularGuiaRemision").attr("requiereAnularFacturaRelacionada", "0");
+                $("#btnAnularGuiaRemision").attr("requiereAnularGuiaRelacionada", "0");
 
                 /*Si la guía de remisión se encuentra ANULADA no se puede extornar, ni imprimir, ni facturar*/
                 if (guiaRemision.estaAnulado == 1) {
@@ -1296,7 +1297,12 @@ jQuery(function ($) {
                 if (guiaRemision.extornoRequiereFacturar) {
                     $("#btnExtornar").attr("requiereFacturar", "1");
                 }
+
+                if (guiaRemision.existeMovRelacionado && !guiaRemision.entregaTerceros) {
+                    $("#btnAnularGuiaRemision").attr("requiereAnularGuiaRelacionada", "1");
+                }
                 
+
                 if (!usuario.creaFacturaCompleja && guiaRemision.pedido_cliente_configuraciones.facturacionCompleja) {
                     $("#btnFacturarGuiaRemision").hide();
                 }
@@ -1420,12 +1426,29 @@ jQuery(function ($) {
 
     $("#btnAnularGuiaRemision").click(function () {
         var requiereAnularFacturaRelacionada = $("#btnAnularGuiaRemision").attr("requiereAnularFacturaRelacionada");
+        var requiereAnularGuiaRelacionada = $("#btnAnularGuiaRemision").attr("requiereAnularGuiaRelacionada");
+
         
         if (requiereAnularFacturaRelacionada == "1") {
             $.alert({
                 //icon: 'fa fa-warning',
                 title: "ANULACIÓN RESTRINGIDA",
                 content: "Debe anular la factura del pedido de origen para poder anular esta guía.",
+                type: 'orange',
+                buttons: {
+                    OK: function () {
+
+                    }
+                }
+            });
+            return false;
+        }
+
+        if (requiereAnularGuiaRelacionada == "1") {
+            $.alert({
+                //icon: 'fa fa-warning',
+                title: "ANULACIÓN RESTRINGIDA",
+                content: "Esta guía se anula automaticamente al anular la guía de atención de terceros que esta relacionada a esta.",
                 type: 'orange',
                 buttons: {
                     OK: function () {

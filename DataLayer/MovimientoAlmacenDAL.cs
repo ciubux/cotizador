@@ -935,6 +935,8 @@ namespace DataLayer
                 guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado) Char.Parse(Converter.GetString(row, "motivo_traslado"));
                 guiaRemision.direccionEntrega = Converter.GetString(row, "direccion_entrega");
                 guiaRemision.idMovimientoRelacionado = Converter.GetGuid(row, "id_movimiento_relacionado");
+                guiaRemision.movimientoRelacionadoFacturado = Converter.GetInt(row, "movimiento_relacionado_facturado") == 1 ? true : false;
+                
                 guiaRemision.facturaPedidoRelacionado = Converter.GetInt(row, "factura_pedido_relacionado") == 1 ? true : false;
 
                 //PEDIDO

@@ -40,6 +40,8 @@ namespace Model
 
         public Boolean facturaPedidoRelacionado { get; set; }
 
+        public Boolean movimientoRelacionadoFacturado { get; set; }
+
 
         [Display(Name = "Atención Parcial:")]
         public Boolean atencionParcial { get; set; }
