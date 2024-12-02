@@ -1162,9 +1162,10 @@ namespace DataLayer
             return productoList;
         }
 
-        public List<Producto> ProductosPlantillaStock(Producto producto, Guid idCiudad)
+        public List<Producto> ProductosPlantillaStock(Producto producto, Guid idCiudad, Guid idUsuario)
         {
             var objCommand = GetSqlCommand("ps_productos_plantilla_stock");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             InputParameterAdd.VarcharEmpty(objCommand, "sku", producto.sku);
             InputParameterAdd.VarcharEmpty(objCommand, "descripcion", producto.descripcion);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);

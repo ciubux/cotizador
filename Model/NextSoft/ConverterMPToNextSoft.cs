@@ -261,6 +261,190 @@ namespace Model.NextSoft
             return item;
         }
 
+        public static object toGuiaFE(GuiaRemision obj, List<DetalleVenta> detallesVentaRelacionada)
+        {
+            List<object> listaDet = new List<object>();
+            int numDet = 1;
+
+            //BORRAR
+            //obj.clienteVer = obj.pedido.cliente;
+
+            foreach (DocumentoDetalle movDet in obj.documentoDetalle)
+            {
+                int cantidadAtender = movDet.cantidadPorAtender; //movDet.cantidadPorAtender;
+
+                if (cantidadAtender > 0 &&
+                    (movDet.producto.tipoProducto == Producto.TipoProducto.Bien ||
+                    movDet.producto.tipoProducto == Producto.TipoProducto.Comodato))
+                {
+                    string codFactor = "";
+                    //int nFactor = 1;
+                    decimal totalItem = 0;
+                    string unidadSunat = "NIU";
+
+                    foreach (DetalleVenta detv in detallesVentaRelacionada)
+                    {
+                        if (detv.sku.Equals(movDet.producto.sku))
+                        {
+                            totalItem = cantidadAtender * (detv.precioUnitario + detv.igvUnitario);
+                        }
+                    }
+
+                    switch (movDet.idProductoPresentacion)
+                    {
+                        case 0:
+                            codFactor = movDet.producto.codigoFactorUnidadMP;
+                            //nFactor = movDet.producto.equivalenciaAlternativa;
+                            unidadSunat = movDet.producto.unidadEstandarInternacional;
+                            break;
+                        case 1:
+                            codFactor = movDet.producto.codigoFactorUnidadAlternativa;
+                            //nFactor = 1;
+                            unidadSunat = movDet.producto.unidadAlternativaInternacional;
+                            break;
+                        case 2:
+                            codFactor = movDet.producto.codigoFactorUnidadProveedor;
+                            //nFactor = movDet.producto.equivalenciaAlternativa * movDet.producto.equivalenciaProveedor;
+                            unidadSunat = movDet.producto.unidadProveedorInternacional;
+                            break;
+                        case 3:
+                            codFactor = movDet.producto.codigoFactorUnidadConteo;
+                            unidadSunat = movDet.producto.unidadAlternativaInternacional;
+                            //nFactor = 1;
+                            break;
+
+                    }
+                    var det = new
+                    {
+                        Item = numDet,
+                        Cantidad = cantidadAtender,
+                        UnidadMedida = unidadSunat, //unidad sunat
+                        Descripcion = movDet.producto.descripcion,
+                        CodProducto = movDet.producto.sku,
+                        Campo1 = movDet.unidad,
+                        Campo2 = codFactor,
+                        Campo3 = "",
+                    };
+
+                    listaDet.Add(det);
+                    numDet++;
+                }
+            }
+
+            string motivoTraslado = "001";
+            switch (obj.motivoTraslado)
+            {
+                case GuiaRemision.motivosTraslado.Venta: motivoTraslado = "001"; break;
+                case GuiaRemision.motivosTraslado.TrasladoInterno: motivoTraslado = "004"; break;
+                case GuiaRemision.motivosTraslado.TransferenciaGratuitaEntregada: motivoTraslado = "001"; break;
+            }
+
+            string tipoDocumentoAlmacen = "009";
+            /*switch (obj.motivoTraslado)
+            {
+                case GuiaRemision.motivosTraslado.Venta: motivoTraslado = "004"; break;
+                case GuiaRemision.motivosTraslado.DevolucionCompra: motivoTraslado = "002"; break;
+                case GuiaRemision.motivosTraslado.TrasladoInterno: motivoTraslado = "010"; break;
+            }*/
+
+            string nombreUsuario = obj.usuario.email.Split('@')[0];
+            nombreUsuario = nombreUsuario.Replace(".", "");
+
+            var direccion = new
+            {
+                descripcion = obj.direccionEntrega,
+                ubigeo = obj.ubigeoEntrega.codigoSepPunto
+            };
+
+            string codigoVendedor = obj.pedido.vendedor.codigoNextSoft;
+            if (codigoVendedor == null || codigoVendedor.Trim().Equals(""))
+            {
+                codigoVendedor = "07885378";
+            }
+
+            bool comprobanteComprador = false;
+
+            if (!obj.pedido.empresaRelacionada.facturacionHabilitada && obj.entregaTerceros &&
+                obj.pedido.empresaRelacionada.entornoFacturacion == Empresa.EntornoFacturacion.NEXTSOFT)
+            {
+                comprobanteComprador = true;
+            }
+
+            Cliente cli = obj.clienteVer;
+            if (cli == null) cli = obj.pedido.cliente;
+            string rucComprador = obj.entregaTerceros ? obj.pedido.cliente.ruc : "";
+            if (obj.entregaTerceros)
+            {
+                motivoTraslado = "014";
+            }
+
+            string modalidadTransporte = "01";
+            if (!obj.transportista.ruc.Trim().Equals(Constantes.RUC_MP) 
+                && !obj.transportista.ruc.Trim().Equals(Constantes.RUC_DPLUS)) {
+                modalidadTransporte = "02"; //PUBLICO
+            }
+
+            if (obj.esGuiaDiferida)
+            {
+                obj.transportista.ruc = "";
+                obj.transportista.descripcion = "";
+                obj.transportista.brevete = "";
+            }
+
+            var item = new
+            {
+                //sucursal = obj.almacen.codigoSucursalNextSoft,
+                //puntoventa = obj.almacen.codigoPuntoVentaNextSoft,
+                //ruccomprador = rucComprador,
+                //comprobantecomprador = comprobanteComprador,
+                RucDestinatario = cli.ruc,
+                TipoDocumentoDestinatario = (int) cli.tipoDocumentoIdentidad,
+                RazonSocialDestinatario = cli.ToStringNombreLegal(),
+                //direcccion = obj.direccionEntrega,
+                //ubigeo = obj.ubigeoEntrega.codigoSepPunto,
+                //exportacion = false,
+                //tdo = tipoDocumentoAlmacen,
+                Serie = obj.serieDocumento, // REVISAR
+                Numero = obj.numeroDocumento, // SALIDA
+                FecEmision = obj.fechaEmision.ToString("dd/MM/yyyy"),
+                Observaciones = obj.observaciones,
+                //vendedor = "46124367",
+                //vendedor = codigoVendedor, se envia en campo3
+                //ordencompra = obj.pedido != null && obj.pedido.numeroReferenciaCliente != null &&
+                //           !obj.pedido.numeroReferenciaCliente.Trim().Equals("") &&
+                //           !(obj.pedido.numeroReferenciaCliente.Length > 2 && obj.pedido.numeroReferenciaCliente.Substring(0, 2).Equals("IF")) ?
+                //                obj.pedido.numeroReferenciaCliente : "",
+                MotivoTraslado = motivoTraslado,
+                Email = "",
+                Bultos = 0.00,
+                Campo3 = nombreUsuario, //
+                Campo4 = "", //
+                Modalidad = modalidadTransporte, // 01 privado 02 Publico
+                FecTraslado = obj.fechaTraslado.ToString("dd/MM/yyyy"),
+                RucTransportePublico = obj.transportista.ruc.Trim(),
+                TipoDocTransportePublico = 6, //REVISAR
+                RazonSocialTransportePublico = obj.transportista.descripcion,
+                PlacaTrasportePrivado = (obj.placaVehiculo == null || obj.placaVehiculo.Length < 6) ? "" : obj.placaVehiculo.Trim(),
+                TipodocumentoConductor = "1",
+                DocumentoConductor = (obj.transportista.brevete == null || obj.transportista.brevete.Length < 9) ? "" : obj.transportista.brevete.Substring(1, 8),
+                LicenciaConductor = (obj.transportista.brevete == null || obj.transportista.brevete.Length < 9) ? "" : obj.transportista.brevete,
+                NombreConductor = obj.transportista.descripcion,
+                TransportePublicoRegMTC = "", //
+                UbigeoPartida = obj.almacen.ubigeo.codigoSepPunto,
+                UbigeoLlegada = obj.ubigeoEntrega.codigoSepPunto,
+                PartidaDireccion = obj.almacen.direccion,
+                LlegadaDireccion = obj.direccionEntrega,
+
+                //usuario = nombreUsuario,
+                Usuario = "nextsoft",
+                Peso = 1,
+                DetalleGuia = listaDet.ToArray()
+            };
+
+
+            return item;
+        }
+
         public static object toGuiaConsulta(GuiaRemision obj, string apiToken, string apiRUC)
         {
             string tipoDocumentoAlmacen = "09";

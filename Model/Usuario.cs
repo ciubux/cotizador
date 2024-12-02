@@ -18,6 +18,8 @@ namespace Model
         public string codigoEmpresa { get; set; }
         public string razonSocialEmpresa { get; set; }
         public string urlEmpresa { get; set; }
+        public bool emiteGuiasEmpresa { get; set; }
+
         public decimal factorEmpresa { get; set; }
         public decimal pMargenMinimo { get; set; }
         public decimal pDescuentoInfraMargen { get; set; }

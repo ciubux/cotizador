@@ -165,7 +165,7 @@ namespace Cotizador.Controllers
 
             PlantillaCargaStock excel = new PlantillaCargaStock();
             ProductoBL bl = new ProductoBL();
-            List<Producto> lista = bl.getProductosPlantillaStock(obj, idSede);
+            List<Producto> lista = bl.getProductosPlantillaStock(obj, idSede, usuario.idUsuario);
 
             String nombreSede = "";
             foreach (Ciudad sede in usuario.sedesMPPedidos)

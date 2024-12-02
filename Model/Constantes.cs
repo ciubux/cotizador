@@ -326,6 +326,7 @@ namespace Model
         public static String EMPRESA_CODIGO_TECNICA = "TC";
         public static String EMPRESA_CODIGO_DISTRIPLUS = "DP";
 
+        public static String RUC_DPLUS = "20611468548";
         public static String RUC_MP = "";
         public static String RAZON_SOCIAL_MP = "";
         public static String DIRECCION_MP = "";

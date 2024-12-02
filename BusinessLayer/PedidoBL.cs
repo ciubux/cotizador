@@ -343,7 +343,12 @@ namespace BusinessLayer
                 dal.InsertPedido(pedido);
                 pedido.IdUsuarioRegistro = pedido.usuario.idUsuario;
 
-                if (!pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP) && 
+                if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
+                {
+                    this.EnviarMailTecnica(pedido);
+                }
+
+                if (!pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP) && !pedido.usuario.emiteGuiasEmpresa &&
                     pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
                     pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
                 {
@@ -388,7 +393,14 @@ namespace BusinessLayer
 
                 dal.UpdatePedido(pedido);
                 pedido.IdUsuarioRegistro = pedido.usuario.idUsuario;
-                if (!pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP) &&
+
+                if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
+                {
+                    this.EnviarMailTecnica(pedido);
+                }
+
+
+                if (!pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP) && !pedido.usuario.emiteGuiasEmpresa &&
                     pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
                     pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
                 {
@@ -1105,10 +1117,10 @@ namespace BusinessLayer
         {
             if (pedido.idMPPedido == null || pedido.idMPPedido.Equals(Guid.Empty))
             {
-                if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
+                /*if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
                 {
                     this.EnviarMailTecnica(pedido);
-                }
+                }*/
                 await this.ReplicarPedidoEntornoMP(pedido);
             }
         }

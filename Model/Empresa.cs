@@ -39,6 +39,7 @@ namespace Model
         
         public bool atencionTerciarizada { get; set; }
         public bool facturacionHabilitada { get; set; }
+        public bool emiteGuias { get; set; }
 
         public enum EntornoFacturacion
         {

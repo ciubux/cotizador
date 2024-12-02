@@ -3633,7 +3633,9 @@ jQuery(function ($) {
                                 $("#btnAtenderPedidoVenta").hide();
                             }
                             else {
-                                $("#btnAtenderPedidoVenta").show();
+                                if (pedido.empresa.emiteGuias) {
+                                    $("#btnAtenderPedidoVenta").show();
+                                }
                             }
 
                         } else {

@@ -966,6 +966,8 @@ namespace DataLayer
                 pedido.cliente.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad_cliente");
                 pedido.cliente.ciudad.nombre = Converter.GetString(row, "nombre_ciudad_cliente");
                 pedido.cliente.razonSocialSunat = Converter.GetString(row, "razon_social_sunat");
+                pedido.cliente.nombreComercial = Converter.GetString(row, "nombre_comercial_cliente");
+                pedido.cliente.razonSocial = Converter.GetString(row, "razon_social");
                 pedido.cliente.direccionDomicilioLegalSunat = Converter.GetString(row, "direccion_domicilio_legal_sunat");
                 pedido.cliente.correoEnvioFactura = Converter.GetString(row, "correo_envio_factura");
                 pedido.cliente.plazoCredito = Converter.GetString(row, "plazo_credito");
@@ -1004,6 +1006,7 @@ namespace DataLayer
                 pedido.empresa = new Empresa();
                 pedido.empresa.idEmpresa = Converter.GetInt(row, "id_empresa");
                 pedido.empresa.codigo = Converter.GetString(row, "codigo_empresa");
+                pedido.empresa.emiteGuias = Converter.GetInt(row, "emite_guias_empresa") == 1 ? true : false;
 
                 pedido.empresaRelacionada = new Empresa();
                 pedido.empresaRelacionada.idEmpresa = Converter.GetInt(row, "id_empresa_rel");
@@ -1165,6 +1168,9 @@ namespace DataLayer
                 pedidoDetalle.producto.codigoFactorUnidadAlternativa = Converter.GetString(row, "codigo_factor_unidad_alternativa");
                 pedidoDetalle.producto.codigoFactorUnidadProveedor = Converter.GetString(row, "codigo_factor_unidad_proveedor");
                 pedidoDetalle.producto.codigoFactorUnidadConteo = Converter.GetString(row, "codigo_factor_unidad_conteo");
+                pedidoDetalle.producto.unidadEstandarInternacional = Converter.GetString(row, "unidad_estandar_internacional");
+                pedidoDetalle.producto.unidadAlternativaInternacional = Converter.GetString(row, "unidad_alternativa_internacional");
+                pedidoDetalle.producto.unidadProveedorInternacional = Converter.GetString(row, "unidad_proveedor_internacional");
 
 
                 pedidoDetalle.producto.image = Converter.GetBytes(row, "imagen");

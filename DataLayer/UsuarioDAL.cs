@@ -200,6 +200,7 @@ namespace DataLayer
                 usuario.codigoEmpresa = Converter.GetString(row, "codigo_empresa");
                 usuario.razonSocialEmpresa = Converter.GetString(row, "nombre_empresa");
                 usuario.urlEmpresa = Converter.GetString(row, "url_web");
+                usuario.emiteGuiasEmpresa = Converter.GetInt(row, "emite_guias_empresa") == 1 ? true : false;
                 usuario.atencionTerciarizadaEmpresa = Converter.GetInt(row, "atencion_terciarizada") == 1 ? true : false;
                 usuario.sessionToken = Converter.GetString(row, "sesion_token");
 

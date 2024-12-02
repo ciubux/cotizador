@@ -1424,7 +1424,6 @@ namespace Cotizador.Controllers
 
             if (guiaRemision.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
             {
-
                 this.GuiaRemisionSession = null;
             }
 
