@@ -1297,7 +1297,7 @@ namespace Cotizador.Controllers
                 if (guiaRemision.almacenes == null || guiaRemision.almacenes.Count == 0)
                 {
                     AlmacenBL almacenBl = new AlmacenBL();
-                    List<Almacen> almacenes = almacenBl.getAlmacenesSedes(guiaRemision.ciudadOrigen.idCiudad);
+                    List<Almacen> almacenes = almacenBl.getAlmacenesSedes(guiaRemision.ciudadOrigen.idCiudad, usuario.idUsuario);
                     guiaRemision.almacenes = almacenes;
                 }
 
@@ -1424,7 +1424,6 @@ namespace Cotizador.Controllers
 
             if (guiaRemision.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
             {
-
                 this.GuiaRemisionSession = null;
             }
 

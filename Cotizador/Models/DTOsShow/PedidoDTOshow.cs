@@ -17,6 +17,7 @@ namespace Cotizador.Models.DTOshow
         public DateTime? fechaEntregaDesde { get; set; }
         public DateTime? fechaEntregaHasta { get; set; }
 
+        public Empresa empresa { get; set; }
         public String empresa_codigo { get; set; }
         public String numeroPedidoString { get; set; }
         public String numeroGrupoPedidoString { get; set; }

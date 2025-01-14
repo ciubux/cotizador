@@ -1218,11 +1218,20 @@ namespace DataLayer
                     guiaRemision.pedido.nombreClienteTercero = Converter.GetString(row, "nombre_cliente_rel");
                 }
 
+                guiaRemision.pedido.empresa = new Empresa();
+                guiaRemision.pedido.empresa.idEmpresa = Converter.GetInt(row, "id_empresa");
+                guiaRemision.pedido.empresa.codigo = Converter.GetString(row, "codigo_empresa");
+                guiaRemision.pedido.empresa.emiteGuias = Converter.GetInt(row, "emite_guias_empresa") == 1 ? true : false;
+
                 //CLIENTE
                 guiaRemision.pedido.cliente = new Cliente();
                 guiaRemision.pedido.cliente.codigo = Converter.GetString(row, "codigo");
                 guiaRemision.pedido.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
-                guiaRemision.pedido.cliente.razonSocial = Converter.GetString(row, "razon_social");
+                guiaRemision.pedido.cliente.razonSocial = Converter.GetString(row, "razon_social_cliente");
+                guiaRemision.pedido.cliente.razonSocialSunat = Converter.GetString(row, "razon_social_sunat");
+                guiaRemision.pedido.cliente.nombreComercial = Converter.GetString(row, "nombre_comercial_cliente");
+                guiaRemision.pedido.cliente.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento_cliente");
+
                 guiaRemision.pedido.cliente.ruc = Converter.GetString(row, "ruc");
                 //USUARIO
                 guiaRemision.usuario = new Usuario();

@@ -2252,7 +2252,7 @@ namespace Cotizador.Controllers
                 }
 
 
-                if (!pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_MP) && 
+                if (!pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_MP) && !pedido.empresa.emiteGuias &&
                     pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado && 
                     pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
                 {
@@ -2292,7 +2292,7 @@ namespace Cotizador.Controllers
                 pedido.usuario.atencionTerciarizadaEmpresa = obj.atencionTerciarizada;
             }
 
-            if (!pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_MP) &&
+            if (!pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_MP) && !pedido.empresa.emiteGuias &&  
                 pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
                 pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
             {

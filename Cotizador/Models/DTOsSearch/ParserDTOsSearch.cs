@@ -22,7 +22,15 @@ namespace Cotizador.Models.DTOsSearch
                 clienteDTO.codigo = clienteTmp.codigo;
                 clienteDTO.razonSocialSunat = clienteTmp.razonSocialSunat;
                 clienteDTO.nombreComercial = clienteTmp.nombreComercial;
-                clienteDTO.tipoDocumentoIdentidadToString = clienteTmp.tipoDocumentoIdentidadToString;
+                try
+                {
+                    clienteDTO.tipoDocumentoIdentidadToString = clienteTmp.tipoDocumentoIdentidadToString;
+
+                }
+                catch(Exception ex)
+                {
+                    int a = 1;
+                }
                 clienteDTO.ruc = clienteTmp.ruc;
                 clienteDTO.ciudad_nombre = clienteTmp.ciudad.nombre;
                 clienteDTO.grupoCliente_nombre = clienteTmp.grupoCliente.nombre;

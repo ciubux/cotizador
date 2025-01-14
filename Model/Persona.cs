@@ -108,7 +108,18 @@ namespace Model
             return "";
         }
 
+        public string ToStringNombreLegal()
+        {
+            if (this.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC)
+            {
+                return this.razonSocialSunat.Equals(string.Empty) ? this.razonSocial : this.razonSocialSunat;
+            } else
+            {
+                return this.razonSocial.Equals(string.Empty) ? this.nombreComercial : this.razonSocial;
+            }
 
+            return "";
+        }
         public string codigoRazonSocial
         {
             get { return this.codigo + " - " + this.razonSocial; }

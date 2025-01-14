@@ -104,7 +104,17 @@ namespace BusinessLayer
                     detallesVenta = dalPedido.getDetallesPedidoRelacionado(guiaRemision.pedido.idPedido, guiaRemision.usuario.idUsuario);
                 }
 
-                object dataSend = ConverterMPToNextSoft.toGuia(guiaRemision, detallesVenta);
+                object dataSend = null;
+
+                if (guiaRemision.pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_MP))
+                {
+                    dataSend = ConverterMPToNextSoft.toGuia(guiaRemision, detallesVenta);
+                }
+
+                if (guiaRemision.pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_DISTRIPLUS))
+                {
+                    dataSend = ConverterMPToNextSoft.toGuiaFE(guiaRemision, detallesVenta);
+                }
 
                 try
                 {
@@ -120,7 +130,12 @@ namespace BusinessLayer
 
                         Cliente clie = blCliente.getCliente(guiaRemision.clienteVer.idCliente);
 
-                        object resultCli = await wsCli.crearCliente(ConverterMPToNextSoft.toCliente(clie));
+                        object resultCli = null;
+
+                        if (guiaRemision.pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_MP))
+                        {
+                            resultCli = await wsCli.crearCliente(ConverterMPToNextSoft.toCliente(clie));
+                        }
 
 
                         GuiaWS ws = new GuiaWS();
@@ -131,7 +146,17 @@ namespace BusinessLayer
                         
                         int success = 0;
 
-                        object result = await ws.crearGuia(dataSend);
+                        object result = null;
+                        
+                        if(guiaRemision.pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_MP))
+                        {
+                            result = await ws.crearGuia(dataSend);
+                        }
+
+                        if (guiaRemision.pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_DISTRIPLUS))
+                        {
+                            result = await ws.crearGuiaFE(dataSend);
+                        }
 
                         using (var logDAL = new LogDAL())
                         {

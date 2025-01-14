@@ -8,11 +8,11 @@ namespace BusinessLayer
 {
     public class AlmacenBL
     {
-        public List<Almacen> getAlmacenesSedes(Guid idCiudad)
+        public List<Almacen> getAlmacenesSedes(Guid idCiudad, Guid idUsuario)
         {
             using (var dal = new AlmacenDAL())
             {
-                return dal.getAlmacenesSedes(idCiudad);
+                return dal.getAlmacenesSedes(idCiudad, idUsuario);
             }
         }
 

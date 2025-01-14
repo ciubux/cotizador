@@ -23,6 +23,22 @@ namespace Model.NextSoft
             return resultContent;
         }
 
+        public async Task<object> crearGuiaFE(object dataGuia)
+        {
+            string nombreServicio = "crearguiafe";
+
+            var sendData = new
+            {
+                token = this.apiToken,
+                guia = dataGuia
+            };
+
+            object resultContent = await this.callService(sendData, nombreServicio);
+
+            return resultContent;
+        }
+
+
         public async Task<object> consultarGuia(object sendData)
         {
             string nombreServicio = "ConsultarComprobante";

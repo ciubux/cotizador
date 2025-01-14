@@ -378,6 +378,7 @@ namespace Cotizador.Models.DTOsShow
             pedidoDTOshow.idPedido = pedido.idPedido;
             pedidoDTOshow.truncado = pedido.truncado;
             pedidoDTOshow.moneda = pedido.moneda;
+            pedidoDTOshow.empresa = pedido.empresa;
             pedidoDTOshow.fechaEntregaDesde = pedido.fechaEntregaDesde;
             pedidoDTOshow.fechaEntregaHasta = pedido.fechaEntregaHasta;
             pedidoDTOshow.numeroPedidoString = pedido.numeroPedidoString;
