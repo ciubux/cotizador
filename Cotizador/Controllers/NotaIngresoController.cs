@@ -587,7 +587,7 @@ namespace Cotizador.Controllers
                 if (notaIngreso.almacenes == null || notaIngreso.almacenes.Count == 0)
                 {
                     AlmacenBL almacenBl = new AlmacenBL();
-                    List<Almacen> almacenes = almacenBl.getAlmacenesSedes(notaIngreso.ciudadDestino.idCiudad);
+                    List<Almacen> almacenes = almacenBl.getAlmacenesSedes(notaIngreso.ciudadDestino.idCiudad, usuario.idUsuario);
                     notaIngreso.almacenes = almacenes;
                 }
 

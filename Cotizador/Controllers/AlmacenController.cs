@@ -27,11 +27,11 @@ namespace Cotizador.Controllers
         }
 
         
-        public String GetAlmacenesSede(Guid idCiudad)
+        public String GetAlmacenesSede(Guid idCiudad, Guid idUsuario)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            List<Almacen> lista = almacenBl.getAlmacenesSedes(idCiudad);
+            List<Almacen> lista = almacenBl.getAlmacenesSedes(idCiudad, idUsuario);
 
             return JsonConvert.SerializeObject(lista);
         }

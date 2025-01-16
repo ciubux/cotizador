@@ -820,6 +820,13 @@ namespace Cotizador.Controllers
 
         private void instanciarGuiaRemision()
         {
+            GuiaRemision guiaRemision = instanciarGuiaRemisionObj();
+            this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
+
+        }
+
+        private GuiaRemision instanciarGuiaRemisionObj()
+        {
             GuiaRemision guiaRemision = new GuiaRemision();
             guiaRemision.fechaEmision = DateTime.Now;
             guiaRemision.fechaTraslado = DateTime.Now;
@@ -834,8 +841,8 @@ namespace Cotizador.Controllers
             guiaRemision.ciudadOrigen.transportistaList = new List<Transportista>();
             guiaRemision.seguimientoMovimientoAlmacenSalida = new SeguimientoMovimientoAlmacenSalida();
             guiaRemision.certificadoInscripcion = ".";
-            this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;
 
+            return guiaRemision;
         }
 
 
@@ -1364,6 +1371,126 @@ namespace Cotizador.Controllers
             return View();
         }
 
+        public async System.Threading.Tasks.Task<string> AtenderRestantePedidOriginal()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            PedidoBL pedidoBL = new PedidoBL();
+            Pedido pedidoEspejo = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
+            Pedido pedido = new Pedido();
+            pedido.idPedido = pedidoEspejo.idMPPedido;
+            pedido = pedidoBL.GetPedido(pedido, usuario);
+
+            GuiaRemision guiaRemision = instanciarGuiaRemisionObj();
+            guiaRemision.pedido = pedido;
+
+            guiaRemision.clienteVer = pedido.cliente;
+            guiaRemision.entregaTerceros = false;
+            guiaRemision.idClienteTerceros = Guid.Empty;
+            
+
+            guiaRemision.motivoTraslado = (GuiaRemision.motivosTraslado)(char)pedido.tipoPedido;
+            guiaRemision.direccionEntrega = pedido.direccionEntrega.descripcion;
+            guiaRemision.ubigeoEntrega = pedido.ubigeoEntrega;
+            
+
+            String observacionesGuiaRemisionAdicional = String.Empty;
+
+            if (pedido.numeroReferenciaCliente != null && pedido.numeroReferenciaCliente.Length > 0)
+            {
+                observacionesGuiaRemisionAdicional = "O/C N° " + pedido.numeroReferenciaCliente + " ";
+            }
+            //Pedido cuenta con numero requerimiento
+            if (pedido.numeroRequerimiento != null && pedido.numeroRequerimiento.Length > 0)
+            {
+                observacionesGuiaRemisionAdicional = observacionesGuiaRemisionAdicional + "NR: " + pedido.numeroRequerimiento + " ";
+            }
+            //Direccion Entrega tiene nombre y codigo 
+            if (pedido.direccionEntrega.nombre != null && pedido.direccionEntrega.nombre.Length > 0)
+            {
+                if (pedido.direccionEntrega.codigoCliente != null && pedido.direccionEntrega.codigoCliente.Length > 0)
+                {
+                    observacionesGuiaRemisionAdicional = observacionesGuiaRemisionAdicional + pedido.direccionEntrega.nombre + " (" + pedido.direccionEntrega.codigoCliente + ")";
+                }
+                else
+                {
+                    observacionesGuiaRemisionAdicional = observacionesGuiaRemisionAdicional + pedido.direccionEntrega.nombre;
+                }
+            }
+
+            if (pedido.observacionesGuiaRemision != null && !pedido.observacionesGuiaRemision.Equals(String.Empty))
+            {
+                guiaRemision.observaciones = observacionesGuiaRemisionAdicional + " / " + pedido.observacionesGuiaRemision;
+            }
+            else
+            {
+                guiaRemision.observaciones = observacionesGuiaRemisionAdicional;
+            }
+
+
+
+            CiudadBL ciudadBL = new CiudadBL();
+            Ciudad ciudadOrigen = ciudadBL.getCiudad(pedido.ciudad.idCiudad);
+            guiaRemision.ciudadOrigen = ciudadOrigen;
+
+            guiaRemision.serieDocumento = ciudadOrigen.serieGuiaRemision;
+            guiaRemision.numeroDocumento = ciudadOrigen.siguienteNumeroGuiaRemision;
+
+            SerieDocumentoBL serieBL = new SerieDocumentoBL();
+                
+            SerieDocumentoElectronico serie = serieBL.getSerieDocumento("VENTA", guiaRemision.ciudadOrigen.idCiudad, pedido.empresa.idEmpresa);
+
+            if (serie.sedeMP != null)
+            {
+                guiaRemision.serieDocumento = serie.serie;
+                guiaRemision.numeroDocumento = serie.siguienteNumeroGuiaRemision;
+            }
+
+            //Transportista
+            guiaRemision.transportista = new Transportista();
+            TransportistaBL transportistaBL = new TransportistaBL();
+            guiaRemision.ciudadOrigen.transportistaList = transportistaBL.getTransportistas(pedido.ciudad.idCiudad);
+            
+
+            //Fechas
+            
+            //Detalles
+            guiaRemision.documentoDetalle = guiaRemision.pedido.documentoDetalle;
+
+        
+
+
+
+
+
+            guiaRemision.usuario = usuario;
+            guiaRemision.IdUsuarioRegistro = usuario.idUsuario;
+
+            String error = String.Empty;
+            MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
+            try
+            {
+                await movimientoAlmacenBL.InsertMovimientoAlmacenSalida(guiaRemision);
+            }
+            catch (DuplicateNumberDocumentException ex)
+            {
+                error = ex.Message;
+            }
+
+            long numeroGuiaRemision = guiaRemision.numero;
+            Guid idGuiaRemision = guiaRemision.idMovimientoAlmacen;
+            String serieNumeroGuia = guiaRemision.serieNumeroGuia;
+
+            String jsonGuiaRemisionValidacion = JsonConvert.SerializeObject(guiaRemision.guiaRemisionValidacion);
+
+            if (guiaRemision.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
+            {
+                this.GuiaRemisionSession = null;
+            }
+
+            String resultado = "{ \"serieNumeroGuia\":\"" + serieNumeroGuia + "\", \"idGuiaRemision\":\"" + idGuiaRemision + "\", \"error\":\"" + error + "\",     \"guiaRemisionValidacion\": " + jsonGuiaRemisionValidacion + "  }";
+            return resultado;
+        }
 
         public async System.Threading.Tasks.Task<string> Create()
         {
