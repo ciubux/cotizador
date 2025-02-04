@@ -1161,7 +1161,7 @@ jQuery(function ($) {
                     } else {
                         $("#btnImprimirGuiaRemision").hide();
                         $("#btnFacturarGuiaRemision").show();
-                        if (guiaRemision.pedido.empresa.emiteGuias) {
+                        if (guiaRemision.empresa_emite_guias) {
                             $("#btnGenerarGuiaAtencion").show();
                         }
                         $("#btnGenerarGuiaReal").show();

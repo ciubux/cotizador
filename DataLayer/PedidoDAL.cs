@@ -1011,7 +1011,9 @@ namespace DataLayer
                 pedido.empresaRelacionada = new Empresa();
                 pedido.empresaRelacionada.idEmpresa = Converter.GetInt(row, "id_empresa_rel");
                 pedido.empresaRelacionada.codigo = Converter.GetString(row, "codigo_empresa_rel");
+                pedido.empresaRelacionada.nombre = Converter.GetString(row, "nombre_empresa_rel");
                 pedido.empresaRelacionada.facturacionHabilitada = Converter.GetInt(row, "facturacion_habilitada_empresa_rel") == 1;
+                pedido.empresaRelacionada.emiteGuias = Converter.GetInt(row, "emite_guias_empresa_rel") == 1 ? true : false;
 
                 Empresa.EntornoFacturacion emrelenfac;
                 if (Enum.TryParse<Empresa.EntornoFacturacion>(Converter.GetString(row, "entorno_facturacion_empresa_rel"), true, out emrelenfac))

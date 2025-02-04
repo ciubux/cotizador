@@ -1144,7 +1144,11 @@
                     @if (pedido.usuario.modificaPreciosEspeciales)
                     {
                         <button type="button" id="btnActualizarCostosEspeciales" class="btn btn-warning">Actualizar Costos Especiales</button>
-                    }                    
+                    }
+                    @if (pedido.usuario.multiEmpresa)
+                    {
+                        <button type="button" id="btnAtenderRestantePedidoOriginal" class="btn btn-danger">Atender Pedido Original</button>
+                    }
                 </div>
 
 

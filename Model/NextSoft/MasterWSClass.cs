@@ -18,13 +18,27 @@ namespace Model.NextSoft
 
         protected async Task<object> callService(object sendData, string  nombreServicio) {
 
-            var httpClient = new HttpClient();
-            String sendJson = JsonConvert.SerializeObject(sendData);
-            var content = new StringContent(sendJson, Encoding.UTF8, "application/json");
-            var result = await httpClient.PostAsync(this.fullUrl(nombreServicio), content);
-            string resultContent = await result.Content.ReadAsStringAsync();
+            var handler = new HttpClientHandler();
+            handler.SslProtocols = System.Security.Authentication.SslProtocols.Tls12;
+            var httpClient = new HttpClient(handler);
 
-            object dataResult = JsonConvert.DeserializeObject(resultContent);
+            //var httpClient = new HttpClient();
+            String sendJson = JsonConvert.SerializeObject(sendData);
+            object dataResult = JsonConvert.DeserializeObject("");
+            try
+            {
+                var content = new StringContent(sendJson, Encoding.UTF8, "application/json");
+                var result = await httpClient.PostAsync(this.fullUrl(nombreServicio), content);
+                string resultContent = await result.Content.ReadAsStringAsync();
+
+                dataResult = JsonConvert.DeserializeObject(resultContent);
+                
+            }
+            catch (Exception ex)
+            {
+                string errmes = ex.Message;
+            }
+
             return dataResult;
         }
 

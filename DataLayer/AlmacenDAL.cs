@@ -18,11 +18,12 @@ namespace DataLayer
         {
         }
 
-        public List<Almacen> getAlmacenesSedes(Guid idCiudad, Guid idUsuario)
+        public List<Almacen> getAlmacenesSedes(Guid idCiudad, Guid idUsuario, int idEmpresa = 0)
         {
             var objCommand = GetSqlCommand("ps_almacenesSede");
             InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Int(objCommand, "idEmpresa", idEmpresa);
             DataTable dataTable = Execute(objCommand);
             List<Almacen> lista = new List<Almacen>();
 

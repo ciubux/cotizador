@@ -3589,6 +3589,8 @@ jQuery(function ($) {
                 $("#btnDestruncarPedido").hide();
 
                 //ATENDER PEDIDO
+                
+                $("#btnAtenderRestantePedidoOriginal").hide();
                 $("#btnAtenderPedidoVenta").hide();
                 $("#btnAtenderDiferidoPedidoVenta").hide();
                 $("#btnIngresarPedidoVenta").hide();
@@ -3604,6 +3606,7 @@ jQuery(function ($) {
                     $("#btnAtenderDiferidoPedidoVenta").attr("mismaEmpresa", "0");
                 }
 
+                
 
                 if (pedido.seguimientoPedido_estado == ESTADO_INGRESADO ||
                     pedido.seguimientoPedido_estado == ESTADO_PROGRAMADO ||
@@ -3617,6 +3620,13 @@ jQuery(function ($) {
                     ) {
                         
                         if (pedido.truncado != 1) {
+
+                            if (pedido.entregaATerceros && usuario.multiEmpresa && pedido.empresaRel.emiteGuias) {
+                                $("#btnAtenderRestantePedidoOriginal").show();
+                                $("#btnAtenderRestantePedidoOriginal").attr("empresaRel", pedido.empresaRel.nombre);
+                            }
+
+
                             if (isOwner == 1 || usuario.truncaPedidos) {
                                 $("#btnTruncarPedido").show();
                             }
@@ -3789,7 +3799,74 @@ jQuery(function ($) {
    
     $("#btnCancelarPedido").click(function () {
         ConfirmDialog(MENSAJE_CANCELAR_EDICION, '/Pedido/CancelarCreacionPedido', null)
-    })
+    });
+
+    $("#btnAtenderRestantePedidoOriginal").click(function () {
+        $.confirm({
+            title: 'CONFIRMAR ATENCION PEDIDO ORIGINAL',
+            content: '¿Está seguro de que desea completar la entrega con una guía emitida desde el pedido original de ' + $("#btnAtenderRestantePedidoOriginal").attr("empresaRel") + '? Se truncará el pedido luego de generar la guía.',
+            type: 'orange',
+            buttons: {
+                NO: {
+                    text: 'NO',
+                    btnClass: 'btn-success',
+                    action: function () {
+                        
+                    }
+                },
+                SI: {
+                    text: 'SI',
+                    btnClass: 'btn-warning',
+                    action: function () {
+                        $.ajax({
+                            url: "/GuiaRemision/AtenderRestantePedidOriginal",
+                            dataType: 'JSON',
+                            type: 'POST',
+                            data: {
+                            },
+                            error: function () {
+                                $.alert({
+                                    title: "ERROR",
+                                    type: 'red',
+                                    content: 'Ocurrió un error al intentar registrar la guía.',
+                                    buttons: {
+                                        OK: function () {
+                                        }
+                                    }
+                                });
+                            },
+                            success: function (response) {
+                                if (response.error == "") {
+                                    $.alert({
+                                        title: "REGISTRO EXITOSO",
+                                        type: 'green',
+                                        content: 'Se registró la guía ' + response.serieNumeroGuia + '.',
+                                        buttons: {
+                                            OK: function () {
+                                                location.reload();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    $.alert({
+                                        title: "ERROR",
+                                        type: 'red',
+                                        content: 'Ocurrió un error.' + response.error,
+                                        buttons: {
+                                            OK: function () {
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    });
+
+    
 
     $("#btnActualizarCostosEspeciales").click(function () {
 

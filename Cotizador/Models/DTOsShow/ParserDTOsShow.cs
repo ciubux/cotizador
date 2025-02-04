@@ -206,7 +206,7 @@ namespace Cotizador.Models.DTOsShow
             guiaRemisionDTOshow.existeMovRelacionado = !guiaRemision.idMovimientoRelacionado.Equals(Guid.Empty);
             guiaRemisionDTOshow.habilitaDescargarFacturaPedidoRelacionado = guiaRemision.movimientoRelacionadoFacturado;
             guiaRemisionDTOshow.nombreClienteTercero = guiaRemisionDTOshow.entregaTerceros ? guiaRemision.pedido.nombreClienteTercero : "";
-
+            guiaRemisionDTOshow.empresa_emite_guias = true; // guiaRemision.pedido.empresa.emiteGuias;
             guiaRemisionDTOshow.extornoRequiereFacturar = guiaRemision.fechaEmision.AddDays(Constantes.DIAS_VALIDO_EXTORNO_GUIA_MES_ANTERIOR).CompareTo(DateTime.Now) < 0 && 
                 guiaRemision.fechaEmision.Month < DateTime.Now.Month && !guiaRemision.estaFacturado;
             return guiaRemisionDTOshow;
@@ -379,6 +379,7 @@ namespace Cotizador.Models.DTOsShow
             pedidoDTOshow.truncado = pedido.truncado;
             pedidoDTOshow.moneda = pedido.moneda;
             pedidoDTOshow.empresa = pedido.empresa;
+            pedidoDTOshow.empresaRel = pedido.empresaRelacionada;
             pedidoDTOshow.fechaEntregaDesde = pedido.fechaEntregaDesde;
             pedidoDTOshow.fechaEntregaHasta = pedido.fechaEntregaHasta;
             pedidoDTOshow.numeroPedidoString = pedido.numeroPedidoString;
@@ -398,7 +399,7 @@ namespace Cotizador.Models.DTOsShow
             pedidoDTOshow.esVentaIndirecta = pedido.esVentaIndirecta;
             pedidoDTOshow.empresa_codigo = pedido.empresa == null ? "" : pedido.empresa.codigo;
 
-
+            pedidoDTOshow.entregaATerceros = pedido.entregaATerceros;
             pedidoDTOshow.textoCondicionesPago = pedido.textoCondicionesPago;
             pedidoDTOshow.fechaHorarioEntrega = pedido.fechaHorarioEntrega;
             pedidoDTOshow.ciudad_nombre = pedido.ciudad.nombre;

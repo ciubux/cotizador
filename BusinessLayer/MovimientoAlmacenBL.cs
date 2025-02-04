@@ -147,7 +147,8 @@ namespace BusinessLayer
                         int success = 0;
 
                         object result = null;
-                        
+                        string nameResultHeader = "crearguiaResult";
+
                         if(guiaRemision.pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_MP))
                         {
                             result = await ws.crearGuia(dataSend);
@@ -156,6 +157,7 @@ namespace BusinessLayer
                         if (guiaRemision.pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_DISTRIPLUS))
                         {
                             result = await ws.crearGuiaFE(dataSend);
+                            nameResultHeader = "CrearGuiaFEResult";
                         }
 
                         using (var logDAL = new LogDAL())
@@ -165,14 +167,14 @@ namespace BusinessLayer
 
 
                         JObject dataResult = (JObject)result;
-                        int codigo = dataResult["crearguiaResult"]["codigo"].Value<int>();
+                        int codigo = dataResult[nameResultHeader]["codigo"].Value<int>();
 
                         string resultText = JsonConvert.SerializeObject(result);
 
                         MovimientoAlmacenBL bl = new MovimientoAlmacenBL();
                         if (codigo == 0)
                         {
-                            string serieCorrelativo = dataResult["crearguiaResult"]["numcomprobante2"].Value<string>();
+                            string serieCorrelativo = dataResult[nameResultHeader]["numcomprobante2"].Value<string>();
 
                             if (!(serieCorrelativo == null) &&  !serieCorrelativo.Trim().Equals(""))
                             {

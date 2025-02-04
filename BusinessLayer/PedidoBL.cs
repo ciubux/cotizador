@@ -348,7 +348,7 @@ namespace BusinessLayer
                     this.EnviarMailTecnica(pedido);
                 }
 
-                if (!pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP) && !pedido.usuario.emiteGuiasEmpresa &&
+                if (!pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP) && /*!pedido.usuario.emiteGuiasEmpresa &&*/
                     pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
                     pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
                 {
@@ -400,7 +400,7 @@ namespace BusinessLayer
                 }
 
 
-                if (!pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP) && !pedido.usuario.emiteGuiasEmpresa &&
+                if (!pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP) && /*!pedido.usuario.emiteGuiasEmpresa &&*/
                     pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
                     pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
                 {

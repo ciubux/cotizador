@@ -168,8 +168,6 @@ namespace Cotizador.Controllers
 
         public ActionResult Index(Guid? idMovimientoAlmacen = null)
         {
-
-
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.MantenimientoGuiaRemision;
 
             if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
@@ -1447,20 +1445,48 @@ namespace Cotizador.Controllers
             }
 
             //Transportista
-            guiaRemision.transportista = new Transportista();
-            TransportistaBL transportistaBL = new TransportistaBL();
-            guiaRemision.ciudadOrigen.transportistaList = transportistaBL.getTransportistas(pedido.ciudad.idCiudad);
             
+            TransportistaBL transportistaBL = new TransportistaBL();
+            guiaRemision.transportista = transportistaBL.transportistaDefectoEmrpesa(Constantes.EMPRESA_CODIGO_DISTRIPLUS);
+
+            if (guiaRemision.almacenes == null || guiaRemision.almacenes.Count == 0)
+            {
+                AlmacenBL almacenBl = new AlmacenBL();
+                List<Almacen> almacenes = almacenBl.getAlmacenesSedes(guiaRemision.ciudadOrigen.idCiudad, usuario.idUsuario, pedido.empresa.idEmpresa);
+                guiaRemision.almacenes = almacenes;
+                guiaRemision.almacen = almacenes.First();
+            }
+
+            guiaRemision.placaVehiculo = "BEC764";
+            if (guiaRemision.idAlmacen == null || guiaRemision.idAlmacen == Guid.Empty)
+            {
+                foreach (Almacen item in guiaRemision.almacenes)
+                {
+                    if (item.esPrincipal)
+                    {
+                        guiaRemision.idAlmacen = item.idAlmacen;
+                        guiaRemision.direccionOrigen = item.direccion;
+                        guiaRemision.almacen = item;
+                    }
+                }
+            }
+
 
             //Fechas
-            
+            guiaRemision.fechaTraslado = DateTime.Now;
+            guiaRemision.fechaEmision = DateTime.Now;
+
+
             //Detalles
             guiaRemision.documentoDetalle = guiaRemision.pedido.documentoDetalle;
-
-        
-
-
-
+            foreach(DocumentoDetalle detGuia in guiaRemision.documentoDetalle)
+            {
+                DocumentoDetalle detPed = pedidoEspejo.documentoDetalle.Where(d => d.producto.idProducto.Equals(detGuia.producto.idProducto)).FirstOrDefault();
+                if(detPed != null)
+                {
+                    detGuia.cantidadPorAtender = detPed.cantidadPorAtender;
+                }
+            }
 
 
             guiaRemision.usuario = usuario;
@@ -1485,6 +1511,19 @@ namespace Cotizador.Controllers
 
             if (guiaRemision.guiaRemisionValidacion.tipoErrorValidacion == GuiaRemisionValidacion.TiposErrorValidacion.NoExisteError)
             {
+                // Truncar pedido espejo
+                pedidoEspejo.usuario = usuario;
+                pedidoBL.TruncarPedido(pedidoEspejo);
+
+                // Cambiar a guíado pedido Original
+                pedido.fechaModificacion = DateTime.Now;
+                pedido.seguimientoPedido = new SeguimientoPedido();
+                pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Atendido;
+                pedido.seguimientoPedido.observacion = "";
+                pedido.usuario = usuario;
+                
+                pedidoBL.cambiarEstadoPedido(pedido);
+
                 this.GuiaRemisionSession = null;
             }
 
