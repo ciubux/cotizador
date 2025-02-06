@@ -318,6 +318,8 @@ namespace Model
         public Decimal montoIGV { get; set; }
         public Decimal montoTotal { get; set; }
 
+        public bool enviarMailProductosInvalidosNextsoft { get; set; }
+        public string mensajeErrorValidacionProductosNextsoft { get; set; }
 
         public List<PedidoDetalle> pedidoDetalleList { get; set; }
 

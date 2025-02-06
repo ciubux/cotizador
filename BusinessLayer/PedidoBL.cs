@@ -241,14 +241,16 @@ namespace BusinessLayer
                 pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado;
             }
 
-            if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
+            if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && pedido.usuario.atencionTerciarizadaEmpresa)
             {
                 ServiceResponse res = await this.validarProductosNextSoftTecnica(pedido);
 
                 if (res.code != 0)
                 {
                     pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
-                    pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + " " + res.message;
+                    pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "Problema de homologación de productos Nextsoft: " + res.message;
+                    pedido.enviarMailProductosInvalidosNextsoft = true;
+                    pedido.mensajeErrorValidacionProductosNextsoft = "Problema de homologación de productos Nextsoft: " + res.message;
                 }
             }
 
@@ -345,8 +347,17 @@ namespace BusinessLayer
 
                 if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
                 {
-                    this.EnviarMailTecnica(pedido);
+                    if (!pedido.usuario.atencionTerciarizadaEmpresa)
+                    {
+                        this.EnviarMailTecnica(pedido);
+                    }
+
+                    if (pedido.enviarMailProductosInvalidosNextsoft)
+                    {
+                        this.EnviarMailTecnica(pedido, "Se requiere homologar Productos en Nextsoft para el pedido Nro {{nroPedido}}", pedido.mensajeErrorValidacionProductosNextsoft);
+                    }
                 }
+
 
                 if (!pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP) && /*!pedido.usuario.emiteGuiasEmpresa &&*/
                     pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
@@ -396,7 +407,15 @@ namespace BusinessLayer
 
                 if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
                 {
-                    this.EnviarMailTecnica(pedido);
+                    if (!pedido.usuario.atencionTerciarizadaEmpresa)
+                    {
+                        this.EnviarMailTecnica(pedido);
+                    }
+
+                    if (pedido.enviarMailProductosInvalidosNextsoft)
+                    {
+                        this.EnviarMailTecnica(pedido, "Se requiere homologar Productos en Nextsoft para el pedido Nro {{nroPedido}}", pedido.mensajeErrorValidacionProductosNextsoft);
+                    }
                 }
 
 
@@ -1236,7 +1255,7 @@ namespace BusinessLayer
             pedido.numeroPedidoMP = pMP.numeroPedido;
         }
 
-        public void EnviarMailTecnica(Pedido pedido) 
+        public void EnviarMailTecnica(Pedido pedido, string asunto ="", string mensajePrincipal = "") 
         {
             MailService mail = new MailService();
             //try
@@ -1294,13 +1313,18 @@ namespace BusinessLayer
 
                     if (destinatarios.Count > 0)
                     {
-                        String asunto = "Nuevo Pedido Ingresado Nro " + pedido.numeroPedidoString;
+                        asunto = asunto.Equals(string.Empty) ? "Nuevo Pedido Ingresado Nro " + pedido.numeroPedidoString : asunto.Replace("{{nroPedido}}", pedido.numeroPedidoString);
 
                         String template = "";
 
                         PedidoTecnica emailTemplate = new PedidoTecnica();
                         emailTemplate.urlVerPedido = urlVerPedido;
                         template = emailTemplate.BuildTemplate(pedido);
+
+                        if (!mensajePrincipal.Equals(string.Empty))
+                        {
+                            template = "<p>" + mensajePrincipal + "</p>" + template;
+                        }
                             
                         mail.enviar(destinatarios, asunto, template, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
                     }

@@ -19,6 +19,7 @@ using Model.UTILES;
 using NPOI.SS.Formula.Functions;
 using System.Threading.Tasks;
 using Model.NextSoft;
+using DataLayer;
 
 namespace Cotizador.Controllers
 {
@@ -2206,8 +2207,13 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(res);
         }
 
-        public async Task updateEstadoPedido()
+        public async Task<String> updateEstadoPedido()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Usuario usuarioWork = (Usuario)usuario.Clone();
+
+            PedidoBL pedidoBL = new PedidoBL();
+
             /*Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
             SeguimientoPedido.estadosSeguimientoPedido estadosSeguimientoPedido = (SeguimientoPedido.estadosSeguimientoPedido)Int32.Parse(Request["estado"].ToString());
             String observacion = Request["observacion"].ToString();*/
@@ -2216,50 +2222,65 @@ namespace Cotizador.Controllers
             SeguimientoPedido.estadosSeguimientoPedido estadosSeguimientoPedido = (SeguimientoPedido.estadosSeguimientoPedido)Int32.Parse(Request["estado"].ToString());
             String observacion = Request["observacion"].ToString();
 
-            
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
+            pedido.idPedido = idPedido;
+            pedido = pedidoBL.GetPedido(pedido, usuario);
+            pedido.usuario = usuarioWork;
 
-            updateEstadoSeguimientoPedido(idPedido, estadosSeguimientoPedido, observacion);
 
-            if (estadosSeguimientoPedido == SeguimientoPedido.estadosSeguimientoPedido.Ingresado)
+            List<Empresa> empresas = (List<Empresa>)this.Session[Constantes.VAR_SESSION_EMPRESA_LISTA];
+
+            Empresa obj = empresas.Where(e => (e.idEmpresa == pedido.empresa.idEmpresa)).FirstOrDefault();
+
+            if (obj != null)
             {
-                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                Usuario usuarioWork = (Usuario) usuario.Clone();
-                PedidoBL pedidoBL = new PedidoBL();
-
-                List<Guid> idDetalles = (List<Guid>)this.Session["pedidoDRIds"];
-                List<int> cantidades = (List<int>)this.Session["pedidoDRCantidades"];
-                List<String> comentarios = (List<String>)this.Session["pedidoDRComentarios"];
-
-                pedidoBL.UpdateDetallesRestriccion(idPedido, idDetalles, cantidades, comentarios, usuario.idUsuario);
-
-                Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
-                pedido.idPedido = idPedido;
-                pedido = pedidoBL.GetPedido(pedido, usuario);
-                pedido.usuario = usuarioWork;
-
-                
-                List<Empresa> empresas = (List<Empresa>)this.Session[Constantes.VAR_SESSION_EMPRESA_LISTA];
-
-                Empresa obj = empresas.Where(e => (e.idEmpresa == pedido.empresa.idEmpresa)).FirstOrDefault();
-
-                if (obj != null)
-                {
-                    pedido.usuario.idEmpresa = obj.idEmpresa;
-                    pedido.usuario.codigoEmpresa = obj.codigo;
-                    pedido.usuario.razonSocialEmpresa = obj.nombre;
-                    pedido.usuario.urlEmpresa = obj.urlWeb;
-                    pedido.usuario.atencionTerciarizadaEmpresa = obj.atencionTerciarizada;
-                }
-
-
-                if (!pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_MP) && !pedido.empresa.emiteGuias &&
-                    pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado && 
-                    pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
-                {
-                    await pedidoBL.ProcesarPedidoAprobadoTecnica(pedido);
-                }
-
+                pedido.usuario.idEmpresa = obj.idEmpresa;
+                pedido.usuario.codigoEmpresa = obj.codigo;
+                pedido.usuario.razonSocialEmpresa = obj.nombre;
+                pedido.usuario.urlEmpresa = obj.urlWeb;
+                pedido.usuario.atencionTerciarizadaEmpresa = obj.atencionTerciarizada;
             }
+
+            int status = 1;
+            string messageError = "";
+
+            if (!pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && !pedido.empresa.emiteGuias &&
+                    estadosSeguimientoPedido == SeguimientoPedido.estadosSeguimientoPedido.Ingresado)
+            {
+                ServiceResponse validRes = await pedidoBL.validarProductosNextSoftTecnica(pedido);
+                if (validRes.code != 0) { 
+                    status = 0;
+                    messageError = "Problema de validación Nextsoft: " + validRes.message;
+                }
+            }
+
+            if (status == 1)
+            {
+                updateEstadoSeguimientoPedido(idPedido, estadosSeguimientoPedido, observacion);
+
+
+                if (estadosSeguimientoPedido == SeguimientoPedido.estadosSeguimientoPedido.Ingresado)
+                {
+                    List<Guid> idDetalles = (List<Guid>)this.Session["pedidoDRIds"];
+                    List<int> cantidades = (List<int>)this.Session["pedidoDRCantidades"];
+                    List<String> comentarios = (List<String>)this.Session["pedidoDRComentarios"];
+
+                    pedidoBL.UpdateDetallesRestriccion(idPedido, idDetalles, cantidades, comentarios, usuario.idUsuario);   
+
+
+                    if (!pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_MP) && !pedido.empresa.emiteGuias &&
+                        pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
+                        pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
+                    {
+                        await pedidoBL.ProcesarPedidoAprobadoTecnica(pedido);
+                    }
+
+                }
+            }
+
+            var response = new { status = status, errorMessage = messageError };
+
+            return JsonConvert.SerializeObject(response);
         }
 
         public async Task updateEstadoPedidoCrediticio()

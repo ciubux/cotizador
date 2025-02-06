@@ -4312,11 +4312,12 @@ jQuery(function ($) {
                         abrirModalAprobacion();
                     } else {
                         $.alert({
-                            title: 'ERROR',
+                            title: 'Error al validar productos NextSoft',
                             content: res.message,
-                            type: 'red',
+                            type: 'orange',
                             buttons: {
                                 OK: function () {
+                                    $("#modalAprobacion").modal('hide');
                                 }
                             }
                         });
@@ -4599,6 +4600,7 @@ jQuery(function ($) {
                 observacion: comentarioEstado
             },
             type: 'POST',
+            dataType: 'JSON',
             error: function () {
                 $.alert({
                     title: 'Error',
@@ -4613,19 +4615,31 @@ jQuery(function ($) {
                 });
                 $("#btnCancelarCambioEstado").click();
             },
-            success: function () {
-                $.alert({
-                    title: 'Registro Correcto',
-                    content: "El estado del pedido número: " + codigo + " se cambió correctamente.",
-                    type: 'green',
-                    buttons: {
+            success: function (res) {
 
-                        OK: function () {
+                if (res.status == 1) {
+                    $.alert({
+                        title: 'Registro Correcto',
+                        content: "El estado del pedido número: " + codigo + " se cambió correctamente.",
+                        type: 'green',
+                        buttons: {
 
+                            OK: function () {
+                                location.reload();
+                            }
                         }
-                    }
-                });
-                location.reload();
+                    });
+                } else {
+                    $.alert({
+                        title: 'OCURRIÓ UN PROBLEMA',
+                        content: "No se aprobó el pedido por el siguiente motivo: " + res.errorMessage,
+                        type: 'orange',
+                        buttons: {
+                            OK: function () {
+                            }
+                        }
+                    });
+                }
             }
         });
     });

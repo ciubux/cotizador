@@ -2777,6 +2777,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
                 DetalleVenta item = new DetalleVenta();
 
                 item.idProducto = Converter.GetGuid(row, "id_producto");
+                item.sku = Converter.GetString(row, "sku");
                 item.precioUnitario = Converter.GetDecimal(row, "precio_unitario");
                 item.igvUnitario = Converter.GetDecimal(row, "igv_precio_unitario");
                 item.equivalencia = Converter.GetDecimal(row, "equivalencia");

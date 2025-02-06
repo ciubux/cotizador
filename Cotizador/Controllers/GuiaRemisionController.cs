@@ -1561,8 +1561,8 @@ namespace Cotizador.Controllers
 
             String error = String.Empty;
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
-            try
-            {
+            /*try
+            {*/
                 if (errorRezago)
                 {
                     throw new Exception("La fecha de emisión no puede tener más de " + diasRezago.ToString() + " días de retraso.");
@@ -1574,11 +1574,11 @@ namespace Cotizador.Controllers
                     this.Session["seAtiendeTrasladoSedes"] = false;
                     this.Session["seAtiendeEntregaTerceros"] = false;
                 }
-            }
+            /*}
             catch (DuplicateNumberDocumentException ex)
             {
                 error = ex.Message;
-            }
+            }*/
 
             long numeroGuiaRemision = guiaRemision.numero;
             Guid idGuiaRemision = guiaRemision.idMovimientoAlmacen;

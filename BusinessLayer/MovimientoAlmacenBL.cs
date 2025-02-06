@@ -116,8 +116,8 @@ namespace BusinessLayer
                     dataSend = ConverterMPToNextSoft.toGuiaFE(guiaRemision, detallesVenta);
                 }
 
-                try
-                {
+                /*try
+                {*/
                     if (guiaRemision.serieDocumento.Substring(0, 2).Equals("T0") ||
                         guiaRemision.serieDocumento.Substring(0, 2).Equals("TT") ||
                         guiaRemision.serieDocumento.Substring(0, 2).Equals("TI"))
@@ -212,7 +212,7 @@ namespace BusinessLayer
                             dal.InsertMovimientoAlmacenSalida(guiaRemision);
                         }
                     }
-                }
+                /*}
                 catch (Exception ex)
                 {
                     using (var logDAL = new LogDAL())
@@ -220,7 +220,7 @@ namespace BusinessLayer
                         logDAL.insertLogWS("NEXTSYS_REGISTRO_GUIA_REMISION", JsonConvert.SerializeObject(dataSend), JsonConvert.SerializeObject(new {error = ex.Message }), guiaRemision.IdUsuarioRegistro);
                     }
                     throw ex;
-                }
+                }*/
             }
         }
 

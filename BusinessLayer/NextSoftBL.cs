@@ -22,16 +22,16 @@ namespace BusinessLayer
             ws.urlApi = Constantes.NEXTSOFT_API_URL;
             ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
 
-            //object result = await ws.validarProductoTecnicaLista(ConverterMPToNextSoft.toProductoValidarList(skus, factores));
+            object result = await ws.validarProductoTecnicaLista(ConverterMPToNextSoft.toProductoValidarList(skus, factores));
 
-            /*
+            
             JObject dataResult = (JObject)result;
             res.code = dataResult["validarproductosResult"]["codigo"].Value<int>();
             res.message = dataResult["validarproductosResult"]["Mensaje"].Value<String>();
-            */
+            
 
-            res.code = 0;
-            res.message = "OK";
+            //res.code = 0;
+            //res.message = "OK";
             return res;
         }
     }
