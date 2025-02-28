@@ -106,6 +106,14 @@ namespace Cotizador.Controllers
             return "ActualizarEstadoDocumentosElectronicos Ejecutando, time:" + DateTime.Now;
         }
 
+        public String ProcesarNotificacionesPendientes()
+        {
+            NotificacionBL documentoVentaBL = new NotificacionBL();
+            documentoVentaBL.ProcesarNotificacionesPendeientes();
+
+            return "ProcesarNotificacionesPendientes Ejecutando, time:" + DateTime.Now;
+        }
+
         public void actualizarParametroRUCCargaMasiva()
         {
             String codigo = "RUC_CARGA_MASIVA_PRODUCTO";

@@ -91,11 +91,11 @@
                     @Html.LabelFor(p => pedido.ciudad, htmlAttributes: new { @class = "control-label col-xs-4", @for = "idCiudad" })
                     <div class="col-xs-8">
                         @Html.Action("GetCiudades", "Ciudad",
-                                                                new
-                                                                {
-                                                                    ciudadSelectId = "idCiudad",
-                                                                    selectedValue = pedido.ciudad.idCiudad
-                                                                })
+                                        new
+                                        {
+                                            ciudadSelectId = "idCiudad",
+                                            selectedValue = pedido.ciudad.idCiudad
+                                        })
                     </div>
                 </div>
             </div>

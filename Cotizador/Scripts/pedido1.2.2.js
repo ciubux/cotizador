@@ -2191,13 +2191,14 @@ jQuery(function ($) {
         if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
             $("#idCiudad").focus();
             $.alert({
+                type: 'orange',
                 title: TITLE_VALIDACION_PEDIDO,
                 content: 'Debe seleccionar la sede MP previamente.',
                 buttons: {
                     OK: function () {
                     }
                 }
-            });            
+            });
             return false;
         }
 
@@ -2206,12 +2207,13 @@ jQuery(function ($) {
             $('#idCliente').trigger('chosen:activate');
             $("#idCiudadAsolicitar").focus();
             $.alert({
+                type: 'orange',
                 title: TITLE_VALIDACION_PEDIDO,
                 content: 'Debe seleccionar un cliente.',
                 buttons: {
                     OK: function () { }
                 }
-            });              
+            });
             return false;
         }
 
@@ -2232,24 +2234,26 @@ jQuery(function ($) {
 
         var tipoPedido = $("#pedido_tipoPedido").val();
         //Si el tipo de pedido es traslado interno (84->'T')
-      /*  if (tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)) {
-            if ($("#idCiudadASolicitar").val() == "" || $("#idCiudadASolicitar").val() == null) {
-                $("#idCiudadAsolicitar").focus();
-                $.alert({
-                    title: TITLE_VALIDACION_PEDIDO,
-                    content: 'Debe seleccionar a que ciudad se solicita el traslado interno.',
-                    buttons: {
-                        OK: function () { }
-                    }
-                });
-                return false;
-            }
-        }*/
+        /*  if (tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)) {
+              if ($("#idCiudadASolicitar").val() == "" || $("#idCiudadASolicitar").val() == null) {
+                  $("#idCiudadAsolicitar").focus();
+                  $.alert({
+                    type: 'orange',
+                      title: TITLE_VALIDACION_PEDIDO,
+                      content: 'Debe seleccionar a que ciudad se solicita el traslado interno.',
+                      buttons: {
+                          OK: function () { }
+                      }
+                  });
+                  return false;
+              }
+          }*/
 
 
         if ($("#pedido_numeroReferenciaCliente").val().length > 20) {
             $("#pedido_numeroReferenciaCliente").focus();
             $.alert({
+                type: 'orange',
                 title: TITLE_VALIDACION_PEDIDO,
                 content: 'El número de referencia del cliente no debe contener más de 20 caracteres, si el dato a ingresar es más extenso agreguelo en Observaciones Factura.',
                 buttons: {
@@ -2257,7 +2261,7 @@ jQuery(function ($) {
                 }
             });
             return false;
-        }   
+        }
 
         /*if ($("#pedido_numeroReferenciaCliente").val().trim() == "") {
             alert('Debe ingresar el número de orden de compra o pedido en el campo "Referencia Doc Cliente".');
@@ -2273,13 +2277,14 @@ jQuery(function ($) {
             //|| tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
             || tipoPedido == TIPO_PEDIDO_VENTA_COMODATO_ENTREGADO.charCodeAt(0)
             || tipoPedido == TIPO_PEDIDO_VENTA_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
-        //    || tipoPedido == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
+            //    || tipoPedido == TIPO_PEDIDO_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
         ) {
 
 
             if ($("#ActualDepartamento").val().trim().length == 0) {
                 $("#ActualDepartamento").focus();
                 $.alert({
+                    type: 'orange',
                     title: TITLE_VALIDACION_PEDIDO,
                     content: 'Debe ingresar el departamento.',
                     buttons: {
@@ -2291,6 +2296,7 @@ jQuery(function ($) {
             if ($("#ActualProvincia").val().trim().length == 0) {
                 $("#ActualProvincia").focus();
                 $.alert({
+                    type: 'orange',
                     title: TITLE_VALIDACION_PEDIDO,
                     content: 'Debe ingresar la provincia.',
                     buttons: {
@@ -2302,6 +2308,7 @@ jQuery(function ($) {
             if ($("#ActualDistrito").val().trim().length == 0) {
                 $("#ActualDistrito").focus();
                 $.alert({
+                    type: 'orange',
                     title: TITLE_VALIDACION_PEDIDO,
                     content: 'Debe ingresar el distrito.',
                     buttons: {
@@ -2315,6 +2322,7 @@ jQuery(function ($) {
             if ($("#pedido_direccionEntrega").val().trim() == "") {
                 $('#pedido_direccionEntrega').focus();
                 $.alert({
+                    type: 'orange',
                     title: TITLE_VALIDACION_PEDIDO,
                     content: 'Debe seleccionar la dirección de entrega.',
                     buttons: {
@@ -2327,6 +2335,7 @@ jQuery(function ($) {
             if ($("#pedido_solicitante").val().trim() == "") {
                 $('#pedido_solicitante').focus();
                 $.alert({
+                    type: 'orange',
                     title: TITLE_VALIDACION_PEDIDO,
                     content: 'Debe seleccionar el solicitante.',
                     buttons: {
@@ -2339,6 +2348,7 @@ jQuery(function ($) {
             if ($("#pedido_direccionEntrega_descripcion").val().trim() == "") {
                 $('#pedido_direccionEntrega_descripcion').focus();
                 $.alert({
+                    type: 'orange',
                     title: TITLE_VALIDACION_PEDIDO,
                     content: 'Debe ingresar la dirección de entrega.',
                     buttons: {
@@ -2351,6 +2361,7 @@ jQuery(function ($) {
             if ($("#pedido_direccionEntrega_contacto").val().trim() == "") {
                 $('#pedido_direccionEntrega_contacto').focus();
                 $.alert({
+                    type: 'orange',
                     title: TITLE_VALIDACION_PEDIDO,
                     content: 'Debe ingresar el contacto de entrega.',
                     buttons: {
@@ -2363,6 +2374,7 @@ jQuery(function ($) {
             if ($("#pedido_direccionEntrega_telefono").val().trim() == "") {
                 $('#pedido_direccionEntrega_telefono').focus();
                 $.alert({
+                    type: 'orange',
                     title: TITLE_VALIDACION_PEDIDO,
                     content: 'Debe ingresar una el telefono del contacto de entrega.',
                     buttons: {
@@ -2377,6 +2389,7 @@ jQuery(function ($) {
         if (fechaSolicitud.trim() == "") {
             $("#fechaSolicitud").focus();
             $.alert({
+                type: 'orange',
                 title: TITLE_VALIDACION_PEDIDO,
                 content: 'Debe ingresar la fecha de la solicitud.',
                 buttons: {
@@ -2390,6 +2403,7 @@ jQuery(function ($) {
         if (horaSolicitud == null || horaSolicitud.trim() == "") {
             $("#horaSolicitud").focus();
             $.alert({
+                type: 'orange',
                 title: TITLE_VALIDACION_PEDIDO,
                 content: 'Debe ingresar la hora de la solicitud.',
                 buttons: {
@@ -2404,6 +2418,7 @@ jQuery(function ($) {
         if (fechaEntregaDesde.trim() == "") {
             $("#pedido_fechaEntregaDesde").focus();
             $.alert({
+                type: 'orange',
                 title: TITLE_VALIDACION_PEDIDO,
                 content: 'Debe ingresar la fecha desde cuando se puede realizar la entrega.',
                 buttons: {
@@ -2417,6 +2432,7 @@ jQuery(function ($) {
         if (fechaEntregaHasta.trim() == "") {
             $("#pedido_fechaEntregaHasta").focus();
             $.alert({
+                type: 'orange',
                 title: TITLE_VALIDACION_PEDIDO,
                 content: 'Debe ingresar la fecha hasta cuando se puede realizar la entrega.',
                 buttons: {
@@ -2426,11 +2442,12 @@ jQuery(function ($) {
             return false;
         }
 
-        
+
         //la fecha máxima de entrega no puede ser inferior a la fecha de entrega
         if (convertirFechaNumero(fechaEntregaHasta) < convertirFechaNumero(fechaEntregaDesde)) {
             $("#fechaEntregaHasta").focus();
             $.alert({
+                type: 'orange',
                 title: TITLE_VALIDACION_PEDIDO,
                 content: 'La fecha entrega hasta debe ser mayor o igual a la fecha de entrega desde.',
                 buttons: {
@@ -2452,6 +2469,7 @@ jQuery(function ($) {
             if ($("#pedido_solicitante_nombre").val().trim() == "") {
                 $('#pedido_solicitante_nombre').focus();
                 $.alert({
+                    type: 'orange',
                     title: TITLE_VALIDACION_PEDIDO,
                     content: 'Debe ingresar el nombre de la persona que realizó la solicitud.',
                     buttons: {
@@ -2466,6 +2484,7 @@ jQuery(function ($) {
             if ($("#pedido_solicitante_telefono").val().trim() == "" && $("#pedido_solicitante_correo").val().trim() == "") {
                 $('#pedido_solicitante_telefono').focus();
                 $.alert({
+                    type: 'orange',
                     title: TITLE_VALIDACION_PEDIDO,
                     content: 'Debe ingresar un telefono y/o correo de contacto de entrega.',
                     buttons: {
@@ -2480,6 +2499,7 @@ jQuery(function ($) {
         if ($("#pedido_observacionesGuiaRemision").val().length > 200) {
             $("#pedido_observacionesGuiaRemision").focus();
             $.alert({
+                type: 'orange',
                 title: TITLE_VALIDACION_PEDIDO,
                 content: 'El campo observaciones guía de remisión no debe contener más de 200 caracteres.',
                 buttons: {
@@ -2487,11 +2507,12 @@ jQuery(function ($) {
                 }
             });
             return false;
-        }  
+        }
 
         if ($("#pedido_observacionesFactura").val().length > 200) {
             $("#pedido_observacionesFactura").focus();
             $.alert({
+                type: 'orange',
                 title: TITLE_VALIDACION_PEDIDO,
                 content: 'El campo observaciones factura no debe contener más de 200 caracteres.',
                 buttons: {
@@ -2499,9 +2520,9 @@ jQuery(function ($) {
                 }
             });
             return false;
-        }  
-        
-      
+        }
+
+
         /*
         if ($("#pedido_correoContactoPedido").val().trim() != "" && !$("#pedido_correoContactoPedido").val().match(/^[a-zA-Z0-9\._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/)) {
             alert("Debe ingresar un correo válido.");
@@ -2517,8 +2538,9 @@ jQuery(function ($) {
             contador++;
         });
 
-        if (contador == 0) {    
+        if (contador == 0) {
             $.alert({
+                type: 'orange',
                 title: TITLE_VALIDACION_PEDIDO,
                 content: 'Debe ingresar el detalle del pedido.',
                 buttons: {
@@ -2526,6 +2548,28 @@ jQuery(function ($) {
                 }
             });
             return false;
+        }
+
+        if (tipoPedido == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)) {
+            var itemPrecioVacio = false;
+            $("td.detprecio").each(function () {
+                var precio = parseFloat($(this).html());
+                if (precio <= 0) {
+                    itemPrecioVacio = true;
+                }
+            });
+
+            if (itemPrecioVacio) {
+                $.alert({
+                    type: 'orange',
+                    title: TITLE_VALIDACION_PEDIDO,
+                    content: 'No puede haber productos con precio 0.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+                return false;
+            }
         }
 
         return true;

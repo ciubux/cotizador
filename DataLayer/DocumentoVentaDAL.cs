@@ -108,6 +108,7 @@ namespace DataLayer
                 case DocumentoVenta.TipoPago.Crédito30: diasCredito = 30; break;
                 case DocumentoVenta.TipoPago.Crédito45: diasCredito = 45; break;
                 case DocumentoVenta.TipoPago.Crédito60: diasCredito = 60; break;
+                case DocumentoVenta.TipoPago.Crédito75: diasCredito = 75; break;
                 case DocumentoVenta.TipoPago.Crédito90: diasCredito = 90; break;
                 case DocumentoVenta.TipoPago.Crédito120: diasCredito = 120; break;
             }

@@ -20,6 +20,7 @@ using NPOI.SS.Formula.Functions;
 using System.Threading.Tasks;
 using Model.NextSoft;
 using DataLayer;
+using static Model.SeguimientoPedido;
 
 namespace Cotizador.Controllers
 {
@@ -2202,8 +2203,15 @@ namespace Cotizador.Controllers
         {
             PedidoBL bl = new PedidoBL();
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
-            ServiceResponse res = await bl.validarProductosNextSoftTecnica(pedido);
 
+            ServiceResponse res = new ServiceResponse();
+            res.code = 0;
+
+            if (pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_TECNICA)
+                && pedido.empresa.atencionTerciarizada)
+            {
+                res = await bl.validarProductosNextSoftTecnica(pedido);
+            }
             return JsonConvert.SerializeObject(res);
         }
 
@@ -2244,7 +2252,8 @@ namespace Cotizador.Controllers
             int status = 1;
             string messageError = "";
 
-            if (!pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && !pedido.empresa.emiteGuias &&
+            if (pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_TECNICA) 
+                && pedido.empresa.atencionTerciarizada &&
                     estadosSeguimientoPedido == SeguimientoPedido.estadosSeguimientoPedido.Ingresado)
             {
                 ServiceResponse validRes = await pedidoBL.validarProductosNextSoftTecnica(pedido);
@@ -2269,7 +2278,7 @@ namespace Cotizador.Controllers
 
 
                     if (!pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_MP) && !pedido.empresa.emiteGuias &&
-                        pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
+                        estadosSeguimientoPedido  == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
                         pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
                     {
                         await pedidoBL.ProcesarPedidoAprobadoTecnica(pedido);

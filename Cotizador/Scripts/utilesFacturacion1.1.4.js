@@ -58,13 +58,23 @@ function calcularFechaVencimiento() {
             $('#documentoVenta_fechaVencimiento').datepicker('setDate', date2);
             break;
         case "10":
-            var date2 = $('#documentoVenta_fechaEmision').datepicker('getDate', '+45d');
+            var date2 = $('#documentoVenta_fechaEmision').datepicker('getDate', '+21d');
             date2.setDate(date2.getDate() + 21);
             $('#documentoVenta_fechaVencimiento').datepicker('setDate', date2);
             break;
         case "11":
-            var date2 = $('#documentoVenta_fechaEmision').datepicker('getDate', '+45d');
+            var date2 = $('#documentoVenta_fechaEmision').datepicker('getDate', '+25d');
             date2.setDate(date2.getDate() + 25);
+            $('#documentoVenta_fechaVencimiento').datepicker('setDate', date2);
+            break;
+        case "101":
+            var date2 = $('#documentoVenta_fechaEmision').datepicker('getDate', '+1d');
+            date2.setDate(date2.getDate() + 1);
+            $('#documentoVenta_fechaVencimiento').datepicker('setDate', date2);
+            break;
+        case "104":
+            var date2 = $('#documentoVenta_fechaEmision').datepicker('getDate', '+75d');
+            date2.setDate(date2.getDate() + 75);
             $('#documentoVenta_fechaVencimiento').datepicker('setDate', date2);
             break;
     }

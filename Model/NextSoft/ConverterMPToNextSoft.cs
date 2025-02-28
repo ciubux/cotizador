@@ -616,6 +616,7 @@ namespace Model.NextSoft
             string formaPago = "001";
             switch (obj.tipoPago)
             {
+                case DocumentoVenta.TipoPago.Crédito1: formaPago = "101"; break;
                 case DocumentoVenta.TipoPago.Crédito7: formaPago = "004"; break;
                 case DocumentoVenta.TipoPago.Crédito15: formaPago = "005"; break;
                 case DocumentoVenta.TipoPago.Crédito20:
@@ -623,6 +624,7 @@ namespace Model.NextSoft
                 case DocumentoVenta.TipoPago.Crédito30: formaPago = "007"; break;
                 case DocumentoVenta.TipoPago.Crédito45: formaPago = "009"; break;
                 case DocumentoVenta.TipoPago.Crédito60: formaPago = "010"; break;
+                case DocumentoVenta.TipoPago.Crédito75: formaPago = "104"; break;
                 case DocumentoVenta.TipoPago.Crédito90: formaPago = "011"; break;
             }
 

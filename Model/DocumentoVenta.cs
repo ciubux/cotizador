@@ -72,7 +72,7 @@ namespace Model
             [Display(Name = "CRÉDITO A 60 DÍAS")]
             Crédito60 = 5,
             [Display(Name = "CRÉDITO A 75 DÍAS")]
-            Crédito70 = 104,
+            Crédito75 = 104,
             [Display(Name = "CRÉDITO A 90 DÍAS")]
             Crédito90 = 6,
             [Display(Name = "CRÉDITO A 120 DÍAS")]

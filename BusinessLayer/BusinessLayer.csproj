@@ -75,6 +75,7 @@
     <Compile Include="MotivoAjusteAlmacenBL.cs" />
     <Compile Include="EscalaComisionBL.cs" />
     <Compile Include="NextSoftBL.cs" />
+    <Compile Include="NotificacionBL.cs" />
     <Compile Include="RolBL.cs" />
     <Compile Include="ParametroBL.cs" />
     <Compile Include="DocumentoVentaBL.cs" />

@@ -61,6 +61,7 @@
     <Compile Include="EmpresaDescuento.cs" />
     <Compile Include="Fabricante.cs" />
     <Compile Include="DocumentoExterno.cs" />
+    <Compile Include="NotificacionPendiente.cs" />
     <Compile Include="NextSoft\ServiceResponse.cs" />
     <Compile Include="PrecioEspecialDetalle.cs" />
     <Compile Include="PrecioEspecialCabecera.cs" />

@@ -27,8 +27,24 @@ namespace BusinessLayer
             
             JObject dataResult = (JObject)result;
             res.code = dataResult["validarproductosResult"]["codigo"].Value<int>();
-            res.message = dataResult["validarproductosResult"]["Mensaje"].Value<String>();
-            
+            res.message = "";
+
+            JArray productos = (JArray)dataResult["validarproductosResult"]["Productos"];
+
+            // Recorrer cada objeto del arreglo
+            foreach (JObject producto in productos)
+            {
+                string codigoMP = producto["CodigoMP"].ToString();
+                bool existeFactor = producto["ExisteFactor"].Value<bool>();
+                bool existeProducto = producto["ExisteProducto"].Value<bool>();
+                int factorMP = producto["FactorMP"].Value<int>();
+
+                if (!existeFactor || !existeProducto)
+                {
+                    res.message = res.message + "El producto " + codigoMP + " no esta correctamente registrado. ";
+                    res.code = 1;
+                }
+            }
 
             //res.code = 0;
             //res.message = "OK";

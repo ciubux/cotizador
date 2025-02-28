@@ -1007,6 +1007,7 @@ namespace DataLayer
                 pedido.empresa.idEmpresa = Converter.GetInt(row, "id_empresa");
                 pedido.empresa.codigo = Converter.GetString(row, "codigo_empresa");
                 pedido.empresa.emiteGuias = Converter.GetInt(row, "emite_guias_empresa") == 1 ? true : false;
+                pedido.empresa.atencionTerciarizada = Converter.GetInt(row, "atencion_tercerizada_empresa") == 1 ? true : false;
 
                 pedido.empresaRelacionada = new Empresa();
                 pedido.empresaRelacionada.idEmpresa = Converter.GetInt(row, "id_empresa_rel");
@@ -1014,6 +1015,7 @@ namespace DataLayer
                 pedido.empresaRelacionada.nombre = Converter.GetString(row, "nombre_empresa_rel");
                 pedido.empresaRelacionada.facturacionHabilitada = Converter.GetInt(row, "facturacion_habilitada_empresa_rel") == 1;
                 pedido.empresaRelacionada.emiteGuias = Converter.GetInt(row, "emite_guias_empresa_rel") == 1 ? true : false;
+                pedido.empresaRelacionada.atencionTerciarizada = Converter.GetInt(row, "atencion_tercerizada_empresa_rel") == 1 ? true : false;
 
                 Empresa.EntornoFacturacion emrelenfac;
                 if (Enum.TryParse<Empresa.EntornoFacturacion>(Converter.GetString(row, "entorno_facturacion_empresa_rel"), true, out emrelenfac))
@@ -1607,6 +1609,7 @@ namespace DataLayer
                 pedidoDetalle.producto.costoSinIgv = Converter.GetDecimal(row, "costo_producto");
                 pedidoDetalle.producto.costoLista = pedidoDetalle.producto.costoSinIgv;
                 pedidoDetalle.producto.costoOriginal = Converter.GetDecimal(row, "costo_original");
+                pedidoDetalle.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia_alternativa");
                 pedidoDetalle.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
                 pedidoDetalle.producto.compraRestringida = Converter.GetInt(row, "compra_restringida");
 
