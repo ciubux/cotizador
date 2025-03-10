@@ -23,6 +23,16 @@ namespace Cotizador.Controllers
             return View();
         }
 
+        public ActionResult EditarParamaetros(string empresaSelectId, string selectedValue = null)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            EmpresaBL bl = new EmpresaBL();
+
+            Empresa obj = bl.GetEmpresa(usuario.idEmpresa);
+            
+            return View();
+        }
+
         public ActionResult GetEmpresasVisualizacion(string empresaSelectId, string selectedValue = null)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
