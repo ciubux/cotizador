@@ -114,12 +114,17 @@ namespace Model.NextSoft
                     string codFactor = "";
                     int nFactor = 1;
                     decimal totalItem = 0;
+                    decimal valorCompra = 0;
 
-                    foreach(DetalleVenta detv in detallesVentaRelacionada)
+                    foreach (DetalleVenta detv in detallesVentaRelacionada)
                     {
                         if (detv.sku.Equals(movDet.producto.sku)) {
                             totalItem = cantidadAtender * (detv.precioUnitario + detv.igvUnitario);
                         }
+                    }
+
+                    if (detallesVentaRelacionada.Count > 0) {
+                        valorCompra = movDet.subTotal;
                     }
 
                     switch (movDet.idProductoPresentacion)
@@ -155,7 +160,8 @@ namespace Model.NextSoft
                         listaprecio = codListaPreciosLim,
                         //comprobante = "001-F001-22029",
                         peso = 1,
-                        totalitem = totalItem
+                        totalitem = totalItem,
+                        valorcompra = valorCompra
                     };
 
                     listaDet.Add(det);
