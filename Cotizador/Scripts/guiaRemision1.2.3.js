@@ -1387,7 +1387,6 @@ jQuery(function ($) {
             $('body').loadingModal('text', 'Generando Factura...');
             $('body').loadingModal('show')
 
-            
             $.ajax({
                 url: "/Factura/FacturarAPedidoRelacionado",
                 type: 'POST',
@@ -1415,8 +1414,8 @@ jQuery(function ($) {
                     }
                     else {
                         mostrarMensajeErrorProceso(MENSAJE_ERROR + ".\n" + "Detalle Error: " + resultado.CPE_RESPUESTA_BE.DETALLE);
-                        //$("#btnAceptarFacturarPedido").removeAttr("disabled");
-                        
+                        $("#btnAceptarFacturarPedido").removeAttr("disabled");
+
                     }
 
                     $("#btnFacturarPedidoRelacionado").removeAttr('disabled');
@@ -1424,7 +1423,6 @@ jQuery(function ($) {
             });
         }
     });
-
 
     $("#btnCancelarGuiaRemision").click(function () {
         if (confirm(MENSAJE_CANCELAR_EDICION)) {

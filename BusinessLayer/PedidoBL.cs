@@ -241,18 +241,33 @@ namespace BusinessLayer
                 pedido.seguimientoCrediticioPedido.estado = SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado;
             }
 
-            if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA) && pedido.usuario.atencionTerciarizadaEmpresa)
-            {
-                ServiceResponse res = await this.validarProductosNextSoftTecnica(pedido);
+            pedido.productosNextSoftHomologados = true;
 
-                if (res.code != 0)
+            if (pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
+            {
+                if (pedido.usuario.atencionTerciarizadaEmpresa)
                 {
-                    pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
-                    pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "Problema de homologación de productos Nextsoft: " + res.message;
-                    pedido.enviarMailProductosInvalidosNextsoft = true;
-                    pedido.mensajeErrorValidacionProductosNextsoft = "Problema de homologación de productos Nextsoft: " + res.message;
+                    ServiceResponse res = await this.validarProductosNextSoftTecnica(pedido);
+
+                    if (res.code != 0)
+                    {
+                        pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
+                        pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "Problema de homologación de productos Nextsoft: " + res.message;
+                        pedido.enviarMailProductosInvalidosNextsoft = true;
+                        pedido.mensajeErrorValidacionProductosNextsoft = "Problema de homologación de productos Nextsoft: " + res.message;
+                    }
+                } else
+                {
+                    ServiceResponse res = await this.validarProductosNextSoftTecnica(pedido);
+
+                    if (res.code != 0)
+                    {
+                        pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "Problema de homologación de productos Nextsoft: " + res.message;
+                        pedido.productosNextSoftHomologados = false;
+                    }
                 }
             }
+
 
             if (pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion && forzarAprobacion)
             {

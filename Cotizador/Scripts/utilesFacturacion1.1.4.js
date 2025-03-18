@@ -421,20 +421,23 @@ $("#btnConfirmarFacturarPedido").click(function () {
                     type: 'green',
                     buttons: {
                         OK: function () {
-
+                            var continuarProcesoNormal = true;
                             if ($("#btnFacturarGuiaRemision").length) {
                                 var facturaPedidoRelacionado = parseInt($("#btnFacturarGuiaRemision").attr("facturaPedidoRelacionado"));
                                 if (facturaPedidoRelacionado == 1) {
-                                    //Llamar proceso para facturar pedido relacionado. 
-                                }
+                                    continuarProcesoNormal = false;
+                                    facturarPedidoRelacionado();
+                                } 
                             }
 
-                            var actionPostCPE = $("#actionPostCPE").val();
+                            if (continuarProcesoNormal) {
+                                var actionPostCPE = $("#actionPostCPE").val();
 
-                            if (actionPostCPE.length > 3) {
-                                execActionPostCPE(actionPostCPE);
-                            } else {
-                                location.reload();
+                                if (actionPostCPE.length > 3) {
+                                    execActionPostCPE(actionPostCPE);
+                                } else {
+                                    location.reload();
+                                }
                             }
                         }
                     }
@@ -591,12 +594,71 @@ function calcularSubtotalGrilla(idproducto, cantidad, precioUnitario, subTotalDo
 
 function execActionPostCPE(actionPostCPE) {
     if (actionPostCPE == "recargarGuia") {
-        $('.modal').modal('hide');
-
-        setTimeout(function () {
-            var idGuia = $("#actionPostCPE").attr("idGuia");
-            $(".btnVerGuiaRemision." + idGuia).click();
-        }, 500);
+        var idGuia = $("#actionPostCPE").attr("idGuia");
+        recagarGuiaRemision(idGuia);
     }
 };
 
+function recagarGuiaRemision(idGuia) {
+    $('.modal').modal('hide');
+
+    setTimeout(function () {
+        $(".btnVerGuiaRemision." + idGuia).click();
+    }, 500);
+};
+
+
+function facturarPedidoRelacionado() {
+    $('body').loadingModal('text', 'Generando Factura...');
+    $('body').loadingModal('show')
+
+    var idGuia = $("#idMovimientoAlmacen").val();
+    $.ajax({
+        url: "/Factura/FacturarAPedidoRelacionado",
+        type: 'POST',
+        dataType: 'JSON',
+        data: {
+        },
+        error: function (resultado) {
+            $('body').loadingModal('hide');
+            $.alert({
+                title: 'ERROR',
+                content: MENSAJE_ERROR,
+                type: 'red',
+                buttons: {
+                    OK: function () {
+                        recagarGuiaRemision(idGuia);
+                    }
+                }
+            });
+        },
+        success: function (resultado) {
+            $('body').loadingModal('hide')
+
+            if (resultado.CPE_RESPUESTA_BE.CODIGO == "001") {
+                $.alert({
+                    title: 'REGISTRO EXITOSO',
+                    content: 'Se generó el documento electrónico: ' + resultado.serieNumero + ' para el pedido original de la guía.',
+                    type: 'green',
+                    buttons: {
+                        OK: function () {
+                            recagarGuiaRemision(idGuia);
+                        }
+                    }
+                });
+            }
+            else {
+                $.alert({
+                    title: 'OCURRIÓ UN ERROR',
+                    content: MENSAJE_ERROR + ".\n" + "Detalle Error: " + resultado.CPE_RESPUESTA_BE.DETALLE,
+                    type: 'red',
+                    buttons: {
+                        OK: function () {
+                            recagarGuiaRemision(idGuia);
+                        }
+                    }
+                });
+            }
+        }
+    });
+}

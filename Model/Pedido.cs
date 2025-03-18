@@ -50,6 +50,8 @@ namespace Model
 
         public bool excluirPedidosYaReplicados { get; set; }
 
+        public bool productosNextSoftHomologados { get; set; }
+
         [Display(Name = "Truncado:")]
         public int truncado { get; set; }
 
