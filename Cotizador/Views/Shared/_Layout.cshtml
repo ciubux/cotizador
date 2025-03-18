@@ -94,6 +94,7 @@
                         var linkCargaMasivaProducto = "";
                         var linkCargaProductosWeb = "";
                         var linkBusquedaProductosWeb = "";
+                        var linkProductosHomologadosTecnica = "";
 
                         var linkCargaMasivaStock = "";
                         var linkPlantillaStock = "";
@@ -149,6 +150,8 @@
                         var linkMantenimientoNotaIngreso = "";
 
                         var linkAsignacionPermisos = "";
+                        var linkConfiguracionEmpresa = "";
+
 
                         var linkMantenimientoTipoContactoCliente = "";
 
@@ -212,6 +215,7 @@
                             case 1710: linkMantenimientoFabricante = "active"; linkMaestros = "active"; break;
                             case 712: linkMantenimientoEmpresaDescuento = "active"; linkMaestros = "active"; break;
 
+
                             case 28: linkCargaMasivaProducto = "active"; linkMaestros = "active"; break;
                             case 29: linkMantenimientoProducto = "active"; linkMaestros = "active"; break;
 
@@ -223,6 +227,7 @@
 
                             case 740: linkCargaProductosWeb = "active"; linkMaestros = "active"; break;
                             case 741: linkBusquedaProductosWeb = "active"; linkMaestros = "active"; break;
+                            case 746: linkProductosHomologadosTecnica = "active"; linkMaestros = "active"; break;
 
                             case 30: linkBusquedaOrigen = "active"; linkMaestros = "active"; break;
                             case 31: linkMantenimientoOrigen = "active"; linkMaestros = "active"; break;
@@ -258,6 +263,7 @@
                             case 102: linkMantenimientoRol = "active"; linkSistema = "active"; break;
                             case 103: linkBusquedaUsuario = "active"; linkSistema = "active"; break;
                             case 104: linkMantenimientoUsuario = "active"; linkSistema = "active"; break;
+                            case 151: linkConfiguracionEmpresa = "active"; linkSistema = "active"; break;
 
 
                             case 220: linkBusquedaPrecioEspecial = "active"; linkCostosEspeciales = "active"; break;
@@ -541,6 +547,11 @@
                                         <li id="linkCRProducto" class="@linkCargaMasivaProducto">@Html.ActionLink("Producto - Importar ", "Index", "Producto")</li>
                                     }
 
+                                    @if (usuario.visualizaProductos || usuario.modificaMaestroProductos)
+                                    {
+                                        <li id="linkProductosHomologadosTecnica" class="@linkProductosHomologadosTecnica">@Html.ActionLink("Producto - Homologación Técnica en NextSoft", "ProductosHomologadosTecnica", "Producto")</li>
+                                    }
+
                                     @if (usuario.realizaCargaProductosWEB)
                                     {
                                         <li id="linkBusquedaProductoWeb" class="@linkBusquedaProductosWeb">@Html.ActionLink("Producto - Búsqueda de Productos WEB", "ProductosWeb", "Producto")</li>
@@ -669,9 +680,9 @@
                                     }
 
                                     @*if (usuario.modificaMensaje)
-                                        {
-                                            <li id="linkCrearMensaje" class="@linkCrearMensaje">@Html.ActionLink("Mensaje - Crear/Modificar", "Editar", "Mensaje")</li>
-                                        }
+                                    {
+                                        <li id="linkCrearMensaje" class="@linkCrearMensaje">@Html.ActionLink("Mensaje - Crear/Modificar", "Editar", "Mensaje")</li>
+                                    }
                                     *@
 
                                     @if (usuario.modificaParametro)
@@ -694,6 +705,11 @@
                                     @if (usuario.administraPermisos)
                                     {
                                         <li id="linkAsignaPermisos" class="@linkAsignacionPermisos">@Html.ActionLink("Permisos - Búsqueda", "List", "Permiso")</li>
+                                    }
+
+                                    @if (usuario.editaConfiguracionEmpresa)
+                                    {
+                                        <li id="linkConfiguracionEmpresa" class="@linkConfiguracionEmpresa">@Html.ActionLink("Empresa - Configuración", "EditarParametros", "Empresa")</li>
                                     }
 
                                 </ul>

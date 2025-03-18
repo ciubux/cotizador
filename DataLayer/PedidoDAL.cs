@@ -1164,6 +1164,10 @@ namespace DataLayer
                 pedidoDetalle.producto.costoOriginal = Converter.GetDecimal(row, "costo_original");
                 pedidoDetalle.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia_alternativa");
                 pedidoDetalle.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+
+                pedidoDetalle.producto.exoneradoIgv = Converter.GetInt(row, "exonerado_igv") == 1 ? true : false;
+                pedidoDetalle.producto.inafecto = Converter.GetInt(row, "inafecto") == 1 ? true : false;
+
                 pedidoDetalle.producto.costoFleteProvincias = Converter.GetDecimal(row, "costo_flete_provincias");
                 pedidoDetalle.producto.monedaFleteProvincias = Moneda.ListaMonedasFija.Where(m => m.codigo.Equals(Converter.GetString(row, "moneda_flete_provincias"))).First();
 

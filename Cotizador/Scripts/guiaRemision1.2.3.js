@@ -1282,12 +1282,18 @@ jQuery(function ($) {
                 }
 
                 if (guiaRemision.habilitaFacturaPedidoRelacionado) {
-                    $("#btnFacturarPedidoRelacionado").show();
+                    $("#btnFacturarGuiaRemision").attr("facturaPedidoRelacionado", "1");
+
+                    
+                    /*$("#btnFacturarPedidoRelacionado").show();
+
                     if (guiaRemision.estaFacturado) {
                         $("#btnFacturarPedidoRelacionado").remove("disabled");
                     } else {
                         $("#btnFacturarPedidoRelacionado").attr("disabled", "disabled");
-                    }
+                    }*/
+                } else {
+                    $("#btnFacturarGuiaRemision").attr("facturaPedidoRelacionado", "0");
                 }
 
                 if (guiaRemision.habilitaDescargarFacturaPedidoRelacionado && guiaRemision.entregaTerceros) {
@@ -1755,7 +1761,8 @@ jQuery(function ($) {
         var facturaUnica = parseInt($("#ver_guiaRemision_facturaUnica").val());
         var numeroGrupo = parseInt($("#ver_guiaRemision_numeroGrupo").val());
         var guiaAtiendePedido = parseInt($("#ver_guiaRemision_guiaAtiendePedido").val());
-        
+        var facturaPedidoRelacionado = parseInt($("#btnFacturarGuiaRemision").attr("facturaPedidoRelacionado"));
+
         if (facturaUnica == 1) {
             if (numeroGrupo > 0) {
                 $.alert({
@@ -1787,6 +1794,18 @@ jQuery(function ($) {
                 }
             }
         } else {
+            if (facturaPedidoRelacionado == 1) {
+                $.alert({
+                    title: "FACTURA PEDIDO RELACIONADO",
+                    content: "Al emitir la factura de esta guía se emitirá automáticamente la factura del pedido de origen.",
+                    type: 'yellow',
+                    buttons: {
+                        OK: function () {
+
+                        }
+                    }
+                });
+            }
             facturarGuia();
         }
     });

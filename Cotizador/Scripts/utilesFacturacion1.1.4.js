@@ -421,6 +421,14 @@ $("#btnConfirmarFacturarPedido").click(function () {
                     type: 'green',
                     buttons: {
                         OK: function () {
+
+                            if ($("#btnFacturarGuiaRemision").length) {
+                                var facturaPedidoRelacionado = parseInt($("#btnFacturarGuiaRemision").attr("facturaPedidoRelacionado"));
+                                if (facturaPedidoRelacionado == 1) {
+                                    //Llamar proceso para facturar pedido relacionado. 
+                                }
+                            }
+
                             var actionPostCPE = $("#actionPostCPE").val();
 
                             if (actionPostCPE.length > 3) {

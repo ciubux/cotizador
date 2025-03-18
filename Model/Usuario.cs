@@ -328,6 +328,8 @@ namespace Model
         /*Administra Permisos*/
         public bool administraPermisos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ADMINISTRA_PERMISOS)).FirstOrDefault() != null; } }
 
+        public bool editaConfiguracionEmpresa { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.EDITA_CONFIGURACION_EMPRESA)).FirstOrDefault() != null; } }
+
         public bool modificaDireccionEntrega { get; set; }
 
         public bool multiEmpresa { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MULTI_EMPRESA)).FirstOrDefault() != null; } }

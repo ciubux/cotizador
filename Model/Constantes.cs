@@ -584,6 +584,7 @@ namespace Model
 
         public const String EXTORNA_FICTICIAS = "P336";
 
+        public const String EDITA_CONFIGURACION_EMPRESA = "P151";
 
         public enum paginas
         {
@@ -823,7 +824,13 @@ namespace Model
             BusquedaFabricantes = 1710,
 
             [Display(Name = "BUSQUEDA EMPRESA DESCUENTO")]
-            BusquedaEmpresaDescuento = 712
+            BusquedaEmpresaDescuento = 712,
+
+            [Display(Name = "PRODUCTOS HOMOLOGADOS TECNICA EN NEXTSOFT")]
+            ProductosHomologadosTecnica = 746,
+
+            [Display(Name = "EDITA CONFIGURACION EMPRESA")]
+            EditaConfiguracionEmpresa = 151
         };
 
 

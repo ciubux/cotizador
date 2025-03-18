@@ -1672,15 +1672,14 @@ namespace Cotizador.Controllers
                         serieNumeroGuia = guiaRemision.serieNumeroGuia, 
                         dataSend = dataSend, 
                         result = result });
-                } else
-                {
-                return JsonConvert.SerializeObject(new
-                    {
-                        success = false,
-                        successRegistro = successRegistro,
-                        successNextSoft = successNextSoft,
-                        messageRegistro = guiaRemision.guiaRemisionValidacion.tipoErrorValidacionString
-                    });
+                } else {
+                    return JsonConvert.SerializeObject(new
+                        {
+                            success = false,
+                            successRegistro = successRegistro,
+                            successNextSoft = successNextSoft,
+                            messageRegistro = guiaRemision.guiaRemisionValidacion.tipoErrorValidacionString
+                        });
                 }
             }
 

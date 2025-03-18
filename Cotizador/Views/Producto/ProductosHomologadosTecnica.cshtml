@@ -1,0 +1,99 @@
+﻿@{
+    ViewBag.Title = "Productos Homologados con Técnica en NextSoft";
+
+    List<List<string>> productos = ViewBag.productos;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+
+    <form class="form-horizontal" method="post">
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-sm-12 col-lg-6">
+                <div class="form-group">
+                    <label class="control-label col-xs-6 text-left" for="txtSearch">Buscar Nombre o Código:</label>
+                    <div class="col-xs-6">
+                        <input class="form-control" type="text" id="txtSearch">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row">
+        <div class="col-sm-6 col-lg-4">
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-lg-12 tableFixHead" style="height:600px;">
+            <table id="tableProductos" class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th colspan="4">MP</th>
+                        <th colspan="4">Técnica</th>
+                    </tr>
+                    <tr>
+                        <th><span>Código</span></th>
+                        <th><span>Nombre</span></th>
+                        <th><span>Unidad</span></th>
+                        <th><span>Factor</span></th>
+                        <th><span>Código</span></th>
+                        <th><span>Nombre</span></th>
+                        <th><span>Unidad</span></th>
+                        <th><span>Factor</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (List<string> item in productos) {
+                    <tr>
+                        <td>@item[0]</td>
+                        <td>@item[1]</td>
+                        <td>@item[2]</td>
+                        <td>@item[3]</td>
+                        <td>@item[4]</td>
+                        <td>@item[5]</td>
+                        <td>@item[6]</td>
+                        <td>@item[7]</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("txtSearch");
+        const table = document.getElementById("tableProductos"); 
+        const tbody = table.querySelector("tbody");
+
+        searchInput.addEventListener("input", function () {
+            const searchText = this.value.toLowerCase();
+            const rows = tbody.getElementsByTagName("tr"); 
+
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName("td");
+                let match = false;
+
+                const columnsToSearch = [0, 1, 2, 4, 5, 6];
+
+                for (let col of columnsToSearch) {
+                    if (cells[col] && cells[col].textContent.toLowerCase().includes(searchText)) {
+                        match = true;
+                        break;
+                    }
+                }
+
+                rows[i].style.display = match ? "" : "none";
+            }
+        });
+    });
+
+</script>

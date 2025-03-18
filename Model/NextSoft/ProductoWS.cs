@@ -70,5 +70,19 @@ namespace Model.NextSoft
 
             return resultContent;
         }
+
+        public async Task<object> productosHomologados()
+        {
+            string nombreServicio = "productosintegracion";
+
+            var sendData = new
+            {
+                token = this.apiToken
+            };
+
+            object resultContent = await this.callService(sendData, nombreServicio);
+
+            return resultContent;
+        }
     }
 }

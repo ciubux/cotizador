@@ -99,13 +99,16 @@ namespace Model.NextSoft
         {
             List<object> listaDet = new List<object>();
             int numDet = 1;
+            decimal igvCompra = 0;
+            decimal tIgv = 0.18m;
 
             //BORRAR
             //obj.clienteVer = obj.pedido.cliente;
 
-            foreach(DocumentoDetalle movDet in obj.documentoDetalle)
+            foreach (DocumentoDetalle movDet in obj.documentoDetalle)
             {
                 int cantidadAtender = movDet.cantidadPorAtender; //movDet.cantidadPorAtender;
+                
 
                 if (cantidadAtender > 0 && 
                     (movDet.producto.tipoProducto == Producto.TipoProducto.Bien || 
@@ -125,6 +128,10 @@ namespace Model.NextSoft
 
                     if (detallesVentaRelacionada.Count > 0) {
                         valorCompra = movDet.subTotal;
+                        if (!movDet.producto.inafecto && !movDet.producto.exoneradoIgv)
+                        {
+                            igvCompra = igvCompra + (tIgv * valorCompra);
+                        }
                     }
 
                     switch (movDet.idProductoPresentacion)
@@ -260,6 +267,7 @@ namespace Model.NextSoft
                 //usuario = nombreUsuario,
                 usuario = "nextsoft",
                 peso = 1,
+                igvdoccompra = igvCompra,
                 items = listaDet.ToArray()
             };
 

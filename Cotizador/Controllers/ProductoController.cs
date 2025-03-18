@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Threading.Tasks;
+using Model.NextSoft;
 
 namespace Cotizador.Controllers
 {
@@ -2662,6 +2663,30 @@ namespace Cotizador.Controllers
         }
 
 
+        public async Task<ActionResult> ProductosHomologadosTecnica()
+        {
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (!usuario.visualizaProductos || !usuario.modificaMaestroProductos)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.ProductosHomologadosTecnica;
+            ViewBag.pagina = (int)Constantes.paginas.ProductosHomologadosTecnica;
+
+            NextSoftBL nsBL = new NextSoftBL();
+            List<List<string>> listaProductos = await nsBL.productosHomologados();
+
+            ViewBag.productos = listaProductos;
+
+            return View();
+        }
     }
 
 

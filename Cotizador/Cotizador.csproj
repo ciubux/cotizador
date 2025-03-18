@@ -790,6 +790,8 @@
     <Content Include="Views\Reporte\SellInProveedores.cshtml" />
     <Content Include="Views\Fabricante\List.cshtml" />
     <Content Include="Views\EmpresaDescuento\List.cshtml" />
+    <Content Include="Views\Empresa\EditarParametros.cshtml" />
+    <Content Include="Views\Producto\ProductosHomologadosTecnica.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

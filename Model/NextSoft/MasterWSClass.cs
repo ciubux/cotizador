@@ -32,7 +32,7 @@ namespace Model.NextSoft
                 string resultContent = await result.Content.ReadAsStringAsync();
 
                 dataResult = JsonConvert.DeserializeObject(resultContent);
-                
+                 
             }
             catch (Exception ex)
             {
