@@ -1796,7 +1796,7 @@ jQuery(function ($) {
                 $.alert({
                     title: "FACTURA PEDIDO RELACIONADO",
                     content: "Al emitir la factura de esta guía se emitirá automáticamente la factura del pedido de origen.",
-                    type: 'yellow',
+                    type: 'orange',
                     buttons: {
                         OK: function () {
 
