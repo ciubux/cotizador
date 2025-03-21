@@ -255,6 +255,7 @@ namespace BusinessLayer
                         pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "Problema de homologación de productos Nextsoft: " + res.message;
                         pedido.enviarMailProductosInvalidosNextsoft = true;
                         pedido.mensajeErrorValidacionProductosNextsoft = "Problema de homologación de productos Nextsoft: " + res.message;
+                        pedido.productosNextSoftHomologados = false;
                     }
                 } else
                 {
@@ -262,7 +263,7 @@ namespace BusinessLayer
 
                     if (res.code != 0)
                     {
-                        pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "Problema de homologación de productos Nextsoft: " + res.message;
+                        pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + " Problema de homologación de productos Nextsoft: " + res.message;
                         pedido.productosNextSoftHomologados = false;
                     }
                 }

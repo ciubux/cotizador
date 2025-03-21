@@ -3045,6 +3045,12 @@ jQuery(function ($) {
 
                 $("#verIdPedido").val(pedido.idPedido);
 
+                var textoProductosHomologados = "";
+                if (pedido.productosNextSoftHomologados == false && pedido.empresa_codigo == "TC") {
+                    textoProductosHomologados = '<br/><span class="text-danger" style="font-size: 11px;">Hay Productos no Homologados con MP</span>';
+                }
+
+
                 $('#pedido_numeroGrupo')
                     .find('option')
                     .remove()
@@ -3089,7 +3095,7 @@ jQuery(function ($) {
                     numeroPedido = numeroPedido + '<br/><span style="color:red; font-weight: bold;">TRUNCADO</span>'; 
                 }
 
-                $("#verNumero").html(numeroPedido);
+                $("#verNumero").html(numeroPedido + textoProductosHomologados);
                 
 
                 $("#verLnkDFCotizacion").hide();
@@ -3232,6 +3238,7 @@ jQuery(function ($) {
                 }
 
 
+                
                 $("#tableDetallePedido > tbody").empty();
 
                 
@@ -5597,10 +5604,14 @@ jQuery(function ($) {
                     if (pedidoList[i].numeroPedidoRelacionado > 0) {
                         textoPedidoRelacionado = "\n[" + pedidoList[i].codigoEmpresaPedidorelacionado + " " + pedidoList[i].numeroPedidoRelacionado + "]"
                     }
+                    var textoProductosHomologados = "";
+                    if (pedidoList[i].productosNextSoftHomologados == false && pedidoList[i].empresa_codigo == "TC") {
+                        textoProductosHomologados = '<br/><span class="text-danger" style="font-size: 11px;">Hay Productos no Homologados con MP</span>';
+                    }
 
                     var pedido = '<tr data-expanded="true" class="pedido-data" idPedido="' + pedidoList[i].idPedido + '">' +
                         '<td>  ' + pedidoList[i].idPedido + '</td>' +
-                        '<td>  ' + pedidoList[i].numeroPedidoNumeroGrupoString + textoPedidoRelacionado + '  </td>' +
+                        '<td>  ' + pedidoList[i].numeroPedidoNumeroGrupoString + textoPedidoRelacionado + textoProductosHomologados + ' </td>' +
                         '<td><img src="/images/logos/icon_' + pedidoList[i].empresa_codigo + '.png" height="27"/></td>' +
                         '<td>  ' + pedidoList[i].ciudad_nombre + '  </td>' +
                         '<td>  ' + pedidoList[i].cliente_codigo + ' </td>' +

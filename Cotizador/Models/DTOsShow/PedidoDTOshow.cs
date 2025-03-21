@@ -25,6 +25,7 @@ namespace Cotizador.Models.DTOshow
         public String cotizacion_numeroCotizacionString { get; set; }
         public long cotizacion_codigoCotizacion { get; set; }
 
+        public bool productosNextSoftHomologados { get; set; }
         public Boolean entregaATerceros { get; set; }
         public bool esVentaIndirecta { get; set; }  
         public String tiposPedidoString { get; set; }

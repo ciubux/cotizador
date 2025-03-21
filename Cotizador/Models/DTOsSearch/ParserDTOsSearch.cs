@@ -271,6 +271,7 @@ namespace Cotizador.Models.DTOsSearch
                 PedidoDTO pedidoDTO = new PedidoDTO();
                 pedidoDTO.fechaProgramacion = pedidoTmp.fechaProgramacion;
                 pedidoDTO.stockConfirmado = pedidoTmp.stockConfirmado;
+                pedidoDTO.productosNextSoftHomologados = pedidoTmp.productosNextSoftHomologados;
                 pedidoDTO.observaciones = pedidoTmp.observaciones;
                 pedidoDTO.idPedido = pedidoTmp.idPedido;
                 pedidoDTO.numeroPedido = pedidoTmp.numeroPedido;

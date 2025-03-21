@@ -75,6 +75,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
 
+            InputParameterAdd.Int(objCommand, "productosHomologadosNextsoft", pedido.productosNextSoftHomologados ? 1 : 0);
             InputParameterAdd.Varchar(objCommand, "moneda", pedido.moneda == null ? null : pedido.moneda.codigo);
 
             if (pedido.clasePedido == Pedido.ClasesPedido.Venta)
@@ -305,6 +306,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
             InputParameterAdd.Varchar(objCommand, "moneda", pedido.moneda == null ? null : pedido.moneda.codigo);
+            InputParameterAdd.Int(objCommand, "productosHomologadosNextsoft", pedido.productosNextSoftHomologados ? 1 : 0);
 
             if (pedido.clasePedido == Pedido.ClasesPedido.Venta)
             {
@@ -772,6 +774,8 @@ namespace DataLayer
 
                 pedido.numeroPedidoRelacionado = Converter.GetInt(row, "numero_pedido_rel");
                 pedido.codigoEmpresaPedidoRelacionado = Converter.GetString(row, "codigo_empresa_pedido_rel");
+
+                pedido.productosNextSoftHomologados = Converter.GetInt(row, "productos_homologados_nextsoft") == 1 ? true : false;
                 pedido.entregaATerceros = Converter.GetInt(row, "entrega_terceros") == 1 ? true : false;
                 if(pedido.entregaATerceros) { 
                     pedido.nombreClienteTercero = Converter.GetString(row, "nombre_cliente_rel");
@@ -857,6 +861,7 @@ namespace DataLayer
                 pedido.horaEntregaAdicionalDesde = Converter.GetString(row, "hora_entrega_adicional_desde");
                 pedido.horaEntregaAdicionalHasta = Converter.GetString(row, "hora_entrega_adicional_hasta");
 
+                pedido.productosNextSoftHomologados = Converter.GetInt(row, "productos_homologados_nextsoft") == 1 ? true : false;
                 pedido.entregaATerceros = Converter.GetInt(row, "entrega_terceros") == 1 ? true : false;
                 pedido.entregaTerciarizada = Converter.GetInt(row, "entrega_terciarizada") == 1 ? true : false;
                 pedido.idClienteTercero = Converter.GetGuid(row, "id_cliente_tercero");

@@ -11,6 +11,9 @@ namespace Cotizador.Models.DTOsSearch
         public DateTime? fechaProgramacion { get; set; }
 
         public int stockConfirmado { get; set; }
+
+        public bool productosNextSoftHomologados { get; set; }
+
         public String observaciones { get; set; }
 
         public Guid idPedido { get; set; }

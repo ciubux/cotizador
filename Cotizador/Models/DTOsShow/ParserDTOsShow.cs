@@ -399,6 +399,7 @@ namespace Cotizador.Models.DTOsShow
             pedidoDTOshow.esVentaIndirecta = pedido.esVentaIndirecta;
             pedidoDTOshow.empresa_codigo = pedido.empresa == null ? "" : pedido.empresa.codigo;
 
+            pedidoDTOshow.productosNextSoftHomologados = pedido.productosNextSoftHomologados;
             pedidoDTOshow.entregaATerceros = pedido.entregaATerceros;
             pedidoDTOshow.textoCondicionesPago = pedido.textoCondicionesPago;
             pedidoDTOshow.fechaHorarioEntrega = pedido.fechaHorarioEntrega;
