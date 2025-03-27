@@ -442,6 +442,24 @@ namespace Cotizador.Controllers
         }
 
 
+        public String HistorialCostos()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO]; 
+            Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
+            Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
+
+            PrecioEspecialBL bL = new PrecioEspecialBL();
+            
+            List<PrecioEspecialCabecera> list = new List<PrecioEspecialCabecera>();
+
+            if(usuario.visualizaCostos)
+            {
+                list = bL.HistorialCostos(usuario.idUsuario, idCliente, idProducto);
+            }
+
+            return JsonConvert.SerializeObject(list);
+        }
+
         public String ConsultarSiExistePrecioEspecial()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -1076,6 +1094,14 @@ namespace Cotizador.Controllers
             }
 
             return RedirectToAction("ActualizacionCorrectaTodos", "PrecioEspecial");
+        }
+
+        public ActionResult LogCostosProducto()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            ViewBag.usuario = usuario;
+
+            return PartialView();
         }
 
         public ActionResult ActualizacionCorrectaTodos()

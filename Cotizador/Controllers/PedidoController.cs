@@ -2088,6 +2088,14 @@ namespace Cotizador.Controllers
             Guid idPedido = pedido.idPedido;
             int estado = (int)pedido.seguimientoPedido.estado;
             String observacion = pedido.seguimientoPedido.observacion;
+
+            bool mostrarAlertaHomologacionNextsoft = false;
+            
+            if (!pedido.productosNextSoftHomologados && pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
+            {
+                mostrarAlertaHomologacionNextsoft = true;
+            }
+
             if (continuarLuego == 1)
             {
                 SeguimientoPedido.estadosSeguimientoPedido estadosSeguimientoPedido = SeguimientoPedido.estadosSeguimientoPedido.Edicion;
@@ -2101,7 +2109,9 @@ namespace Cotizador.Controllers
 
             usuarioBL.updatePedidoSerializado(usuario, null);
 
-            var v = new { numeroPedido = numeroPedidoString, estado = estado, observacion = observacion, idPedido = idPedido };
+            var v = new { numeroPedido = numeroPedidoString, estado = estado,
+                mostrarAlertaHomologacionNextsoft = mostrarAlertaHomologacionNextsoft,
+                observacion = observacion, idPedido = idPedido };
             String resultado = JsonConvert.SerializeObject(v);
 
            // String resultado = "{ \"codigo\":\"" + numeroPedido + "\", \"estado\":\"" + estado + "\", \"observacion\":\"" + observacion + "\" }";
@@ -2147,6 +2157,14 @@ namespace Cotizador.Controllers
             Guid idPedido = pedido.idPedido;
             int estado = (int)pedido.seguimientoPedido.estado;
             String observacion = pedido.seguimientoPedido.observacion;
+
+            bool mostrarAlertaHomologacionNextsoft = false;
+
+            if (!pedido.productosNextSoftHomologados && pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
+            {
+                mostrarAlertaHomologacionNextsoft = true;
+            }
+
             if (continuarLuego == 1)
             {
                 SeguimientoPedido.estadosSeguimientoPedido estadosSeguimientoPedido = SeguimientoPedido.estadosSeguimientoPedido.Edicion;
@@ -2159,7 +2177,9 @@ namespace Cotizador.Controllers
 
             usuarioBL.updatePedidoSerializado(usuario, null);
 
-            var v = new { numeroPedido = numeroPedidoString, estado = estado, observacion = observacion, idPedido = idPedido };
+            var v = new { numeroPedido = numeroPedidoString, estado = estado,
+                mostrarAlertaHomologacionNextsoft = mostrarAlertaHomologacionNextsoft,
+                observacion = observacion, idPedido = idPedido };
             String resultado = JsonConvert.SerializeObject(v);
             
             //String resultado = "{ \"codigo\":\"" + numeroPedido + "\", \"estado\":\"" + estado + "\", \"observacion\":\"" + observacion + "\" }";

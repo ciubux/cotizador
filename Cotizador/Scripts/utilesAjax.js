@@ -22,6 +22,7 @@ $("#editLogFechaVigencia").datepicker({ dateFormat: "dd/mm/yy" });
 var idProductoViewMostrarLog = "";
 var nombreProductoViewMostrarLog = "";
 var skuProductoViewMostrarLog = "";
+var idClienteViewMostrarLog = "";
 
 $(document).on('click', "#lnkMostrarLogPrecioProducto", function () {
     idProductoViewMostrarLog = $(this).attr("idProducto");
@@ -29,6 +30,8 @@ $(document).on('click', "#lnkMostrarLogPrecioProducto", function () {
     skuProductoViewMostrarLog = $(this).attr("sku");
     cargarVistaLogPreciosHistoricos();
 });
+
+
 
 $(document).on('click', ".btnVerHistorialProducto", function () {
     idProductoViewMostrarLog = $(this).attr("idProducto");
@@ -249,6 +252,50 @@ $(document).on('click', ".btnLogAnularDatoHistorico", function () {
 
     
 });
+
+
+$(document).on('click', "#lnkHistorialCostosEspeciales", function () {
+    idProductoViewMostrarLog = $(this).attr("idProducto");
+    nombreProductoViewMostrarLog = $(this).attr("nombreProducto");
+    skuProductoViewMostrarLog = $(this).attr("sku");
+    idClienteViewMostrarLog = $(this).attr("idCliente");
+    cargarVistaLogCostosEspecialesProducto();
+});
+
+function cargarVistaLogCostosEspecialesProducto() {
+    var actionUrl = "HistorialCostos";
+    $("#verProductoLCEP").html(nombreProductoViewMostrarLog);
+    $("#verCodigoProductoLCEP").html(skuProductoViewMostrarLog);
+
+    $.ajax({
+        url: "/PrecioEspecial/" + actionUrl,
+        type: 'POST',
+        dataType: 'JSON',
+        data: {
+            idProducto: idProductoViewMostrarLog,
+            idCliente: idClienteViewMostrarLog
+        },
+        success: function (historial) {
+
+            $("#tableLogCostosEspecialesProducto > tbody").empty();
+
+            for (var i = 0; i < historial.length; i++) {
+                var item = historial[i].precios[0];
+
+                var addRow = '<td>' + historial[i].codigo + ' ' + historial[i].titulo + '</td>'
+                    + '<td>' + item.FechaInicioDesc + '</td>'
+                    + '<td>' + item.fechaFinDesc + '</td>'
+                    + '<td>' + item.moneda.simbolo + ' ' + item.unidadCosto.CostoSinIGV + '</td>'
+                    + '<td>' + item.unidadCosto.Presentacion + '</td>'
+                    + '<td>' + item.observaciones + '</td>';
+
+                $("#tableLogCostosEspecialesProducto").append('<tr data-expanded="true">' + addRow + '</tr>');
+            }
+
+            FooTable.init('#tableLogCostosEspecialesProducto');
+        }
+    });
+}
 
 
 function descargarPDFCPE(idDocumentoVenta, serieNumero) {

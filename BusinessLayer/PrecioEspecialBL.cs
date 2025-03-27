@@ -89,5 +89,13 @@ namespace BusinessLayer
                 return dal.ActualizarTodos(idUsuario, listas);
             }
         }
+
+        public List<PrecioEspecialCabecera> HistorialCostos(Guid idUsuario, Guid idCliente, Guid idProducto)
+        {
+            using (PrecioEspecialDAL dal = new PrecioEspecialDAL())
+            {
+                return dal.HistorialCostos(idUsuario, idCliente, idProducto);
+            }
+        }
     }
 }

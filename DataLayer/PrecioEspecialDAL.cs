@@ -749,5 +749,58 @@ namespace DataLayer
 
             return true;
         }
+
+        public List<PrecioEspecialCabecera> HistorialCostos(Guid idUsuario, Guid idCliente, Guid idProducto)
+        {
+            var objCommand = GetSqlCommand("ps_historialCostosEspeciales");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
+            InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
+
+            DataTable dataTable = Execute(objCommand);
+
+
+            List<PrecioEspecialCabecera> lista = new List<PrecioEspecialCabecera>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                PrecioEspecialCabecera obj = new PrecioEspecialCabecera();
+                PrecioEspecialDetalle item = new PrecioEspecialDetalle();
+
+                obj.idPrecioEspecialCabecera = Converter.GetGuid(row, "id_precio_especial_cabecera");
+                obj.tipoNegociacion = Converter.GetString(row, "tipo_negociacion");
+                obj.codigo = Converter.GetString(row, "codigo");
+                obj.titulo = Converter.GetString(row, "titulo");
+
+                item.idPrecioEspecialDetalle = Converter.GetGuid(row, "id_precio_especial_detalle");
+
+                item.producto = new Producto();
+                item.producto.idProducto = idProducto;
+                item.producto.sku = Converter.GetString(row, "sku");
+
+                item.unidadCosto = new ProductoPresentacion();
+                item.unidadCosto.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion_costo");
+                item.unidadCosto.CostoSinIGV = Converter.GetDecimal(row, "costo_unitario");
+                item.unidadCosto.Presentacion = Converter.GetString(row, "unidad_costo");
+                item.unidadCosto.Equivalencia = Converter.GetDecimal(row, "equivalencia_costo");
+                item.observaciones = Converter.GetString(row, "observaciones");
+
+                item.fechaInicio = Converter.GetDateTime(row, "fecha_inicio");
+                item.fechaFin = Converter.GetDateTime(row, "fecha_fin");
+                item.moneda = new Moneda();
+                item.moneda.codigo = Converter.GetString(row, "codigo_moneda");
+                item.moneda.nombre = Converter.GetString(row, "nombre_moneda");
+                item.moneda.simbolo = Converter.GetString(row, "simbolo_moneda");
+
+                item.Estado = 1;
+
+                obj.precios = new List<PrecioEspecialDetalle>();
+                obj.precios.Add(item);
+
+                lista.Add(obj);
+            }
+
+            return lista;
+        }
+
     }
 }

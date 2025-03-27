@@ -1665,6 +1665,11 @@ jQuery(function ($) {
                 $("#lnkMostrarLogPrecioProducto").attr("sku", producto.sku);
                 $("#lnkMostrarLogPrecioProducto").attr("idProducto", idProducto);
 
+                $("#lnkHistorialCostosEspeciales").attr("nombreProducto", producto.nombre);
+                $("#lnkHistorialCostosEspeciales").attr("sku", producto.sku);
+                $("#lnkHistorialCostosEspeciales").attr("idProducto", idProducto);
+                $("#lnkHistorialCostosEspeciales").attr("idCliente", idCliente);
+
 
                 $("#verUnidadProveedor").html(producto.unidadProveedor);
                 $("#verUnidadMP").html(producto.unidad);
@@ -2765,6 +2770,17 @@ jQuery(function ($) {
                     window.location = '/Pedido/Index';
                 }
 
+                if (resultado.mostrarAlertaHomologacionNextsoft) {
+                    $.alert({
+                        title: TITLE_EXITO,
+                        type: 'orange',
+                        content: "Existen productos que no estan homologados con MP. Revisar comentario de estado para mayor detalle.",
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                }
+
             }
         });
     }
@@ -2819,6 +2835,17 @@ jQuery(function ($) {
                     //alert("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
                     mostrarMensajeErrorProceso("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
                     window.location = '/Pedido/Index';
+                }
+
+                if (resultado.mostrarAlertaHomologacionNextsoft) {
+                    $.alert({
+                        title: TITLE_EXITO,
+                        type: 'orange',
+                        content: "Existen productos que no estan homologados con MP. Revisar comentario de estado para mayor detalle.",
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
                 }
             }
         });
