@@ -463,15 +463,8 @@ namespace Cotizador.Controllers
         public String ConsultarSiExistePrecioEspecial()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            Guid idPrecioEspecialCabecera = Guid.Parse(Request["idPrecioEspecialCabecera"].ToString());
-            PrecioEspecialBL bL = new PrecioEspecialBL();
-            PrecioEspecialCabecera obj = bL.GetPrecioEspcial(idPrecioEspecialCabecera, usuario.idUsuario);
-            obj.usuario = usuario;
 
-            String resultado = JsonConvert.SerializeObject(obj);
-            this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL_VER] = obj;
-
-            obj = (PrecioEspecialCabecera)this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL];
+            PrecioEspecialCabecera obj = (PrecioEspecialCabecera)this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL];
             if (obj == null)
                 return "{\"existe\":\"false\"}";
             else

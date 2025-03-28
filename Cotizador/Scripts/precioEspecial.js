@@ -480,7 +480,27 @@ jQuery(function ($) {
     });
 
     $("#btnCancelarPrecioEspecial").click(function () {
-        ConfirmDialog(MENSAJE_CANCELAR_EDICION, '/PrecioEspecial/CancelarCreacion', null)
+        $.confirm({
+            title: "SALIR",
+            type: 'orange',
+            content: MENSAJE_CANCELAR_EDICION,
+            buttons: {
+                no: {
+                    text: 'NO',
+                    btnClass: 'btn-success',
+                    action: function () {
+                        
+                    }
+                },
+                si: {
+                    text: 'SI',
+                    btnClass: 'btn-danger',
+                    action: function () {
+                        window.location = "/PrecioEspecial/CancelarCreacion";
+                    }
+                }
+            }
+        });
     })
 
     $("#btnFinalizarEdicionPrecioEspecial").click(function () {  
@@ -638,42 +658,30 @@ jQuery(function ($) {
     }
 
 
-    $(document).on('click', "button.btnEditarAjusteAlmacen", function () {
-      //  desactivarBotonesVer();
+    $(document).on('click', "button#btnEditarPrecioEspecial", function () {
+        //desactivarBotonesVer();
         //Se identifica si existe cotizacion en curso, la consulta es sincrona
 
-        var arrrayClass = event.target.getAttribute("class").split(" ");
-        var idRol = arrrayClass[0];
-        
         $.ajax({
-            url: "/AjusteAlmacen/ConsultarSiExisteAjusteAlmacen",
+            url: "/PrecioEspecial/ConsultarSiExistePrecioEspecial",
             type: 'POST',
             async: false,
             dataType: 'JSON',
             data: {
-                idRol: idRol
             },
             success: function (resultado) {
                 if (resultado.existe == "false") {
-
                     $.ajax({
-                        url: "/AjusteAlmacen/iniciarEdicionAjusteAlmacen",
+                        url: "/PrecioEspecial/iniciarEdicionPrecioEspecial",
                         type: 'POST',
-                        error: function (detalle) { alert("Ocurrió un problema al iniciar la edición del Ajuste de Almacen."); },
+                        error: function (detalle) { alert("Ocurrió un problema al iniciar la edición del Precio Especial."); },
                         success: function (fileName) {
-                            window.location = '/AjusteAlmacen/Editar';
+                            window.location = '/PrecioEspecial/Editar';
                         }
                     });
-
                 }
                 else {
-                    if (resultado.idRol == 0) {
-                        alert('Está creando un nuevo ajuste almacen; para continuar por favor diríjase a la página "Crear/Modificar Ajuste Almacen" y luego haga clic en el botón Cancelar.');
-                    }
-                    
-                    else {
-                        alert('Ya se encuentra editando un ajuste almacen para continuar por favor dirigase a la página "Crear/Modificar Ajuste Almacen".');
-                    }
+                    alert('Ya se encuentra creando o editando un ajuste almacen para continuar por favor dirigase a la página "Crear/Modificar Precio Especial".');
                 }
             }
         });
