@@ -420,8 +420,13 @@ namespace DataLayer
             InputParameterAdd.VarcharEmpty(objCommand, "fechaVigenciaDesde", obj.fechaInicio.ToString("yyyy-MM-dd"));
             InputParameterAdd.VarcharEmpty(objCommand, "fechaVigenciaHasta", obj.fechaFin.ToString("yyyy-MM-dd"));
 
-            InputParameterAdd.Int(objCommand, "idClienteSunat", obj.clienteSunat.idClienteSunat);
-            InputParameterAdd.Int(objCommand, "idGrupo", obj.grupoCliente.idGrupoCliente);
+            if (obj.tipoNegociacion == "RUC")
+            {
+                InputParameterAdd.Int(objCommand, "idClienteSunat", obj.clienteSunat.idClienteSunat);
+            } else {
+                InputParameterAdd.Int(objCommand, "idGrupo", obj.grupoCliente.idGrupoCliente);
+            }
+
 
             DataTable dataTable = Execute(objCommand);
 

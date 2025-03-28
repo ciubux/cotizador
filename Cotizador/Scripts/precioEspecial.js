@@ -47,9 +47,26 @@ jQuery(function ($) {
         setTimeout(function () {
             $("#btnBusqueda").click();
             cargarChosenCliente();
+            cargarChosenGrupo();
+
+            pagina = $("#pagina").val();
+            
+            if (pagina == PAGINA_BUSQUEDA_PRECIOSESPECIALES) {
+                var tipoNegociacion = $("#tipoNegociacion").val();
+
+                if (tipoNegociacion == "RUC") {
+                    $("#divClienteSunat").show();
+                    $("#divGrupoCliente").hide();
+                } else {
+                    $("#divClienteSunat").hide();
+                    $("#divGrupoCliente").show();
+                }
+            }
+
         }, 500);
         
     });
+
 
 
     function limpiarFormulario() {
@@ -202,7 +219,20 @@ jQuery(function ($) {
     });
 
     $("#tipoNegociacion").change(function () {
-        changeInputString("tipoNegociacion", $(this).val());
+        var tipoNegociacion = $(this).val();
+        changeInputString("tipoNegociacion", tipoNegociacion);
+
+        pagina = $("#pagina").val();
+
+        if (pagina == PAGINA_BUSQUEDA_PRECIOSESPECIALES) {
+            if (tipoNegociacion == "RUC") {
+                $("#divClienteSunat").show();
+                $("#divGrupoCliente").hide();
+            } else {
+                $("#divClienteSunat").hide();
+                $("#divGrupoCliente").show();
+            }
+        }
 
         $.ajax({
             url: "/PrecioEspecial/LimpiarDetallesPrecios",
@@ -265,48 +295,17 @@ jQuery(function ($) {
         changeInputDate("fechaFin", fechaFin);
     });
 
-
-    $("#btnAprobarAjusteAlmacen").click(function () {
-        $('body').loadingModal({
-            text: 'Registrando Aprobación...'
-        });
-        $('body').loadingModal('show');
-
-        var idAjusteAlmacen = $(this).attr("idAjusteAlmacen");
+    $("#btnLimpiarBusqueda").click(function () {
         $.ajax({
-            url: "/AjusteAlmacen/AprobarAjusteAlmacen",
+            url: "/PrecioEspecial/CleanBusqueda",
             type: 'POST',
-            data: {
-                idAjusteAlmacen: idAjusteAlmacen
-            },
-            error: function () {
-                $('body').loadingModal('hide');
-                $.alert({
-                    title: "ERROR",
-                    content: 'Ocurrió un error.',
-                    type: 'green',
-                    buttons: {
-                        OK: function () {
-                        }
-                    }
-                });
-            },
             success: function () {
-                $('body').loadingModal('hide');
-                $.alert({
-                    title: "REGISTRO EXITOSO",
-                    content: 'Se registro la aprobación del Ajuste de almacén.',
-                    type: 'green',
-                    buttons: {
-                        OK: function () {
-                            location.reload();
-                        }
-                    }
-                });
-                
+                location.reload();
             }
         });
     });
+
+    
     
 
 

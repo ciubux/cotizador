@@ -1207,7 +1207,12 @@ jQuery(function ($) {
                 $("#lnkMostrarLogPrecioProducto").attr("nombreProducto", producto.nombre);
                 $("#lnkMostrarLogPrecioProducto").attr("sku", producto.sku);
                 $("#lnkMostrarLogPrecioProducto").attr("idProducto", idProducto);
-                
+
+                $("#lnkHistorialCostosEspeciales").attr("nombreProducto", producto.nombre);
+                $("#lnkHistorialCostosEspeciales").attr("sku", producto.sku);
+                $("#lnkHistorialCostosEspeciales").attr("idProducto", idProducto);
+                $("#lnkHistorialCostosEspeciales").attr("idCliente", idCliente);
+
                 $("#verUnidadProveedor").html(producto.unidadProveedor);
                 $("#verUnidadMP").html(producto.unidad);
                 $("#verUnidadAlternativa").html(producto.unidadAlternativa);

@@ -23,7 +23,7 @@
         <div class="row">
             <!--NÚMERO COTIZACION-->
             <div class="col-sm-6 col-lg-4">
-                
+
                 <div class="form-group">
                     <label for="numero" class="control-label col-xs-4">Número:</label>
                     <div class="col-xs-8">
@@ -800,6 +800,10 @@
                                     }
                                     <p class="form-control-static text-center">
                                         <button id="lnkMostrarLogPrecioProducto" type="button" class="btn btn-link lnkAction lnkActionLabel" data-toggle="modal" data-target="#modalLogPrecioProducto"></button>
+                                        @if (cotizacion.usuario.visualizaCostos)
+                                        {
+                                            <button id="lnkHistorialCostosEspeciales" type="button" class="btn btn-link lnkAction lnkActionLabel" data-toggle="modal" data-target="#modalLogCostosEspecialesProducto">Ver Historial de Costos Especiales</button>
+                                        }
                                     </p>
                                 </div>
                             </div>
@@ -914,6 +918,8 @@
 
 
 @Html.Action("LogPrecioProducto", "Precio")
+@Html.Action("LogCostosProducto", "PrecioEspecial")
+
 
 @Html.Partial("../Stock/_ModalStockProducto")
 

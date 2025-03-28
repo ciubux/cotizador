@@ -550,6 +550,8 @@ namespace Cotizador.Controllers
         {
             PrecioEspecialCabecera obj = this.PrecioEspecialCabeceraSession;
             obj.clienteSunat.idClienteSunat = Int32.Parse(this.Request.Params["valor"]);
+            ClienteBL clienteBL = new ClienteBL();
+            obj.clienteSunat = clienteBL.getClienteSunat(obj.clienteSunat.idClienteSunat);
             this.PrecioEspecialCabeceraSession = obj;
             LimpiarDetallesPrecios();
         }
@@ -1094,6 +1096,11 @@ namespace Cotizador.Controllers
             }
 
             return RedirectToAction("ActualizacionCorrectaTodos", "PrecioEspecial");
+        }
+
+        public void CleanBusqueda()
+        {
+            instanciarPrecioEspecialBusqueda();
         }
 
         public ActionResult LogCostosProducto()

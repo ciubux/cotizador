@@ -22,6 +22,7 @@
                     <label for="tipoNegociacion" class="control-label col-xs-4">Tipo Negociación:</label>
                     <div class="col-xs-8">
                         <select id="tipoNegociacion" class="form-control">
+                            <option @(objSearch.tipoNegociacion.Equals("") ? "selected" : "") value="">Seleccione</option>
                             <option @(objSearch.tipoNegociacion.Equals("RUC") ? "selected" : "") value="RUC">RUC</option>
                             <option @(objSearch.tipoNegociacion.Equals("GRUPO") ? "selected" : "") value="GRUPO">GRUPO</option>
                         </select>
@@ -29,7 +30,37 @@
                 </div>
             </div>
 
+            <div class="col-xs-12 col-sm-6 col-lg-4" id="divClienteSunat">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="idClienteSunat">RUC:</label>
+                    <div class="col-xs-8">
+                        <select class="form-control input-sm" id="idClienteSunat" name="idClienteSunat">
+                            @if (objSearch.clienteSunat != null && objSearch.clienteSunat.idClienteSunat > 0)
+                            {
+                                <option selected value="@objSearch.clienteSunat.idClienteSunat">@objSearch.clienteSunat</option>
+                            }
+                            else
+                            {
+                                <option value=""></option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
 
+            <div class="col-xs-12 col-sm-6 col-lg-4" id="divGrupoCliente">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="idGrupoCliente">Grupo Cliente:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("GetGruposCliente", "GrupoCliente",
+                                new
+                                {
+                                    grupoClienteSelectId = "idGrupoCliente",
+                                    selectedValue = objSearch.grupoCliente.idGrupoCliente
+                                })
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="row" style="margin-bottom: 20px;">
