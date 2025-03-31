@@ -75,7 +75,7 @@ namespace Cotizador.ExcelExport
 
                 IDataFormat format = wb.CreateDataFormat();
                 ICellStyle dateFormatStyle = wb.CreateCellStyle();
-                dateFormatStyle.DataFormat = format.GetFormat("yyyy-mm-dd");
+                dateFormatStyle.DataFormat = format.GetFormat("dd/MM/yyyy");
 
 
 
@@ -168,6 +168,8 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "N° DOC CLIENTE", titleCellStyle); /* 6 */ indexColumn++;
                 UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "CLIENTE", titleCellStyle); /* 7 */ indexColumn++;
                 UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "CÓDIGO CLIENTE", titleCellStyle); /* 8 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "ES SUBDISTRIBUIDOR", titleCellStyle); /* 47 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "TIPO SUBDISTRIBUIDOR", titleCellStyle); /* 48 */ indexColumn++;
                 UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "TIPO MOVIMIENTO", titleCellStyle); /* 9 */ indexColumn++;
                 UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "FECHA TRANSACCIÓN", titleCellStyle); /* 10 */ indexColumn++;
                 UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "N° PEDIDO", titleCellStyle); /* 11 */ indexColumn++;
@@ -243,16 +245,20 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(6)); indexColumn++;
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(7)); indexColumn++;
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(8)); indexColumn++;
+
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], (int.Parse(obj.ElementAt(47))) == 1 ? "SI" : "NO"); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(48)); indexColumn++;
+
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(9)); indexColumn++;
-                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(10)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(10), dateFormatStyle); indexColumn++;
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(11)); indexColumn++;
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(12)); indexColumn++;
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(13)); indexColumn++;
-                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(14)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(14), dateFormatStyle); indexColumn++;
 
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(43)); indexColumn++;
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(44)); indexColumn++;
-                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(45)); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(45), dateFormatStyle); indexColumn++;
 
 
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(15)); indexColumn++;

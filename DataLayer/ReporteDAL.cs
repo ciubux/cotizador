@@ -246,6 +246,8 @@ namespace DataLayer
 
                 item.Add(String.Format(Constantes.formatoCuatroDecimales, costoEspecial)); /* 46: */
 
+                item.Add(Converter.GetInt(row, "ES_SUBDISTRIBUIDOR").ToString()); /* 47: */
+                item.Add(Converter.GetString(row, "nombre_cat_sub_distribuidor")); /* 48: */
 
                 resultados.Add(item);
             }
