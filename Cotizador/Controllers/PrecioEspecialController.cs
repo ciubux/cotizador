@@ -16,6 +16,7 @@ using Model.UTILES;
 using NPOI.XWPF.UserModel;
 using Model.ServiceReferencePSE;
 using static NPOI.HSSF.Util.HSSFColor;
+using NPOI.POIFS.FileSystem;
 
 namespace Cotizador.Controllers
 {
@@ -605,6 +606,40 @@ namespace Cotizador.Controllers
                 this.PrecioEspecialCabeceraSession = obj;
             }
         }
+
+        public void ChangeInputDetalleDecimal()
+        {
+            PrecioEspecialCabecera obj = this.PrecioEspecialCabeceraSession;
+            int pos = int.Parse(this.Request.Params["pos"].ToString());
+            PrecioEspecialDetalle item = obj.precios[pos];
+
+            PropertyInfo propertyInfo = item.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(item, Decimal.Parse(this.Request.Params["valor"]));
+
+            obj.precios[pos] = item;
+
+            this.PrecioEspecialCabeceraSession = obj;
+        }
+
+        public void ChangeInputDetallePresentacionDecimal()
+        {
+            PrecioEspecialCabecera obj = this.PrecioEspecialCabeceraSession;
+            int pos = int.Parse(this.Request.Params["pos"].ToString());
+            string tipo = this.Request.Params["tipo"].ToString();
+
+            PrecioEspecialDetalle item = obj.precios[pos];
+            ProductoPresentacion pres = tipo.Equals("COSTO") ? item.unidadCosto : item.unidadPrecio;
+
+            PropertyInfo propertyInfo = pres.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(pres, Decimal.Parse(this.Request.Params["valor"]));
+
+            if (tipo.Equals("COSTO")) { item.unidadCosto = pres; }
+            else { item.unidadPrecio = pres; }
+            
+            obj.precios[pos] = item;
+            this.PrecioEspecialCabeceraSession = obj;
+        }
+
 
         public ActionResult CancelarCreacion()
         {

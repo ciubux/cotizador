@@ -205,7 +205,7 @@
                     <tbody>
                         @foreach (Model.PrecioEspecialDetalle item in obj.precios)
                         {
-                            <tr>
+                            <tr posicion="@obj.precios.IndexOf(item)">
                                 <td>
                                     @(item.producto.sku + " - " + item.producto.descripcion)
                                     <br />
@@ -264,9 +264,9 @@
                                     }
                                 </td>
                                 <td>@item.unidadPrecio.Presentacion</td>
-                                <td>@item.unidadPrecio.PrecioSinIGV</td>
+                                <td><input type="number" class="montoPrecio form-control" value="@item.unidadPrecio.PrecioSinIGV" step=".0001"/></td>
                                 <td>@item.unidadCosto.Presentacion</td>
-                                <td>@item.unidadCosto.CostoSinIGV</td>
+                                <td><input type="number" class="montoCosto form-control" value="@item.unidadCosto.CostoSinIGV" step=".0001"/></td>
                                 <td>@item.FechaInicioDesc</td>
                                 <td>@item.fechaFinDesc</td>
                                 <td></td>

@@ -134,6 +134,21 @@ jQuery(function ($) {
         });
     }
 
+    function ChangeInputDetallePresentacionDecimal(pos, tipo, propiedad, valor) {
+        $.ajax({
+            url: "/PrecioEspecial/ChangeInputDetallePresentacionDecimal",
+            type: 'POST',
+            data: {
+                pos: pos,
+                tipo: tipo,
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
+
     function changeInputString(propiedad, valor) {
         $.ajax({
             url: "/PrecioEspecial/ChangeInputString",
@@ -205,7 +220,17 @@ jQuery(function ($) {
             }
         });
     }
-    
+
+    $(document).on('change', ".montoPrecio", function () {
+        var pos = $(this).closest("tr").attr("posicion");
+        ChangeInputDetallePresentacionDecimal(pos, "PRECIO", "PrecioSinIGV", $(this).val());
+    });
+
+    $(document).on('change', ".montoCosto", function () {
+        var pos = $(this).closest("tr").attr("posicion");
+        ChangeInputDetallePresentacionDecimal(pos, "COSTO", "CostoSinIGV", $(this).val());
+    });
+
     $("#obj_codigoListaProveedor").change(function () {
         changeInputString("codigoListaProveedor", $(this).val());
     });
@@ -508,7 +533,7 @@ jQuery(function ($) {
             procesarCrearPrecioEspecial();
         }
         else {
-            //editarPrecioEspecial();
+            editarPrecioEspecial();
         }
     });
 
@@ -545,7 +570,7 @@ jQuery(function ($) {
 
     function crearPrecioEspecial() {
         $('body').loadingModal({
-            text: 'Creando Rol...'
+            text: 'Creando...'
         });
         $.ajax({
             url: "/PrecioEspecial/Create",
@@ -576,7 +601,72 @@ jQuery(function ($) {
                 });
             }
         });
+    }
 
+    function procesarEditarPrecioEspecial() {
+        if (!validacionDatosPrecioEspecial())
+            return false;
+
+        if ($("#tieneDetallesConflicto").val() == 1) {
+            $.confirm({
+                title: "Precios con conflicto",
+                type: 'orange',
+                content: 'Tiene precios con conflico, estos no serán registrados.',
+                buttons: {
+                    aceptar: {
+                        text: 'ACEPTAR',
+                        btnClass: 'btn-success',
+                        action: function () {
+                            crearPrecioEspecial();
+                        }
+                    },
+                    regresar: {
+                        text: 'REGRESAR',
+                        btnClass: 'btn-danger',
+                        action: function () {
+
+                        }
+                    }
+                }
+            });
+        } else {
+            crearPrecioEspecial();
+        }
+    }
+
+    function editarPrecioEspecial() {
+        $('body').loadingModal({
+            text: 'Editando...'
+        });
+        $.ajax({
+            url: "/PrecioEspecial/Update",
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) {
+                $('body').loadingModal('hide');
+                $.alert({
+                    title: 'Error',
+                    content: 'Se generó un error al intentar actualizar.',
+                    type: 'red',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            },
+            success: function (resultado) {
+                $('body').loadingModal('hide');
+                $.alert({
+                    title: "Actualización Correcta",
+                    content: 'Los precios especiales se actualizaron correctamente.',
+                    type: 'green',
+                    buttons: {
+                        OK: function () {
+                            window.location = '/PrecioEspecial/List';
+                        }
+                    }
+                });
+            }
+        });
     }
 
     function validacionDatosPrecioEspecial() {
