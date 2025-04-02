@@ -533,7 +533,7 @@ jQuery(function ($) {
             procesarCrearPrecioEspecial();
         }
         else {
-            editarPrecioEspecial();
+            procesarEditarPrecioEspecial();
         }
     });
 
@@ -617,7 +617,7 @@ jQuery(function ($) {
                         text: 'ACEPTAR',
                         btnClass: 'btn-success',
                         action: function () {
-                            crearPrecioEspecial();
+                            editarPrecioEspecial();
                         }
                     },
                     regresar: {
@@ -630,7 +630,7 @@ jQuery(function ($) {
                 }
             });
         } else {
-            crearPrecioEspecial();
+            editarPrecioEspecial();
         }
     }
 

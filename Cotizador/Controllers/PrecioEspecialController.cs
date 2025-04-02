@@ -477,6 +477,7 @@ namespace Cotizador.Controllers
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             PrecioEspecialCabecera obj = (PrecioEspecialCabecera)this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL_VER];
+            obj.usuario = usuario;
             this.Session[Constantes.VAR_SESSION_PRECIO_ESPECIAL] = obj;
         }
 

@@ -44,8 +44,10 @@ namespace Model.NextSoft
 
         protected async Task<object> callServiceWeb(object sendData, string nombreServicio)
         {
+            var handler = new HttpClientHandler();
+            handler.SslProtocols = System.Security.Authentication.SslProtocols.Tls12;
+            var httpClient = new HttpClient(handler);
 
-            var httpClient = new HttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(sendData), Encoding.UTF8, "application/json");
             var result = await httpClient.PostAsync(this.fullUrlWeb(nombreServicio), content);
             string resultContent = await result.Content.ReadAsStringAsync();
