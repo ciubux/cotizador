@@ -97,6 +97,9 @@ namespace BusinessLayer.Email
 																			<span style=""font-family: Arial;"">Código Proveedor</span>
 																		</th>
 																		<th style=""font-weight: bold; font-size: 14px;"">
+																			<span style=""font-family: Arial;"">Código MP</span>
+																		</th>
+																		<th style=""font-weight: bold; font-size: 14px;"">
 																			<span style=""font-family: Arial;"">Descripción</span>
 																		</th>
 																		<th style=""font-weight: bold; font-size: 14px;"">
@@ -171,6 +174,9 @@ namespace BusinessLayer.Email
 												<span style=""font-family: Arial; color: #777575;"">{{codigo_producto}}</span>
 											</td>
 											<td align=""left"" style=""font-size: 14px; padding-bottom: 5px;"">
+												<span style=""font-family: Arial; color: #777575;"">{{sku_mp}}</span>
+											</td>
+											<td align=""left"" style=""font-size: 14px; padding-bottom: 5px;"">
 												<span style=""font-family: Arial; color: #777575;"">{{nombre_producto}}</span>
 											</td>
 											<td align=""center"" style=""font-size: 14px; padding-bottom: 5px;"">
@@ -212,6 +218,7 @@ namespace BusinessLayer.Email
             {
                 String detalle = detallePedido;
                 detalle = detalle.Replace("{{codigo_producto}}", det.producto.skuProveedor);
+                detalle = detalle.Replace("{{sku_mp}}", det.producto.sku);
                 detalle = detalle.Replace("{{nombre_producto}}", det.producto.descripcion);
 				detalle = detalle.Replace("{{unidad_producto}}", det.unidad);
 				detalle = detalle.Replace("{{precio_unitario}}", det.precioUnitario.ToString());

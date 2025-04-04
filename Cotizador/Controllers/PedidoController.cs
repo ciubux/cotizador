@@ -2227,11 +2227,11 @@ namespace Cotizador.Controllers
             ServiceResponse res = new ServiceResponse();
             res.code = 0;
 
-            /*if (pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_TECNICA)
+            if (pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_TECNICA)
                 && pedido.empresa.atencionTerciarizada)
-            {*/
+            {
                 res = await bl.validarProductosNextSoftTecnica(pedido);
-            //}
+            }
             return JsonConvert.SerializeObject(res);
         }
 

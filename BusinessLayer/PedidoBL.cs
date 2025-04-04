@@ -265,6 +265,7 @@ namespace BusinessLayer
                     {
                         pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + " Problema de homologación de productos Nextsoft: " + res.message;
                         pedido.productosNextSoftHomologados = false;
+                        pedido.enviarMailProductosInvalidosNextsoft = true;
                     }
                 }
             }
@@ -376,7 +377,11 @@ namespace BusinessLayer
 
                     if (pedido.enviarMailProductosInvalidosNextsoft)
                     {
-                        this.EnviarMailTecnica(pedido, "Se requiere homologar Productos en Nextsoft para el pedido Nro {{nroPedido}}", pedido.mensajeErrorValidacionProductosNextsoft);
+                        ParametroBL parametroBL = new ParametroBL();
+                        string emailsNotificar = parametroBL.getParametro("TC_EMAILS_PRODUCTOS_NO_HOMOLOGADOS");
+                        List<String> destinatarios = new List<String>();
+                        string[] emails = emailsNotificar.Split(';');
+                        this.EnviarMailTecnica(pedido, "Se requiere homologar Productos en Nextsoft para el pedido Nro {{nroPedido}}", pedido.mensajeErrorValidacionProductosNextsoft, destinatarios);
                     }
                 }
 
@@ -1283,7 +1288,7 @@ namespace BusinessLayer
             pedido.numeroPedidoMP = pMP.numeroPedido;
         }
 
-        public void EnviarMailTecnica(Pedido pedido, string asunto ="", string mensajePrincipal = "") 
+        public void EnviarMailTecnica(Pedido pedido, string asunto = "", string mensajePrincipal = "", List<String> destinatarios = null) 
         {
             MailService mail = new MailService();
             //try
@@ -1291,53 +1296,27 @@ namespace BusinessLayer
 
                 PedidoBL pedidoBL = new PedidoBL();
                 ParametroBL parametroBL = new ParametroBL();
-                string emailsNotificar = parametroBL.getParametro("TC_EMAILS_PEDIDO_ATENDER");
-
+                
                 if (pedido.cliente != null)
                 {
                     var urlVerPedido = "http://zasmp.azurewebsites.net/Pedido?idPedido=" + pedido.idPedido.ToString();
-
-                    List<String> destinatarios = new List<String>();
-
-                    Boolean seEnvioCorreo = false;
-                    //if (pedido.cliente.asistenteServicioCliente != null && pedido.cliente.asistenteServicioCliente.usuario != null
-                    //    && pedido.cliente.asistenteServicioCliente.usuario.email != null && !pedido.cliente.asistenteServicioCliente.usuario.email.Equals(String.Empty))
-                    //{
-                    //    destinatarios.Add(pedido.cliente.asistenteServicioCliente.usuario.email);
-                    //    seEnvioCorreo = true;
-                    //}
-                    //if (pedido.cliente.responsableComercial != null && pedido.cliente.responsableComercial.usuario != null
-                    //    && pedido.cliente.responsableComercial.usuario.email != null && !pedido.cliente.responsableComercial.usuario.email.Equals(String.Empty))
-                    //{
-                    //    destinatarios.Add(pedido.cliente.responsableComercial.usuario.email);
-                    //    seEnvioCorreo = true;
-                    //}
-                    //if (pedido.cliente.supervisorComercial != null && pedido.cliente.supervisorComercial.usuario != null
-                    //    && pedido.cliente.supervisorComercial.usuario.email != null && !pedido.cliente.supervisorComercial.usuario.email.Equals(String.Empty))
-                    //{
-                    //    destinatarios.Add(pedido.cliente.supervisorComercial.usuario.email);
-                    //    seEnvioCorreo = true;
-                    //}
-                    //if (!pedido.usuario.email.Equals(String.Empty))
-                    //{
-                    //    destinatarios.Add(pedido.usuario.email);
-                    //    seEnvioCorreo = true;
-                    //}
-
-                    string[] emails = emailsNotificar.Split(';');
-
-                    foreach (string email in emails)
+                    
+                    if (destinatarios == null)
                     {
-                        destinatarios.Add(email.Trim());
-                        seEnvioCorreo = true;
-                    }
+                        string emailsNotificar = parametroBL.getParametro("TC_EMAILS_PEDIDO_ATENDER");
+                        destinatarios = new List<String>();
+                        string[] emails = emailsNotificar.Split(';');
 
+                        foreach (string email in emails)
+                        {
+                            destinatarios.Add(email.Trim());
+                        }
 
-                    if (!pedido.UsuarioRegistro.email.Equals(String.Empty))
-                    {
-                        destinatarios.Add(pedido.UsuarioRegistro.email);
-                        seEnvioCorreo = true;
-                    }
+                        if (!pedido.UsuarioRegistro.email.Equals(String.Empty))
+                        {
+                            destinatarios.Add(pedido.UsuarioRegistro.email);
+                        }
+                    } 
 
                     if (destinatarios.Count > 0)
                     {
@@ -1353,7 +1332,7 @@ namespace BusinessLayer
                         {
                             template = "<p>" + mensajePrincipal + "</p>" + template;
                         }
-                            
+
                         mail.enviar(destinatarios, asunto, template, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
                     }
                 }
