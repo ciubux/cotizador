@@ -2650,7 +2650,20 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             tvparam.SqlDbType = SqlDbType.Structured;
             tvparam.TypeName = "dbo.UniqueIdentifierList";
 
-            DataTable dataTable = Execute(objCommand);
+            DataSet dataSet = ExecuteDataSet(objCommand);
+            DataTable dataTable = dataSet.Tables[0];
+            DataTable costosDt = dataSet.Tables[1];
+
+            List<Guid> idProdCE = new List<Guid>();
+            List<Decimal> costoProdCE = new List<Decimal>();
+
+            foreach (DataRow row in costosDt.Rows)
+            {
+                idProdCE.Add(Converter.GetGuid(row, "id_producto"));
+                costoProdCE.Add(Converter.GetDecimal(row, "costo_unitario"));
+            }
+
+
 
             List<List<String>> resultados = new List<List<String>>();
 
@@ -2658,6 +2671,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             {
                 List<String> item = new List<String>();
 
+                Guid idProducto = Converter.GetGuid(row, "id_producto");
                 item.Add(Converter.GetString(row, "sku"));
                 item.Add(Converter.GetString(row, "descripcion"));
                 item.Add(Converter.GetString(row, "unidad"));
@@ -2683,12 +2697,27 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
                 }
 
                 Decimal costoMP = Converter.GetDecimal(row, "costo_mp");
+                bool tieneCostoEspecial = false;
+                for (int i = 0; i < idProdCE.Count; i++)
+                {
+                    if (idProdCE[i].Equals(idProducto))
+                    {
+                        costoMP = costoProdCE[i];
+                        i = idProdCE.Count;
+                        tieneCostoEspecial = true;
+                    }
+                }
+
                 Decimal margen = ((precioUnitario - costoMP) / precioUnitario) * 100;
 
                 item.Add(String.Format(Constantes.formatoDosDecimales, margen));
+                
+                item.Add(tieneCostoEspecial ? "1" : "0");
 
                 resultados.Add(item);
             }
+
+            
 
             return resultados;
         }

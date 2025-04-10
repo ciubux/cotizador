@@ -264,6 +264,7 @@ namespace BusinessLayer
                     if (res.code != 0)
                     {
                         pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + " Problema de homologación de productos Nextsoft: " + res.message;
+                        pedido.mensajeErrorValidacionProductosNextsoft = "Problema de homologación de productos Nextsoft: " + res.message;
                         pedido.productosNextSoftHomologados = false;
                         pedido.enviarMailProductosInvalidosNextsoft = true;
                     }
@@ -377,10 +378,8 @@ namespace BusinessLayer
 
                     if (pedido.enviarMailProductosInvalidosNextsoft)
                     {
-                        ParametroBL parametroBL = new ParametroBL();
-                        string emailsNotificar = parametroBL.getParametro("TC_EMAILS_PRODUCTOS_NO_HOMOLOGADOS");
-                        List<String> destinatarios = new List<String>();
-                        string[] emails = emailsNotificar.Split(';');
+                        List<String> destinatarios = mailsDestinatarios("TC_EMAILS_PRODUCTOS_NO_HOMOLOGADOS");
+                        
                         this.EnviarMailTecnica(pedido, "Se requiere homologar Productos en Nextsoft para el pedido Nro {{nroPedido}}", pedido.mensajeErrorValidacionProductosNextsoft, destinatarios);
                     }
                 }
@@ -441,7 +440,8 @@ namespace BusinessLayer
 
                     if (pedido.enviarMailProductosInvalidosNextsoft)
                     {
-                        this.EnviarMailTecnica(pedido, "Se requiere homologar Productos en Nextsoft para el pedido Nro {{nroPedido}}", pedido.mensajeErrorValidacionProductosNextsoft);
+                        List<String> destinatarios = mailsDestinatarios("TC_EMAILS_PRODUCTOS_NO_HOMOLOGADOS");
+                        this.EnviarMailTecnica(pedido, "Se requiere homologar Productos en Nextsoft para el pedido Nro {{nroPedido}}", pedido.mensajeErrorValidacionProductosNextsoft, destinatarios);
                     }
                 }
 
@@ -1303,15 +1303,8 @@ namespace BusinessLayer
                     
                     if (destinatarios == null)
                     {
-                        string emailsNotificar = parametroBL.getParametro("TC_EMAILS_PEDIDO_ATENDER");
-                        destinatarios = new List<String>();
-                        string[] emails = emailsNotificar.Split(';');
-
-                        foreach (string email in emails)
-                        {
-                            destinatarios.Add(email.Trim());
-                        }
-
+                        destinatarios = mailsDestinatarios("TC_EMAILS_PEDIDO_ATENDER"); ;
+                        
                         if (!pedido.UsuarioRegistro.email.Equals(String.Empty))
                         {
                             destinatarios.Add(pedido.UsuarioRegistro.email);
@@ -1460,6 +1453,21 @@ namespace BusinessLayer
 
             NextSoftBL nsBL = new NextSoftBL();
             return await nsBL.validarProductos(skus, factores);
+        }
+
+        protected List<string> mailsDestinatarios(string parametro)
+        {
+            ParametroBL parametroBL = new ParametroBL();
+            string emailsNotificar = parametroBL.getParametro(parametro);
+            List<String> destinatarios = new List<String>();
+            string[] emails = emailsNotificar.Split(';');
+
+            foreach (string email in emails)
+            {
+                destinatarios.Add(email.Trim());
+            }
+
+            return destinatarios;
         }
     }
 }

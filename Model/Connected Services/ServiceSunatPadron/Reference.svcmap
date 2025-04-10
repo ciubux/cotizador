@@ -19,13 +19,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://eol.pe/padron/wsSunatPadron.svc?wsdl" Protocol="http" SourceId="1" />
+    <MetadataSource Address="https://eol.pe/wsConsultaRuc/wsPadron.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="wsSunatPadron.xsd" MetadataType="Schema" ID="24755976-3cca-4c27-9042-8fdab33f1c37" SourceId="1" SourceUrl="http://eol.pe/padron/wsSunatPadron.svc?xsd=xsd1" />
-    <MetadataFile FileName="wsSunatPadron2.xsd" MetadataType="Schema" ID="523cc2ed-d1fc-4f4d-b71d-c68b0e4a0d6a" SourceId="1" SourceUrl="http://eol.pe/padron/wsSunatPadron.svc?xsd=xsd0" />
-    <MetadataFile FileName="wsSunatPadron.wsdl" MetadataType="Wsdl" ID="89eb6608-9fbf-4488-8b7b-8532be5ee929" SourceId="1" SourceUrl="http://eol.pe/padron/wsSunatPadron.svc?wsdl" />
-    <MetadataFile FileName="wsSunatPadron1.xsd" MetadataType="Schema" ID="9d9dcd50-2ab6-41bf-9841-731842fcec2c" SourceId="1" SourceUrl="http://eol.pe/padron/wsSunatPadron.svc?xsd=xsd2" />
+    <MetadataFile FileName="wsPadron.wsdl" MetadataType="Wsdl" ID="e4bbac93-8c83-4019-ba2c-d636c92b0849" SourceId="1" SourceUrl="https://eol.pe/wsConsultaRuc/wsPadron.svc?wsdl" />
+    <MetadataFile FileName="wsPadron.disco" MetadataType="Disco" ID="bd8ab7ad-02b9-494c-be75-62e1f28be8c7" SourceId="1" SourceUrl="https://eol.pe/wsConsultaRuc/wsPadron.svc?disco" />
+    <MetadataFile FileName="wsPadron.xsd" MetadataType="Schema" ID="1e12e6fc-6fd1-492f-a53f-c073c85e0cc3" SourceId="1" SourceUrl="https://eol.pe/wsConsultaRuc/wsPadron.svc?xsd=xsd1" />
+    <MetadataFile FileName="wsPadron1.xsd" MetadataType="Schema" ID="54158c81-958e-4f5c-86ac-7c639d72a349" SourceId="1" SourceUrl="https://eol.pe/wsConsultaRuc/wsPadron.svc?xsd=xsd0" />
+    <MetadataFile FileName="wsPadron2.xsd" MetadataType="Schema" ID="48176ce0-392b-4d00-b368-d3a5b950d9de" SourceId="1" SourceUrl="https://eol.pe/wsConsultaRuc/wsPadron.svc?xsd=xsd2" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

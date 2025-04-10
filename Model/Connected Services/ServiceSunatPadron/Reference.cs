@@ -15,9 +15,9 @@ namespace Model.ServiceSunatPadron {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ClienteSunat", Namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Coplementos")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CltSunat", Namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Coplementos")]
     [System.SerializableAttribute()]
-    public partial class ClienteSunat : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class CltSunat : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -66,6 +66,15 @@ namespace Model.ServiceSunatPadron {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string kilometroField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool agenteretencionField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool buencontribuyenteField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string obligatoriedadField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string fechaingresoField;
@@ -282,6 +291,45 @@ namespace Model.ServiceSunatPadron {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute(Order=15)]
+        public bool agenteretencion {
+            get {
+                return this.agenteretencionField;
+            }
+            set {
+                if ((this.agenteretencionField.Equals(value) != true)) {
+                    this.agenteretencionField = value;
+                    this.RaisePropertyChanged("agenteretencion");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=16)]
+        public bool buencontribuyente {
+            get {
+                return this.buencontribuyenteField;
+            }
+            set {
+                if ((this.buencontribuyenteField.Equals(value) != true)) {
+                    this.buencontribuyenteField = value;
+                    this.RaisePropertyChanged("buencontribuyente");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=17)]
+        public string obligatoriedad {
+            get {
+                return this.obligatoriedadField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.obligatoriedadField, value) != true)) {
+                    this.obligatoriedadField = value;
+                    this.RaisePropertyChanged("obligatoriedad");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=18)]
         public string fechaingreso {
             get {
                 return this.fechaingresoField;
@@ -294,7 +342,7 @@ namespace Model.ServiceSunatPadron {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=16)]
+        [System.Runtime.Serialization.DataMemberAttribute(Order=19)]
         public bool flagerror {
             get {
                 return this.flagerrorField;
@@ -307,7 +355,7 @@ namespace Model.ServiceSunatPadron {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=17)]
+        [System.Runtime.Serialization.DataMemberAttribute(Order=20)]
         public string Message {
             get {
                 return this.MessageField;
@@ -331,49 +379,49 @@ namespace Model.ServiceSunatPadron {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceSunatPadron.IwsSunatPadron")]
-    public interface IwsSunatPadron {
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceSunatPadron.IwsPadron")]
+    public interface IwsPadron {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsSunatPadron/BuscarClienteSunat", ReplyAction="http://tempuri.org/IwsSunatPadron/BuscarClienteSunatResponse")]
-        Model.ServiceSunatPadron.ClienteSunat BuscarClienteSunat(string nroruc);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsPadron/BuscarClienteSunat", ReplyAction="http://tempuri.org/IwsPadron/BuscarClienteSunatResponse")]
+        Model.ServiceSunatPadron.CltSunat BuscarClienteSunat(string ouser, string oclave, string nroruc);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsSunatPadron/BuscarClienteSunat", ReplyAction="http://tempuri.org/IwsSunatPadron/BuscarClienteSunatResponse")]
-        System.Threading.Tasks.Task<Model.ServiceSunatPadron.ClienteSunat> BuscarClienteSunatAsync(string nroruc);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IwsPadron/BuscarClienteSunat", ReplyAction="http://tempuri.org/IwsPadron/BuscarClienteSunatResponse")]
+        System.Threading.Tasks.Task<Model.ServiceSunatPadron.CltSunat> BuscarClienteSunatAsync(string ouser, string oclave, string nroruc);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IwsSunatPadronChannel : Model.ServiceSunatPadron.IwsSunatPadron, System.ServiceModel.IClientChannel {
+    public interface IwsPadronChannel : Model.ServiceSunatPadron.IwsPadron, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class IwsSunatPadronClient : System.ServiceModel.ClientBase<Model.ServiceSunatPadron.IwsSunatPadron>, Model.ServiceSunatPadron.IwsSunatPadron {
+    public partial class IwsPadronClient : System.ServiceModel.ClientBase<Model.ServiceSunatPadron.IwsPadron>, Model.ServiceSunatPadron.IwsPadron {
         
-        public IwsSunatPadronClient() {
+        public IwsPadronClient() {
         }
         
-        public IwsSunatPadronClient(string endpointConfigurationName) : 
+        public IwsPadronClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
         
-        public IwsSunatPadronClient(string endpointConfigurationName, string remoteAddress) : 
+        public IwsPadronClient(string endpointConfigurationName, string remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public IwsSunatPadronClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public IwsPadronClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public IwsSunatPadronClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public IwsPadronClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
         }
         
-        public Model.ServiceSunatPadron.ClienteSunat BuscarClienteSunat(string nroruc) {
-            return base.Channel.BuscarClienteSunat(nroruc);
+        public Model.ServiceSunatPadron.CltSunat BuscarClienteSunat(string ouser, string oclave, string nroruc) {
+            return base.Channel.BuscarClienteSunat(ouser, oclave, nroruc);
         }
         
-        public System.Threading.Tasks.Task<Model.ServiceSunatPadron.ClienteSunat> BuscarClienteSunatAsync(string nroruc) {
-            return base.Channel.BuscarClienteSunatAsync(nroruc);
+        public System.Threading.Tasks.Task<Model.ServiceSunatPadron.CltSunat> BuscarClienteSunatAsync(string ouser, string oclave, string nroruc) {
+            return base.Channel.BuscarClienteSunatAsync(ouser, oclave, nroruc);
         }
     }
 }

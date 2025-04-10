@@ -88,7 +88,7 @@ namespace BusinessLayer.Email
 															<td>
 																<table style=""width: 100%; padding: 30px 0px 30px 0px;"" border=""0"" cellspacing=""0"" cellpadding=""3"">
 																	<tr>
-																		<td colspan=""6"" style=""font-weight: bold; font-size: 16px; background-color: #cccccc; text-align: center; padding: 10px;"">
+																		<td colspan=""7"" style=""font-weight: bold; font-size: 16px; background-color: #cccccc; text-align: center; padding: 10px;"">
 																			<span style=""font-family: Arial;"">Productos</span>
 																		</td>
 																	</tr>

@@ -351,7 +351,10 @@
                     if (tipoAprobarGrupoPedido == 2) {
                         total = resumenProducto[i][5];
                     }
-
+                    var costoEspecialLabel = "";
+                    if (resumenProducto[i][8] == "1") { 
+                        costoEspecialLabel = '<br/><label class="lbl-vigencia-corregida">Especial</label>';
+                    }
 
                     var cliente = '<tr data-expanded="true">' +
                         '<td>  ' + resumenProducto[i][0] + '  </td>' +
@@ -362,7 +365,7 @@
                         '  </td>' +
                         '<td>  ' + resumenProducto[i][4] + '  </td>' +
                         '<td>  ' + resumenProducto[i][5] + '  </td>' +
-                        '<td>  ' + resumenProducto[i][7] + ' % </td>' +
+                        '<td>  ' + resumenProducto[i][7] + ' %' + costoEspecialLabel + '</td>' +
                         '</tr>';
 
                     $("#tableResumenVentaProductoPedidoColectivo").append(cliente);

@@ -270,9 +270,18 @@ namespace BusinessLayer
                     documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaDébito;
                     documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
                     documentoVenta.globalEnumTipoOnline = GlobalEnumTipoOnline.Normal;
-                    IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
-                    Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
-                    client.Endpoint.Address = new EndpointAddress(uri);
+                    //IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
+                    //Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
+                    //client.Endpoint.Address = new EndpointAddress(uri);
+
+                    BasicHttpBinding binding = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
+                    binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.None;
+                    binding.MaxReceivedMessageSize = 20000000;
+
+                    EndpointAddress endpoint = new EndpointAddress(Constantes.ENDPOINT_ADDRESS_EOL);
+
+                    var client = new IwsOnlineToCPEClient(binding, endpoint);
+
 
                     documentoVenta.cPE_RESPUESTA_BE = client.callProcessOnline(Constantes.USER_EOL, Constantes.PASSWORD_EOL,
                         documentoVenta.cPE_CABECERA_BE,
@@ -322,10 +331,17 @@ namespace BusinessLayer
                     documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaCrédito;
                     documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
                     documentoVenta.globalEnumTipoOnline = GlobalEnumTipoOnline.Normal;
-                    IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
-                    Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
-                    client.Endpoint.Address = new EndpointAddress(uri);
+                    //IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
+                    //Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
+                    //client.Endpoint.Address = new EndpointAddress(uri);
 
+                    BasicHttpBinding binding = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
+                    binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.None;
+                    binding.MaxReceivedMessageSize = 20000000;
+
+                    EndpointAddress endpoint = new EndpointAddress(Constantes.ENDPOINT_ADDRESS_EOL);
+
+                    var client = new IwsOnlineToCPEClient(binding, endpoint);
 
                     documentoVenta.cPE_RESPUESTA_BE = client.callProcessOnline(Constantes.USER_EOL, Constantes.PASSWORD_EOL,
                         documentoVenta.cPE_CABECERA_BE,
@@ -373,9 +389,17 @@ namespace BusinessLayer
                     documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.BoletaVenta;
                     documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
                     documentoVenta.globalEnumTipoOnline = GlobalEnumTipoOnline.Normal;
-                    IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
-                    Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
-                    client.Endpoint.Address = new EndpointAddress(uri);
+                    //IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
+                    //Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
+                    //client.Endpoint.Address = new EndpointAddress(uri);
+
+                    BasicHttpBinding binding = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
+                    binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.None;
+                    binding.MaxReceivedMessageSize = 20000000;
+
+                    EndpointAddress endpoint = new EndpointAddress(Constantes.ENDPOINT_ADDRESS_EOL);
+
+                    var client = new IwsOnlineToCPEClient(binding, endpoint);
 
                     ParametroBL parametroBL = new ParametroBL();
                     int idEmpresa = parametroBL.GetDataFacturacionEmpresaEOL(documentoVenta.cPE_CABECERA_BE.ID);
@@ -434,20 +458,29 @@ namespace BusinessLayer
                     ParametroBL parametroBL = new ParametroBL();
                     int idEmpresa = parametroBL.GetDataFacturacionEmpresaEOL(documentoVenta.cPE_CABECERA_BE.ID);
 
-                    IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
-                    Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
-                    client.Endpoint.Address = new EndpointAddress(uri);
+                    //IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
+                    //Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
+                    //client.Endpoint.Address = new EndpointAddress(uri);
+
+                    BasicHttpBinding binding = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
+                    binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.None;
+                    binding.MaxReceivedMessageSize = 20000000;
+
+                    EndpointAddress endpoint = new EndpointAddress(Constantes.ENDPOINT_ADDRESS_EOL);
+
+                    var client = new IwsOnlineToCPEClient(binding, endpoint);
+
 
 
                     documentoVenta.cPE_RESPUESTA_BE = client.callProcessOnline(Constantes.USER_EOL, Constantes.PASSWORD_EOL,
-                        documentoVenta.cPE_CABECERA_BE,
-                        documentoVenta.cPE_DETALLE_BEList.ToArray(),
-                        documentoVenta.cPE_DAT_ADIC_BEList.ToArray(),
-                        documentoVenta.cPE_DOC_REF_BEList.ToArray(),
-                        documentoVenta.cPE_ANTICIPO_BEList.ToArray(),
-                        documentoVenta.cPE_FAC_GUIA_BEList.ToArray(),
-                        documentoVenta.cPE_DOC_ASOC_BEList.ToArray(),
-                        documentoVenta.globalEnumTipoOnline);
+                            documentoVenta.cPE_CABECERA_BE,
+                            documentoVenta.cPE_DETALLE_BEList.ToArray(),
+                            documentoVenta.cPE_DAT_ADIC_BEList.ToArray(),
+                            documentoVenta.cPE_DOC_REF_BEList.ToArray(),
+                            documentoVenta.cPE_ANTICIPO_BEList.ToArray(),
+                            documentoVenta.cPE_FAC_GUIA_BEList.ToArray(),
+                            documentoVenta.cPE_DOC_ASOC_BEList.ToArray(),
+                            documentoVenta.globalEnumTipoOnline);
                     documentoVenta.serie = documentoVenta.cPE_CABECERA_BE.SERIE;
                     documentoVenta.numero = documentoVenta.cPE_CABECERA_BE.CORRELATIVO;
                     //Se inserta el resultado en Base de Datos
@@ -545,9 +578,17 @@ namespace BusinessLayer
 
         public void consultarEstadoDocumentoVenta(DocumentoVenta documentoVenta)
         {
-            IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
-            Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
-            client.Endpoint.Address = new EndpointAddress(uri); 
+            //IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
+            //Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
+            //client.Endpoint.Address = new EndpointAddress(uri);
+
+            BasicHttpBinding binding = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
+            binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.None;
+            binding.MaxReceivedMessageSize = 20000000;
+
+            EndpointAddress endpoint = new EndpointAddress(Constantes.ENDPOINT_ADDRESS_EOL);
+
+            var client = new IwsOnlineToCPEClient(binding, endpoint);
 
             documentoVenta.rPTA_BE = client.callStateCPE(Constantes.USER_EOL, Constantes.PASSWORD_EOL, documentoVenta.cPE_CABECERA_BE.NRO_DOC_EMI, "0" + (int)documentoVenta.tipoDocumento, documentoVenta.serie, documentoVenta.numero);
 
@@ -613,9 +654,17 @@ namespace BusinessLayer
         }
         public void aprobarAnulacionDocumentoVenta(DocumentoVenta documentoVenta, Usuario usuario)
         {
-            IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
-            Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
-            client.Endpoint.Address = new EndpointAddress(uri);
+            //IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
+            //Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
+            //client.Endpoint.Address = new EndpointAddress(uri);
+
+            BasicHttpBinding binding = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
+            binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.None;
+            binding.MaxReceivedMessageSize = 20000000;
+
+            EndpointAddress endpoint = new EndpointAddress(Constantes.ENDPOINT_ADDRESS_EOL);
+
+            var client = new IwsOnlineToCPEClient(binding, endpoint);
 
             ParametroBL parametroBL = new ParametroBL();
             int idEmpresa = parametroBL.GetDataFacturacionEmpresaEOL(documentoVenta.cPE_CABECERA_BE.ID);
@@ -724,10 +773,17 @@ namespace BusinessLayer
 
         public DocumentoVenta descargarArchivoDocumentoVenta(DocumentoVenta documentoVenta)
         {
-            IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
-            Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
-            client.Endpoint.Address = new EndpointAddress(uri);
+            //IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
+            //Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
+            //client.Endpoint.Address = new EndpointAddress(uri);
 
+            BasicHttpBinding binding = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
+            binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.None;
+            binding.MaxReceivedMessageSize = 20000000;
+
+            EndpointAddress endpoint = new EndpointAddress(Constantes.ENDPOINT_ADDRESS_EOL);
+
+            var client = new IwsOnlineToCPEClient(binding, endpoint);
 
             ParametroBL parametroBL = new ParametroBL();
             int idEmpresa = parametroBL.GetDataFacturacionEmpresaEOL(documentoVenta.cPE_CABECERA_BE.ID);

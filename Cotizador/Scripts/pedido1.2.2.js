@@ -5668,6 +5668,7 @@ jQuery(function ($) {
                  
                 }
 
+                // Si hay resultado y se ha buscado un numero de grupo
                 if (pedidoList.length > 0 && pedido_numeroGrupoPedido.trim() != "") {
                     $("#btnAprobarPedidosGrupo").attr("idGrupo", pedido_numeroGrupoPedido);
                     $("#btnLiberarPedidosGrupo").attr("idGrupo", pedido_numeroGrupoPedido);
@@ -5677,12 +5678,15 @@ jQuery(function ($) {
                     $("#btnAprobarPedidosGrupo").hide();
                     $("#btnLiberarPedidosGrupo").hide();
 
+                    // Si se ha buscado cliente o grupo de cliente
                     if (idCliente != "" || pedido_idGrupoCliente != "") {
+                        //si se ha buscado estado pendiente de aprobacion y no se ha selecionado estado crediticio
                         if (estado == 0 && estadoCrediticio == -1) {
                             $("#btnAprobarPedidosColectivo").show();
                             $("#btnAprobarPedidosColectivo").attr("idsPdidos", concatIdsPedido);
                         }
 
+                        //si se ha buscado estado crediticio pendiente de liberacion y no se ha selecionado estado pedido 
                         if (estadoCrediticio == 0 && estado == -1) {
                             $("#btnLiberarPedidosColectivo").show();
                             $("#btnLiberarPedidosColectivo").attr("idsPdidos", concatIdsPedido);

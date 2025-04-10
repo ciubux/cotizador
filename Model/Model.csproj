@@ -43,8 +43,8 @@
     <Reference Include="MVC Foolproof Validation">
       <HintPath>..\packages\foolproof.0.9.4517\lib\MVC Foolproof Validation.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -52,6 +52,11 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Primitives, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.Serialization.Primitives.4.3.0\lib\net46\System.Runtime.Serialization.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
@@ -243,17 +248,17 @@
     <None Include="Connected Services\ServiceReferencePSE\wsOnlineToCPE6.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\ServiceSunatPadron\Model.ServiceSunatPadron.ClienteSunat.datasource">
+    <None Include="Connected Services\ServiceSunatPadron\Model.ServiceSunatPadron.CltSunat.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\ServiceSunatPadron\wsSunatPadron.wsdl" />
-    <None Include="Connected Services\ServiceSunatPadron\wsSunatPadron.xsd">
+    <None Include="Connected Services\ServiceSunatPadron\wsPadron.wsdl" />
+    <None Include="Connected Services\ServiceSunatPadron\wsPadron.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\ServiceSunatPadron\wsSunatPadron1.xsd">
+    <None Include="Connected Services\ServiceSunatPadron\wsPadron1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\ServiceSunatPadron\wsSunatPadron2.xsd">
+    <None Include="Connected Services\ServiceSunatPadron\wsPadron2.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
@@ -294,6 +299,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DTO\JSON\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ServiceSunatPadron\wsPadron.disco" />
+    <Content Include="OpenAPIs\wsPadron.svc">
+      <ClassName>PadronSunat</ClassName>
+      <CodeGenerator>NSwagCSharp</CodeGenerator>
+      <SourceUri>https://eol.pe/wsConsultaRuc/wsPadron.svc</SourceUri>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -14,6 +14,7 @@ using Model.NextSoft;
 using Newtonsoft.Json;
 using Framework.DAL;
 using System.Data;
+using Model.ServiceReferencePSE;
 
 namespace BusinessLayer
 {
@@ -25,9 +26,17 @@ namespace BusinessLayer
         {
             /*var RUC = txtRuc.Text;
             RUC = RUC.Replace(" ", "");*/
-            using (IwsSunatPadronClient client = new IwsSunatPadronClient())
+
+            BasicHttpBinding binding = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
+            binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.None;
+            binding.MaxReceivedMessageSize = 20000000;
+
+            EndpointAddress endpoint = new EndpointAddress("https://eol.pe/wsConsultaRuc/wsPadron.svc");
+
+            
+            using (IwsPadronClient client = new IwsPadronClient(binding, endpoint))
             {
-                Model.ServiceSunatPadron.ClienteSunat clienteSunat = client.BuscarClienteSunat(cliente.ruc);
+                Model.ServiceSunatPadron.CltSunat clienteSunat = client.BuscarClienteSunat(Constantes.USER_EOL, Constantes.PASSWORD_EOL, cliente.ruc);
 
                 List<string> direccion = new List<string>();
 

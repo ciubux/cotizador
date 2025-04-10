@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://eol.pe/padron/wsSunatPadron.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Coplementos" />
+  <xs:import schemaLocation="https://eol.pe/wsConsultaRuc/wsPadron.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/TT.EOL.Coplementos" />
   <xs:element name="BuscarClienteSunat">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="ouser" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="oclave" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="nroruc" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -11,7 +13,7 @@
   <xs:element name="BuscarClienteSunatResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/TT.EOL.Coplementos" minOccurs="0" name="BuscarClienteSunatResult" nillable="true" type="q1:ClienteSunat" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/TT.EOL.Coplementos" minOccurs="0" name="BuscarClienteSunatResult" nillable="true" type="q1:CltSunat" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
