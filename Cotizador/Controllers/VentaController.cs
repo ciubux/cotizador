@@ -38,27 +38,27 @@ namespace Cotizador.Controllers
 
         public String Show()
         {
+            bool esRefacturacion = int.Parse(Request["esRefacturacion"].ToString()) == 1;
+
             VentaBL ventaBL = new VentaBL();
             Venta venta = new Venta();
             venta.guiaRemision = new GuiaRemision();
             venta.guiaRemision.idMovimientoAlmacen = Guid.Parse(Request["idMovimientoAlmacen"].ToString());
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            venta = ventaBL.GetVenta(venta, usuario);
+            venta = ventaBL.GetVenta(venta, usuario, esRefacturacion);
             this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta;
 
 
             Ciudad ciudad = usuario.sedesMPPedidos.Where(s => s.idCiudad == venta.pedido.ciudad.idCiudad).FirstOrDefault();
 
-            string jsonSeries = "[]";
+            List<SerieDocumentoElectronico> jsonSeries = new List<SerieDocumentoElectronico>();
             if (ciudad != null)
             {
                 List<SerieDocumentoElectronico> serieDocumentoElectronicoList = new List<SerieDocumentoElectronico>();
                 SerieDocumentoBL serieDocumentoBL = new SerieDocumentoBL();
                 ciudad.serieDocumentoElectronicoList = serieDocumentoBL.getSeriesDocumento(ciudad.idCiudad, usuario.idEmpresa);
 
-                jsonSeries = JsonConvert.SerializeObject(ciudad.serieDocumentoElectronicoList);
-
-
+                jsonSeries = ciudad.serieDocumentoElectronicoList;
             }
 
             if (usuario.idEmpresa != 1 && venta.pedido != null && !venta.pedido.Equals(Guid.Empty))
@@ -73,9 +73,16 @@ namespace Cotizador.Controllers
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
             string jsonVenta = JsonConvert.SerializeObject(venta);
 
+            var json = new
+            {
+                serieDocumentoElectronicoList = jsonSeries,
+                esRefacturacion = esRefacturacion,
+                venta = venta
+            };
+
             this.Session["s_cambioclientefactura_cambio"] = false;
-            String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + "}";
-            return json;
+            //String json = "{\"serieDocumentoElectronicoList\":" + jsonSeries + ", \"venta\":" + jsonVenta + "}";
+            return JsonConvert.SerializeObject(json);
         }
 
         public String CambiarListadoSeries()

@@ -90,7 +90,7 @@ namespace DataLayer
         }
 
 
-        public void InsertarDocumentoVenta(DocumentoVenta documentoVenta, int idEmpresa)
+        public void InsertarDocumentoVenta(DocumentoVenta documentoVenta, int idEmpresa, bool esRefacturacion = false)
         {
             var objCommand = GetSqlCommand("pi_documentoVenta");
             //var objCommand = GetSqlCommand("pi_documentoVenta_vInafecto");
@@ -117,6 +117,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", documentoVenta.venta.guiaRemision.idMovimientoAlmacen);
             InputParameterAdd.Int(objCommand, "tipoDocumento", (int)documentoVenta.tipoDocumento);
             InputParameterAdd.Int(objCommand, "diasCredito", diasCredito);
+            InputParameterAdd.Int(objCommand, "esRefacturacion", esRefacturacion ? 1 : 0);
             InputParameterAdd.DateTime(objCommand, "fechaEmision", documentoVenta.fechaEmision);
             InputParameterAdd.DateTime(objCommand, "fechaVencimiento", documentoVenta.fechaVencimiento);
             InputParameterAdd.Int(objCommand, "tipoPago", (int)documentoVenta.tipoPago);

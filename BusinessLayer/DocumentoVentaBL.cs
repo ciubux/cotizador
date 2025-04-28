@@ -22,14 +22,14 @@ namespace BusinessLayer
             }
         }
 
-        public DocumentoVenta InsertarDocumentoVenta(DocumentoVenta documentoVenta)
+        public DocumentoVenta InsertarDocumentoVenta(DocumentoVenta documentoVenta, bool esRefacturacion = false)
         {
             using (var dal = new DocumentoVentaDAL())
             {
                 ClienteBL clienteBL = new ClienteBL();
                 int idEmpresa = clienteBL.GetDataFacturacionEmpresaEOL(documentoVenta.cliente.idCliente);
 
-                dal.InsertarDocumentoVenta(documentoVenta, idEmpresa);
+                dal.InsertarDocumentoVenta(documentoVenta, idEmpresa, esRefacturacion);
 
                 if (documentoVenta.tiposErrorValidacion == DocumentoVenta.TiposErrorValidacion.NoExisteError)
                 {
@@ -440,7 +440,7 @@ namespace BusinessLayer
             }
         }
 
-        public CPE_RESPUESTA_BE procesarCPE(DocumentoVenta documentoVenta, List<Guid> movimientoAlmacenIdList = null)
+        public CPE_RESPUESTA_BE procesarCPE(DocumentoVenta documentoVenta, List<Guid> movimientoAlmacenIdList = null, bool esRefacturacion = false)
         {
             using (var dal = new DocumentoVentaDAL())
             {

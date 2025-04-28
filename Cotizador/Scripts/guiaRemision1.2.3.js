@@ -1756,6 +1756,14 @@ jQuery(function ($) {
     }
 
     $("#btnFacturarGuiaRemision").click(function () {
+        iniciarFacturacionGuia(0);
+    });
+
+    $("#btnIniciarRefacturacionGuiaRemision").click(function () {
+        iniciarFacturacionGuia(1);
+    });
+
+    function iniciarFacturacionGuia(esRefacturacion = 0) {
         var facturaUnica = parseInt($("#ver_guiaRemision_facturaUnica").val());
         var numeroGrupo = parseInt($("#ver_guiaRemision_numeroGrupo").val());
         var guiaAtiendePedido = parseInt($("#ver_guiaRemision_guiaAtiendePedido").val());
@@ -1776,7 +1784,7 @@ jQuery(function ($) {
                 });
             } else {
                 if (guiaAtiendePedido) {
-                    facturarGuia();
+                    facturarGuia(esRefacturacion);
                 } else {
                     $.alert({
                         //icon: 'fa fa-warning',
@@ -1804,16 +1812,16 @@ jQuery(function ($) {
                     }
                 });
             }
-            facturarGuia();
+            facturarGuia(esRefacturacion);
         }
-    });
-
-    function facturarGuia() {
+    }
+    function facturarGuia(esRefacturacion = 0) {
         var idMovimientoAlmacen = $("#idMovimientoAlmacen").val();
         $.ajax({
             url: "/Venta/Show",
             data: {
-                idMovimientoAlmacen: idMovimientoAlmacen
+                idMovimientoAlmacen: idMovimientoAlmacen,
+                esRefacturacion: esRefacturacion
             },
             type: 'POST',
             dataType: 'JSON',
@@ -1875,9 +1883,18 @@ jQuery(function ($) {
         var pedido = resultado.venta.pedido;
         var guiaRemision = resultado.venta.guiaRemision;
         var serieDocumentoElectronicoList = resultado.serieDocumentoElectronicoList;
-
+        var esRefacturacion = resultado.esRefacturacion;
         //  var usuario = resultado.usuario;
 
+        if (esRefacturacion) {
+            $("#btnEditarVenta").hide();
+            $("#btnAceptarFacturarPedido").attr("esRefacturacion", "1");
+            $("#btnConfirmarFacturarPedido").attr("esRefacturacion", "1");
+        } else {
+            $("#btnEditarVenta").show();
+            $("#btnAceptarFacturarPedido").attr("esRefacturacion", "0");
+            $("#btnConfirmarFacturarPedido").attr("esRefacturacion", "0");
+        }
 
         $("#fechaEntregaDesdeProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaDesde.substr(0, 10)));
         $("#fechaEntregaHastaProgramacion").val(invertirFormatoFecha(pedido.fechaEntregaHasta.substr(0, 10)));

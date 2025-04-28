@@ -51,11 +51,11 @@ namespace BusinessLayer
             }
         }
 
-        public void InsertVentaRefacturacion(Venta venta)
+        public void InsertVentaRefacturacion(Venta venta, Guid idCPEReemplazarVenta = default)
         {
             using (var dal = new VentaDAL())
             {
-                dal.InsertVentaRefacturacion(venta);
+                dal.InsertVentaRefacturacion(venta, idCPEReemplazarVenta);
             }
         }
 
@@ -116,11 +116,11 @@ namespace BusinessLayer
 
 
 
-        public Venta GetVenta(Venta venta, Usuario usuario)
+        public Venta GetVenta(Venta venta, Usuario usuario, bool considerarFacturados = false)
         {
             using (var dal = new VentaDAL())
             {
-                venta = dal.SelectVenta(venta, usuario);
+                venta = dal.SelectVenta(venta, usuario, considerarFacturados);
                 //Se agrega comentarios recuperados de los datos registrados en el pedido
                 String observacionesFacturaAdicional = String.Empty;
 

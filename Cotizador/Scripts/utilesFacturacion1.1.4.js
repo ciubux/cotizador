@@ -196,7 +196,7 @@ $("#btnAceptarFacturarPedido").click(function () {
     var formaPago = $("#formaPago").val();
     var numeroReferenciaCliente = $("#verNumeroReferenciaCliente").html();
 
-
+    var esRefacturacion = $("#btnAceptarFacturarPedido").attr("esRefacturacion");
 
     desactivarBotonesFacturar();
 
@@ -222,6 +222,7 @@ $("#btnAceptarFacturarPedido").click(function () {
             tipoPago: tipoPago,
             formaPago: formaPago,
             observaciones: observaciones,
+            esRefacturacion: esRefacturacion,
             serie: serie,
             numeroReferenciaCliente: numeroReferenciaCliente
         },
@@ -385,7 +386,7 @@ $("#btnConfirmarFacturarPedido").click(function () {
     var observaciones = $("#documentoVenta_observaciones").val();
     var tipoPago = $("#tipoPago").val();
     var formaPago = $("#formaPago").val();
-
+    var esRefacturacion = $("#btnConfirmarFacturarPedido").attr("esRefacturacion");
 
 
     desactivarBotonesFacturar();
@@ -403,7 +404,8 @@ $("#btnConfirmarFacturarPedido").click(function () {
         type: 'POST',
         dataType: 'JSON',
         data: {
-            idDocumentoVenta: idDocumentoVenta
+            idDocumentoVenta: idDocumentoVenta,
+            esRefacturacion: esRefacturacion
         },
         error: function (resultado) {
             $('body').loadingModal('hide')
@@ -424,7 +426,7 @@ $("#btnConfirmarFacturarPedido").click(function () {
                             var continuarProcesoNormal = true;
                             if ($("#btnFacturarGuiaRemision").length) {
                                 var facturaPedidoRelacionado = parseInt($("#btnFacturarGuiaRemision").attr("facturaPedidoRelacionado"));
-                                if (facturaPedidoRelacionado == 1) {
+                                if (facturaPedidoRelacionado == 1 && esRefacturacion != "1") {
                                     continuarProcesoNormal = false;
                                     facturarPedidoRelacionado();
                                 } 

@@ -46,6 +46,7 @@ namespace Cotizador.Controllers
 
         public String Create()
         {
+            bool esRefacturacion = int.Parse(Request["esRefacturacion"].ToString()) == 1;
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             //try
@@ -65,8 +66,6 @@ namespace Cotizador.Controllers
                 cambioCliente = (bool)this.Session["s_cambioclientefactura_cambio"];
             }
 
-
-            
 
             documentoVenta.venta = venta;
 
@@ -113,7 +112,7 @@ namespace Cotizador.Controllers
                 throw new Exception("No se ha identificado el clasePedido de documento electrónico a crear.");
 
 
-            documentoVenta = documentoVentaBL.InsertarDocumentoVenta(documentoVenta);
+            documentoVenta = documentoVentaBL.InsertarDocumentoVenta(documentoVenta, esRefacturacion);
 
             if (cambioCliente && usuario.cambiaClienteFactura)
             {
@@ -343,14 +342,31 @@ namespace Cotizador.Controllers
 
         public String ConfirmarCreacion()
         {
+            
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             try
             {
                 Venta venta = (Venta)this.Session[Constantes.VAR_SESSION_VENTA_VER];
+                bool esRefacturacion = int.Parse(Request["esRefacturacion"].ToString()) == 1;
+                Guid idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
+
+                if (esRefacturacion)
+                {
+                    GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+                    Venta ventaNueva = new Venta();
+                    ventaNueva.guiaRemision = guiaRemision;
+                    VentaBL ventaBL = new VentaBL();
+                    ventaBL.InsertVentaRefacturacion(ventaNueva, idDocumentoVenta);
+                    venta.idVenta = ventaNueva.idVenta;
+                    venta.numero = ventaNueva.numero;
+                    this.Session[Constantes.VAR_SESSION_VENTA_VER] = venta;
+                }
+
+
                 DocumentoVenta documentoVenta = new DocumentoVenta();
                 documentoVenta.venta = venta;
-                documentoVenta.idDocumentoVenta = Guid.Parse(this.Request.Params["idDocumentoVenta"]);
+                documentoVenta.idDocumentoVenta = idDocumentoVenta;
                 documentoVenta.cliente = venta.pedido.cliente;
                 documentoVenta.usuario = usuario;
 

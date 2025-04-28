@@ -517,10 +517,11 @@ namespace DataLayer
             return transaccion;
         }
 
-        public Venta SelectVenta(Venta venta, Usuario usuario)
+        public Venta SelectVenta(Venta venta, Usuario usuario, bool considerarFacturados = false)
         {
             var objCommand = GetSqlCommand("ps_venta");
             InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", venta.guiaRemision.idMovimientoAlmacen);
+            InputParameterAdd.Int(objCommand, "considerarFacturados", considerarFacturados ? 1 : 0);
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable ventaDataTable = dataSet.Tables[0];
             DataTable ventaDetalleDataTable = dataSet.Tables[1];
@@ -962,13 +963,20 @@ namespace DataLayer
         }
 
 
-        public void InsertVentaRefacturacion(Venta venta)
+        public void InsertVentaRefacturacion(Venta venta, Guid idCPEReemplazarVenta = default)
         {
             this.BeginTransaction(IsolationLevel.ReadCommitted);
+
             var objCommand = GetSqlCommand("pi_ventaRefacturacion");
             InputParameterAdd.Guid(objCommand, "idUsuario", venta.guiaRemision.usuario.idUsuario);
             InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", venta.guiaRemision.idMovimientoAlmacen);
             InputParameterAdd.DateTime(objCommand, "fecha", DateTime.Now);
+
+            if (!idCPEReemplazarVenta.Equals(Guid.Empty))
+            {
+                InputParameterAdd.Guid(objCommand, "idCPEReemplazarVenta", idCPEReemplazarVenta);
+            }
+
             OutputParameterAdd.UniqueIdentifier(objCommand, "idVenta");
             OutputParameterAdd.BigInt(objCommand, "numeroVenta");
             ExecuteNonQuery(objCommand);
