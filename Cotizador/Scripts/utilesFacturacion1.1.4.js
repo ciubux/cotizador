@@ -432,6 +432,11 @@ $("#btnConfirmarFacturarPedido").click(function () {
                                 } 
                             }
 
+                            if (esRefacturacion == "1") {
+                                continuarProcesoNormal = false;
+                                notaCreditoRefacturacionGuia();
+                            }
+
                             if (continuarProcesoNormal) {
                                 var actionPostCPE = $("#actionPostCPE").val();
 
@@ -624,7 +629,7 @@ function facturarPedidoRelacionado() {
         error: function (resultado) {
             $('body').loadingModal('hide');
             $.alert({
-                title: 'ERROR',
+                title: 'ERROR AL GENERAR FACTURA PEDIDO RELACIONADO',
                 content: MENSAJE_ERROR,
                 type: 'red',
                 buttons: {
@@ -651,7 +656,63 @@ function facturarPedidoRelacionado() {
             }
             else {
                 $.alert({
-                    title: 'OCURRIÓ UN ERROR',
+                    title: 'OCURRIÓ UN ERROR AL GENERAR FACTURA PEDIDO RELACIONADO',
+                    content: MENSAJE_ERROR + ".\n" + "Detalle Error: " + resultado.CPE_RESPUESTA_BE.DETALLE,
+                    type: 'red',
+                    buttons: {
+                        OK: function () {
+                            recagarGuiaRemision(idGuia);
+                        }
+                    }
+                });
+            }
+        }
+    });
+}
+
+
+function notaCreditoRefacturacionGuia() {
+    $('body').loadingModal('text', 'Generando Nota Crédito...');
+    $('body').loadingModal('show')
+
+    var idGuia = $("#idMovimientoAlmacen").val();
+    $.ajax({
+        url: "/NotaCredito/NotaCreditoRefacturacionGuia",
+        type: 'POST',
+        dataType: 'JSON',
+        data: {
+        },
+        error: function (resultado) {
+            $('body').loadingModal('hide');
+            $.alert({
+                title: 'ERROR AL GENERAR NOTA CRÉDITO',
+                content: MENSAJE_ERROR,
+                type: 'red',
+                buttons: {
+                    OK: function () {
+                        recagarGuiaRemision(idGuia);
+                    }
+                }
+            });
+        },
+        success: function (resultado) {
+            $('body').loadingModal('hide')
+
+            if (resultado.CPE_RESPUESTA_BE.CODIGO == "001") {
+                $.alert({
+                    title: 'REGISTRO EXITOSO',
+                    content: 'Se generó la Nota de Crédito: ' + resultado.serieNumero + ' para la factura anterior.',
+                    type: 'green',
+                    buttons: {
+                        OK: function () {
+                            recagarGuiaRemision(idGuia);
+                        }
+                    }
+                });
+            }
+            else {
+                $.alert({
+                    title: 'OCURRIÓ UN ERROR AL GENERAR NOTA CRÉDITO',
                     content: MENSAJE_ERROR + ".\n" + "Detalle Error: " + resultado.CPE_RESPUESTA_BE.DETALLE,
                     type: 'red',
                     buttons: {

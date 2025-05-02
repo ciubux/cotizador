@@ -1285,5 +1285,26 @@ namespace DataLayer
             TipoError = (DocumentoVenta.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
             descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
         }
+
+        public void IniciaNotaCreditoRefacturacionGuia(Guid idGuia, Guid idUsuario, out Guid idVentaNC, out Guid idCPE,
+                out DocumentoVenta.TiposErrorValidacion TipoError, out string descripcionError)
+        {
+            var objCommand = GetSqlCommand("pi_iniciaNotaCreditoRefacturacion");
+
+            Guid idVenta;
+
+            InputParameterAdd.Guid(objCommand, "idGuia", idGuia);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idVentaNC");
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idNotaCredito");
+            OutputParameterAdd.Int(objCommand, "tipoError");
+            OutputParameterAdd.Varchar(objCommand, "descripcionError", 500);
+            ExecuteNonQuery(objCommand);
+            idVentaNC = (Guid)objCommand.Parameters["@idVentaNC"].Value;
+            idCPE = (Guid)objCommand.Parameters["@idNotaCredito"].Value;
+            TipoError = (DocumentoVenta.TiposErrorValidacion)(int)objCommand.Parameters["@tipoError"].Value;
+            descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
+        }
     }
 }
+

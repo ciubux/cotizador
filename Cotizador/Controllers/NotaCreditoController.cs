@@ -284,6 +284,57 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(transaccionExtorno);
         }
 
+        public String NotaCreditoRefacturacionGuia()
+        {
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            MovimientoAlmacen movimientoAlmacen = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+
+            try
+            {
+                // CREAR VENTA Y CPE
+
+                Guid idVentaNC = Guid.Empty;
+                Guid idCPE = Guid.Empty;
+
+                DocumentoVenta documentoVenta = new DocumentoVenta();
+
+                DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
+                documentoVenta = documentoVentaBL.IniciaNotaCreditoRefacturacionGuia(movimientoAlmacen.idMovimientoAlmacen, usuario.idUsuario,
+                                           out idVentaNC, out idCPE);
+                // ENVIAR CPE
+
+                Venta ventaNC = new Venta();
+                ventaNC.idVenta = idVentaNC;
+
+
+                documentoVenta.idDocumentoVenta = idCPE;
+                documentoVenta.venta = ventaNC;
+                //documentoVentaRel.cliente = venta.cliente;
+                documentoVenta.usuario = usuario;
+
+                documentoVenta.tipoDocumento = DocumentoVenta.TipoDocumento.NotaCrédito;
+                CPE_RESPUESTA_BE cPE_RESPUESTA_BE = documentoVentaBL.procesarCPE(documentoVenta);
+
+
+                var otmp = new
+                {
+                    CPE_RESPUESTA_BE = cPE_RESPUESTA_BE,
+                    serieNumero = documentoVenta.serieNumero,
+                    idDocumentoVenta = documentoVenta.idDocumentoVenta
+                };
+
+                return JsonConvert.SerializeObject(otmp);
+            }
+            catch (Exception ex)
+            {
+                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                LogBL logBL = new LogBL();
+                logBL.insertLog(log);
+                return ex.ToString();
+            }
+        }
+
 
         [HttpPost]
         public String ChangeDetalle(List<DocumentoDetalleJson> cotizacionDetalleJsonList)
