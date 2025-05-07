@@ -132,12 +132,12 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idDireccionEntrega", direccionEntrega.idDireccionEntrega);
             InputParameterAdd.Guid(objCommand, "idUsuario", direccionEntrega.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "ubigeo", direccionEntrega.ubigeo.Id);
-            InputParameterAdd.Varchar(objCommand, "descripcion", direccionEntrega.descripcion);
-            InputParameterAdd.Varchar(objCommand, "contacto", direccionEntrega.contacto);
-            InputParameterAdd.Varchar(objCommand, "telefono", direccionEntrega.telefono);
-            InputParameterAdd.Varchar(objCommand, "emailRecepcionFacturas", direccionEntrega.emailRecepcionFacturas);
+            InputParameterAdd.Varchar(objCommand, "descripcion", direccionEntrega.descripcion.Trim());
+            InputParameterAdd.Varchar(objCommand, "contacto", direccionEntrega.contacto.Trim());
+            InputParameterAdd.Varchar(objCommand, "telefono", direccionEntrega.telefono.Trim());
+            InputParameterAdd.Varchar(objCommand, "emailRecepcionFacturas", direccionEntrega.emailRecepcionFacturas.Trim());
             InputParameterAdd.Varchar(objCommand, "codigoCliente", direccionEntrega.codigoCliente);
-            InputParameterAdd.Varchar(objCommand, "nombre", direccionEntrega.nombre);
+            InputParameterAdd.Varchar(objCommand, "nombre", direccionEntrega.nombre.Trim());
             InputParameterAdd.Int(objCommand, "idDomicilioLegal", direccionEntrega.domicilioLegal.idDomicilioLegal);
             ExecuteNonQuery(objCommand);
         }
@@ -147,12 +147,12 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pi_direccionEntrega");
             InputParameterAdd.Guid(objCommand, "idUsuario", direccionEntrega.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "ubigeo", direccionEntrega.ubigeo.Id);
-            InputParameterAdd.Varchar(objCommand, "descripcion", direccionEntrega.descripcion);
-            InputParameterAdd.Varchar(objCommand, "contacto", direccionEntrega.contacto);
-            InputParameterAdd.Varchar(objCommand, "telefono", direccionEntrega.telefono);
-            InputParameterAdd.Varchar(objCommand, "emailRecepcionFacturas", direccionEntrega.emailRecepcionFacturas);
+            InputParameterAdd.Varchar(objCommand, "descripcion", direccionEntrega.descripcion.Trim());
+            InputParameterAdd.Varchar(objCommand, "contacto", direccionEntrega.contacto.Trim());
+            InputParameterAdd.Varchar(objCommand, "telefono", direccionEntrega.telefono.Trim());
+            InputParameterAdd.Varchar(objCommand, "emailRecepcionFacturas", direccionEntrega.emailRecepcionFacturas.Trim());
             InputParameterAdd.Varchar(objCommand, "codigoCliente", direccionEntrega.codigoCliente);
-            InputParameterAdd.Varchar(objCommand, "nombre", direccionEntrega.nombre);
+            InputParameterAdd.Varchar(objCommand, "nombre", direccionEntrega.nombre.Trim());
             InputParameterAdd.Int(objCommand, "idDomicilioLegal", direccionEntrega.domicilioLegal.idDomicilioLegal);
             InputParameterAdd.Guid(objCommand, "idCliente", direccionEntrega.cliente.idCliente);
             OutputParameterAdd.UniqueIdentifier(objCommand, "idDireccionEntrega");

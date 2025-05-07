@@ -474,18 +474,15 @@ namespace BusinessLayer
             {
                 //try
                 //{
-
-                    
-
                     documentoVenta = dal.SelectDocumentoVenta(documentoVenta);
                     //Se recupera el clasePedido de pago registrado
                     documentoVenta.tipoPago = (DocumentoVenta.TipoPago)Int32.Parse(documentoVenta.cPE_CABECERA_BE.TIP_PAG);
-
+                    
                     documentoVenta.globalEnumTipoOnline = GlobalEnumTipoOnline.Normal;
-
+                    
                     ParametroBL parametroBL = new ParametroBL();
                     int idEmpresa = parametroBL.GetDataFacturacionEmpresaEOL(documentoVenta.cPE_CABECERA_BE.ID);
-
+                    
                     //IwsOnlineToCPEClient client = new IwsOnlineToCPEClient();
                     //Uri uri = new Uri(Constantes.ENDPOINT_ADDRESS_EOL);
                     //client.Endpoint.Address = new EndpointAddress(uri);
@@ -493,13 +490,13 @@ namespace BusinessLayer
                     BasicHttpBinding binding = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
                     binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.None;
                     binding.MaxReceivedMessageSize = 20000000;
-
+                    
                     EndpointAddress endpoint = new EndpointAddress(Constantes.ENDPOINT_ADDRESS_EOL);
-
+                    
                     var client = new IwsOnlineToCPEClient(binding, endpoint);
-
-
-
+                    
+                    
+                    
                     documentoVenta.cPE_RESPUESTA_BE = client.callProcessOnline(Constantes.USER_EOL, Constantes.PASSWORD_EOL,
                             documentoVenta.cPE_CABECERA_BE,
                             documentoVenta.cPE_DETALLE_BEList.ToArray(),
@@ -513,7 +510,7 @@ namespace BusinessLayer
                     documentoVenta.numero = documentoVenta.cPE_CABECERA_BE.CORRELATIVO;
                     //Se inserta el resultado en Base de Datos
                     dal.UpdateRespuestaDocumentoVenta(documentoVenta);
-
+                    
                     //Si se procesa correctamente se actualiza el correlativo y los documentos internos y 
                     //Se consulta el estado del documento en SUNAT
                     if (documentoVenta.cPE_RESPUESTA_BE.CODIGO.Equals(Constantes.EOL_CPE_RESPUESTA_BE_CODIGO_OK))

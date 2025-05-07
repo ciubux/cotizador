@@ -24,13 +24,13 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("pi_clienteStaging");
             InputParameterAdd.Varchar(objCommand, "PlazaId", clienteStaging.PlazaId);
-            InputParameterAdd.Varchar(objCommand, "Plaza", clienteStaging.Plaza);
+            InputParameterAdd.Varchar(objCommand, "Plaza", clienteStaging.Plaza.Trim());
             InputParameterAdd.Varchar(objCommand, "Id", clienteStaging.codigo);
-            InputParameterAdd.Varchar(objCommand, "nombre", clienteStaging.nombre);
-            InputParameterAdd.Varchar(objCommand, "documento", clienteStaging.documento);
+            InputParameterAdd.Varchar(objCommand, "nombre", clienteStaging.nombre.Trim());
+            InputParameterAdd.Varchar(objCommand, "documento", clienteStaging.documento.Trim());
             InputParameterAdd.Varchar(objCommand, "codVe", clienteStaging.codVe);
-            InputParameterAdd.Varchar(objCommand, "nombreComercial", clienteStaging.nombreComercial);
-            InputParameterAdd.Varchar(objCommand, "domicilioLegal", clienteStaging.domicilioLegal);
+            InputParameterAdd.Varchar(objCommand, "nombreComercial", clienteStaging.nombreComercial.Trim());
+            InputParameterAdd.Varchar(objCommand, "domicilioLegal", clienteStaging.domicilioLegal.Trim());
             InputParameterAdd.Varchar(objCommand, "distrito", clienteStaging.distrito);
             InputParameterAdd.Varchar(objCommand, "direccionDespacho", clienteStaging.direccionDespacho);
             InputParameterAdd.Varchar(objCommand, "distritoDespacho", clienteStaging.distritoDespacho);
@@ -255,8 +255,8 @@ namespace DataLayer
         public Guid getClienteId(String ruc, String codigoSedeMP)
         {
             var objCommand = GetSqlCommand("ps_clienteId");
-            InputParameterAdd.Varchar(objCommand, "ruc", ruc);
-            InputParameterAdd.Varchar(objCommand, "codigoSede", codigoSedeMP);
+            InputParameterAdd.Varchar(objCommand, "ruc", ruc.Trim());
+            InputParameterAdd.Varchar(objCommand, "codigoSede", codigoSedeMP.Trim());
             DataTable dataTable = Execute(objCommand);
 
             Guid idCliente = Guid.Empty;
@@ -518,7 +518,7 @@ namespace DataLayer
         public List<Cliente> getClientesByRUC(string ruc)
         {
             var objCommand = GetSqlCommand("ps_clientes_ruc");
-            InputParameterAdd.Varchar(objCommand, "ruc", ruc);
+            InputParameterAdd.Varchar(objCommand, "ruc", ruc.Trim());
             DataTable dataTable = Execute(objCommand);
 
             List<Cliente> lista = new List<Cliente>();
@@ -668,7 +668,7 @@ namespace DataLayer
         public List<Cliente> getSedes(String ruc)
         {
             var objCommand = GetSqlCommand("ps_clienteSedes");
-            InputParameterAdd.Varchar(objCommand, "ruc", ruc);
+            InputParameterAdd.Varchar(objCommand, "ruc", ruc.Trim());
             DataTable dataTable = Execute(objCommand);
 
             List<Cliente> clienteList = new List<Cliente>();
@@ -720,7 +720,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "codigo", cliente.codigo);
             InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idUsuario", cliente.usuario.idUsuario);
-            InputParameterAdd.VarcharEmpty(objCommand, "textoBusqueda", cliente.textoBusqueda);
+            InputParameterAdd.VarcharEmpty(objCommand, "textoBusqueda", cliente.textoBusqueda.Trim());
             InputParameterAdd.Int(objCommand, "idResponsableComercial", cliente.responsableComercial.idVendedor);
             InputParameterAdd.Int(objCommand, "idSupervisorComercial", cliente.supervisorComercial.idVendedor);
             InputParameterAdd.Int(objCommand, "idAsistenteServicioCliente", cliente.asistenteServicioCliente.idVendedor);
@@ -836,7 +836,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "codigo", cliente.codigo);
             InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idUsuario", cliente.usuario.idUsuario);
-            InputParameterAdd.VarcharEmpty(objCommand, "textoBusqueda", cliente.textoBusqueda);
+            InputParameterAdd.VarcharEmpty(objCommand, "textoBusqueda", cliente.textoBusqueda.Trim());
 
             DataTable dataTable = Execute(objCommand);
 
@@ -909,7 +909,7 @@ namespace DataLayer
         public List<Cliente> SelectClienteEmpresasRelacionadas(String ruc, Guid idSede, Guid idUsuario)
         {
             var objCommand = GetSqlCommand("ps_cliente_empresas_relacionadas");
-            InputParameterAdd.Varchar(objCommand, "ruc", ruc);
+            InputParameterAdd.Varchar(objCommand, "ruc", ruc.Trim());
             InputParameterAdd.Guid(objCommand, "idCiudad", idSede);
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             InputParameterAdd.Varchar(objCommand, "tipo", "GRUPOEMPRESARIAL");
@@ -936,7 +936,7 @@ namespace DataLayer
         public bool ExisteClienteSede(String ruc, Guid idSede, Guid idUsuario)
         {
             var objCommand = GetSqlCommand("ps_cliente_existe");
-            InputParameterAdd.Varchar(objCommand, "ruc", ruc);
+            InputParameterAdd.Varchar(objCommand, "ruc", ruc.Trim());
             InputParameterAdd.Guid(objCommand, "idCiudad", idSede);
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
 
@@ -957,15 +957,15 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pi_cliente_lite");
 
             InputParameterAdd.Guid(objCommand, "idUsuario", cliente.IdUsuarioRegistro);
-            InputParameterAdd.Varchar(objCommand, "razonSocial", cliente.razonSocial);
-            InputParameterAdd.Varchar(objCommand, "nombreComercial", cliente.nombreComercial);
+            InputParameterAdd.Varchar(objCommand, "razonSocial", cliente.razonSocial.Trim());
+            InputParameterAdd.Varchar(objCommand, "nombreComercial", cliente.nombreComercial.Trim());
             InputParameterAdd.Int(objCommand, "idRubro", cliente.rubro.idRubro);
             InputParameterAdd.Int(objCommand, "idOrigen", cliente.origen.idOrigen);
-            InputParameterAdd.Varchar(objCommand, "contacto1", cliente.contacto1);
-            InputParameterAdd.Varchar(objCommand, "telefonoContacto1", cliente.telefonoContacto1);
-            InputParameterAdd.Varchar(objCommand, "emailContacto1", cliente.emailContacto1);
+            InputParameterAdd.Varchar(objCommand, "contacto1", cliente.contacto1.Trim());
+            InputParameterAdd.Varchar(objCommand, "telefonoContacto1", cliente.telefonoContacto1.Trim());
+            InputParameterAdd.Varchar(objCommand, "emailContacto1", cliente.emailContacto1.Trim());
             InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);
-            InputParameterAdd.Varchar(objCommand, "observaciones", cliente.observaciones);
+            InputParameterAdd.Varchar(objCommand, "observaciones", cliente.observaciones.Trim());
 
             InputParameterAdd.SmallInt(objCommand, "esCargaMasiva", (short)(cliente.CargaMasiva ? 1 : 0));
 
@@ -990,16 +990,16 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pi_clienteSunat");
 
             InputParameterAdd.Guid(objCommand, "idUsuario", cliente.IdUsuarioRegistro);
-            InputParameterAdd.Varchar(objCommand, "razonSocial", cliente.razonSocialSunat);
-            InputParameterAdd.Varchar(objCommand, "nombreComercial", cliente.nombreComercial);
-            InputParameterAdd.Varchar(objCommand, "ruc", cliente.ruc);
+            InputParameterAdd.Varchar(objCommand, "razonSocial", cliente.razonSocialSunat.Trim());
+            InputParameterAdd.Varchar(objCommand, "nombreComercial", cliente.nombreComercial.Trim());
+            InputParameterAdd.Varchar(objCommand, "ruc", cliente.ruc.Trim());
             InputParameterAdd.Varchar(objCommand, "contacto1", cliente.contacto1);
-            InputParameterAdd.Varchar(objCommand, "telefonoContacto1", cliente.telefonoContacto1);
-            InputParameterAdd.Varchar(objCommand, "emailContacto1", cliente.emailContacto1);
+            InputParameterAdd.Varchar(objCommand, "telefonoContacto1", cliente.telefonoContacto1.Trim());
+            InputParameterAdd.Varchar(objCommand, "emailContacto1", cliente.emailContacto1.Trim());
             InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);
-            InputParameterAdd.Varchar(objCommand, "correoEnvioFactura", cliente.correoEnvioFactura);
-            InputParameterAdd.Varchar(objCommand, "razonSocialSunat", cliente.razonSocialSunat);
-            InputParameterAdd.Varchar(objCommand, "nombreComercialSunat", cliente.nombreComercialSunat);
+            InputParameterAdd.Varchar(objCommand, "correoEnvioFactura", cliente.correoEnvioFactura.Trim());
+            InputParameterAdd.Varchar(objCommand, "razonSocialSunat", cliente.razonSocialSunat.Trim());
+            InputParameterAdd.Varchar(objCommand, "nombreComercialSunat", cliente.nombreComercialSunat.Trim());
             InputParameterAdd.Varchar(objCommand, "direccionDomicilioLegalSunat", cliente.direccionDomicilioLegalSunat);
             InputParameterAdd.Varchar(objCommand, "estadoContribuyente", cliente.estadoContribuyente);
             InputParameterAdd.Varchar(objCommand, "condicionContribuyente", cliente.condicionContribuyente);
@@ -1023,10 +1023,10 @@ namespace DataLayer
 
             InputParameterAdd.Int(objCommand, "tipoDocumento", (int)cliente.tipoDocumentoIdentidad);
 
-            InputParameterAdd.Varchar(objCommand, "observacionesCredito", cliente.observacionesCredito);
-            InputParameterAdd.Varchar(objCommand, "observaciones", cliente.observaciones);
+            InputParameterAdd.Varchar(objCommand, "observacionesCredito", cliente.observacionesCredito.Trim());
+            InputParameterAdd.Varchar(objCommand, "observaciones", cliente.observaciones.Trim());
 
-            InputParameterAdd.VarcharEmpty(objCommand, "observacionHorarioEntrega", cliente.observacionHorarioEntrega);
+            InputParameterAdd.VarcharEmpty(objCommand, "observacionHorarioEntrega", cliente.observacionHorarioEntrega.Trim());
 
             InputParameterAdd.SmallInt(objCommand, "vendedoresAsignados", (short)(cliente.vendedoresAsignados ? 1 : 0));
 
@@ -1108,7 +1108,7 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pi_clienteAdjunto");
             //InputParameterAdd.Guid(objCommand, "idPedido", pedidoAdjunto.idPedido);
             InputParameterAdd.Guid(objCommand, "idCliente", clienteAdjunto.idCliente);
-            InputParameterAdd.Varchar(objCommand, "nombre", clienteAdjunto.nombre);
+            InputParameterAdd.Varchar(objCommand, "nombre", clienteAdjunto.nombre.Trim());
             InputParameterAdd.VarBinary(objCommand, "adjunto", clienteAdjunto.adjunto);
             InputParameterAdd.Guid(objCommand, "idUsuario", clienteAdjunto.usuario.idUsuario);
             InputParameterAdd.BigInt(objCommand, "checksum", clienteAdjunto.checksum);
@@ -1125,18 +1125,18 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", cliente.usuario.idUsuario);
 
 
-            InputParameterAdd.Varchar(objCommand, "rucNuevo", cliente.ruc);
-            InputParameterAdd.Varchar(objCommand, "razonSocial", cliente.razonSocialSunat);
-            InputParameterAdd.Varchar(objCommand, "nombreComercial", cliente.nombreComercial);
-            InputParameterAdd.Varchar(objCommand, "contacto1", cliente.contacto1);
-            InputParameterAdd.Varchar(objCommand, "telefonoContacto1", cliente.telefonoContacto1);
-            InputParameterAdd.Varchar(objCommand, "emailContacto1", cliente.emailContacto1);
+            InputParameterAdd.Varchar(objCommand, "rucNuevo", cliente.ruc.Trim());
+            InputParameterAdd.Varchar(objCommand, "razonSocial", cliente.razonSocialSunat.Trim());
+            InputParameterAdd.Varchar(objCommand, "nombreComercial", cliente.nombreComercial.Trim());
+            InputParameterAdd.Varchar(objCommand, "contacto1", cliente.contacto1.Trim());
+            InputParameterAdd.Varchar(objCommand, "telefonoContacto1", cliente.telefonoContacto1.Trim());
+            InputParameterAdd.Varchar(objCommand, "emailContacto1", cliente.emailContacto1.Trim());
             InputParameterAdd.Int(objCommand, "tipoDocumentoNuevo", (int)cliente.tipoDocumentoIdentidad);
             InputParameterAdd.Guid(objCommand, "idCiudad", cliente.ciudad.idCiudad);
             InputParameterAdd.Varchar(objCommand, "correoEnvioFactura", cliente.correoEnvioFactura);
-            InputParameterAdd.Varchar(objCommand, "razonSocialSunat", cliente.razonSocialSunat);
-            InputParameterAdd.Varchar(objCommand, "nombreComercialSunat", cliente.nombreComercialSunat);
-            InputParameterAdd.Varchar(objCommand, "direccionDomicilioLegalSunat", cliente.direccionDomicilioLegalSunat);
+            InputParameterAdd.Varchar(objCommand, "razonSocialSunat", cliente.razonSocialSunat.Trim());
+            InputParameterAdd.Varchar(objCommand, "nombreComercialSunat", cliente.nombreComercialSunat.Trim());
+            InputParameterAdd.Varchar(objCommand, "direccionDomicilioLegalSunat", cliente.direccionDomicilioLegalSunat.Trim());
             InputParameterAdd.Varchar(objCommand, "estadoContribuyente", cliente.estadoContribuyente);
             InputParameterAdd.Varchar(objCommand, "condicionContribuyente", cliente.condicionContribuyente);
             InputParameterAdd.Varchar(objCommand, "ubigeo", cliente.ubigeo.Id);
@@ -1157,8 +1157,8 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "idAsistenteServicioCliente", cliente.asistenteServicioCliente.idVendedor);
             InputParameterAdd.Decimal(objCommand, "idSupervisorComercial", cliente.supervisorComercial.idVendedor);
 
-            InputParameterAdd.Varchar(objCommand, "observacionesCredito", cliente.observacionesCredito);
-            InputParameterAdd.Varchar(objCommand, "observaciones", cliente.observaciones);
+            InputParameterAdd.Varchar(objCommand, "observacionesCredito", cliente.observacionesCredito.Trim());
+            InputParameterAdd.Varchar(objCommand, "observaciones", cliente.observaciones.Trim());
             InputParameterAdd.SmallInt(objCommand, "vendedoresAsignados", (short)(cliente.vendedoresAsignados ? 1 : 0));
             InputParameterAdd.Int(objCommand, "estadoLiberacionCrediticia", (int)cliente.tipoLiberacionCrediticia);
 
@@ -1242,7 +1242,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCliente", obj.idCliente);
             InputParameterAdd.Varchar(objCommand, "campo", obj.campo);
             InputParameterAdd.Varchar(objCommand, "valor", obj.valor);
-            InputParameterAdd.Varchar(objCommand, "observacion", obj.observacion);
+            InputParameterAdd.Varchar(objCommand, "observacion", obj.observacion.Trim());
             InputParameterAdd.Varchar(objCommand, "fechaInicioVigencia", obj.fechaInicioVigencia.ToString("yyyy-MM-dd"));
             InputParameterAdd.Guid(objCommand, "idUsuario", obj.usuario.idUsuario);
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
