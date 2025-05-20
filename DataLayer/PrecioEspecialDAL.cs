@@ -185,7 +185,7 @@ namespace DataLayer
                 rowObj["ID_PRODUCTO_PRESENTACION_COSTO"] = item.unidadCosto.IdProductoPresentacion;
                 rowObj["FECHA_INICIO"] = item.fechaInicio;
                 rowObj["FECHA_FIN"] = item.fechaFin;
-                rowObj["OBSERVACIONES"] = item.observaciones;
+                rowObj["OBSERVACIONES"] = item.observaciones?.Trim();
 
                 tvp.Rows.Add(rowObj);
             }
@@ -304,7 +304,7 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("ps_precioEspecialCabecerasDetalles");
             InputParameterAdd.Guid(objCommand, "idUsuario", obj.usuario.idUsuario);
-            InputParameterAdd.VarcharEmpty(objCommand, "codigo", obj.codigo);
+            InputParameterAdd.VarcharEmpty(objCommand, "codigo", obj.codigo?.Trim());
             InputParameterAdd.VarcharEmpty(objCommand, "tipoNegociacion", obj.tipoNegociacion);
 
             InputParameterAdd.VarcharEmpty(objCommand, "fechaVigenciaDesde", obj.fechaInicio.ToString("yyyy-MM-dd"));
@@ -414,7 +414,7 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("ps_precioEspecialCabeceras");
             InputParameterAdd.Guid(objCommand, "idUsuario", obj.usuario.idUsuario);
-            InputParameterAdd.VarcharEmpty(objCommand, "codigo", obj.codigo);
+            InputParameterAdd.VarcharEmpty(objCommand, "codigo", obj.codigo?.Trim());
             InputParameterAdd.VarcharEmpty(objCommand, "tipoNegociacion", obj.tipoNegociacion);
 
             InputParameterAdd.VarcharEmpty(objCommand, "fechaVigenciaDesde", obj.fechaInicio.ToString("yyyy-MM-dd"));
@@ -558,11 +558,11 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pi_precioEspecialCabecera");
 
             InputParameterAdd.Guid(objCommand, "idUsuario", obj.usuario.idUsuario);
-            InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo);
+            InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo?.Trim());
             InputParameterAdd.Varchar(objCommand, "tipoNegociacion", obj.tipoNegociacion);
-            InputParameterAdd.Varchar(objCommand, "titulo", obj.titulo);
-            InputParameterAdd.Varchar(objCommand, "codigoListaProveedor", obj.codigoListaProveedor);
-            InputParameterAdd.Varchar(objCommand, "observaciones", obj.observaciones);
+            InputParameterAdd.Varchar(objCommand, "titulo", obj.titulo?.Trim());
+            InputParameterAdd.Varchar(objCommand, "codigoListaProveedor", obj.codigoListaProveedor?.Trim());
+            InputParameterAdd.Varchar(objCommand, "observaciones", obj.observaciones?.Trim());
             InputParameterAdd.DateTime(objCommand, "fechaInicio", obj.fechaInicio);
             InputParameterAdd.DateTime(objCommand, "fechaFin", obj.fechaFin);
             InputParameterAdd.Int(objCommand, "idClienteSunat", obj.clienteSunat.idClienteSunat);
@@ -599,7 +599,7 @@ namespace DataLayer
                 rowObj["ID_PRODUCTO_PRESENTACION_COSTO"] = item.unidadCosto.IdProductoPresentacion;
                 rowObj["FECHA_INICIO"] = item.fechaInicio;
                 rowObj["FECHA_FIN"] = item.fechaFin;
-                rowObj["OBSERVACIONES"] = item.observaciones;
+                rowObj["OBSERVACIONES"] = item.observaciones?.Trim();
 
                 tvp.Rows.Add(rowObj);
             }
@@ -620,11 +620,11 @@ namespace DataLayer
 
             InputParameterAdd.Guid(objCommand, "idPrecioEspecialCabecera", obj.idPrecioEspecialCabecera);
             InputParameterAdd.Guid(objCommand, "idUsuario", obj.usuario.idUsuario);
-            InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo);
-            InputParameterAdd.Varchar(objCommand, "codigoListaProveedor", obj.codigoListaProveedor);
+            InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo?.Trim());
+            InputParameterAdd.Varchar(objCommand, "codigoListaProveedor", obj.codigoListaProveedor?.Trim());
             InputParameterAdd.Varchar(objCommand, "tipoNegociacion", obj.tipoNegociacion);
-            InputParameterAdd.Varchar(objCommand, "titulo", obj.titulo);
-            InputParameterAdd.Varchar(objCommand, "observaciones", obj.observaciones);
+            InputParameterAdd.Varchar(objCommand, "titulo", obj.titulo?.Trim());
+            InputParameterAdd.Varchar(objCommand, "observaciones", obj.observaciones?.Trim());
             InputParameterAdd.DateTime(objCommand, "fechaInicio", obj.fechaInicio);
             InputParameterAdd.DateTime(objCommand, "fechaFin", obj.fechaFin);
             InputParameterAdd.Int(objCommand, "idClienteSunat", obj.clienteSunat.idClienteSunat);
@@ -661,7 +661,7 @@ namespace DataLayer
                 rowObj["ID_PRODUCTO_PRESENTACION_COSTO"] = item.unidadCosto.IdProductoPresentacion;
                 rowObj["FECHA_INICIO"] = item.fechaInicio;
                 rowObj["FECHA_FIN"] = item.fechaFin;
-                rowObj["OBSERVACIONES"] = item.observaciones;
+                rowObj["OBSERVACIONES"] = item.observaciones?.Trim();
 
                 tvp.Rows.Add(rowObj);
             }

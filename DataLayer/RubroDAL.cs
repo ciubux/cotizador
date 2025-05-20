@@ -103,8 +103,8 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pi_rubro");
 
             InputParameterAdd.Guid(objCommand, "idUsuario", obj.IdUsuarioRegistro);
-            InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo);
-            InputParameterAdd.Varchar(objCommand, "nombre", obj.nombre);
+            InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo?.Trim());
+            InputParameterAdd.Varchar(objCommand, "nombre", obj.nombre?.Trim());
             InputParameterAdd.Int(objCommand, "estado", obj.Estado);
             
             if (obj.idRubroPadre > 0)
@@ -128,8 +128,8 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pu_rubro");
             InputParameterAdd.Int(objCommand, "idRubro", obj.idRubro);
             InputParameterAdd.Guid(objCommand, "idUsuario", obj.IdUsuarioRegistro);
-            InputParameterAdd.Varchar(objCommand, "nombre", obj.nombre);
-            InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo);
+            InputParameterAdd.Varchar(objCommand, "nombre", obj.nombre?.Trim());
+            InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo?.Trim());
             InputParameterAdd.Int(objCommand, "estado", obj.Estado);
 
             if (obj.idRubroPadre > 0)

@@ -149,10 +149,10 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pi_grupoCliente");
 
             InputParameterAdd.Guid(objCommand, "idUsuario", grupoCliente.IdUsuarioRegistro);
-            InputParameterAdd.Varchar(objCommand, "nombre", grupoCliente.nombre);
-            InputParameterAdd.Varchar(objCommand, "contacto", grupoCliente.contacto);
-            InputParameterAdd.Varchar(objCommand, "telefonoContacto", grupoCliente.telefonoContacto);
-            InputParameterAdd.Varchar(objCommand, "emailContacto", grupoCliente.emailContacto);
+            InputParameterAdd.Varchar(objCommand, "nombre", grupoCliente.nombre?.Trim());
+            InputParameterAdd.Varchar(objCommand, "contacto", grupoCliente.contacto?.Trim());
+            InputParameterAdd.Varchar(objCommand, "telefonoContacto", grupoCliente.telefonoContacto?.Trim());
+            InputParameterAdd.Varchar(objCommand, "emailContacto", grupoCliente.emailContacto?.Trim());
             InputParameterAdd.Guid(objCommand, "idCiudad", grupoCliente.ciudad.idCiudad);
 
             /*Plazo credito*/
@@ -164,8 +164,8 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "creditoAprobado", grupoCliente.creditoAprobado);
             InputParameterAdd.Decimal(objCommand, "sobreGiro", grupoCliente.sobreGiro);
       
-            InputParameterAdd.Varchar(objCommand, "observacionesCredito", grupoCliente.observacionesCredito);
-            InputParameterAdd.Varchar(objCommand, "observaciones", grupoCliente.observaciones);
+            InputParameterAdd.Varchar(objCommand, "observacionesCredito", grupoCliente.observacionesCredito?.Trim());
+            InputParameterAdd.Varchar(objCommand, "observaciones", grupoCliente.observaciones?.Trim());
 
             //InputParameterAdd.Varchar(objCommand, "codigo", grupoCliente.codigo);
             //InputParameterAdd.Int(objCommand, "estado", grupoCliente.Estado);
@@ -195,7 +195,7 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("pi_grupoClienteAdjunto");
             InputParameterAdd.Int(objCommand, "idGrupoCliente", grupoClienteAdjunto.idGrupoCliente);
-            InputParameterAdd.Varchar(objCommand, "nombre", grupoClienteAdjunto.nombre);
+            InputParameterAdd.Varchar(objCommand, "nombre", grupoClienteAdjunto.nombre?.Trim());
             InputParameterAdd.VarBinary(objCommand, "adjunto", grupoClienteAdjunto.adjunto);
 
             InputParameterAdd.Guid(objCommand, "idUsuario", grupoClienteAdjunto.usuario.idUsuario);
@@ -212,10 +212,10 @@ namespace DataLayer
 
             InputParameterAdd.Int(objCommand, "idGrupoCliente", grupoCliente.idGrupoCliente);
             InputParameterAdd.Guid(objCommand, "idUsuario", grupoCliente.IdUsuarioRegistro);
-            InputParameterAdd.Varchar(objCommand, "grupo", grupoCliente.nombre);
-            InputParameterAdd.Varchar(objCommand, "contacto", grupoCliente.contacto);
-            InputParameterAdd.Varchar(objCommand, "telefonoContacto", grupoCliente.telefonoContacto);
-            InputParameterAdd.Varchar(objCommand, "emailContacto", grupoCliente.emailContacto);
+            InputParameterAdd.Varchar(objCommand, "grupo", grupoCliente.nombre?.Trim());
+            InputParameterAdd.Varchar(objCommand, "contacto", grupoCliente.contacto?.Trim());
+            InputParameterAdd.Varchar(objCommand, "telefonoContacto", grupoCliente.telefonoContacto?.Trim());
+            InputParameterAdd.Varchar(objCommand, "emailContacto", grupoCliente.emailContacto?.Trim());
             InputParameterAdd.Guid(objCommand, "idCiudad", grupoCliente.ciudad.idCiudad);
 
             /*Plazo credito*/
@@ -227,8 +227,8 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "creditoAprobado", grupoCliente.creditoAprobado);
             InputParameterAdd.Decimal(objCommand, "sobreGiro", grupoCliente.sobreGiro);
 
-            InputParameterAdd.Varchar(objCommand, "observacionesCredito", grupoCliente.observacionesCredito);
-            InputParameterAdd.Varchar(objCommand, "observaciones", grupoCliente.observaciones);
+            InputParameterAdd.Varchar(objCommand, "observacionesCredito", grupoCliente.observacionesCredito?.Trim());
+            InputParameterAdd.Varchar(objCommand, "observaciones", grupoCliente.observaciones?.Trim());
 
             //InputParameterAdd.Varchar(objCommand, "codigo", grupoCliente.codigo);
             InputParameterAdd.Int(objCommand, "estado", grupoCliente.Estado);

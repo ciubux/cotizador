@@ -46,8 +46,8 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pi_fabricante");
 
             InputParameterAdd.Guid(objCommand, "idUsuario", obj.IdUsuarioRegistro);
-            InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo);
-            InputParameterAdd.Varchar(objCommand, "nombreUsual", obj.nombreUsual);
+            InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo?.Trim());
+            InputParameterAdd.Varchar(objCommand, "nombreUsual", obj.nombreUsual?.Trim());
 
             OutputParameterAdd.Int(objCommand, "idFabricante");
 
@@ -64,7 +64,7 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pu_fabricante");
             InputParameterAdd.Int(objCommand, "idFabricante", obj.idFabricante);
             InputParameterAdd.Guid(objCommand, "idUsuario", obj.IdUsuarioRegistro);
-            InputParameterAdd.Varchar(objCommand, "nombreUsual", obj.nombreUsual);
+            InputParameterAdd.Varchar(objCommand, "nombreUsual", obj.nombreUsual?.Trim());
 
             ExecuteNonQuery(objCommand);
 

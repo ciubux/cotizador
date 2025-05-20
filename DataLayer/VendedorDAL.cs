@@ -27,9 +27,9 @@ namespace DataLayer
             List<Vendedor> lista = new List<Vendedor>();
 
             InputParameterAdd.Int(objCommand, "estado", vendedor.estado);
-            InputParameterAdd.VarcharEmpty(objCommand, "cod", vendedor.codigo);
-            InputParameterAdd.VarcharEmpty(objCommand, "descripcion", vendedor.descripcion);
-            InputParameterAdd.VarcharEmpty(objCommand, "email", vendedor.email);
+            InputParameterAdd.VarcharEmpty(objCommand, "cod", vendedor.codigo?.Trim());
+            InputParameterAdd.VarcharEmpty(objCommand, "descripcion", vendedor.descripcion?.Trim());
+            InputParameterAdd.VarcharEmpty(objCommand, "email", vendedor.email?.Trim());
             InputParameterAdd.Guid(objCommand, "ciudad", vendedor.ciudad.idCiudad);
             DataTable dataTable = Execute(objCommand);
             foreach (DataRow row in dataTable.Rows)
@@ -93,9 +93,9 @@ namespace DataLayer
         {
 
             var objCommand = GetSqlCommand("pi_vendedor");
-            InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo);
+            InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo?.Trim());
             
-            InputParameterAdd.Varchar(objCommand, "nombre", obj.descripcion);           
+            InputParameterAdd.Varchar(objCommand, "nombre", obj.descripcion?.Trim());           
 
             InputParameterAdd.Int(objCommand, "estado", obj.estado);
             InputParameterAdd.Guid(objCommand, "usuario_creacion", obj.usuario.idUsuario);
@@ -123,7 +123,7 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pu_vendedores");
             InputParameterAdd.Int(objCommand, "id_vendedor", obj.idVendedor);
             InputParameterAdd.Guid(objCommand, "usuario_modificacion", obj.usuario.idUsuario);
-            InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo);
+            InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo?.Trim());
             //InputParameterAdd.Varchar(objCommand, "cargo", obj.cargo);
             //InputParameterAdd.Varchar(objCommand, "nombre", obj.descripcion);
             //InputParameterAdd.Varchar(objCommand, "contacto", obj.contacto);

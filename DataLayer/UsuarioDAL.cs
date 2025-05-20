@@ -182,7 +182,7 @@ namespace DataLayer
         public Usuario getUsuarioLogin(Usuario usuario)
         {
             var objCommand = GetSqlCommand("ps_usuario");
-            InputParameterAdd.Varchar(objCommand, "email", usuario.email);
+            InputParameterAdd.Varchar(objCommand, "email", usuario.email?.Trim());
             InputParameterAdd.Varchar(objCommand, "password", usuario.password);
             InputParameterAdd.Varchar(objCommand, "ip_login", usuario.ipAddress);
             DataSet dataSet = ExecuteDataSet(objCommand);
@@ -778,12 +778,12 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("pi_usuario_mantenedor");
             InputParameterAdd.Guid(objCommand, "id_usuario_modificacion", usuario.idUsuarioModificacion);
-            InputParameterAdd.Varchar(objCommand, "cargo", usuario.cargo);
-            InputParameterAdd.Varchar(objCommand, "contacto", usuario.contacto);
-            InputParameterAdd.Varchar(objCommand, "nombre", usuario.nombre);
+            InputParameterAdd.Varchar(objCommand, "cargo", usuario.cargo?.Trim());
+            InputParameterAdd.Varchar(objCommand, "contacto", usuario.contacto?.Trim());
+            InputParameterAdd.Varchar(objCommand, "nombre", usuario.nombre?.Trim());
             InputParameterAdd.Int(objCommand, "estado", usuario.Estado);
             InputParameterAdd.Bit(objCommand, "es_cliente", usuario.esCliente);
-            InputParameterAdd.Varchar(objCommand, "email", usuario.email);
+            InputParameterAdd.Varchar(objCommand, "email", usuario.email?.Trim());
             InputParameterAdd.Varchar(objCommand, "pass", usuario.password);
             InputParameterAdd.Guid(objCommand, "id_ciudad", usuario.sedeMP.idCiudad);
             InputParameterAdd.Int(objCommand, "idArea", usuario.area.idArea);
@@ -798,12 +798,12 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pu_usuario_mantenedor");
             InputParameterAdd.Guid(objCommand, "id_usuario", usuario.idUsuario);
             InputParameterAdd.Guid(objCommand, "id_usuario_modificacion", usuario.idUsuarioModificacion);
-            InputParameterAdd.Varchar(objCommand, "cargo", usuario.cargo);
-            InputParameterAdd.Varchar(objCommand, "contacto", usuario.contacto);
-            InputParameterAdd.Varchar(objCommand, "nombre", usuario.nombre);
+            InputParameterAdd.Varchar(objCommand, "cargo", usuario.cargo?.Trim());
+            InputParameterAdd.Varchar(objCommand, "contacto", usuario.contacto?.Trim());
+            InputParameterAdd.Varchar(objCommand, "nombre", usuario.nombre?.Trim());
             InputParameterAdd.Int(objCommand, "estado", usuario.Estado);
             InputParameterAdd.Bit(objCommand, "es_cliente", usuario.esCliente);
-            InputParameterAdd.Varchar(objCommand, "email", usuario.email);
+            InputParameterAdd.Varchar(objCommand, "email", usuario.email?.Trim());
             InputParameterAdd.Varchar(objCommand, "pass", usuario.password);
             InputParameterAdd.Guid(objCommand, "id_ciudad", usuario.sedeMP.idCiudad);
             InputParameterAdd.Decimal(objCommand, "max_por_des_apro", usuario.maximoPorcentajeDescuentoAprobacion);

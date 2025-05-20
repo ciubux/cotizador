@@ -73,10 +73,10 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("pi_promocion");
 
-            InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo);
-            InputParameterAdd.Varchar(objCommand, "titulo", obj.titulo);
-            InputParameterAdd.Varchar(objCommand, "descripcion", obj.descripcion);
-            InputParameterAdd.Varchar(objCommand, "descripcionPresentacion", obj.descripcionPresentacion);
+            InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo?.Trim());
+            InputParameterAdd.Varchar(objCommand, "titulo", obj.titulo?.Trim());
+            InputParameterAdd.Varchar(objCommand, "descripcion", obj.descripcion?.Trim());
+            InputParameterAdd.Varchar(objCommand, "descripcionPresentacion", obj.descripcionPresentacion?.Trim());
             InputParameterAdd.DateTime(objCommand, "fechaInicio", obj.fechaInicio);
             InputParameterAdd.DateTime(objCommand, "fechaFin", obj.fechaFin);
             InputParameterAdd.Guid(objCommand, "idUsuario", obj.IdUsuarioRegistro);
@@ -97,10 +97,10 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("pu_promocion");
             InputParameterAdd.Guid(objCommand, "idPromocion", obj.idPromocion);
-            InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo);
-            InputParameterAdd.Varchar(objCommand, "titulo", obj.titulo);
-            InputParameterAdd.Varchar(objCommand, "descripcion", obj.descripcion);
-            InputParameterAdd.Varchar(objCommand, "descripcionPresentacion", obj.descripcionPresentacion);
+            InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo?.Trim());
+            InputParameterAdd.Varchar(objCommand, "titulo", obj.titulo?.Trim());
+            InputParameterAdd.Varchar(objCommand, "descripcion", obj.descripcion?.Trim());
+            InputParameterAdd.Varchar(objCommand, "descripcionPresentacion", obj.descripcionPresentacion?.Trim());
             InputParameterAdd.DateTime(objCommand, "fechaInicio", obj.fechaInicio);
             InputParameterAdd.DateTime(objCommand, "fechaFin", obj.fechaFin);
             InputParameterAdd.Guid(objCommand, "idUsuario", obj.IdUsuarioRegistro);
