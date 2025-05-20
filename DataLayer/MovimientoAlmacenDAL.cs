@@ -299,14 +299,14 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "ultimaAtencionParcial", guiaRemision.ultimaAtencionParcial ? 1 : 0);
             InputParameterAdd.Guid(objCommand, "idSedeOrigen", guiaRemision.ciudadOrigen.idCiudad);
             InputParameterAdd.Char(objCommand, "ubigeoEntrega", guiaRemision.pedido.ubigeoEntrega.Id);
-            InputParameterAdd.Varchar(objCommand, "direccionEntrega", guiaRemision.pedido.direccionEntrega.descripcion);
+            InputParameterAdd.Varchar(objCommand, "direccionEntrega", guiaRemision.pedido.direccionEntrega.descripcion?.Trim());
             InputParameterAdd.Char(objCommand, "motivoTraslado", ((char)guiaRemision.motivoTraslado).ToString());
-            InputParameterAdd.Varchar(objCommand, "observaciones", guiaRemision.observaciones);
-            InputParameterAdd.Varchar(objCommand, "certificadoInscripcion", guiaRemision.certificadoInscripcion);
+            InputParameterAdd.Varchar(objCommand, "observaciones", guiaRemision.observaciones?.Trim());
+            InputParameterAdd.Varchar(objCommand, "certificadoInscripcion", guiaRemision.certificadoInscripcion?.Trim());
             InputParameterAdd.Guid(objCommand, "idUsuario", guiaRemision.usuario.idUsuario);
             InputParameterAdd.Guid(objCommand, "idAlmacen", guiaRemision.idAlmacen);
             InputParameterAdd.Int(objCommand, "estado", (int)guiaRemision.seguimientoMovimientoAlmacenSalida.estado);
-            InputParameterAdd.Varchar(objCommand, "observacionSeguimiento", guiaRemision.seguimientoMovimientoAlmacenSalida.observacion);
+            InputParameterAdd.Varchar(objCommand, "observacionSeguimiento", guiaRemision.seguimientoMovimientoAlmacenSalida.observacion?.Trim());
             InputParameterAdd.Int(objCommand, "entregaATerceros", guiaRemision.entregaTerceros ? 1 : 0);
             InputParameterAdd.Guid(objCommand, "idClienteTercero", guiaRemision.idClienteTerceros);
 
@@ -320,10 +320,10 @@ namespace DataLayer
             } else
             {
                 InputParameterAdd.Guid(objCommand, "idTransportista", guiaRemision.transportista.idTransportista);
-                InputParameterAdd.Varchar(objCommand, "nombreTransportista", guiaRemision.transportista.descripcion);
-                InputParameterAdd.Varchar(objCommand, "rucTransportista", guiaRemision.transportista.ruc);
-                InputParameterAdd.Varchar(objCommand, "breveteTransportista", guiaRemision.transportista.brevete);
-                InputParameterAdd.Varchar(objCommand, "direccionTransportista", guiaRemision.transportista.direccion);
+                InputParameterAdd.Varchar(objCommand, "nombreTransportista", guiaRemision.transportista.descripcion?.Trim());
+                InputParameterAdd.Varchar(objCommand, "rucTransportista", guiaRemision.transportista.ruc?.Trim());
+                InputParameterAdd.Varchar(objCommand, "breveteTransportista", guiaRemision.transportista.brevete?.Trim());
+                InputParameterAdd.Varchar(objCommand, "direccionTransportista", guiaRemision.transportista.direccion?.Trim());
                 InputParameterAdd.Varchar(objCommand, "placaVehiculo", guiaRemision.placaVehiculo);
             }
 
@@ -340,7 +340,7 @@ namespace DataLayer
                 {
                     InputParameterAdd.Int(objCommand, "motivoExtorno", (int)GuiaRemision.MotivosExtornoNotaIngreso.DevolucionTotal);
                 }
-                InputParameterAdd.Varchar(objCommand, "sustentoExtorno", guiaRemision.sustentoExtorno);
+                InputParameterAdd.Varchar(objCommand, "sustentoExtorno", guiaRemision.sustentoExtorno?.Trim());
             }
             else
             {
@@ -426,12 +426,12 @@ namespace DataLayer
 
 
             InputParameterAdd.Guid(objCommand, "idTransportista", guiaRemision.transportista.idTransportista);
-            InputParameterAdd.Varchar(objCommand, "nombreTransportista", guiaRemision.transportista.descripcion);
-            InputParameterAdd.Varchar(objCommand, "rucTransportista", guiaRemision.transportista.ruc);
-            InputParameterAdd.Varchar(objCommand, "breveteTransportista", guiaRemision.transportista.brevete);
-            InputParameterAdd.Varchar(objCommand, "direccionTransportista", guiaRemision.transportista.direccion);
-            InputParameterAdd.Varchar(objCommand, "placaVehiculo", guiaRemision.placaVehiculo);
-            InputParameterAdd.Varchar(objCommand, "observaciones", guiaRemision.observaciones);
+            InputParameterAdd.Varchar(objCommand, "nombreTransportista", guiaRemision.transportista.descripcion?.Trim());
+            InputParameterAdd.Varchar(objCommand, "rucTransportista", guiaRemision.transportista.ruc?.Trim());
+            InputParameterAdd.Varchar(objCommand, "breveteTransportista", guiaRemision.transportista.brevete?.Trim());
+            InputParameterAdd.Varchar(objCommand, "direccionTransportista", guiaRemision.transportista.direccion?.Trim());
+            InputParameterAdd.Varchar(objCommand, "placaVehiculo", guiaRemision.placaVehiculo?.Trim());
+            InputParameterAdd.Varchar(objCommand, "observaciones", guiaRemision.observaciones?.Trim());
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "idMovimientoAlmacen");
             OutputParameterAdd.Int(objCommand, "siguienteNumeroGuiaRemision");
@@ -490,23 +490,23 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idAlmacen", notaIngreso.idAlmacen);
             InputParameterAdd.Guid(objCommand, "idSedeDestino", notaIngreso.ciudadDestino.idCiudad);
             InputParameterAdd.Char(objCommand, "ubigeoEntrega", notaIngreso.pedido.ubigeoEntrega.Id);
-            InputParameterAdd.Varchar(objCommand, "direccionEntrega", notaIngreso.pedido.direccionEntrega.descripcion);
+            InputParameterAdd.Varchar(objCommand, "direccionEntrega", notaIngreso.pedido.direccionEntrega.descripcion?.Trim());
             InputParameterAdd.Char(objCommand, "motivoTraslado", ((char)notaIngreso.motivoTraslado).ToString());
-            InputParameterAdd.Varchar(objCommand, "serieGuiaReferencia", notaIngreso.serieGuiaReferencia);
+            InputParameterAdd.Varchar(objCommand, "serieGuiaReferencia", notaIngreso.serieGuiaReferencia?.Trim());
             InputParameterAdd.Int(objCommand, "numeroGuiaReferencia", notaIngreso.numeroGuiaReferencia);
-            InputParameterAdd.Varchar(objCommand, "serieDocumentoVentaReferencia", notaIngreso.serieDocumentoVentaReferencia);
+            InputParameterAdd.Varchar(objCommand, "serieDocumentoVentaReferencia", notaIngreso.serieDocumentoVentaReferencia?.Trim());
             InputParameterAdd.Int(objCommand, "numeroDocumentoVentaReferencia", notaIngreso.numeroDocumentoVentaReferencia);
             InputParameterAdd.Int(objCommand, "tipoDocumentoVentaReferencia", (int)notaIngreso.tipoDocumentoVentaReferencia);
-            InputParameterAdd.Varchar(objCommand, "observaciones", notaIngreso.observaciones);
+            InputParameterAdd.Varchar(objCommand, "observaciones", notaIngreso.observaciones?.Trim());
             InputParameterAdd.Guid(objCommand, "idUsuario", notaIngreso.usuario.idUsuario);
             InputParameterAdd.Int(objCommand, "estado", (int)notaIngreso.seguimientoMovimientoAlmacenEntrada.estado);
-            InputParameterAdd.Varchar(objCommand, "observacionSeguimiento", notaIngreso.seguimientoMovimientoAlmacenEntrada.observacion);
+            InputParameterAdd.Varchar(objCommand, "observacionSeguimiento", notaIngreso.seguimientoMovimientoAlmacenEntrada.observacion?.Trim());
 
             if (notaIngreso.guiaRemisionAExtornar != null)
             {
                 InputParameterAdd.Guid(objCommand, "idMovimientoAlmacenExtornado", notaIngreso.guiaRemisionAExtornar.idMovimientoAlmacen);
                 InputParameterAdd.Int(objCommand, "motivoExtorno", (int)notaIngreso.motivoExtornoGuiaRemision);
-                InputParameterAdd.Varchar(objCommand, "sustentoExtorno", notaIngreso.sustentoExtorno);
+                InputParameterAdd.Varchar(objCommand, "sustentoExtorno", notaIngreso.sustentoExtorno?.Trim());
             }
             else
             {
@@ -642,9 +642,9 @@ namespace DataLayer
 
                 InputParameterAdd.Int(objCommand, "cantidadUnidadConteo", cantidadConteo);
                 
-                InputParameterAdd.Varchar(objCommand, "observaciones", documentoDetalle.observacion);
-                InputParameterAdd.Varchar(objCommand, "unidad", documentoDetalle.unidad);
-                InputParameterAdd.Varchar(objCommand, "unidadConteo", documentoDetalle.producto.unidadConteo);
+                InputParameterAdd.Varchar(objCommand, "observaciones", documentoDetalle.observacion?.Trim());
+                InputParameterAdd.Varchar(objCommand, "unidad", documentoDetalle.unidad?.Trim());
+                InputParameterAdd.Varchar(objCommand, "unidadConteo", documentoDetalle.producto.unidadConteo?.Trim());
                 InputParameterAdd.Int(objCommand, "tipoProducto", (int)documentoDetalle.producto.tipoProducto);
                 OutputParameterAdd.UniqueIdentifier(objCommand, "idMovimientoAlmacenDetalle");
                 ExecuteNonQuery(objCommand);
@@ -662,7 +662,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", obj.usuario.idUsuario);
             InputParameterAdd.Guid(objCommand, "idCierreStock", obj.idCierreStock);
             InputParameterAdd.Int(objCommand, "estado", obj.Estado);
-            InputParameterAdd.Varchar(objCommand, "observaciones", obj.observaciones);
+            InputParameterAdd.Varchar(objCommand, "observaciones", obj.observaciones?.Trim());
 
             InputParameterAdd.Guid(objCommand, "idSedeOrigen", obj.ciudadOrigen.idCiudad);
             InputParameterAdd.Char(objCommand, "motivoTraslado", ((char)obj.motivoTraslado).ToString());
@@ -686,7 +686,7 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("pu_anularMovimientoAlmacen");
             InputParameterAdd.Guid(objCommand, "idMovimientoAlmacen", movimientoAlmacen.idMovimientoAlmacen);
-            InputParameterAdd.Varchar(objCommand, "comentarioAnulado", movimientoAlmacen.comentarioAnulado);
+            InputParameterAdd.Varchar(objCommand, "comentarioAnulado", movimientoAlmacen.comentarioAnulado?.Trim());
             InputParameterAdd.Guid(objCommand, "idUsuario", movimientoAlmacen.usuario.idUsuario);
             ExecuteNonQuery(objCommand);
 
@@ -725,11 +725,11 @@ namespace DataLayer
 
             InputParameterAdd.Guid(objCommand, "idCiudad", pedido.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idCliente", pedido.cliente.idCliente);
-            InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente); //puede ser null
+            InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", pedido.numeroReferenciaCliente?.Trim()); //puede ser null
             InputParameterAdd.Guid(objCommand, "idDireccionEntrega", pedido.direccionEntrega.idDireccionEntrega); //puede ser null
-            InputParameterAdd.Varchar(objCommand, "direccionEntrega", pedido.direccionEntrega.descripcion);  //puede ser null
-            InputParameterAdd.Varchar(objCommand, "contactoEntrega", pedido.direccionEntrega.contacto); //puede ser null
-            InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", pedido.direccionEntrega.telefono); //puede ser null
+            InputParameterAdd.Varchar(objCommand, "direccionEntrega", pedido.direccionEntrega.descripcion?.Trim());  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "contactoEntrega", pedido.direccionEntrega.contacto?.Trim()); //puede ser null
+            InputParameterAdd.Varchar(objCommand, "telefonoContactoEntrega", pedido.direccionEntrega.telefono?.Trim()); //puede ser null
             InputParameterAdd.DateTime(objCommand, "fechaSolicitud", pedido.fechaSolicitud);
             InputParameterAdd.DateTime(objCommand, "fechaEntregaDesde", pedido.fechaEntregaDesde.Value);
             InputParameterAdd.DateTime(objCommand, "fechaEntregaHasta", pedido.fechaEntregaHasta.Value);
@@ -741,17 +741,17 @@ namespace DataLayer
             DateTime horaEntregaHasta = new DateTime(dtTmp.Year, dtTmp.Month, dtTmp.Day, Int32.Parse(horaEntregaHastaArray[0]), Int32.Parse(horaEntregaHastaArray[1]), 0);
             InputParameterAdd.DateTime(objCommand, "horaEntregaDesde", horaEntregaDesde);
             InputParameterAdd.DateTime(objCommand, "horaEntregaHasta", horaEntregaHasta);
-            InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.contactoPedido);  //puede ser null
-            InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.telefonoContactoPedido);  //puede ser null
-            InputParameterAdd.Varchar(objCommand, "correoContactoPedido", pedido.correoContactoPedido);  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "contactoPedido", pedido.contactoPedido?.Trim());  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "telefonoContactoPedido", pedido.telefonoContactoPedido?.Trim());  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "correoContactoPedido", pedido.correoContactoPedido?.Trim());  //puede ser null
             InputParameterAdd.SmallInt(objCommand, "incluidoIGV", (short)(pedido.incluidoIGV ? 1 : 0));
             InputParameterAdd.Decimal(objCommand, "tasaIGV", Constantes.IGV);
             InputParameterAdd.Decimal(objCommand, "igv", pedido.montoIGV);
             InputParameterAdd.Decimal(objCommand, "total", pedido.montoTotal);
-            InputParameterAdd.Varchar(objCommand, "observaciones", pedido.observaciones);  //puede ser null
+            InputParameterAdd.Varchar(objCommand, "observaciones", pedido.observaciones?.Trim());  //puede ser null
             InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
-            InputParameterAdd.Varchar(objCommand, "observacionSeguimientoPedido", pedido.seguimientoPedido.observacion);
+            InputParameterAdd.Varchar(objCommand, "observacionSeguimientoPedido", pedido.seguimientoPedido.observacion?.Trim());
             InputParameterAdd.Varchar(objCommand, "ubigeoEntrega", pedido.ubigeoEntrega.Id);
 
             ExecuteNonQuery(objCommand);
@@ -771,13 +771,13 @@ namespace DataLayer
             //Siempre se almacena el costo sin igv de la unidad estandar
             InputParameterAdd.Decimal(objCommand, "costoSinIGV", pedidoDetalle.producto.costoSinIgv);
             InputParameterAdd.Decimal(objCommand, "equivalencia", pedidoDetalle.ProductoPresentacion.Equivalencia);
-            InputParameterAdd.Varchar(objCommand, "unidad", pedidoDetalle.unidad);
+            InputParameterAdd.Varchar(objCommand, "unidad", pedidoDetalle.unidad?.Trim());
             InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", pedidoDetalle.porcentajeDescuento);
             InputParameterAdd.Decimal(objCommand, "precioNetoEquivalente", pedidoDetalle.precioNeto);
             InputParameterAdd.Int(objCommand, "esPrecioAlternativo", pedidoDetalle.esPrecioAlternativo?1:0);
             InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
             InputParameterAdd.Decimal(objCommand, "flete", pedidoDetalle.flete);
-            InputParameterAdd.Varchar(objCommand, "observaciones", pedidoDetalle.observacion);
+            InputParameterAdd.Varchar(objCommand, "observaciones", pedidoDetalle.observacion?.Trim());
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             ExecuteNonQuery(objCommand);
           
@@ -791,7 +791,7 @@ namespace DataLayer
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
             InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
-            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion);
+            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion?.Trim());
 
             ExecuteNonQuery(objCommand);
             return cotizacion;
@@ -1341,7 +1341,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
             InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
-            InputParameterAdd.Varchar(objCommand, "observacion", pedido.seguimientoPedido.observacion);
+            InputParameterAdd.Varchar(objCommand, "observacion", pedido.seguimientoPedido.observacion?.Trim());
             InputParameterAdd.DateTime(objCommand, "fechaModificacion", pedido.fechaModificacion);
          //   OutputParameterAdd.DateTime(objCommand, "fechaModificacionActual");
             ExecuteNonQuery(objCommand);

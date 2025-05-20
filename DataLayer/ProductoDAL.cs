@@ -24,24 +24,24 @@ namespace DataLayer
         public void setProductoStaging(ProductoStaging productoStaging)
         {
             var objCommand = GetSqlCommand("pi_productoStaging");
-            InputParameterAdd.Varchar(objCommand, "codigo", productoStaging.codigo.Trim()); //(y)
+            InputParameterAdd.Varchar(objCommand, "codigo", productoStaging.codigo?.Trim()); //(y)
             InputParameterAdd.Varchar(objCommand, "familia", productoStaging.familia); //(y)
-            InputParameterAdd.Varchar(objCommand, "unidad", productoStaging.unidad.Trim()); //(y)
-            InputParameterAdd.Varchar(objCommand, "descripcion", productoStaging.descripcion.Trim()); //(y)
-            InputParameterAdd.Varchar(objCommand, "codigoProveedor", productoStaging.codigoProveedor.Trim()); //(y)
-            InputParameterAdd.Varchar(objCommand, "unidadAlternativa", productoStaging.unidadAlternativa.Trim()); //(y)
+            InputParameterAdd.Varchar(objCommand, "unidad", productoStaging.unidad?.Trim()); //(y)
+            InputParameterAdd.Varchar(objCommand, "descripcion", productoStaging.descripcion?.Trim()); //(y)
+            InputParameterAdd.Varchar(objCommand, "codigoProveedor", productoStaging.codigoProveedor?.Trim()); //(y)
+            InputParameterAdd.Varchar(objCommand, "unidadAlternativa", productoStaging.unidadAlternativa?.Trim()); //(y)
             InputParameterAdd.Decimal(objCommand, "equivalencia", productoStaging.equivalencia); //(y)
             InputParameterAdd.Decimal(objCommand, "precioLima", productoStaging.precioLima); //(y)
             InputParameterAdd.Decimal(objCommand, "precioProvincias", productoStaging.precioProvincias); //(y)
             InputParameterAdd.Varchar(objCommand, "proveedor", productoStaging.proveedor); //(y)
             InputParameterAdd.Decimal(objCommand, "costo", productoStaging.costo); //(y)
-            InputParameterAdd.Varchar(objCommand, "unidadProveedor", productoStaging.unidadProveedor.Trim()); //(y)
+            InputParameterAdd.Varchar(objCommand, "unidadProveedor", productoStaging.unidadProveedor?.Trim()); //(y)
             InputParameterAdd.Int(objCommand, "equivalenciaProveedor", productoStaging.equivalenciaProveedor); //(y)
             InputParameterAdd.Varchar(objCommand, "monedaProveedor", productoStaging.monedaProveedor); //(y)
             InputParameterAdd.Varchar(objCommand, "monedaMP", productoStaging.monedaMP); //(y)
-            InputParameterAdd.Varchar(objCommand, "unidadSunat", productoStaging.unidadSunat.Trim()); //(y)
-            InputParameterAdd.Varchar(objCommand, "unidadAlternativaSunat", productoStaging.unidadAlternativaSunat.Trim()); //(y)
-            InputParameterAdd.Varchar(objCommand, "unidadProveedorSunat", productoStaging.unidadProveedorSunat.Trim()); //(y)
+            InputParameterAdd.Varchar(objCommand, "unidadSunat", productoStaging.unidadSunat?.Trim()); //(y)
+            InputParameterAdd.Varchar(objCommand, "unidadAlternativaSunat", productoStaging.unidadAlternativaSunat?.Trim()); //(y)
+            InputParameterAdd.Varchar(objCommand, "unidadProveedorSunat", productoStaging.unidadProveedorSunat?.Trim()); //(y)
             ExecuteNonQuery(objCommand);
         }
 
@@ -1431,24 +1431,24 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "sku", producto.sku.Trim());
             InputParameterAdd.Binary(objCommand, "imagen", producto.image);
             InputParameterAdd.Varchar(objCommand, "descripcion", producto.descripcion.Replace("\"", "''"));
-            InputParameterAdd.Varchar(objCommand, "skuProveedor", producto.skuProveedor.Trim());
+            InputParameterAdd.Varchar(objCommand, "skuProveedor", producto.skuProveedor?.Trim());
             InputParameterAdd.Varchar(objCommand, "familia", producto.familia);
             InputParameterAdd.Varchar(objCommand, "proveedor", producto.proveedor);
-            InputParameterAdd.Varchar(objCommand, "unidad", producto.unidad.Trim());
-            InputParameterAdd.Varchar(objCommand, "unidadAlternativa", producto.unidad_alternativa.Trim());
+            InputParameterAdd.Varchar(objCommand, "unidad", producto.unidad?.Trim());
+            InputParameterAdd.Varchar(objCommand, "unidadAlternativa", producto.unidad_alternativa?.Trim());
             InputParameterAdd.VarcharEmpty(objCommand, "unidadProveedor", producto.unidadProveedor == null ? "" : producto.unidadProveedor.Trim());
-            InputParameterAdd.Varchar(objCommand, "unidadEstandarInternacional", producto.unidadEstandarInternacional.Trim());
-            InputParameterAdd.Varchar(objCommand, "unidadPedidoProveedor", producto.unidadPedidoProveedor.Trim());
-            InputParameterAdd.Varchar(objCommand, "codigoFactorUnidadMP", producto.codigoFactorUnidadMP.Trim());
-            InputParameterAdd.Varchar(objCommand, "codigoFactorUnidadAlternativa", producto.codigoFactorUnidadAlternativa.Trim());
-            InputParameterAdd.Varchar(objCommand, "codigoFactorUnidadProveedor", producto.codigoFactorUnidadProveedor.Trim());
+            InputParameterAdd.Varchar(objCommand, "unidadEstandarInternacional", producto.unidadEstandarInternacional?.Trim());
+            InputParameterAdd.Varchar(objCommand, "unidadPedidoProveedor", producto.unidadPedidoProveedor?.Trim());
+            InputParameterAdd.Varchar(objCommand, "codigoFactorUnidadMP", producto.codigoFactorUnidadMP?.Trim());
+            InputParameterAdd.Varchar(objCommand, "codigoFactorUnidadAlternativa", producto.codigoFactorUnidadAlternativa?.Trim());
+            InputParameterAdd.Varchar(objCommand, "codigoFactorUnidadProveedor", producto.codigoFactorUnidadProveedor?.Trim());
             InputParameterAdd.Int(objCommand, "equivalencia", producto.equivalenciaAlternativa);
             InputParameterAdd.Int(objCommand, "equivalenciaProveedor", producto.equivalenciaProveedor);
             InputParameterAdd.Decimal(objCommand, "equivalenciaUnidadPedidoProveedor", producto.equivalenciaUnidadPedidoProveedor);
             InputParameterAdd.Int(objCommand, "estado", producto.Estado);
             InputParameterAdd.Int(objCommand, "descontinuado", (int)producto.ventaRestringida);
             InputParameterAdd.Int(objCommand, "compraRestringida", producto.compraRestringida);
-            InputParameterAdd.VarcharEmpty(objCommand, "motivoRestriccion", producto.motivoRestriccion.Trim());
+            InputParameterAdd.VarcharEmpty(objCommand, "motivoRestriccion", producto.motivoRestriccion?.Trim());
             InputParameterAdd.Int(objCommand, "exoneradoIgv", (producto.exoneradoIgv ? 1 : 0));
             InputParameterAdd.Int(objCommand, "inafecto", producto.inafecto ? 1 : 0);
             InputParameterAdd.Int(objCommand, "tipo", (int)producto.tipoProducto);
@@ -1467,13 +1467,13 @@ namespace DataLayer
 
             InputParameterAdd.Varchar(objCommand, "monedaCompra", producto.monedaProveedor);
             InputParameterAdd.Varchar(objCommand, "monedaVenta", producto.monedaMP);
-            InputParameterAdd.Varchar(objCommand, "unidadAlternativaInternacional", producto.unidadAlternativaInternacional.Trim());
-            InputParameterAdd.Varchar(objCommand, "unidadConteo", producto.unidadConteo.Trim());
+            InputParameterAdd.Varchar(objCommand, "unidadAlternativaInternacional", producto.unidadAlternativaInternacional?.Trim());
+            InputParameterAdd.Varchar(objCommand, "unidadConteo", producto.unidadConteo?.Trim());
             InputParameterAdd.VarcharEmpty(objCommand, "unidadProveedorInternacional", producto.unidadProveedorInternacional == null ? "" : producto.unidadProveedorInternacional.Trim());
             InputParameterAdd.Varchar(objCommand, "codigoSunat", producto.codigoSunat);
 
             InputParameterAdd.Int(objCommand, "validaStock", producto.validaStock);
-            InputParameterAdd.Varchar(objCommand, "kit", producto.kit.Trim());
+            InputParameterAdd.Varchar(objCommand, "kit", producto.kit?.Trim());
 
             InputParameterAdd.Int(objCommand, "esComercial", producto.esComercial);
 
@@ -1508,7 +1508,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
             InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
-            InputParameterAdd.Varchar(objCommand, "sku", skuCliente.Trim());
+            InputParameterAdd.Varchar(objCommand, "sku", skuCliente?.Trim());
             InputParameterAdd.Int(objCommand, "estado", 1);
 
             ExecuteNonQuery(objCommand);
@@ -1523,7 +1523,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "idGrupo", idGrupo);
             InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
-            InputParameterAdd.Varchar(objCommand, "sku", skuCliente.Trim());
+            InputParameterAdd.Varchar(objCommand, "sku", skuCliente?.Trim());
             InputParameterAdd.Int(objCommand, "estado", 1);
             InputParameterAdd.Int(objCommand, "replicarMiembros", replicarMiembros);
 
@@ -1540,14 +1540,14 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "sku", producto.sku.Trim());
             InputParameterAdd.Binary(objCommand, "imagen", producto.image);
             InputParameterAdd.Varchar(objCommand, "descripcion", producto.descripcion.Trim().Replace("\"", "''"));
-            InputParameterAdd.Varchar(objCommand, "skuProveedor", producto.skuProveedor.Trim());
+            InputParameterAdd.Varchar(objCommand, "skuProveedor", producto.skuProveedor?.Trim());
             InputParameterAdd.Varchar(objCommand, "familia", producto.familia);
             InputParameterAdd.Varchar(objCommand, "proveedor", producto.proveedor);
-            InputParameterAdd.Varchar(objCommand, "unidad", producto.unidad.Trim());
-            InputParameterAdd.Varchar(objCommand, "unidadAlternativa", producto.unidad_alternativa.Trim());
-            InputParameterAdd.Varchar(objCommand, "unidadProveedor", producto.unidadProveedor.Trim());
-            InputParameterAdd.Varchar(objCommand, "unidadPedidoProveedor", producto.unidadPedidoProveedor.Trim());
-            InputParameterAdd.Varchar(objCommand, "unidadEstandarInternacional", producto.unidadEstandarInternacional.Trim());
+            InputParameterAdd.Varchar(objCommand, "unidad", producto.unidad?.Trim());
+            InputParameterAdd.Varchar(objCommand, "unidadAlternativa", producto.unidad_alternativa?.Trim());
+            InputParameterAdd.Varchar(objCommand, "unidadProveedor", producto.unidadProveedor?.Trim());
+            InputParameterAdd.Varchar(objCommand, "unidadPedidoProveedor", producto.unidadPedidoProveedor?.Trim());
+            InputParameterAdd.Varchar(objCommand, "unidadEstandarInternacional", producto.unidadEstandarInternacional?.Trim());
             InputParameterAdd.Int(objCommand, "equivalencia", producto.equivalenciaAlternativa);
             InputParameterAdd.Int(objCommand, "equivalenciaProveedor", producto.equivalenciaProveedor);
             InputParameterAdd.Decimal(objCommand, "equivalenciaUnidadPedidoProveedor", producto.equivalenciaUnidadPedidoProveedor);
@@ -1568,7 +1568,7 @@ namespace DataLayer
             {
                 producto.motivoRestriccion = "";
             }
-            InputParameterAdd.VarcharEmpty(objCommand, "motivoRestriccion", producto.motivoRestriccion.Trim());
+            InputParameterAdd.VarcharEmpty(objCommand, "motivoRestriccion", producto.motivoRestriccion?.Trim());
             InputParameterAdd.Int(objCommand, "exoneradoIgv", producto.exoneradoIgv ? 1 : 0);
             InputParameterAdd.Int(objCommand, "inafecto", producto.inafecto ? 1 : 0);
             InputParameterAdd.Int(objCommand, "tipo", (int)producto.tipoProducto);
@@ -1583,10 +1583,10 @@ namespace DataLayer
 
             InputParameterAdd.Varchar(objCommand, "monedaCompra", producto.monedaProveedor);
             InputParameterAdd.Varchar(objCommand, "monedaVenta", producto.monedaMP);
-            InputParameterAdd.Varchar(objCommand, "unidadAlternativaInternacional", producto.unidadAlternativaInternacional.Trim());
-            InputParameterAdd.Varchar(objCommand, "unidadConteo", producto.unidadConteo.Trim());
-            InputParameterAdd.Varchar(objCommand, "unidadProveedorInternacional", producto.unidadProveedorInternacional.Trim());
-            InputParameterAdd.Varchar(objCommand, "codigoSunat", producto.codigoSunat.Trim());
+            InputParameterAdd.Varchar(objCommand, "unidadAlternativaInternacional", producto.unidadAlternativaInternacional?.Trim());
+            InputParameterAdd.Varchar(objCommand, "unidadConteo", producto.unidadConteo?.Trim());
+            InputParameterAdd.Varchar(objCommand, "unidadProveedorInternacional", producto.unidadProveedorInternacional?.Trim());
+            InputParameterAdd.Varchar(objCommand, "codigoSunat", producto.codigoSunat?.Trim());
 
             InputParameterAdd.Decimal(objCommand, "costoFleteProvincias", producto.costoFleteProvincias);
             InputParameterAdd.Varchar(objCommand, "monedaFleteProvincias", producto.monedaFleteProvincias.codigo);
@@ -1630,7 +1630,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
             InputParameterAdd.Int(objCommand, "descontinuado", descontinuado);
-            InputParameterAdd.Varchar(objCommand, "comentario", comentario.Trim());
+            InputParameterAdd.Varchar(objCommand, "comentario", comentario?.Trim());
 
             ExecuteNonQuery(objCommand);
         }
@@ -1645,7 +1645,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             InputParameterAdd.Int(objCommand, "inventarioTotal", tipoCarga);
             InputParameterAdd.Guid(objCommand, "idArchivoAdjunto", idArchivoAdjunto);
-            InputParameterAdd.VarcharEmpty(objCommand, "observaciones", observaciones.Trim());
+            InputParameterAdd.VarcharEmpty(objCommand, "observaciones", observaciones?.Trim());
 
             DataTable tvp = new DataTable();
             tvp.Columns.Add(new DataColumn("SKU", typeof(string)));

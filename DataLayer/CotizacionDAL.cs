@@ -75,10 +75,10 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "porcentajeFlete", cotizacion.flete);
             InputParameterAdd.Decimal(objCommand, "igv", cotizacion.igv);
             InputParameterAdd.Decimal(objCommand, "total", cotizacion.montoTotal);
-            InputParameterAdd.Varchar(objCommand, "observaciones", cotizacion.observaciones.Trim());
+            InputParameterAdd.Varchar(objCommand, "observaciones", cotizacion.observaciones?.Trim());
             InputParameterAdd.Varchar(objCommand, "observacionesFijas", cotizacion.observacionesFijas);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
-            InputParameterAdd.Varchar(objCommand, "contacto", cotizacion.contacto.Trim());
+            InputParameterAdd.Varchar(objCommand, "contacto", cotizacion.contacto?.Trim());
             InputParameterAdd.Bit(objCommand, "esPagoContado", cotizacion.esPagoContado);
             InputParameterAdd.Bit(objCommand, "noAfectoCambiosPrecio", cotizacion.noAfectoCambiosPrecio);
             InputParameterAdd.Bit(objCommand, "ajusteCalculoPrecios", cotizacion.ajusteCalculoPrecios);
@@ -90,7 +90,7 @@ namespace DataLayer
 
             InputParameterAdd.SmallInt(objCommand, "fechaEsModificada", (short)(cotizacion.fechaEsModificada?1:0));
             InputParameterAdd.Bit(objCommand, "aplicaSedes", cotizacion.aplicaSedes);
-            InputParameterAdd.Varchar(objCommand, "observacionSeguimientoCotizacion", cotizacion.seguimientoCotizacion.observacion.Trim());
+            InputParameterAdd.Varchar(objCommand, "observacionSeguimientoCotizacion", cotizacion.seguimientoCotizacion.observacion?.Trim());
 
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
@@ -160,10 +160,10 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "porcentajeFlete", cotizacion.flete);
             InputParameterAdd.Decimal(objCommand, "igv", cotizacion.igv);
             InputParameterAdd.Decimal(objCommand, "total", cotizacion.montoTotal);
-            InputParameterAdd.Varchar(objCommand, "observaciones", cotizacion.observaciones.Trim());
+            InputParameterAdd.Varchar(objCommand, "observaciones", cotizacion.observaciones?.Trim());
             InputParameterAdd.Varchar(objCommand, "observacionesFijas", cotizacion.observacionesFijas);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
-            InputParameterAdd.Varchar(objCommand, "contacto", cotizacion.contacto.Trim());
+            InputParameterAdd.Varchar(objCommand, "contacto", cotizacion.contacto?.Trim());
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
             InputParameterAdd.Bit(objCommand, "noAfectoCambiosPrecio", cotizacion.noAfectoCambiosPrecio);
             InputParameterAdd.Int(objCommand, "mostrarCodigoProveedor", short.Parse((cotizacion.mostrarCodigoProveedor ? 1 : 0).ToString()));
@@ -176,7 +176,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "tipoCotizacion", (int)cotizacion.tipoCotizacion);
 
             InputParameterAdd.SmallInt(objCommand, "fechaEsModificada", (short)(cotizacion.fechaEsModificada ? 1 : 0));
-            InputParameterAdd.Varchar(objCommand, "observacionSeguimientoCotizacion", cotizacion.seguimientoCotizacion.observacion.Trim());
+            InputParameterAdd.Varchar(objCommand, "observacionSeguimientoCotizacion", cotizacion.seguimientoCotizacion.observacion?.Trim());
             InputParameterAdd.Bit(objCommand, "aplicaSedes", cotizacion.aplicaSedes);
 
             OutputParameterAdd.DateTime(objCommand, "fechaModificacionActual");
@@ -238,7 +238,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "esPrecioAlternativo", cotizacionDetalle.esPrecioAlternativo?1:0);
             InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
             InputParameterAdd.Decimal(objCommand, "flete", cotizacionDetalle.flete);
-            InputParameterAdd.Varchar(objCommand, "observaciones", cotizacionDetalle.observacion.Trim());
+            InputParameterAdd.Varchar(objCommand, "observaciones", cotizacionDetalle.observacion?.Trim());
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
 
             if (cotizacionDetalle.esPrecioAlternativo)
@@ -262,7 +262,7 @@ namespace DataLayer
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
             InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
-            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion.Trim());
+            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion?.Trim());
 
             ExecuteNonQuery(objCommand);
             return cotizacion;
@@ -676,7 +676,7 @@ namespace DataLayer
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
             InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
-            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion.Trim());
+            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion?.Trim());
             InputParameterAdd.DateTime(objCommand, "fechaModificacion", cotizacion.fechaModificacion);
             OutputParameterAdd.DateTime(objCommand, "fechaModificacionActual");
             ExecuteNonQuery(objCommand);
@@ -704,7 +704,7 @@ namespace DataLayer
 
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
-            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion.Trim());
+            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion?.Trim());
             InputParameterAdd.DateTime(objCommand, "nuevaFechaFin", cotizacion.fechaFinVigenciaPreciosExtendida);
             ExecuteNonQuery(objCommand);
         }
@@ -714,7 +714,7 @@ namespace DataLayer
 
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
-            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion.Trim());
+            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion?.Trim());
             InputParameterAdd.DateTime(objCommand, "nuevaFechaFin", cotizacion.fechaFinVigenciaPreciosExtendida);
             ExecuteNonQuery(objCommand);
         }
@@ -725,7 +725,7 @@ namespace DataLayer
 
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
-            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion.Trim());
+            InputParameterAdd.Varchar(objCommand, "observacion", cotizacion.seguimientoCotizacion.observacion?.Trim());
             ExecuteNonQuery(objCommand);
         }
 
