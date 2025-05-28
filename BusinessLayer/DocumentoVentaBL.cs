@@ -130,8 +130,8 @@ namespace BusinessLayer
             }
         }
 
-        public DocumentoVenta IniciaNotaCreditoRefacturacionGuia(Guid idGuia, Guid idUsuario, out Guid idVentaNC,
-            out Guid idCPE)
+        public DocumentoVenta IniciaNotaCreditoRefacturacionGuia(Guid idGuia, Guid idUsuario, string sustento, 
+                            out Guid idVentaNC, out Guid idCPE)
         {
             DocumentoVenta documentoVenta = new DocumentoVenta();
             using (var dal = new DocumentoVentaDAL())
@@ -139,7 +139,7 @@ namespace BusinessLayer
                 DocumentoVenta.TiposErrorValidacion TipoError = DocumentoVenta.TiposErrorValidacion.NoExisteError;
                 string descripcionError = "";
 
-                dal.IniciaNotaCreditoRefacturacionGuia(idGuia, idUsuario, out idVentaNC, out idCPE,
+                dal.IniciaNotaCreditoRefacturacionGuia(idGuia, idUsuario, sustento, out idVentaNC, out idCPE,
                         out TipoError, out descripcionError);
 
                 if (TipoError == DocumentoVenta.TiposErrorValidacion.NoExisteError)

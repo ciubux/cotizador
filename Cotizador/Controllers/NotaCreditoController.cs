@@ -297,12 +297,16 @@ namespace Cotizador.Controllers
                 Guid idVentaNC = Guid.Empty;
                 Guid idCPE = Guid.Empty;
 
+                String sustento = Request["sustento"].ToString();
+
                 DocumentoVenta documentoVenta = new DocumentoVenta();
 
                 DocumentoVentaBL documentoVentaBL = new DocumentoVentaBL();
-                documentoVenta = documentoVentaBL.IniciaNotaCreditoRefacturacionGuia(movimientoAlmacen.idMovimientoAlmacen, usuario.idUsuario,
-                                           out idVentaNC, out idCPE);
+                documentoVenta = documentoVentaBL.IniciaNotaCreditoRefacturacionGuia(movimientoAlmacen.idMovimientoAlmacen, usuario.idUsuario, 
+                            sustento, out idVentaNC, out idCPE);
                 // ENVIAR CPE
+
+                
 
                 Venta ventaNC = new Venta();
                 ventaNC.idVenta = idVentaNC;

@@ -676,11 +676,13 @@ function notaCreditoRefacturacionGuia() {
     $('body').loadingModal('show')
 
     var idGuia = $("#idMovimientoAlmacen").val();
+    var sustentoNC = $("#documentoVenta_sustento_nc").val();
     $.ajax({
         url: "/NotaCredito/NotaCreditoRefacturacionGuia",
         type: 'POST',
         dataType: 'JSON',
         data: {
+            sustento: sustentoNC
         },
         error: function (resultado) {
             $('body').loadingModal('hide');

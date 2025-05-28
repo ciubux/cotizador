@@ -1286,7 +1286,7 @@ namespace DataLayer
             descripcionError = (String)objCommand.Parameters["@descripcionError"].Value;
         }
 
-        public void IniciaNotaCreditoRefacturacionGuia(Guid idGuia, Guid idUsuario, out Guid idVentaNC, out Guid idCPE,
+        public void IniciaNotaCreditoRefacturacionGuia(Guid idGuia, Guid idUsuario, string sustento, out Guid idVentaNC, out Guid idCPE,
                 out DocumentoVenta.TiposErrorValidacion TipoError, out string descripcionError)
         {
             var objCommand = GetSqlCommand("pi_iniciaNotaCreditoRefacturacion");
@@ -1295,6 +1295,7 @@ namespace DataLayer
 
             InputParameterAdd.Guid(objCommand, "idGuia", idGuia);
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.VarcharEmpty(objCommand, "sustento", sustento?.Trim());
             OutputParameterAdd.UniqueIdentifier(objCommand, "idVentaNC");
             OutputParameterAdd.UniqueIdentifier(objCommand, "idNotaCredito");
             OutputParameterAdd.Int(objCommand, "tipoError");

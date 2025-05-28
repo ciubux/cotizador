@@ -1619,6 +1619,7 @@ jQuery(function ($) {
         var fechaEmision = $("#documentoVenta_fechaEmision").val();
         var horaEmision = $("#documentoVenta_horaEmision").val();
 
+
         desactivarBotonesFactura();
 
         $.ajax({

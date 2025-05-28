@@ -1769,6 +1769,12 @@ jQuery(function ($) {
         var guiaAtiendePedido = parseInt($("#ver_guiaRemision_guiaAtiendePedido").val());
         var facturaPedidoRelacionado = parseInt($("#btnFacturarGuiaRemision").attr("facturaPedidoRelacionado"));
 
+        if (esRefacturacion == 1) {
+            $("#div_sustento_nc").show();
+        } else {
+            $("#div_sustento_nc").hide();
+        }
+
         if (facturaUnica == 1) {
             if (numeroGrupo > 0) {
                 $.alert({
