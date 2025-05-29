@@ -1101,6 +1101,7 @@ namespace DataLayer
                 transaccion.documentoVenta.serie = Converter.GetString(row, "SERIE");
                 transaccion.documentoVenta.numero = Converter.GetString(row, "CORRELATIVO");
                 transaccion.documentoVenta.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
+                transaccion.observaciones = Converter.GetString(row, "observaciones");
                 guiaRemision.transaccionList.Add(transaccion);
             }
 

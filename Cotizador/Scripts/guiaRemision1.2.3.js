@@ -1236,16 +1236,21 @@ jQuery(function ($) {
                 }
 
 
-
+                var obsUltFactura = "[NONE]";
                 var transaccionList = guiaRemision.transaccionList;
                 var documentosVenta = "";
                 for (var i = 0; i < transaccionList.length; i++) {
+                    if (obsUltFactura == "[NONE]") { obsUltFactura = transaccionList[i].observaciones; }
                     var documentoVenta = transaccionList[i].documentoVenta;
                     documentosVenta = documentoVenta.serieNumero + ";"
                 }
                 documentosVenta = documentosVenta.substr(0, documentosVenta.length - 1);
 
                 $("#documentosVenta").val(documentosVenta);
+
+                $("#btnIniciarRefacturacionGuiaRemision").attr("observaciones_ultima_factura", obsUltFactura);
+                
+
 
                 /*Si la guía de remisión no corresponde a una venta o a una transferencia gratuita no se puede facturar*/
                 $("#btnIngresar").hide();
@@ -1771,6 +1776,10 @@ jQuery(function ($) {
 
         if (esRefacturacion == 1) {
             $("#div_sustento_nc").show();
+            var obsUltFactura = $("#btnIniciarRefacturacionGuiaRemision").attr("observaciones_ultima_factura");
+            if (obsUltFactura != "[NONE]") {
+                $("#documentoVenta_observaciones").val(obsUltFactura);
+            }
         } else {
             $("#div_sustento_nc").hide();
         }
