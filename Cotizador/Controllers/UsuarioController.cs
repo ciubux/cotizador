@@ -392,7 +392,7 @@ namespace Cotizador.Controllers
             }
             if ((Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR] == null && idUsuario == null)
             {
-                instanciarUsuario();
+                instanciarUsuario(usuario.idEmpresa);
             }
 
             Usuario obj = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO_MANTENEDOR];
@@ -409,11 +409,12 @@ namespace Cotizador.Controllers
 
         }
 
-        private void instanciarUsuario()
+        private void instanciarUsuario(int idEmpresa)
         {
             Usuario obj = new Usuario();
             obj.sedeMP = new Ciudad();
-            obj.idUsuario = Guid.Empty;            
+            obj.idUsuario = Guid.Empty;
+            obj.idEmpresa = idEmpresa;
             obj.cargo = String.Empty;
             obj.contacto = String.Empty;
             obj.maximoPorcentajeDescuentoAprobacion = 0.00M;

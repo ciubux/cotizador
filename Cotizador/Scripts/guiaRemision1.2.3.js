@@ -1236,12 +1236,18 @@ jQuery(function ($) {
                 }
 
 
-                var obsUltFactura = "[NONE]";
+                var obsUltFactura = "";
+                var esConsolidada = 0;
                 var transaccionList = guiaRemision.transaccionList;
                 var documentosVenta = "";
                 for (var i = 0; i < transaccionList.length; i++) {
-                    if (obsUltFactura == "[NONE]") { obsUltFactura = transaccionList[i].observaciones; }
                     var documentoVenta = transaccionList[i].documentoVenta;
+
+                    if (i == 0) {
+                        obsUltFactura = transaccionList[i].observaciones;
+                        esConsolidada = documentoVenta.esConsolidada ? 1 : 0;
+                    }
+                    
                     documentosVenta = documentoVenta.serieNumero + ";"
                 }
                 documentosVenta = documentosVenta.substr(0, documentosVenta.length - 1);
@@ -1249,7 +1255,7 @@ jQuery(function ($) {
                 $("#documentosVenta").val(documentosVenta);
 
                 $("#btnIniciarRefacturacionGuiaRemision").attr("observaciones_ultima_factura", obsUltFactura);
-                
+                $("#btnIniciarRefacturacionGuiaRemision").attr("es_factura_consolidada", esConsolidada);
 
 
                 /*Si la guía de remisión no corresponde a una venta o a una transferencia gratuita no se puede facturar*/
@@ -1765,7 +1771,15 @@ jQuery(function ($) {
     });
 
     $("#btnIniciarRefacturacionGuiaRemision").click(function () {
-        iniciarFacturacionGuia(1);
+        var esConsolidada = $("#btnIniciarRefacturacionGuiaRemision").attr("es_factura_consolidada");
+
+        if (esConsolidada == "1") {
+            refacturacionManual("REQUIERE REFACTURACIÓN MANUAL",
+                'La factura de esta guía es consolidada y requiere refacturarse manualmente. ¿Desea habilitar la guía de remisión '
+                + $("#ver_guiaRemision_serieNumeroDocumento").html() + ' para refacturación manual?');
+        } else {
+            iniciarFacturacionGuia(1);
+        }
     });
 
     function iniciarFacturacionGuia(esRefacturacion = 0) {
@@ -3293,9 +3307,13 @@ jQuery(function ($) {
     });
 
     $('#btnRefacturar').click(function () {
+        refacturacionManual("CONFIRMAR REFACTURACIÓN", '¿Está seguro de generar una nueva venta para la Guía de Remisión: ' + $("#ver_guiaRemision_serieNumeroDocumento").html() + '?');
+    });
+
+    function refacturacionManual(titulo, mensaje) {
         $.confirm({
-            title: 'Confirmación Refacturación',
-            content: '¿Está seguro de generar una nueva venta para la Guía de Remisión: ' + $("#ver_guiaRemision_serieNumeroDocumento").html() + "?",
+            title: titulo,
+            content: mensaje,
             type: 'orange',
             buttons: {
                 confirm: {
@@ -3329,7 +3347,7 @@ jQuery(function ($) {
             }
         })
 
-    });
+    }
 
 
     /*GENERACIÓN DE NOTA DE INGRESO*/

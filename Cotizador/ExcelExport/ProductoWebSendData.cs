@@ -79,7 +79,7 @@ namespace Cotizador.ExcelExport
                  * ub.provincia,  ub.departamento, ma.observaciones,*/
 
                 /*Cabecera, Sub total*/
-                int rTotal = (list.Count * 8) + 20;
+                int rTotal = (list.Count * 10) + 20;
                 int cTotal = 30 + 2;
 
                 /*Se crean todas las celdas*/

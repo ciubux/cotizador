@@ -35,6 +35,9 @@ namespace Model
         [Display(Name = "Moneda:")]
         public Moneda moneda{ get; set; }
 
+        [Display(Name = "Es Consolidada:")]
+        public Boolean esConsolidada { get; set; }
+
         public String tipoPagoString
         {
             get

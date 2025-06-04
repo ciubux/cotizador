@@ -107,7 +107,7 @@ namespace Cotizador.Controllers
                 empresas = (List<Empresa>)this.Session[Constantes.VAR_SESSION_EMPRESA_LISTA];
             }
 
-            if (usuario != null)
+            if (usuario != null && selectedValue == null)
             {
                 selectedValue = usuario.idEmpresa.ToString();
             }

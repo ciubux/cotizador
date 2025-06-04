@@ -707,7 +707,7 @@ function notaCreditoRefacturacionGuia() {
                     type: 'green',
                     buttons: {
                         OK: function () {
-                            recagarGuiaRemision(idGuia);
+                            location.reload()
                         }
                     }
                 });
