@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Model;
+using Model.WEB;
 using System.Linq;
 using System.Data.SqlClient;
 
@@ -760,6 +761,62 @@ namespace DataLayer
             }
 
             return seguimientoCotizacion;
+        }
+
+        public void InsertarCotizacionesWeb(List<CotizacionWebMail> cotizaciones, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pi_cotizacion");
+
+            InputParameterAdd.Guid(objCommand, "idCotizacionAntecedente", idUsuario);
+
+            
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("CODIGO", typeof(string)));
+            tvp.Columns.Add(new DataColumn("FECHA", typeof(DateTime)));
+            tvp.Columns.Add(new DataColumn("NOMBRECLIENTE", typeof(string)));
+            tvp.Columns.Add(new DataColumn("UBIGEOCIUDAD", typeof(string)));
+            tvp.Columns.Add(new DataColumn("EMAIL", typeof(string)));
+            tvp.Columns.Add(new DataColumn("TELEFONO", typeof(string)));
+            tvp.Columns.Add(new DataColumn("MENSAJE", typeof(string)));
+            tvp.Columns.Add(new DataColumn("TIPODOC", typeof(string)));
+            tvp.Columns.Add(new DataColumn("NRODOC", typeof(string)));
+            tvp.Columns.Add(new DataColumn("NOMBRECOMERCIAL", typeof(string)));
+            tvp.Columns.Add(new DataColumn("SKU", typeof(string)));
+            tvp.Columns.Add(new DataColumn("CANTIDAD", typeof(int)));
+
+            foreach (CotizacionWebMail cot in cotizaciones)
+            {
+                foreach (ProductoWebMail item in cot.products)
+                {
+                    DataRow rowObj = tvp.NewRow();
+                    rowObj["CODIGO"] = cot.codigo;
+                    rowObj["FECHA"] = cot.apply_date;
+                    rowObj["NOMBRECLIENTE"] = cot.full_name;
+                    rowObj["UBIGEOCIUDAD"] = cot.ubigeo;
+                    rowObj["EMAIL"] = cot.email;
+                    rowObj["TELEFONO"] = cot.phone;
+                    rowObj["MENSAJE"] = cot.message;
+                    rowObj["TIPODOC"] = cot.doc_type;
+                    rowObj["NRODOC"] = cot.ruc_number;
+                    rowObj["NOMBRECOMERCIAL"] = cot.codigo;
+
+                    rowObj["SKU"] = item.sku;
+                    rowObj["CANTIDAD"] = item.quantity;
+
+                    tvp.Rows.Add(rowObj);
+                }
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@items", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.ItemCotizacionWebList";
+
+
+            OutputParameterAdd.Int(objCommand, "nuevos");
+            ExecuteNonQuery(objCommand);
+
+            int nuevos = (int)objCommand.Parameters["@nuevos"].Value;
+
         }
     }
 }

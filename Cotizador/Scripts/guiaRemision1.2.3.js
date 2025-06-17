@@ -1134,6 +1134,7 @@ jQuery(function ($) {
                 $("#ver_guiaRemision_estadoDescripcion").html(guiaRemision.estadoDescripcion);
 
                 $("#btnRefacturar").hide();
+                $("#btnIniciarRefacturacionGuiaRemision").hide();
                 $("#btnGenerarGuiaAtencion").hide();
                 $("#btnGenerarGuiaReal").hide();
                 
@@ -1219,6 +1220,7 @@ jQuery(function ($) {
                         $("#ver_guiaRemision_estadoDescripcion").attr("style", "color:green")
                         $("#btnAnularGuiaRemision").hide();
                         $("#btnRefacturar").show();
+                        $("#btnIniciarRefacturacionGuiaRemision").show();
                     } else {
 
                         $("#btnFacturarGuiaRemision").show();
@@ -1256,7 +1258,7 @@ jQuery(function ($) {
 
                 $("#btnIniciarRefacturacionGuiaRemision").attr("observaciones_ultima_factura", obsUltFactura);
                 $("#btnIniciarRefacturacionGuiaRemision").attr("es_factura_consolidada", esConsolidada);
-
+                $("#btnFacturarGuiaRemision").attr("bloquearGuiaRelacionadaNoFacturada", "0");
 
                 /*Si la guía de remisión no corresponde a una venta o a una transferencia gratuita no se puede facturar*/
                 $("#btnIngresar").hide();
@@ -1305,6 +1307,10 @@ jQuery(function ($) {
                     }*/
                 } else {
                     $("#btnFacturarGuiaRemision").attr("facturaPedidoRelacionado", "0");
+                }
+
+                if (guiaRemision.esGuiaDiferida && guiaRemision.existeMovRelacionado && !guiaRemision.habilitaDescargarFacturaPedidoRelacionado) {
+                    $("#btnFacturarGuiaRemision").attr("bloquearGuiaRelacionadaNoFacturada", "1");
                 }
 
                 if (guiaRemision.habilitaDescargarFacturaPedidoRelacionado && guiaRemision.entregaTerceros) {
@@ -1767,6 +1773,22 @@ jQuery(function ($) {
     }
 
     $("#btnFacturarGuiaRemision").click(function () {
+        var bloquearGuiaRelacionadaNoFacturada = parseInt($("#btnFacturarGuiaRemision").attr("bloquearGuiaRelacionadaNoFacturada"));
+        
+        if (bloquearGuiaRelacionadaNoFacturada) {
+            $.alert({
+                title: "BLOQUEADO",
+                content: "No se puede facturar ya que la guía de remisión relacionada no esta facturada.",
+                type: 'orange',
+                buttons: {
+                    OK: function () {
+
+                    }
+                }
+            });
+
+            return;
+        }
         iniciarFacturacionGuia(0);
     });
 

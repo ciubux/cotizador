@@ -152,6 +152,17 @@ namespace Cotizador.Controllers
             //bl.EnviarMailTecnica(pedido);
         }
 
+        public async Task ImportarCotizacionesMail()
+        {
+            Guid idUsuario = Constantes.IDUSUARIOZAS;
+
+            WebBl bl = new WebBl();
+            await bl.LeerNuevasCotizacionesMail(idUsuario);
+
+            //bl.EnviarMailTecnica(pedido);
+        }
+
+
         public async Task<String> envSW()
         {
             ProductoBL bl = new ProductoBL();

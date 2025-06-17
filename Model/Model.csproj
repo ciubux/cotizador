@@ -205,6 +205,8 @@
     <Compile Include="Ciudad.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VentaDetalle.cs" />
+    <Compile Include="WEB\CotizacionWebMail.cs" />
+    <Compile Include="WEB\ProductoWebMail.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
