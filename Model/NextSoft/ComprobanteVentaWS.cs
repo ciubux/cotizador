@@ -38,5 +38,20 @@ namespace Model.NextSoft
 
             return resultContent;
         }
+
+        public async Task<object> facturaAnticipadaTC(object dataVenta)
+        {
+            string nombreServicio = "crearfacturasinentregainmediata";
+
+            var sendData = new
+            {
+                token = this.apiToken,
+                comprobante = dataVenta
+            };
+
+            object resultContent = await this.callService(sendData, nombreServicio);
+
+            return resultContent;
+        }
     }
 }

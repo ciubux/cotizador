@@ -459,6 +459,85 @@ namespace Model.NextSoft
             return item;
         }
 
+        public static object toFacturaAnticipadaTC(Pedido obj)
+        {
+            List<object> listaDet = new List<object>();
+            int numDet = 1;
+            decimal igvVenta = 0;
+            decimal tIgv = 0.18m;
+
+            foreach (DocumentoDetalle detPed in obj.documentoDetalle)
+            {
+                int cantidadAtender = detPed.cantidadPorAtender; //movDet.cantidadPorAtender;
+
+
+                if (cantidadAtender > 0 &&
+                    (detPed.producto.tipoProducto == Producto.TipoProducto.Bien ||
+                    detPed.producto.tipoProducto == Producto.TipoProducto.Comodato))
+                {
+                    string codFactor = "";
+                    int nFactor = 1;
+                    decimal totalItem = 0;
+                    decimal igvItem = 0;
+
+                    igvItem = cantidadAtender * (detPed.precioUnitario) * (tIgv);
+                    totalItem = (cantidadAtender * detPed.precioUnitario) + igvItem;
+                    igvVenta += igvItem;
+
+                    switch (detPed.idProductoPresentacion)
+                    {
+                        case 0:
+                            codFactor = detPed.producto.codigoFactorUnidadMP;
+                            nFactor = detPed.producto.equivalenciaAlternativa;
+                            break;
+                        case 1:
+                            codFactor = detPed.producto.codigoFactorUnidadAlternativa;
+                            nFactor = 1;
+                            break;
+                        case 2:
+                            codFactor = detPed.producto.codigoFactorUnidadProveedor;
+                            nFactor = detPed.producto.equivalenciaAlternativa * detPed.producto.equivalenciaProveedor;
+                            break;
+                        case 3:
+                            codFactor = detPed.producto.codigoFactorUnidadConteo;
+                            nFactor = 1;
+                            break;
+
+                    }
+                    var det = new
+                    {
+                        numitem = numDet,
+                        codprod = detPed.producto.sku,
+                        descripcion = detPed.producto.descripcion,
+                        cantidad = cantidadAtender,
+                        precioventatotal = totalItem,
+                        igv  = igvItem,
+                        fcv = nFactor // REVISAR
+                    };
+
+                    listaDet.Add(det);
+                    numDet++;
+                }
+            }
+
+            var item = new
+            {
+                ruc = obj.rucClienteTercero,
+                mnd = "001",
+                notas = obj.numeroReferenciaCliente != null &&
+                            !obj.numeroReferenciaCliente.Trim().Equals("") ? "Orden de compra N°: " + obj.numeroReferenciaCliente : "",
+                igv = igvVenta,
+                porcigv = tIgv,
+                ordencompra = obj.numeroPedidoRelacionado,
+                usuario = "nextsoft",
+
+                items = listaDet.ToArray()
+            };
+
+
+            return item;
+        }
+
         public static object toGuiaConsulta(GuiaRemision obj, string apiToken, string apiRUC)
         {
             string tipoDocumentoAlmacen = "09";

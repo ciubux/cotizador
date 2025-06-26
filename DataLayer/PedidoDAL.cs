@@ -575,6 +575,15 @@ namespace DataLayer
             return pedido;
         }
 
+        public void SetEstadoFacturadoExterno(Guid idPedido, Guid idUsuario, int estadoFacturadoExterno)
+        {
+            var objCommand = GetSqlCommand("pu_pedido_facturado_externo");
+            InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
+            InputParameterAdd.Int(objCommand, "estadoFacturadoExterno", estadoFacturadoExterno);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
+            ExecuteNonQuery(objCommand);
+        }
 
         public Cotizacion obtenerProductosAPartirdePreciosRegistrados(Cotizacion cotizacion, String familia, String proveedor, Usuario usuario)
         {
@@ -865,6 +874,7 @@ namespace DataLayer
                 pedido.entregaATerceros = Converter.GetInt(row, "entrega_terceros") == 1 ? true : false;
                 pedido.entregaTerciarizada = Converter.GetInt(row, "entrega_terciarizada") == 1 ? true : false;
                 pedido.idClienteTercero = Converter.GetGuid(row, "id_cliente_tercero");
+                pedido.rucClienteTercero = Converter.GetString(row, "ruc_cliente_tercero");
 
                 pedido.idMPPedido = Converter.GetGuid(row, "id_pedido_mp");
                 pedido.numeroPedidoMP = Converter.GetLong(row, "numero_pedido_mp");

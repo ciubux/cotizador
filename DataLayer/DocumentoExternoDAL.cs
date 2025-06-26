@@ -63,5 +63,14 @@ namespace DataLayer
             return obj;
 
         }
+
+        public void InsertarLista(List<DocumentoExterno> lista, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pi_docs_externos");
+
+            OutputParameterAdd.Int(objCommand, "idDocExterno");
+
+            ExecuteNonQuery(objCommand);
+        }
     }
 }

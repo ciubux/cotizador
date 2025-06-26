@@ -19,6 +19,9 @@ namespace Model.WEB
         public string doc_type { get; set; }
         public string business_name { get; set; }
         public string ruc_number { get; set; }
+
+        public string dni_number { get; set; }
+        
         public DateTime apply_date { get; set; }
 
         public List<ProductoWebMail> products { get; set; }

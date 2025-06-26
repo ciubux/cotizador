@@ -9,6 +9,7 @@ namespace Model
     public class DocumentoExterno : Auditoria
     {
         public const string TIPO_FACTURA_RELACIONADA = "FACTURA_RELACIONADA";
+        public const string TIPO_FACTURA_RELACIONADA_PEDIDO = "FACTURA_RELACIONADA_PEDIDO";
         public Guid idDocumentoExterno { get; set; }
 
         public Guid idRegistro { get; set; }

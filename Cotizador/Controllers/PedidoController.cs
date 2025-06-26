@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using Model.NextSoft;
 using DataLayer;
 using static Model.SeguimientoPedido;
+using Newtonsoft.Json.Linq;
 
 namespace Cotizador.Controllers
 {
@@ -1095,6 +1096,24 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(response);
         }
 
+
+        public async System.Threading.Tasks.Task<string> GenerarFacturaAdelantadaTC()
+        {
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            PedidoBL bl = new PedidoBL();
+
+            string mensaje = "Se generó la factura correctamente.";
+            bool success = await bl.FacturaAdelantadaTC(pedido, usuario.idUsuario);
+            
+            if (!success)
+            {
+                mensaje = "Ocurrió un problema al generar la factura en NEXTSOFT.";
+            }
+
+            return JsonConvert.SerializeObject(new { success = success, message = mensaje});
+        }
 
         #region CONTROLES CHOOSEN
 

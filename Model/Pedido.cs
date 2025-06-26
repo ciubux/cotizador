@@ -72,7 +72,9 @@ namespace Model
         public Empresa empresa { get; set; }
         public Empresa empresaRelacionada { get; set; }
 
+        
         public Guid idClienteTercero { get; set; }
+        public String rucClienteTercero { get; set; }
         public String nombreClienteTercero { get; set; }
         public Boolean entregaATerceros { get; set; }
         public Boolean entregaTerciarizada { get; set; }

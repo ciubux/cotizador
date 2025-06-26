@@ -12,6 +12,9 @@ using System.Web.UI;
 using Model.NextSoft;
 using NPOI.SS.Formula.Functions;
 using System.Threading.Tasks;
+using Model.UTILES;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace BusinessLayer
 {
@@ -453,6 +456,57 @@ namespace BusinessLayer
                     await ProcesarPedidoAprobadoTecnica(pedido);
                 }
             }
+        }
+
+        public async Task<bool> FacturaAdelantadaTC(Pedido ped, Guid idUsuario)
+        {
+            List<DetalleVenta> detallesVenta = new List<DetalleVenta>();
+
+            ClienteDAL dalCliente = new ClienteDAL();
+
+            Cliente clienteTercero = dalCliente.getCliente(ped.idClienteTercero);
+
+            PedidoDAL dalPedido = new PedidoDAL();
+
+            object dataSend = ConverterMPToNextSoft.toFacturaAnticipadaTC(ped);
+
+            ComprobanteVentaWS wsCli = new ComprobanteVentaWS();
+            wsCli.urlApi = Constantes.NEXTSOFT_API_URL;
+            wsCli.apiToken = Constantes.NEXTSOFT_API_TOKEN;
+
+            object resultWs = await wsCli.facturaAnticipadaTC(dataSend);
+
+            JObject dataResult = (JObject)resultWs;
+            int codigo = dataResult["crearfacturasinentregainmediataResult"]["codigo"].Value<int>();
+
+            string resultText = JsonConvert.SerializeObject(resultWs);
+
+            MovimientoAlmacenBL bl = new MovimientoAlmacenBL();
+            if (codigo == 0)
+            {
+                string serieCorrelativo = dataResult["crearfacturasinentregainmediataResult"]["numcomprobante"].Value<string>();
+
+                if (!(serieCorrelativo == null) && !serieCorrelativo.Trim().Equals(""))
+                {
+                    string[] partesDoc = serieCorrelativo.Split('-');
+                    DocumentoExterno docExt = new DocumentoExterno();
+                    docExt.serie = partesDoc[0].Trim();
+                    docExt.correlativo = partesDoc[1].Trim();
+                    docExt.tipo = DocumentoExterno.TIPO_FACTURA_RELACIONADA_PEDIDO;
+                    docExt.idRegistro = ped.idMPPedido;
+                    docExt.nombre = "";
+                    docExt.IdUsuarioRegistro = idUsuario;
+
+                    dalPedido.SetEstadoFacturadoExterno(ped.idMPPedido, idUsuario, 1);
+
+                    DocumentoExternoDAL docExternoDal = new DocumentoExternoDAL();
+                    docExternoDal.Insertar(docExt);
+
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public bool ActualizarCostosEspeciales(Guid idPedido, Guid idUsuario)

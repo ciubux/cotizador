@@ -765,7 +765,7 @@ namespace DataLayer
 
         public void InsertarCotizacionesWeb(List<CotizacionWebMail> cotizaciones, Guid idUsuario)
         {
-            var objCommand = GetSqlCommand("pi_cotizacion");
+            var objCommand = GetSqlCommand("pi_cotizaciones_web");
 
             InputParameterAdd.Guid(objCommand, "idCotizacionAntecedente", idUsuario);
 
@@ -797,8 +797,8 @@ namespace DataLayer
                     rowObj["TELEFONO"] = cot.phone;
                     rowObj["MENSAJE"] = cot.message;
                     rowObj["TIPODOC"] = cot.doc_type;
-                    rowObj["NRODOC"] = cot.ruc_number;
-                    rowObj["NOMBRECOMERCIAL"] = cot.codigo;
+                    rowObj["NRODOC"] = cot.doc_type.Equals("RUC") ? cot.ruc_number : cot.dni_number;
+                    rowObj["NOMBRECOMERCIAL"] = cot.doc_type.Equals("RUC") ? cot.business_name : cot.full_name;
 
                     rowObj["SKU"] = item.sku;
                     rowObj["CANTIDAD"] = item.quantity;

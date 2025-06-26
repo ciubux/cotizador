@@ -12,6 +12,8 @@ using Model.WEB;
 using MimeKit;
 using Newtonsoft.Json;
 using System.IO;
+using static NPOI.HSSF.Util.HSSFColor;
+using System.Net;
 
 namespace BusinessLayer
 {
@@ -19,29 +21,35 @@ namespace BusinessLayer
     {
         public async Task LeerNuevasCotizacionesMail(Guid idUsuario)
         {
-            string host = "";
-            int puerto = 0;
-            string email = "";
-            string password = "";
+            ParametroDAL dal = new ParametroDAL();
+
+            string host = "outlook.office365.com";
+            int puerto = 993;
+            string email = dal.getParametro("WEB_MAIL_COTIZACIONES");
+            string password = dal.getParametro("WEB_MAIL_COTIZACIONES_PASSWORD");
+            
             DateTime fechaDesde = new DateTime(2025, 6, 1, 0, 0, 0);
             string parteAsunto = "Solicitud de cotización Web de";
 
             List<CotizacionWebMail> cotizacionesWeb = await ObtenerCotizacionesMail(host, puerto, email, password, fechaDesde, parteAsunto); 
 
-            CotizacionDAL dalCotizacion = new CotizacionDAL();
-            dalCotizacion.InsertarCotizacionesWeb(cotizacionesWeb, idUsuario);
+            if (cotizacionesWeb.Count > 0) {
+                CotizacionDAL dalCotizacion = new CotizacionDAL();
+                dalCotizacion.InsertarCotizacionesWeb(cotizacionesWeb, idUsuario);
+            }
         }
 
         public async Task<List<CotizacionWebMail>> ObtenerCotizacionesMail(string imapHost, int imapPort, string email, string password, DateTime sinceDate, string subjectKeyword)
         {
             List<CotizacionWebMail> lista = new List<CotizacionWebMail>();
-
             // Usamos 'using' para asegurar que el cliente se desconecte y libere recursos
             using (var client = new ImapClient())
             {
-                try
-                {
-                    // Conexión y autenticacion 
+                //try
+                //{
+                // Conexión y autenticacion 
+                    //System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;
+                    client.SslProtocols = System.Security.Authentication.SslProtocols.Tls12;
                     await client.ConnectAsync(imapHost, imapPort, true);
                     await client.AuthenticateAsync(email, password);
 
@@ -92,11 +100,11 @@ namespace BusinessLayer
                     }
 
                     await client.DisconnectAsync(true);
-                }
+                /*}
                 catch (Exception ex)
                 {
                     Console.WriteLine($"❌ Ocurrió un error: {ex.Message}");
-                }
+                }*/
             }
 
             return lista;
