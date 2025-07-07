@@ -187,6 +187,11 @@ namespace Model
         [Display(Name = "Venta Indirecta:")]
         public bool esVentaIndirecta { get; set; }
 
+        [Display(Name = "Facturado Externamente:")]
+        public bool facturadoExterno { get; set; }
+
+        public bool facturadoExternoPedidoMP { get; set; }
+
         public bool esVentaIndirectaAnt { get; set; }
 
         [Display(Name = "Fechas de Entrega:")]

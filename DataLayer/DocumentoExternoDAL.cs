@@ -54,7 +54,7 @@ namespace DataLayer
             InputParameterAdd.VarcharEmpty(objCommand, "serie", obj.serie);
             InputParameterAdd.VarcharEmpty(objCommand, "correlativo", obj.correlativo);
 
-            OutputParameterAdd.Int(objCommand, "idDocExterno");
+            OutputParameterAdd.UniqueIdentifier(objCommand, "idDocExterno");
 
             ExecuteNonQuery(objCommand);
 

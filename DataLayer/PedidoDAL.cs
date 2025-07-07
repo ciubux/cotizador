@@ -581,7 +581,6 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
             InputParameterAdd.Int(objCommand, "estadoFacturadoExterno", estadoFacturadoExterno);
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
-            OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             ExecuteNonQuery(objCommand);
         }
 
@@ -870,6 +869,8 @@ namespace DataLayer
                 pedido.horaEntregaAdicionalDesde = Converter.GetString(row, "hora_entrega_adicional_desde");
                 pedido.horaEntregaAdicionalHasta = Converter.GetString(row, "hora_entrega_adicional_hasta");
 
+                pedido.facturadoExterno = Converter.GetInt(row, "facturado_externo") == 1 ? true : false;
+
                 pedido.productosNextSoftHomologados = Converter.GetInt(row, "productos_homologados_nextsoft") == 1 ? true : false;
                 pedido.entregaATerceros = Converter.GetInt(row, "entrega_terceros") == 1 ? true : false;
                 pedido.entregaTerciarizada = Converter.GetInt(row, "entrega_terciarizada") == 1 ? true : false;
@@ -877,6 +878,7 @@ namespace DataLayer
                 pedido.rucClienteTercero = Converter.GetString(row, "ruc_cliente_tercero");
 
                 pedido.idMPPedido = Converter.GetGuid(row, "id_pedido_mp");
+                pedido.facturadoExternoPedidoMP = Converter.GetInt(row, "facturado_externo_pedido_mp") == 1 ? true : false;
                 pedido.numeroPedidoMP = Converter.GetLong(row, "numero_pedido_mp");
 
                 pedido.moneda = new Moneda();

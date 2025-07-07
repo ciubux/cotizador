@@ -88,7 +88,7 @@ namespace Cotizador.ExcelExport
 
                 /*Cabecera, Sub total*/
                 int rTotal = (list.Count) + 12;
-                int cTotal = 56 + 2;
+                int cTotal = 58 + 2;
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
@@ -227,7 +227,8 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "VENTA EXCLUIDA", titleCellStyle); /* 39 */ indexColumn++;
                 UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "EMPRESA", titleCellStyle); /* 41 */ indexColumn++;
                 UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "N° PEDIDO RELACIONADO", titleCellStyle); /* 42 */ indexColumn++;
-
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "DISTRITO ENTREGA", titleCellStyle); /* 50, 51, 52 */ indexColumn++;
+                UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "DIRECCION ENTREGA", titleCellStyle); /* 53 */ indexColumn++;
                 i = i + 1;
 
                 /*  for (int iii = 0; iii<50;iii++)
@@ -304,6 +305,15 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(39)); indexColumn++;
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(41)); indexColumn++;
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(42)); indexColumn++;
+
+                    string distrito = "";
+                    if (obj.ElementAt(50) != null && !obj.ElementAt(50).Equals(""))
+                    {
+                        distrito = obj.ElementAt(50) + " - " + obj.ElementAt(51) + " - " + obj.ElementAt(52);
+                    }
+
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], distrito); indexColumn++;
+                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(53)); indexColumn++;
 
                     i++;
                 }

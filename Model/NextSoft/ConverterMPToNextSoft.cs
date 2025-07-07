@@ -101,6 +101,7 @@ namespace Model.NextSoft
             int numDet = 1;
             decimal igvCompra = 0;
             decimal tIgv = 0.18m;
+            bool relacionarFactura = false;
 
             //BORRAR
             //obj.clienteVer = obj.pedido.cliente;
@@ -207,6 +208,10 @@ namespace Model.NextSoft
                 codigoVendedor = "07885378";
             }
 
+            string ordenCompra = obj.pedido != null && obj.pedido.numeroReferenciaCliente != null &&
+                            !obj.pedido.numeroReferenciaCliente.Trim().Equals("") &&
+                            !(obj.pedido.numeroReferenciaCliente.Length > 2 && obj.pedido.numeroReferenciaCliente.Substring(0, 2).Equals("IF")) ?
+                                obj.pedido.numeroReferenciaCliente : "";
             bool comprobanteComprador = false;
 
             if (!obj.pedido.empresaRelacionada.facturacionHabilitada && obj.entregaTerceros &&
@@ -230,27 +235,30 @@ namespace Model.NextSoft
                 obj.transportista.brevete = "";
             }
 
+            if (obj.pedido.facturadoExternoPedidoMP)
+            {
+                relacionarFactura = true;
+                ordenCompra = obj.pedido.numeroPedidoMP.ToString();
+            }
+
             var item = new
             {
                 sucursal = obj.almacen.codigoSucursalNextSoft,
                 puntoventa = obj.almacen.codigoPuntoVentaNextSoft,
                 ruccomprador = rucComprador,
                 comprobantecomprador = comprobanteComprador,
+                relacionarfactura = relacionarFactura,
                 ruc = cli.ruc,
                 direcccion = obj.direccionEntrega,
                 ubigeo = obj.ubigeoEntrega.codigoSepPunto,
                 exportacion = false,
                 tdo = tipoDocumentoAlmacen,
-                serie = obj.serieDocumento, // REVISAR
-                numero = obj.numeroDocumento, // SALIDA
+                serie = obj.serieDocumento,//  "TXX1", // REVISAR
+                numero = obj.numeroDocumento, //  1, // SALIDA
                 fecemision = obj.fechaEmision.ToString("dd/MM/yyyy"),
                 observaciones = obj.observaciones,
-                //vendedor = "46124367",
                 vendedor = codigoVendedor,
-                ordencompra = obj.pedido != null && obj.pedido.numeroReferenciaCliente != null && 
-                            !obj.pedido.numeroReferenciaCliente.Trim().Equals("") && 
-                            !(obj.pedido.numeroReferenciaCliente.Length > 2 && obj.pedido.numeroReferenciaCliente.Substring(0,2).Equals("IF")) ? 
-                                obj.pedido.numeroReferenciaCliente : "",
+                ordencompra = ordenCompra,
                 motivotraslado = motivoTraslado,
                 modalidadtraslado = "",
                 fectraslado = obj.fechaTraslado.ToString("dd/MM/yyyy"),
@@ -522,13 +530,13 @@ namespace Model.NextSoft
 
             var item = new
             {
-                ruc = obj.rucClienteTercero,
+                ruc = obj.cliente.ruc,
                 mnd = "001",
                 notas = obj.numeroReferenciaCliente != null &&
                             !obj.numeroReferenciaCliente.Trim().Equals("") ? "Orden de compra N°: " + obj.numeroReferenciaCliente : "",
                 igv = igvVenta,
                 porcigv = tIgv,
-                ordencompra = obj.numeroPedidoRelacionado,
+                ordencompra = obj.numeroPedido,
                 usuario = "nextsoft",
 
                 items = listaDet.ToArray()

@@ -493,11 +493,11 @@ namespace BusinessLayer
                     docExt.serie = partesDoc[0].Trim();
                     docExt.correlativo = partesDoc[1].Trim();
                     docExt.tipo = DocumentoExterno.TIPO_FACTURA_RELACIONADA_PEDIDO;
-                    docExt.idRegistro = ped.idMPPedido;
+                    docExt.idRegistro = ped.idPedido;
                     docExt.nombre = "";
                     docExt.IdUsuarioRegistro = idUsuario;
 
-                    dalPedido.SetEstadoFacturadoExterno(ped.idMPPedido, idUsuario, 1);
+                    dalPedido.SetEstadoFacturadoExterno(ped.idPedido, idUsuario, 1);
 
                     DocumentoExternoDAL docExternoDal = new DocumentoExternoDAL();
                     docExternoDal.Insertar(docExt);

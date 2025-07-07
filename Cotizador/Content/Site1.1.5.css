@@ -433,12 +433,28 @@ input.label-input {
     background-repeat: no-repeat;
 }
 
+.bouton-image-tc:before {
+    content: "";
+    width: 33px;
+    height: 18px;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
 .botonSunat:before {
     background-image: url(/images/logo_sunat.gif);
 }
 
 .botonExcel:before {
     background-image: url(/images/excel.png);
+}
+
+.botonTC:before {
+    background-image: url(/images/miniicon_TC.png);
 }
 
 .botonClean:before {

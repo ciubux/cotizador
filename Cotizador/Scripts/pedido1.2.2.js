@@ -3400,6 +3400,7 @@ jQuery(function ($) {
                 }
 
                 FooTable.init('#tableDetallePedido');
+                $("#tableDetallePedido").append(d);
 
                 $("#spnUtilidad").html(pedido.utilidadVisible.toFixed(cantidadDecimales) + " (" + pedido.margenVisible.toFixed(cantidadDecimales) + "%)");
                 if (tieneCostoFlete) {
@@ -3527,10 +3528,12 @@ jQuery(function ($) {
                     $("#btnRestringirAtencionPedido").hide();
                 }
 
-                //  
-                // sleep
-                $("#tableDetallePedido").append(d);
 
+                $("#btnRestringirAtencionPedido").hide();
+
+
+                // sleep
+                
                 if (pedido.seguimientoPedido_estado != ESTADO_PROGRAMADO
                     && pedido.seguimientoPedido_estado != ESTADO_ATENDIDO
                     && pedido.seguimientoPedido_estado != ESTADO_FACTURADO
@@ -3583,6 +3586,12 @@ jQuery(function ($) {
 
                 if (pedido.empresa_codigo == "TC") {
                     $("#btnAprobarIngresoPedido").attr("validarproductosns", "1");
+
+                    if (pedido.seguimientoPedido_estado == ESTADO_INGRESADO && pedido.seguimientoCrediticioPedido_estado == ESTADO_LIBERADO) {
+                        if (!pedido.facturadoExterno && pedido.entregaTercerizada) {
+                            $("#btnFacturarExternamente").show();
+                        }
+                    }
                 } else {
                     $("#btnAprobarIngresoPedido").attr("validarproductosns", "0");
                 }
@@ -3649,7 +3658,6 @@ jQuery(function ($) {
                 else {
                     $("#btnBloquearPedido").hide();
                 }
-
 
                 //PROGRAMAR PEDIDO
                 if (pedido.seguimientoPedido_estado == ESTADO_INGRESADO
@@ -3810,6 +3818,44 @@ jQuery(function ($) {
         });
     }
 
+    $('#btnFacturarExternamente').click(function () {
+        desactivarBotonesVer();
+        $.ajax({
+            url: "/Pedido/GenerarFacturaAdelantadaTC",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+            },
+            error: function (error) {
+                mostrarMensajeErrorProceso("ERROR");
+            },
+            success: function (res) {
+                if (res.success) {
+                    $.alert({
+                        title: "Envio Correcto",
+                        content: res.message,
+                        type: 'green',
+                        buttons: {
+                            OK: function () {
+                                $('#btnFacturarExternamente').hide();
+                            }
+                        }
+                    });
+                } else {
+                    $.alert({
+                        title: "Error en envío",
+                        content: res.message, 
+                        type: 'red',
+                        buttons: {
+                            OK: function () {
+
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    });
 
     function cargarStockProductos() {
         $.ajax({

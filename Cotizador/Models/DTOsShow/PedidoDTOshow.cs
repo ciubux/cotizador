@@ -20,6 +20,7 @@ namespace Cotizador.Models.DTOshow
         public Empresa empresa { get; set; }
         public Empresa empresaRel { get; set; }
         public String empresa_codigo { get; set; }
+        public bool facturadoExterno { get; set; }
         public String numeroPedidoString { get; set; }
         public String numeroGrupoPedidoString { get; set; }
         public String cotizacion_numeroCotizacionString { get; set; }
@@ -27,6 +28,8 @@ namespace Cotizador.Models.DTOshow
 
         public bool productosNextSoftHomologados { get; set; }
         public Boolean entregaATerceros { get; set; }
+        public Boolean entregaTercerizada { get; set; }
+        
         public bool esVentaIndirecta { get; set; }  
         public String tiposPedidoString { get; set; }
         public String cliente_responsableComercial_codigoDescripcion { get; set; }

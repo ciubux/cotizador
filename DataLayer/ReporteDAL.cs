@@ -249,6 +249,12 @@ namespace DataLayer
                 item.Add(Converter.GetInt(row, "ES_SUBDISTRIBUIDOR").ToString()); /* 47: */
                 item.Add(Converter.GetString(row, "nombre_cat_sub_distribuidor")); /* 48: */
 
+                item.Add(Converter.GetString(row, "UBIGEO")); /* 49: */
+                item.Add(Converter.GetString(row, "DEPARTAMENTO")); /* 50: */
+                item.Add(Converter.GetString(row, "PROVINCIA")); /* 51: */
+                item.Add(Converter.GetString(row, "DISTRITO")); /* 52: */
+                item.Add(Converter.GetString(row, "DIRECCION_ENTREGA")); /* 53: */
+
                 resultados.Add(item);
             }
 

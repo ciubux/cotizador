@@ -398,9 +398,11 @@ namespace Cotizador.Models.DTOsShow
             pedidoDTOshow.cliente_tipoDocumento = pedido.cliente.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC ? "RUC" : "DNI";
             pedidoDTOshow.esVentaIndirecta = pedido.esVentaIndirecta;
             pedidoDTOshow.empresa_codigo = pedido.empresa == null ? "" : pedido.empresa.codigo;
+            pedidoDTOshow.facturadoExterno = pedido.facturadoExterno;
 
             pedidoDTOshow.productosNextSoftHomologados = pedido.productosNextSoftHomologados;
             pedidoDTOshow.entregaATerceros = pedido.entregaATerceros;
+            pedidoDTOshow.entregaTercerizada = pedido.entregaTerciarizada;
             pedidoDTOshow.textoCondicionesPago = pedido.textoCondicionesPago;
             pedidoDTOshow.fechaHorarioEntrega = pedido.fechaHorarioEntrega;
             pedidoDTOshow.ciudad_nombre = pedido.ciudad.nombre;
