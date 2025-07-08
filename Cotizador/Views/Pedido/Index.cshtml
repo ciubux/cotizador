@@ -1132,7 +1132,7 @@
             </div>
 
             <div class="modal-footer">
-                <div class="pull-left">
+                <div class="col-lg-12 text-left" style="margin-bottom: 10px;">
                     @if (pedido.usuario.liberaPedidos)
                     {
                         <button type="button" id="btnLiberarPedido" class="btn btn-success" data-toggle='modal' data-target='#modalLiberacion'>Liberar</button>
@@ -1150,15 +1150,17 @@
                         <button type="button" id="btnAtenderRestantePedidoOriginal" class="btn btn-danger">Atender Pedido Original</button>
                     }
 
-                    @if (true)
+                    @if (false)
                     {
                         <button type="button" id="btnFacturarExternamente" class="btn btn-warning bouton-image-tc botonTC" style="display: none;">Facturar</button>
                     }
+
+                    <button type="button" id="btnEnviarMensajePedV" class="btn btn-success btnEnviarMensajePrecargado">Enviar Mensaje</button>
                 </div>
 
 
 
-                <div class="pull-right">
+                <div class="col-lg-12">
                     <button type="button" id="btnCancelarVerPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     @if (pedido.usuario.tomaPedidos || pedido.usuario.apruebaPedidos)
                     {

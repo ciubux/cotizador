@@ -63,7 +63,7 @@ namespace Cotizador.Controllers
                 mensaje.user = usuario;
 
                 this.Session[Constantes.VAR_SESSION_MENSAJE] = mensaje;
-            }
+            } 
 
             ViewBag.Mensaje = mensaje;
             ViewBag.roles = roles;
@@ -185,7 +185,34 @@ namespace Cotizador.Controllers
             else
                 return "{\"existe\":\"true\",\"idMensaje\":\"" + obj.id_mensaje + "\"}";
         }
-        
+
+        public String PrecargarMensaje()
+        {
+            instanciarMensaje();
+            Mensaje mensaje = (Mensaje)this.Session[Constantes.VAR_SESSION_MENSAJE];
+
+            this.Session[Constantes.VAR_SESSION_MENSAJE] = mensaje;
+            
+            Guid destinatario = Guid.Parse(this.Request.Params["destinatario"]);
+            mensaje.titulo = this.Request.Params["titulo"];
+
+            if (!destinatario.Equals(Guid.Empty))
+            {
+                UsuarioBL usuarioBl = new UsuarioBL();
+                Usuario dUser = usuarioBl.getUsuario(destinatario);
+                mensaje.listUsuario = new List<Usuario>{dUser};
+            }
+
+
+            var retornar = new
+            {
+                success = true
+            };
+
+            return JsonConvert.SerializeObject(retornar);
+        }
+
+
         private Mensaje MensajeSession
         {
             get

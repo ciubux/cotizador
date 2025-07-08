@@ -1158,11 +1158,14 @@
     setTimeout(function () {
         $('body').on('click', '#MensajeRapidoMenu', function (event) {
             event.preventDefault();
-            var url = $('#MensajeRapido').data('url');
-            $("#MensajeRapidoDialog").load(url, function (data) { $("#MensajeRapido").modal("show"); });
+            abrirEnviarMensaje();
         });
     }, 3000);
 
+    function abrirEnviarMensaje() {
+        var url = $('#MensajeRapido').data('url');
+        $("#MensajeRapidoDialog").load(url, function (data) { $("#MensajeRapido").modal("show"); });
+    }
 
     $('body').on('change', '#mensaje_importancia_si_modal', function (event) {
         changeInputString("mensaje", "Alta");
@@ -1506,5 +1509,28 @@
         });
     }
 
+    function enviarMensajePrecargado(idDestinatario, titulo) {
+        $.ajax({
+            url: "/Mensaje/PrecargarMensaje",
+            type: 'POST',
+            dataType: 'JSON',
+            data:
+            {
+                destinatario: idDestinatario,
+                titulo: titulo
+            },
+            success: function (res) {
+                if (res.success) {
+                    abrirEnviarMensaje();
+                }
+            }
+        });
+    }
+
+    $('body').on('click', ".btnEnviarMensajePrecargado", function () {
+        let idDestinatario = $(this).attr("destinatario");
+        let titulo = $(this).attr("titulo");
+        enviarMensajePrecargado(idDestinatario, titulo);
+    });
 });
 

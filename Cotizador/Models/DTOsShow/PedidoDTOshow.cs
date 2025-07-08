@@ -51,6 +51,7 @@ namespace Cotizador.Models.DTOshow
         public String direccionEntrega_descripcion { get; set; }
         public String direccionEntrega_telefono { get; set; }
         public String direccionEntrega_contacto { get; set; }
+        public Guid usuario_id { get; set; }
         public String usuario_nombre { get; set; }
         public String fechaHoraRegistro { get; set; }
         public Model.Ubigeo ubigeoEntrega { get; set; }

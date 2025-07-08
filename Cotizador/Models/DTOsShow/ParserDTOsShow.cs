@@ -416,7 +416,8 @@ namespace Cotizador.Models.DTOsShow
             pedidoDTOshow.direccionEntrega_descripcion = pedido.direccionEntrega.descripcion;
             pedidoDTOshow.direccionEntrega_telefono = pedido.direccionEntrega.telefono;
             pedidoDTOshow.direccionEntrega_contacto = pedido.direccionEntrega.contacto;
-            pedidoDTOshow.usuario_nombre = pedido.usuario.nombre;
+            pedidoDTOshow.usuario_id = pedido.UsuarioRegistro.idUsuario;
+            pedidoDTOshow.usuario_nombre = pedido.UsuarioRegistro.nombre;
             pedidoDTOshow.fechaHoraRegistro = pedido.fechaHoraRegistro;
             pedidoDTOshow.ubigeoEntrega = pedido.ubigeoEntrega;
             pedidoDTOshow.contactoPedido = pedido.contactoPedido;

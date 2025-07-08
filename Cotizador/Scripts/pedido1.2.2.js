@@ -3522,6 +3522,11 @@ jQuery(function ($) {
 
                 }
 
+                var tituloMensaje = "Pedido de Venta " + pedido.numeroPedidoString + " / " + pedido.cliente_codigoRazonSocial;
+
+                $("#btnEnviarMensajePedV").attr("titulo", tituloMensaje);
+                $("#btnEnviarMensajePedV").attr("destinatario", pedido.usuario_id);
+
                 if (tienePendienteAtencion && usuario.apruebaPedidos) {
                     $("#btnRestringirAtencionPedido").show();
                 } else {

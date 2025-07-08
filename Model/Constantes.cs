@@ -151,6 +151,8 @@ namespace Model
         public static String VAR_SESSION_MENSAJE_LISTA = "mensajeList";
         public static String VAR_SESSION_MENSAJE_VER = "mensajeVer";
 
+        public static String VAR_SESSION_MENSAJE_PRECARGADO = "mensajePrecargado";
+
         public static String VAR_SESSION_PARAMETRO = "parametro";
         public static String VAR_SESSION_PARAMETRO_BUSQUEDA = "parametroBusqueda";
         public static String VAR_SESSION_PARAMETRO_LISTA = "parametroList";
