@@ -2552,6 +2552,10 @@ jQuery(function ($) {
                     $(".promocionesContainerView").append(htmlAddProm);
                 }
 
+                var tituloMensaje = "Cotización " + cotizacion.codigo + " / " + cotizacion.cliente_codigoRazonSocial;
+
+                $("#btnEnviarMensajeCot").attr("titulo", tituloMensaje);
+                $("#btnEnviarMensajeCot").attr("destinatario", cotizacion.usuario_id);
 
                 /*EDITAR COTIZACIÓN*/
                 if (

@@ -2668,7 +2668,7 @@ jQuery(function ($) {
                 $("#verTelefonoContactoEntrega").html(pedido.direccionEntrega.telefono);
                 $("#verContactoEntrega").html(pedido.direccionEntrega.contacto);
 
-                $("#verUsuarioCreacion").html(pedido.usuario.nombre);
+                $("#verUsuarioCreacion").html(pedido.UsuarioRegistro.nombre);
                 $("#verFechaHoraRegistro").html(pedido.fechaHoraRegistro);
 
                 $("#verUbigeoEntrega").html(pedido.ubigeoEntrega.ToString);
@@ -2816,7 +2816,10 @@ jQuery(function ($) {
                 $("#documentoVenta_observaciones").val(pedido.observacionesFactura);
                 $("#verCorreoEnvioFactura").html(pedido.cliente.correoEnvioFactura);
 
+                var tituloMensaje = "Pedido de Compra " + pedido.numeroPedidoString + " / " + pedido.cliente.codigoRazonSocial;
 
+                $("#btnEnviarMensajePedC").attr("titulo", tituloMensaje);
+                $("#btnEnviarMensajePedC").attr("destinatario", pedido.UsuarioRegistro.idUsuario);
                                
                 
                 if (pedido.tipoPedidoCompra == TIPO_PEDIDO_COMPRA_COMPRA.charCodeAt(0)

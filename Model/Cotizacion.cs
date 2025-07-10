@@ -74,6 +74,7 @@ namespace Model
         public DateTime fechaModificacion { get; set; }
 
         public Usuario usuario { get; set; }
+        public Usuario UsuarioRegistro { get; set; }
 
         [Display(Name = "Vendedor:")]
         public Vendedor responsableComercial { get; set; }

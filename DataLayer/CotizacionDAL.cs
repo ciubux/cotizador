@@ -404,6 +404,17 @@ namespace DataLayer
                 cotizacion.usuario.razonSocialEmpresa = Converter.GetString(row, "usuario_razon_social_empresa");
                 cotizacion.usuario.urlEmpresa = Converter.GetString(row, "usuario_url_web_empresa");
 
+                cotizacion.UsuarioRegistro = new Usuario();
+                cotizacion.UsuarioRegistro.idUsuario = Converter.GetGuid(row, "id_usuario");
+                cotizacion.UsuarioRegistro.nombre = Converter.GetString(row, "nombre_usuario");
+                cotizacion.UsuarioRegistro.cargo = Converter.GetString(row, "cargo");
+                cotizacion.UsuarioRegistro.contacto = Converter.GetString(row, "contacto_usuario");
+                cotizacion.UsuarioRegistro.firmaImagen = Converter.GetBytes(row, "usuario_firma_imagen");
+                cotizacion.UsuarioRegistro.email = Converter.GetString(row, "email");
+                cotizacion.UsuarioRegistro.codigoEmpresa = Converter.GetString(row, "usuario_codigo_empresa");
+                cotizacion.UsuarioRegistro.razonSocialEmpresa = Converter.GetString(row, "usuario_razon_social_empresa");
+                cotizacion.UsuarioRegistro.urlEmpresa = Converter.GetString(row, "usuario_url_web_empresa");
+
                 //ESTADO
                 cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
                 cotizacion.seguimientoCotizacion.estado = (SeguimientoCotizacion.estadosSeguimientoCotizacion)Converter.GetInt(row, "estado_seguimiento");

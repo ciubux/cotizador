@@ -767,7 +767,7 @@
             </div>
 
             <div class="modal-footer">
-                <div class="pull-left">
+                <div class="col-lg-12 text-left" style="margin-bottom: 10px;">
                     @if (pedido.usuario.liberaPedidos)
                     {
                         <button type="button" id="btnLiberarPedido" class="btn btn-success" data-toggle='modal' data-target='#modalLiberacion'>Liberar</button>
@@ -783,11 +783,12 @@
 
                         <button type="button" id="btnCvsCompra" class="btn btn-primary" actionLink="@Url.Action("ExportLastViewCSVKC", "PedidoCompra")">Exportar CSV</button>
                     }
+                    <button type="button" id="btnEnviarMensajePedC" class="btn btn-success btnEnviarMensajePrecargado">Enviar Mensaje</button>
                 </div>
 
 
 
-                <div class="pull-right">
+                <div class="col-lg-12">
                     <button type="button" id="btnCancelarVerPedido" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     @if (pedido.usuario.tomaPedidosCompra || pedido.usuario.apruebaPedidosCompra)
                     {

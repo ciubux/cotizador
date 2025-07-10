@@ -68,6 +68,9 @@ namespace Cotizador.Models.DTOsShow
             cotizacionDTOshow.fechaFinVigenciaPreciosExtendida = cotizacion.fechaFinVigenciaPreciosExtendida;
             cotizacionDTOshow.estadoExtendida = cotizacion.estadoExtendida;
 
+            cotizacionDTOshow.usuario_id = cotizacion.UsuarioRegistro.idUsuario;
+            cotizacionDTOshow.usuario_nombre = cotizacion.UsuarioRegistro.nombre;
+
             cotizacionDTOshow.empresa_codigo = cotizacion.empresa == null ? "" : cotizacion.empresa.codigo;
 
             cotizacionDTOshow.monedaCodigo = cotizacion.moneda.codigo;
