@@ -82,11 +82,11 @@ namespace BusinessLayer
             }
         }
 
-        public bool ActualizarTodos(Guid idUsuario, List<PrecioEspecialCabecera> listas)
+        public bool ActualizarTodos(Guid idUsuario, int limpiarTodos, List<PrecioEspecialCabecera> listas)
         {
             using (PrecioEspecialDAL dal = new PrecioEspecialDAL())
             {
-                return dal.ActualizarTodos(idUsuario, listas);
+                return dal.ActualizarTodos(idUsuario, limpiarTodos, listas);
             }
         }
 

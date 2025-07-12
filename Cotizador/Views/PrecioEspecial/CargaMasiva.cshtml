@@ -11,19 +11,35 @@
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
     <input type="hidden" value="@ViewBag.debug" />
     <div class="form-horizontal">
-        <div class="row">
-            <form action="/PrecioEspecial/LoadAll" method="post" enctype="multipart/form-data" id="formCargarPrecios">
-                <div class="col-xs-8 col-lg-4">
-                    <!--Archivo-->
-                    <label class="control-label col-xs-4" for="file">Cargar Archivo de Precios:</label>
-                    <div class="col-xs-8">
-                        <input class="form-control" type="file" name="file" id="file" accept="application/vnd.ms-excel" />
+        <form action="/PrecioEspecial/LoadAll" method="post" enctype="multipart/form-data" id="formCargarPrecios">
+            <div class="row">
+                <div class="col-xs-8 col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label col-xs-4" for="file">Tipo de Carga:</label>
+                        <div class="col-xs-8">
+                            <select class="form-control" id="tipoCarga" name="tipoCarga">
+                                <option value="0" selected>Parcial</option>
+                                <option value="1">Total</option>
+                            </select>
+                        </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-8 col-lg-6">
+                    <div class="form-group">
+                        <!--Archivo-->
+                        <label class="control-label col-xs-4" for="file">Cargar Archivo de Precios:</label>
+                        <div class="col-xs-8">
+                            <input class="form-control" type="file" name="file" id="file" accept="application/vnd.ms-excel" />
+                        </div>
+                     </div>
                 </div>
                 <div class="col-xs-4 col-lg-2">
                     <button id="btnCargarPrecios" type="submit" class="btn btn-primary">Cargar Precios</button>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>

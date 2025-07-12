@@ -857,9 +857,11 @@ namespace Cotizador.Controllers
         }
 
         [HttpPost]
-        public ActionResult LoadAll(HttpPostedFileBase file)
+        public ActionResult LoadAll(HttpPostedFileBase file, int tipoCarga)
         {
             Usuario usuario = (Usuario)this.Session["usuario"];
+
+            int limpiarTodos = tipoCarga;
 
             HSSFWorkbook hssfwb;
 
@@ -1121,7 +1123,7 @@ namespace Cotizador.Controllers
             if (listas.Count > 0)
             {
                 PrecioEspecialBL bl = new PrecioEspecialBL();
-                bl.ActualizarTodos(usuario.idUsuario, listas);
+                bl.ActualizarTodos(usuario.idUsuario, limpiarTodos, listas);
             }
 
             return RedirectToAction("ActualizacionCorrectaTodos", "PrecioEspecial");

@@ -687,10 +687,11 @@ namespace DataLayer
             return true;
         }
 
-        public bool ActualizarTodos(Guid idUsuario, List<PrecioEspecialCabecera> listas)
+        public bool ActualizarTodos(Guid idUsuario, int limpiarTodos, List<PrecioEspecialCabecera> listas)
         {
             var objCommand = GetSqlCommand("pi_precio_especial_fill");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Int(objCommand, "clearAll", limpiarTodos);
 
             DataTable tvp = new DataTable();
             tvp.Columns.Add(new DataColumn("CODIGO", typeof(string)));
