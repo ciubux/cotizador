@@ -230,6 +230,8 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i, "W", "FECHA INICIO", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "X", "FECHA FIN", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "Y", "OBSERVACIONES", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "Z", "FECHA FIN ORIGINAL", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "AA", "OBSERVACIONES RECTIFICACION FECHA FIN", titleDataCellStyle);
 
                 UtilesHelper.setColumnWidth(sheet, "A", 4500);
                 UtilesHelper.setColumnWidth(sheet, "B", 4500);
@@ -257,6 +259,8 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setColumnWidth(sheet, "W", 3000);
                 UtilesHelper.setColumnWidth(sheet, "X", 3000);
                 UtilesHelper.setColumnWidth(sheet, "Y", 6000);
+                UtilesHelper.setColumnWidth(sheet, "Z", 3000);
+                UtilesHelper.setColumnWidth(sheet, "AA", 6000);
 
                 i = filaInicioDatos;
 
@@ -360,6 +364,11 @@ namespace Cotizador.ExcelExport
                         UtilesHelper.setValorCelda(sheet, i, "X", det.fechaFin, tableDataDateCellStyle);
 
                         UtilesHelper.setValorCelda(sheet, i, "Y", det.observaciones, tableDataCenterCellStyle);
+
+                        UtilesHelper.setValorCelda(sheet, i, "Z", det.fechaFinOriginal, tableDataDateCellStyle);
+
+                        UtilesHelper.setValorCelda(sheet, i, "AA", det.observacionesRectificacionFechacFin, tableDataCenterCellStyle);
+
                         i++;
                     }
                 }
@@ -389,6 +398,8 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i, "W", "", lastDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "X", "", lastDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "Y", "", lastDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "Z", "", lastDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "AA", "", lastDataCellStyle);
 
                 MemoryStream ms = new MemoryStream();
                 using (MemoryStream tempStream = new MemoryStream())
@@ -400,7 +411,7 @@ namespace Cotizador.ExcelExport
                     ms.Position = 0;
                     FileStreamResult result = new FileStreamResult(ms, "application/vnd.ms-excel");
 
-                    result.FileDownloadName = "ListaPreciosEspeciales" + tipo + DateTime.Now.ToString("yyyyMMdd")+ " .xls";
+                    result.FileDownloadName = "ListaPreciosEspeciales" + tipo + DateTime.Now.ToString("yyyyMMdd")+ ".xls";
 
                     return result;
                 }

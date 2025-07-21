@@ -111,8 +111,8 @@ namespace DataLayer
                 det.Estado = Converter.GetInt(row, "estado");
                 det.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
 
-                
-
+                det.fechaFinOriginal = Converter.GetDateTime(row, "fecha_fin_original");
+                det.observacionesRectificacionFechacFin = Converter.GetString(row, "observaciones_rectificacion_fecha_fin");
 
                 obj.precios.Add(det);
             }
@@ -173,6 +173,8 @@ namespace DataLayer
             tvp.Columns.Add(new DataColumn("FECHA_INICIO", typeof(DateTime)));
             tvp.Columns.Add(new DataColumn("FECHA_FIN", typeof(DateTime)));
             tvp.Columns.Add(new DataColumn("OBSERVACIONES", typeof(string)));
+            tvp.Columns.Add(new DataColumn("FECHA_FIN_ORIGINAL", typeof(DateTime)));
+            tvp.Columns.Add(new DataColumn("OBSERVACIONES_RECTIFICACION_FECHA_FIN", typeof(string)));
 
             foreach (PrecioEspecialDetalle item in obj.precios)
             {
@@ -186,6 +188,8 @@ namespace DataLayer
                 rowObj["FECHA_INICIO"] = item.fechaInicio;
                 rowObj["FECHA_FIN"] = item.fechaFin;
                 rowObj["OBSERVACIONES"] = item.observaciones?.Trim();
+                rowObj["FECHA_FIN_ORIGINAL"] = item.fechaFinOriginal;
+                rowObj["OBSERVACIONES_RECTIFICACION_FECHA_FIN"] = item.observacionesRectificacionFechacFin?.Trim();
 
                 tvp.Rows.Add(rowObj);
             }
@@ -269,6 +273,9 @@ namespace DataLayer
                 item.fechaInicio = Converter.GetDateTime(row, "FECHA_INICIO");
                 item.fechaFin = Converter.GetDateTime(row, "FECHA_FIN");
                 item.observaciones = Converter.GetString(row, "OBSERVACIONES");
+
+                item.fechaFinOriginal = Converter.GetDateTime(row, "FECHA_FIN_ORIGINAL");
+                item.observacionesRectificacionFechacFin = Converter.GetString(row, "OBSERVACIONES_RECTIFICACION_FECHA_FIN");
 
                 item.moneda = new Moneda();
                 item.moneda.codigo = Converter.GetString(row, "codigo_moneda");
@@ -395,6 +402,9 @@ namespace DataLayer
 
                 det.Estado = Converter.GetInt(row, "estado_det");
                 det.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion_det");
+                
+                det.fechaFinOriginal = Converter.GetDateTime(row, "fecha_fin_original_det");
+                det.observacionesRectificacionFechacFin = Converter.GetString(row, "observaciones_rectificacion_fecha_fin_det");
 
                 item.precios.Add(det);
 
@@ -537,6 +547,9 @@ namespace DataLayer
                 det.unidadCosto.Equivalencia = Converter.GetDecimal(row, "equivalencia_costo");
                 det.unidadCosto.CostoOriginalSinIGV = Converter.GetDecimal(row, "costo_unitario_mp");
 
+                det.fechaFinOriginal = Converter.GetDateTime(row, "fecha_fin_original");
+                det.observacionesRectificacionFechacFin = Converter.GetString(row, "observaciones_rectificacion_fecha_fin");
+
                 obj.precios.Add(det);
                                 
             }
@@ -583,6 +596,8 @@ namespace DataLayer
             tvp.Columns.Add(new DataColumn("FECHA_INICIO", typeof(DateTime)));
             tvp.Columns.Add(new DataColumn("FECHA_FIN", typeof(DateTime)));
             tvp.Columns.Add(new DataColumn("OBSERVACIONES", typeof(string)));
+            tvp.Columns.Add(new DataColumn("FECHA_FIN_ORIGINAL", typeof(DateTime)));
+            tvp.Columns.Add(new DataColumn("OBSERVACIONES_RECTIFICACION_FECHA_FIN", typeof(string)));
 
             foreach (PrecioEspecialDetalle item in obj.precios)
             {
@@ -600,6 +615,8 @@ namespace DataLayer
                 rowObj["FECHA_INICIO"] = item.fechaInicio;
                 rowObj["FECHA_FIN"] = item.fechaFin;
                 rowObj["OBSERVACIONES"] = item.observaciones?.Trim();
+                rowObj["FECHA_FIN_ORIGINAL"] = item.fechaFinOriginal;
+                rowObj["OBSERVACIONES_RECTIFICACION_FECHA_FIN"] = item.observacionesRectificacionFechacFin?.Trim();
 
                 tvp.Rows.Add(rowObj);
             }
@@ -645,6 +662,8 @@ namespace DataLayer
             tvp.Columns.Add(new DataColumn("FECHA_INICIO", typeof(DateTime)));
             tvp.Columns.Add(new DataColumn("FECHA_FIN", typeof(DateTime)));
             tvp.Columns.Add(new DataColumn("OBSERVACIONES", typeof(string)));
+            tvp.Columns.Add(new DataColumn("FECHA_FIN_ORIGINAL", typeof(DateTime)));
+            tvp.Columns.Add(new DataColumn("OBSERVACIONES_RECTIFICACION_FECHA_FIN", typeof(string)));
 
             foreach (PrecioEspecialDetalle item in obj.precios)
             {
@@ -662,6 +681,8 @@ namespace DataLayer
                 rowObj["FECHA_INICIO"] = item.fechaInicio;
                 rowObj["FECHA_FIN"] = item.fechaFin;
                 rowObj["OBSERVACIONES"] = item.observaciones?.Trim();
+                rowObj["FECHA_FIN_ORIGINAL"] = item.fechaFinOriginal;
+                rowObj["OBSERVACIONES_RECTIFICACION_FECHA_FIN"] = item.observacionesRectificacionFechacFin?.Trim();
 
                 tvp.Rows.Add(rowObj);
             }
@@ -713,8 +734,8 @@ namespace DataLayer
             tvp.Columns.Add(new DataColumn("FECHA_INICIO", typeof(DateTime)));
             tvp.Columns.Add(new DataColumn("FECHA_FIN", typeof(DateTime)));
             tvp.Columns.Add(new DataColumn("OBSERVACIONES", typeof(string)));
-
-
+            tvp.Columns.Add(new DataColumn("FECHA_FIN_ORIGINAL", typeof(DateTime)));
+            tvp.Columns.Add(new DataColumn("OBSERVACIONES_RECTIFICACION_FECHA_FIN", typeof(string)));
 
             foreach (PrecioEspecialCabecera obj in listas)
             {
@@ -741,7 +762,10 @@ namespace DataLayer
                     rowObj["COSTO_UNITARIO"] = item.unidadCosto.CostoSinIGV;
                     rowObj["FECHA_INICIO"] = item.fechaInicio;
                     rowObj["FECHA_FIN"] = item.fechaFin;
-                    rowObj["OBSERVACIONES"] = item.observaciones.Length > 499 ? item.observaciones.Substring(0, 499) : item.observaciones;  
+                    rowObj["OBSERVACIONES"] = item.observaciones.Length > 499 ? item.observaciones.Substring(0, 499) : item.observaciones;
+
+                    rowObj["FECHA_FIN_ORIGINAL"] = item.fechaFinOriginal;
+                    rowObj["OBSERVACIONES_RECTIFICACION_FECHA_FIN"] = item.observacionesRectificacionFechacFin?.Trim();
 
                     tvp.Rows.Add(rowObj);
                 }

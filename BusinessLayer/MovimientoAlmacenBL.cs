@@ -106,22 +106,24 @@ namespace BusinessLayer
 
                 object dataSend = null;
 
-                if (guiaRemision.pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_MP))
-                {
-                    dataSend = ConverterMPToNextSoft.toGuia(guiaRemision, detallesVenta);
-                }
-
-                if (guiaRemision.pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_DISTRIPLUS))
-                {
-                    dataSend = ConverterMPToNextSoft.toGuiaFE(guiaRemision, detallesVenta);
-                }
-
                 try
                 {
                     if (guiaRemision.serieDocumento.Substring(0, 2).Equals("T0") ||
                         guiaRemision.serieDocumento.Substring(0, 2).Equals("TT") ||
                         guiaRemision.serieDocumento.Substring(0, 2).Equals("TI"))
                     {
+
+                        if (guiaRemision.pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_MP))
+                        {
+                            dataSend = ConverterMPToNextSoft.toGuia(guiaRemision, detallesVenta);
+                        }
+
+                        if (guiaRemision.pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_DISTRIPLUS))
+                        {
+                            dataSend = ConverterMPToNextSoft.toGuiaFE(guiaRemision, detallesVenta);
+                        }
+
+
                         ClienteBL blCliente = new ClienteBL();
 
                         ClienteWS wsCli = new ClienteWS();

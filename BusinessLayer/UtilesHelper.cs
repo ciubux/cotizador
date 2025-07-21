@@ -15,7 +15,8 @@ namespace BusinessLayer
 
         public static List<String> columnas = new List<string>{ "A", "B","C", "D", "E",
         "F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
-        "AA","AB","AC","AD","AE","AF","AG","AH","AI","AJ","AK","AL","AM","AN","AO","AP","AQ","AR","AS","AT","AU","AV","AW","AX","AY","AZ"};
+        "AA","AB","AC","AD","AE","AF","AG","AH","AI","AJ","AK","AL","AM","AN","AO","AP","AQ","AR","AS","AT","AU","AV","AW","AX","AY","AZ",
+        "BA","BB","BC","BD","BE","BF","BG","BH","BI","BJ","BK","BL","BM","BN","BO","BP","BQ","BR","BS","BT","BU","BV","BW","BX","BY","BZ"};
 
         public static String getValorCelda(ISheet sheet, int fila, string columna)
         {
@@ -93,7 +94,15 @@ namespace BusinessLayer
         public static void setValorCelda(ISheet sheet, int fila, string columna, DateTime valor, ICellStyle cellStyle)
         {
             ICell cell = sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna)));
-            sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).SetCellValue(valor);
+
+            if (valor.Equals(DateTime.MinValue))
+            {
+                sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).SetCellValue("");
+            } else
+            {
+                sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).SetCellValue(valor);
+            }
+
             sheet.GetRow(fila - 1).GetCell(columnas.FindIndex(x => x.StartsWith(columna))).CellStyle = cellStyle;
         }
 

@@ -702,6 +702,8 @@ namespace Cotizador.Controllers
                         L	Fecha Inicio
                         M	Fecha Fin
                         N	Observaciones
+                        O	Fecha Fin Original
+                        P	Observaciones Rectificación Fecha Fin
                      */
                     agregar = true;
                     posicionInicial = 0;
@@ -818,7 +820,26 @@ namespace Cotizador.Controllers
                             else
                             {
                                 obj.observaciones = sheet.GetRow(row).GetCell(pos).ToString().Trim();
-                            }                           
+                            }
+
+                            pos = posicionInicial + 14;
+                            obj.fechaFinOriginal = DateTime.MinValue;
+                            if (sheet.GetRow(row).GetCell(pos) != null && !sheet.GetRow(row).GetCell(pos).ToString().Trim().Equals("")
+                                && sheet.GetRow(row).GetCell(pos).CellType == CellType.Numeric
+                                && DateUtil.IsCellDateFormatted(sheet.GetRow(row).GetCell(pos)))
+                            {
+                                obj.fechaFinOriginal = sheet.GetRow(row).GetCell(pos).DateCellValue;
+                            }
+
+                            pos = posicionInicial + 15;
+                            if (sheet.GetRow(row).GetCell(pos) == null)
+                            {
+                                obj.observacionesRectificacionFechacFin = "";
+                            }
+                            else
+                            {
+                                obj.observacionesRectificacionFechacFin = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
 
                             items.Add(obj);
                         }
@@ -889,7 +910,7 @@ namespace Cotizador.Controllers
                 int a = 1;
                 if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
                 {
-                   
+
                     /*  A 0  TIPO NEGOCIACIÓN
                         B 1  CÓDIGO NEGOCIACIÓN
                         C 2  TÍTULO LISTA
@@ -906,10 +927,12 @@ namespace Cotizador.Controllers
                         W 22 FECHA INICIO
                         X 23 FECHA FIN
                         Y 24 OBSERVACIONES
+                        Z 25 FECHA FIN ORIGINAL
+                        AA 26 OBSERVACIONES RECTIFICACION FECHA FIN
                      */
 
                     agregar = true;
-                    posicionInicial = 0;
+                    posicionInicial = 0; 
 
                     try
                     {
@@ -1097,7 +1120,23 @@ namespace Cotizador.Controllers
                             {
                                 obj.observaciones = sheet.GetRow(row).GetCell(pos).ToString().Trim();
                             }
-                            
+
+                            pos = posicionInicial + 25;
+                            obj.fechaFinOriginal = DateTime.MinValue;
+                            if (sheet.GetRow(row).GetCell(pos) != null && !sheet.GetRow(row).GetCell(pos).ToString().Trim().Equals("")
+                                && sheet.GetRow(row).GetCell(pos).CellType == CellType.Numeric
+                                && DateUtil.IsCellDateFormatted(sheet.GetRow(row).GetCell(pos)))
+                            {
+                                obj.fechaFinOriginal = sheet.GetRow(row).GetCell(pos).DateCellValue;
+                            }
+
+                            pos = posicionInicial + 26;
+                            obj.observacionesRectificacionFechacFin = "";
+                            if (sheet.GetRow(row).GetCell(pos) != null)
+                            {
+                                obj.observacionesRectificacionFechacFin = sheet.GetRow(row).GetCell(pos).ToString().Trim();
+                            }
+
                             cabecera.precios.Add(obj);
                         }
                         else

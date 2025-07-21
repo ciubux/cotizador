@@ -199,7 +199,10 @@
                             <th data-name="valorCosto" data-visible="true" data-sortable="true">Costo</th>
                             <th data-name="fechaInicio" data-visible="true" data-sortable="true">Fecha Inicio</th>
                             <th data-name="fechaFin" data-visible="true" data-sortable="true">Fecha Fin</th>
-                            <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
+                            <th data-name="observaciones" data-visible="true" data-sortable="true">Observaciones</th>
+                            <th data-name="fechaFinOriginal" data-visible="true" data-sortable="true">Fecha Fin Original</th>
+                            <th data-name="observacionesRectifiacionFechaFin" data-visible="true" data-sortable="true">Obs. Rectificación</th>
+                            @*<th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>*@
                         </tr>
                     </thead>
                     <tbody>
@@ -264,12 +267,15 @@
                                     }
                                 </td>
                                 <td>@item.unidadPrecio.Presentacion</td>
-                                <td><input type="number" class="montoPrecio form-control" value="@item.unidadPrecio.PrecioSinIGV" step=".0001"/></td>
+                                <td><input type="number" class="montoPrecio form-control" value="@item.unidadPrecio.PrecioSinIGV" step=".0001" /></td>
                                 <td>@item.unidadCosto.Presentacion</td>
-                                <td><input type="number" class="montoCosto form-control" value="@item.unidadCosto.CostoSinIGV" step=".0001"/></td>
+                                <td><input type="number" class="montoCosto form-control" value="@item.unidadCosto.CostoSinIGV" step=".0001" /></td>
                                 <td>@item.FechaInicioDesc</td>
                                 <td>@item.fechaFinDesc</td>
-                                <td></td>
+                                <td>@item.observaciones</td>
+                                <td>@item.fechaFinOriginalDesc</td>
+                                <td>@item.observacionesRectificacionFechacFin</td>
+                                @*<td></td>*@
                             </tr>
                         }
                     </tbody>

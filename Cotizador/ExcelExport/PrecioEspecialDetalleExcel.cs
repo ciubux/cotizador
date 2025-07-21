@@ -179,7 +179,7 @@ namespace Cotizador.ExcelExport
 
                 /*Cabecera, Sub total*/
                 int rTotal = (obj.precios.Count) + cantFilasRegistrosAdicionales;
-                int cTotal = 24;
+                int cTotal = 26;
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
@@ -210,6 +210,8 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i, "L", "FECHA INICIO", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "M", "FECHA FIN", titleDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "N", "OBSERVACIONES", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "O", "FECHA FIN ORIGINAL", titleDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "P", "OBSERVACIONES RECTIFICACION FECHA FIN", titleDataCellStyle);
 
                 UtilesHelper.setColumnWidth(sheet, "A", 2500);
                 UtilesHelper.setColumnWidth(sheet, "B", 8000);
@@ -225,6 +227,8 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setColumnWidth(sheet, "L", 3000);
                 UtilesHelper.setColumnWidth(sheet, "M", 3000);
                 UtilesHelper.setColumnWidth(sheet, "N", 6000);
+                UtilesHelper.setColumnWidth(sheet, "O", 3000);
+                UtilesHelper.setColumnWidth(sheet, "P", 6000);
 
                 i = filaInicioDatos;
 
@@ -281,6 +285,10 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "M", det.fechaFin, tableDataDateCellStyle);
 
                     UtilesHelper.setValorCelda(sheet, i, "N", det.observaciones, tableDataCenterCellStyle);
+
+                    UtilesHelper.setValorCelda(sheet, i, "O", det.fechaFinOriginal, tableDataDateCellStyle);
+                    UtilesHelper.setValorCelda(sheet, i, "P", det.observacionesRectificacionFechacFin, tableDataCenterCellStyle);
+
                     i++;
                 }
 
@@ -302,6 +310,8 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, i, "M", "", lastDataCellStyle);
                 UtilesHelper.setValorCelda(sheet, i, "N", "", lastDataCellStyle);
 
+                UtilesHelper.setValorCelda(sheet, i, "O", "", lastDataCellStyle);
+                UtilesHelper.setValorCelda(sheet, i, "P", "", lastDataCellStyle);
 
                 MemoryStream ms = new MemoryStream();
                 using (MemoryStream tempStream = new MemoryStream())
