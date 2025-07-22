@@ -45,7 +45,7 @@ namespace Model
 
         public List<string> dataRelacionada { get; set; }
 
-        public string FechaInicioDesc
+        public string fechaInicioDesc
         {
             get { return fechaInicio.ToString("dd/MM/yyyy"); }
         }

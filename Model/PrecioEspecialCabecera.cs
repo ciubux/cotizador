@@ -43,7 +43,7 @@ namespace Model
         public String codigoListaProveedor { get; set; }
 
         
-        public string FechaInicioDesc
+        public string fechaInicioDesc
         {
             get { return fechaInicio.ToString("dd/MM/yyyy"); }
         }

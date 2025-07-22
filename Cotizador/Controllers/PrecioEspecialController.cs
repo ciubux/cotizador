@@ -608,17 +608,35 @@ namespace Cotizador.Controllers
             }
         }
 
-        public void ChangeInputDetalleDecimal()
+        public void ChangeInputDetalle()
         {
             PrecioEspecialCabecera obj = this.PrecioEspecialCabeceraSession;
+            string tipoDato = this.Request.Params["tipodato"];
             int pos = int.Parse(this.Request.Params["pos"].ToString());
+
             PrecioEspecialDetalle item = obj.precios[pos];
-
             PropertyInfo propertyInfo = item.GetType().GetProperty(this.Request.Params["propiedad"]);
-            propertyInfo.SetValue(item, Decimal.Parse(this.Request.Params["valor"]));
 
+            switch (tipoDato)
+            {
+                case "string":
+                    propertyInfo.SetValue(item, this.Request.Params["valor"]);
+                    break;
+                case "date":
+                    string fechaParam = Request.Params["valor"].ToString();
+                    if (!fechaParam.Trim().Equals(""))
+                    {
+                        String[] fecha = fechaParam.Split('-');
+                        propertyInfo.SetValue(item, new DateTime(Int32.Parse(fecha[0]), Int32.Parse(fecha[1]), Int32.Parse(fecha[2])));
+                        obj.precios[pos] = item;
+                    }
+                    break;
+                case "decimal":
+                    propertyInfo.SetValue(item, Decimal.Parse(this.Request.Params["valor"]));
+                    break;
+            }
+            
             obj.precios[pos] = item;
-
             this.PrecioEspecialCabeceraSession = obj;
         }
 

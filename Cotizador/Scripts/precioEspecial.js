@@ -134,6 +134,20 @@ jQuery(function ($) {
         });
     }
 
+    function ChangeInputDetalle(pos, tipodato, propiedad, valor) {
+        $.ajax({
+            url: "/PrecioEspecial/ChangeInputDetalle",
+            type: 'POST',
+            data: {
+                pos: pos,
+                tipodato: tipodato,
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
+
     function ChangeInputDetallePresentacionDecimal(pos, tipo, propiedad, valor) {
         $.ajax({
             url: "/PrecioEspecial/ChangeInputDetallePresentacionDecimal",
@@ -229,6 +243,14 @@ jQuery(function ($) {
     $(document).on('change', ".montoCosto", function () {
         var pos = $(this).closest("tr").attr("posicion");
         ChangeInputDetallePresentacionDecimal(pos, "COSTO", "CostoSinIGV", $(this).val());
+    });
+
+
+    $(document).on('change', ".changeInputDetalle", function () {
+        var pos = $(this).closest("tr").attr("posicion");
+        var tipodato = $(this).attr("tipodato");
+        var nombre = $(this).attr("nombre");
+        ChangeInputDetalle(pos, tipodato, nombre, $(this).val());
     });
 
     $("#obj_codigoListaProveedor").change(function () {
@@ -379,7 +401,7 @@ jQuery(function ($) {
                 $("#ver_tipo_negociacion").html(obj.tipoNegociacion);
                 $("#ver_grupo").html(obj.grupoCliente.codigoNombre);
                 $("#ver_cliente").html(obj.clienteSunat.ruc + " - " + obj.clienteSunat.razonSocial);
-                $("#ver_fecha_inicio").html(obj.FechaInicioDesc);
+                $("#ver_fecha_inicio").html(obj.fechaInicioDesc);
                 $("#ver_fecha_fin").html(obj.fechaFinDesc);
                 $("#ver_registradoPor").html(obj.UsuarioRegistro.nombre);
                 $("#ver_fechaRegistro").html(obj.FechaRegistroDesc);
@@ -408,7 +430,7 @@ jQuery(function ($) {
                         '<td>' + lista[i].unidadPrecio.PrecioSinIGV + '</td>' +
                         '<td>' + lista[i].unidadCosto.Presentacion + '</td>' +
                         '<td>' + lista[i].unidadCosto.CostoSinIGV + '</td>' +
-                        '<td>' + lista[i].FechaInicioDesc + '</td>' +
+                        '<td>' + lista[i].fechaInicioDesc + '</td>' +
                         '<td>' + lista[i].fechaFinDesc + '</td>' +
                         '<td></td>' +
                         '</tr>';
@@ -470,7 +492,7 @@ jQuery(function ($) {
                         '<td>  ' + list[i].tipoNegociacion + '</td>' +
                         '<td>  ' + list[i].codigo + '  </td>' +
                         '<td>  ' + list[i].clienteOGrupoDesc + '  </td>' +
-                        '<td>  ' + list[i].FechaInicioDesc + '  </td>' +
+                        '<td>  ' + list[i].fechaInicioDesc + '  </td>' +
                         '<td>  ' + list[i].fechaFinDesc + '  </td>' +
                         '<td>' +
                         '<button type="button" idPrecioEspecial="' + list[i].idPrecioEspecialCabecera + '" class="btnVerPrecioEspecial btn btn-primary">Ver</button>' 
