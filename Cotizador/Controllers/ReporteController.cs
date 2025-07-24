@@ -207,6 +207,8 @@ namespace Cotizador.Controllers
             obj.excluirVentasRelacionadasHijas = true;
             obj.esSubDistribuidor = false;
             obj.idSubDistribuidor = 0;
+            obj.considerarVentasConCPE = true;
+            obj.considerarVentasSinCPE = true;
 
             if (usuario.esResponsableComercial && !usuario.modificaFiltroVendedor)
             {
@@ -256,7 +258,8 @@ namespace Cotizador.Controllers
                     asistenteServicioCliente != null ? asistenteServicioCliente.codigo : "",
                     obj.fechaInicio, obj.fechaFin, obj.anio, obj.trimestre, obj.ciudad.nombre, 
                     obj.incluirVentasExcluidas, usuario.idUsuario, obj.idGrupo, obj.ruc, obj.integraEmpresas,
-                    obj.excluirVentasRelacionadasHijas, obj.esSubDistribuidor, obj.idSubDistribuidor);
+                    obj.excluirVentasRelacionadasHijas, obj.esSubDistribuidor, obj.idSubDistribuidor,
+                    obj.considerarVentasConCPE, obj.considerarVentasSinCPE);
                 this.Session["s_rSellOutVendedoresFiltroLastF"] = obj;
                 this.Session["s_rSellOutVendedoresFiltroLastS"] = resultados;
             }
@@ -293,7 +296,8 @@ namespace Cotizador.Controllers
                     asistenteServicioCliente != null ? asistenteServicioCliente.codigo : "", 
                     obj.fechaInicio, obj.fechaFin, obj.anio, obj.trimestre, obj.ciudad.nombre, 
                     obj.incluirVentasExcluidas, usuario.idUsuario, obj.idGrupo, obj.ruc, obj.integraEmpresas,
-                    obj.excluirVentasRelacionadasHijas, obj.esSubDistribuidor, obj.idSubDistribuidor);
+                    obj.excluirVentasRelacionadasHijas, obj.esSubDistribuidor, obj.idSubDistribuidor,
+                    obj.considerarVentasConCPE, obj.considerarVentasSinCPE);
 
             ReporteDetallesSellOutVendedor excel = new ReporteDetallesSellOutVendedor();
 

@@ -43,6 +43,24 @@
         excluirVentasRelacionadasHijasClass = "lbl-ajuste-calculo-precios";
         excluirVentasRelacionadasHijasChecked = "checked";
     }
+
+    var considerarCPEClass = "text-muted";
+    var considerarCPEChecked = "";
+
+    if (item.considerarVentasConCPE)
+    {
+        considerarCPEClass = "lbl-ajuste-calculo-precios";
+        considerarCPEChecked = "checked";
+    }
+
+    var considerarSinCPEClass = "text-muted";
+    var considerarSinCPEChecked = "";
+
+    if (item.considerarVentasSinCPE)
+    {
+        considerarSinCPEClass = "lbl-ajuste-calculo-precios";
+        considerarSinCPEChecked = "checked";
+    }
 }
 
 <div class="page-header">
@@ -206,12 +224,21 @@
             </div>
 
             <div class="col-sm-6 col-lg-4">
-                <!--USUARIO-->
                 <div class="form-group">
-                    @*<label for="usuario" class="control-label col-xs-4">Creado Por:</label>
-                    <div class="col-xs-8">
-                        @Html.Action("usuariosPedidoList", "Usuario")
-                    </div>*@
+                    <div class="col-xs-12">
+                        <div class="onoffswitch" title="Considera las transacciones CON CPE (Factura, Boleta, Nota de Crédito o Débito).">
+                            <input type="checkbox" name="onoffswitch" @considerarCPEChecked class="onoffswitch-checkbox" id="chkConsiderarCPE">
+                            <label class="onoffswitch-label" for="chkConsiderarCPE"></label>
+                        </div>
+                        <h5 id="lblChkConsiderarCPE" for="chkConsiderarCPE" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;" class="@considerarCPEClass" title="Considera las transacciones CON CPE (Factura, Boleta, Nota de Crédito o Débito).">Consiedar ventas CON CPE</h5>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="onoffswitch" title="Considera las transacciones SIN CPE (Sin Factura, Boleta, Nota de Crédito o Débito).">
+                            <input type="checkbox" name="onoffswitch" @considerarSinCPEChecked class="onoffswitch-checkbox" id="chkConsiderarSinCPE">
+                            <label class="onoffswitch-label" for="chkConsiderarSinCPE"></label>
+                        </div>
+                        <h5 id="lblChkConsiderarSinCPE" for="chkConsiderarSinCPE" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;" class="@considerarSinCPEClass" title="Considera las transacciones SIN CPE (Sin Factura, Boleta, Nota de Crédito o Débito).">Considerar ventas SIN CPE</h5>
+                    </div>
                 </div>
             </div>
         </div>
@@ -301,18 +328,19 @@
                         </div>
                     </div>
                 </div>
-            }
-            <div class="col-sm-6 col-lg-4">
-                <div class="form-group">
-                    <div class="col-xs-12">
-                        <div class="onoffswitch" title="Excluye de los resultados las ventas de pedidos generados desde otro pedido de otra empresa.">
-                            <input type="checkbox" name="onoffswitch" @excluirVentasRelacionadasHijasChecked class="onoffswitch-checkbox" id="chkExcluirVentasRelacionadasHijas">
-                            <label class="onoffswitch-label" for="chkExcluirVentasRelacionadasHijas"></label>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <div class="onoffswitch" title="Excluye de los resultados las ventas de pedidos generados desde otro pedido de otra empresa.">
+                                <input type="checkbox" name="onoffswitch" @excluirVentasRelacionadasHijasChecked class="onoffswitch-checkbox" id="chkExcluirVentasRelacionadasHijas">
+                                <label class="onoffswitch-label" for="chkExcluirVentasRelacionadasHijas"></label>
+                            </div>
+                            <h5 id="lblChkExcluirVentasRelacionadasHijas" for="chkExcluirVentasRelacionadasHijas" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;" class="@excluirVentasRelacionadasHijasClass" title="Excluye de los resultados las ventas de pedidos generados desde otro pedido de otra empresa.">Excluir ventas cruzadas</h5>
                         </div>
-                        <h5 id="lblChkExcluirVentasRelacionadasHijas" for="chkExcluirVentasRelacionadasHijas" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;" class="@excluirVentasRelacionadasHijasClass" title="Excluye de los resultados las ventas de pedidos generados desde otro pedido de otra empresa.">Excluir ventas cruzadas</h5>
                     </div>
                 </div>
-            </div>
+            }
         </div>
         <div class="row pull-left" style="margin-top: 20px; margin-bottom: 10px; margin-left: 0px">
 
@@ -627,6 +655,39 @@
             }
 
             cambioChkSwitchBool("chkExcluirVentasRelacionadasHijas", "lblChkExcluirVentasRelacionadasHijas", "excluirVentasRelacionadasHijas");
+        });
+
+
+        $("#chkConsiderarCPE").change(function () {
+            if ($("#chkConsiderarCPE").is(":checked"));
+            cambioChkSwitchBool("chkConsiderarCPE", "lblChkConsiderarCPE", "considerarVentasConCPE");
+        });
+
+
+        $("#lblChkConsiderarCPE").click(function () {
+            if ($("#chkConsiderarCPE").is(":checked")) {
+                $("#chkConsiderarCPE").prop("checked", false);
+            } else {
+                $("#chkConsiderarCPE").prop("checked", true);
+            }
+
+            cambioChkSwitchBool("chkConsiderarCPE", "lblChkConsiderarCPE", "considerarVentasConCPE");
+        });
+
+        $("#chkConsiderarSinCPE").change(function () {
+            if ($("#chkConsiderarSinCPE").is(":checked"));
+            cambioChkSwitchBool("chkConsiderarSinCPE", "lblChkConsiderarSinCPE", "considerarVentasSinCPE");
+        });
+
+
+        $("#lblChkConsiderarSinCPE").click(function () {
+            if ($("#chkConsiderarSinCPE").is(":checked")) {
+                $("#chkConsiderarSinCPE").prop("checked", false);
+            } else {
+                $("#chkConsiderarSinCPE").prop("checked", true);
+            }
+
+            cambioChkSwitchBool("chkConsiderarSinCPE", "lblChkConsiderarSinCPE", "considerarVentasSinCPE");
         });
 
 

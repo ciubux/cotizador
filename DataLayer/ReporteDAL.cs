@@ -75,7 +75,8 @@ namespace DataLayer
 
         public List<List<String>> sellOutVendedores(String sku, String familia, String proveedor, String codVRC, String codVSC, String codVAC, 
             DateTime fechaInicio, DateTime fechaFin, int anio, int trimestre, String ciudad, int incluirVentasExcluidas, Guid idUsuario,
-            int idGrupo, string ruc, bool integraEmpresas, bool excluirVentasRelacionadasHijas, bool esSubDistribuidor, int idSubDistribuidor)
+            int idGrupo, string ruc, bool integraEmpresas, bool excluirVentasRelacionadasHijas, bool esSubDistribuidor, int idSubDistribuidor,
+            bool considerarConCPE, bool considerarSinCPE)
         {
             var objCommand = GetSqlCommand("ps_sellout_vendedores");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
@@ -102,6 +103,10 @@ namespace DataLayer
 
             InputParameterAdd.Int(objCommand, "idGrupo", idGrupo);
             InputParameterAdd.VarcharEmpty(objCommand, "ruc", ruc);
+
+            int estadoCPE = (considerarConCPE && considerarSinCPE) || (!considerarConCPE && !considerarSinCPE) ? -1 : considerarConCPE ? 1 : 0;
+            InputParameterAdd.Int(objCommand, "estadoCPE", estadoCPE);
+
 
             fechaInicio = new DateTime(fechaInicio.Year, fechaInicio.Month, fechaInicio.Day, 0, 0, 0);
             fechaFin = new DateTime(fechaFin.Year, fechaFin.Month, fechaFin.Day, 23, 59, 59);
@@ -132,7 +137,8 @@ namespace DataLayer
 
         public List<List<String>> sellOutVendedoresDetalles(String codVendedor, String sku, String familia, String proveedor, String codVRC, String codVSC, String codVAC, 
             DateTime fechaInicio, DateTime fechaFin, int anio, int trimestre, String ciudad, int incluirVentasExcluidas, Guid idUsuario,
-            int idGrupo, string ruc, bool integraEmpresas, bool excluirVentasRelacionadasHijas, bool esSubDistribuidor, int idSubDistribuidor)
+            int idGrupo, string ruc, bool integraEmpresas, bool excluirVentasRelacionadasHijas, bool esSubDistribuidor, int idSubDistribuidor,
+            bool considerarConCPE, bool considerarSinCPE)
         {
             var objCommand = GetSqlCommand("ps_sellout_vendedores_detalles");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
@@ -157,6 +163,9 @@ namespace DataLayer
             InputParameterAdd.VarcharEmpty(objCommand, "sku", sku);
             InputParameterAdd.Varchar(objCommand, "familia", familia);
             InputParameterAdd.Varchar(objCommand, "proveedor", proveedor);
+
+            int estadoCPE = (considerarConCPE && considerarSinCPE) || (!considerarConCPE && !considerarSinCPE) ? -1 : considerarConCPE ? 1 : 0;
+            InputParameterAdd.Int(objCommand, "estadoCPE", estadoCPE);
 
             fechaInicio = new DateTime(fechaInicio.Year, fechaInicio.Month, fechaInicio.Day, 0, 0, 0);
             fechaFin = new DateTime(fechaFin.Year, fechaFin.Month, fechaFin.Day, 23, 59, 59);

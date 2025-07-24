@@ -41,6 +41,9 @@ namespace Cotizador.Models.OBJsFiltro
 
         public bool excluirVentasRelacionadasHijas { get; set; }
 
+        public bool considerarVentasConCPE { get; set; }
+
+        public bool considerarVentasSinCPE { get; set; }
 
         public void changeDatoParametro(string propiedad, string valor, string tipo)
         {

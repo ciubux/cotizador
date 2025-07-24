@@ -16,6 +16,8 @@ using NPOI.HSSF.Util;
 using BusinessLayer;
 
 using System.Web.Mvc;
+using System.Globalization;
+using Castle.Core.Internal;
 
 namespace Cotizador.ExcelExport
 {
@@ -55,6 +57,7 @@ namespace Cotizador.ExcelExport
                 titleDataCellStyle.BorderTop = BorderStyle.Thin;
                 titleDataCellStyle.BorderRight = BorderStyle.Thin;
                 titleDataCellStyle.BorderBottom = BorderStyle.Thin;
+
 
                 var avgCellFormate = wb.CreateDataFormat();
                 var twoDecFormat = avgCellFormate.GetFormat("0.00");
@@ -251,15 +254,45 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(48)); indexColumn++;
 
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(9)); indexColumn++;
-                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(10), dateFormatStyle); indexColumn++;
+
+
+                    if (string.IsNullOrEmpty(obj.ElementAt(10)))
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "", dateFormatStyle);
+                    } else
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], DateTime.ParseExact(obj.ElementAt(10), "dd/MM/yyyy", CultureInfo.InvariantCulture), dateFormatStyle); 
+                    }
+                    indexColumn++;
+
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(11)); indexColumn++;
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(12)); indexColumn++;
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(13)); indexColumn++;
+
+                    if (string.IsNullOrEmpty(obj.ElementAt(14)))
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "", dateFormatStyle); 
+                    }
+                    else
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], DateTime.ParseExact(obj.ElementAt(14), "dd/MM/yyyy", CultureInfo.InvariantCulture), dateFormatStyle); 
+                    }
+                    indexColumn++;
+
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(14), dateFormatStyle); indexColumn++;
 
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(43)); indexColumn++;
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(44)); indexColumn++;
-                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(45), dateFormatStyle); indexColumn++;
+
+                    if (string.IsNullOrEmpty(obj.ElementAt(45)))
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "", dateFormatStyle);
+                    }
+                    else
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], DateTime.ParseExact(obj.ElementAt(45), "dd/MM/yyyy", CultureInfo.InvariantCulture), dateFormatStyle);
+                    }
+                    indexColumn++;
 
 
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(15)); indexColumn++;
