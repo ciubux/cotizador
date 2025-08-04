@@ -30,7 +30,7 @@ namespace BusinessLayer
             res.message = "";
 
             JArray productos = (JArray)dataResult["validarproductosResult"]["Productos"];
-
+            int validados = 0;
             // Recorrer cada objeto del arreglo
             foreach (JObject producto in productos)
             {
@@ -43,7 +43,16 @@ namespace BusinessLayer
                 {
                     res.message = res.message + "El producto " + codigoMP + " no esta correctamente registrado. ";
                     res.code = 1;
+                } else
+                {
+                    validados++;
                 }
+            }
+
+            if (validados < skus.Count)
+            {
+                res.message = res.message + "Hay productos que NextSys no ha indicado el estado de la homologación. ";
+                res.code = 1;
             }
 
             //res.code = 0;

@@ -2254,6 +2254,22 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(res);
         }
 
+        public String FacturasExternasPedidoTC()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            DocumentoExternoBL docExtBl = new DocumentoExternoBL();
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
+
+            List<DocumentoExterno> lista = new List<DocumentoExterno>();
+            if (usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
+            {
+                lista = docExtBl.getDocumentosPedidoOriginal(usuario.idUsuario, pedido.idPedido);
+            }
+
+            return JsonConvert.SerializeObject(lista);
+        }
+
         public async Task<String> updateEstadoPedido()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];

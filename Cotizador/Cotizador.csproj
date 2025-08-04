@@ -232,6 +232,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\DocumentoExternoController.cs" />
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Controllers\EmpresaDescuentoController.cs" />
     <Compile Include="Controllers\PrecioEspecialController.cs" />
@@ -466,6 +467,7 @@
     <Content Include="images\logo_sunat.svg" />
     <Content Include="images\logo_zas.png" />
     <Content Include="images\map.png" />
+    <Content Include="images\miniicon_TC.png" />
     <Content Include="images\pdf-icon.png" />
     <Content Include="images\producto_inactivo_label.png" />
     <Content Include="images\proveedores.png" />
@@ -793,6 +795,7 @@
     <Content Include="Views\Empresa\EditarParametros.cshtml" />
     <Content Include="Views\Producto\ProductosHomologadosTecnica.cshtml" />
     <Content Include="Views\PrecioEspecial\LogCostosProducto.cshtml" />
+    <Content Include="Views\DocumentoExterno\_ModalDescargarFacturasTC.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

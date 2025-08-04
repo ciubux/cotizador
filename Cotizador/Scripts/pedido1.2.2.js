@@ -3535,7 +3535,8 @@ jQuery(function ($) {
 
 
                 $("#btnRestringirAtencionPedido").hide();
-
+                $("#btnFacturarExternamente").hide();
+                $("#btnDescargarFacturaExterna").hide();
 
                 // sleep
                 
@@ -3596,6 +3597,12 @@ jQuery(function ($) {
                         if (!pedido.facturadoExterno && pedido.entregaTercerizada) {
                             $("#btnFacturarExternamente").show();
                         }
+                    }
+
+                    if (pedido.facturadoExterno || (pedido.entregaTercerizada && 
+                        (pedido.seguimientoPedido_estado == ESTADO_ATENDIDO || pedido.seguimientoPedido_estado == ESTADO_ATENDIDO_PARCIALMENTE
+                            || pedido.seguimientoPedido_estado == ESTADO_FACTURADO || pedido.seguimientoPedido_estado == ESTADO_FACTURADO_PARCIALMENTE))) {
+                        $("#btnDescargarFacturaExterna").show();
                     }
                 } else {
                     $("#btnAprobarIngresoPedido").attr("validarproductosns", "0");
@@ -3858,6 +3865,30 @@ jQuery(function ($) {
                         }
                     });
                 }
+            }
+        });
+    });
+
+    $("#btnDescargarFacturaExterna").click(function () {
+        $.ajax({
+            url: "/Pedido/FacturasExternasPedidoTC",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+            },
+            error: function () {
+                $.alert({
+                    title: 'ERROR',
+                    content: "Ocurrió un error al consultar las facturas del pedido.",
+                    type: 'red',
+                    buttons: {
+                        OK: function () {
+                        }
+                    }
+                });
+            },
+            success: function (lista) {
+                llenarListaFacturas(lista);
             }
         });
     });

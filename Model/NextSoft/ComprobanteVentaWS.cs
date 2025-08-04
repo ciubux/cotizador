@@ -53,5 +53,21 @@ namespace Model.NextSoft
 
             return resultContent;
         }
+
+        public async Task<object> descargarFacturaTC(string serie, string numero)
+        {
+            string nombreServicio = "consultacomprobantetp";
+
+            var sendData = new
+            {
+                token = this.apiToken,
+                serie = serie,
+                numero = numero
+            };
+
+            object resultContent = await this.callService(sendData, nombreServicio);
+
+            return resultContent;
+        }
     }
 }

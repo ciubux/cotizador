@@ -29,19 +29,28 @@ namespace DataLayer
 
             foreach (DataRow row in dataTable.Rows)
             {
-                DocumentoExterno obj = new DocumentoExterno();
-
-                obj.idDocumentoExterno = Converter.GetGuid(row, "id_doc_externo");
-                obj.tipo = Converter.GetString(row, "tipo");
-                obj.nombre = Converter.GetString(row, "nombre");
-                obj.serie = Converter.GetString(row, "serie");
-                obj.correlativo = Converter.GetString(row, "correlativo");
-
-                lista.Add(obj);
+                lista.Add(getBasicFromRow(row));
             }
 
             return lista;
         }
+
+        public List<DocumentoExterno> getDocumentosPedidoOriginal(Guid idUsuario, Guid idPedido)
+        {
+            var objCommand = GetSqlCommand("ps_documentosExternosPedidoOriginal");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
+            DataTable dataTable = Execute(objCommand);
+            List<DocumentoExterno> lista = new List<DocumentoExterno>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                lista.Add(getBasicFromRow(row));
+            }
+
+            return lista;
+        }
+        
 
         public DocumentoExterno Insertar(DocumentoExterno obj)
         {
@@ -71,6 +80,19 @@ namespace DataLayer
             OutputParameterAdd.Int(objCommand, "idDocExterno");
 
             ExecuteNonQuery(objCommand);
+        }
+
+        private DocumentoExterno getBasicFromRow(DataRow row)
+        {
+            DocumentoExterno obj = new DocumentoExterno();
+
+            obj.idDocumentoExterno = Converter.GetGuid(row, "id_doc_externo");
+            obj.tipo = Converter.GetString(row, "tipo");
+            obj.nombre = Converter.GetString(row, "nombre");
+            obj.serie = Converter.GetString(row, "serie");
+            obj.correlativo = Converter.GetString(row, "correlativo");
+
+            return obj;
         }
     }
 }

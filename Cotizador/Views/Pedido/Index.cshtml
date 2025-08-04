@@ -1150,9 +1150,10 @@
                         <button type="button" id="btnAtenderRestantePedidoOriginal" class="btn btn-danger">Atender Pedido Original</button>
                     }
 
-                    @if (false)
+                    @if (pedido.usuario.codigoEmpresa.Equals("TC"))
                     {
                         <button type="button" id="btnFacturarExternamente" class="btn btn-warning bouton-image-tc botonTC" style="display: none;">Facturar</button>
+                        <button type="button" id="btnDescargarFacturaExterna" class="btn btn-warning bouton-image-tc botonTC" style="display: none;">Ver Facturas</button>
                     }
 
                     <button type="button" id="btnEnviarMensajePedV" class="btn btn-success btnEnviarMensajePrecargado">Enviar Mensaje</button>
@@ -2630,6 +2631,7 @@
 
 @Html.Partial("../Pedido/_ModalPedidoReadOnly")
 
+@Html.Partial("../DocumentoExterno/_ModalDescargarFacturasTC")
 
 @section Scripts {
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/pedido")

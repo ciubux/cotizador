@@ -27,5 +27,14 @@ namespace BusinessLayer
             }
         }
 
+        public List<DocumentoExterno> getDocumentosPedidoOriginal(Guid idUsuario, Guid idPedido)
+        {
+            using (DocumentoExternoDAL dal = new DocumentoExternoDAL())
+            {
+                List<DocumentoExterno> lista = dal.getDocumentosPedidoOriginal(idUsuario, idPedido);
+
+                return lista;
+            }
+        }
     }
 }

@@ -1,0 +1,121 @@
+﻿
+<div class="modal fade" id="modalFacturasTCDescargar" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVermodalFacturasTCDescargar"><b>Facturas Técnica en Nextsys</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <div id="divFacturas" class="row">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="pull-right">
+                    <button type="button" id="btnCloseFacturasTCDEscargar" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var tipoAprobarGrupoPedido = 0;
+    var nroGrupoAprobarGrupoPedido = 0;
+    var cantidadPedidosAfectadosAprobarGrupoPedido = 0;
+    var idsPedidoProcesar = [];
+
+
+    function funcionesModalDescargarFacturasTC() {
+        $(document).on('click', ".btnDescargarFacturaTC", function () {
+            $('body').loadingModal({
+                text: 'Descargando...'
+            });
+            $('body').loadingModal('show');
+
+            var serie = $(this).attr("serie");
+            var correlativo = $(this).attr("correlativo");
+
+            $.ajax({
+                url: "/DocumentoExterno/DescargarFacturaTC",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    serie: serie,
+                    correlativo: correlativo
+                },
+                error: function () {
+                    $.alert({
+                        title: 'ERROR',
+                        content: "Ocurrió un error al intentar descargar la factura.",
+                        type: 'red',
+                        buttons: {
+                            OK: function () {
+                            }
+                        }
+                    });
+                    $('body').loadingModal('hide');
+                },
+                success: function (result) {
+                    $('body').loadingModal('hide');
+
+                    if (result.success == 1) {
+                        var filePDF = base64ToArrayBuffer(result.result.consultacomprobantetpResult.ArchivoPDF);
+                        saveByteArray(serie + "-" + correlativo + ".pdf", filePDF);
+                    } else {
+                        $.alert({
+                            type: 'red',
+                            title: "NO SE ENCONTRÓ FACTURA",
+                            content: 'No se puede descargar el archivo ya que la factura no se encuentra en Nextsys.',
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    }
+                }
+            });
+
+            $('body').loadingModal('hide');
+        });
+    };
+
+    function llenarListaFacturas(listaFacturas) {
+        $("#modalFacturasTCDescargar").modal();
+
+        var contenidoFacturas = "";
+
+        if (listaFacturas.length > 0) {
+            for (var i = 0; i < listaFacturas.length; i++) {
+                contenidoFacturas = contenidoFacturas +
+                    '<div class="col-lg-12" style="margin-bottom:5px;">' +
+                    '<span>Factura: ' + listaFacturas[i].serie + '-' + listaFacturas[i].correlativo + '</span>&nbsp; ' +
+                    '<button type="button" class="btn btn-primary btnDescargarFacturaTC" ' +
+                        'serie="' + listaFacturas[i].serie + '" correlativo="' + listaFacturas[i].correlativo + '">Descargar</button></div>';
+            }
+        } else {
+            contenidoFacturas = '<div class="col-lg-12"><h3>No se encontraron facturas.</h3></div>';
+        }
+
+        $("#divFacturas").html(contenidoFacturas);
+    }
+
+    if (window.addEventListener) // W3C standard
+    {
+        window.addEventListener('load', funcionesModalDescargarFacturasTC, false); // NB **not** 'onload'
+    }
+    else if (window.attachEvent) // Microsoft
+    {
+        window.attachEvent('onload', funcionesModalDescargarFacturasTC);
+    }
+
+
+
+
+</script>
