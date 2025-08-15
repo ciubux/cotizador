@@ -77,6 +77,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "igv", cotizacion.igv);
             InputParameterAdd.Decimal(objCommand, "total", cotizacion.montoTotal);
             InputParameterAdd.Varchar(objCommand, "observaciones", cotizacion.observaciones?.Trim());
+            InputParameterAdd.Varchar(objCommand, "observacionesInterno", cotizacion.observacionesInterno?.Trim());
             InputParameterAdd.Varchar(objCommand, "observacionesFijas", cotizacion.observacionesFijas);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "contacto", cotizacion.contacto?.Trim());
@@ -162,6 +163,7 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "igv", cotizacion.igv);
             InputParameterAdd.Decimal(objCommand, "total", cotizacion.montoTotal);
             InputParameterAdd.Varchar(objCommand, "observaciones", cotizacion.observaciones?.Trim());
+            InputParameterAdd.Varchar(objCommand, "observacionesInterno", cotizacion.observacionesInterno?.Trim());
             InputParameterAdd.Varchar(objCommand, "observacionesFijas", cotizacion.observacionesFijas);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);
             InputParameterAdd.Varchar(objCommand, "contacto", cotizacion.contacto?.Trim());
@@ -314,6 +316,7 @@ namespace DataLayer
                 cotizacion.igv = Converter.GetDecimal(row, "igv");
                 cotizacion.montoTotal = Converter.GetDecimal(row, "total");
                 cotizacion.observaciones = Converter.GetString(row, "observaciones");
+                cotizacion.observacionesInterno = Converter.GetString(row, "observaciones_interno");
                 cotizacion.observacionesFijas = Converter.GetString(row, "observaciones_fijas");
                 cotizacion.mostrarCodigoProveedor = Converter.GetBool(row, "mostrar_codigo_proveedor");
                 cotizacion.contacto = Converter.GetString(row, "contacto");

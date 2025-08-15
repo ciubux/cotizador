@@ -1251,11 +1251,13 @@ namespace BusinessLayer
             if (pMP.entregaATerceros)
             {
                 pMP.idClienteTercero = pedido.cliente.idCliente;
+            } else
+            {
+                pMP.numeroRequerimiento = "";
+                pMP.numeroReferenciaAdicional = "";
+                pMP.numeroReferenciaCliente = "";
             }
 
-            pMP.numeroRequerimiento = "";
-            pMP.numeroReferenciaAdicional = "";
-            pMP.numeroReferenciaCliente = "";
             pMP.observaciones = pMP.observaciones + " N° Pedido " + pedido.usuario.razonSocialEmpresa + ": " + pedido.numeroPedido.ToString() + ". Cliente: " + pedido.cliente.nombreCliente;
 
             foreach (PedidoDetalle det in pMP.pedidoDetalleList)

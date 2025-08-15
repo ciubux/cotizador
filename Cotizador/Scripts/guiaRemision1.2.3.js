@@ -356,8 +356,8 @@ jQuery(function ($) {
                     }
 
                     if (res.tipo == "NEXTSOFT_CPE") {
-                        var filePDF = base64ToArrayBuffer(result.resultWS.Archivo);
-                        saveByteArray(result.serie + "-" + result.correlativo + ".pdf", filePDF);
+                        var filePDF = base64ToArrayBuffer(res.resultWS.consultacomprobantetpResult.ArchivoPDF);
+                        saveByteArray(res.serie + "-" + res.correlativo + ".pdf", filePDF);
                     }
 
                     $.alert({
@@ -1313,12 +1313,16 @@ jQuery(function ($) {
                     $("#btnFacturarGuiaRemision").attr("bloquearGuiaRelacionadaNoFacturada", "1");
                 }
 
-                if (guiaRemision.habilitaDescargarFacturaPedidoRelacionado && guiaRemision.entregaTerceros) {
-                    $("#btnExtornar").attr("requiereExtornoRelacionado", "1");
-                    $("#btnAnularGuiaRemision").attr("requiereAnularFacturaRelacionada", "1");
+                if ((guiaRemision.habilitaDescargarFacturaPedidoRelacionado && guiaRemision.entregaTerceros) || guiaRemision.habilitaDescargarFacturaExternaRelacionada) {
                     $("#btnDescargarFacturaPedidoRelacionado").show();
                     $("#btnDescargarFacturaPedidoRelacionado").attr("idMovimientoAlmacen", idMovimientoAlmacen);
                 }
+
+                if (guiaRemision.habilitaDescargarFacturaPedidoRelacionado && guiaRemision.entregaTerceros) {
+                    $("#btnExtornar").attr("requiereExtornoRelacionado", "1");
+                    $("#btnAnularGuiaRemision").attr("requiereAnularFacturaRelacionada", "1");
+                }
+
                 if (guiaRemision.extornoRequiereFacturar) {
                     $("#btnExtornar").attr("requiereFacturar", "1");
                 }

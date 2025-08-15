@@ -25,7 +25,11 @@ namespace Model
         [Display(Name = "Correlativo:")]
         public String correlativo { get; set; }
 
-        
+        public String serieRel { get; set; }
+
+        public int correlativoRel { get; set; }
+
+
         public String SerieCorrelativo()
         {
             return this.serie+ "-" + this.correlativo;

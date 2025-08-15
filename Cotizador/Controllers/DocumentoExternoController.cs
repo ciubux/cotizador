@@ -32,7 +32,7 @@ namespace Cotizador.Controllers
 
 
             JObject dataResult = (JObject) result;
-            int codigo = dataResult["consultacomprobantetpResult"]["Codigo"].Value<int>();
+            int codigo = dataResult["consultacomprobantetpResult"]["codigo"].Value<int>();
 
             string resultText = JsonConvert.SerializeObject(result);
 

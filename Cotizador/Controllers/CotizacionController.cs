@@ -18,6 +18,7 @@ using Cotizador.Models.DTOsSearch;
 using Cotizador.Models.DTOsShow;
 using NLog;
 using Model.UTILES;
+using System.Configuration;
 
 namespace Cotizador.Controllers
 {
@@ -2336,22 +2337,29 @@ namespace Cotizador.Controllers
         }
 
 
-        public void ChangeInputBoolean()
+        public void ChangeInputBoolean(string propiedad, string valor)
+        {
+            ChangeInput(propiedad, valor, "bool");
+        }
+
+        public void ChangeInputString(string propiedad, string valor)
+        {
+            ChangeInput(propiedad, valor, "string");
+        }
+
+        public void ChangeInput(string propiedad, string valor, string tipo)
         {
             Cotizacion cotizacion = this.CotizacionSession;
             PropertyInfo propertyInfo = cotizacion.GetType().GetProperty(this.Request.Params["propiedad"]);
-            propertyInfo.SetValue(cotizacion, Int32.Parse(this.Request.Params["valor"]) == 1);
+
+            switch (tipo)
+            {
+                case "string": propertyInfo.SetValue(cotizacion, this.Request.Params["valor"]); break;
+                case "bool": propertyInfo.SetValue(cotizacion, Int32.Parse(this.Request.Params["valor"]) == 1); break;
+            }
+            
             this.CotizacionSession = cotizacion;
         }
-
-        public void ChangeInputString()
-        {
-            Cotizacion cotizacion = this.CotizacionSession;
-            PropertyInfo propertyInfo = cotizacion.GetType().GetProperty(this.Request.Params["propiedad"]);
-            propertyInfo.SetValue(cotizacion, this.Request.Params["valor"]);
-            this.CotizacionSession = cotizacion;
-        }
-
 
         private bool necesitaAjusteDecimales(Cotizacion obj)
         {

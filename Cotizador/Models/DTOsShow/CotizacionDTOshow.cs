@@ -40,7 +40,8 @@ namespace Cotizador.Models.DTOshow
         public String seguimientoCotizacion_observacion { get; set; }
         public String considerarCantidades { get; set; }
         public String observaciones { get; set; }
-
+        public String observacionesInterno { get; set; }
+        
         public String monedaSimbolo { get; set; }
         public String monedaCodigo { get; set; }
         public String monedaNombre { get; set; }

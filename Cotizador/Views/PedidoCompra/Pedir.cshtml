@@ -399,11 +399,11 @@
                     <div class="form-group">
                         <label for="fechaEntrega" class="control-label col-xs-6 col-lg-4">Hora de Solicitud:</label>
                         <!-- <div class="input-group col-xs-6 col-lg-8">
-                        <div class="input-group-addon" style="width:70px">
-                            <span class="input-group-text" id="basic-addon1">Hora:</span>
-                        </div>
+                            <div class="input-group-addon" style="width:70px">
+                                <span class="input-group-text" id="basic-addon1">Hora:</span>
+                            </div>
 
-                    </div>-->
+                        </div>-->
                         <div class="input-group col-xs-8 col-lg-8">
                             <input class="form-control" type="time" id="horaSolicitud" name="horaSolicitud" value="@ViewBag.horaSolicitud">
                         </div>
@@ -471,26 +471,26 @@
 
         <div class="row" style="margin-bottom:10px; margin-right:0px; margin-left:10px">
             <!--
-        <div class="pull-left">
-            @if (pedido.usuario.apruebaPedidos)
-            {
-                <label for="mostrarCosto" class="control-label ">Mostrar Costo:</label>
-
-                if (pedido.mostrarCosto)
+            <div class="pull-left">
+                @if (pedido.usuario.apruebaPedidos)
                 {
-                    <input checked type="checkbox" id="mostrarCosto" name="mostrarCosto" />
-                }
-                else
-                {
-                    <input type="checkbox" id="mostrarCosto" name="mostrarCosto" />
-                }
-            }
-        </div>
+                    <label for="mostrarCosto" class="control-label ">Mostrar Costo:</label>
 
-        <div class="pull-left">
-            <button id="btnAgregarProductosDesdePreciosRegistrados" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBuscarPreciosRegistrados">Importar Detalle Desde Precios Registrados en Facturación</button>
-        </div>
-        -->
+                    if (pedido.mostrarCosto)
+                    {
+                        <input checked type="checkbox" id="mostrarCosto" name="mostrarCosto" />
+                    }
+                    else
+                    {
+                        <input type="checkbox" id="mostrarCosto" name="mostrarCosto" />
+                    }
+                }
+            </div>
+
+            <div class="pull-left">
+                <button id="btnAgregarProductosDesdePreciosRegistrados" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalBuscarPreciosRegistrados">Importar Detalle Desde Precios Registrados en Facturación</button>
+            </div>
+            -->
 
             <div class="pull-right">
                 <button id="btnOpenAgregarProducto" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto">Agregar Producto</button>
@@ -553,7 +553,7 @@
                     }
                     else
                     {
-                <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Dif %</th>
+                        <th data-name="margen" data-visible="false" data-sortable="false" data-breakpoints="xs sm" style="width:60px">Dif %</th>
                     }
                     <th data-name="flete" data-sortable="false" data-breakpoints="xs sm">Flete</th>
                     <th data-name="precioUnitario" data-sortable="false" data-breakpoints="xs sm">Costo Unit.</th>
@@ -668,7 +668,13 @@
                         <td class="@cotizacionDetalle.producto.idProducto detcantidad" style="text-align:right">@cotizacionDetalle.cantidad</td>
                         <td class="@cotizacionDetalle.producto.idProducto detsubtotal" style="text-align:right">@cotizacionDetalle.subTotal</td>
                         <td class="@cotizacionDetalle.producto.idProducto detobservacion" style="text-align:left">@cotizacionDetalle.observacion</td>
-                        <td class="@cotizacionDetalle.producto.idProducto detbtnMostrarPrecios"> <button type="button" class="@cotizacionDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>
+                        <td class="@cotizacionDetalle.producto.idProducto detbtnMostrarPrecios">
+                            <button type="button" class="@cotizacionDetalle.producto.idProducto btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button>
+                            <br />
+                            <button type="button" title="Consultar Stock" class="verModalStockProducto btn" sku="@cotizacionDetalle.producto.sku" idProductoPresentacion="@(cotizacionDetalle.esPrecioAlternativo ? cotizacionDetalle.ProductoPresentacion.IdProductoPresentacion : 0)" idCiudad="@pedido.ciudad.idCiudad" style="margin-top: 7px;">
+                                <img src="~/images/icon_stock.png" height="25" />
+                            </button>
+                        </td>
 
                         <td class="@cotizacionDetalle.producto.idProducto detordenamiento"></td>
 
@@ -908,8 +914,13 @@
                             <!--PRESENTACIÓN-->
                             <div class="form-group">
                                 <label for="unidad" class="control-label col-xs-3">Presentación:</label>
-                                <div class="col-xs-9">
+                                <div class="col-xs-7">
                                     <select class="form-control" id="unidad" name="unidad"></select>
+                                </div>
+                                <div class="col-xs-2" style="margin-top: -2px;">
+                                    <button id="btnStockUnidadAddProduct" type="button" title="Consultar Stock" class="verModalStockProducto btn" style="margin-bottom: 5px;">
+                                        <img src="~/images/icon_stock.png" height="25" />
+                                    </button>
                                 </div>
                             </div>
 
@@ -1565,6 +1576,9 @@
 <span id="spnProductoCompraRestringida" style="display: none;">
     @Html.Partial("../Producto/_LabelCompraRestringida")
 </span>
+
+@Html.Partial("../Stock/_ModalStockProducto")
+
 
 @section Scripts {
     @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/pedidoCompra")

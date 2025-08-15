@@ -40,12 +40,30 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_documentosExternosPedidoOriginal");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
-            DataTable dataTable = Execute(objCommand);
+            
+            DataSet dataSet = ExecuteDataSet(objCommand);
+            DataTable docsDataTable = dataSet.Tables[0];
+            DataTable guiasDataTable = dataSet.Tables[1];
+
             List<DocumentoExterno> lista = new List<DocumentoExterno>();
 
-            foreach (DataRow row in dataTable.Rows)
+            foreach (DataRow row in docsDataTable.Rows)
             {
                 lista.Add(getBasicFromRow(row));
+            }
+
+            foreach (DataRow row in guiasDataTable.Rows)
+            {
+                Guid idGuia = Converter.GetGuid(row, "id_movimiento_almacen");
+                
+                foreach (DocumentoExterno doc in lista)
+                {
+                    if (doc.idRegistro.Equals(idGuia))
+                    {
+                        doc.serieRel = Converter.GetString(row, "serie_documento");
+                        doc.correlativoRel = Converter.GetInt(row, "numero_documento");
+                    }
+                }
             }
 
             return lista;
@@ -87,6 +105,7 @@ namespace DataLayer
             DocumentoExterno obj = new DocumentoExterno();
 
             obj.idDocumentoExterno = Converter.GetGuid(row, "id_doc_externo");
+            obj.idRegistro = Converter.GetGuid(row, "id_registro");
             obj.tipo = Converter.GetString(row, "tipo");
             obj.nombre = Converter.GetString(row, "nombre");
             obj.serie = Converter.GetString(row, "serie");

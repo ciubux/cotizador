@@ -854,7 +854,8 @@ namespace DataLayer
             DataTable pedidoGrupoDataTable = dataSet.Tables[6];
             DataTable preciosEspecialesDataTable = dataSet.Tables[7];
             DataTable promocionesDataTable = dataSet.Tables[8];
-
+            DataTable docsExternosDataTable = dataSet.Tables[9];
+            
             //   DataTable dataTable = Execute(objCommand);
             //Datos de la cotizacion
             foreach (DataRow row in pedidoDataTable.Rows)
@@ -1395,6 +1396,23 @@ namespace DataLayer
                 pedido.promociones.Add(prom);
             }
 
+
+            foreach (DataRow row in docsExternosDataTable.Rows)
+            {
+                DocumentoExterno docEx = new DocumentoExterno();
+                docEx.idDocumentoExterno = Converter.GetGuid(row, "id_doc_externo");
+                docEx.nombre = Converter.GetString(row, "nombre");
+                docEx.serie = Converter.GetString(row, "serie");
+                docEx.correlativo = Converter.GetString(row, "correlativo");
+                docEx.tipo = Converter.GetString(row, "tipo");
+
+                if (docEx.tipo.Equals(DocumentoExterno.TIPO_FACTURA_RELACIONADA_PEDIDO) && pedido.facturadoExternoPedidoMP)
+                {
+                    pedido.facturaTC = docEx;
+                }
+            }
+
+            
             return pedido;
         }
 

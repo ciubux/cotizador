@@ -292,11 +292,7 @@
 
 
         @*<div class="row">
-
-
-
                 <div class="col-sm-6 col-lg-4">
-
                     <div class="form-group">
                         <label for="igv" class="control-label col-xs-4">¿Precios unitarios incluyen IGV?:</label>
                         <div class="col-xs-8">
@@ -310,7 +306,6 @@
                                     {
                                         <input class="radio-input" type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
                                     }
-
                                 </label>
                             </div>
                             <div class="radio radio-inline">
@@ -328,12 +323,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
-
-
             </div>*@
 
         <div class="row">
@@ -767,25 +756,35 @@
                     }
                 </div>
             </div>
-
-            <div class="form-group">
-                <label for="observaciones" class="control-label col-xs-2">Observaciones:</label>
-                <div class="col-xs-10">
-                    <textarea rows="6" cols="100" style="min-width: 100%" id="observaciones" name="observaciones">@cotizacion.observaciones</textarea>
-                </div>
-
-            </div>
-            @if (cotizacion.aplicaSedes)
-            {
-                <div class="form-group">
-                    <div class="">
-                        <p class=" text-danger" id="verSedesAplica">
-                            Esta cotización aplicará también para las sedes:  @cotizacion.cliente.sedeListWebString.Replace("<br>", ", ")
-                        </p>
-                    </div>
-                </div>
-            }
         </div>
+
+        <div class="form-group">
+            <label for="observaciones" class="control-label col-xs-2">Observaciones:</label>
+            <div class="col-xs-10">
+                <textarea rows="6" cols="100" style="min-width: 100%" id="observaciones" name="observaciones">@cotizacion.observaciones</textarea>
+            </div>
+
+        </div>
+
+        @if (cotizacion.aplicaSedes)
+        {
+            <div class="form-group">
+                <div class="">
+                    <p class=" text-danger" id="verSedesAplica">
+                        Esta cotización aplicará también para las sedes:  @cotizacion.cliente.sedeListWebString.Replace("<br>", ", ")
+                    </p>
+                </div>
+            </div>
+        }
+
+        <div class="form-group">
+            <label for="observaciones_interno" class="control-label col-xs-2" style="margin-top: 15px;">Observaciones Uso Interno:</label>
+            <div class="col-xs-10">
+                <textarea rows="6" cols="100" style="min-width: 100%; margin-top: 15px;" id="observaciones_interno" name="observaciones_interno">@cotizacion.observacionesInterno</textarea>
+            </div>
+        </div>
+
+
         <div class="col-sm-6 col-lg-3">
 
             @if ((int)cotizacion.considerarCantidades == 1 || (int)cotizacion.considerarCantidades == 2)

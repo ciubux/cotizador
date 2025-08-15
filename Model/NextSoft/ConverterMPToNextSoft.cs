@@ -102,6 +102,7 @@ namespace Model.NextSoft
             decimal igvCompra = 0;
             decimal tIgv = 0.18m;
             bool relacionarFactura = false;
+            string facturaExt = "";
 
             //BORRAR
             //obj.clienteVer = obj.pedido.cliente;
@@ -238,7 +239,7 @@ namespace Model.NextSoft
             if (obj.pedido.facturadoExternoPedidoMP)
             {
                 relacionarFactura = true;
-                ordenCompra = obj.pedido.numeroPedidoMP.ToString();
+                facturaExt = obj.pedido.facturaTC.SerieCorrelativo();
             }
 
             var item = new
@@ -248,6 +249,7 @@ namespace Model.NextSoft
                 ruccomprador = rucComprador,
                 comprobantecomprador = comprobanteComprador,
                 relacionarfactura = relacionarFactura,
+                factura  = facturaExt,
                 ruc = cli.ruc,
                 direcccion = obj.direccionEntrega,
                 ubigeo = obj.ubigeoEntrega.codigoSepPunto,
@@ -536,7 +538,8 @@ namespace Model.NextSoft
                             !obj.numeroReferenciaCliente.Trim().Equals("") ? "Orden de compra N°: " + obj.numeroReferenciaCliente : "",
                 igv = igvVenta,
                 porcigv = tIgv,
-                ordencompra = obj.numeroPedido,
+                ordencompra = obj.numeroReferenciaCliente != null &&
+                            !obj.numeroReferenciaCliente.Trim().Equals("") ? obj.numeroReferenciaCliente : "",
                 usuario = "nextsoft",
 
                 items = listaDet.ToArray()

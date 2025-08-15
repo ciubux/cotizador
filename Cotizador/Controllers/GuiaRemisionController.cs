@@ -24,6 +24,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.WebPages;
 
 namespace Cotizador.Controllers
 {
@@ -1819,9 +1820,18 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(new { success = success, dataSend = dataSend, result = result });
         }
 
-        public async System.Threading.Tasks.Task<string> DescargarArchivoPDF()
+        public async System.Threading.Tasks.Task<string> DescargarArchivoPDF(string serie = "", long correlativo = 0)
         {
-            GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+            GuiaRemision guiaRemision = new GuiaRemision();
+            if (!serie.IsEmpty() && correlativo > 0)
+            {
+                guiaRemision.serieDocumento = serie;
+                guiaRemision.numeroDocumento = correlativo;
+            } else
+            {
+                guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+            }
+
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             guiaRemision.usuario = usuario;
 
@@ -1917,10 +1927,10 @@ namespace Cotizador.Controllers
                     ws.urlApi = Constantes.NEXTSOFT_API_URL;
                     ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
 
-                    resultWS = await ws.consultarComprobanteTecnica(serie, correlativo);
+                    resultWS = await ws.descargarFacturaTC(serie, correlativo);
 
                     JObject dataResult = (JObject)resultWS;
-                    int codigo = dataResult["crearguiaResult"]["codigo"].Value<int>();
+                    int codigo = dataResult["consultacomprobantetpResult"]["codigo"].Value<int>();
 
                     if (codigo == 0)
                     {

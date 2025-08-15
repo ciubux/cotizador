@@ -87,6 +87,8 @@ namespace Cotizador.Models.DTOsShow
             cotizacionDTOshow.seguimientoCotizacion_observacion = cotizacion.seguimientoCotizacion.observacion;
             cotizacionDTOshow.considerarCantidades = cotizacion.considerarCantidades.ToString();//preguntar a cesar
             cotizacionDTOshow.observaciones = cotizacion.observaciones;
+            cotizacionDTOshow.observacionesInterno = cotizacion.observacionesInterno;
+
             cotizacionDTOshow.aplicaSedes = cotizacion.aplicaSedes;
             cotizacionDTOshow.cliente_sedeListWebString = cotizacion.cliente.sedeListWebString;
             cotizacionDTOshow.montoSubTotal = cotizacion.montoSubTotal;
@@ -204,10 +206,11 @@ namespace Cotizador.Models.DTOsShow
             guiaRemisionDTOshow.documentoDetalle = guiaRemision.documentoDetalle;
             guiaRemisionDTOshow.esGuiaDiferida = guiaRemision.esGuiaDiferida;
             guiaRemisionDTOshow.entregaTerceros = guiaRemision.pedido == null ? false : guiaRemision.pedido.entregaATerceros;
-            guiaRemisionDTOshow.habilitaFacturaPedidoRelacionado = guiaRemision.facturaPedidoRelacionado && 
+            guiaRemisionDTOshow.habilitaFacturaPedidoRelacionado = guiaRemision.facturaPedidoRelacionado &&
                                         !guiaRemision.idMovimientoRelacionado.Equals(Guid.Empty) && !guiaRemision.movimientoRelacionadoFacturado ? true : false;
             guiaRemisionDTOshow.existeMovRelacionado = !guiaRemision.idMovimientoRelacionado.Equals(Guid.Empty);
             guiaRemisionDTOshow.habilitaDescargarFacturaPedidoRelacionado = guiaRemision.movimientoRelacionadoFacturado;
+            guiaRemisionDTOshow.habilitaDescargarFacturaExternaRelacionada = guiaRemision.pedido.entregaATerceros && guiaRemision.pedido.empresaRelacionada.entornoFacturacion == Empresa.EntornoFacturacion.NEXTSOFT;
             guiaRemisionDTOshow.nombreClienteTercero = guiaRemisionDTOshow.entregaTerceros ? guiaRemision.pedido.nombreClienteTercero : "";
             guiaRemisionDTOshow.empresa_emite_guias = true; // guiaRemision.pedido.empresa.emiteGuias;
             guiaRemisionDTOshow.extornoRequiereFacturar = guiaRemision.fechaEmision.AddDays(Constantes.DIAS_VALIDO_EXTORNO_GUIA_MES_ANTERIOR).CompareTo(DateTime.Now) < 0 && 

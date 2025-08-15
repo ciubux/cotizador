@@ -2402,6 +2402,8 @@ jQuery(function ($) {
 
 
                 $("#verObservaciones").html(cotizacion.observaciones);
+                $("#verObservacionesInterno").html(cotizacion.observacionesInterno);
+                
                 if (cotizacion.aplicaSedes === true) {
                     $("#verSedesAplica").html("Esta cotización aplicará también para las sedes: " + cotizacion.cliente_sedeListWebString.replace(new RegExp('<br>', 'g'), ', '));
                 }
@@ -3605,7 +3607,9 @@ jQuery(function ($) {
         });
     });
 
-    
+    $("#observaciones_interno").change(function () {
+        changeInputString("observacionesInterno", $("#observaciones_interno").val());
+    });
     
 
     //Mantener en Session cambio de Seleccion de Mostrar Proveedor

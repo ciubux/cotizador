@@ -100,6 +100,9 @@ namespace Model
         public Decimal montoIGV { get; set; }
         public Decimal montoTotal { get; set; }
         public String observaciones { get; set; }
+
+        [Display(Name = "Observaciones Uso Interno:")]
+        public String observacionesInterno { get; set; }
         public String observacionesFijas { get; set; }
         public String contacto { get; set; }
         public List<CotizacionDetalle> cotizacionDetalleList { get; set; }

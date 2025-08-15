@@ -436,8 +436,6 @@ namespace Cotizador.Controllers
                 ViewBag.fechaEntregaDesde = pedido.fechaEntregaDesde == null ? "" : pedido.fechaEntregaDesde.Value.ToString(Constantes.formatoFecha);
                 ViewBag.fechaEntregaHasta = pedido.fechaEntregaHasta == null ? "" : pedido.fechaEntregaHasta.Value.ToString(Constantes.formatoFecha);
 
-
-
                 ViewBag.pedido = pedido;
                 ViewBag.VARIACION_PRECIO_ITEM_PEDIDO = Constantes.VARIACION_PRECIO_ITEM_PEDIDO;
 
@@ -2247,9 +2245,10 @@ namespace Cotizador.Controllers
             res.code = 0;
 
             if (pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_TECNICA)
-                && pedido.empresa.atencionTerciarizada)
+                && pedido.empresa.atencionTerciarizada && !pedido.productosNextSoftHomologados)
             {
                 res = await bl.validarProductosNextSoftTecnica(pedido);
+                //if (res.code == 0) { }
             }
             return JsonConvert.SerializeObject(res);
         }

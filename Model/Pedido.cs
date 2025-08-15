@@ -66,6 +66,7 @@ namespace Model
         [Display(Name = "Número Grupo Pedido:")]
         public Int64? numeroGrupoPedido { get; set; }
 
+        public DocumentoExterno facturaTC { get; set; }
         public Int64 numeroPedidoRelacionado { get; set; }
         public string codigoEmpresaPedidoRelacionado { get; set; }
 

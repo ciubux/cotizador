@@ -279,8 +279,6 @@ namespace Cotizador.ExcelExport
                     }
                     indexColumn++;
 
-                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(14), dateFormatStyle); indexColumn++;
-
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(43)); indexColumn++;
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(44)); indexColumn++;
 

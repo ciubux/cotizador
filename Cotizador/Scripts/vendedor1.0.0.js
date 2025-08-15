@@ -99,6 +99,11 @@
         });
     });
 
+    
+    $("#vendedor_email").change(function () {
+        changeInputString("email", $("#vendedor_email").val());
+    });
+
     $("#vendedor_estado_si").click(function () {
         var valCheck = 1;
         changeInputInt("estado", valCheck);

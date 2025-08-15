@@ -633,6 +633,7 @@ namespace Cotizador.Controllers
 
             String resultado = "{" +
                 "\"id\":\"" + producto.idProducto + "\"," +
+                "\"sku\":\"" + producto.sku+ "\"," +
                 "\"nombre\":\"" + producto.descripcion + "\"," +
                 "\"image\":\"data:image/png;base64, " + Convert.ToBase64String(producto.image) + "\"," +
                 "\"unidad\":\"" + producto.unidad + "\"," +
@@ -764,6 +765,7 @@ namespace Cotizador.Controllers
                 codigoProducto = detalle.producto.sku,
                 nombreProducto = nombreProducto,
                 unidad = detalle.unidad,
+                idProductoPresentacion = detalle.esPrecioAlternativo ? detalle.ProductoPresentacion.IdProductoPresentacion : 0,
                 igv = pedido.montoIGV.ToString(),
                 subTotal = pedido.montoSubTotal.ToString(),
                 margen = detalle.margen,
