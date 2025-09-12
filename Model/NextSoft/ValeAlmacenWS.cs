@@ -49,5 +49,19 @@ namespace Model.NextSoft
             return resultContent;
         }
 
+        public async Task<object> asociarConFacturaTC(object dataRelacion)
+        {
+            string nombreServicio = "ingresoTP";
+
+            var sendData = new
+            {
+                token = this.apiToken,
+                ingreso = dataRelacion
+            };
+
+            object resultContent = await this.callService(sendData, nombreServicio);
+
+            return resultContent;
+        }
     }
 }

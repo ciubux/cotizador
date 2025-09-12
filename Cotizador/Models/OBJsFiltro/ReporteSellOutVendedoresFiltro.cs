@@ -18,6 +18,7 @@ namespace Cotizador.Models.OBJsFiltro
         public String proveedor { get; set; }
         public String ruc { get; set; }
 
+        public bool activarFechaTransaccion { get; set; }
         public DateTime fechaInicio { get; set; }
         public DateTime fechaFin { get; set; }
 
@@ -39,11 +40,18 @@ namespace Cotizador.Models.OBJsFiltro
         public bool esSubDistribuidor { get; set; }
         public int idSubDistribuidor { get; set; }
 
+        public int idEmpresaExcluir { get; set; }
         public bool excluirVentasRelacionadasHijas { get; set; }
 
         public bool considerarVentasConCPE { get; set; }
 
         public bool considerarVentasSinCPE { get; set; }
+
+        
+        public bool activarFechaFactura { get; set; }
+        public DateTime fechaFacturaInicio { get; set; }
+        public DateTime fechaFacturaFin { get; set; }
+
 
         public void changeDatoParametro(string propiedad, string valor, string tipo)
         {

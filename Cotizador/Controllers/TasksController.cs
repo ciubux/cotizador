@@ -275,10 +275,11 @@ namespace Cotizador.Controllers
                     ubigeo = "15.01.22"
                 }
             };
+            ParametroBL blParametro = new ParametroBL();
 
             ClienteWS ws = new ClienteWS();
-            ws.urlApi = "https://service.solutions-ns.com/ServiceINT-MPInstitucional/RESTServiceINT.svc/rest/";
-            ws.apiToken = "D0B51C9D-0406-42D0-AB08-948D50BC1F1F";
+            ws.urlApi = blParametro.getParametro("NEXTSOFT_API_URL");
+            ws.apiToken = blParametro.getParametro("NEXTSOFT_API_TOKEN");
 
             object result = await ws.crearCliente(cliente);
 
@@ -328,12 +329,62 @@ namespace Cotizador.Controllers
             //return JsonConvert.SerializeObject(result);
         }
 
+        public async Task<string> enviarGuiaTecnicaFacturaNextSys()
+        {
+            MovimientoAlmacenBL bl = new MovimientoAlmacenBL();
+
+            List<List<string>> lista = bl.FacturasGuiasTecnicaPendientesEnvio();
+            ParametroBL blParametro = new ParametroBL();
+
+            string urlApi = blParametro.getParametro("NEXTSOFT_API_URL");
+            string apiToken = blParametro.getParametro("NEXTSOFT_API_TOKEN");
+
+            GuiaWS ws = new GuiaWS();
+            ws.urlApi = urlApi;
+            ws.apiToken = apiToken;
+
+            List<Guid> guiasEnviadas = new List<Guid>();
+            List<string> guiasCorrectas = new List<string>();
+            List<string> guiasError = new List<string>();
+
+            foreach (List<string> item in lista)
+            {
+                DateTime fechaEmisionGuia = DateTime.ParseExact(item.ElementAt(1), "yyyy-MM-dd", null);
+                DateTime fechaEmisionCPE = DateTime.ParseExact(item.ElementAt(5), "yyyy-MM-dd", null);
+
+                object dataSend = ConverterMPToNextSoft.toIngresoTP(fechaEmisionGuia, item.ElementAt(2), item.ElementAt(3), 
+                    fechaEmisionCPE, item.ElementAt(6), item.ElementAt(7));
+
+                object result = await ws.asociarConFacturaTC(dataSend);
+
+                JObject dataResult = (JObject)result;
+                int codigo = dataResult[""]["codigo"].Value<int>();
+                string mensaje = dataResult[""]["mensaje"].Value<string>();
+
+                if (codigo == 0)
+                {
+                    guiasEnviadas.Add(Guid.Parse(item.ElementAt(0)));
+                    guiasCorrectas.Add(item.ElementAt(2) + "-" + item.ElementAt(3));
+                } else
+                {
+                    guiasError.Add(item.ElementAt(2) + "-" + item.ElementAt(3) + ": " + mensaje);
+                }
+
+            }
+
+            bl.ActualizarFacturaTCEnviada(guiasEnviadas);
+
+            var res = new { guiasOk = guiasCorrectas, guiasError = guiasError};
+            return JsonConvert.SerializeObject(guiasError);
+        }
 
         public async Task<string> obtenerDatosProducto()
         {
+            ParametroBL blParametro = new ParametroBL();
+
             ProductoWS ws = new ProductoWS();
-            ws.urlApi = "https://service.solutions-ns.com/ServiceINT-MPInstitucional/RESTServiceINT.svc/rest/";
-            ws.apiToken = "D0B51C9D-0406-42D0-AB08-948D50BC1F1F";
+            ws.urlApi = blParametro.getParametro("NEXTSOFT_API_URL");
+            ws.apiToken = blParametro.getParametro("NEXTSOFT_API_TOKEN");
             object result = await ws.getProducto("04.20.02.01.001");
 
             JObject dataResult = (JObject) result;

@@ -1021,6 +1021,16 @@ namespace DataLayer
                 pedido.vendedor.idVendedor = Converter.GetInt(row, "id_vendedor_usuario");
                 pedido.vendedor.codigoNextSoft = Converter.GetString(row, "codigo_nextsoft_vendedor");
 
+                pedido.vendedorClienteTercero = new Vendedor();
+                pedido.vendedorClienteTercero.idVendedor = Converter.GetInt(row, "id_vendedor_usuario_rel");
+                pedido.vendedorClienteTercero.codigoNextSoft = Converter.GetString(row, "codigo_nextsoft_vendedor_rel");
+
+                pedido.cliente.responsableComercial = new Vendedor();
+                pedido.cliente.responsableComercial.codigo = Converter.GetString(row, "responsable_comercial_codigo");
+                pedido.cliente.responsableComercial.descripcion = Converter.GetString(row, "responsable_comercial_descripcion");
+                pedido.cliente.responsableComercial.usuario = new Usuario();
+                pedido.cliente.responsableComercial.usuario.email = Converter.GetString(row, "responsable_comercial_email");
+
                 pedido.empresa = new Empresa();
                 pedido.empresa.idEmpresa = Converter.GetInt(row, "id_empresa");
                 pedido.empresa.codigo = Converter.GetString(row, "codigo_empresa");

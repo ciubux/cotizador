@@ -76,7 +76,8 @@ namespace DataLayer
         public List<List<String>> sellOutVendedores(String sku, String familia, String proveedor, String codVRC, String codVSC, String codVAC, 
             DateTime fechaInicio, DateTime fechaFin, int anio, int trimestre, String ciudad, int incluirVentasExcluidas, Guid idUsuario,
             int idGrupo, string ruc, bool integraEmpresas, bool excluirVentasRelacionadasHijas, bool esSubDistribuidor, int idSubDistribuidor,
-            bool considerarConCPE, bool considerarSinCPE)
+            bool considerarConCPE, bool considerarSinCPE, bool buscaFechaTransaccion, bool buscaFechaFacturacion, DateTime fechaFacturaInicio, 
+            DateTime fechaFacturaFin, int idEmpresaExcluir)
         {
             var objCommand = GetSqlCommand("ps_sellout_vendedores");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
@@ -104,15 +105,18 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "idGrupo", idGrupo);
             InputParameterAdd.VarcharEmpty(objCommand, "ruc", ruc);
 
-            int estadoCPE = (considerarConCPE && considerarSinCPE) || (!considerarConCPE && !considerarSinCPE) ? -1 : considerarConCPE ? 1 : 0;
+            int estadoCPE = (considerarConCPE && considerarSinCPE) ? -1 : (!considerarConCPE && !considerarSinCPE) ? -100 : considerarConCPE ? 1 : 0;
             InputParameterAdd.Int(objCommand, "estadoCPE", estadoCPE);
 
-
-            fechaInicio = new DateTime(fechaInicio.Year, fechaInicio.Month, fechaInicio.Day, 0, 0, 0);
-            fechaFin = new DateTime(fechaFin.Year, fechaFin.Month, fechaFin.Day, 23, 59, 59);
-
+            InputParameterAdd.Int(objCommand, "buscaFechaTransaccion", buscaFechaTransaccion ? 1 : 0);
             InputParameterAdd.DateTime(objCommand, "fechaDesde", fechaInicio);
             InputParameterAdd.DateTime(objCommand, "fechaHasta", fechaFin);
+
+            InputParameterAdd.Int(objCommand, "buscaFechaFactura", buscaFechaFacturacion ? 1 : 0);
+            InputParameterAdd.DateTime(objCommand, "fechaFacturaDesde", fechaFacturaInicio);
+            InputParameterAdd.DateTime(objCommand, "fechaFacturaHasta", fechaFacturaFin);
+
+            InputParameterAdd.Int(objCommand, "empresaExcluida", idEmpresaExcluir);
 
             DataTable dataTable = Execute(objCommand);
 
@@ -138,7 +142,8 @@ namespace DataLayer
         public List<List<String>> sellOutVendedoresDetalles(String codVendedor, String sku, String familia, String proveedor, String codVRC, String codVSC, String codVAC, 
             DateTime fechaInicio, DateTime fechaFin, int anio, int trimestre, String ciudad, int incluirVentasExcluidas, Guid idUsuario,
             int idGrupo, string ruc, bool integraEmpresas, bool excluirVentasRelacionadasHijas, bool esSubDistribuidor, int idSubDistribuidor,
-            bool considerarConCPE, bool considerarSinCPE)
+            bool considerarConCPE, bool considerarSinCPE, bool buscaFechaTransaccion, bool buscaFechaFacturacion, DateTime fechaFacturaInicio,
+            DateTime fechaFacturaFin, int idEmpresaExcluir)
         {
             var objCommand = GetSqlCommand("ps_sellout_vendedores_detalles");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
@@ -164,17 +169,24 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "familia", familia);
             InputParameterAdd.Varchar(objCommand, "proveedor", proveedor);
 
-            int estadoCPE = (considerarConCPE && considerarSinCPE) || (!considerarConCPE && !considerarSinCPE) ? -1 : considerarConCPE ? 1 : 0;
+            int estadoCPE = (considerarConCPE && considerarSinCPE) ? -1 : (!considerarConCPE && !considerarSinCPE) ? -100 : considerarConCPE ? 1 : 0;
             InputParameterAdd.Int(objCommand, "estadoCPE", estadoCPE);
 
             fechaInicio = new DateTime(fechaInicio.Year, fechaInicio.Month, fechaInicio.Day, 0, 0, 0);
             fechaFin = new DateTime(fechaFin.Year, fechaFin.Month, fechaFin.Day, 23, 59, 59);
 
+            InputParameterAdd.Int(objCommand, "buscaFechaTransaccion", buscaFechaTransaccion ? 1 : 0);
             InputParameterAdd.DateTime(objCommand, "fechaDesde", fechaInicio);
             InputParameterAdd.DateTime(objCommand, "fechaHasta", fechaFin);
 
+            InputParameterAdd.Int(objCommand, "buscaFechaFactura", buscaFechaFacturacion ? 1 : 0);
+            InputParameterAdd.DateTime(objCommand, "fechaFacturaDesde", fechaFacturaInicio);
+            InputParameterAdd.DateTime(objCommand, "fechaFacturaHasta", fechaFacturaFin);
+
             InputParameterAdd.Int(objCommand, "idGrupo", idGrupo);
             InputParameterAdd.VarcharEmpty(objCommand, "ruc", ruc);
+            
+            InputParameterAdd.Int(objCommand, "empresaExcluida", idEmpresaExcluir);
 
             DataTable dataTable = Execute(objCommand);
 

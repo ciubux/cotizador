@@ -192,6 +192,7 @@ namespace Cotizador.Controllers
 
             ParametroBL parametroBL = new ParametroBL();
 
+            obj.activarFechaTransaccion = true;
             obj.fechaInicio = DateTime.Now;
             obj.fechaFin = DateTime.Now;
             obj.sku = string.Empty;
@@ -209,6 +210,10 @@ namespace Cotizador.Controllers
             obj.idSubDistribuidor = 0;
             obj.considerarVentasConCPE = true;
             obj.considerarVentasSinCPE = true;
+            obj.activarFechaFactura = false;
+            obj.fechaFacturaInicio = DateTime.Now;
+            obj.fechaFacturaFin = DateTime.Now;
+            obj.idEmpresaExcluir = 2;
 
             if (usuario.esResponsableComercial && !usuario.modificaFiltroVendedor)
             {
@@ -259,7 +264,9 @@ namespace Cotizador.Controllers
                     obj.fechaInicio, obj.fechaFin, obj.anio, obj.trimestre, obj.ciudad.nombre, 
                     obj.incluirVentasExcluidas, usuario.idUsuario, obj.idGrupo, obj.ruc, obj.integraEmpresas,
                     obj.excluirVentasRelacionadasHijas, obj.esSubDistribuidor, obj.idSubDistribuidor,
-                    obj.considerarVentasConCPE, obj.considerarVentasSinCPE);
+                    obj.considerarVentasConCPE, obj.considerarVentasSinCPE, obj.activarFechaTransaccion,
+                    obj.activarFechaFactura, obj.fechaFacturaInicio, obj.fechaFacturaFin, 
+                    obj.idEmpresaExcluir);
                 this.Session["s_rSellOutVendedoresFiltroLastF"] = obj;
                 this.Session["s_rSellOutVendedoresFiltroLastS"] = resultados;
             }
@@ -297,7 +304,9 @@ namespace Cotizador.Controllers
                     obj.fechaInicio, obj.fechaFin, obj.anio, obj.trimestre, obj.ciudad.nombre, 
                     obj.incluirVentasExcluidas, usuario.idUsuario, obj.idGrupo, obj.ruc, obj.integraEmpresas,
                     obj.excluirVentasRelacionadasHijas, obj.esSubDistribuidor, obj.idSubDistribuidor,
-                    obj.considerarVentasConCPE, obj.considerarVentasSinCPE);
+                    obj.considerarVentasConCPE, obj.considerarVentasSinCPE, obj.activarFechaTransaccion,
+                    obj.activarFechaFactura, obj.fechaFacturaInicio, obj.fechaFacturaFin,
+                    obj.idEmpresaExcluir);
 
             ReporteDetallesSellOutVendedor excel = new ReporteDetallesSellOutVendedor();
 

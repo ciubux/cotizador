@@ -203,7 +203,7 @@ namespace Model.NextSoft
                 ubigeo = obj.ubigeoEntrega.codigoSepPunto
             };
 
-            string codigoVendedor = obj.pedido.vendedor.codigoNextSoft;
+            string codigoVendedor = obj.entregaTerceros ? obj.pedido.vendedorClienteTercero.codigoNextSoft : obj.pedido.vendedor.codigoNextSoft;
             if (codigoVendedor == null || codigoVendedor.Trim().Equals(""))
             {
                 codigoVendedor = "07885378";
@@ -862,6 +862,23 @@ namespace Model.NextSoft
 
             return listaResult;
         }
+
+        public static object toIngresoTP(DateTime fechaEmisionGuia, string serieGuia, string numeroGuia, 
+            DateTime fechaEmisionCPE, string serieCPE, string numeroCPE)
+        {
+            var item = new
+            {
+                guia_fecha = fechaEmisionGuia.ToString("dd/MM/yyyy"),
+                guia_serie = serieGuia,
+                guia_num = numeroGuia,
+                doc_fecha = fechaEmisionCPE.ToString("dd/MM/yyyy"),
+                doc_serie = serieCPE,
+                doc_num = numeroCPE
+            };
+
+            return item;
+        }
+
 
         /* CONVIERTE UNA FECHA EN STRING DE AÑO-MES-DIA A DIA/MES/AÑO */
         private static string cambiarFormatoFechaV1(string fecha) {

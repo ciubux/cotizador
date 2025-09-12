@@ -80,6 +80,8 @@ namespace Model
         public Boolean entregaATerceros { get; set; }
         public Boolean entregaTerciarizada { get; set; }
 
+        public Vendedor vendedorClienteTercero { get; set; }
+
         public int idGrupoCliente { get; set; }
 
         public Guid idMPPedido { get; set; }

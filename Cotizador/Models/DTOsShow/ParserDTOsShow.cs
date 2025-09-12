@@ -205,6 +205,12 @@ namespace Cotizador.Models.DTOsShow
             guiaRemisionDTOshow.ingresado = guiaRemision.ingresado;
             guiaRemisionDTOshow.documentoDetalle = guiaRemision.documentoDetalle;
             guiaRemisionDTOshow.esGuiaDiferida = guiaRemision.esGuiaDiferida;
+            guiaRemisionDTOshow.habilitaFacturaPedidoRelacionadoExterno =
+                guiaRemision.entregaTerceros && guiaRemision.pedido.empresaRelacionada.codigo.Equals(Constantes.EMPRESA_CODIGO_TECNICA) 
+                && !guiaRemision.facturadoExterno ? 
+                    true : false;
+            guiaRemisionDTOshow.estaFacturadoExterno = guiaRemision.facturadoExterno;
+
             guiaRemisionDTOshow.entregaTerceros = guiaRemision.pedido == null ? false : guiaRemision.pedido.entregaATerceros;
             guiaRemisionDTOshow.habilitaFacturaPedidoRelacionado = guiaRemision.facturaPedidoRelacionado &&
                                         !guiaRemision.idMovimientoRelacionado.Equals(Guid.Empty) && !guiaRemision.movimientoRelacionadoFacturado ? true : false;

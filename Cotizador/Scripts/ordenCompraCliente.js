@@ -2555,7 +2555,7 @@ jQuery(function ($) {
                 $("#verTelefonoContactoEntrega").html(ordenCompraCliente.direccionEntrega_telefono);
                 $("#verContactoEntrega").html(ordenCompraCliente.direccionEntrega_contacto);
 
-                $("#verUsuarioCreacion").html(ordenCompraCliente.usuario.nombre);
+                $("#verUsuarioCreacion").html(ordenCompraCliente.UsuarioRegistro.nombre);
                 $("#verFechaHoraRegistro").html(ordenCompraCliente.fechaHoraRegistro);
 
                 $("#verContactoOrdenCompraCliente").html(ordenCompraCliente.contactoOrdenCompraCliente);

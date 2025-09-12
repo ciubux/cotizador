@@ -1140,6 +1140,8 @@ jQuery(function ($) {
                 
                 $("#btnFacturarGuiaRemision").hide();
                 $("#btnFacturarPedidoRelacionado").hide();
+                $("#btnFacturarPedidoRelacionadoExterno").hide();
+                
                 $("#btnDescargarFacturaPedidoRelacionado").hide();
                 $("#btnExtornar").hide();
                 $("#btnExtornar").attr("requiereExtornoRelacionado", "0");
@@ -1294,10 +1296,17 @@ jQuery(function ($) {
                     $("#ver_guiaRemision_atencionParcial").html("Atención Final");
                 }
 
+                if (guiaRemision.habilitaFacturaPedidoRelacionadoExterno) {
+                    $("#btnFacturarPedidoRelacionadoExterno").show();
+                }
+
                 if (guiaRemision.habilitaFacturaPedidoRelacionado) {
                     $("#btnFacturarGuiaRemision").attr("facturaPedidoRelacionado", "1");
 
-                    
+                    if (!guiaRemision.estaFacturado) {
+                        $("#btnFacturarPedidoRelacionado").show();
+                    } 
+
                     /*$("#btnFacturarPedidoRelacionado").show();
 
                     if (guiaRemision.estaFacturado) {
@@ -1444,6 +1453,51 @@ jQuery(function ($) {
             });
         }
     });
+
+    $("#btnFacturarPedidoRelacionadoExterno").click(function () {
+        if (confirm("¿Esta seguro que desea intentar emitir la factura en NextSys al pedido original?")) {
+            $("#btnFacturarPedidoRelacionadoExterno").attr('disabled', 'disabled');
+
+            $('body').loadingModal('text', 'Generando Factura...');
+            $('body').loadingModal('show')
+
+            $.ajax({
+                url: "/GuiaRemision/EnviarGuiaANextSoft",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                },
+                error: function (resultado) {
+                    $('body').loadingModal('hide')
+                    mostrarMensajeErrorProceso(MENSAJE_ERROR);
+                    $("#btnFacturarPedidoRelacionadoExterno").removeAttr('disabled');
+                },
+                success: function (resultado) {
+                    $('body').loadingModal('hide')
+                    var codigo = resultado.result.crearguiaResult.codigo;
+                    var serieNumero = resultado.result.crearguiaResult.numcomprobante2;
+
+                    if (codigo == 0 && serieNumero != null && serieNumero != '') {
+                        $.alert({
+                            //icon: 'fa fa-warning',
+                            title: 'REGISTRO EXITOSO',
+                            content: 'Se generó la factura en NextSys: ' + serieNumero + '.',
+                            type: 'green',
+                            buttons: {
+                                OK: function () { $("#btnFacturarPedidoRelacionadoExterno").hide(); }
+                            }
+                        });
+                    }
+                    else {
+                        mostrarMensajeErrorProceso(MENSAJE_ERROR + ".\n" + "Detalle Error: " + resultado.result.crearguiaResult.mensaje);
+                    }
+
+                    $("#btnFacturarPedidoRelacionadoExterno").removeAttr('disabled');
+                }
+            });
+        }
+    });
+
 
     $("#btnCancelarGuiaRemision").click(function () {
         if (confirm(MENSAJE_CANCELAR_EDICION)) {

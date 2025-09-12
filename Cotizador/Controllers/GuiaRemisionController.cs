@@ -1792,14 +1792,23 @@ namespace Cotizador.Controllers
             wsCli.apiToken = Constantes.NEXTSOFT_API_TOKEN;
 
             Cliente clie = blCliente.getCliente(guiaRemision.pedido.cliente.idCliente);
-
             object resultCli = await wsCli.crearCliente(ConverterMPToNextSoft.toCliente(clie));
+
+            List<DetalleVenta> detallesVenta = new List<DetalleVenta>();
+
+            if (guiaRemision.entregaTerceros && !guiaRemision.pedido.empresaRelacionada.facturacionHabilitada
+                    && guiaRemision.pedido.empresaRelacionada.entornoFacturacion == Empresa.EntornoFacturacion.NEXTSOFT)
+            {
+                // obtener info ventas
+                PedidoBL blPedido = new PedidoBL();
+                detallesVenta = blPedido.GetDetallesPedidoRelacionado(guiaRemision.pedido.idPedido, guiaRemision.usuario.idUsuario);
+            }
 
             GuiaWS ws = new GuiaWS();
             ws.urlApi = Constantes.NEXTSOFT_API_URL;
             ws.apiToken = Constantes.NEXTSOFT_API_TOKEN;
 
-            object dataSend = ConverterMPToNextSoft.toGuia(guiaRemision, new List<DetalleVenta>());
+            object dataSend = ConverterMPToNextSoft.toGuia(guiaRemision, detallesVenta);
             object result = await ws.crearGuia(dataSend);
 
             JObject dataResult = (JObject)result;
@@ -1813,6 +1822,23 @@ namespace Cotizador.Controllers
             if (codigo == 0)
             {
                 success = 1;
+
+                string serieCorrelativo = dataResult["crearguiaResult"]["numcomprobante2"].Value<string>();
+
+                if (!(serieCorrelativo == null) && !serieCorrelativo.Trim().Equals(""))
+                {
+                    string[] partesDoc = serieCorrelativo.Split('-');
+                    DocumentoExterno docExt = new DocumentoExterno();
+                    docExt.serie = partesDoc[0].Trim();
+                    docExt.correlativo = partesDoc[1].Trim();
+                    docExt.tipo = DocumentoExterno.TIPO_FACTURA_RELACIONADA;
+                    docExt.idRegistro = guiaRemision.idMovimientoAlmacen;
+                    docExt.nombre = "";
+                    docExt.IdUsuarioRegistro = usuario.idUsuario;
+
+                    DocumentoExternoBL docExtBl = new DocumentoExternoBL();
+                    docExtBl.Insertar(docExt);
+                }
             }
 
             bl.GuardarRespuestaNextSys(guiaRemision.idMovimientoAlmacen, success, resultText);

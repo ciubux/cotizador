@@ -88,7 +88,6 @@ namespace DataLayer
             obj.idDocumentoExterno = (Guid)objCommand.Parameters["@idDocExterno"].Value;
 
             return obj;
-
         }
 
         public void InsertarLista(List<DocumentoExterno> lista, Guid idUsuario)

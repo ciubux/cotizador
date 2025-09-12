@@ -42,6 +42,7 @@ namespace Model
 
         public Boolean movimientoRelacionadoFacturado { get; set; }
 
+        public Boolean facturadoExterno { get; set; }
 
         [Display(Name = "Atención Parcial:")]
         public Boolean atencionParcial { get; set; }

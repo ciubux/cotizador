@@ -187,7 +187,7 @@ namespace BusinessLayer
                                 docExt.tipo = DocumentoExterno.TIPO_FACTURA_RELACIONADA;
 
                                 guiaRemision.documentosExternos.Add(docExt);
-                            }
+                            } 
 
                             success = 1;
                             dal.InsertMovimientoAlmacenSalida(guiaRemision);
@@ -429,7 +429,7 @@ namespace BusinessLayer
 
         public Guid obtenerIdDocumentoVenta(MovimientoAlmacen movimientoAlmacen)
         {
-            using (var dal = new MovimientoALmacenDAL())
+            using (MovimientoALmacenDAL dal = new MovimientoALmacenDAL())
             {
                 return dal.SelectMovimientoAlmacenIdCpeCabeceraBe(movimientoAlmacen);
             }
@@ -437,9 +437,25 @@ namespace BusinessLayer
 
         public void GuardarRespuestaNextSys(Guid idGuiaRemision, int success, string resultText)
         {
-            using (var dal = new MovimientoALmacenDAL())
+            using (MovimientoALmacenDAL dal = new MovimientoALmacenDAL())
             {
                 dal.GuardarRespuestaNextSys(idGuiaRemision, success, resultText);
+            }
+        }
+
+        public List<List<string>> FacturasGuiasTecnicaPendientesEnvio()
+        {
+            using (MovimientoALmacenDAL dal = new MovimientoALmacenDAL())
+            {
+                return dal.FacturasGuiasTecnicaPendientesEnvio();
+            }
+        }
+
+        public void ActualizarFacturaTCEnviada(List<Guid> idGuiasEnviadas)
+        {
+            using (MovimientoALmacenDAL dal = new MovimientoALmacenDAL())
+            {
+                dal.ActualizarFacturaTCEnviada(idGuiasEnviadas);
             }
         }
     }

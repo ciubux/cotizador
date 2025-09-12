@@ -1250,8 +1250,6 @@ namespace Cotizador.Controllers
 
 
 
-        #region CREAR/ACTUALIZAR PEDIDO
-
         
         #region carga de imagenes
 
@@ -1410,7 +1408,6 @@ namespace Cotizador.Controllers
         }
 
 
-        #endregion
 
         public void CleanBusqueda()
         {
@@ -1463,7 +1460,6 @@ namespace Cotizador.Controllers
 
             String occListString = JsonConvert.SerializeObject(ParserDTOsSearch.OrdenCompraClienteToOrdenCompraClienteVentaDTO(occList));
             return occListString;
-            //return occList.Count();
         }
 
 

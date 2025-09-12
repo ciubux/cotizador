@@ -939,6 +939,9 @@ namespace DataLayer
                 
                 guiaRemision.facturaPedidoRelacionado = Converter.GetInt(row, "factura_pedido_relacionado") == 1 ? true : false;
 
+                Guid idFacturaExterna = Converter.GetGuid(row, "id_fac_externa");
+                guiaRemision.facturadoExterno = idFacturaExterna == null || idFacturaExterna .Equals(Guid.Empty) ? false: true;
+
                 //PEDIDO
                 guiaRemision.pedido = new Pedido();
                 guiaRemision.pedido.idPedido = Converter.GetGuid(row, "id_pedido");
@@ -1089,6 +1092,7 @@ namespace DataLayer
                 documentoDetalle.producto.codigoFactorUnidadAlternativa = Converter.GetString(row, "codigo_factor_unidad_alternativa");
                 documentoDetalle.producto.codigoFactorUnidadProveedor = Converter.GetString(row, "codigo_factor_unidad_proveedor");
                 documentoDetalle.producto.codigoFactorUnidadConteo = Converter.GetString(row, "codigo_factor_unidad_conteo");
+                documentoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * documentoDetalle.ProductoPresentacion.Equivalencia;
 
                 guiaRemision.documentoDetalle.Add(documentoDetalle);
             }
@@ -1774,6 +1778,47 @@ namespace DataLayer
             return idCpeCabeceraBe;
         }
 
+        public List<List<string>> FacturasGuiasTecnicaPendientesEnvio()
+        {
+            var objCommand = GetSqlCommand("ps_facturas_guias_tecnica_pendientes_enviar");
 
+            DataTable dataTable = Execute(objCommand);
+            List<List<string>> lista = new List<List<string>>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                List<string> item = new List<string>();
+
+                item.Add(Converter.GetString(row, "id_movimiento_almacen")); /* 0 */
+                item.Add(Converter.GetString(row, "fecha_emision_guia")); /* 1 */
+                item.Add(Converter.GetString(row, "serie_guia")); /* 2 */
+                item.Add(Converter.GetString(row, "numero_guia")); /* 3 */
+                item.Add(Converter.GetString(row, "id_cpe_cabecera_be")); /* 4 */
+                item.Add(Converter.GetString(row, "fecha_emision_cpe")); /* 5 */
+                item.Add(Converter.GetString(row, "serie_cpe")); /* 6 */
+                item.Add(Converter.GetString(row, "numero_cpe")); /* 7 */
+
+                lista.Add(item);
+            }
+
+            return lista;
+        }
+
+        public void ActualizarFacturaTCEnviada(List<Guid> idGuiasEnviadas)
+        {
+            var objCommand = GetSqlCommand("pu_actualizar_factura_tc_enviada");
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("idMovimientoAlmacenList", typeof(Guid)));
+
+            foreach (var id in idGuiasEnviadas)
+                tvp.Rows.Add(id);
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idMovimientoAlmacenList", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+            ExecuteNonQuery(objCommand);
+        }
     }
 }

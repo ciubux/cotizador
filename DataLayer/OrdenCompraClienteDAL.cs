@@ -389,6 +389,7 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("ps_ordenCompraCliente");
             InputParameterAdd.Guid(objCommand, "idOrdenCompraCliente", occ.idOrdenCompraCliente);
+            InputParameterAdd.Guid(objCommand, "idUsuario", occ.usuario.idUsuario);
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable occDataTable = dataSet.Tables[0];
             DataTable occDetalleDataTable = dataSet.Tables[1];
@@ -475,11 +476,11 @@ namespace DataLayer
                 occ.clienteSunat.razonSocial = Converter.GetString(row, "razon_social");
                 occ.clienteSunat.ruc = Converter.GetString(row, "ruc");
 
-                occ.usuario = new Usuario(); 
-                occ.usuario.nombre = Converter.GetString(row, "nombre_usuario");
-                occ.usuario.cargo = Converter.GetString(row, "cargo");
-                occ.usuario.contacto = Converter.GetString(row, "contacto_usuario");
-                occ.usuario.email = Converter.GetString(row, "email");
+                occ.UsuarioRegistro = new Usuario(); 
+                occ.UsuarioRegistro.nombre = Converter.GetString(row, "nombre_usuario");
+                occ.UsuarioRegistro.cargo = Converter.GetString(row, "cargo");
+                occ.UsuarioRegistro.contacto = Converter.GetString(row, "contacto_usuario");
+                occ.UsuarioRegistro.email = Converter.GetString(row, "email");
 
             }
 

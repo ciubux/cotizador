@@ -24,14 +24,16 @@ namespace BusinessLayer
         public List<List<String>> sellOutVendedores(String sku, String familia, String proveedor, String codVRC, String codVSC, String codVAC,
             DateTime fechaInicio, DateTime fechaFin, int anio, int trimestre, String ciudad, int incluirVentasExcluidas, Guid idUsuario,
             int idGrupo, string ruc, bool integraEmpresas, bool excluirVentasRelacionadasHijas, bool esSubDistribuidor, int idSubDistribuidor,
-            bool considerarConCPE, bool considerarSinCPE)
+            bool considerarConCPE, bool considerarSinCPE, bool buscaFechaTransaccion, bool buscaFechaFacturacion, DateTime fechaFacturaInicio,
+            DateTime fechaFacturaFin, int idEmpresaExcluir)
         {
             using (var dal = new ReporteDAL())
             {
                 List<List<String>> list = dal.sellOutVendedores(sku, familia, proveedor, codVRC, codVSC, codVAC, fechaInicio, fechaFin, 
                                                 anio, trimestre, ciudad, incluirVentasExcluidas, idUsuario, idGrupo, ruc, 
                                                 integraEmpresas, excluirVentasRelacionadasHijas, esSubDistribuidor, idSubDistribuidor,
-                                                considerarConCPE, considerarSinCPE);
+                                                considerarConCPE, considerarSinCPE, buscaFechaTransaccion, buscaFechaFacturacion, fechaFacturaInicio,
+                                                fechaFacturaFin, idEmpresaExcluir);
 
                 return list;
             }
@@ -40,14 +42,16 @@ namespace BusinessLayer
         public List<List<String>> sellOutVendedoresDetalles(String codVendedor, String sku, String familia, String proveedor, String codVRC, String codVSC, String codVAC, 
             DateTime fechaInicio, DateTime fechaFin, int anio, int trimestre, String ciudad, int incluirVentasExcluidas, Guid idUsuario,
             int idGrupo, string ruc, bool integraEmpresas, bool excluirVentasRelacionadasHijas, bool esSubDistribuidor, int idSubDistribuidor,
-            bool considerarConCPE, bool considerarSinCPE)
+            bool considerarConCPE, bool considerarSinCPE, bool buscaFechaTransaccion, bool buscaFechaFacturacion, DateTime fechaFacturaInicio,
+            DateTime fechaFacturaFin, int idEmpresaExcluir)
         {
             using (var dal = new ReporteDAL())
             {
                 List<List<String>> list = dal.sellOutVendedoresDetalles(codVendedor, sku, familia, proveedor, codVRC, codVSC, codVAC, 
                                                 fechaInicio, fechaFin, anio, trimestre, ciudad, incluirVentasExcluidas, idUsuario, idGrupo, ruc, 
                                                 integraEmpresas, excluirVentasRelacionadasHijas, esSubDistribuidor, idSubDistribuidor,
-                                                considerarConCPE, considerarSinCPE);
+                                                considerarConCPE, considerarSinCPE, buscaFechaTransaccion, buscaFechaFacturacion, fechaFacturaInicio,
+                                                fechaFacturaFin, idEmpresaExcluir);
 
                 return list;
             }

@@ -460,21 +460,28 @@ namespace BusinessLayer
 
         public async Task<bool> FacturaAdelantadaTC(Pedido ped, Guid idUsuario)
         {
-            List<DetalleVenta> detallesVenta = new List<DetalleVenta>();
+            ClienteBL blCliente = new ClienteBL();
 
-            ClienteDAL dalCliente = new ClienteDAL();
+            ClienteWS wsCli = new ClienteWS();
+            wsCli.urlApi = Constantes.NEXTSOFT_API_URL;
+            wsCli.apiToken = Constantes.NEXTSOFT_API_TOKEN;
 
-            Cliente clienteTercero = dalCliente.getCliente(ped.idClienteTercero);
+            Cliente clie = blCliente.getCliente(ped.cliente.idCliente);
+
+            object resultCli = null;
+
+            resultCli = await wsCli.crearCliente(ConverterMPToNextSoft.toCliente(clie));
+            
 
             PedidoDAL dalPedido = new PedidoDAL();
 
             object dataSend = ConverterMPToNextSoft.toFacturaAnticipadaTC(ped);
 
-            ComprobanteVentaWS wsCli = new ComprobanteVentaWS();
-            wsCli.urlApi = Constantes.NEXTSOFT_API_URL;
-            wsCli.apiToken = Constantes.NEXTSOFT_API_TOKEN;
+            ComprobanteVentaWS wsFactura = new ComprobanteVentaWS();
+            wsFactura.urlApi = Constantes.NEXTSOFT_API_URL;
+            wsFactura.apiToken = Constantes.NEXTSOFT_API_TOKEN;
 
-            object resultWs = await wsCli.facturaAnticipadaTC(dataSend);
+            object resultWs = await wsFactura.facturaAnticipadaTC(dataSend);
 
             JObject dataResult = (JObject)resultWs;
             int codigo = dataResult["crearfacturasinentregainmediataResult"]["codigo"].Value<int>();
@@ -1524,6 +1531,14 @@ namespace BusinessLayer
             }
 
             return destinatarios;
+        }
+
+        public List<DetalleVenta> GetDetallesPedidoRelacionado(Guid idPedido, Guid idUsuario)
+        {
+            using (PedidoDAL dal = new PedidoDAL())
+            {
+                return dal.getDetallesPedidoRelacionado(idPedido, idUsuario);
+            }
         }
     }
 }
