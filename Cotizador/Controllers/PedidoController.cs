@@ -795,7 +795,6 @@ namespace Cotizador.Controllers
             pedido.ciudadASolicitar = new Ciudad();
 
             pedido.direccionEntrega = new DireccionEntrega();
-            pedido.solicitante = new Solicitante();
             pedido.fechaSolicitud = DateTime.Now;
             pedido.fechaEntregaDesde = null;
             pedido.fechaEntregaHasta = null;
@@ -878,54 +877,61 @@ namespace Cotizador.Controllers
 
         }
 
+        public static Pedido instanciarPedidoRegistrar()
+        {
+            Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
+            pedido.idPedido = Guid.Empty;
+            pedido.numeroPedido = 0;
+            pedido.numeroGrupoPedido = null;
+            pedido.cotizacion = new Cotizacion();
+            pedido.ubigeoEntrega = new Ubigeo();
+            pedido.ubigeoEntrega.Id = "000000";
+            pedido.ciudad = new Ciudad();
+            pedido.cliente = new Cliente();
+            pedido.esPagoContado = false;
+            pedido.esVentaIndirecta = false;
+
+            pedido.promocion = new Promocion();
+            pedido.promocion.idPromocion = Guid.Empty;
+
+            pedido.promociones = new List<Promocion>();
+
+            pedido.tipoPedido = Pedido.tiposPedido.Venta;
+            pedido.ciudadASolicitar = new Ciudad();
+
+            pedido.moneda = Moneda.ListaMonedas.Where(m => m.codigo.Equals("PEN")).FirstOrDefault();
+
+            pedido.numeroReferenciaCliente = null;
+            pedido.direccionEntrega = new DireccionEntrega();
+            pedido.solicitante = new Solicitante();
+            pedido.fechaSolicitud = DateTime.Now;
+            pedido.fechaEntregaDesde = null;
+            pedido.fechaEntregaHasta = null;
+            pedido.horaEntregaDesde = "09:00";
+            pedido.horaEntregaHasta = "18:00";
+            pedido.contactoPedido = String.Empty;
+            pedido.telefonoContactoPedido = String.Empty;
+            pedido.incluidoIGV = false;
+            //  pedido.tasaIGV = Constantes.IGV;
+            //pedido.flete = 0;
+            // pedido.mostrarCodigoProveedor = true;
+            pedido.observaciones = String.Empty;
+
+            pedido.seguimientoPedido = new SeguimientoPedido();
+            pedido.seguimientoCrediticioPedido = new SeguimientoCrediticioPedido();
+            pedido.pedidoDetalleList = new List<PedidoDetalle>();
+            pedido.pedidoAdjuntoList = new List<PedidoAdjunto>();
+            pedido.fechaPrecios = pedido.fechaSolicitud.AddDays(Constantes.DIAS_MAX_BUSQUEDA_PRECIOS * -1);
+
+            return pedido;
+        }
+
         private void instanciarPedido()
         {
             try
             {
-                Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
-                pedido.idPedido = Guid.Empty;
-                pedido.numeroPedido = 0;
-                pedido.numeroGrupoPedido = null;
-                pedido.cotizacion = new Cotizacion();
-                pedido.ubigeoEntrega = new Ubigeo();
-                pedido.ubigeoEntrega.Id = "000000";
-                pedido.ciudad = new Ciudad();
-                pedido.cliente = new Cliente();
-                pedido.esPagoContado = false;
-                pedido.esVentaIndirecta = false;
-
-                pedido.promocion = new Promocion();
-                pedido.promocion.idPromocion = Guid.Empty;
-
-                pedido.promociones = new List<Promocion>();
-
-                pedido.tipoPedido = Pedido.tiposPedido.Venta;
-                pedido.ciudadASolicitar = new Ciudad();
-                
-                pedido.moneda = Moneda.ListaMonedas.Where(m => m.codigo.Equals("PEN")).FirstOrDefault();
-
-                pedido.numeroReferenciaCliente = null;
-                pedido.direccionEntrega = new DireccionEntrega();
-                pedido.solicitante = new Solicitante();
-                pedido.fechaSolicitud = DateTime.Now;
-                pedido.fechaEntregaDesde = null;
-                pedido.fechaEntregaHasta = null;
-                pedido.horaEntregaDesde = "09:00";
-                pedido.horaEntregaHasta = "18:00";
-                pedido.contactoPedido = String.Empty;
-                pedido.telefonoContactoPedido = String.Empty;
-                pedido.incluidoIGV = false;
-              //  pedido.tasaIGV = Constantes.IGV;
-                //pedido.flete = 0;
-               // pedido.mostrarCodigoProveedor = true;
-                pedido.observaciones = String.Empty;
-
+                Pedido pedido = instanciarPedidoRegistrar();
                 pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                pedido.seguimientoPedido = new SeguimientoPedido();
-                pedido.seguimientoCrediticioPedido = new SeguimientoCrediticioPedido();
-                pedido.pedidoDetalleList = new List<PedidoDetalle>();
-                pedido.pedidoAdjuntoList = new List<PedidoAdjunto>();
-                pedido.fechaPrecios = pedido.fechaSolicitud.AddDays(Constantes.DIAS_MAX_BUSQUEDA_PRECIOS * -1);
 
                 this.Session[Constantes.VAR_SESSION_PEDIDO] = pedido;
             }

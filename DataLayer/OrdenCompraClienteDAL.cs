@@ -425,6 +425,10 @@ namespace DataLayer
 
                 occ.solicitante = new Solicitante();
                 occ.solicitante.idSolicitante = Converter.GetGuid(row, "id_solicitante");
+                occ.solicitante.nombre = occ.contactoOrdenCompraCliente;
+                occ.solicitante.telefono = occ.telefonoContactoOrdenCompraCliente;
+                occ.solicitante.correo = occ.correoContactoOrdenCompraCliente;
+
 
                 occ.esPagoContado = Converter.GetBool(row, "es_pago_contado");
 
@@ -434,9 +438,7 @@ namespace DataLayer
 
                 occ.numeroRequerimiento = Converter.GetString(row, "numero_requerimiento");
 
-                occ.solicitante.nombre = occ.contactoOrdenCompraCliente;
-                occ.solicitante.telefono = occ.telefonoContactoOrdenCompraCliente;
-                occ.solicitante.correo = occ.correoContactoOrdenCompraCliente;
+               
 
                 occ.fechaProgramacion = Converter.GetDateTime(row, "fecha_programacion");
                 occ.observacionesFactura = Converter.GetString(row, "observaciones_factura");
@@ -475,6 +477,12 @@ namespace DataLayer
                 occ.clienteSunat.idClienteSunat = Converter.GetInt(row, "id_cliente_sunat");
                 occ.clienteSunat.razonSocial = Converter.GetString(row, "razon_social");
                 occ.clienteSunat.ruc = Converter.GetString(row, "ruc");
+
+                occ.empresa = new Empresa();
+                occ.empresa.idEmpresa = Converter.GetInt(row, "id_empresa");
+                occ.empresa.codigo = Converter.GetString(row, "codigo_empresa");
+                occ.empresa.emiteGuias = Converter.GetInt(row, "emite_guias_empresa") == 1 ? true : false;
+                occ.empresa.atencionTerciarizada = Converter.GetInt(row, "atencion_tercerizada_empresa") == 1 ? true : false;
 
                 occ.UsuarioRegistro = new Usuario(); 
                 occ.UsuarioRegistro.nombre = Converter.GetString(row, "nombre_usuario");

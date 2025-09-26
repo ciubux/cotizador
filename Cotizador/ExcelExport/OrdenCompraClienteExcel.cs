@@ -291,6 +291,7 @@ namespace Cotizador.ExcelExport
                         }
                     }
 
+                    UtilesHelper.setValorCelda(sheet, i, "E", "", tableDataCellStyle);
                     UtilesHelper.setValorCelda(sheet, i, "F", "", tableDataCellStyle);
                     UtilesHelper.setValorCelda(sheet, i, "G", "", tableDataCenterCellStyle);
                     UtilesHelper.setValorCelda(sheet, i, "H", "", tableDataCellStyle);

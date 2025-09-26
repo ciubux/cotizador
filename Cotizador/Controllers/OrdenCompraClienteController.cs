@@ -1491,11 +1491,14 @@ namespace Cotizador.Controllers
             string jsonUsuario = JsonConvert.SerializeObject(usuario);
 
 
-            Pedido pedidoGenerar = new Pedido(Pedido.ClasesPedido.Venta);
+            Pedido pedidoGenerar = PedidoController.instanciarPedidoRegistrar();
 
             pedidoGenerar.ordenCompracliente = occ;
             pedidoGenerar.pedidoDetalleList = new List<PedidoDetalle>();
             pedidoGenerar.numeroReferenciaCliente = occ.numeroReferenciaCliente;
+            pedidoGenerar.solicitante = occ.solicitante;
+            pedidoGenerar.empresa = occ.empresa;
+
             foreach (OrdenCompraClienteDetalle det in occ.detalleList)
             {
                 det.producto = productoBL.getProducto(det.producto.idProducto, occ.ciudad.esProvincia, occ.incluidoIGV, occ.ciudad.idClienteRelacionado);

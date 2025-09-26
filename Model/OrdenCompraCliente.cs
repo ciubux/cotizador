@@ -36,7 +36,7 @@ namespace Model
 
         public bool buscarSedesGrupoCliente { get; set; }
 
-
+        public Empresa empresa { get; set; }
         public Cotizacion cotizacion { get; set; }
         [Display(Name = "Sede:")]
         public Ciudad ciudad { get; set; }
