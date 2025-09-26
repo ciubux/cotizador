@@ -127,7 +127,6 @@ namespace BusinessLayer
                 */
                 foreach (OrdenCompraClienteDetalle occDetalle in occ.detalleList)
                 {
-
                     if (occDetalle.producto.image == null)
                     {
                         FileStream inStream = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\images\\NoDisponible.gif", FileMode.Open);

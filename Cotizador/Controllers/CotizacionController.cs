@@ -1233,9 +1233,6 @@ namespace Cotizador.Controllers
 
 
 
-
-
-
         public String AddProducto()
         {
             Cotizacion cotizacion = this.CotizacionSession;
@@ -2633,6 +2630,10 @@ namespace Cotizador.Controllers
 
                     if (cantidad > 0 && sheet.GetRow(row) != null) //null is when the row only contains empty cells 
                     {
+                        precioNeto = 0;
+                        unidad = "";
+                        flete = 0;
+                        idProductoPresentacion = 0;
 
                         CotizacionDetalle item = new CotizacionDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
                         item.producto = new Producto();

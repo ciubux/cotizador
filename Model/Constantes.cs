@@ -368,10 +368,12 @@ namespace Model
         }
 
 
+        public static String SIMBOLO_SOL = "S/";
+        public static String CODIGO_SOL = "PEN";
+        public static String CODIGO_DOLAR = "UDS";
 
         public static Decimal IGV = 0.18M;
         public static Decimal PORCENTAJE_MAX_APROBACION = 3.00M;
-        public static String SIMBOLO_SOL = "S/";
         public static int PLAZO_OFERTA_DIAS = 2;
         public static int DEBUG = 1;
         public static int DIAS_MAX_BUSQUEDA_PRECIOS = 730;

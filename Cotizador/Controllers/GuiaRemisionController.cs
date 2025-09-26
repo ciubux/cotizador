@@ -1796,13 +1796,17 @@ namespace Cotizador.Controllers
 
             List<DetalleVenta> detallesVenta = new List<DetalleVenta>();
 
+            PedidoBL blPedido = new PedidoBL();
+
+            guiaRemision.pedido = blPedido.GetPedido(guiaRemision.pedido, usuario);
+
             if (guiaRemision.entregaTerceros && !guiaRemision.pedido.empresaRelacionada.facturacionHabilitada
                     && guiaRemision.pedido.empresaRelacionada.entornoFacturacion == Empresa.EntornoFacturacion.NEXTSOFT)
             {
                 // obtener info ventas
-                PedidoBL blPedido = new PedidoBL();
                 detallesVenta = blPedido.GetDetallesPedidoRelacionado(guiaRemision.pedido.idPedido, guiaRemision.usuario.idUsuario);
             }
+
 
             GuiaWS ws = new GuiaWS();
             ws.urlApi = Constantes.NEXTSOFT_API_URL;

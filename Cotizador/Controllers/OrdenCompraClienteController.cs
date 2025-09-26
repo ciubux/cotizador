@@ -15,6 +15,7 @@ using System.Web.Mvc;
 using Cotizador.Models.DTOsSearch;
 using NLog;
 using Cotizador.Models.DTOsShow;
+using NPOI.XWPF.UserModel;
 
 namespace Cotizador.Controllers
 {
@@ -1428,6 +1429,8 @@ namespace Cotizador.Controllers
         }
         */
 
+        
+
         public String Search()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaOrdenCompraClientes;
@@ -1480,6 +1483,8 @@ namespace Cotizador.Controllers
 
             OrdenCompraCliente occ = new OrdenCompraCliente();
             occ.idOrdenCompraCliente = Guid.Parse(Request["idOrdenCompraCliente"].ToString());
+            occ.usuario = usuario;
+
             occ = occBL.GetOrdenCompraCliente(occ,usuario);
             this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE_VER] = occ;
             
@@ -1517,6 +1522,15 @@ namespace Cotizador.Controllers
 
             String json = "{\"occ\":" + jsonOrdenCompraCliente + ", \"usuario\":" + jsonUsuario + "}";
             return json;
+        }
+
+        [HttpGet]
+        public ActionResult ExportLastShowExcel()
+        {
+            OrdenCompraCliente occ = (OrdenCompraCliente)this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE_VER];
+
+            OrdenCompraClienteExcel excel = new OrdenCompraClienteExcel();
+            return excel.generateExcel(occ);
         }
 
         public void autoGuardarOrdenCompraCliente()
@@ -1630,6 +1644,218 @@ namespace Cotizador.Controllers
             OrdenCompraCliente occ = this.OrdenCompraClienteSession;
             occ.mostrarCosto = Boolean.Parse(this.Request.Params["mostrarCosto"]);
             this.OrdenCompraClienteSession = occ;
+        }
+
+        [HttpPost]
+        public String LoadProductosByExcel(HttpPostedFileBase file)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            OrdenCompraCliente occ = this.OrdenCompraClienteSession;
+
+            TipoCambioSunatBL tcBl = new TipoCambioSunatBL();
+            TipoCambioSunat tc = tcBl.GetTipoCambioHoy();
+
+            try
+            {
+                HSSFWorkbook hssfwb;
+
+                ProductoBL productoBL = new ProductoBL();
+
+                hssfwb = new HSSFWorkbook(file.InputStream);
+
+                ISheet sheet = hssfwb.GetSheetAt(0);
+                int row = 0;
+                int cantidad = sheet.LastRowNum;
+                List<Cliente> clientesTemp = new List<Cliente>();
+
+
+                Decimal precioNeto = 0;
+                Decimal flete = 0;
+                string unidad = "";
+                int idProductoPresentacion = 0;
+
+                bool sinPrecio = false;
+                decimal precioDefecto = 0;
+
+                int colSKU = 0;
+                int colUnidad = 4;
+                int colCantidad = 6;
+                int colPrecioNeto = 7;
+                int colFlete = 8;
+                int colObservaciones = 10;
+
+                HSSFFormulaEvaluator formula = new HSSFFormulaEvaluator(hssfwb);
+                formula.EvaluateAll();
+
+                for (row = OrdenCompraClienteExcel.filaInicioDatos - 1; row <= cantidad; row++)
+                {
+                    if (sheet.GetRow(row) == null || sheet.GetRow(row).GetCell(colSKU) == null || sheet.GetRow(row).GetCell(colSKU).ToString().Trim().Equals(""))
+                    {
+                        cantidad = 0;
+                        if (row == OrdenCompraClienteExcel.filaInicioDatos - 1)
+                        {
+                            return "{\"success\":\"false\",\"message\":\"No se encontró SKU de producto en la primera fila de los datos.\"}";
+                        }
+                    }
+
+                    if (cantidad > 0 && sheet.GetRow(row) != null) //null is when the row only contains empty cells 
+                    {
+
+                        precioNeto = 0;
+                        unidad = "";
+                        flete = 0;
+                        idProductoPresentacion = 0;
+                        sinPrecio = false;
+                        precioDefecto = 0;
+
+                        OrdenCompraClienteDetalle item = new OrdenCompraClienteDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
+                        item.producto = new Producto();
+                        try
+                        {
+                            if (sheet.GetRow(row).GetCell(colSKU) != null)
+                            {
+                                item.producto.idProducto = productoBL.getProductoId(sheet.GetRow(row).GetCell(colSKU).ToString().Trim());
+
+                                if (occ.cliente != null)
+                                {
+                                    item.producto = productoBL.getProducto(item.producto.idProducto, occ.ciudad.esProvincia, occ.incluidoIGV, occ.cliente.idCliente, false, Constantes.CODIGO_SOL, tc);
+                                }
+                                else
+                                {
+                                    item.producto = productoBL.getProducto(item.producto.idProducto, occ.ciudad.esProvincia, occ.incluidoIGV, Guid.Empty, false, Constantes.CODIGO_SOL, tc);
+                                }
+                            }
+
+                            occ.detalleList.Remove(occ.detalleList.Where(p => p.producto.idProducto == item.producto.idProducto).FirstOrDefault());
+
+
+                            if (item.producto.idProducto != Guid.Empty)
+                            {
+                                /* unidad */
+                                if (sheet.GetRow(row).GetCell(colUnidad) != null)
+                                {
+                                    unidad = sheet.GetRow(row).GetCell(colUnidad).ToString().ToUpper().Trim();
+                                    unidad = unidad.Split('-')[0].Trim();
+                                }
+
+                                /* precio unitario  */
+                                if (sheet.GetRow(row).GetCell(colPrecioNeto) != null && !sheet.GetRow(row).GetCell(colPrecioNeto).ToString().Trim().Equals(""))
+                                {
+                                    NPOI.SS.UserModel.ICell precioCell = sheet.GetRow(row).GetCell(colPrecioNeto);
+                                    if (precioCell.CellType == CellType.Formula)
+                                    {
+                                        precioNeto = (decimal)precioCell.NumericCellValue;
+                                    }
+                                    else
+                                    {
+                                        precioNeto = Decimal.Parse(sheet.GetRow(row).GetCell(colPrecioNeto).ToString());
+                                    }
+
+                                    precioNeto = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, precioNeto));
+                                } else
+                                {
+                                    sinPrecio = true;
+                                }
+
+                                /* flete */
+                                if (sheet.GetRow(row).GetCell(colFlete) != null)
+                                {
+                                    flete = Decimal.Parse(sheet.GetRow(row).GetCell(colFlete).ToString());
+                                }
+
+
+                                /* cantidad */
+                                if (sheet.GetRow(row).GetCell(colCantidad) != null)
+                                {
+                                    item.cantidad = int.Parse(sheet.GetRow(row).GetCell(colCantidad).ToString().Trim());
+                                }
+
+                                /* observaciones */
+                                if (sheet.GetRow(row).GetCell(colObservaciones) != null)
+                                {
+                                    item.observacion = sheet.GetRow(row).GetCell(colObservaciones).ToString().Trim();
+                                }
+
+
+                                switch (unidad)
+                                {
+                                    case "ALTERNATIVA": idProductoPresentacion = 1; item.esPrecioAlternativo = true; break;
+                                    case "PROVEEDOR": idProductoPresentacion = 2; item.esPrecioAlternativo = true; break;
+                                    default: idProductoPresentacion = 0; item.esPrecioAlternativo = false; break;
+                                }
+
+
+
+                                //decimal costo = Decimal.Parse(Request["costo"].ToString());
+
+                                
+
+                                item.unidad = item.producto.unidad;
+                                //si esPrecioAlternativo  se mostrará la unidad alternativa
+                                item.flete = flete;
+
+                                if (item.esPrecioAlternativo)
+                                {
+                                    //Si es el precio Alternativo se multiplica por la equivalencia para que se registre el precio estandar
+                                    //dado que cuando se hace get al precioNetoEquivalente se recupera diviendo entre la equivalencia
+                                    item.ProductoPresentacion = item.producto.getProductoPresentacion(idProductoPresentacion);
+
+                                    if (item.ProductoPresentacion == null)
+                                    {
+                                        item.esPrecioAlternativo = false;
+                                        item.precioNeto = precioNeto;
+                                        precioDefecto = item.producto.precioClienteProducto.precioNeto;
+                                    }
+                                    else
+                                    {
+                                        item.precioNeto = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, precioNeto * item.ProductoPresentacion.Equivalencia));
+                                        item.unidad = item.ProductoPresentacion.Presentacion;
+
+                                        precioDefecto = item.producto.precioClienteProducto.precioNetoAlternativo;
+                                    }
+                                }
+                                else
+                                {
+                                    item.precioNeto = precioNeto;
+                                    precioDefecto = item.producto.precioClienteProducto.precioNeto;
+                                }
+
+                                if (sinPrecio)
+                                {
+                                    item.precioNeto = precioDefecto;
+                                }
+
+                                occ.detalleList.Add(item);
+
+
+                                item.porcentajeDescuento = (1 - (item.precioNeto / item.precioLista)) * 100;
+                                //Calcula los montos totales de la cabecera de la cotizacion
+                                HelperDocumento.calcularMontosTotales(occ);
+
+
+
+                                this.OrdenCompraClienteSession = occ;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                            LogBL logBL = new LogBL();
+                            logBL.insertLog(log);
+                        }
+                    }
+                }
+
+                return "{\"success\":\"true\",\"message\":\"Se procesó el archivo correctamente.\"}";
+            }
+            catch (Exception ex)
+            {
+                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                LogBL logBL = new LogBL();
+                logBL.insertLog(log);
+
+                return "{\"success\":\"false\",\"message\":\"Error al cargar el fichero.\"}";
+            }
         }
     }
 }

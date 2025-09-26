@@ -297,6 +297,7 @@
     <Compile Include="Controllers\CompraController.cs" />
     <Compile Include="Controllers\VentaController.cs" />
     <Compile Include="ExcelExport\CanastaGrupoCliente.cs" />
+    <Compile Include="ExcelExport\OrdenCompraClienteExcel.cs" />
     <Compile Include="ExcelExport\PrecioEspecialCabecerasDetallesExcel.cs" />
     <Compile Include="ExcelExport\PrecioEspecialDetalleExcel.cs" />
     <Compile Include="ExcelExport\DireccionCliente.cs" />
@@ -796,6 +797,7 @@
     <Content Include="Views\Producto\ProductosHomologadosTecnica.cshtml" />
     <Content Include="Views\PrecioEspecial\LogCostosProducto.cshtml" />
     <Content Include="Views\DocumentoExterno\_ModalDescargarFacturasTC.cshtml" />
+    <Content Include="Views\OrdenCompraCliente\_ModalImportarDetallesExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

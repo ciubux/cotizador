@@ -1790,13 +1790,13 @@ namespace DataLayer
                 List<string> item = new List<string>();
 
                 item.Add(Converter.GetString(row, "id_movimiento_almacen")); /* 0 */
-                item.Add(Converter.GetString(row, "fecha_emision_guia")); /* 1 */
+                item.Add(Converter.GetDateTime(row, "fecha_emision_guia").ToString("yyyy-MM-dd")); /* 1 */
                 item.Add(Converter.GetString(row, "serie_guia")); /* 2 */
-                item.Add(Converter.GetString(row, "numero_guia")); /* 3 */
+                item.Add(Converter.GetInt(row, "numero_guia").ToString()); /* 3 */
                 item.Add(Converter.GetString(row, "id_cpe_cabecera_be")); /* 4 */
-                item.Add(Converter.GetString(row, "fecha_emision_cpe")); /* 5 */
+                item.Add(Converter.GetString(row, "fecha_emision_cpe").Substring(0, 10)); /* 5 */
                 item.Add(Converter.GetString(row, "serie_cpe")); /* 6 */
-                item.Add(Converter.GetString(row, "numero_cpe")); /* 7 */
+                item.Add(int.Parse(Converter.GetString(row, "numero_cpe")).ToString()); /* 7 */
 
                 lista.Add(item);
             }

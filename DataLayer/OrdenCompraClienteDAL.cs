@@ -389,7 +389,7 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("ps_ordenCompraCliente");
             InputParameterAdd.Guid(objCommand, "idOrdenCompraCliente", occ.idOrdenCompraCliente);
-            InputParameterAdd.Guid(objCommand, "idUsuario", occ.usuario.idUsuario);
+            InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable occDataTable = dataSet.Tables[0];
             DataTable occDetalleDataTable = dataSet.Tables[1];

@@ -358,8 +358,8 @@ namespace Cotizador.Controllers
                 object result = await ws.asociarConFacturaTC(dataSend);
 
                 JObject dataResult = (JObject)result;
-                int codigo = dataResult[""]["codigo"].Value<int>();
-                string mensaje = dataResult[""]["mensaje"].Value<string>();
+                int codigo = dataResult["ingresoTPResult"]["codigo"].Value<int>();
+                string mensaje = dataResult["ingresoTPResult"]["mensaje"].Value<string>();
 
                 if (codigo == 0)
                 {

@@ -4536,7 +4536,7 @@ jQuery(function ($) {
         $("#fechaProgramacion").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaProgramacion);    
     })
 
-    $("#btnExportExcel").click(function () {
+    $(".btnExportExcel").click(function () {
         window.location.href = $(this).attr("actionLink");
     });
 
@@ -4578,10 +4578,112 @@ jQuery(function ($) {
         $("btnCancelarProgramarOrdenCompraCliente").click();
     });
 
-
-
- 
-
-
     /****************** FIN PROGRAMACION OCC****************************/
+
+
+    $(document).ready(function () {
+        $('#btnUploadProducts').click(function (event) {
+            var fileInput = $('#fileUploadExcel');
+            var maxSize = fileInput.data('max-size');
+            var maxSizeText = fileInput.data('max-size-text');
+            var imagenValida = true;
+            if (fileInput.get(0).files.length) {
+                var fileSize = fileInput.get(0).files[0].size; // in bytes
+
+                if (fileSize > maxSize) {
+                    $.alert({
+                        title: "Archivo Inválido",
+                        type: 'red',
+                        content: 'El tamaño del archivo debe ser como maximo ' + maxSizeText + '.',
+                        buttons: {
+                            OK: function () { }
+                        }
+                    });
+                    imagenValida = false;
+                }
+
+
+            } else {
+                $.alert({
+                    title: "Archivo Inválido",
+                    type: 'red',
+                    content: 'Seleccione un archivo por favor.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+                imagenValida = false;
+            }
+
+            if (imagenValida) {
+
+                var that = document.getElementById('fileUploadExcel');
+                var file = that.files[0];
+                var form = new FormData();
+                var url = $(that).data("urlSetFile");
+                var reader = new FileReader();
+                var mime = file.type;
+
+                // read the image file as a data URL.
+                reader.readAsDataURL(file);
+
+                form.append('file', file);
+
+                $('body').loadingModal({
+                    text: '...'
+                });
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: form,
+                    dataType: 'JSON',
+                    beforeSend: function () {
+                        //$.blockUI();
+                    },
+                    success: function (response) {
+                        if (response.success == "true") {
+                            $.alert({
+                                title: "Carga Exitosa!",
+                                type: 'green',
+                                content: response.message,
+                                buttons: {
+                                    OK: function () {
+                                        location.reload();
+                                    }
+                                }
+                            });
+
+                            $('#btnBusqueda').click();
+                        } else {
+                            $.alert({
+                                title: "Carga fallida",
+                                type: 'red',
+                                content: response.message,
+                                buttons: {
+                                    OK: function () { }
+                                }
+                            });
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        $.alert({
+                            title: "Carga fallida",
+                            type: 'red',
+                            content: 'Ocurrió un error al subir el archivo.',
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    }
+                }).done(function () {
+                    $('body').loadingModal('hide')
+                });
+            }
+        });
+    });
+
 });
