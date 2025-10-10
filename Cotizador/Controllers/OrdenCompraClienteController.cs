@@ -1345,7 +1345,6 @@ namespace Cotizador.Controllers
 
         public String Create()
         {
-
             //RUC_MP
             UsuarioBL usuarioBL = new UsuarioBL();
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -1515,8 +1514,6 @@ namespace Cotizador.Controllers
                 pedDet.visualizaMargen = det.visualizaMargen;
 
                 pedidoGenerar.pedidoDetalleList.Add(pedDet);
-
-                
             }
 
             this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE_PEDIDO_GENERAR] = pedidoGenerar;

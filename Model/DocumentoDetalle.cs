@@ -30,6 +30,20 @@ namespace Model
 
         //   public Decimal precioNeto { get; set; }
 
+        public Decimal cantidadMP { 
+            get {
+                Decimal cantidadMP = Decimal.Parse(this.cantidad.ToString());
+                if (this.ProductoPresentacion != null)
+                {
+                    switch (this.ProductoPresentacion.IdProductoPresentacion)
+                    {
+                        case 1: cantidadMP = cantidadMP * this.ProductoPresentacion.Equivalencia; break;
+                        case 2: cantidadMP = cantidadMP / this.ProductoPresentacion.Equivalencia; break;
+                    }
+                }
+                return cantidadMP;
+            } 
+        }
 
         public Decimal costoEspecial
         {

@@ -459,6 +459,20 @@ namespace Model
             DevolucionTransferenciaGratuitaRecibida = tiposOrdenCompraClienteCompra.DevolucionTransferenciaGratuitaRecibida,
      */   }
 
+        public List<object> productListSearchResults()
+        {
+            List<object> lista = new List<object>();
+            foreach(OrdenCompraClienteDetalle item in detalleList)
+            {
+                lista.Add(new {
+                    id = item.producto.idProducto,
+                    text = item.producto.ToString(),
+                    descontinuado = 0
+                });
+            }
+
+            return lista;
+        }
 
         [Display(Name = "Tipo OrdenCompraCliente:")]
         public tiposOrdenCompraClienteAlmacenBusqueda tipoOrdenCompraClienteAlmacenBusqueda { get; set; }

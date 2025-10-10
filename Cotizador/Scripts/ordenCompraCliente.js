@@ -2640,10 +2640,15 @@ jQuery(function ($) {
                         descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
                     }
 
+                    idProductoPresentacion = 0;
+                    if (lista[i].ProductoPresentacion != null) {
+                        idProductoPresentacion = lista[i].ProductoPresentacion.IdProductoPresentacion;
+                    }
+
                     itemOrdenCompraCliente = {
                         idOrdenCompraClienteDetalle: lista[i].idOrdenCompraClienteDetalle, sku: lista[i].producto.sku, producto: lista[i].producto.descripcion, unidad: lista[i].unidad,
-                        idProducto: lista[i].producto.idProducto, cantidad: lista[i].cantidad, cantidadPendienteAtencion: lista[i].cantidadPendienteAtencion,
-                        producto: lista[i].producto,
+                        idProducto: lista[i].producto.idProducto, cantidad: lista[i].cantidad, cantidadPorAsignar: lista[i].cantidadPorAsignar, cantidadPorEntregar: lista[i].cantidadPorEntregar,
+                        producto: lista[i].producto, idProductoPresentacion: idProductoPresentacion, 
                         cantidadPermitida: lista[i].cantidadPermitida, observacionRestriccion: lista[i].observacionRestriccion
                     };
 
@@ -3013,24 +3018,65 @@ jQuery(function ($) {
 
         text = "";
         for (i = 0; i < fLen; i++) {
-            var cantidadRestringir = parseInt(ordenCompraClienteItemsRestringidos[i].cantidad) - parseInt(ordenCompraClienteItemsRestringidos[i].cantidadPermitida);
-            var cantidadAtendida = parseInt(ordenCompraClienteItemsRestringidos[i].cantidad) - parseInt(ordenCompraClienteItemsRestringidos[i].cantidadPendienteAtencion);
+            var cantidadRestringir = parseFloat(ordenCompraClienteItemsRestringidos[i].cantidad) - parseFloat(ordenCompraClienteItemsRestringidos[i].cantidadPermitida);
+            var cantidadAtendida = parseFloat(ordenCompraClienteItemsRestringidos[i].cantidad) - parseFloat(ordenCompraClienteItemsRestringidos[i].cantidadPendienteAtencion);
             var optionsUnidad = "";
+            var idProductoPresentacionItem = parseInt(ordenCompraClienteItemsRestringidos[i].idProductoPresentacion); 
+            var cantPorAsignarUnidadMP = 0;
+            var cantidadItemMP = 0;
+            var cantPorEntregarUnidadMP = 0;
+            var cantPorAsignarUnidad = 0;
+            var cantPorEntregarUnidad = 0;
+            var cantUnidad = 0;
+            var strCantUnidad = "";
 
             var producto = ordenCompraClienteItemsRestringidos[i].producto;
-            if (ordenCompraClienteItemsRestringidos[i].unidad == producto.unidad) {
-                optionsUnidad = '<option selected value="0">' + producto.unidad + '</option>';
+            cantPorAsignarUnidadMP = ordenCompraClienteItemsRestringidos[i].cantidadPorAsignar;
+            cantPorEntregarUnidadMP = ordenCompraClienteItemsRestringidos[i].cantidadPorEntregar;
+            cantidadItemMP = ordenCompraClienteItemsRestringidos[i].cantidad;
+
+            console.log(ordenCompraClienteItemsRestringidos[i]);
+
+            if (idProductoPresentacionItem == 0) {    
+                strCantUnidad = ' cantidadItem="' + cantidadItemMP + '" cantidadPorAsignar="' + cantPorAsignarUnidadMP + '" cantidadPorEntregar="' + cantPorEntregarUnidadMP + '" '
+                optionsUnidad = '<option ' + strCantUnidad + ' selected  value="0">' + producto.unidad + '</option>';
             } else {
-                optionsUnidad = '<option value="0">' + producto.unidad + '</option>';
+                if (idProductoPresentacionItem == 1) {
+                    cantidadItemMP = cantidadItemMP / producto.equivalenciaAlternativa;
+                    cantPorAsignarUnidadMP = cantPorAsignarUnidadMP / producto.equivalenciaAlternativa;
+                    cantPorEntregarUnidadMP = cantPorEntregarUnidadMP / producto.equivalenciaAlternativa;
+                }
+                if (idProductoPresentacionItem == 2) {
+                    cantidadItemMP = cantidadItemMP * producto.equivalenciaProveedor;
+                    cantPorAsignarUnidadMP = cantPorAsignarUnidadMP * producto.equivalenciaProveedor;
+                    cantPorEntregarUnidadMP = cantPorEntregarUnidadMP * producto.equivalenciaProveedor;
+                }
+
+                strCantUnidad = ' cantidadItem="' + cantidadItemMP.toFixed(2) + '" cantidadPorAsignar="' + cantPorAsignarUnidadMP.toFixed(2) + '" cantidadPorEntregar="' + cantPorEntregarUnidadMP.toFixed(2) + '" '
+                optionsUnidad = '<option ' + strCantUnidad + ' value="0">' + producto.unidad + '</option>';
             }
 
             var presLen = producto.ProductoPresentacionList.length;
 
             for (j = 0; j < presLen; j++) {
-                if (producto.ProductoPresentacionList[j].Presentacion == producto.unidad) {
-                    optionsUnidad = optionsUnidad + '<option selected value="' + producto.ProductoPresentacionList[j].IdProductoPresentacion + '">' + producto.ProductoPresentacionList[j].Presentacion + '</option>';
+                if (producto.ProductoPresentacionList[j].IdProductoPresentacion == 1) {
+                    cantUnidad = cantidadItemMP * producto.equivalenciaAlternativa;
+                    cantPorAsignarUnidad = cantPorAsignarUnidadMP * producto.equivalenciaAlternativa;
+                    cantPorEntregarUnidad = cantPorEntregarUnidadMP * producto.equivalenciaAlternativa;
+                }
+
+                if (producto.ProductoPresentacionList[j].IdProductoPresentacion == 2) {
+                    cantUnidad = cantidadItemMP / producto.equivalenciaProveedor;
+                    cantPorAsignarUnidad = cantPorAsignarUnidadMP / producto.equivalenciaProveedor;
+                    cantPorEntregarUnidad = cantPorEntregarUnidadMP / producto.equivalenciaProveedor;
+                }
+
+                strCantUnidad = ' cantidadItem="' + cantUnidad.toFixed(2) + '" cantidadPorAsignar="' + cantPorAsignarUnidad.toFixed(2) + '" cantidadPorEntregar="' + cantPorEntregarUnidad.toFixed(2) + '" '
+
+                if (producto.ProductoPresentacionList[j].IdProductoPresentacion == idProductoPresentacionItem) {
+                    optionsUnidad = optionsUnidad + '<option ' + strCantUnidad + ' selected value="' + producto.ProductoPresentacionList[j].IdProductoPresentacion + '">' + producto.ProductoPresentacionList[j].Presentacion + '</option>';
                 } else {
-                    optionsUnidad = optionsUnidad + '<option value="' + producto.ProductoPresentacionList[j].IdProductoPresentacion + '">' + producto.ProductoPresentacionList[j].Presentacion + '</option>';
+                    optionsUnidad = optionsUnidad + '<option ' + strCantUnidad + ' value="' + producto.ProductoPresentacionList[j].IdProductoPresentacion + '">' + producto.ProductoPresentacionList[j].Presentacion + '</option>';
                 }
             }
 
@@ -3038,7 +3084,8 @@ jQuery(function ($) {
             text += '<td>' + ordenCompraClienteItemsRestringidos[i].sku + ' ' + ordenCompraClienteItemsRestringidos[i].producto.descripcion + '</td>';
             text += '<td><select class="form-control inputUnidad">' + optionsUnidad + '</select></td>';
             text += '<td class="celdaItemCantidad">' + ordenCompraClienteItemsRestringidos[i].cantidad + '</td>';
-            text += '<td class="celdaItemCantidadRestante">' + ordenCompraClienteItemsRestringidos[i].cantidad + '</td>';
+            text += '<td class="celdaItemCantidadRestante">' + ordenCompraClienteItemsRestringidos[i].cantidadPorAsignar + '</td>';
+            text += '<td class="celdaItemCantidadPorEntregar">' + ordenCompraClienteItemsRestringidos[i].cantidadPorEntregar + '</td>';
             text += '<td>' + 
                 '<input class="form-control inputItemAtender" type="number" min="0" max="' + ordenCompraClienteItemsRestringidos[i].cantidad + '" step="1" value="0">' +
                     '</td>';
@@ -3056,16 +3103,28 @@ jQuery(function ($) {
 
     $('.divProductosGenerarPedido').on('change', 'tr td .inputUnidad', function (e) {
         var idDetalle = $(this).closest('tr').attr('idOrdenCompraClienteDetalle');
-        var cantidadAtender = $(this).closest('tr').find('td .inputItemAtender').val();
-        var comentario = $(this).closest('tr').find('td .inputItemObervacionDetalle').val();
         var productoPresentacion = $(this).val();
+
+        var cantItem = $(this).find(':selected').attr('cantidadItem');
+        var cantPorAsignar = $(this).find(':selected').attr('cantidadPorAsignar');
+        var cantPorEntregar = $(this).find(':selected').attr('cantidadPorEntregar');
+
+        $(this).closest('tr').find('td.celdaItemCantidad').html(cantItem);
+        $(this).closest('tr').find('td.celdaItemCantidadRestante').html(cantPorAsignar);
+        $(this).closest('tr').find('td.celdaItemCantidadPorEntregar').html(cantPorEntregar);
+
+        var cantidadAtender = 0;
+        $(this).closest('tr').find('td .inputItemAtender').val(0)
+
+        var comentario = $(this).closest('tr').find('td .inputItemObervacionDetalle').val();
+        
 
         ActualizarDetalleGenerarPedido(idDetalle, cantidadAtender, productoPresentacion, comentario);
     });
 
     $('.divProductosGenerarPedido').on('change', 'tr td .inputItemAtender', function (e) {
-        var cantidadAtender = parseInt($(this).val());
-        var cantidad = parseInt($(this).closest('tr').find('td.celdaItemCantidadRestante').html());
+        var cantidadAtender = parseFloat($(this).val());
+        var cantidad = parseFloat(Math.trunc($(this).closest('tr').find('td.celdaItemCantidadRestante').html()));
         
         if (cantidadAtender > cantidad) {
             cantidadAtender = cantidad;

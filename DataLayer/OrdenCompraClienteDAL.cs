@@ -503,8 +503,8 @@ namespace DataLayer
 
                 occDetalle.idOrdenCompraClienteDetalle = Converter.GetGuid(row, "id_orden_compra_cliente_detalle");
                 occDetalle.cantidad = Converter.GetInt(row, "cantidad");
-                occDetalle.cantidadPendienteAtencion = Converter.GetInt(row, "cantidadPendienteAtencion");
-                occDetalle.cantidadPorAtender = Converter.GetInt(row, "cantidadPendienteAtencion");
+                occDetalle.cantidadAsignada = Converter.GetDecimal(row, "cantidadSolicitada");
+                occDetalle.cantidadEntregada = Converter.GetDecimal(row, "cantidadAtendida");
 
                 occDetalle.cantidadPermitida = Converter.GetInt(row, "cantidad_permitida");
                 occDetalle.observacionRestriccion = Converter.GetString(row, "comentario_retencion");
@@ -976,10 +976,81 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             return occ;
         }
 
-       
 
-        #endregion        
-         
+
+        #endregion
+
+        public List<OrdenCompraClienteDetalle> CantidadesOrdenCompraCliente(Guid idOcc, Usuario usuario)
+        {
+            var objCommand = GetSqlCommand("ps_occ_cantidades_en_pedidos");
+            InputParameterAdd.Guid(objCommand, "idOrdenCompraCliente", idOcc);
+            InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
+            
+            DataTable dataTable = Execute(objCommand);
+
+
+            List<OrdenCompraClienteDetalle> detalleList = new List<OrdenCompraClienteDetalle>();
+            //Detalle de la cotizacion
+            foreach (DataRow row in dataTable.Rows)
+            {
+                OrdenCompraClienteDetalle occDetalle = new OrdenCompraClienteDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
+
+                occDetalle.producto = new Producto();
+
+                occDetalle.idOrdenCompraClienteDetalle = Converter.GetGuid(row, "id_orden_compra_cliente_detalle");
+                occDetalle.cantidad = Converter.GetInt(row, "cantidad");
+                occDetalle.cantidadAsignada = Converter.GetDecimal(row, "cantidadSolicitada");
+                occDetalle.cantidadEntregada = Converter.GetDecimal(row, "cantidadAtendida");
+
+                occDetalle.cantidadPermitida = Converter.GetInt(row, "cantidad_permitida");
+                occDetalle.observacionRestriccion = Converter.GetString(row, "comentario_retencion");
+
+                occDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
+
+                occDetalle.flete = Converter.GetDecimal(row, "flete");
+
+
+                //Si NO es recotizacion se consideran los precios y el costo de lo guardado
+                occDetalle.producto.precioSinIgv = Converter.GetDecimal(row, "precio_sin_igv");
+
+                //Si la unidad es alternativa se múltiplica por la equivalencia, dado que la capa de negocio se encarga de hacer los calculos y espera siempre el precio estándar
+
+                if (occDetalle.esPrecioAlternativo)
+                {
+                    occDetalle.ProductoPresentacion = new ProductoPresentacion();
+                    occDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+                    occDetalle.ProductoPresentacion.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion");
+                    occDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * occDetalle.ProductoPresentacion.Equivalencia;
+                }
+                else
+                {
+                    occDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto");
+                }
+
+                occDetalle.unidad = Converter.GetString(row, "unidad");
+
+                occDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                occDetalle.producto.sku = Converter.GetString(row, "sku");
+                occDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
+                occDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
+                occDetalle.producto.proveedor = Converter.GetString(row, "proveedor");
+                occDetalle.producto.tipoProducto = (Producto.TipoProducto)Converter.GetInt(row, "tipo_producto");
+                occDetalle.producto.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");
+                occDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
+
+                occDetalle.producto.image = Converter.GetBytes(row, "imagen");
+
+                occDetalle.porcentajeDescuento = Converter.GetDecimal(row, "porcentaje_descuento");
+
+                occDetalle.precioUnitarioVenta = Converter.GetDecimal(row, "precio_unitario_venta");
+                occDetalle.idVentaDetalle = Converter.GetGuid(row, "id_venta_detalle");
+
+                detalleList.Add(occDetalle);
+            }
+
+            return detalleList;
+        }
+
 
         public List<Guid> SelectOrdenCompraClientesSinAtencion()
         {

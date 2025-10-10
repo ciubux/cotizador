@@ -225,7 +225,13 @@ namespace BusinessLayer
             }
             return occ;
         }
-        
+
+        public List<OrdenCompraClienteDetalle> CantidadesOrdenCompraCliente(Guid idOcc, Usuario usuario)
+        {
+            OrdenCompraClienteDAL dal = new OrdenCompraClienteDAL();
+            return dal.CantidadesOrdenCompraCliente(idOcc, usuario);
+        }
+
         public void calcularMontosTotales(OrdenCompraCliente occ)
         {
             Decimal total = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, occ.detalleList.AsEnumerable().Sum(o => o.subTotal)));

@@ -16,6 +16,22 @@ namespace Model
             //this.ProductoPresentacion = new ProductoPresentacion();
         }
 
+        public Decimal cantidadEntregada { get; set; }
+
+        public Decimal cantidadAsignada { get; set; }
+
+        public Decimal cantidadPorAsignar
+        {
+            get {
+                return Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, this.cantidadMP - this.cantidadAsignada)); 
+            }
+        }
+
+        public Decimal cantidadPorEntregar
+        {
+            get { return Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, this.cantidadMP - this.cantidadEntregada)); }
+        }
+
         public Guid idOrdenCompraClienteDetalle { get; set; }
         public Guid idOrdenCompraCliente { get; set; }
 

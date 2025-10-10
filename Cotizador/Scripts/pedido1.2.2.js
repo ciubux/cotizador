@@ -2737,50 +2737,61 @@ jQuery(function ($) {
                 mostrarMensajeErrorProceso(detalle.responseText);
             },
             success: function (resultado) {
-                $('body').loadingModal('hide')
-                $("#pedido_numeroPedido").val(resultado.numeroPedido);
-                $("#idPedido").val(resultado.idPedido);
+                $('body').loadingModal('hide');
 
-                if (resultado.estado == ESTADO_INGRESADO) {
-                    $.alert({
-                        title: TITLE_EXITO,
-                        type: 'green',
-                        content: "El pedido número " + resultado.numeroPedido + " fue ingresado correctamente.",
-                        buttons: {
-                            OK: function () { window.location = '/Pedido/Index';  }
-                        }
-                    });
-                     
-                }
-                else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
-                    //alert("El pedido número " + resultado.numeroPedido + " fue ingresado correctamente, sin embargo requiere APROBACIÓN")
-                    $("#solicitudIngresoComentario").html("El pedido número " + resultado.numeroPedido + " fue ingresado correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario.")
-                    $("#comentarioPendienteIngreso").val(resultado.observacion);
-                    $("#modalComentarioPendienteIngreso").modal({
-                        show: true,
-                        keyboard: false,
-                        backdrop: 'static'
-                    });
-                }
-                else if (resultado.estado == ESTADO_EN_EDICION) {
-                    ConfirmDialog("El pedido número " + resultado.numeroPedido + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/Pedido/CancelarCreacionPedido');
-                }
-                else {
-                    mostrarMensajeErrorProceso("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
-                    window.location = '/Pedido/Index';
-                }
+                if (resultado.ssuccess == 1) {
+                    $("#pedido_numeroPedido").val(resultado.numeroPedido);
+                    $("#idPedido").val(resultado.idPedido);
 
-                if (resultado.mostrarAlertaHomologacionNextsoft) {
+                    if (resultado.estado == ESTADO_INGRESADO) {
+                        $.alert({
+                            title: TITLE_EXITO,
+                            type: 'green',
+                            content: "El pedido número " + resultado.numeroPedido + " fue ingresado correctamente.",
+                            buttons: {
+                                OK: function () { window.location = '/Pedido/Index'; }
+                            }
+                        });
+
+                    }
+                    else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
+                        //alert("El pedido número " + resultado.numeroPedido + " fue ingresado correctamente, sin embargo requiere APROBACIÓN")
+                        $("#solicitudIngresoComentario").html("El pedido número " + resultado.numeroPedido + " fue ingresado correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario.")
+                        $("#comentarioPendienteIngreso").val(resultado.observacion);
+                        $("#modalComentarioPendienteIngreso").modal({
+                            show: true,
+                            keyboard: false,
+                            backdrop: 'static'
+                        });
+                    }
+                    else if (resultado.estado == ESTADO_EN_EDICION) {
+                        ConfirmDialog("El pedido número " + resultado.numeroPedido + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/Pedido/CancelarCreacionPedido');
+                    }
+                    else {
+                        mostrarMensajeErrorProceso("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
+                        window.location = '/Pedido/Index';
+                    }
+
+                    if (resultado.mostrarAlertaHomologacionNextsoft) {
+                        $.alert({
+                            title: TITLE_EXITO,
+                            type: 'orange',
+                            content: "Existen productos que no estan homologados con MP. Revisar comentario de estado para mayor detalle.",
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    }
+                } else {
                     $.alert({
-                        title: TITLE_EXITO,
+                        title: "OCURRIÓ UN PROBLEMA AL GUARDAR EL PEDIDO",
                         type: 'orange',
-                        content: "Existen productos que no estan homologados con MP. Revisar comentario de estado para mayor detalle.",
+                        content: resultado.mensajeError,
                         buttons: {
                             OK: function () { }
                         }
                     });
                 }
-
             }
         });
     }
@@ -2804,44 +2815,56 @@ jQuery(function ($) {
             },
             success: function (resultado) {
                 $('body').loadingModal('hide')
-                $("#pedido_numeroPedido").val(resultado.numeroPedido);
-                $("#idPedido").val(resultado.idPedido);
+                
+                if (resultado.ssuccess == 1) {
+                    $("#pedido_numeroPedido").val(resultado.numeroPedido);
+                    $("#idPedido").val(resultado.idPedido);
 
-                if (resultado.estado == ESTADO_INGRESADO) {
-                    //alert("El pedido número " + resultado.numeroPedido + " fue editado correctamente.");
-                    $.alert({
-                        title: TITLE_EXITO,
-                        type: 'green',
-                        content: "El pedido número " + resultado.numeroPedido + " fue editado correctamente.",
-                        buttons: {
-                            OK: function () { window.location = '/Pedido/Index'; }
-                        }
-                    });
-                }
-                else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
-                    //alert("El pedido número " + resultado.numeroPedido + " fue editado correctamente, sin embargo requiere APROBACIÓN")
-                    $("#solicitudIngresoComentario").html("El pedido número " + resultado.numeroPedido + " fue editado correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario.")
-                    $("#comentarioPendienteIngreso").val(resultado.observacion);
-                    $("#modalComentarioPendienteIngreso").modal({
-                        show: true,
-                        keyboard: false,
-                        backdrop: 'static'
-                    });
-                }
-                else if (resultado.estado == ESTADO_EN_EDICION) {
-                    ConfirmDialog("El pedido número " + resultado.numeroPedido + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/Pedido/CancelarCreacionPedido');
-                }
-                else {
-                    //alert("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
-                    mostrarMensajeErrorProceso("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
-                    window.location = '/Pedido/Index';
-                }
+                    if (resultado.estado == ESTADO_INGRESADO) {
+                        //alert("El pedido número " + resultado.numeroPedido + " fue editado correctamente.");
+                        $.alert({
+                            title: TITLE_EXITO,
+                            type: 'green',
+                            content: "El pedido número " + resultado.numeroPedido + " fue editado correctamente.",
+                            buttons: {
+                                OK: function () { window.location = '/Pedido/Index'; }
+                            }
+                        });
+                    }
+                    else if (resultado.estado == ESTADO_PENDIENTE_APROBACION) {
+                        //alert("El pedido número " + resultado.numeroPedido + " fue editado correctamente, sin embargo requiere APROBACIÓN")
+                        $("#solicitudIngresoComentario").html("El pedido número " + resultado.numeroPedido + " fue editado correctamente, sin embargo requiere APROBACIÓN, debe ingresar un comentario.")
+                        $("#comentarioPendienteIngreso").val(resultado.observacion);
+                        $("#modalComentarioPendienteIngreso").modal({
+                            show: true,
+                            keyboard: false,
+                            backdrop: 'static'
+                        });
+                    }
+                    else if (resultado.estado == ESTADO_EN_EDICION) {
+                        ConfirmDialog("El pedido número " + resultado.numeroPedido + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/Pedido/CancelarCreacionPedido');
+                    }
+                    else {
+                        //alert("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
+                        mostrarMensajeErrorProceso("El pedido ha tenido problemas para ser procesado; Contacte con el Administrador.");
+                        window.location = '/Pedido/Index';
+                    }
 
-                if (resultado.mostrarAlertaHomologacionNextsoft) {
+                    if (resultado.mostrarAlertaHomologacionNextsoft) {
+                        $.alert({
+                            title: TITLE_EXITO,
+                            type: 'orange',
+                            content: "Existen productos que no estan homologados con MP. Revisar comentario de estado para mayor detalle.",
+                            buttons: {
+                                OK: function () { }
+                            }
+                        });
+                    }
+                } else {
                     $.alert({
-                        title: TITLE_EXITO,
+                        title: "OCURRIÓ UN PROBLEMA AL GUARDAR EL PEDIDO",
                         type: 'orange',
-                        content: "Existen productos que no estan homologados con MP. Revisar comentario de estado para mayor detalle.",
+                        content: resultado.mensajeError,
                         buttons: {
                             OK: function () { }
                         }

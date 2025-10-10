@@ -949,6 +949,8 @@ namespace Cotizador.Controllers
                 Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 Pedido pedidoVer = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_VER];
                 PedidoBL pedidoBL = new PedidoBL();
+                OrdenCompraClienteBL ocBl = new OrdenCompraClienteBL();
+
                 Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
                 pedido.idPedido = pedidoVer.idPedido;
                 //    pedido.fechaModificacion = cotizacionVer.fechaModificacion;
@@ -959,6 +961,12 @@ namespace Cotizador.Controllers
                 pedidoBL.cambiarEstadoPedido(pedido);
                 //Se obtiene los datos de la cotización ya modificada
                 pedido = pedidoBL.GetPedidoParaEditar(pedido,usuario);
+
+                if (pedido.ordenCompracliente != null && !pedido.ordenCompracliente.idOrdenCompraCliente.Equals(Guid.Empty))
+                {
+                    pedido.ordenCompracliente = ocBl.GetOrdenCompraCliente(pedido.ordenCompracliente, usuario);
+                }
+
                 //Temporal
                 pedido.ciudadASolicitar = new Ciudad();
            
@@ -1040,8 +1048,19 @@ namespace Cotizador.Controllers
                     incluyeDescontinuados = int.Parse(this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"].ToString());
                 }
 
+                String resultado = "";
+
                 Pedido pedido = this.PedidoSession;
-                String resultado = bl.getProductosBusqueda(texto_busqueda, false, this.Session["proveedor"] != null ? (String)this.Session["proveedor"] : "Todos", this.Session["familia"] != null ? (String)this.Session["familia"] : "Todas", pedido.tipoPedido, incluyeDescontinuados);
+
+                if(pedido.ordenCompracliente != null && !pedido.ordenCompracliente.idOrdenCompraCliente.Equals(Guid.Empty))
+                {
+                    resultado = JsonConvert.SerializeObject(pedido.ordenCompracliente.productListSearchResults());
+                    resultado = "{\"q\":\"" + texto_busqueda + "\",\"results\":" + resultado + "}";
+                } else
+                {
+                    resultado = bl.getProductosBusqueda(texto_busqueda, false, this.Session["proveedor"] != null ? (String)this.Session["proveedor"] : "Todos", this.Session["familia"] != null ? (String)this.Session["familia"] : "Todas", pedido.tipoPedido, incluyeDescontinuados);
+                }
+
                 return resultado;
             }
             catch (Exception e)
@@ -2086,6 +2105,28 @@ namespace Cotizador.Controllers
         #endregion
 
 
+        protected void ValidacionPreRegistro(Pedido pedido, ref int success, ref string mensajeError)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (pedido.ordenCompracliente != null && !pedido.ordenCompracliente.idOrdenCompraCliente.Equals(Guid.Empty))
+            {
+                OrdenCompraClienteBL occBl = new OrdenCompraClienteBL();
+                List<OrdenCompraClienteDetalle> itemsOC = occBl.CantidadesOrdenCompraCliente(pedido.ordenCompracliente.idOrdenCompraCliente, usuario);
+                foreach (OrdenCompraClienteDetalle itemOC in itemsOC)
+                {
+                    PedidoDetalle itemPed = pedido.pedidoDetalleList.Where(d => (d.producto.idProducto.Equals(itemOC.producto.idProducto))).FirstOrDefault();
+                    if (itemPed != null)
+                    {
+                        if (itemPed.cantidadMP > itemOC.cantidadPorAsignar)
+                        {
+                            success = 0;
+                            mensajeError = mensajeError + "La cantidad del producto " + itemPed.producto.sku + " es mayor a la cantidad pendiente de la Orden de compra. ";
+                        }
+                    }
+                }
+            }
+        }
 
         public async Task<String> Create()
         {
@@ -2105,34 +2146,47 @@ namespace Cotizador.Controllers
                 throw new System.Exception("Pedido ya se encuentra creado");
             }
 
-            await pedidoBL.InsertPedido(pedido);
-            long numeroPedido = pedido.numeroPedido;
-            String numeroPedidoString = pedido.numeroPedidoString;
-            Guid idPedido = pedido.idPedido;
-            int estado = (int)pedido.seguimientoPedido.estado;
-            String observacion = pedido.seguimientoPedido.observacion;
+            int success = 1;
+            string mensajeError = "";
+            ValidacionPreRegistro(pedido, ref success, ref mensajeError);
 
+            String numeroPedidoString = String.Empty;
+            String observacion = String.Empty;
             bool mostrarAlertaHomologacionNextsoft = false;
-            
-            if (!pedido.productosNextSoftHomologados && pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
+            Guid idPedido = Guid.Empty;
+            int estado = -1;
+
+            if (success == 1)
             {
-                mostrarAlertaHomologacionNextsoft = true;
+                await pedidoBL.InsertPedido(pedido);
+                long numeroPedido = pedido.numeroPedido;
+                numeroPedidoString = pedido.numeroPedidoString;
+                idPedido = pedido.idPedido;
+                estado = (int)pedido.seguimientoPedido.estado;
+                observacion = pedido.seguimientoPedido.observacion;
+
+                mostrarAlertaHomologacionNextsoft = false;
+
+                if (!pedido.productosNextSoftHomologados && pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
+                {
+                    mostrarAlertaHomologacionNextsoft = true;
+                }
+
+                if (continuarLuego == 1)
+                {
+                    SeguimientoPedido.estadosSeguimientoPedido estadosSeguimientoPedido = SeguimientoPedido.estadosSeguimientoPedido.Edicion;
+                    estado = (int)estadosSeguimientoPedido;
+                    observacion = "Se continuará editando luego";
+                    updateEstadoSeguimientoPedido(idPedido, estadosSeguimientoPedido, observacion);
+                }
+                // pedido = null;
+                this.Session[Constantes.VAR_SESSION_PEDIDO] = null;// pedido;// null;
+
+                usuarioBL.updatePedidoSerializado(usuario, null);
             }
 
-            if (continuarLuego == 1)
-            {
-                SeguimientoPedido.estadosSeguimientoPedido estadosSeguimientoPedido = SeguimientoPedido.estadosSeguimientoPedido.Edicion;
-                estado = (int)estadosSeguimientoPedido;
-                 observacion = "Se continuará editando luego";
-                updateEstadoSeguimientoPedido(idPedido, estadosSeguimientoPedido, observacion);
-            }
-            // pedido = null;
-            this.Session[Constantes.VAR_SESSION_PEDIDO] = null;// pedido;// null;
-
-
-            usuarioBL.updatePedidoSerializado(usuario, null);
-
-            var v = new { numeroPedido = numeroPedidoString, estado = estado,
+            var v = new { success = success, mensajeError = mensajeError,
+                numeroPedido = numeroPedidoString, estado = estado,
                 mostrarAlertaHomologacionNextsoft = mostrarAlertaHomologacionNextsoft,
                 observacion = observacion, idPedido = idPedido };
             String resultado = JsonConvert.SerializeObject(v);
@@ -2140,9 +2194,6 @@ namespace Cotizador.Controllers
            // String resultado = "{ \"codigo\":\"" + numeroPedido + "\", \"estado\":\"" + estado + "\", \"observacion\":\"" + observacion + "\" }";
             return resultado;
         }
-
-
-
 
 
         public async Task<String> Update()
@@ -2174,41 +2225,51 @@ namespace Cotizador.Controllers
                 this.Session[Constantes.VAR_SESSION_USUARIO] = usuario;
             }
 
-            await bl.UpdatePedido(pedido);
-            long numeroPedido = pedido.numeroPedido;
-            String numeroPedidoString = pedido.numeroPedidoString;
-            Guid idPedido = pedido.idPedido;
-            int estado = (int)pedido.seguimientoPedido.estado;
-            String observacion = pedido.seguimientoPedido.observacion;
-
+            int success = 1;
+            string mensajeError = "";
+            ValidacionPreRegistro(pedido, ref success, ref mensajeError);
+            
+            String numeroPedidoString = String.Empty;
+            String observacion = String.Empty;
             bool mostrarAlertaHomologacionNextsoft = false;
+            Guid idPedido = Guid.Empty;
+            int estado = -1;
 
-            if (!pedido.productosNextSoftHomologados && pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
+            if (success == 1)
             {
-                mostrarAlertaHomologacionNextsoft = true;
+                await bl.UpdatePedido(pedido);
+                long numeroPedido = pedido.numeroPedido;
+                numeroPedidoString = pedido.numeroPedidoString;
+                idPedido = pedido.idPedido;
+                estado = (int)pedido.seguimientoPedido.estado;
+                observacion = pedido.seguimientoPedido.observacion;
+
+                if (!pedido.productosNextSoftHomologados && pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
+                {
+                    mostrarAlertaHomologacionNextsoft = true;
+                }
+
+                if (continuarLuego == 1)
+                {
+                    SeguimientoPedido.estadosSeguimientoPedido estadosSeguimientoPedido = SeguimientoPedido.estadosSeguimientoPedido.Edicion;
+                    estado = (int)estadosSeguimientoPedido;
+                    observacion = "Se continuará editando luego";
+                    updateEstadoSeguimientoPedido(idPedido, estadosSeguimientoPedido, observacion);
+                }
+                // pedido = null;
+                this.Session[Constantes.VAR_SESSION_PEDIDO] = null;// pedido;
+
+                usuarioBL.updatePedidoSerializado(usuario, null);
             }
 
-            if (continuarLuego == 1)
-            {
-                SeguimientoPedido.estadosSeguimientoPedido estadosSeguimientoPedido = SeguimientoPedido.estadosSeguimientoPedido.Edicion;
-                estado = (int)estadosSeguimientoPedido;
-                observacion = "Se continuará editando luego";
-                updateEstadoSeguimientoPedido(idPedido, estadosSeguimientoPedido, observacion);
-            }
-            // pedido = null;
-            this.Session[Constantes.VAR_SESSION_PEDIDO] = null;// pedido;
-
-            usuarioBL.updatePedidoSerializado(usuario, null);
-
-            var v = new { numeroPedido = numeroPedidoString, estado = estado,
+            var v = new { success = success, mensajeError = mensajeError,  
+                numeroPedido = numeroPedidoString, estado = estado,
                 mostrarAlertaHomologacionNextsoft = mostrarAlertaHomologacionNextsoft,
                 observacion = observacion, idPedido = idPedido };
             String resultado = JsonConvert.SerializeObject(v);
             
-            //String resultado = "{ \"codigo\":\"" + numeroPedido + "\", \"estado\":\"" + estado + "\", \"observacion\":\"" + observacion + "\" }";
             return resultado;
         }
-
 
 
         public void ChangeResponsableComercialPedidoBusqueda()
