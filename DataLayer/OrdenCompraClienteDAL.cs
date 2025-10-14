@@ -980,12 +980,17 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
 
         #endregion
 
-        public List<OrdenCompraClienteDetalle> CantidadesOrdenCompraCliente(Guid idOcc, Usuario usuario)
+        public List<OrdenCompraClienteDetalle> CantidadesOrdenCompraCliente(Guid idOcc, Usuario usuario, Guid idPedido)
         {
             var objCommand = GetSqlCommand("ps_occ_cantidades_en_pedidos");
             InputParameterAdd.Guid(objCommand, "idOrdenCompraCliente", idOcc);
             InputParameterAdd.Guid(objCommand, "idUsuario", usuario.idUsuario);
-            
+
+            if (!idPedido.Equals(Guid.Empty))
+            {
+                InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
+            }
+
             DataTable dataTable = Execute(objCommand);
 
 

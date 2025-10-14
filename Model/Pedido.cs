@@ -712,6 +712,11 @@ namespace Model
         [Display(Name = "SKU:")]
         public String sku { get; set; }
 
+        [Display(Name = "Descripción Producto:")]
+        public String descripcionProducto { get; set; }
+
+        [Display(Name = "Cliente RUC:")]
+        public ClienteSunat clienteSunat { get; set; }
 
         public Vendedor vendedor { get; set; }
 

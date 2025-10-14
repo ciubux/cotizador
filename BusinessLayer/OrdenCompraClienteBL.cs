@@ -226,10 +226,10 @@ namespace BusinessLayer
             return occ;
         }
 
-        public List<OrdenCompraClienteDetalle> CantidadesOrdenCompraCliente(Guid idOcc, Usuario usuario)
+        public List<OrdenCompraClienteDetalle> CantidadesOrdenCompraCliente(Guid idOcc, Usuario usuario, Guid idPedido)
         {
             OrdenCompraClienteDAL dal = new OrdenCompraClienteDAL();
-            return dal.CantidadesOrdenCompraCliente(idOcc, usuario);
+            return dal.CantidadesOrdenCompraCliente(idOcc, usuario, idPedido);
         }
 
         public void calcularMontosTotales(OrdenCompraCliente occ)

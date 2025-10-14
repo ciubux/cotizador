@@ -77,6 +77,8 @@ namespace Cotizador.Controllers
 
                 pedidoTmp.buscarSedesGrupoCliente = false;
                 pedidoTmp.truncado = 0;
+                pedidoTmp.clienteSunat = new ClienteSunat();
+                pedidoTmp.clienteSunat.idClienteSunat = 0;
 
                 pedidoTmp.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 pedidoTmp.ciudad = new Ciudad();
@@ -1158,7 +1160,14 @@ namespace Cotizador.Controllers
             }
         }
 
-
+        public void ChangeClienteSunat()
+        {
+            Pedido obj = this.PedidoSession;
+            obj.clienteSunat.idClienteSunat = Int32.Parse(this.Request.Params["valor"]);
+            ClienteBL clienteBL = new ClienteBL();
+            obj.clienteSunat = clienteBL.getClienteSunat(obj.clienteSunat.idClienteSunat);
+            this.PedidoSession = obj;
+        }
 
         public String GetCliente()
         {
@@ -1259,9 +1268,6 @@ namespace Cotizador.Controllers
 
                 String jsonPrecioLista = JsonConvert.SerializeObject(producto.precioListaList);
                 String jsonProductoPresentacion = JsonConvert.SerializeObject(producto.ProductoPresentacionList);
-
-
-
 
 
                 String resultado = "{" +
@@ -2112,7 +2118,7 @@ namespace Cotizador.Controllers
             if (pedido.ordenCompracliente != null && !pedido.ordenCompracliente.idOrdenCompraCliente.Equals(Guid.Empty))
             {
                 OrdenCompraClienteBL occBl = new OrdenCompraClienteBL();
-                List<OrdenCompraClienteDetalle> itemsOC = occBl.CantidadesOrdenCompraCliente(pedido.ordenCompracliente.idOrdenCompraCliente, usuario);
+                List<OrdenCompraClienteDetalle> itemsOC = occBl.CantidadesOrdenCompraCliente(pedido.ordenCompracliente.idOrdenCompraCliente, usuario, pedido.idPedido);
                 foreach (OrdenCompraClienteDetalle itemOC in itemsOC)
                 {
                     PedidoDetalle itemPed = pedido.pedidoDetalleList.Where(d => (d.producto.idProducto.Equals(itemOC.producto.idProducto))).FirstOrDefault();

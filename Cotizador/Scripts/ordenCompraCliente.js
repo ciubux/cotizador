@@ -2647,9 +2647,9 @@ jQuery(function ($) {
 
                     itemOrdenCompraCliente = {
                         idOrdenCompraClienteDetalle: lista[i].idOrdenCompraClienteDetalle, sku: lista[i].producto.sku, producto: lista[i].producto.descripcion, unidad: lista[i].unidad,
-                        idProducto: lista[i].producto.idProducto, cantidad: lista[i].cantidad, cantidadPorAsignar: lista[i].cantidadPorAsignar, cantidadPorEntregar: lista[i].cantidadPorEntregar,
-                        producto: lista[i].producto, idProductoPresentacion: idProductoPresentacion, 
-                        cantidadPermitida: lista[i].cantidadPermitida, observacionRestriccion: lista[i].observacionRestriccion
+                        idProducto: lista[i].producto.idProducto, producto: lista[i].producto, idProductoPresentacion: idProductoPresentacion,
+                        cantidad: lista[i].cantidad, cantidadPorAsignar: lista[i].cantidadPorAsignar, cantidadPorEntregar: lista[i].cantidadPorEntregar,
+                        cantidadMP: lista[i].cantidadMP, cantidadPermitida: lista[i].cantidadPermitida, observacionRestriccion: lista[i].observacionRestriccion
                     };
 
 
@@ -3033,7 +3033,10 @@ jQuery(function ($) {
             var producto = ordenCompraClienteItemsRestringidos[i].producto;
             cantPorAsignarUnidadMP = ordenCompraClienteItemsRestringidos[i].cantidadPorAsignar;
             cantPorEntregarUnidadMP = ordenCompraClienteItemsRestringidos[i].cantidadPorEntregar;
-            cantidadItemMP = ordenCompraClienteItemsRestringidos[i].cantidad;
+            cantidadItemMP = ordenCompraClienteItemsRestringidos[i].cantidadMP;
+
+            cantidadPorAsignarMostrar = cantPorAsignarUnidadMP;
+            cantidadPorEntregarrMostrar = cantPorEntregarUnidadMP;
 
             console.log(ordenCompraClienteItemsRestringidos[i]);
 
@@ -3041,17 +3044,6 @@ jQuery(function ($) {
                 strCantUnidad = ' cantidadItem="' + cantidadItemMP + '" cantidadPorAsignar="' + cantPorAsignarUnidadMP + '" cantidadPorEntregar="' + cantPorEntregarUnidadMP + '" '
                 optionsUnidad = '<option ' + strCantUnidad + ' selected  value="0">' + producto.unidad + '</option>';
             } else {
-                if (idProductoPresentacionItem == 1) {
-                    cantidadItemMP = cantidadItemMP / producto.equivalenciaAlternativa;
-                    cantPorAsignarUnidadMP = cantPorAsignarUnidadMP / producto.equivalenciaAlternativa;
-                    cantPorEntregarUnidadMP = cantPorEntregarUnidadMP / producto.equivalenciaAlternativa;
-                }
-                if (idProductoPresentacionItem == 2) {
-                    cantidadItemMP = cantidadItemMP * producto.equivalenciaProveedor;
-                    cantPorAsignarUnidadMP = cantPorAsignarUnidadMP * producto.equivalenciaProveedor;
-                    cantPorEntregarUnidadMP = cantPorEntregarUnidadMP * producto.equivalenciaProveedor;
-                }
-
                 strCantUnidad = ' cantidadItem="' + cantidadItemMP.toFixed(2) + '" cantidadPorAsignar="' + cantPorAsignarUnidadMP.toFixed(2) + '" cantidadPorEntregar="' + cantPorEntregarUnidadMP.toFixed(2) + '" '
                 optionsUnidad = '<option ' + strCantUnidad + ' value="0">' + producto.unidad + '</option>';
             }
@@ -3075,6 +3067,8 @@ jQuery(function ($) {
 
                 if (producto.ProductoPresentacionList[j].IdProductoPresentacion == idProductoPresentacionItem) {
                     optionsUnidad = optionsUnidad + '<option ' + strCantUnidad + ' selected value="' + producto.ProductoPresentacionList[j].IdProductoPresentacion + '">' + producto.ProductoPresentacionList[j].Presentacion + '</option>';
+                    cantidadPorAsignarMostrar = cantPorAsignarUnidad;
+                    cantidadPorEntregarrMostrar = cantPorEntregarUnidad;
                 } else {
                     optionsUnidad = optionsUnidad + '<option ' + strCantUnidad + ' value="' + producto.ProductoPresentacionList[j].IdProductoPresentacion + '">' + producto.ProductoPresentacionList[j].Presentacion + '</option>';
                 }
@@ -3084,8 +3078,8 @@ jQuery(function ($) {
             text += '<td>' + ordenCompraClienteItemsRestringidos[i].sku + ' ' + ordenCompraClienteItemsRestringidos[i].producto.descripcion + '</td>';
             text += '<td><select class="form-control inputUnidad">' + optionsUnidad + '</select></td>';
             text += '<td class="celdaItemCantidad">' + ordenCompraClienteItemsRestringidos[i].cantidad + '</td>';
-            text += '<td class="celdaItemCantidadRestante">' + ordenCompraClienteItemsRestringidos[i].cantidadPorAsignar + '</td>';
-            text += '<td class="celdaItemCantidadPorEntregar">' + ordenCompraClienteItemsRestringidos[i].cantidadPorEntregar + '</td>';
+            text += '<td class="celdaItemCantidadRestante">' + cantidadPorAsignarMostrar.toFixed(2) + '</td>';
+            text += '<td class="celdaItemCantidadPorEntregar">' + cantidadPorEntregarrMostrar.toFixed(2) + '</td>';
             text += '<td>' + 
                 '<input class="form-control inputItemAtender" type="number" min="0" max="' + ordenCompraClienteItemsRestringidos[i].cantidad + '" step="1" value="0">' +
                     '</td>';

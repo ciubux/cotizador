@@ -27,10 +27,43 @@ jQuery(function ($) {
             }
         }
 
+        cargarChosenClienteSunat();
     });
 
    
     
+    function cargarChosenClienteSunat() {
+
+        $("#idClienteSunat").chosen({ placeholder_text_single: "Buscar RUC", no_results_text: "No se encontró RUC" }).on('chosen:showing_dropdown', function (evt, params) {
+
+        });
+
+        $("#idClienteSunat").ajaxChosen({
+            dataType: "json",
+            type: "GET",
+            minTermLength: 5,
+            afterTypeDelay: 300,
+            cache: false,
+            url: "/Cliente/SearchClienteSunat"
+        }, {
+            loadingImg: "Content/chosen/images/loading.gif"
+        }, { placeholder_text_single: "Buscar RUC", no_results_text: "No se encontró RUC" });
+    }
+
+    $("#idClienteSunat").change(function () {
+        ChangeClienteSunat($(this).val());
+    });
+
+    function ChangeClienteSunat(valor) {
+        $.ajax({
+            url: "/Pedido/ChangeClienteSunat",
+            type: 'POST',
+            data: {
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
 
     function ConfirmDialogReload(message) {
         $('<div></div>').appendTo('body')
@@ -775,13 +808,6 @@ jQuery(function ($) {
             }
        // }
 
-
-        
-        
-
-
-
-
     }
 
     $("#pedido_tipoPedido").change(function () { 
@@ -821,6 +847,10 @@ jQuery(function ($) {
 
     $("#pedido_sku").change(function () {
         changeInputString("sku", $("#pedido_sku").val())
+    });
+
+    $("#pedido_descripcionProducto").change(function () {
+        changeInputString("descripcionProducto", $("#pedido_descripcionProducto").val())
     });
 
     $("#pedido_numeroReferenciaCliente").change(function () {
@@ -2739,7 +2769,7 @@ jQuery(function ($) {
             success: function (resultado) {
                 $('body').loadingModal('hide');
 
-                if (resultado.ssuccess == 1) {
+                if (resultado.success == 1) {
                     $("#pedido_numeroPedido").val(resultado.numeroPedido);
                     $("#idPedido").val(resultado.idPedido);
 
@@ -2816,7 +2846,7 @@ jQuery(function ($) {
             success: function (resultado) {
                 $('body').loadingModal('hide')
                 
-                if (resultado.ssuccess == 1) {
+                if (resultado.success == 1) {
                     $("#pedido_numeroPedido").val(resultado.numeroPedido);
                     $("#idPedido").val(resultado.idPedido);
 

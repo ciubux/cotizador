@@ -724,6 +724,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "verTodasEmpresas", pedido.integraEmpresas? 1 : 0);
             InputParameterAdd.Int(objCommand, "excluirYaReplicados", pedido.excluirPedidosYaReplicados? 1 : 0);
 
+            InputParameterAdd.Int(objCommand, "idClienteSunat", pedido.clienteSunat.idClienteSunat);
 
             switch (pedido.clasePedido)
             {
@@ -744,6 +745,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
             InputParameterAdd.Int(objCommand, "estadoCrediticio", (int)pedido.seguimientoCrediticioPedido.estado);
             InputParameterAdd.Varchar(objCommand, "sku", pedido.sku?.Trim());
+            InputParameterAdd.Varchar(objCommand, "descripcionProducto", pedido.descripcionProducto?.Trim());
             DataTable dataTable = Execute(objCommand);
 
             List<Pedido> pedidoList = new List<Pedido>();

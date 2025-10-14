@@ -32,16 +32,16 @@ namespace Model
 
         public Decimal cantidadMP { 
             get {
-                Decimal cantidadMP = Decimal.Parse(this.cantidad.ToString());
+                Decimal resCantidadMP = Decimal.Parse(this.cantidad.ToString());
                 if (this.ProductoPresentacion != null)
                 {
                     switch (this.ProductoPresentacion.IdProductoPresentacion)
                     {
-                        case 1: cantidadMP = cantidadMP * this.ProductoPresentacion.Equivalencia; break;
-                        case 2: cantidadMP = cantidadMP / this.ProductoPresentacion.Equivalencia; break;
+                        case 1: resCantidadMP = resCantidadMP / this.ProductoPresentacion.Equivalencia; break;
+                        case 2: resCantidadMP = resCantidadMP / this.ProductoPresentacion.Equivalencia; break;
                     }
                 }
-                return cantidadMP;
+                return resCantidadMP;
             } 
         }
 
