@@ -2490,7 +2490,7 @@ jQuery(function ($) {
 
                     d += '<tr class="' + inactivoClass + '" sku = "' + lista[i].producto.sku + '" idProductoPresentacion="' + lista[i].idProductoPresentacion + '" >' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
-                        '<td>' + lista[i].producto.sku + descontinuadoLabel + '</td>' +
+                        '<td>' + lista[i].producto.sku + "<br/>[" + lista[i].producto.skuProveedor + "]" + descontinuadoLabel + '</td>' +
                         '<td>' + lista[i].producto.descripcion + '</td>' +
                         '<td>' + lista[i].unidad + '</td>' +
                         '<td class="column-img"><img class="table-product-img" src="data:image/png;base64,' + lista[i].producto.image + '"> </td>' +

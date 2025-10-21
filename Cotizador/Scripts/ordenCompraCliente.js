@@ -2674,7 +2674,8 @@ jQuery(function ($) {
                         '<td>' + lista[i].precioUnitario.toFixed(cantidadCuatroDecimales) + '</td>' +
                         //       '<td>' + lista[i].precioUnitarioVenta.toFixed(cantidadCuatroDecimales) + '</td>' +
                         '<td>' + lista[i].cantidad + '</td>' +
-                        '<td>' + lista[i].cantidadPendienteAtencion + '</td>' +
+                        '<td>' + lista[i].cantidadPorAsignarItem.toFixed(cantidadDecimales) + '</td>' +
+                        '<td>' + lista[i].cantidadPorEntregarItem.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + lista[i].subTotal.toFixed(cantidadDecimales) + '</td>' +
                         '<td>' + observacion + '</td>' +
                         '<td class="' + lista[i].producto.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + lista[i].producto.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>' +

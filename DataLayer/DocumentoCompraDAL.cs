@@ -113,8 +113,8 @@ namespace DataLayer
                         !column.ToUpper().Equals("aprobado".ToUpper()) &&
                         !column.ToUpper().Equals("usuario_aprobacion".ToUpper()) &&
                         !column.ToUpper().Equals("fecha_aprobacion".ToUpper()) &&
-                        !column.ToUpper().Equals("observaciones".ToUpper())
-
+                        !column.ToUpper().Equals("observaciones".ToUpper()) &&
+                        !column.ToUpper().Equals("id_empresa".ToUpper())
                         )
                     {
                         documentoCompra.cPE_CABECERA_COMPRA.GetType().GetProperty(column).SetValue(documentoCompra.cPE_CABECERA_COMPRA, Converter.GetString(row, column));
@@ -164,8 +164,6 @@ namespace DataLayer
                 documentoCompra.cPE_DOC_REF_COMPRAList.Add(cPE_DOC_REF_COMPRA);
 
             }
-
-
 
             return documentoCompra;
         }

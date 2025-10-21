@@ -32,6 +32,27 @@ namespace Model
             get { return Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, this.cantidadMP - this.cantidadEntregada)); }
         }
 
+        public Decimal cantidadPorAsignarItem
+        {
+            get
+            {
+                if (esPrecioAlternativo)
+                    return Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, this.cantidadPorAsignar * ProductoPresentacion.Equivalencia));
+                else
+                    return this.cantidadPorAsignar;
+            }
+        }
+
+        public Decimal cantidadPorEntregarItem
+        {
+            get {
+                if (esPrecioAlternativo)
+                    return Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, this.cantidadPorEntregar * ProductoPresentacion.Equivalencia));
+                else
+                    return this.cantidadPorEntregar;
+            }
+        }
+
         public Guid idOrdenCompraClienteDetalle { get; set; }
         public Guid idOrdenCompraCliente { get; set; }
 
