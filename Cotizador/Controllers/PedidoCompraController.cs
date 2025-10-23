@@ -61,6 +61,9 @@ namespace Cotizador.Controllers
 
             pedidoTmp.responsableComercial = new Vendedor();
 
+            pedidoTmp.clienteSunat = new ClienteSunat();
+            pedidoTmp.clienteSunat.idClienteSunat = 0;
+
             pedidoTmp.ciudad = new Ciudad();
             pedidoTmp.cliente = new Cliente();
             pedidoTmp.seguimientoPedido = new SeguimientoPedido();
