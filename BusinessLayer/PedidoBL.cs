@@ -458,6 +458,8 @@ namespace BusinessLayer
             }
         }
 
+
+
         public async Task<bool> FacturaAdelantadaTC(Pedido ped, Guid idUsuario)
         {
             ClienteBL blCliente = new ClienteBL();
@@ -529,6 +531,14 @@ namespace BusinessLayer
             using (var dal = new PedidoDAL())
             {
                 dal.UpdateStockConfirmado(pedido);
+            }
+        }
+        
+        public void UpdateFacturadoAnticipadamente(Pedido pedido)
+        {
+            using (PedidoDAL dal = new PedidoDAL())
+            {
+                dal.UpdateFacturadoAnticipadamente(pedido);
             }
         }
 

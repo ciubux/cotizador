@@ -853,12 +853,13 @@ namespace Cotizador.Controllers
                 this.Session["seAtiendeDiferidoVenta"] = false;
                 this.Session["seAtiendeTrasladoInterno"] = false;
                 this.Session["seAtiendeEntregaTerceros"] = false;
-
+                bool esGuiaDiferida = false;
                 Pedido pedido = null;
                 if (tipo.ToString().Equals("VD"))
                 {
                     tipo = "V";
                     this.Session["seAtiendeDiferidoVenta"] = true;
+                    esGuiaDiferida = true;
                 }
 
                 if ((Pedido.ClasesPedido)Char.Parse(tipo) == Pedido.ClasesPedido.Venta)
@@ -987,6 +988,10 @@ namespace Cotizador.Controllers
                 TransportistaBL transportistaBL = new TransportistaBL();
                 guiaRemision.ciudadOrigen.transportistaList = transportistaBL.getTransportistas(pedido.ciudad.idCiudad);
                 guiaRemision.documentoDetalle = guiaRemision.pedido.documentoDetalle;
+
+                if ((!pedido.idMPPedido.Equals(Guid.Empty) && esGuiaDiferida) || pedido.facturadoAnticipadamentePedidoMP) {
+                    guiaRemision.ultimaAtencionParcial = true;
+                }
 
             }
             catch (Exception ex)

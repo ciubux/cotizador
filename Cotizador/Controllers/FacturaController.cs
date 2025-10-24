@@ -517,14 +517,6 @@ namespace Cotizador.Controllers
 
 
 
-
-
-
-
-
-
-
-
         [HttpGet]
         public ActionResult Index()
         {

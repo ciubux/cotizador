@@ -782,6 +782,8 @@ namespace DataLayer
 
                 pedido.observaciones = Converter.GetString(row, "observaciones");
 
+                pedido.facturadoAnticipadamente = Converter.GetInt(row, "facturado_anticipadamente") == 1 ? true : false;
+
                 pedido.numeroPedidoRelacionado = Converter.GetInt(row, "numero_pedido_rel");
                 pedido.codigoEmpresaPedidoRelacionado = Converter.GetString(row, "codigo_empresa_pedido_rel");
 
@@ -873,6 +875,7 @@ namespace DataLayer
                 pedido.horaEntregaAdicionalHasta = Converter.GetString(row, "hora_entrega_adicional_hasta");
 
                 pedido.facturadoExterno = Converter.GetInt(row, "facturado_externo") == 1 ? true : false;
+                pedido.facturadoAnticipadamente = Converter.GetInt(row, "facturado_anticipadamente") == 1 ? true : false;
 
                 pedido.productosNextSoftHomologados = Converter.GetInt(row, "productos_homologados_nextsoft") == 1 ? true : false;
                 pedido.entregaATerceros = Converter.GetInt(row, "entrega_terceros") == 1 ? true : false;
@@ -883,6 +886,7 @@ namespace DataLayer
                 pedido.idMPPedido = Converter.GetGuid(row, "id_pedido_mp");
                 pedido.facturadoExternoPedidoMP = Converter.GetInt(row, "facturado_externo_pedido_mp") == 1 ? true : false;
                 pedido.numeroPedidoMP = Converter.GetLong(row, "numero_pedido_mp");
+                pedido.facturadoAnticipadamentePedidoMP = Converter.GetInt(row, "facturado_anticipadamente_pedido_mp") == 1 ? true : false;
 
                 pedido.moneda = new Moneda();
                 pedido.moneda.codigo = Converter.GetString(row, "moneda");
@@ -1864,6 +1868,16 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
             ExecuteNonQuery(objCommand);
         }
+
+        public void UpdateFacturadoAnticipadamente(Pedido pedido)
+        {
+            var objCommand = GetSqlCommand("pu_pedido_facturado_anticipadamente");
+            InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
+            InputParameterAdd.Int(objCommand, "estadoFacturadoAnticipadamente", pedido.facturadoAnticipadamente ? 1 : 0);
+            InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
+            ExecuteNonQuery(objCommand);
+        }
+        
 
         public bool ActualizarCostosEspeciales(Guid idPedido, Guid idUsuario)
         {

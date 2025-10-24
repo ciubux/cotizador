@@ -179,8 +179,15 @@
                     {<label for="guiaRemision_atencionParcial" class="control-label col-xs-4">Atención Parcial:</label>}
                     else
                     { <label for="guiaRemision_atencionParcial" class="control-label col-xs-4">Devolución Parcial:</label>}
-                    <div class="col-xs-8">
-                        @if (guiaRemision.atencionParcial)
+                <div class="col-xs-8">
+
+                    @if (guiaRemision.ultimaAtencionParcial)
+                    {
+                        <span class="form-control-static" id="descripcionUltimaAtencionParcial">(Última Atención Parcial)</span>
+                    }
+                    else
+                    {
+                        if (guiaRemision.atencionParcial)
                         {
                             <input checked type="checkbox" id="guiaRemision_atencionParcial" name="guiaRemision_atencionParcial" />
                         }
@@ -188,20 +195,11 @@
                         {
                             <input type="checkbox" id="guiaRemision_atencionParcial" name="guiaRemision_atencionParcial" />
                         }
+                        <span class="form-control-static" id="descripcionUltimaAtencionParcial"></span>
+                    }
 
 
-
-                        @if (guiaRemision.ultimaAtencionParcial)
-                        {
-                            <span class="form-control-static" id="descripcionUltimaAtencionParcial">(Última Atención Parcial)</span>
-                        }
-                        else
-                        {
-                            <span class="form-control-static" id="descripcionUltimaAtencionParcial"></span>
-                        }
-
-
-                    </div>
+                </div>
 
                 </div>
             </div>

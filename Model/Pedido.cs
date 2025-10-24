@@ -193,6 +193,10 @@ namespace Model
         [Display(Name = "Facturado Externamente:")]
         public bool facturadoExterno { get; set; }
 
+        [Display(Name = "Facturado Anticipadamente:")]
+        public bool facturadoAnticipadamente { get; set; }
+        public bool facturadoAnticipadamentePedidoMP { get; set; }
+
         public bool facturadoExternoPedidoMP { get; set; }
 
         public bool esVentaIndirectaAnt { get; set; }
