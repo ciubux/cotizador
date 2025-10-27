@@ -1041,78 +1041,91 @@
             }
 
 
-            <fieldset>
-                <legend>Configuración:</legend>
+        <fieldset>
+            <legend>Configuración:</legend>
 
-                <div class="row">
-                    <div class="col-sm-12 col-lg-6">
-                        <div class="col-sm-12">
-                            <div class="form-group">
+            <div class="row">
+                <div class="col-sm-12 col-lg-6">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="onoffswitch" @(cliente.configuraciones.agregarNombreSedeObservacionFactura ? "checked" : "") class="onoffswitch-checkbox" id="chkConfigAgregarNombreSedeObservacionFactura">
+                                <label class="onoffswitch-label" for="chkConfigAgregarNombreSedeObservacionFactura"></label>
+                            </div>
+                            <h5 id="lblChkConfigAgregarNombreSedeObservacionFactura" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Agregar nombre de sede de dirección de entrega a observaciones de factura</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-lg-6">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="onoffswitch" @(cliente.esAgenteRetencion ? "checked" : "") class="onoffswitch-checkbox" id="chkEsAgenteRetencion">
+                                <label class="onoffswitch-label" for="chkEsAgenteRetencion"></label>
+                            </div>
+                            <h5 id="lblChkEsAgenteRetencion" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Es agente de retención</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-lg-6">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="onoffswitch" @(cliente.facturaUnica ? "checked" : "") class="onoffswitch-checkbox" id="chkFacturaUnica">
+                                <label class="onoffswitch-label" for="chkFacturaUnica"></label>
+                            </div>
+                            <h5 id="lblChkFacturaUnica" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Facturación única</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-lg-6">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="onoffswitch" @(cliente.atencionSoloOc ? "checked" : "") class="onoffswitch-checkbox" id="chkAtencionSoloOc">
+                                <label class="onoffswitch-label" for="chkAtencionSoloOc"></label>
+                            </div>
+                            <h5 id="lblChkAtencionSoloOc" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Atención sólo mediante Orden de Compra</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-lg-6">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            @if (cliente.usuario.activaClienteFacturaCompleja)
+                            {
                                 <div class="onoffswitch">
-                                    <input type="checkbox" name="onoffswitch" @(cliente.configuraciones.agregarNombreSedeObservacionFactura ? "checked" : "") class="onoffswitch-checkbox" id="chkConfigAgregarNombreSedeObservacionFactura">
-                                    <label class="onoffswitch-label" for="chkConfigAgregarNombreSedeObservacionFactura"></label>
+                                    <input type="checkbox" name="onoffswitch" @(cliente.configuraciones.facturacionCompleja ? "checked" : "") class="onoffswitch-checkbox" id="chkConfigFacturacionCompleja">
+                                    <label class="onoffswitch-label" for="chkConfigFacturacionCompleja"></label>
                                 </div>
-                                <h5 id="lblChkConfigAgregarNombreSedeObservacionFactura" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Agregar nombre de sede de dirección de entrega a observaciones de factura</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 col-lg-6">
-                        <div class="col-sm-12">
-                            <div class="form-group">
+                            }
+                            else
+                            {
                                 <div class="onoffswitch">
-                                    <input type="checkbox" name="onoffswitch" @(cliente.esAgenteRetencion ? "checked" : "") class="onoffswitch-checkbox" id="chkEsAgenteRetencion">
-                                    <label class="onoffswitch-label" for="chkEsAgenteRetencion"></label>
+                                    @if (cliente.configuraciones.facturacionCompleja)
+                                    {
+                                        <label style="color:#40b34f">SI</label>
+                                    }
+                                    else
+                                    {
+                                        <label style="color:#d81717">NO</label>
+                                    }
                                 </div>
-                                <h5 id="lblChkEsAgenteRetencion" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Es agente de retención</h5>
-                            </div>
+                            }
+                            <h5 id="lblChkConfigFacturacionCompleja" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Facturación compleja</h5>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-12 col-lg-6">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <div class="onoffswitch">
-                                    <input type="checkbox" name="onoffswitch" @(cliente.facturaUnica ? "checked" : "") class="onoffswitch-checkbox" id="chkFacturaUnica">
-                                    <label class="onoffswitch-label" for="chkFacturaUnica"></label>
-                                </div>
-                                <h5 id="lblChkFacturaUnica" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Facturación única</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 col-lg-6">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                @if (cliente.usuario.activaClienteFacturaCompleja)
-                                {
-                                    <div class="onoffswitch">
-                                        <input type="checkbox" name="onoffswitch" @(cliente.configuraciones.facturacionCompleja ? "checked" : "") class="onoffswitch-checkbox" id="chkConfigFacturacionCompleja">
-                                        <label class="onoffswitch-label" for="chkConfigFacturacionCompleja"></label>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="onoffswitch">
-                                        @if (cliente.configuraciones.facturacionCompleja)
-                                        {
-                                            <label style="color:#40b34f">SI</label>
-                                        }
-                                        else
-                                        {
-                                            <label style="color:#d81717">NO</label>
-                                        }
-                                    </div>
-                                }
-                                <h5 id="lblChkConfigFacturacionCompleja" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Facturación compleja</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </fieldset>
+            </div>
+        </fieldset>
         </fieldset>
 
         <div class="row">

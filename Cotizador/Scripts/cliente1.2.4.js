@@ -2828,7 +2828,28 @@ jQuery(function ($) {
         changeInputBoolean('facturaUnica', valor)
     }
 
+    $("#lblChkAtencionSoloOc").click(function () {
+        if ($("#chkAtencionSoloOc").is(":checked")) {
+            $("#chkAtencionSoloOc").prop("checked", false);
+        } else {
+            $("#chkAtencionSoloOc").prop("checked", true);
+        }
 
+        actualizarValorChkAtencionSoloOc();
+    });
+
+
+    $("#chkAtencionSoloOc").change(function () {
+        actualizarValorChkAtencionSoloOc();
+    });
+
+    function actualizarValorChkAtencionSoloOc() {
+        var valor = 1;
+        if (!$('#chkAtencionSoloOc').prop('checked')) {
+            valor = 0;
+        }
+        changeInputBoolean('atencionSoloOc', valor)
+    }
 
     $("#lblChkConfigAgregarNombreSedeObservacionFactura").click(function () {
         if ($("#chkConfigAgregarNombreSedeObservacionFactura").is(":checked")) {
@@ -3483,6 +3504,13 @@ jQuery(function ($) {
                         $("#verChkFacturaUnica_NO").show();
                     }
 
+                    if (cliente.atencionSoloOc) {
+                        $("#verChkAtencionSoloOc_SI").show();
+                        $("#verChkAtencionSoloOc_NO").hide();
+                    } else {
+                        $("#verChkAtencionSoloOc_SI").hide();
+                        $("#verChkAtencionSoloOc_NO").show();
+                    }
 
                     if (cliente.configuraciones.facturacionCompleja) {
                         $("#verChkConfigFacturacionCompleja_SI").show();

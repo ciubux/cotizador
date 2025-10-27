@@ -452,6 +452,7 @@ namespace DataLayer
 
                 cliente.esAgenteRetencion = Converter.GetInt(row, "es_agente_retencion") == 1 ? true : false;
                 cliente.facturaUnica = Converter.GetInt(row, "factura_unica") == 1 ? true : false;
+                cliente.atencionSoloOc = Converter.GetInt(row, "atencion_solo_oc") == 1 ? true : false;
 
                 cliente.habilitadoNegociacionGrupal = Converter.GetBool(row, "habilitado_negociacion_grupal");
                 cliente.sedePrincipal = Converter.GetBool(row, "sede_principal");
@@ -1049,6 +1050,7 @@ namespace DataLayer
             InputParameterAdd.SmallInt(objCommand, "esCargaMasiva", (short)(cliente.CargaMasiva ? 1 : 0));
             InputParameterAdd.Int(objCommand, "esAgenteRetencion", (int)(cliente.esAgenteRetencion ? 1 : 0));
             InputParameterAdd.Int(objCommand, "facturaUnica", (int)(cliente.facturaUnica ? 1 : 0));
+            InputParameterAdd.Int(objCommand, "atencionSoloOc", (int)(cliente.atencionSoloOc ? 1 : 0));
 
             InputParameterAdd.Int(objCommand, "idOrigen", cliente.origen == null ? 0 : cliente.origen.idOrigen);
             InputParameterAdd.Int(objCommand, "idSubDistribuidor", (!cliente.esSubDistribuidor) ? 0 : cliente.subDistribuidor.idSubDistribuidor);
@@ -1171,6 +1173,7 @@ namespace DataLayer
             InputParameterAdd.SmallInt(objCommand, "esCargaMasiva", (short)(cliente.CargaMasiva ? 1 : 0));
             InputParameterAdd.Int(objCommand, "esAgenteRetencion", (int)(cliente.esAgenteRetencion ? 1 : 0));
             InputParameterAdd.Int(objCommand, "facturaUnica", (int)(cliente.facturaUnica ? 1 : 0));
+            InputParameterAdd.Int(objCommand, "atencionSoloOc", (int)(cliente.atencionSoloOc ? 1 : 0));
 
             InputParameterAdd.Bit(objCommand, "sedePrincipal", cliente.sedePrincipal);
             InputParameterAdd.Bit(objCommand, "negociacionMultiregional", cliente.negociacionMultiregional);
