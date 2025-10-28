@@ -347,6 +347,20 @@ jQuery(function ($) {
                     return false;
                 }
 
+                if (cliente.atencionSoloOc) {
+                    $.alert({
+                        title: '¡Advertencia!',
+                        type: 'orange',
+                        content: "Solo se pueden generar pedidos a este cliente por medio de Ordenes de Compra.",
+                        buttons: {
+                            OK: function () {
+                                window.location = '/Pedido/Pedir';
+                            }
+                        }
+                    });
+                    return false;
+                }
+
                 if (cliente.facturaUnica) {
                     $("#chkFacturaUnica").prop("checked", true);
                 } else {

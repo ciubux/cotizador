@@ -233,6 +233,7 @@ namespace Model
         public bool visualizaClientes { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_CLIENTES)).FirstOrDefault() != null; } }
         public bool modificaCanastaCliente { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_CANASTA_CLIENTE)).FirstOrDefault() != null; } }
         public bool activaClienteFacturaCompleja { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.ACTIVA_CLIENTE_FACTURA_COMPLEJA)).FirstOrDefault() != null; } }
+        public bool restringeAtencionClienteSoloOC { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.RESTRINGE_ATENCION_CLIENTE_SOLO_OC)).FirstOrDefault() != null; } }
 
         public bool reasignaCarteraCliente { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REASIGNA_CARTERA_CLIENTE)).FirstOrDefault() != null; } }
 

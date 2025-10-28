@@ -556,6 +556,7 @@ namespace Model
 
 
         public const String ACTIVA_CLIENTE_FACTURA_COMPLEJA = "P680";
+        public const String RESTRINGE_ATENCION_CLIENTE_SOLO_OC = "P681";
 
         public const String MODIFICA_CLIENTE_CONTACTO_TIPO = "P761";
 

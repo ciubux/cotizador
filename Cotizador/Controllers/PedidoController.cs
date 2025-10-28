@@ -1177,14 +1177,21 @@ namespace Cotizador.Controllers
                 Pedido pedido = this.PedidoSession; 
                 Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
                 ClienteBL clienteBl = new ClienteBL();
-                pedido.cliente = clienteBl.getCliente(idCliente);
+                Cliente clieResult = clienteBl.getCliente(idCliente);
+                
 
-                if (pedido.cliente.correoEnvioFactura == null || (pedido.cliente.correoEnvioFactura != null && pedido.cliente.correoEnvioFactura.Trim().Length == 0))
+                if (clieResult.correoEnvioFactura == null 
+                    || (clieResult.correoEnvioFactura != null && clieResult.correoEnvioFactura.Trim().Length == 0)
+                    || clieResult.atencionSoloOc
+                    )
                 {
                     pedido.cliente = new Cliente();
+                    pedido.cliente.atencionSoloOc = clieResult.atencionSoloOc;
+                    pedido.cliente.correoEnvioFactura = clieResult.correoEnvioFactura;
                 }
                 else
                 {
+                    pedido.cliente = clieResult;
                     //Se obtiene la lista de direccioines de entrega registradas para el cliente
                     DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
                     pedido.cliente.direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(idCliente);
