@@ -1297,6 +1297,91 @@ namespace DataLayer
             return list;
         }
 
+        public List<List<string>> getHistorialCredito(Guid idCliente, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_cliente_historial_credito");
+            InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable dataTable = Execute(objCommand);
+
+            DateTime fechaModificacion = DateTime.MinValue;
+            DateTime fechaInicioVigencia = DateTime.MinValue;
+            
+            string nombreCampo = string.Empty;
+            string nombreUsuario = string.Empty;
+            string plazoCreditoAprobado = string.Empty;
+            string creditoAprobado = string.Empty;
+            string plazoCreditoSolicitado = string.Empty;
+            string creditoSolicitado = string.Empty;
+            string observacionesCredito = string.Empty;
+
+            DateTime fechaModificacionNew = DateTime.MinValue;
+            string nombreUsuarioNew = string.Empty;
+            string valorTmp = string.Empty;
+            DocumentoVenta.TipoPago tipoTmp = DocumentoVenta.TipoPago.NoAsignado;
+
+            List<List<string>> lista = new List<List<string>>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                nombreUsuarioNew = Converter.GetString(row, "usuario");
+                fechaModificacionNew = Converter.GetDateTime(row, "fecha_modificacion");
+
+                if (!nombreUsuario.Equals(string.Empty) && 
+                        (!nombreUsuario.Equals(nombreUsuarioNew) ||
+                         fechaModificacion.AddSeconds(5).CompareTo(fechaModificacionNew) < 0)
+                    )
+                {
+                    List<string> item = new List<string>();
+
+                    item.Add(nombreUsuario);
+                    item.Add(creditoSolicitado);
+                    item.Add(plazoCreditoSolicitado);
+                    item.Add(creditoAprobado);
+                    item.Add(plazoCreditoAprobado);
+                    item.Add(observacionesCredito);
+                    item.Add(fechaInicioVigencia.ToString("dd/MM/yyyy"));
+                    item.Add(fechaModificacion.ToString("dd/MM/yyyy hh:mm"));
+
+                    lista.Add(item);
+
+                    fechaModificacion = DateTime.MinValue;
+                    fechaInicioVigencia = DateTime.MinValue;
+
+                    nombreCampo = string.Empty;
+                    nombreUsuario = string.Empty;
+                    plazoCreditoAprobado = string.Empty;
+                    creditoAprobado = string.Empty;
+                    plazoCreditoSolicitado = string.Empty;
+                    creditoSolicitado = string.Empty;
+                    observacionesCredito = string.Empty;
+                }
+
+                nombreCampo = Converter.GetString(row, "campo");
+                valorTmp = Converter.GetString(row, "valor");
+
+                switch (nombreCampo)
+                {
+                    case "credito_aprobado": creditoAprobado = valorTmp; break;
+                    case "plazo_credito":
+                        tipoTmp = (DocumentoVenta.TipoPago)int.Parse(valorTmp);
+                        plazoCreditoAprobado = tipoTmp.GetDisplayName();
+                        break;
+                    case "plazo_credito_solicitado":
+                        tipoTmp = (DocumentoVenta.TipoPago)int.Parse(valorTmp);
+                        plazoCreditoSolicitado = tipoTmp.GetDisplayName();
+                        break;
+                    case "credito_solicitado": creditoSolicitado = valorTmp; break;
+                    case "observaciones_credito": observacionesCredito = valorTmp; break;
+                }
+
+                fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+                fechaModificacion = fechaModificacionNew;
+                nombreUsuario = nombreUsuarioNew;
+            }
+
+            return lista;
+        }
 
         public List<Cliente> BusquedaClientesCartera(Cliente cliente)
         {

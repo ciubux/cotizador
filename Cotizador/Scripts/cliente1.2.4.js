@@ -3841,6 +3841,53 @@ jQuery(function ($) {
     });
 
 
+    $("#modalVerCliente").on('click', ".lnkVerHistorialCredito", function () {
+        cargarModalHistorialCredito(idClienteView);
+    });
+
+    function cargarModalHistorialCredito(idCliente) {
+        $.ajax({
+            url: "/Cliente/GetHistorialCredito",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCliente: idCliente
+            },
+            success: function (res) {
+                var lista = res.lista;
+
+                // var producto = $.parseJSON(respuesta);
+                $("#tableHistorialCredito > tbody").empty();
+
+                for (var i = 0; i < lista.length; i++) {
+                    $("#tableHistorialCredito").append('<tr data-expanded="true">' +
+                        '<td>' + lista[i][6] + '</td>' +
+                        '<td>' + lista[i][0] + '</td>' +
+                        '<td>' + lista[i][2] + '</td>' +
+                        '<td>' + lista[i][1] + '</td>' +
+                        '<td>' + lista[i][4] + '</td>' +
+                        '<td>' + lista[i][3] + '</td>' +
+                        '<td>' + lista[i][5] + '</td>' +
+                        '<td>' + lista[i][7] + '</td>' +
+                        '</tr>');
+
+                }
+                // 0 item.Add(nombreUsuario);
+                // 1 item.Add(creditoSolicitado);
+                // 2 item.Add(plazoCreditoSolicitado);
+                // 3 item.Add(creditoAprobado);
+                // 4 item.Add(plazoCreditoAprobado);
+                // 5 item.Add(observacionesCredito);
+                // 6 item.Add(fechaInicioVigencia.ToString("dd/MM/yyyy"));
+                // 7 item.Add(fechaModificacion.ToString("dd/MM/yyyy hh:mm"));
+                FooTable.init('#tableHistorialCredito');
+            }
+        });
+        $("#modalVerHistorialCredito").modal();
+    }
+
+
+
     $("#modalVerCliente").on('click', ".lnkVerHistorialReasignaciones", function () {
         var campo = $(this).attr("campo");
         cargarModalHistoricoReasignaciones($(this).attr("campo"), idClienteView);

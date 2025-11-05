@@ -989,7 +989,7 @@ namespace Cotizador.Controllers
                 guiaRemision.ciudadOrigen.transportistaList = transportistaBL.getTransportistas(pedido.ciudad.idCiudad);
                 guiaRemision.documentoDetalle = guiaRemision.pedido.documentoDetalle;
 
-                if ((!pedido.idMPPedido.Equals(Guid.Empty) && esGuiaDiferida) || pedido.facturadoAnticipadamentePedidoMP) {
+                if ((!pedido.idMPPedido.Equals(Guid.Empty) && esGuiaDiferida) /*|| pedido.facturadoAnticipadamentePedidoMP*/) {
                     guiaRemision.ultimaAtencionParcial = true;
                 }
 

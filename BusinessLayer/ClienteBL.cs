@@ -945,9 +945,18 @@ namespace BusinessLayer
 
         public List<ClienteReasignacionHistorico> getHistorialReasignacionesClientePorCampo(String campo, Guid idCliente)
         {
-            using (var dal = new ClienteDAL())
+            using (ClienteDAL dal = new ClienteDAL())
             {
                 return dal.getHistorialReasignacionesClientePorCampo(campo, idCliente);
+            }
+        }
+
+
+        public List<List<string>> getHistorialCredito(Guid idCliente, Guid idUsuario)
+        {
+            using (ClienteDAL dal = new ClienteDAL())
+            {
+                return dal.getHistorialCredito(idCliente, idUsuario);
             }
         }
 

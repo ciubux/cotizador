@@ -816,7 +816,12 @@
                                 </div>
 
                             </div>
-
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button type="button" class="btn btn-primary lnkVerHistorialCredito">Ver Historial Crédito</button>
+                                </div>
+                            </div>
+                            <br />
                             <div class="row" style="margin-right: 10px">
                                 <div class="col-sm-6 col-lg-8">
                                     <div class="form-group">
@@ -1547,6 +1552,48 @@
             <div class="modal-footer">
                 <button class="btn btn-primary" id="btnGuardarCambiosClienteContacto">Guardar Cambios</button>
                 <button type="button" class="btn btn-default" id="btnCloseAgregarContacto">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalVerHistorialCredito" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerHistorialCreditoTitle"><b>Historial de Crédito</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <table id="tableHistorialCredito" class="table" data-editing="false"
+                       data-editing-allow-add="false"
+                       data-editing-allow-delete="false"
+                       data-editing-allow-edit="false"
+                       data-show-toggle="false">
+                    <thead>
+                        <tr>
+                            <th data-name="fechaInicioVigencia" data-sortable="false" data-breakpoints="xs">Inicio <br /> Vigencia</th>
+                            <th data-name="usuario" data-sortable="false" data-breakpoints="xs">Usuario</th>
+                            <th data-name="plazoSolicitado" data-sortable="false" data-breakpoints="xs">Plazo <br /> Solicitado</th>
+                            <th data-name="montoSolicitado" data-sortable="false" data-breakpoints="xs">Monto <br /> Solicitado</th>
+                            <th data-name="plazoAprobado" data-sortable="false" data-breakpoints="xs">Plazo <br /> Aprobado</th>
+                            <th data-name="montoAprobado" data-sortable="false" data-breakpoints="xs">Monto <br /> Aprobado</th>
+                            <th data-name="observacion" data-sortable="false" data-visible="true" data-breakpoints="xs">Observaciones Crédito</th>
+                            <th data-name="fechaRegistro" data-sortable="false" data-breakpoints="xs">Fecha <br /> Registro</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <div class="pull-right">
+                    <button type="button" id="btnCloseHistorialCredito" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
             </div>
         </div>
     </div>

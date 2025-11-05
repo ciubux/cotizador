@@ -96,6 +96,7 @@
     <Compile Include="EscalaComision.cs" />
     <Compile Include="TipoCambioSunat.cs" />
     <Compile Include="TipoVistaDashboard.cs" />
+    <Compile Include="UTILES\EnumExtensions.cs" />
     <Compile Include="UTILES\MovimientoKardexCabecera.cs" />
     <Compile Include="UTILES\MovimientoKardexDetalle.cs" />
     <Compile Include="UTILES\FilaProductoPendienteAtencion.cs" />

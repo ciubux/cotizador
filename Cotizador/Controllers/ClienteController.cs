@@ -554,6 +554,18 @@ namespace Cotizador.Controllers
             return "{\"success\": " + success.ToString() + ",\"message\": \"" + "" + "\", \"lista\": " + jsonLista + "}";
         }
 
+        public String GetHistorialCredito()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            ClienteBL clienteBL = new ClienteBL();
+            List<List<string>> lista = clienteBL.getHistorialCredito(Guid.Parse(Request["idCliente"].ToString()), usuario.idUsuario);
+            //return JsonConvert.SerializeObject(clienteList);
+            int success = 1;
+            string jsonLista = JsonConvert.SerializeObject(lista);
+
+            return "{\"success\": " + success.ToString() + ",\"message\": \"" + "" + "\", \"lista\": " + jsonLista + "}";
+        }
 
         public String EliminarClienteReasignacionHistorico()
         {
