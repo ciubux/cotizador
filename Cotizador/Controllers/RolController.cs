@@ -254,16 +254,19 @@ namespace Cotizador.Controllers
 
         public String Update()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             RolBL bL = new RolBL();
             Rol obj = (Rol)this.Session[Constantes.VAR_SESSION_ROL];
-
+            
             if (obj.idRol == 0)
             {
+                obj.IdUsuarioRegistro = usuario.idUsuario;
                 obj = bL.insertRol(obj);
                 this.Session[Constantes.VAR_SESSION_ROL] = null;
             }
             else
             {
+                obj.IdUsuarioEdicion = usuario.idUsuario;
                 obj = bL.updateRol(obj);
                 this.Session[Constantes.VAR_SESSION_ROL] = null;
             }

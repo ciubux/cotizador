@@ -153,7 +153,7 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("pu_rol");
             InputParameterAdd.Int(objCommand, "idRol", obj.idRol);
-            InputParameterAdd.Guid(objCommand, "idUsuario", obj.IdUsuarioRegistro);
+            InputParameterAdd.Guid(objCommand, "idUsuario", obj.IdUsuarioEdicion);
             InputParameterAdd.Varchar(objCommand, "nombre", obj.nombre?.Trim());
             InputParameterAdd.Varchar(objCommand, "codigo", obj.codigo?.Trim());
             InputParameterAdd.Int(objCommand, "estado", obj.Estado);

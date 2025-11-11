@@ -676,7 +676,7 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("pu_usuario_permisos");
             InputParameterAdd.Guid(objCommand, "idUsuario", obj.idUsuario);
-            InputParameterAdd.Guid(objCommand, "idUsuarioModificacion", obj.IdUsuarioRegistro);
+            InputParameterAdd.Guid(objCommand, "idUsuarioModificacion", obj.IdUsuarioEdicion);
 
             DataTable tvp = new DataTable();
             tvp.Columns.Add(new DataColumn("ID", typeof(int)));

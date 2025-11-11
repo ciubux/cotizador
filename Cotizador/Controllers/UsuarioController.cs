@@ -285,6 +285,7 @@ namespace Cotizador.Controllers
             usuarioEdit = bl.getUsuarioMantenedor(idUsuario);
             usuarioEdit.usuario = usuario;
             usuarioEdit.IdUsuarioRegistro = usuario.idUsuario;
+            usuarioEdit.IdUsuarioEdicion = usuario.idUsuario;
             usuarioEdit.permisoList = permisosUsuario;
 
             bl.updatePermisos(usuarioEdit);
