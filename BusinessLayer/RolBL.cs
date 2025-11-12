@@ -72,11 +72,11 @@ namespace BusinessLayer
             }
         }
 
-        public void quitarUsuarioRol(int idRol, Guid idUsuario)
+        public void quitarUsuarioRol(int idRol, Guid idUsuario, Guid idUsuarioEjecutor)
         {
             using (var dal = new RolDAL())
             {
-                dal.quitarUsuarioRol(idRol, idUsuario);
+                dal.quitarUsuarioRol(idRol, idUsuario, idUsuarioEjecutor);
             }
         }
         

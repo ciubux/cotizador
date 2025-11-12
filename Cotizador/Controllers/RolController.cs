@@ -389,7 +389,7 @@ namespace Cotizador.Controllers
 
             if (success == 1)
             {
-                bl.quitarUsuarioRol(rol.idRol, idUsuario);
+                bl.quitarUsuarioRol(rol.idRol, idUsuario, usuario.idUsuario);
                 rol.usuarios.RemoveAt(removeAt);
                 message = "Se removió el usuario.";
             }

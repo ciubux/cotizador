@@ -207,11 +207,12 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
 
-        public void quitarUsuarioRol(int idRol, Guid idUsuario)
+        public void quitarUsuarioRol(int idRol, Guid idUsuario, Guid idUsuarioEjecutor)
         {
             var objCommand = GetSqlCommand("pd_rol_usuario");
             InputParameterAdd.Int(objCommand, "idRol", idRol);
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Guid(objCommand, "idUsuarioModifica", idUsuarioEjecutor);
 
             ExecuteNonQuery(objCommand);
         }
