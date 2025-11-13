@@ -86,6 +86,8 @@ namespace DataLayer
             InputParameterAdd.Bit(objCommand, "ajusteCalculoPrecios", cotizacion.ajusteCalculoPrecios);
             InputParameterAdd.Int(objCommand, "tipoCotizacion", (int)cotizacion.tipoCotizacion);
 
+            InputParameterAdd.Int(objCommand, "aceptacionAutomatica", cotizacion.aceptacionAutomatica ? 1 : 0);
+
             InputParameterAdd.SmallInt(objCommand, "mostrarCodigoProveedor", short.Parse((cotizacion.mostrarCodigoProveedor ? 1 : 0).ToString()));
             InputParameterAdd.Int(objCommand, "mostrarValidezOfertaDias", cotizacion.mostrarValidezOfertaEnDias);
             InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
@@ -170,6 +172,8 @@ namespace DataLayer
             InputParameterAdd.BigInt(objCommand, "codigo", cotizacion.codigo);
             InputParameterAdd.Bit(objCommand, "noAfectoCambiosPrecio", cotizacion.noAfectoCambiosPrecio);
             InputParameterAdd.Int(objCommand, "mostrarCodigoProveedor", short.Parse((cotizacion.mostrarCodigoProveedor ? 1 : 0).ToString()));
+
+            InputParameterAdd.Int(objCommand, "aceptacionAutomatica", cotizacion.aceptacionAutomatica ? 1 : 0);
 
             InputParameterAdd.Int(objCommand, "estado", (int)cotizacion.seguimientoCotizacion.estado);
             InputParameterAdd.Int(objCommand, "mostrarValidezOfertaDias", cotizacion.mostrarValidezOfertaEnDias);
@@ -333,6 +337,8 @@ namespace DataLayer
 
                 cotizacion.idCotizacionAntecedente = Converter.GetGuid(row, "id_cotizacion_antecedente");
                 cotizacion.codigoAntecedente = Converter.GetInt(row, "codigo_antecedente");
+
+                cotizacion.aceptacionAutomatica = Converter.GetInt(row, "aceptacion_automatica") == 1 ? true: false;
 
                 //CLIENTE
                 cotizacion.cliente = new Cliente();

@@ -28,6 +28,15 @@
     {
         displayFijaPrecios = "block";
     }
+
+    var acepAutChecked = "";
+    var acepAutTextClass = "text-muted";
+
+    if (cotizacion.aceptacionAutomatica)
+    {
+        acepAutChecked = "checked";
+        acepAutTextClass = "lbl-ajuste-calculo-precios";
+    }
 }
 <script>
     var encodedStrTSC = '@encodedStrTSC';
@@ -159,33 +168,45 @@
                     <label for="fechaLimiteValidezOferta" class="control-label col-xs-4">Validez Oferta Hasta:</label>
 
 
+                    <div class="col-xs-8">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <select class="form-control " readonly disabled="disabled" id="mostrarValidezOfertaEnDias" name="mostrarValidezOfertaEnDias">
+                                    <option value="0">Días</option>
+                                    @if (cotizacion.mostrarValidezOfertaEnDias == 1)
+                                    {
+                                        <option selected value="1">Fecha</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="1">Fecha</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-xs-6">
+                                <input type="hidden" id="fechaLimiteValidezOfertaTmp" value="@cotizacion.fechaLimiteValidezOferta.ToString("dd/MM/yyyy")" />
+                                <div id="fechaVigenciadiv">
+                                    <input class="form-control" readonly disabled="disabled" type="text" id="fechaLimiteValidezOferta" name="fechaLimiteValidezOferta">
+                                </div>
+                                <div id="diasVigenciadiv">
+                                    <input class="form-control" readonly disabled="disabled" type="number" min="1" step="1" id="validezOfertaEnDias" value="@cotizacion.validezOfertaEnDias" name="fechaLimiteValidezOferta">
+                                </div>
 
-                    <div class="col-xs-4">
-                        <select class="form-control " readonly disabled="disabled" id="mostrarValidezOfertaEnDias" name="mostrarValidezOfertaEnDias">
-                            <option value="0">Días</option>
-                            @if (cotizacion.mostrarValidezOfertaEnDias == 1)
-                            {
-                                <option selected value="1">Fecha</option>
-                            }
-                            else
-                            {
-                                <option value="1">Fecha</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="col-xs-4">
-                        <input type="hidden" id="fechaLimiteValidezOfertaTmp" value="@cotizacion.fechaLimiteValidezOferta.ToString("dd/MM/yyyy")" />
-                        <div id="fechaVigenciadiv">
-                            <input class="form-control" readonly disabled="disabled" type="text" id="fechaLimiteValidezOferta" name="fechaLimiteValidezOferta">
+                            </div>
                         </div>
-                        <div id="diasVigenciadiv">
-                            <input class="form-control" readonly disabled="disabled" type="number" min="1" step="1" id="validezOfertaEnDias" value="@cotizacion.validezOfertaEnDias" name="fechaLimiteValidezOferta">
+
+                        <div class="row" style="margin-top: 7px;">
+                            <div class="col-xs-12" >
+                                <div class="form-group">
+                                    <div class="onoffswitch" title="La cotización se aceptará automáticamente al ser aprobada.">
+                                        <input type="checkbox" name="onoffswitch" @acepAutChecked class="onoffswitch-checkbox" id="chkAceptacionAutomatica">
+                                        <label class="onoffswitch-label" for="chkAceptacionAutomatica"></label>
+                                    </div>
+                                    <h5 id="lblChkAceptacionAutomatica" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;" class="@acepAutTextClass" title="La cotización se aceptará automáticamente al ser aprobada.">Aceptación Automática</h5>
+                                </div>
+                            </div>
                         </div>
-
                     </div>
-
-
-
                 </div>
             </div>
 
@@ -198,6 +219,8 @@
                     </div>
                 </div>
             </div>
+
+            
         </div>
 
         <div class="row">

@@ -3378,6 +3378,38 @@ jQuery(function ($) {
     }
 
 
+    $("#chkAceptacionAutomatica").change(function () {
+        cambioChkAceptacionAutomatica();
+    });
+
+    $("#lblChkAceptacionAutomatica").click(function () {
+        if ($("#chkAceptacionAutomatica").is(":checked")) {
+            $("#chkAceptacionAutomatica").prop("checked", false);
+        } else {
+            $("#chkAceptacionAutomatica").prop("checked", true);
+        }
+
+        cambioChkAceptacionAutomatica();
+    });
+
+    function cambioChkAceptacionAutomatica() {
+        var valor = 0;
+
+        if ($("#chkAceptacionAutomatica").is(":checked")) {
+            valor = 1;
+        }
+
+        changeInputBoolean("aceptacionAutomatica", valor);
+
+        if ($("#chkAceptacionAutomatica").is(":checked")) {
+            $("#lblChkAceptacionAutomatica").addClass("lbl-ajuste-calculo-precios");
+            $("#lblChkAceptacionAutomatica").removeClass("text-muted");
+        } else {
+            $("#lblChkAceptacionAutomatica").addClass("text-muted");
+            $("#lblChkAceptacionAutomatica").removeClass("lbl-ajuste-calculo-precios");
+        }
+    }
+
     $("#chkAjusteCalculoPrecios").change(function () {
         if ($("#chkAjusteCalculoPrecios").is(":checked")) {
             $("#chkAjusteCalculoPreciosModal").prop("checked", true);

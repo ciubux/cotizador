@@ -48,6 +48,9 @@ namespace Model
         public bool productosInactivosRemovidos { get; set; }
 
         public bool noAfectoCambiosPrecio { get; set; }
+
+        [Display(Name = "Aceptación Automática:")]
+        public bool aceptacionAutomatica { get; set; }
         public Int64 codigoAntecedente { get; set; }
 
         [Display(Name = "Número Cotización:")]

@@ -1995,6 +1995,7 @@ namespace Cotizador.Controllers
         {
             Int64 codigo = Int64.Parse(Request["codigo"].ToString());
             SeguimientoCotizacion.estadosSeguimientoCotizacion estadosSeguimientoCotizacion = (SeguimientoCotizacion.estadosSeguimientoCotizacion)Int32.Parse(Request["estado"].ToString());
+
             String observacion = Request["observacion"].ToString();
             updateEstadoSeguimientoCotizacion(codigo, estadosSeguimientoCotizacion, observacion);
         }
@@ -2013,12 +2014,27 @@ namespace Cotizador.Controllers
             cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
             cotizacion.seguimientoCotizacion.estado = estado;
             cotizacion.seguimientoCotizacion.observacion = observacion;
-            cotizacion.usuario = (Usuario)this.Session["usuario"];
+            cotizacion.usuario = us;
             cotizacionBL.cambiarEstadoCotizacion(cotizacion);
 
             if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada)
             {
                 cotizacion = cotizacionBL.GetCotizacion(cotizacion, us);
+
+                //TO DO: Aceptar automaticamente si aplica
+                if (cotizacion.aceptacionAutomatica)
+                {
+                    Usuario tmp = cotizacion.usuario;
+
+                    cotizacion.fechaModificacion = DateTime.Now;// cotizacionSession.fechaModificacion;
+                    cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
+                    cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Aceptada;
+                    cotizacion.seguimientoCotizacion.observacion = "[Aceptación Automática]";
+                    cotizacion.usuario = us;
+                    cotizacionBL.cambiarEstadoCotizacion(cotizacion);
+
+                    cotizacion.usuario = tmp;
+                }
 
                 if (!cotizacion.usuario.idUsuario.Equals(us.idUsuario))
                 {
@@ -2026,8 +2042,10 @@ namespace Cotizador.Controllers
                     recep.Add(cotizacion.usuario);
 
                     Mensaje notificacion = new Mensaje();
-                    notificacion.titulo = "COTIZACION APROBADA";
-                    notificacion.mensaje = "La cotización " + cotizacion.codigo.ToString() + " fue aprobada.";
+                    notificacion.titulo = cotizacion.aceptacionAutomatica ? "COTIZACION APROBADA Y ACEPTADA" : "COTIZACION APROBADA";
+                    notificacion.mensaje = cotizacion.aceptacionAutomatica ? 
+                                    "La cotización " + cotizacion.codigo.ToString() + " fue aprobada y aceptada." : 
+                                    "La cotización " + cotizacion.codigo.ToString() + " fue aprobada."; ;
                     if (!observacion.Trim().Equals(""))
                     {
                         notificacion.mensaje = notificacion.mensaje + "<br/><br/><b>Observación:</b> " + observacion;

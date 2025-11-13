@@ -192,7 +192,7 @@ namespace BusinessLayer
                                         if (evaluarVariacion == 4)
                                         {
                                             //pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista. El precio unitario registrado en facturación tuvo vigencia hasta " + precioClienteProducto.fechaFinVigencia.Value.ToString(Constantes.formatoFecha) + ".\n";
-                                            pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + pedidoDetalle.producto.sku + ": Precio varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista. El precio registrado en ya venció. \n";
+                                            pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + pedidoDetalle.producto.sku + ": Precio varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista. El precio registrado ya venció. \n";
                                             pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
                                             if (pedidoDetalle.indicadorAprobacion != PedidoDetalle.IndicadorAprobacion.RechazadoSinPrecio)
                                                 pedidoDetalle.indicadorAprobacion = PedidoDetalle.IndicadorAprobacion.RechazadoSinVigencia;
