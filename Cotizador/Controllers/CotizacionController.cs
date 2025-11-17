@@ -1,24 +1,25 @@
 ﻿using BusinessLayer;
-using Model;
-using cotizadorPDF;
 using Cotizador.ExcelExport;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using NPOI.HSSF.UserModel;
-using System.IO;
-using System.Linq;
-using NPOI.SS.UserModel;
-using Newtonsoft.Json;
-using NPOI.HSSF.Model;
-using System.Reflection;
 using Cotizador.Models.DTOsSearch;
 using Cotizador.Models.DTOsShow;
-using NLog;
+using cotizadorPDF;
+using DataLayer;
+using Model;
 using Model.UTILES;
+using Newtonsoft.Json;
+using NLog;
+using NPOI.HSSF.Model;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Linq;
+using System.Reflection;
+using System.Web;
+using System.Web.Mvc;
 
 namespace Cotizador.Controllers
 {
@@ -64,7 +65,7 @@ namespace Cotizador.Controllers
             cotizacionTmp.ciudad = new Ciudad();
             cotizacionTmp.cliente = new Cliente();
             cotizacionTmp.responsableComercial = new Vendedor();
-
+            cotizacionTmp.aceptacionAutomatica = false;
             cotizacionTmp.integraEmpresas = false;
 
             if (usuario.esResponsableComercial && !usuario.modificaFiltroVendedor)
@@ -225,6 +226,7 @@ namespace Cotizador.Controllers
             cotizacionTmp.igv = Constantes.IGV;
             cotizacionTmp.flete = 0;
             cotizacionTmp.ajusteCalculoPrecios = false;
+            cotizacionTmp.aceptacionAutomatica = false;
             cotizacionTmp.moneda = Moneda.ListaMonedas.Where(m => m.codigo.Equals("PEN")).FirstOrDefault();
             cotizacionTmp.promociones = new List<Promocion>();
 
@@ -1505,7 +1507,7 @@ namespace Cotizador.Controllers
                     {
                         cotizacion.validezOfertaEnDias = Constantes.PLAZO_OFERTA_DIAS;
                         cotizacion.mostrarValidezOfertaEnDias = 1;
-                        cotizacion.fechaLimiteValidezOferta = DateTime.Now.AddDays(Constantes.PLAZO_OFERTA_DIAS);
+                        cotizacion.fechaLimiteValidezOferta = cotizacion.fecha.AddDays(Constantes.PLAZO_OFERTA_DIAS);
                     }
                 } else
                 {
@@ -1538,6 +1540,15 @@ namespace Cotizador.Controllers
                         estado = (int)SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
                     }
 
+                    if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada && cotizacion.aceptacionAutomatica)
+                    {
+                        //TO DO: aceptar automaticamente
+                        cotizacion.fechaModificacion = DateTime.Now;// cotizacionSession.fechaModificacion;
+                        cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
+                        cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Aceptada;
+                        cotizacion.seguimientoCotizacion.observacion = "[Aceptación Automática]";
+                        bl.cambiarEstadoCotizacion(cotizacion);
+                    }
                 }
                 // cotizacion = null;
                 // this.CotizacionSession = null;
@@ -1574,7 +1585,7 @@ namespace Cotizador.Controllers
                 {
                     cotizacion.validezOfertaEnDias = Constantes.PLAZO_OFERTA_DIAS;
                     cotizacion.mostrarValidezOfertaEnDias = 1;
-                    cotizacion.fechaLimiteValidezOferta = DateTime.Now.AddDays(Constantes.PLAZO_OFERTA_DIAS);
+                    cotizacion.fechaLimiteValidezOferta = cotizacion.fecha.AddDays(Constantes.PLAZO_OFERTA_DIAS);
                 }
             }
             else
@@ -1607,6 +1618,16 @@ namespace Cotizador.Controllers
                 if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion)
                 {
                     estado = (int)SeguimientoCotizacion.estadosSeguimientoCotizacion.Pendiente;
+                }
+
+                if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada && cotizacion.aceptacionAutomatica)
+                {
+                    //TO DO: aceptar automaticamente
+                    cotizacion.fechaModificacion = DateTime.Now;// cotizacionSession.fechaModificacion;
+                    cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
+                    cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Aceptada;
+                    cotizacion.seguimientoCotizacion.observacion = "[Aceptación Automática]";
+                    bl.cambiarEstadoCotizacion(cotizacion);
                 }
             }
 
