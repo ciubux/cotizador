@@ -5,6 +5,7 @@ using Cotizador.Models.DTOsShow;
 using cotizadorPDF;
 using DataLayer;
 using Model;
+using Model.NextSoft;
 using Model.UTILES;
 using Newtonsoft.Json;
 using NLog;
@@ -1701,6 +1702,43 @@ namespace Cotizador.Controllers
             cotizacion = cotizacionBL.obtenerProductosAPartirdePreciosRegistrados (cotizacion, familia, proveedor, usuario);
             HelperDocumento.calcularMontosTotales(cotizacion);
             this.CotizacionSession = cotizacion;
+        }
+
+        public void IniciarEdicionDesdePedidoRequeiereCotizar()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Pedido pedido = (Pedido) this.Session[Constantes.VAR_SESSION_PEDIDO_PARA_COTIZAR];
+
+            instanciarCotizacion();
+            Cotizacion cotizacion = this.CotizacionSession;
+
+            cotizacion.cliente = pedido.cliente;
+            cotizacion.ciudad = pedido.ciudad;
+            cotizacion.aceptacionAutomatica = true;
+            
+            PrecioClienteProducto precioCliProd = null;
+            
+            
+            foreach (PedidoDetalle pedDet in pedido.pedidoDetalleList)
+            {
+                if (pedDet.requiereCotizacion)
+                {
+                    CotizacionDetalle item = new CotizacionDetalle(usuario.visualizaCostos, usuario.visualizaMargen);
+                    item.producto = new Producto();
+
+                    item.producto = pedDet.producto;
+                    item.cantidad = pedDet.cantidad;
+                    item.unidad = pedDet.unidad;
+                    item.flete = pedDet.flete;
+                    item.precioNeto = pedDet.precioNetoItem;
+                    item.esPrecioAlternativo = pedDet.esPrecioAlternativo;
+                    item.porcentajeDescuento = (1 - (item.precioNeto / item.precioLista)) * 100;
+                    
+                    cotizacion.cotizacionDetalleList.Add(item);
+                }
+
+            }
+            HelperDocumento.calcularMontosTotales(cotizacion);
         }
 
         public void iniciarEdicionCotizacion()

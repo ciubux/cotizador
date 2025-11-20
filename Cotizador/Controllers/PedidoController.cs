@@ -22,6 +22,7 @@ using Model.NextSoft;
 using DataLayer;
 using static Model.SeguimientoPedido;
 using Newtonsoft.Json.Linq;
+using NPOI.OpenXmlFormats.Wordprocessing;
 
 namespace Cotizador.Controllers
 {
@@ -2141,6 +2142,67 @@ namespace Cotizador.Controllers
             }
         }
 
+        protected bool ValidarRequiereCotizacion(Pedido pedido)
+        {
+            DateTime fechaHoy = DateTime.Now;
+            PrecioClienteProducto precioCliProd = null;
+            decimal varPrecioReg = 0;
+            decimal varPrecioLista = 0;
+            bool tienePrecioRegistrado = false;
+            bool tienePrecioVencido = false;
+            bool itemNecesitaCotizacion = false;
+            bool seEncontroItemsParaCotizar = false;
+
+            foreach (PedidoDetalle pedDet in pedido.pedidoDetalleList)
+            {
+                precioCliProd = pedDet.producto.precioClienteProducto;
+                varPrecioReg = 0;
+                varPrecioLista = Math.Abs(pedDet.precioUnitario - pedDet.precioLista);
+
+                tienePrecioVencido = false;
+                tienePrecioRegistrado = false;
+                itemNecesitaCotizacion = false;
+
+                if (precioCliProd != null && precioCliProd.idPrecioClienteProducto != Guid.Empty)
+                {
+                    //Revisa variación
+                    varPrecioReg = Math.Abs(pedDet.precioUnitario - precioCliProd.precioUnitario);
+                    tienePrecioRegistrado = true;
+
+                    //Rervisar vencimiento
+                    if (precioCliProd.fechaFinVigencia == null && fechaHoy > precioCliProd.fechaInicioVigencia.Value.AddDays(Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION))
+                    {
+                        tienePrecioVencido = true;
+                    }
+                    else if (precioCliProd.fechaFinVigencia != null && fechaHoy > precioCliProd.fechaFinVigencia.Value)
+                    {
+                        tienePrecioVencido = true;
+                    }
+                }
+
+                if (tienePrecioRegistrado)
+                {
+                    if (tienePrecioVencido || varPrecioReg > Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
+                    {
+                        itemNecesitaCotizacion = true;
+                    }
+                }
+                else
+                {
+                    if (varPrecioLista > Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
+                    {
+                        itemNecesitaCotizacion = true;
+                    }
+                }
+                pedDet.requiereCotizacion = itemNecesitaCotizacion;
+
+                if (itemNecesitaCotizacion) { seEncontroItemsParaCotizar = true; }
+            }
+
+            this.Session[Constantes.VAR_SESSION_PEDIDO_PARA_COTIZAR] = pedido;
+
+            return seEncontroItemsParaCotizar;
+        }
         public async Task<String> Create()
         {
 
@@ -2153,6 +2215,7 @@ namespace Cotizador.Controllers
             pedido.usuario = usuario;
             pedido.UsuarioRegistro = usuario;
             PedidoBL pedidoBL = new PedidoBL();
+            bool requiereCotizacion = false;
 
             if (pedido.idPedido != Guid.Empty || pedido.numeroPedido > 0)
             {
@@ -2191,7 +2254,14 @@ namespace Cotizador.Controllers
                     estado = (int)estadosSeguimientoPedido;
                     observacion = "Se continuará editando luego";
                     updateEstadoSeguimientoPedido(idPedido, estadosSeguimientoPedido, observacion);
+                } else
+                {
+                    if (pedido.seguimientoPedido.estado == estadosSeguimientoPedido.PendienteAprobacion)
+                    {
+                        requiereCotizacion = ValidarRequiereCotizacion(pedido);
+                    }
                 }
+
                 // pedido = null;
                 this.Session[Constantes.VAR_SESSION_PEDIDO] = null;// pedido;// null;
 
@@ -2200,6 +2270,7 @@ namespace Cotizador.Controllers
 
             var v = new { success = success, mensajeError = mensajeError,
                 numeroPedido = numeroPedidoString, estado = estado,
+                requiereCotizacion = requiereCotizacion,
                 mostrarAlertaHomologacionNextsoft = mostrarAlertaHomologacionNextsoft,
                 observacion = observacion, idPedido = idPedido };
             String resultado = JsonConvert.SerializeObject(v);
@@ -2220,6 +2291,7 @@ namespace Cotizador.Controllers
             pedido.usuario = usuario;
             pedido.UsuarioRegistro = usuario;
             PedidoBL bl = new PedidoBL();
+            bool requiereCotizacion = false;
 
             Usuario usuarioWork = (Usuario)usuario.Clone();
 
@@ -2269,6 +2341,13 @@ namespace Cotizador.Controllers
                     observacion = "Se continuará editando luego";
                     updateEstadoSeguimientoPedido(idPedido, estadosSeguimientoPedido, observacion);
                 }
+                else
+                {
+                    if (pedido.seguimientoPedido.estado == estadosSeguimientoPedido.PendienteAprobacion)
+                    {
+                        requiereCotizacion = ValidarRequiereCotizacion(pedido);
+                    }
+                }
                 // pedido = null;
                 this.Session[Constantes.VAR_SESSION_PEDIDO] = null;// pedido;
 
@@ -2277,6 +2356,7 @@ namespace Cotizador.Controllers
 
             var v = new { success = success, mensajeError = mensajeError,  
                 numeroPedido = numeroPedidoString, estado = estado,
+                requiereCotizacion = requiereCotizacion,
                 mostrarAlertaHomologacionNextsoft = mostrarAlertaHomologacionNextsoft,
                 observacion = observacion, idPedido = idPedido };
             String resultado = JsonConvert.SerializeObject(v);

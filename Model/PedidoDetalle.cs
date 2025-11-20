@@ -45,6 +45,14 @@ namespace Model
 
         }
 
+        public Decimal precioNetoItem
+        {
+            get
+            {
+                return _precioNeto;
+            }
+        }
+
         public Decimal precioUnitarioVenta { get; set; }
 
         public Guid idVentaDetalle { get; set; }
@@ -126,6 +134,8 @@ namespace Model
 
         public Boolean visualizaMargen { get; set; }
 
+        public Boolean requiereCotizacion { get; set; }
+
         //public Decimal margen
         //{
 
@@ -139,7 +149,7 @@ namespace Model
         //    }
         //}
 
-        
+
         public Decimal margen
         {
             get

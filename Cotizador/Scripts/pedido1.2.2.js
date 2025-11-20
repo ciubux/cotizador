@@ -5,6 +5,7 @@ jQuery(function ($) {
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
     var TITLE_VALIDACION_PEDIDO = 'Revisar Datos del Pedido';
     var TITLE_EXITO = 'Operación Realizada';
+    var MOSTRAR_OPCION_GENERAR_COTIZACION = false;
 
     $(document).ready(function () {
         obtenerConstantes();
@@ -2807,6 +2808,10 @@ jQuery(function ($) {
                             keyboard: false,
                             backdrop: 'static'
                         });
+
+                        if (resultado.requiereCotizacion) {
+                            MOSTRAR_OPCION_GENERAR_COTIZACION = true;
+                        }
                     }
                     else if (resultado.estado == ESTADO_EN_EDICION) {
                         ConfirmDialog("El pedido número " + resultado.numeroPedido + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/Pedido/CancelarCreacionPedido');
@@ -2884,6 +2889,10 @@ jQuery(function ($) {
                             keyboard: false,
                             backdrop: 'static'
                         });
+
+                        if (resultado.requiereCotizacion) {
+                            MOSTRAR_OPCION_GENERAR_COTIZACION = true;
+                        }
                     }
                     else if (resultado.estado == ESTADO_EN_EDICION) {
                         ConfirmDialog("El pedido número " + resultado.numeroPedido + " fue guardado correctamente. ¿Desea continuar editando ahora?", null, '/Pedido/CancelarCreacionPedido');
@@ -2957,7 +2966,13 @@ jQuery(function ($) {
                     type: 'green',
                     content: "El comentario del estado del pedido número: " + codigoPedido + " fue modificado.",
                     buttons: {
-                        OK: function () { window.location = '/Pedido/Index';  }
+                        OK: function () {
+                            if (MOSTRAR_OPCION_GENERAR_COTIZACION) { 
+                                mostrarOpcionCotizacion("/Pedido/Index");
+                            } else {
+                                window.location = '/Pedido/Index';
+                            }
+                        }
                     }
                 });
                 $("#btnCancelarComentario").click();
@@ -2965,6 +2980,38 @@ jQuery(function ($) {
         });
 
     });
+
+
+    function mostrarOpcionCotizacion(urlReturn = "") {
+        MOSTRAR_OPCION_GENERAR_COTIZACION = false;
+
+        $.confirm({
+            title: 'GENERAR COTIAZACIÓN PARA PRODUCTOS CON PRECIOS NO APROBADOS',
+            content: 'El pedido tiene productos con precios no aprobados para el cliente. ¿Desea iniciar una cotización para estos productos?',
+            type: 'yellow',
+            buttons: {
+                NO: {
+                    text: 'NO',
+                    btnClass: 'btn-success',
+                    action: function () {
+                        if (urlReturn != "") {
+                            window.location = urlReturn;
+                        }
+                    }
+                },
+                SI: {
+                    text: 'SI',
+                    btnClass: 'btn-warning',
+                    action: function () {
+                        window.location = '/Cotizacion/IniciarEdicionDesdePedidoRequeiereCotizar';
+                    }
+                }
+            }
+        });
+
+    }
+
+
     /*
         $("#btnAceptarComentarioCrediticio").click(function () {
             var codigoPedido = $("#pedido_numeroPedido").val();

@@ -91,6 +91,7 @@ namespace Model
         public static String VAR_SESSION_PEDIDO_APROBACION = "pedidoAprobacion";
         public static String VAR_SESSION_PEDIDO_LISTA = "pedidoList";
         public static String VAR_SESSION_PEDIDO_VER = "pedidoVer";
+        public static String VAR_SESSION_PEDIDO_PARA_COTIZAR = "pedidoParaCotizar";
 
         public static String VAR_SESSION_PEDIDO_COMPRA = "pedidoCompra";
         public static String VAR_SESSION_PEDIDO_COMPRA_BUSQUEDA = "pedidoCompraBusqueda";
