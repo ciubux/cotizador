@@ -17,8 +17,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -1484,7 +1484,7 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
-        public String Create()
+        public async Task<string> Create()
         {
             try
             {
@@ -1532,7 +1532,7 @@ namespace Cotizador.Controllers
                     SeguimientoCotizacion.estadosSeguimientoCotizacion estadosSeguimientoCotizacion = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
                     estado = (int)estadosSeguimientoCotizacion;
                     observacion = "Se continuará editando luego";
-                    updateEstadoSeguimientoCotizacion(codigo, estadosSeguimientoCotizacion, observacion);
+                    await updateEstadoSeguimientoCotizacion(codigo, estadosSeguimientoCotizacion, observacion);
                 }
                 else
                 {
@@ -1549,6 +1549,13 @@ namespace Cotizador.Controllers
                         cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Aceptada;
                         cotizacion.seguimientoCotizacion.observacion = "[Aceptación Automática]";
                         bl.cambiarEstadoCotizacion(cotizacion);
+
+                        if (cotizacion.idPedidoOrigen != null && !cotizacion.idPedidoOrigen.Equals(Guid.Empty))
+                        {
+                            Pedido ped = new Pedido();
+                            PedidoBL blPedido = new PedidoBL();
+                            await blPedido.RevisarAprobacionPedidoPendiente(cotizacion.idPedidoOrigen, usuario);
+                        }
                     }
                 }
                 // cotizacion = null;
@@ -1567,7 +1574,7 @@ namespace Cotizador.Controllers
         }
 
 
-        public String Update()
+        public async Task<string> Update()
         {
             try { 
             UsuarioBL usuarioBL = new UsuarioBL();
@@ -1612,7 +1619,7 @@ namespace Cotizador.Controllers
                 SeguimientoCotizacion.estadosSeguimientoCotizacion estadosSeguimientoCotizacion = SeguimientoCotizacion.estadosSeguimientoCotizacion.Edicion;
                 estado = (int)estadosSeguimientoCotizacion;
                 observacion = "Se continuará editando luego";
-                updateEstadoSeguimientoCotizacion(codigo, estadosSeguimientoCotizacion, observacion);
+                await updateEstadoSeguimientoCotizacion(codigo, estadosSeguimientoCotizacion, observacion);
             }
             else
             {
@@ -1629,6 +1636,13 @@ namespace Cotizador.Controllers
                     cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Aceptada;
                     cotizacion.seguimientoCotizacion.observacion = "[Aceptación Automática]";
                     bl.cambiarEstadoCotizacion(cotizacion);
+
+                    if (cotizacion.idPedidoOrigen != null && !cotizacion.idPedidoOrigen.Equals(Guid.Empty))
+                    {
+                        Pedido ped = new Pedido();
+                        PedidoBL blPedido = new PedidoBL();
+                        await blPedido.RevisarAprobacionPedidoPendiente(cotizacion.idPedidoOrigen, usuario);
+                    }
                 }
             }
 
@@ -1704,21 +1718,22 @@ namespace Cotizador.Controllers
             this.CotizacionSession = cotizacion;
         }
 
-        public void IniciarEdicionDesdePedidoRequeiereCotizar()
+        public ActionResult IniciarEdicionDesdePedidoRequeiereCotizar()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             Pedido pedido = (Pedido) this.Session[Constantes.VAR_SESSION_PEDIDO_PARA_COTIZAR];
 
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoCotizacion;
+
             instanciarCotizacion();
             Cotizacion cotizacion = this.CotizacionSession;
 
+            cotizacion.empresa = pedido.empresa;
             cotizacion.cliente = pedido.cliente;
             cotizacion.ciudad = pedido.ciudad;
             cotizacion.aceptacionAutomatica = true;
-            
-            PrecioClienteProducto precioCliProd = null;
-            
-            
+            cotizacion.idPedidoOrigen = pedido.idPedido;
+
             foreach (PedidoDetalle pedDet in pedido.pedidoDetalleList)
             {
                 if (pedDet.requiereCotizacion)
@@ -1736,9 +1751,10 @@ namespace Cotizador.Controllers
                     
                     cotizacion.cotizacionDetalleList.Add(item);
                 }
-
             }
             HelperDocumento.calcularMontosTotales(cotizacion);
+
+            return RedirectToAction("Cotizar", "Cotizacion");
         }
 
         public void iniciarEdicionCotizacion()
@@ -2050,17 +2066,17 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(res);
         }
 
-        public void updateEstadoCotizacion()
+        public async Task updateEstadoCotizacion()
         {
             Int64 codigo = Int64.Parse(Request["codigo"].ToString());
             SeguimientoCotizacion.estadosSeguimientoCotizacion estadosSeguimientoCotizacion = (SeguimientoCotizacion.estadosSeguimientoCotizacion)Int32.Parse(Request["estado"].ToString());
 
             String observacion = Request["observacion"].ToString();
-            updateEstadoSeguimientoCotizacion(codigo, estadosSeguimientoCotizacion, observacion);
+            await updateEstadoSeguimientoCotizacion(codigo, estadosSeguimientoCotizacion, observacion);
         }
 
 
-        private void updateEstadoSeguimientoCotizacion(Int64 codigo, SeguimientoCotizacion.estadosSeguimientoCotizacion estado, String observacion)
+        private async Task updateEstadoSeguimientoCotizacion(Int64 codigo, SeguimientoCotizacion.estadosSeguimientoCotizacion estado, String observacion)
         {
             Cotizacion cotizacionSession = this.CotizacionSession;
             CotizacionBL cotizacionBL = new CotizacionBL();
@@ -2091,8 +2107,18 @@ namespace Cotizador.Controllers
                     cotizacion.seguimientoCotizacion.observacion = "[Aceptación Automática]";
                     cotizacion.usuario = us;
                     cotizacionBL.cambiarEstadoCotizacion(cotizacion);
-
+                    
                     cotizacion.usuario = tmp;
+                }
+
+                if(cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aceptada)
+                {
+                    if (cotizacion.idPedidoOrigen != null && !cotizacion.idPedidoOrigen.Equals(Guid.Empty))
+                    {
+                        Pedido ped = new Pedido();
+                        PedidoBL blPedido = new PedidoBL();
+                        await blPedido.RevisarAprobacionPedidoPendiente(cotizacion.idPedidoOrigen, us);
+                    }
                 }
 
                 if (!cotizacion.usuario.idUsuario.Equals(us.idUsuario))
@@ -2120,6 +2146,7 @@ namespace Cotizador.Controllers
                     MensajeBL mensajeBl = new MensajeBL();
                     mensajeBl.insertMensaje(notificacion);
                 }
+
             }
 
         }

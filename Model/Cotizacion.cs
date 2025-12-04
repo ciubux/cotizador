@@ -35,6 +35,9 @@ namespace Model
 
         public Empresa empresa { get; set; }
         public Guid idCotizacion { get; set; }
+
+        public Guid idPedidoOrigen { get; set; }
+        
         public bool estaVencida { get
             {
                 DateTime fechaHoy = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);

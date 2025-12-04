@@ -630,6 +630,54 @@ namespace BusinessLayer
             }
         }
 
+        public async Task RevisarAprobacionPedidoPendiente(Guid idPedido, Usuario us)
+        {
+            Pedido pedido = new Pedido();
+            pedido.idPedido = idPedido;
+
+            pedido = GetPedidoParaEditar(pedido, us);
+            pedido.usuario = us;
+
+            //continuar solo si pedido esta pendiente aprobación
+            if (pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion)
+            {
+                // Si no es un pedido de venta MP, se revisa si tiene inframargen
+                if (!pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP) && pedido.tipoPedido == Pedido.tiposPedido.Venta)
+                {
+                    UsuarioDAL usuarioDal = new UsuarioDAL();
+                    Usuario usuarioEmpresa = usuarioDal.getUsuario(pedido.IdUsuarioRegistro);
+
+                    foreach (PedidoDetalle det in pedido.pedidoDetalleList)
+                    {
+                        decimal margenDet = ((det.precioNeto - det.producto.costoLista) / det.precioNeto) * 100;
+                        det.tieneInfraMargenEmpresaExterna = false;
+
+                        if (margenDet < usuarioEmpresa.pMargenMinimo)
+                        {
+                            det.tieneInfraMargenEmpresaExterna = true;
+                        }
+                    }
+                }
+
+                pedido.usuario = us;
+                await validarPedidoVenta(pedido);
+
+                //if (pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado)
+                //{
+                    cambiarEstadoPedido(pedido);
+                //}
+
+
+                if (!pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP) && /*!pedido.usuario.emiteGuiasEmpresa &&*/
+                    pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
+                    pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
+                {
+                    await ProcesarPedidoAprobadoTecnica(pedido);
+                }
+
+            }
+        }
+
         #endregion
 
         #region Pedidos de COMPRA

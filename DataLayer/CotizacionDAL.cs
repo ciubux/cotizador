@@ -53,6 +53,11 @@ namespace DataLayer
                 InputParameterAdd.Guid(objCommand, "idCiudad", cotizacion.ciudad.idCiudad);
             }
 
+            if (!cotizacion.idPedidoOrigen.Equals(Guid.Empty))
+            {
+                InputParameterAdd.Guid(objCommand, "idPedidoOrigen", cotizacion.idPedidoOrigen);
+            }
+
             //if (cotizacion.promocion.idPromocion == Guid.Empty)
             //    InputParameterAdd.Guid(objCommand, "idPromocion", null); //puede ser null
             //else
@@ -339,6 +344,8 @@ namespace DataLayer
                 cotizacion.codigoAntecedente = Converter.GetInt(row, "codigo_antecedente");
 
                 cotizacion.aceptacionAutomatica = Converter.GetInt(row, "aceptacion_automatica") == 1 ? true: false;
+
+                cotizacion.idPedidoOrigen = Converter.GetGuid(row, "id_pedido_origen");
 
                 //CLIENTE
                 cotizacion.cliente = new Cliente();
