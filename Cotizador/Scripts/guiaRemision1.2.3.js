@@ -3655,6 +3655,11 @@ jQuery(function ($) {
                         style = "style='color: black'";
                     }
 
+                    var clienteRazonSocial = guiaRemisionList[i].pedido.cliente.razonSocial;
+                    if (guiaRemisionList[i].pedido.entregaATerceros) {
+                        clienteRazonSocial = '<span class="spn-nombre-cliente-relacionado">' + guiaRemisionList[i].pedido.nombreClienteTercero + '</span><br/>' + guiaRemisionList[i].pedido.cliente.razonSocial;
+                    }
+
                     var guiaRemision = '<tr data-expanded="false">' +
                         '<td>  ' + guiaRemisionList[i].idMovimientoAlmacen + '</td>' +
                         '<td><input class="' + guiaRemisionList[i].idMovimientoAlmacen + ' ' + guiaRemisionList[i].serieNumeroGuia + ' ' + guiaRemisionList[i].pedido.numeroReferenciaCliente + ' ' + guiaRemisionList[i].ciudadOrigen.nombre +
@@ -3665,7 +3670,7 @@ jQuery(function ($) {
                         '<td>  ' + guiaRemisionList[i].usuario.nombre + '</td>' +
                         '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaEmision.substr(0, 10)) + '</td>' +
                         '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaTraslado.substr(0, 10)) + '</td>' +
-                        '<td>  ' + guiaRemisionList[i].pedido.cliente.razonSocial + '</td>' +
+                        '<td>  ' + clienteRazonSocial + '</td>' +
                         '<td>  ' + guiaRemisionList[i].pedido.cliente.ruc + '</td>' +
                         '<td>  ' + guiaRemisionList[i].ciudadOrigen.nombre + '</td>' +
                         '<td>  ' + guiaRemisionList[i].pedido.direccionEntrega.nombre + '</td>' +
@@ -4044,7 +4049,23 @@ jQuery(function ($) {
             contentType: 'application/json',
             success: function (respuesta) {
 
-                ventaDetalleList = respuesta.ventaDetalleList;
+                
+
+                if (respuesta.success == 0) {
+                    $.alert({
+                        //icon: 'fa fa-warning',
+                        title: "SE ENCONTRÓ UN PROBLEMA",
+                        content: respuesta.errorMessage,
+                        type: 'orange',
+                        buttons: {
+                            OK: function () {
+                            }
+                        }
+                    });
+                    return false;
+                }
+
+                ventaDetalleList = respuesta.documentoVenta.ventaDetalleList;
 
                 $("#modalVerVentaConsolidada").modal();
 

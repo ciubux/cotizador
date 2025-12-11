@@ -9,6 +9,7 @@ using Model.EXCEPTION;
 using System.Data.SqlClient;
 using Newtonsoft.Json;
 using Model.CONFIGCLASSES;
+using System.ComponentModel.Design;
 
 namespace DataLayer
 {
@@ -48,7 +49,8 @@ namespace DataLayer
 
             DataTable documentoVentaDataTable = dataSet.Tables[0];
             DataTable productoDataTable = dataSet.Tables[1];
-            
+            DataTable movRelacionadosDataTable = dataSet.Tables[2];
+
 
             DocumentoVenta documentoVenta = new DocumentoVenta();
             documentoVenta.ventaDetalleList = new List<VentaDetalle>();
@@ -125,6 +127,38 @@ namespace DataLayer
                         productoPresentacion.Cantidad = Convert.ToInt32(ventaDetalle.sumCantidadUnidadEstandar * productoPresentacion.Equivalencia);
                     }
                 }
+            }
+
+            string rucRelacionadoAnt = string.Empty;
+            int cantidadGuiasRelacionada = 0;
+            foreach (DataRow row in movRelacionadosDataTable.Rows)
+            {
+                Guid idMovRel = Converter.GetGuid(row, "id_movimiento_relacionado");
+
+                if (!idMovRel.Equals(Guid.Empty))
+                {
+                    cantidadGuiasRelacionada++;
+                    documentoVenta.tieneGuiaRelacionada = true;
+                    string rucRelacionado = Converter.GetString(row, "ruc_relacionado");
+                    int facturado = Converter.GetInt(row, "relacionado_facturado");
+
+                    if (facturado == 1) { documentoVenta.facturadoRelacionado = true; }
+
+                    if (!rucRelacionadoAnt.Equals(string.Empty))
+                    {
+                        if (!rucRelacionado.Equals(rucRelacionadoAnt))
+                        {
+                            documentoVenta.diferenteRucRelacionado = true;
+                        }
+                    }
+
+                    rucRelacionadoAnt = rucRelacionado;
+                }
+            }
+
+            if (idMovimientoAlmacenList.Count == cantidadGuiasRelacionada)
+            {
+                documentoVenta.soloGuiasRelacionadas = true;
             }
 
             return documentoVenta;
@@ -1304,6 +1338,13 @@ namespace DataLayer
                 guiaRemision.pedido.idPedido = Converter.GetGuid(row, "id_pedido");
                 guiaRemision.pedido.numeroPedido = Converter.GetLong(row, "numero_pedido");
                 guiaRemision.pedido.numeroGrupoPedido = Converter.GetLong(row, "numero_grupo_pedido");
+                
+                guiaRemision.pedido.entregaATerceros = Converter.GetInt(row, "entrega_terceros") == 1 ? true : false;
+                if (guiaRemision.pedido.entregaATerceros)
+                {
+                    guiaRemision.pedido.nombreClienteTercero = Converter.GetString(row, "nombre_cliente_rel");
+                }
+
 
                 //CLIENTE
                 guiaRemision.pedido.cliente = new Cliente();

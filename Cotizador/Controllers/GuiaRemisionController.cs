@@ -23,6 +23,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Web.Management;
+using System.Web.ModelBinding;
 using System.Web.Mvc;
 using System.Web.WebPages;
 
@@ -471,7 +473,35 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA_LISTA_IDS] = movimientoAlmacenIdList;
             DocumentoVenta documentoVenta = movimientoAlmacenBL.obtenerResumenConsolidadoAtenciones(movimientoAlmacenIdList);
             this.Session[Constantes.VAR_SESSION_RESUMEN_CONSOLIDADO] = documentoVenta;
-            String resultado = JsonConvert.SerializeObject(documentoVenta);
+
+            int success = 1;
+            string errorMessage = "";
+
+            if (documentoVenta.tieneGuiaRelacionada)
+            {
+                if (!documentoVenta.soloGuiasRelacionadas)
+                {
+                    success = 0;
+                    errorMessage = "Todas las guías deben ser de atención de terceros.";
+                } else if (documentoVenta.diferenteRucRelacionado)
+                {
+                    success = 0;
+                    errorMessage = "Todas las guías deben tener el mismo cliente tercerizado.";
+                } else if (documentoVenta.facturadoRelacionado)
+                {
+                    success = 0;
+                    errorMessage = "Hay una o mas guías que tienen guia fictica relacionada que ya estan facturadas.";
+                }
+            }
+
+            var retornar = new {
+                success = success,
+                errorMessage = errorMessage, 
+                documentoVenta = documentoVenta
+            }; 
+            String resultado = JsonConvert.SerializeObject(retornar);
+            
+
             return resultado;
 
             /*this.Session[Constantes.VAR_SESSION_GUIA] = guiaRemision;

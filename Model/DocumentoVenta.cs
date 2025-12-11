@@ -20,6 +20,13 @@ namespace Model
         public Almacen almacen { get; set; }
 
 
+        /* Validaciones Venta Consolidada*/
+
+        public bool tieneGuiaRelacionada { get; set; }
+        public bool soloGuiasRelacionadas { get; set; }
+        public bool diferenteRucRelacionado { get; set; }
+        public bool facturadoRelacionado { get; set; }
+
         [Display(Name = "Fecha Emisión:")]
         public DateTime? fechaEmision { get; set; }
 
