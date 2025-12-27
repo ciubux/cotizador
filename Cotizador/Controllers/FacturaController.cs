@@ -410,7 +410,6 @@ namespace Cotizador.Controllers
             try
             {
                 // CREAR GUIA, VENTA Y CPE
-
                 Guid idGuiaFic = Guid.Empty;
                 Guid idVentaFic = Guid.Empty;
                 Guid idCPE = Guid.Empty;
