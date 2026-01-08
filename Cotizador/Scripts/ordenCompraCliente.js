@@ -3043,7 +3043,7 @@ jQuery(function ($) {
 
             if (idProductoPresentacionItem == 0) {    
                 strCantUnidad = ' cantidadItem="' + cantidadItemMP + '" cantidadPorAsignar="' + cantPorAsignarUnidadMP + '" cantidadPorEntregar="' + cantPorEntregarUnidadMP + '" '
-                optionsUnidad = '<option ' + strCantUnidad + ' selected  value="0">' + producto.unidad + '</option>';
+                optionsUnidad = '<option ' + strCantUnidad + ' selected  value="0">*' + producto.unidad + '</option>';
             } else {
                 strCantUnidad = ' cantidadItem="' + cantidadItemMP.toFixed(2) + '" cantidadPorAsignar="' + cantPorAsignarUnidadMP.toFixed(2) + '" cantidadPorEntregar="' + cantPorEntregarUnidadMP.toFixed(2) + '" '
                 optionsUnidad = '<option ' + strCantUnidad + ' value="0">' + producto.unidad + '</option>';
@@ -3067,7 +3067,7 @@ jQuery(function ($) {
                 strCantUnidad = ' cantidadItem="' + cantUnidad.toFixed(2) + '" cantidadPorAsignar="' + cantPorAsignarUnidad.toFixed(2) + '" cantidadPorEntregar="' + cantPorEntregarUnidad.toFixed(2) + '" '
 
                 if (producto.ProductoPresentacionList[j].IdProductoPresentacion == idProductoPresentacionItem) {
-                    optionsUnidad = optionsUnidad + '<option ' + strCantUnidad + ' selected value="' + producto.ProductoPresentacionList[j].IdProductoPresentacion + '">' + producto.ProductoPresentacionList[j].Presentacion + '</option>';
+                    optionsUnidad = optionsUnidad + '<option ' + strCantUnidad + ' selected value="' + producto.ProductoPresentacionList[j].IdProductoPresentacion + '">*' + producto.ProductoPresentacionList[j].Presentacion + '</option>';
                     cantidadPorAsignarMostrar = cantPorAsignarUnidad;
                     cantidadPorEntregarrMostrar = cantPorEntregarUnidad;
                 } else {

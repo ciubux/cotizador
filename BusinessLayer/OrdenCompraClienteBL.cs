@@ -16,7 +16,7 @@ namespace BusinessLayer
 
         public void InsertOrdenCompraCliente(OrdenCompraCliente occ)
         {
-            using (var dal = new OrdenCompraClienteDAL())
+            using (OrdenCompraClienteDAL dal = new OrdenCompraClienteDAL())
             {
 
                 String observacionesAdicionales = String.Empty;
@@ -37,7 +37,7 @@ namespace BusinessLayer
 
         public void UpdateOrdenCompraCliente(OrdenCompraCliente occ)
         {
-            using (var dal = new OrdenCompraClienteDAL())
+            using (OrdenCompraClienteDAL dal = new OrdenCompraClienteDAL())
             {
                 dal.UpdateOrdenCompraCliente(occ);
             }
@@ -48,18 +48,27 @@ namespace BusinessLayer
         public List<OrdenCompraCliente> GetOrdenCompraClientes(OrdenCompraCliente occ)
         {
             List<OrdenCompraCliente> occList = null;
-            using (var dal = new OrdenCompraClienteDAL())
+            using (OrdenCompraClienteDAL dal = new OrdenCompraClienteDAL())
             {
                 occList = dal.SelectOrdenCompraClientes(occ);
             }
             return occList;
         }
 
+        public bool ExisteNumeroRefernciaOCC(OrdenCompraCliente occ)
+        {   
+            if (occ.clienteSunat == null || occ.clienteSunat.idClienteSunat <= 0 || occ.numeroReferenciaCliente.Trim().Equals(string.Empty))
+            {
+                return false;
+            }
 
+            OrdenCompraClienteDAL dal = new OrdenCompraClienteDAL();
+            return dal.ExisteNumeroReferenciaOCC(occ);
+        }
 
         #region General
 
-        
+
 
         public OrdenCompraCliente obtenerProductosAPartirdePreciosCotizados(OrdenCompraCliente occ, Boolean canastaHabitual, Usuario usuario)
         {

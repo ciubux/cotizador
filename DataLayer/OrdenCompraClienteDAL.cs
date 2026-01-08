@@ -36,8 +36,9 @@ namespace DataLayer
             //InputParameterAdd.Guid(objCommand, "idCliente", occ.cliente.idCliente);
             InputParameterAdd.Int(objCommand, "idClienteSunat", occ.clienteSunat.idClienteSunat);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", occ.numeroReferenciaCliente); //puede ser null
+            InputParameterAdd.Varchar(objCommand, "numeroRequerimiento", occ.numeroRequerimiento); //puede ser null
 
-            
+
             InputParameterAdd.DateTime(objCommand, "fechaSolicitud", occ.fechaSolicitud);
             
             DateTime dtTmp = DateTime.Now;
@@ -98,7 +99,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCiudad", occ.ciudad.idCiudad);
             InputParameterAdd.Int(objCommand, "idClienteSunat", occ.clienteSunat.idClienteSunat);
             InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", occ.numeroReferenciaCliente); //puede ser null
-
+            InputParameterAdd.Varchar(objCommand, "numeroRequerimiento", occ.numeroRequerimiento); //puede ser null
 
             InputParameterAdd.DateTime(objCommand, "fechaSolicitud", occ.fechaSolicitud);
             
@@ -324,6 +325,22 @@ namespace DataLayer
             return (Int64)objCommand.Parameters["@numeroGrupo"].Value;
         }
 
+        public bool ExisteNumeroReferenciaOCC(OrdenCompraCliente occ)
+        {
+            var objCommand = GetSqlCommand("ps_validarNumeroReferenciaOrdenCompraCliente");
+            InputParameterAdd.Int(objCommand, "idClienteSunat", occ.clienteSunat.idClienteSunat);
+            InputParameterAdd.Varchar(objCommand, "numeroReferenciaCliente", occ.numeroReferenciaCliente);
+
+            if(!occ.idOrdenCompraCliente.Equals(Guid.Empty))
+            {
+                InputParameterAdd.Guid(objCommand, "idOrdenCompraCliente", occ.idOrdenCompraCliente);
+            }
+            
+            OutputParameterAdd.Int(objCommand, "cantidad");
+            ExecuteNonQuery(objCommand);
+            return ((int)objCommand.Parameters["@cantidad"].Value) > 0;
+        }
+
         public List<OrdenCompraCliente> SelectOrdenCompraClientes(OrdenCompraCliente occ)
         {
             var objCommand = GetSqlCommand("ps_ordenesCompraCliente");
@@ -414,6 +431,7 @@ namespace DataLayer
                 occ.observaciones = Converter.GetString(row, "observaciones");
                 occ.montoSubTotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, occ.montoTotal - occ.montoIGV));
                 occ.numeroReferenciaCliente = Converter.GetString(row, "numero_referencia_cliente");
+                occ.numeroRequerimiento = Converter.GetString(row, "numero_requerimiento");
                 occ.direccionEntrega = new DireccionEntrega();
                 occ.direccionEntrega.idDireccionEntrega = Converter.GetGuid(row, "id_direccion_entrega");
                 occ.direccionEntrega.descripcion = Converter.GetString(row, "direccion_entrega");

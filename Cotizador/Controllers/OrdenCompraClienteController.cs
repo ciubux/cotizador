@@ -478,7 +478,7 @@ namespace Cotizador.Controllers
                 occ.tipoOrdenCompraCliente = OrdenCompraCliente.tiposOrdenCompraCliente.Venta;
                 occ.ciudadASolicitar = new Ciudad();
 
-                occ.numeroReferenciaCliente = null;
+                occ.numeroReferenciaCliente = string.Empty;
                 occ.direccionEntrega = new DireccionEntrega();
                 occ.solicitante = new Solicitante();
                 occ.fechaSolicitud = DateTime.Now;
@@ -1355,7 +1355,12 @@ namespace Cotizador.Controllers
 
             if (occ.idOrdenCompraCliente != Guid.Empty || occ.numeroOrdenCompraCliente > 0)
             {
-                throw new System.Exception("OrdenCompraCliente ya se encuentra creado");
+                throw new System.Exception("OrdenCompraCliente ya se encuentra creado.");
+            }
+
+            if (occBL.ExisteNumeroRefernciaOCC(occ))
+            {
+                throw new System.Exception("El número de referencia de cliente ya existe.");
             }
 
             occBL.InsertOrdenCompraCliente(occ);
@@ -1392,6 +1397,13 @@ namespace Cotizador.Controllers
             OrdenCompraCliente occ = (OrdenCompraCliente)this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE];
             occ.usuario = usuario;
             OrdenCompraClienteBL bl = new OrdenCompraClienteBL();
+
+            if (bl.ExisteNumeroRefernciaOCC(occ))
+            {
+                throw new System.Exception("El número de referencia de cliente ya existe.");
+            }
+
+
             bl.UpdateOrdenCompraCliente(occ);
             long numeroOrdenCompraCliente = occ.numeroOrdenCompraCliente;
             String numeroOrdenCompraClienteString = occ.numeroOrdenCompraClienteString;
@@ -1407,7 +1419,21 @@ namespace Cotizador.Controllers
             return resultado;
         }
 
+        public String ValidarNumeroReferenciaOcc()
+        {
+            UsuarioBL usuarioBL = new UsuarioBL();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
+            OrdenCompraCliente occ = (OrdenCompraCliente)this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE];
+            occ.usuario = usuario;
+            OrdenCompraClienteBL bl = new OrdenCompraClienteBL();
+            bool existeNumero = bl.ExisteNumeroRefernciaOCC(occ);
+            
+            var v = new { existeNumero = existeNumero };
+            String resultado = JsonConvert.SerializeObject(v);
+
+            return resultado;
+        }
 
         public void CleanBusqueda()
         {

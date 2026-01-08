@@ -106,6 +106,15 @@
                 </div>
             </div>
 
+            <!--NUMERO REQUERIMIENTO -->
+            <div class="col-sm-6 col-lg-4" id="divRequerimientoCliente">
+                <div class="form-group">
+                    @Html.LabelFor(p => occ.numeroRequerimiento, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        @Html.TextBoxFor(p => occ.numeroRequerimiento, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
         </div>
 
         <fieldset>
