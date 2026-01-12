@@ -15,9 +15,7 @@ jQuery(function ($) {
         verificarSiExisteDetalle();
         verificarSiExisteCliente();
         $("#btnBusquedaOrdenCompraClientes").click();
-        var tipoOrdenCompraCliente = $("#occ_tipoOrdenCompraCliente").val();
-        validarTipoOrdenCompraCliente(tipoOrdenCompraCliente);
-
+        
         if ($("#pagina").val() == 2) {
             if ($("#idOrdenCompraCliente").val() != "") {
                 showOrdenCompraCliente($("#idOrdenCompraCliente").val());
@@ -649,55 +647,6 @@ jQuery(function ($) {
 
 
 
-    /* ################################## INICIO CHANGE CONTROLES */
-
-    function validarTipoOrdenCompraCliente(tipoOrdenCompraCliente) {
-        //Si el tipo de ordenCompraCliente es traslado interno (84->'T')
-      /*  if (tipoOrdenCompraCliente == TIPO_OCC_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)) {
-            $("#divReferenciaCliente").hide();
-            $("#divCiudadASolicitar").show();
-            $(".mostrarDatosParaGuia").show();
-        }
-        else {*/
-            $("#divReferenciaCliente").show();
-            $("#divCiudadASolicitar").hide();
-
-            if (tipoOrdenCompraCliente == TIPO_OCC_VENTA_VENTA.charCodeAt(0)
-              //  || tipoOrdenCompraCliente == TIPO_OCC_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
-                || tipoOrdenCompraCliente == TIPO_OCC_VENTA_COMODATO_ENTREGADO.charCodeAt(0)
-                || tipoOrdenCompraCliente == TIPO_OCC_VENTA_TRANSFERENCIA_GRATUITA_ENTREGADA.charCodeAt(0)
-                //   || tipoOrdenCompraCliente == TIPO_OCC_VENTA_PRESTAMO_ENTREGADO.charCodeAt(0)
-            ) {
-                $(".mostrarDatosParaGuia").show();
-            }
-            else {
-                $(".mostrarDatosParaGuia").hide();
-            }
-       // }
-
-
-        
-        
-
-
-
-
-    }
-
-    $("#occ_tipoOrdenCompraCliente").change(function () { 
-        var tipoOrdenCompraCliente = $("#occ_tipoOrdenCompraCliente").val();
-        validarTipoOrdenCompraCliente(tipoOrdenCompraCliente);
-        
-
-        $.ajax({
-            url: "/OrdenCompraCliente/ChangeTipoOrdenCompraCliente",
-            type: 'POST',
-            data: {
-                tipoOrdenCompraCliente: tipoOrdenCompraCliente
-            },
-            success: function () { }
-        });
-    });
 
     $("#idCiudadASolicitar").change(function () {
         var idCiudadASolicitar = $("#idCiudadASolicitar").val();
@@ -3096,10 +3045,25 @@ jQuery(function ($) {
         }*/
     }
 
+    function cambiarOptionUnidadGenerarPedido(selectUnidad, optionUnidad) {
+        var cantItem = optionUnidad.attr('cantidadItem');
+        var cantPorAsignar = optionUnidad.attr('cantidadPorAsignar');
+        var cantPorEntregar = optionUnidad.attr('cantidadPorEntregar');
+
+        var trItem = selectUnidad.closest('tr');
+
+        trItem.find('td.celdaItemCantidad').html(cantItem);
+        trItem.find('td.celdaItemCantidadRestante').html(cantPorAsignar);
+        trItem.find('td.celdaItemCantidadPorEntregar').html(cantPorEntregar);
+    }
+
     $('.divProductosGenerarPedido').on('change', 'tr td .inputUnidad', function (e) {
         var idDetalle = $(this).closest('tr').attr('idOrdenCompraClienteDetalle');
         var productoPresentacion = $(this).val();
 
+        cambiarOptionUnidadGenerarPedido($(this), $(this).find(':selected'));
+
+        /*
         var cantItem = $(this).find(':selected').attr('cantidadItem');
         var cantPorAsignar = $(this).find(':selected').attr('cantidadPorAsignar');
         var cantPorEntregar = $(this).find(':selected').attr('cantidadPorEntregar');
@@ -3107,13 +3071,13 @@ jQuery(function ($) {
         $(this).closest('tr').find('td.celdaItemCantidad').html(cantItem);
         $(this).closest('tr').find('td.celdaItemCantidadRestante').html(cantPorAsignar);
         $(this).closest('tr').find('td.celdaItemCantidadPorEntregar').html(cantPorEntregar);
+        */
 
         var cantidadAtender = 0;
         $(this).closest('tr').find('td .inputItemAtender').val(0)
 
         var comentario = $(this).closest('tr').find('td .inputItemObervacionDetalle').val();
         
-
         ActualizarDetalleGenerarPedido(idDetalle, cantidadAtender, productoPresentacion, comentario);
     });
 
@@ -3124,6 +3088,17 @@ jQuery(function ($) {
         if (cantidadAtender > cantidad) {
             cantidadAtender = cantidad;
             $(this).val(cantidadAtender);
+
+            $.alert({
+                title: 'Advertencia',
+                content: "La cantidad máxima a atender es de " + cantidad + ".",
+                type: 'yellow',
+                buttons: {
+                    OK: function () {
+
+                    }
+                }
+            });
         }
 
         if (cantidadAtender < 0) {
@@ -3136,6 +3111,44 @@ jQuery(function ($) {
         var productoPresentacion = $(this).closest('tr').find('td .inputUnidad').val();
 
         ActualizarDetalleGenerarPedido(idDetalle, cantidadAtender, productoPresentacion, comentario);
+    });
+
+    $('.divProductosGenerarPedido').on('click', '#btnGenerarPedidoAtenderTodo', function (e) {
+        alert("btn atender todo");
+        $('.tableProductosGenerarPedido tbody tr').each(function () {
+            var $fila = $(this);
+            var cantidadMax = parseFloat($fila.find('td.celdaItemCantidadRestante').text());
+
+            var idDetalle = $fila.attr('idOrdenCompraClienteDetalle');
+            var comentario = $fila.find('td .inputItemObervacionDetalle').val();
+            alert(idDetalle);
+
+            if (!Number.isInteger(cantidadMax)) {
+                $fila.find('select.inputUnidad option').each(function () {
+                    var cantidadAtender = parseFloat($(this).attr('cantidadPorAsignar'));
+
+                    if (Number.isInteger(cantidadAtender)) {
+                        $(this).prop('selected', true);
+
+                        cambiarOptionUnidadGenerarPedido($fila.find('select.inputUnidad'), $(this));
+
+                        var productoPresentacion = $(this).attr('value');
+
+                        $(this).closest('tr').find('td .inputItemAtender').val(cantidadAtender)
+
+                        ActualizarDetalleGenerarPedido(idDetalle, cantidadAtender, productoPresentacion, comentario);
+
+                        //$(this).parent().trigger('change');
+
+                        return false;
+                    }
+                });
+            } else {
+                var productoPresentacion = $fila.find('td .inputUnidad').val();
+                $fila.find('td .inputItemAtender').val(cantidadMax)
+                ActualizarDetalleGenerarPedido(idDetalle, cantidadMax, productoPresentacion, comentario);
+            }
+        });
     });
 
 
