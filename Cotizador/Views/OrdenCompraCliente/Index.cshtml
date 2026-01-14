@@ -414,14 +414,12 @@
                         <button type="button" id="btnGenerarPedido" class="btn btn-primary " data-toggle="modal" data-target="#modalGenerarPedido">Generar Pedido</button>
                     }
 
+                    <button type="button" id="btnVerPedidos" class="btn btn-primary" data-toggle='modal' data-target='#modalVerPedidosOCC'>Ver Pedidos</button>
 
-
-                    @if (occ.usuario.visualizaGuias && occ.usuario.visualizaDocumentosVenta
-                        || (occ.usuario.creaDocumentosVenta && occ.usuario.creaDocumentosVenta)
-                        )
+                    @if (occ.usuario.visualizaGuias || occ.usuario.visualizaDocumentosVenta
+                        || occ.usuario.creaDocumentosVenta || occ.usuario.creaGuias)
                     {
                         <button type="button" id="btnVerAtenciones" class="btn btn-primary" data-toggle='modal' data-target='#modalVerGuiasRemision'>Ver Guías Remisión</button>
-                        <button type="button" id="btnVerIngresos" class="btn btn-primary" data-toggle='modal' data-target='#modalVerNotasIngreso'>Ver Notas Ingreso</button>
                     }
                     @if (occ.usuario.tomaPedidos || occ.usuario.apruebaPedidos)
                     {
@@ -436,7 +434,46 @@
     </div>
 </div>
 
+<div class="modal fade" tabindex="-1" id="modalVerPedidosOCC">
+    <div class="modal-dialog">
 
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalVerPedidosOCCTitle"><b>Pedidos Generados</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12 tableFixHead modalDivResultsTable">
+                        <table id="tableModalPedidosOCC" class="table table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Sede</th>
+                                    <th>Número Pedido</th>
+                                    <th>Fecha Pedido</th>
+                                    <th>Fecha Entrega</th>
+                                    <th>Estado Pedido</th>
+                                    <th>Estado Crediticio</th>
+                                    <th>Usuario Registro</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-sm-12 col-lg-12 text-right">
+                        @*<button id="btnExportStockPendienteAtencionExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ReporteStockPendienteAtencionExcel", "Stock")">Exportar</button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="modalGenerarPedido" tabindex="-1">
     <div class="modal-dialog">

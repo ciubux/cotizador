@@ -2897,10 +2897,10 @@ jQuery(function ($) {
 
         $.ajax({
             url: "/OrdenCompraCliente/UpdatePost",
-         /*   data: {
-                idOrdenCompraCliente: idOrdenCompraCliente
-            },
-           */
+            /*   data: {
+                   idOrdenCompraCliente: idOrdenCompraCliente
+               },
+              */
             type: 'POST',
             data: {
                 numeroReferenciaCliente: numeroReferenciaCliente,
@@ -2932,10 +2932,61 @@ jQuery(function ($) {
 
 
             }
-        })
+        });
     });
     
 
+    $("#btnVerPedidos").click(function () {
+        $.ajax({
+            url: "/OrdenCompraCliente/SearchPedidosGenerados",
+            type: 'POST',
+            data: {
+            },
+            dataType: 'JSON',
+            error: function (detalle) {
+                //alert("Ocurrió un problema al obtener el detalle del OrdenCompraCliente N° " + numeroOrdenCompraCliente + ".");
+                mostrarMensajeErrorProceso(detalle.responseText);
+            },
+            success: function (resultado) {
+                $("#tableModalPedidosOCC > tbody").empty();
+                //FooTable.init('#tableModalPedidosOCC');
+                $("#tableModalPedidosOCC").footable({
+                    "paging": {
+                        "enabled": true
+                    }
+                });
+
+                for (var i = 0; i < resultado.pedidos.length; i++) {
+                    var dataPedido = resultado.pedidos[i];
+
+                    var truncado = '';
+                    if (dataPedido.truncado == 1) {
+                        truncado = '<br/><span style="color:red; font-weight: bold;">TRUNCADO</span>'
+                    }
+
+                    var filaPedido = '<tr data-expanded="true" idPedido="' + dataPedido.idPedido + '">' +
+                        '<td>  ' + dataPedido.ciudad_nombre + '</td>' +
+                        '<td>  ' + dataPedido.numeroPedidoNumeroGrupoString + '</td>' +
+                        '<td>  ' + dataPedido.fechaHoraRegistro + '</td>' +
+                        '<td>  ' + dataPedido.rangoFechasEntrega + '</td>' +
+                        '<td>  ' + dataPedido.seguimientoPedido_estadoString + truncado + '</td>' +
+                        '<td>  ' + dataPedido.seguimientoCrediticioPedido_estadoString + '</td>' +
+                        '<td>  ' + dataPedido.usuario_nombre + '</td>' +
+                        '<td>' +
+                        '<button type="button" class="btnVerOrdenCompraCliente btn btn-primary ">Ver</button>' +
+                        '</td>' +
+                        '</tr>';
+
+                    $("#tableModalPedidosOCC tbody").append(filaPedido);
+
+                }
+
+                if (resultado.pedidos.length <= 0) {
+                    $("#tableModalPedidosOCC tbody").append('<tr><td colspan="8"><h3>No se encontraron resultados.</h3></td></tr>');
+                }
+            }
+        });
+    });
 
 
     $("#btnActualizarOrdenCompraCliente").click(function () {
@@ -3032,6 +3083,7 @@ jQuery(function ($) {
             text += '<td class="celdaItemCantidadPorEntregar">' + cantidadPorEntregarrMostrar.toFixed(2) + '</td>';
             text += '<td>' + 
                 '<input class="form-control inputItemAtender" type="number" min="0" max="' + ordenCompraClienteItemsRestringidos[i].cantidad + '" step="1" value="0">' +
+                '<span class="txt-restante-atender">Restante: ' + cantidadPorAsignarMostrar.toFixed(2) + '</span>'
                     '</td>';
             text += '<td class=""><input type="text" class="inputItemObervacionDetalle form-control" value=""></td>';
             text += '</tr>';
@@ -3055,6 +3107,8 @@ jQuery(function ($) {
         trItem.find('td.celdaItemCantidad').html(cantItem);
         trItem.find('td.celdaItemCantidadRestante').html(cantPorAsignar);
         trItem.find('td.celdaItemCantidadPorEntregar').html(cantPorEntregar);
+
+        trItem.find('td .txt-restante-atender').html("Restante: " + parseFloat(cantPorAsignar).toFixed(2));
     }
 
     $('.divProductosGenerarPedido').on('change', 'tr td .inputUnidad', function (e) {
@@ -3074,7 +3128,7 @@ jQuery(function ($) {
         */
 
         var cantidadAtender = 0;
-        $(this).closest('tr').find('td .inputItemAtender').val(0)
+        $(this).closest('tr').find('td .inputItemAtender').val(0);
 
         var comentario = $(this).closest('tr').find('td .inputItemObervacionDetalle').val();
         
@@ -3083,7 +3137,9 @@ jQuery(function ($) {
 
     $('.divProductosGenerarPedido').on('change', 'tr td .inputItemAtender', function (e) {
         var cantidadAtender = parseFloat($(this).val());
-        var cantidad = parseFloat(Math.trunc($(this).closest('tr').find('td.celdaItemCantidadRestante').html()));
+        var cantidadPendiente = parseFloat($(this).closest('tr').find('td.celdaItemCantidadRestante').html());
+        var cantidad = parseFloat(Math.trunc(cantidadPendiente));
+
         
         if (cantidadAtender > cantidad) {
             cantidadAtender = cantidad;
@@ -3105,16 +3161,19 @@ jQuery(function ($) {
             cantidadAtender = 0;
             $(this).val(cantidadAtender);
         }
+        var cantidadRestante = cantidadPendiente - cantidadAtender;
 
         var idDetalle = $(this).closest('tr').attr('idOrdenCompraClienteDetalle');
         var comentario = $(this).closest('tr').find('td .inputItemObervacionDetalle').val();
         var productoPresentacion = $(this).closest('tr').find('td .inputUnidad').val();
 
+        $(this).closest('tr').find('td .txt-restante-atender').html("Restante: " + cantidadRestante.toFixed(2));
+
         ActualizarDetalleGenerarPedido(idDetalle, cantidadAtender, productoPresentacion, comentario);
     });
 
     $('.divProductosGenerarPedido').on('click', '#btnGenerarPedidoAtenderTodo', function (e) {
-        alert("btn atender todo");
+        
         $('.tableProductosGenerarPedido tbody tr').each(function () {
             var $fila = $(this);
             var cantidadMax = parseFloat($fila.find('td.celdaItemCantidadRestante').text());
@@ -3135,7 +3194,7 @@ jQuery(function ($) {
                         var productoPresentacion = $(this).attr('value');
 
                         $(this).closest('tr').find('td .inputItemAtender').val(cantidadAtender)
-
+                        $fila.find('td .txt-restante-atender').html("Restante: 0");
                         ActualizarDetalleGenerarPedido(idDetalle, cantidadAtender, productoPresentacion, comentario);
 
                         //$(this).parent().trigger('change');
@@ -3145,7 +3204,8 @@ jQuery(function ($) {
                 });
             } else {
                 var productoPresentacion = $fila.find('td .inputUnidad').val();
-                $fila.find('td .inputItemAtender').val(cantidadMax)
+                $fila.find('td .inputItemAtender').val(cantidadMax);
+                $fila.find('td .txt-restante-atender').html("Restante: 0");
                 ActualizarDetalleGenerarPedido(idDetalle, cantidadMax, productoPresentacion, comentario);
             }
         });

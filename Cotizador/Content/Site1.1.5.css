@@ -80,6 +80,11 @@ textarea {
 
 @media screen and (min-width: 768px) {
 
+
+    #modalVerPedidosOCC .modal-dialog {
+        width: 800px;
+    }
+
     #modalLogCostosEspecialesProducto .modal-dialog {
         width: 700px;
     }
@@ -1438,3 +1443,10 @@ $darkred: darken($red, 0.2);*/
     color: #999999;
     font-size: 9px;
 }
+
+
+.tableProductosGenerarPedido .txt-restante-atender {
+    color: #3276b1;
+    font-weight: bold;
+    font-size: 11px;
+} 

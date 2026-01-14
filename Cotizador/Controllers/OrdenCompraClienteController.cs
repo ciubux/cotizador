@@ -1573,6 +1573,23 @@ namespace Cotizador.Controllers
 
         }
 
+        [HttpPost]
+        public String SearchPedidosGenerados()
+        {
+            //Se recupera el occ Búsqueda de la session
+            OrdenCompraCliente occ = (OrdenCompraCliente)this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE_VER];
+            Usuario usuario = (Usuario)this.Session["usuario"];
+
+            occ.usuario = usuario;
+
+            OrdenCompraClienteBL occBL = new OrdenCompraClienteBL();
+            List<Pedido> pedidos = occBL.GetPedidosGenerados(occ);
+
+            var result = new { pedidos = ParserDTOsSearch.PedidoVentaToPedidoVentaDTO(pedidos) };
+
+            return JsonConvert.SerializeObject(result);
+        }
+
         public void updateUsuario()
         {
             OrdenCompraCliente occ = this.OrdenCompraClienteSession;
