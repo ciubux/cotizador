@@ -781,6 +781,9 @@ namespace Cotizador.Controllers
 
                 detalle.producto = producto;
 
+                detalle.codigoProductoCliente = "";
+                detalle.codigosProductoClienteAnteriores = new List<string>();
+
                 detalle.cantidad = Int32.Parse(Request["cantidad"].ToString());
                 detalle.porcentajeDescuento = Decimal.Parse(Request["porcentajeDescuento"].ToString());
                 detalle.esPrecioAlternativo = Int16.Parse(Request["esPrecioAlternativo"].ToString()) == 1;
@@ -791,7 +794,6 @@ namespace Cotizador.Controllers
                 decimal precioNeto = Decimal.Parse(Request["precio"].ToString());
                 decimal costo = Decimal.Parse(Request["costo"].ToString());
                 decimal flete = Decimal.Parse(Request["flete"].ToString());
-
 
                 detalle.unidad = detalle.producto.unidad;
 
@@ -865,6 +867,7 @@ namespace Cotizador.Controllers
                 {
                     idProducto = detalle.producto.idProducto,
                     codigoProducto = detalle.producto.sku,
+                    skuProveedor = detalle.producto.skuProveedor,
                     nombreProducto = nombreProducto,
                     unidad = detalle.unidad,
                     igv = occ.montoIGV.ToString(),
@@ -873,6 +876,8 @@ namespace Cotizador.Controllers
                     precioUnitario = detalle.precioUnitario,
                     descontinuado = detalle.producto.descontinuado,
                     motivoRestriccion = detalle.producto.motivoRestriccion,
+                    codigoProductoCliente = detalle.codigoProductoCliente,
+                    codigosProductoClienteAnteriores = detalle.codigosProductoClienteAnteriores,
                     observacion = detalle.observacion,
                     total = occ.montoTotal.ToString(),
                     precioUnitarioRegistrado = precioUnitarioRegistrado

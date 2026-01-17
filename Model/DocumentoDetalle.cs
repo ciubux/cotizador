@@ -106,6 +106,9 @@ namespace Model
 
         public string observacionRestriccion { get; set; }
 
+        public string codigoProductoCliente { get; set; }
+        public List<string> codigosProductoClienteAnteriores { get; set; }
+
         public int cantidadSolicitada { get { return cantidad; } }
 
         public Boolean excluirVenta { get; set; }

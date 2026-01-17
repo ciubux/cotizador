@@ -66,8 +66,8 @@ namespace Model
                     DocumentoDetalle documentoDetalle = detallesPorActualizar.Where(s => s.producto.idProducto == idProducto).FirstOrDefault();
 
                     documentoDetalle.cantidad = cotizacionDetalleJson.cantidad;
+                    documentoDetalle.codigoProductoCliente = cotizacionDetalleJson.codigoProductoCliente;
 
-                    
                     documentoDetalle.flete = cotizacionDetalleJson.flete;
                     documentoDetalle.reverseSubTotal = cotizacionDetalleJson.reverseSubTotal;
 

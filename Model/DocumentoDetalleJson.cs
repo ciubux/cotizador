@@ -16,6 +16,9 @@ namespace Model
         public Decimal costo { get; set; }
         public Decimal reverseSubTotal { get; set; }
         public String observacion {get;set;}
+
+        public String codigoProductoCliente { get; set; }
+        
         public int esUnidadAlternativa { get; set; }
     }
 }

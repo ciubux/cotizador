@@ -1520,13 +1520,13 @@ jQuery(function ($) {
             },
             success: function (detalle) {
 
-             /*   var esRecotizacion = "";
-                if ($("#esRecotizacion").val() == "1") {
-                    esRecotizacion = '<td class="' + detalle.idProducto + ' detprecioNetoAnterior" style="text-align:right; color: #B9371B">0.00</td>' +
-                        '<td class="' + detalle.idProducto + ' detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">0.0 %</td>' +
-                        '<td class="' + detalle.idProducto + ' detvarCosto" style="text-align:right; color: #B9371B">0.0 %</td>' +
-                        '<td class="' + detalle.idProducto + ' detcostoAnterior" style="text-align:right; color: #B9371B">0.0</td>';
-                }*/
+                /*   var esRecotizacion = "";
+                   if ($("#esRecotizacion").val() == "1") {
+                       esRecotizacion = '<td class="' + detalle.idProducto + ' detprecioNetoAnterior" style="text-align:right; color: #B9371B">0.00</td>' +
+                           '<td class="' + detalle.idProducto + ' detvarprecioNetoAnterior" style="text-align:right; color: #B9371B">0.0 %</td>' +
+                           '<td class="' + detalle.idProducto + ' detvarCosto" style="text-align:right; color: #B9371B">0.0 %</td>' +
+                           '<td class="' + detalle.idProducto + ' detcostoAnterior" style="text-align:right; color: #B9371B">0.0</td>';
+                   }*/
 
                 var observacionesEnDescripcion = "<br /><span class='" + detalle.idProducto + " detproductoObservacion'  style='color: darkred'>" + detalle.observacion + "</span>";
 
@@ -1536,13 +1536,11 @@ jQuery(function ($) {
                 if (detalle.precioUnitarioRegistrado == 0) {
 
                     if (detalle.precioUnitario >= Number(precioLista) - Number(VARIACION_PRECIO_ITEM_OCC)
-                        && detalle.precioUnitario <= Number(precioLista) + Number(VARIACION_PRECIO_ITEM_OCC))
-                    {
+                        && detalle.precioUnitario <= Number(precioLista) + Number(VARIACION_PRECIO_ITEM_OCC)) {
                         precios = '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right">' + detalle.precioUnitario + '</td>';
-                        
+
                     }
-                    else
-                    {
+                    else {
                         precios = '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">' + detalle.precioUnitario + '</td>';
 
                     }
@@ -1550,24 +1548,22 @@ jQuery(function ($) {
 
                 }
                 else {
-                    
+
 
                     if (Number(detalle.precioUnitario) >= (Number(detalle.precioUnitarioRegistrado) - Number(VARIACION_PRECIO_ITEM_OCC))
-                        && Number(detalle.precioUnitario) <= (Number(detalle.precioUnitarioRegistrado) + Number(VARIACION_PRECIO_ITEM_OCC)))
-                    {
+                        && Number(detalle.precioUnitario) <= (Number(detalle.precioUnitarioRegistrado) + Number(VARIACION_PRECIO_ITEM_OCC))) {
                         precios = '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right">' + detalle.precioUnitario + '</td>';
-                        
+
                     }
-                    else
-                    {
-                    precios = '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">' + detalle.precioUnitario + '</td>';
+                    else {
+                        precios = '<td class="' + detalle.idProducto + ' detprecioUnitario" style="text-align:right; color: #B9371B; font-weight:bold">' + detalle.precioUnitario + '</td>';
 
                     }
                 }
 
                 var descontinuadoLabel = "";
                 if (detalle.descontinuado == 1) {
-                    descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html(); 
+                    descontinuadoLabel = "<br/>" + $("#spnProductoDescontinuado").html();
 
                     if (detalle.motivoRestriccion != null) {
                         detalle.motivoRestriccion = detalle.motivoRestriccion.trim();
@@ -1587,7 +1583,7 @@ jQuery(function ($) {
 
                     '<td>' + proveedor + '</td>' +
                     '<td>' + detalle.codigoProducto + descontinuadoLabel + '</td>' +
-                     
+                    '<td class="' + detalle.idProducto + ' detcodigoProductocliente" style="text-align:right">' + detalle.codigoProductoCliente + '</td>' +
 
                     '<td>' + detalle.nombreProducto + observacionesEnDescripcion + '</td>' +
                     '<td>' + detalle.unidad + '</td>' +
@@ -1605,13 +1601,26 @@ jQuery(function ($) {
                     '<td class="' + detalle.idProducto + ' detcantidad" style="text-align:right">' + cantidad + '</td>' +
                     '<td class="' + detalle.idProducto + ' detsubtotal" style="text-align:right">' + subtotal + '</td>' +
                     '<td class="' + detalle.idProducto + ' detobservacion" style="text-align:left">' + observacion + '</td>' +
-                    '<td class="' + detalle.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + detalle.idProducto+' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>' +
+                    '<td class="' + detalle.idProducto + ' detbtnMostrarPrecios"> <button  type="button" class="' + detalle.idProducto + ' btnMostrarPrecios btn btn-primary bouton-image botonPrecios"></button></td>' +
 
 
-                 //   esRecotizacion +
+                    //   esRecotizacion +
 
                     '<td class="' + detalle.idProducto + ' detordenamiento"></td>' +
                     '</tr > ');
+                var dataListOptions = '<datalist id="opciones-' + detalle.idProducto + '">';
+
+                for (var j = 0; j < detalle.codigosProductoClienteAnteriores.length; j++) {
+                    dataListOptions = dataListOptions + '<option value="' + detalle.codigosProductoClienteAnteriores[j] + '">' + detalle.codigosProductoClienteAnteriores[j] + '</option>';
+                }
+
+                dataListOptions = dataListOptions + '<option value="' + detalle.codigoProducto + '">' + detalle.codigoProducto + '</option>';
+                if (detalle.skuProveedor != '') {
+                    dataListOptions = dataListOptions + '<option value="' + detalle.skuProveedor + '">' + detalle.skuProveedor + '</option>';
+                }
+                dataListOptions = dataListOptions + '</datalist>';
+                $("#divOpcionesSkuClienteDetalles").append(dataListOptions);
+
 
                 $('#tableDetalleOrdenCompraCliente thead tr th.footable-editing').remove();
                 $('#tableDetalleOrdenCompraCliente tbody tr td.footable-editing').remove();
@@ -3954,7 +3963,13 @@ jQuery(function ($) {
      //   @cotizacionDetalle.producto.idProducto detproductoObservacion"
 
 
+        var $j_object = $("td.detcodigoProductocliente");
+        $.each($j_object, function (key, value) {
 
+            var arrId = value.getAttribute("class").split(" ");
+            var codigoProductoCliente = value.innerText.trim();
+            value.innerHTML = "<input list='opciones-" + arrId[0] + "' style='width: 120px' class='" + arrId[0] + " detincodigoProductocliente form-control' value='" + codigoProductoCliente + "' />";
+        });
 
         /*Se agrega control input en columna porcentaje descuento*/
         var $j_object1 = $("td.detporcentajedescuento");
@@ -4022,18 +4037,11 @@ jQuery(function ($) {
             var costo = $("." + arrId[0] + ".detcostoLista").text();
 
             var observacion = $("." + arrId[0] + ".detobservacionarea").val(); 
+            var codigoProductoCliente = $("." + arrId[0] + ".detincodigoProductocliente").val();
 
-            json = json + '{"idProducto":"' + arrId[0] + '", "cantidad":"' + cantidad + '", "porcentajeDescuento":"' + porcentajeDescuento + '", "precio":"' + precio + '", "flete":"' + flete + '",  "costo":"' + costo + '", "observacion":"' + observacion+'"},' 
+            json = json + '{"idProducto":"' + arrId[0] + '", "codigoProductoCliente":"' + codigoProductoCliente + '", "cantidad":"' + cantidad + '", "porcentajeDescuento":"' + porcentajeDescuento + '", "precio":"' + precio + '", "flete":"' + flete + '",  "costo":"' + costo + '", "observacion":"' + observacion+'"},' 
         });
         json = json.substr(0, json.length - 1) + "]";
-
-    
-        /*
-        var cotizacionDetalleJson = [
-            { "idProducto": "John", "cantidad": "1", "porcentajeDescuento": "0" },
-            { "idProducto": "Anna", "cantidad": "1", "porcentajeDescuento": "0" },
-            { "idProducto": "Peter", "cantidad": "1", "porcentajeDescuento": "0" }];
-        var   json3 = JSON.stringify(cotizacionDetalleJson);*/
 
         
         $.ajax({

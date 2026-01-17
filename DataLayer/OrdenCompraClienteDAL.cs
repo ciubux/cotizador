@@ -167,6 +167,7 @@ namespace DataLayer
             else
                 InputParameterAdd.Decimal(objCommand, "equivalencia", 1);
             InputParameterAdd.Varchar(objCommand, "unidad", occDetalle.unidad);
+            InputParameterAdd.Varchar(objCommand, "codigoProductoCliente", occDetalle.codigoProductoCliente);
             InputParameterAdd.Decimal(objCommand, "porcentajeDescuento", occDetalle.porcentajeDescuento);
             InputParameterAdd.Decimal(objCommand, "precioNeto", occDetalle.precioNeto);
             InputParameterAdd.Int(objCommand, "esPrecioAlternativo", occDetalle.esPrecioAlternativo?1:0);
