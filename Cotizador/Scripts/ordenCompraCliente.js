@@ -605,6 +605,9 @@ jQuery(function ($) {
     var fechaSolicitud = $("#fechaSolicitudTmp").val();
     $("#fechaSolicitud").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaSolicitud);
 
+    var fechaFinVigencia = $("#fechaFinVigenciaTmp").val();
+    $("#fechaFinVigencia").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaFinVigencia);
+
     var fechaCreacionDesde = $("#fechaCreacionDesdetmp").val();
     $("#occ_fechaCreacionDesde").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaCreacionDesde);
 
@@ -856,10 +859,7 @@ jQuery(function ($) {
         });
     });
 
-
-
-
-    $(".fechaSolicitud").change(function () {
+    $("#fechaSolicitud").change(function () {
         var fechaSolicitud = $("#fechaSolicitud").val();
         $.ajax({
             url: "/OrdenCompraCliente/ChangeFechaSolicitud",
@@ -872,12 +872,18 @@ jQuery(function ($) {
         });
     });
 
-
-    
-
-
-
-
+    $("#fechaFinVigencia").change(function () {
+        var fechaFinVigencia = $("#fechaFinVigencia").val();
+        $.ajax({
+            url: "/OrdenCompraCliente/ChangeFechaFinVigencia",
+            type: 'POST',
+            data: {
+                fechaFinVigencia: fechaFinVigencia
+            },
+            success: function () {
+            }
+        });
+    });
 
 
     function changeInputString(propiedad, valor) {
@@ -1973,6 +1979,18 @@ jQuery(function ($) {
             return false;
         }
 
+        var fechaFinVigencia = $("#fechaFinVigencia").val();
+        if (fechaFinVigencia.trim() == "") {
+            $("#fechaFinVigencia").focus();
+            $.alert({
+                title: TITLE_VALIDACION_OCC,
+                content: 'Debe ingresar la fecha de fin de vigencia.',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            return false;
+        }
         
         if ($("#occ_solicitante_nombre").val().trim() == "") {
             $('#occ_solicitante_nombre').focus();
@@ -2515,6 +2533,9 @@ jQuery(function ($) {
 
                 $("#verUsuarioCreacion").html(ordenCompraCliente.UsuarioRegistro.nombre);
                 $("#verFechaHoraRegistro").html(ordenCompraCliente.fechaHoraRegistro);
+                $("#verFechaFinVigencia").html(ordenCompraCliente.fechaFinVigenciaString);
+
+                
 
                 $("#verContactoOrdenCompraCliente").html(ordenCompraCliente.contactoOrdenCompraCliente);
                 $("#verTelefonoCorreoContactoOrdenCompraCliente").html(ordenCompraCliente.telefonoCorreoContactoOrdenCompraCliente);
@@ -2620,6 +2641,7 @@ jQuery(function ($) {
                     d += '<tr>' +
                         '<td>' + imgIndicadorAprobacion + '</td>' +
                         '<td>' + lista[i].producto.proveedor + '</td>' +
+                        '<td>' + lista[i].codigoProductoCliente + '</td>' +
                         '<td>' + lista[i].producto.sku + descontinuadoLabel + '</td>' +
                         '<td>' + lista[i].producto.descripcion + '</td>' +
                         '<td>' + lista[i].unidad + '</td>' +

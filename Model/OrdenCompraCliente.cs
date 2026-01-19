@@ -87,6 +87,11 @@ namespace Model
 
         [Display(Name = "Fecha Solicitud:")]
         public DateTime fechaSolicitud { get; set; }
+
+        [Display(Name = "Fecha Fin Vigencia:")]
+        public DateTime fechaFinVigencia { get; set; }
+        public string fechaFinVigenciaString => fechaFinVigencia.ToString("dd/MM/yyyy");
+
         [Required(ErrorMessage = "Ingrese la Fecha de Entrega.")]
 
         [Display(Name = "Solicitado Por:")]

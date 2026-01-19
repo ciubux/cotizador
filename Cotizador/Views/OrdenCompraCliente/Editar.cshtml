@@ -178,20 +178,25 @@
                         <label for="fechaSolicitud" class="control-label col-xs-6 col-lg-4">Fecha de Emisión:</label>
                         <div class="input-group col-xs-8 col-lg-8">
 
-                            <input type="hidden" id="fechaSolicitudTmp" value="@ViewBag.fechaSolicitud" />
+                            <input type="hidden" id="fechaSolicitudTmp" value="@occ.fechaSolicitud" />
                             <input class="form-control" type="text" id="fechaSolicitud" name="fechaSolicitud" autocomplete="off">
                         </div>
                     </div>
                 </div>
 
+                <div class="col-sm-6 col-lg-4">
+                    <div class="form-group">
+                        <label for="fechaFinVigencia" class="control-label col-xs-6 col-lg-4">Fecha Fin Vigencia:</label>
+                        <div class="input-group col-xs-8 col-lg-8">
+                            <input type="hidden" id="fechaFinVigenciaTmp" value="@occ.fechaFinVigencia" />
+                            <input class="form-control" type="text" id="fechaFinVigencia" name="fechaFinVigencia" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
             </div>
 
 
-
             <div class="row">
-
-
-
                 <div class="col-sm-6 col-lg-4">
                     <!--IGV-->
                     <div class="form-group">

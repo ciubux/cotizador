@@ -272,6 +272,11 @@ namespace BusinessLayer
 
         #endregion
 
+        public List<string> SelectCodigosProductosClienteAnteriores(Guid idProducto, int idClienteSunat, Guid idUsuario)
+        {
+            OrdenCompraClienteDAL dal = new OrdenCompraClienteDAL();
+            return dal.SelectCodigosProductosClienteAnteriores(idProducto, idClienteSunat, idUsuario);
+        }
 
     }
 }

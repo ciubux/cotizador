@@ -40,7 +40,8 @@ namespace DataLayer
 
 
             InputParameterAdd.DateTime(objCommand, "fechaSolicitud", occ.fechaSolicitud);
-            
+            InputParameterAdd.DateTime(objCommand, "fechaFinVigencia", occ.fechaFinVigencia);
+
             DateTime dtTmp = DateTime.Now;
             
 
@@ -102,7 +103,7 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "numeroRequerimiento", occ.numeroRequerimiento); //puede ser null
 
             InputParameterAdd.DateTime(objCommand, "fechaSolicitud", occ.fechaSolicitud);
-            
+            InputParameterAdd.DateTime(objCommand, "fechaFinVigencia", occ.fechaFinVigencia);
 
             InputParameterAdd.Guid(objCommand, "idSolicitante", occ.solicitante.idSolicitante);
             InputParameterAdd.Varchar(objCommand, "contactoOrdenCompraCliente", occ.solicitante.nombre);  //puede ser null
@@ -422,6 +423,7 @@ namespace DataLayer
             {
                 occ.numeroOrdenCompraCliente = Converter.GetLong(row, "numero_occ");
                 occ.fechaSolicitud = Converter.GetDateTime(row, "fecha_solicitud");
+                occ.fechaFinVigencia = Converter.GetDateTime(row, "fecha_fin_vigencia");
 
                 occ.fechaEntregaExtendida = Converter.GetDateTimeNullable(row, "fecha_entrega_extendida");
 
@@ -467,7 +469,6 @@ namespace DataLayer
                 occ.otrosCargos = Converter.GetDecimal(row, "otros_cargos");
 
                 occ.FechaRegistro = Converter.GetDateTime(row, "fecha_registro");
-                occ.FechaRegistro = occ.FechaRegistro.AddHours(-5);
 
                 /* occ.venta = new Venta();
                    occ.venta.igv = Converter.GetDecimal(row, "igv_venta");
@@ -524,6 +525,7 @@ namespace DataLayer
                 occDetalle.cantidad = Converter.GetInt(row, "cantidad");
                 occDetalle.cantidadAsignada = Converter.GetDecimal(row, "cantidadSolicitada");
                 occDetalle.cantidadEntregada = Converter.GetDecimal(row, "cantidadAtendida");
+                occDetalle.codigoProductoCliente = Converter.GetString(row, "codigo_producto_cliente");
 
                 occDetalle.cantidadPermitida = Converter.GetInt(row, "cantidad_permitida");
                 occDetalle.observacionRestriccion = Converter.GetString(row, "comentario_retencion");
@@ -1179,25 +1181,43 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
         }
 
 
+        public List<string> SelectCodigosProductosClienteAnteriores(Guid idProducto, int idClienteSunat, Guid idUsuario)
+        {
+            List<string> lista = new List<string>();
+
+            var objCommand = GetSqlCommand("ps_codigosClienteProducto");
+            InputParameterAdd.Int(objCommand, "idClinteSunat", idClienteSunat);
+            InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable dataTable = Execute(objCommand);
+            
+            foreach (DataRow row in dataTable.Rows)
+            {
+                string codigoProductoCliente = Converter.GetString(row, "codigo_producto_cliente");
+
+                lista.Add(codigoProductoCliente);
+            }
+            
+            return lista;
+        }
+
+
         public List<Guid> SelectOrdenCompraClientesSinAtencion()
         {
             List<Guid> occIds = new List<Guid>();
 
             var objCommand = GetSqlCommand("ps_occs_sin_atencion");
             DataTable dataTable = Execute(objCommand);
-            
+
             foreach (DataRow row in dataTable.Rows)
             {
                 Guid idOrdenCompraCliente = Converter.GetGuid(row, "id_occ");
-                
+
                 occIds.Add(idOrdenCompraCliente);
             }
-            
+
             return occIds;
         }
-
-        
-
-        
     }
 }

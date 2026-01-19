@@ -482,6 +482,7 @@ namespace Cotizador.Controllers
                 occ.direccionEntrega = new DireccionEntrega();
                 occ.solicitante = new Solicitante();
                 occ.fechaSolicitud = DateTime.Now;
+                occ.fechaFinVigencia = DateTime.Now.AddDays(30);
                 occ.fechaEntregaDesde = null;
                 occ.fechaEntregaHasta = null;
                 occ.horaEntregaDesde = "09:00";
@@ -813,7 +814,7 @@ namespace Cotizador.Controllers
                     if (detalle.producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
                     {
                         detalle.producto.precioClienteProducto.precioUnitario =
-                       detalle.producto.precioClienteProducto.precioUnitario / detalle.ProductoPresentacion.Equivalencia;
+                        detalle.producto.precioClienteProducto.precioUnitario / detalle.ProductoPresentacion.Equivalencia;
                     }
 
                 }
@@ -822,6 +823,10 @@ namespace Cotizador.Controllers
                     detalle.precioNeto = precioNeto;
                 }
                 detalle.flete = flete;
+
+                OrdenCompraClienteBL occBl = new OrdenCompraClienteBL();
+                detalle.codigosProductoClienteAnteriores = occBl.SelectCodigosProductosClienteAnteriores(idProducto, occ.clienteSunat.idClienteSunat, usuario.idUsuario);
+
                 occ.detalleList.Add(detalle);
 
                 //CotizacionDetalle cotizacionDetalle = (CotizacionDetalle)Convert.ChangeType(occ, typeof(CotizacionDetalle));
@@ -1026,6 +1031,14 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE] = occ;
         }
 
+
+        public void ChangeFechaFinVigencia()
+        {
+            OrdenCompraCliente occ = (OrdenCompraCliente)this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE];
+            String[] fechaFinVigencia = this.Request.Params["fechaFinVigencia"].Split('/');
+            occ.fechaFinVigencia = new DateTime(Int32.Parse(fechaFinVigencia[2]), Int32.Parse(fechaFinVigencia[1]), Int32.Parse(fechaFinVigencia[0]), 0, 0, 0);
+            this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE] = occ;
+        }
 
         public void ChangeFechaSolicitud()
         {
