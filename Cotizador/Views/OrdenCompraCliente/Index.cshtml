@@ -246,7 +246,15 @@
                             </div>
                         </div>
 
-                        
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="form-group">
+                                @Html.LabelFor(p => occ.fechaSolicitud, htmlAttributes: new { @class = "control-label col-xs-4" })
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verFechaEmision"></p>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col-sm-6 col-lg-6">
                             <div class="form-group">
                                 @Html.LabelFor(p => occ.fechaFinVigencia, htmlAttributes: new { @class = "control-label col-xs-4" })

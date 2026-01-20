@@ -85,8 +85,9 @@ namespace Model
         [Display(Name = "Max Hora de Entrega 2:")]
         public String horaEntregaAdicionalHasta { get; set; }
 
-        [Display(Name = "Fecha Solicitud:")]
+        [Display(Name = "Fecha Emisión:")]
         public DateTime fechaSolicitud { get; set; }
+        public string fechaSolicitudString => fechaSolicitud.ToString("dd/MM/yyyy");
 
         [Display(Name = "Fecha Fin Vigencia:")]
         public DateTime fechaFinVigencia { get; set; }

@@ -413,6 +413,7 @@ namespace DataLayer
             DataTable occDataTable = dataSet.Tables[0];
             DataTable occDetalleDataTable = dataSet.Tables[1];
             DataTable occSedesDataTable = dataSet.Tables[2];
+            DataTable codigosClienteProductoDataTable = dataSet.Tables[3];
 
             //DataTable movimientoAlmacenDataTable = dataSet.Tables[2];
             //DataTable solicitanteDataTable = dataSet.Tables[3];
@@ -573,6 +574,7 @@ namespace DataLayer
 
                 occDetalle.observacion = Converter.GetString(row, "observaciones");
 
+                occDetalle.codigosProductoClienteAnteriores = new List<string>();
 
                 PrecioClienteProducto precioClienteProducto = new PrecioClienteProducto();
 
@@ -620,6 +622,17 @@ namespace DataLayer
 
                 occ.sedesClienteSunat.Add(occSede);
             }
+
+
+            foreach (DataRow row in codigosClienteProductoDataTable.Rows)
+            {
+                Guid idProducto = Converter.GetGuid(row, "id_producto");
+                string codigo = Converter.GetString(row, "codigo_producto_cliente");
+
+                OrdenCompraClienteDetalle detalle = occ.detalleList.Where(s => s.producto.idProducto == idProducto).FirstOrDefault(); 
+                detalle.codigosProductoClienteAnteriores.Add(codigo); 
+            }
+
 
             List<DireccionEntrega> direccionEntregaList = new List<DireccionEntrega>();
 

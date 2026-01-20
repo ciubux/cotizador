@@ -3555,6 +3555,13 @@ jQuery(function ($) {
                     $(".promocionesContainerView").append(htmlAddProm);
                 }
 
+                $("#divVerArchivosOC").html("");
+                if (pedido.idOrdenCompraCliente != "00000000-0000-0000-0000-000000000000") {
+                    htmlVerArchivosAdjuntos(pedido.idOrdenCompraCliente, 'OC_OCCLIENTE', function (html) {
+                        $("#divVerArchivosOC").html(html);
+                    });
+                }
+
                 if (pedido.tipoPedido == TIPO_PEDIDO_VENTA_VENTA.charCodeAt(0)
                     //|| pedido.tipoPedido == TIPO_PEDIDO_VENTA_TRASLADO_INTERNO_ENTREGADO.charCodeAt(0)
                     || pedido.tipoPedido == TIPO_PEDIDO_VENTA_COMODATO_ENTREGADO.charCodeAt(0)

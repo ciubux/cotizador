@@ -10,7 +10,7 @@ namespace Cotizador.Models.DTOshow
     {
         
         public Guid idPedido { get; set; }
-
+        public Guid idOrdenCompraCliente { get; set; }
         public Moneda moneda { get; set; }
 
         public List<Promocion> promocionesList { get; set; }

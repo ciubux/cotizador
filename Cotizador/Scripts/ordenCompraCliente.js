@@ -2534,7 +2534,8 @@ jQuery(function ($) {
                 $("#verUsuarioCreacion").html(ordenCompraCliente.UsuarioRegistro.nombre);
                 $("#verFechaHoraRegistro").html(ordenCompraCliente.fechaHoraRegistro);
                 $("#verFechaFinVigencia").html(ordenCompraCliente.fechaFinVigenciaString);
-
+                $("#verFechaEmision").html(ordenCompraCliente.fechaSolicitudString);
+                
                 
 
                 $("#verContactoOrdenCompraCliente").html(ordenCompraCliente.contactoOrdenCompraCliente);

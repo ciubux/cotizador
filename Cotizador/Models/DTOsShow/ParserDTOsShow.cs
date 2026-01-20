@@ -388,6 +388,11 @@ namespace Cotizador.Models.DTOsShow
             PedidoDTOshow pedidoDTOshow = new PedidoDTOshow();
             pedidoDTOshow.promocionesList = pedido.promociones;
             pedidoDTOshow.idPedido = pedido.idPedido;
+            if (pedido.ordenCompracliente != null)
+            {
+                pedidoDTOshow.idOrdenCompraCliente = pedido.ordenCompracliente.idOrdenCompraCliente;
+            }
+
             pedidoDTOshow.truncado = pedido.truncado;
             pedidoDTOshow.moneda = pedido.moneda;
             pedidoDTOshow.empresa = pedido.empresa;
