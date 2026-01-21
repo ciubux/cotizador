@@ -1321,11 +1321,20 @@ namespace Cotizador.Controllers
                 Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO];
                 Guid idProducto = Guid.Parse(this.Session["idProducto"].ToString());
                 PedidoDetalle pedidoDetalle = pedido.pedidoDetalleList.Where(p => p.producto.idProducto == idProducto).FirstOrDefault();
+                int success = 1;
+                string mensajeError = "";
                 if (pedidoDetalle != null)
                 {
-                    String mensajeError = "Producto ya se encuentra en la lista.";
+                    mensajeError = "Producto ya se encuentra en la lista.";
                     logger.Error(agregarUsuarioAlMensaje(mensajeError));
-                    throw new System.Exception(mensajeError);
+                    success = 0;
+
+                    return JsonConvert.SerializeObject(new {
+                        success = success,
+                        errorMessage = mensajeError
+                    });
+
+                    //throw new System.Exception(mensajeError);
                 }
 
                 PedidoDetalle detalle = new PedidoDetalle(pedido.usuario.visualizaCostos, pedido.usuario.visualizaMargen);
@@ -1334,7 +1343,7 @@ namespace Cotizador.Controllers
 
                 if (pedido.clasePedido == Pedido.ClasesPedido.Venta)
                 {
-                    String mensajeError = "Tipo de Producto no concuerda con el tipo de Pedido.";
+                    mensajeError = "Tipo de Producto no concuerda con el tipo de Pedido.";
                     if ((pedido.tipoPedido == Pedido.tiposPedido.Venta || pedido.tipoPedido == Pedido.tiposPedido.TransferenciaGratuitaEntregada) && producto.tipoProducto == Producto.TipoProducto.Comodato)
                     {
                         logger.Error(agregarUsuarioAlMensaje(mensajeError));
@@ -1432,6 +1441,8 @@ namespace Cotizador.Controllers
 
                 var v = new
                 {
+                    success = success,
+                    errorMessage = mensajeError,
                     idProducto = detalle.producto.idProducto,
                     codigoProducto = detalle.producto.sku,
                     nombreProducto = nombreProducto,

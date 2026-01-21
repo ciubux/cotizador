@@ -1866,6 +1866,21 @@ jQuery(function ($) {
                         '<td class="' + detalle.idProducto + ' detcostoAnterior" style="text-align:right; color: #B9371B">0.0</td>';
                 }*/
 
+                if (detalle.success == 0) {
+                    $.alert({
+                        title: 'Error al agregar producto',
+                        content: detalle.errorMessage,
+                        type: 'orange',
+                        buttons: {
+                            OK: function () {
+                                $('#btnCancelAddProduct').click();
+                            }
+                        }
+                    });
+
+                    return;
+                }
+
                 var observacionesEnDescripcion = "<br /><span class='" + detalle.idProducto + " detproductoObservacion'  style='color: darkred'>" + detalle.observacion + "</span>";
 
 

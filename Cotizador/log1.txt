@@ -162,3 +162,10 @@ Nombre del parámetro: source
 Nombre del parámetro: source
 2025-10-13 20:55:54.7882|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Producto ya se encuentra en la lista.
 2025-10-13 20:55:54.8494|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Producto ya se encuentra en la lista.
+2026-01-21 12:23:55.4698|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Producto ya se encuentra en la lista.
+2026-01-21 12:23:55.5204|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Producto ya se encuentra en la lista.
+2026-01-21 12:29:58.7062|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Producto ya se encuentra en la lista.
+2026-01-21 12:29:58.7302|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Producto ya se encuentra en la lista.
+2026-01-21 14:03:40.4509|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Producto ya se encuentra en la lista.
+2026-01-21 14:40:00.1165|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Producto ya se encuentra en la lista.
+2026-01-21 14:42:32.0851|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Producto ya se encuentra en la lista.
