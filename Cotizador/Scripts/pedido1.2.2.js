@@ -1363,6 +1363,8 @@ jQuery(function ($) {
                 $("#btnStockUnidadAddProduct").attr("idCiudad", idCiudad);
                 $("#btnStockUnidadAddProduct").attr("idProductoPresentacion", "0");
 
+                var cantidadMaximaMP = Number(producto.cantidadMaxima).toFixed(2);
+
                 //Limpieza de campos
                 $("#costoLista").val(Number(producto.costoLista));
                 //alert($("#costoLista").val());
@@ -1378,7 +1380,23 @@ jQuery(function ($) {
                 $('#fleteDetalle').val(producto.fleteDetalle);
                 $("#porcentajeDescuento").val(Number(producto.porcentajeDescuento).toFixed(10));
                 $("#cantidad").val(1);
+                $("#cantidad").attr("cantidadMaximaMP", cantidadMaximaMP);
                 $("#stock").val(producto.Stock);
+
+                if (cantidadMaximaMP >= 0) {
+                    //TO DO: Mostrar cantidad maxima debajo de input cantidad y que cambie al cambiar unidad.
+                    $("#cantidadMaxima").html("Cantidad Máxima: " + cantidadMaximaMP);
+                } else {
+                    $("#cantidadMaxima").html("");
+                }
+
+                if (producto.precioEditable) {
+                    $('#porcentajeDescuento').prop('disabled', false);
+                    $('#btnCalcularDescuento').show();
+                } else {
+                    $('#porcentajeDescuento').prop('disabled', true);
+                    $('#btnCalcularDescuento').hide();
+                }
 
                 if (producto.descontinuado == 1) {
                     $("#spnProductoDescontinuado").show();
@@ -1526,14 +1544,36 @@ jQuery(function ($) {
 
 
     /////////////////////////CAMPOS PORCENTAJE DESCUENTO y CANTIDAD 
-    $("#porcentajeDescuento, #cantidad").change(function () {
+    $("#porcentajeDescuento").change(function () {
 
         var descuento = Number($("#porcentajeDescuento").val());
         /*      if (descuento > 100) {
                   descuento = 100;
               }*/
         $("#porcentajeDescuento").val(descuento.toFixed(10));
-        $("#cantidad").val(Number($("#cantidad").val()).toFixed());
+        calcularSubtotalProducto();
+    });
+
+    $("#cantidad").change(function () {
+        var cantidad = Number($("#cantidad").val()).toFixed();
+        var cantidadMaxima = Number($("#cantidad").attr("cantidadmaximamp"));
+
+        if (cantidadMaxima < cantidad) {
+            cantidad = Math.trunc(cantidadMaxima);
+            $.alert({
+                title: 'ADVERTENCIA',
+                content: "La cantidad máxima a asignar es de " + cantidad + ".",
+                type: 'orange',
+                buttons: {
+                    OK: function () {
+
+                    }
+                }
+            });
+        }
+
+        $("#cantidad").val(cantidad);
+
         calcularSubtotalProducto();
     });
 

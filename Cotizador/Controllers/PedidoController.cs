@@ -1,8 +1,17 @@
 ﻿using BusinessLayer;
 using Cotizador.ExcelExport;
+using Cotizador.Models.DTOsSearch;
+using Cotizador.Models.DTOsShow;
+using DataLayer;
 using Model;
+using Model.NextSoft;
+using Model.UTILES;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NLog;
 using NPOI.HSSF.UserModel;
+using NPOI.OpenXmlFormats.Wordprocessing;
+using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
@@ -10,19 +19,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.ConstrainedExecution;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Cotizador.Models.DTOsSearch;
-using NLog;
-using Cotizador.Models.DTOsShow;
-using Model.UTILES;
-using NPOI.SS.Formula.Functions;
-using System.Threading.Tasks;
-using Model.NextSoft;
-using DataLayer;
 using static Model.SeguimientoPedido;
-using Newtonsoft.Json.Linq;
-using NPOI.OpenXmlFormats.Wordprocessing;
 
 namespace Cotizador.Controllers
 {
@@ -1225,6 +1226,7 @@ namespace Cotizador.Controllers
 
                 Decimal fleteDetalle = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, producto.costoLista * (0) / 100));
                 Decimal precioUnitario = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, fleteDetalle + producto.precioLista));
+                bool precioEditable = true;
 
                 //Se calcula el porcentaje de descuento
                 Decimal porcentajeDescuento = 0;
@@ -1233,16 +1235,58 @@ namespace Cotizador.Controllers
                     fleteDetalle = producto.precioClienteProducto.flete;
                     //Solo en caso de que el precioNetoEquivalente sea distinto a 0 se calcula el porcentaje de descuento
                     //si no se obtiene precioNetoEquivalente quiere decir que no hay precioRegistrado
-                    if (producto.precioLista == 0)
-                        porcentajeDescuento = 100;
-                    else
-                        porcentajeDescuento = 100 - (producto.precioClienteProducto.precioNeto * 100 / producto.precioLista);
+
                 }
+
+                decimal cantidadMaxima = -1;
+
+                if (pedido.ordenCompracliente != null && !pedido.ordenCompracliente.idOrdenCompraCliente.Equals(Guid.Empty))
+                {
+                    OrdenCompraClienteDetalle occDet = pedido.ordenCompracliente.detalleList.Where(d => d.producto.idProducto == idProducto).FirstOrDefault();
+                    precioUnitario = occDet.precioUnitario;
+                    fleteDetalle = occDet.flete;
+                    cantidadMaxima = occDet.cantidadPorAsignar;
+                    precioEditable= false;
+                }
+
+                if (producto.precioLista == 0)
+                    porcentajeDescuento = 100;
+                else
+                    porcentajeDescuento = 100 - (producto.precioClienteProducto.precioNeto * 100 / producto.precioLista);
 
                 String jsonPrecioLista = JsonConvert.SerializeObject(producto.precioListaList);
                 String jsonProductoPresentacion = JsonConvert.SerializeObject(producto.ProductoPresentacionList);
 
 
+                var resultado = new 
+                {
+                    id = producto.idProducto,
+                    nombre = producto.descripcion,
+                    sku = producto.sku,
+                    image = "data:image/png;base64, " + Convert.ToBase64String(producto.image), 
+                    unidad = producto.unidad, 
+                    unidad_alternativa = producto.unidad_alternativa, 
+                    selectUnidadProv = selectUnidadProv, 
+                    proveedor = producto.proveedor, 
+                    familia = producto.familia, 
+                    precioUnitarioSinIGV = producto.precioSinIgv, 
+                    cantidadMaxima = cantidadMaxima, 
+                    precioEditable = precioEditable,
+                    //       precioUnitarioAlternativoSinIGV = producto.precioAlternativoSinIgv,
+                    precioLista = producto.precioLista, 
+                    costoSinIGV = producto.costoSinIgv,
+                    //       costoAlternativoSinIGV = producto.costoAlternativoSinIgv,
+                    fleteDetalle = fleteDetalle,
+                    precioUnitario = precioUnitario, 
+                    porcentajeDescuento = porcentajeDescuento,
+                    descontinuado = producto.descontinuado.ToString(), 
+                    motivoRestriccion = producto.motivoRestriccion, 
+                    precioListaList = producto.precioListaList,
+                    productoPresentacionList = producto.ProductoPresentacionList, 
+                    costoLista = producto.costoLista 
+                };
+
+                /*
                 String resultado = "{" +
                     "\"id\":\"" + producto.idProducto + "\"," +
                     "\"nombre\":\"" + producto.descripcion + "\"," +
@@ -1267,7 +1311,8 @@ namespace Cotizador.Controllers
                     "\"productoPresentacionList\":" + jsonProductoPresentacion + "," +
                     "\"costoLista\":\"" + producto.costoLista + "\"" +
                     "}";
-                return resultado;
+                */
+                return JsonConvert.SerializeObject(resultado); 
             }
             catch (Exception e)
             {

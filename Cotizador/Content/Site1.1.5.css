@@ -1445,7 +1445,7 @@ $darkred: darken($red, 0.2);*/
 }
 
 
-.tableProductosGenerarPedido .txt-restante-atender {
+.txt-restante-atender {
     color: #3276b1;
     font-weight: bold;
     font-size: 11px;

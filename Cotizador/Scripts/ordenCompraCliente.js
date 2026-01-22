@@ -3178,9 +3178,9 @@ jQuery(function ($) {
             $(this).val(cantidadAtender);
 
             $.alert({
-                title: 'Advertencia',
+                title: 'ADVERTENCIA',
                 content: "La cantidad máxima a atender es de " + cantidad + ".",
-                type: 'yellow',
+                type: 'orange',
                 buttons: {
                     OK: function () {
 
