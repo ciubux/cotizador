@@ -3212,8 +3212,7 @@ jQuery(function ($) {
 
             var idDetalle = $fila.attr('idOrdenCompraClienteDetalle');
             var comentario = $fila.find('td .inputItemObervacionDetalle').val();
-            alert(idDetalle);
-
+            
             if (!Number.isInteger(cantidadMax)) {
                 $fila.find('select.inputUnidad option').each(function () {
                     var cantidadAtender = parseFloat($(this).attr('cantidadPorAsignar'));

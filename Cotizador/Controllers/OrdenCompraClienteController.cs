@@ -1540,6 +1540,7 @@ namespace Cotizador.Controllers
             pedidoGenerar.pedidoDetalleList = new List<PedidoDetalle>();
             pedidoGenerar.numeroReferenciaCliente = occ.numeroReferenciaCliente;
             pedidoGenerar.solicitante = occ.solicitante;
+            pedidoGenerar.observaciones = occ.observaciones;
             pedidoGenerar.empresa = occ.empresa;
 
             foreach (OrdenCompraClienteDetalle det in occ.detalleList)

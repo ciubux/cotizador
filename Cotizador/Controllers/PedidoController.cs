@@ -782,41 +782,11 @@ namespace Cotizador.Controllers
 
             Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_ORDEN_COMPRA_CLIENTE_PEDIDO_GENERAR];
 
-
             pedido.cliente = clienteBl.getCliente(pedido.cliente.idCliente);
 
             pedido.ciudad = pedido.cliente.ciudad;
-            pedido.idPedido = Guid.Empty;
-            pedido.numeroPedido = 0;
-            pedido.numeroGrupoPedido = null;
-            pedido.cotizacion = new Cotizacion();
-            pedido.ubigeoEntrega = new Ubigeo();
-            pedido.ubigeoEntrega.Id = "000000";
-            pedido.esPagoContado = false;
-
-            pedido.tipoPedido = Pedido.tiposPedido.Venta;
-            pedido.ciudadASolicitar = new Ciudad();
-
-            pedido.direccionEntrega = new DireccionEntrega();
-            pedido.fechaSolicitud = DateTime.Now;
-            pedido.fechaEntregaDesde = null;
-            pedido.fechaEntregaHasta = null;
-            pedido.horaEntregaDesde = "09:00";
-            pedido.horaEntregaHasta = "18:00";
-            pedido.contactoPedido = String.Empty;
-            pedido.telefonoContactoPedido = String.Empty;
-            pedido.incluidoIGV = false;
-            //  pedido.tasaIGV = Constantes.IGV;
-            //pedido.flete = 0;
-            // pedido.mostrarCodigoProveedor = true;
-            pedido.observaciones = String.Empty;
-
+            
             pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            pedido.seguimientoPedido = new SeguimientoPedido();
-            pedido.seguimientoCrediticioPedido = new SeguimientoCrediticioPedido();
-            pedido.pedidoAdjuntoList = new List<PedidoAdjunto>();
-            pedido.fechaPrecios = pedido.fechaSolicitud.AddDays(Constantes.DIAS_MAX_BUSQUEDA_PRECIOS * -1);
-
 
             if (pedido.cliente.horaInicioPrimerTurnoEntrega != null && !pedido.cliente.horaInicioPrimerTurnoEntrega.Equals("00:00:00"))
             {
@@ -843,11 +813,6 @@ namespace Cotizador.Controllers
             DireccionEntregaBL direccionEntregaBL = new DireccionEntregaBL();
             pedido.cliente.direccionEntregaList = direccionEntregaBL.getDireccionesEntrega(pedido.cliente.idCliente);
             pedido.direccionEntrega = new DireccionEntrega();
-
-            pedido.observaciones = String.Empty;
-
-            pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            pedido.seguimientoPedido = new SeguimientoPedido();
 
             List<PedidoDetalle> detalles = new List<PedidoDetalle>();
 
