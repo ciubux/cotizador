@@ -1364,6 +1364,8 @@ jQuery(function ($) {
                 $("#btnStockUnidadAddProduct").attr("idProductoPresentacion", "0");
 
                 var cantidadMaximaMP = Number(producto.cantidadMaxima).toFixed(2);
+                var cantidadMaximaProveedor = Number(producto.cantidadMaximaProveedor).toFixed(2);
+                var cantidadMaximaAlternativa = Number(producto.cantidadMaximaAlternativa).toFixed(2);
 
                 //Limpieza de campos
                 $("#costoLista").val(Number(producto.costoLista));
@@ -1380,7 +1382,9 @@ jQuery(function ($) {
                 $('#fleteDetalle').val(producto.fleteDetalle);
                 $("#porcentajeDescuento").val(Number(producto.porcentajeDescuento).toFixed(10));
                 $("#cantidad").val(1);
-                $("#cantidad").attr("cantidadMaximaMP", cantidadMaximaMP);
+                $("#cantidad").attr("cantidadmaximamp", cantidadMaximaMP);
+                $("#cantidad").attr("cantidadmaximaproveedor", cantidadMaximaProveedor);
+                $("#cantidad").attr("cantidadmaximaalternativa", cantidadMaximaAlternativa);
                 $("#stock").val(producto.Stock);
 
                 if (cantidadMaximaMP >= 0) {
@@ -1504,6 +1508,27 @@ jQuery(function ($) {
             costoLista = (costoLista + (costoLista * IGV)).toFixed(cantidadDecimales);
         }
 
+        var cantidadMaxima = Number($("#cantidad").attr("cantidadmaximamp"));
+        var cantidadMaximaAlternativa = Number($("#cantidad").attr("cantidadmaximaalternativa"));
+        var cantidadMaximaProveedor = Number($("#cantidad").attr("cantidadmaximaproveedor"));
+
+        if (cantidadMaxima >= 0) {
+            if (codigoPrecioAlternativo == 0) {
+                $("#cantidadMaxima").html("Cantidad Máxima: " + cantidadMaxima);
+            }
+
+            if (codigoPrecioAlternativo == 1) {
+                $("#cantidadMaxima").html("Cantidad Máxima: " + cantidadMaximaAlternativa);
+            }
+
+            if (codigoPrecioAlternativo == 2) {
+                $("#cantidadMaxima").html("Cantidad Máxima: " + cantidadMaximaProveedor);
+            }
+        }
+
+        $("#cantidad").val(0);
+
+
         $("#precioLista").val(precioLista);
         $("#costoLista").val(costoLista);
 
@@ -1557,6 +1582,16 @@ jQuery(function ($) {
     $("#cantidad").change(function () {
         var cantidad = Number($("#cantidad").val()).toFixed();
         var cantidadMaxima = Number($("#cantidad").attr("cantidadmaximamp"));
+
+        var codigoPrecioAlternativo = Number($("#unidad").val());
+        if (codigoPrecioAlternativo == 1) {
+            cantidadMaxima = Number($("#cantidad").attr("cantidadmaximaalternativa"));
+        }
+
+        if (codigoPrecioAlternativo == 2) {
+            cantidadMaxima = Number($("#cantidad").attr("cantidadmaximaproveedor"));
+        }
+
 
         if (cantidadMaxima < cantidad) {
             cantidad = Math.trunc(cantidadMaxima);

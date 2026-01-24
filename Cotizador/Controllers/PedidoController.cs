@@ -1239,6 +1239,8 @@ namespace Cotizador.Controllers
                 }
 
                 decimal cantidadMaxima = -1;
+                decimal cantidadMaximaProveedor = -1;
+                decimal cantidadMaximaAlternativa = -1;
 
                 if (pedido.ordenCompracliente != null && !pedido.ordenCompracliente.idOrdenCompraCliente.Equals(Guid.Empty))
                 {
@@ -1246,7 +1248,9 @@ namespace Cotizador.Controllers
                     precioUnitario = occDet.precioUnitario;
                     fleteDetalle = occDet.flete;
                     cantidadMaxima = occDet.cantidadPorAsignar;
-                    precioEditable= false;
+                    cantidadMaximaAlternativa = cantidadMaxima * producto.equivalenciaAlternativa;
+                    cantidadMaximaProveedor = cantidadMaxima / producto.equivalenciaProveedor;
+                    precioEditable = false;
                 }
 
                 if (producto.precioLista == 0)
@@ -1270,7 +1274,9 @@ namespace Cotizador.Controllers
                     proveedor = producto.proveedor, 
                     familia = producto.familia, 
                     precioUnitarioSinIGV = producto.precioSinIgv, 
-                    cantidadMaxima = cantidadMaxima, 
+                    cantidadMaxima = cantidadMaxima,
+                    cantidadMaximaProveedor = cantidadMaximaProveedor,
+                    cantidadMaximaAlternativa = cantidadMaximaAlternativa,
                     precioEditable = precioEditable,
                     //       precioUnitarioAlternativoSinIGV = producto.precioAlternativoSinIgv,
                     precioLista = producto.precioLista, 
@@ -1336,13 +1342,7 @@ namespace Cotizador.Controllers
                 if (pedidoDetalle != null)
                 {
                     mensajeError = "Producto ya se encuentra en la lista.";
-                    logger.Error(agregarUsuarioAlMensaje(mensajeError));
                     success = 0;
-
-                    return JsonConvert.SerializeObject(new {
-                        success = success,
-                        errorMessage = mensajeError
-                    });
 
                     //throw new System.Exception(mensajeError);
                 }
@@ -1380,6 +1380,12 @@ namespace Cotizador.Controllers
                 decimal costo = Decimal.Parse(Request["costo"].ToString());
                 decimal flete = Decimal.Parse(Request["flete"].ToString());
 
+                if (detalle.cantidad <= 0)
+                {
+                    mensajeError = "Debe ingresar una cantidad mayor a 0.";
+                    success = 0;
+                }
+
 
                 detalle.unidad = detalle.producto.unidad;
 
@@ -1408,6 +1414,18 @@ namespace Cotizador.Controllers
                     detalle.precioNeto = precioNeto;
                 }
                 detalle.flete = flete;
+
+
+                if (success == 0)
+                {
+                    ogger.Error(agregarUsuarioAlMensaje(mensajeError));
+                    return JsonConvert.SerializeObject(new
+                    {
+                        success = success,
+                        errorMessage = mensajeError
+                    });
+                }
+
                 pedido.pedidoDetalleList.Add(detalle);
 
                 //CotizacionDetalle cotizacionDetalle = (CotizacionDetalle)Convert.ChangeType(pedido, typeof(CotizacionDetalle));
