@@ -3,6 +3,9 @@
     Model.Pedido pedido = ViewBag.pedido;
     Model.DireccionEntrega direccionEntrega = ViewBag.direccionEntrega;
     Model.Solicitante solicitante = pedido.solicitante;
+    string idOCC = pedido.ordenCompracliente == null || pedido.ordenCompracliente.idOrdenCompraCliente.Equals(Guid.Empty) ? 
+                            "" : 
+                            pedido.ordenCompracliente.idOrdenCompraCliente.ToString();
     // Model.pedido.OpcionesConsiderarCantidades opcionesConsiderarCantidades;
     // @model Enum;
 }
@@ -12,6 +15,7 @@
 </div>
 <div class="container">
     <input type="hidden" id="idPedido" />
+    <input type="hidden" id="idOcc" value="@idOCC"/>
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
     <input type="hidden" value="@ViewBag.debug" />
     @Html.HiddenFor(p => @pedido.cliente.habilitadoModificarDireccionEntrega, htmlAttributes: new { })
@@ -219,40 +223,40 @@
 
             @if (pedido.usuario.marcaPedidoVentaIndirecta)
             {
-            <!--Venta Indirecta-->
-            <div class="col-sm-6 col-lg-4">
-                <!--IGV-->
-                <div class="form-group">
-                    <label for="igv" class="control-label col-xs-4">Venta Indirecta:</label>
-                    <div class="col-xs-8">
-                        <div class="radio radio-inline">
-                            <label class="radio-label" for="ventadirectasi">
-                                @if (pedido.esVentaIndirecta)
-                                {
-                                    <input class="radio-input" checked type="radio" name="ventaindirecta" id="ventaindirectasi" value="1">@ViewBag.Si;
-                                }
-                                else
-                                {
-                                    <input class="radio-input" type="radio" name="ventaindirecta" id="ventaindirectasi" value="1">@ViewBag.Si;
-                                }
+                <!--Venta Indirecta-->
+                <div class="col-sm-6 col-lg-4">
+                    <!--IGV-->
+                    <div class="form-group">
+                        <label for="igv" class="control-label col-xs-4">Venta Indirecta:</label>
+                        <div class="col-xs-8">
+                            <div class="radio radio-inline">
+                                <label class="radio-label" for="ventadirectasi">
+                                    @if (pedido.esVentaIndirecta)
+                                    {
+                                        <input class="radio-input" checked type="radio" name="ventaindirecta" id="ventaindirectasi" value="1">@ViewBag.Si;
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" type="radio" name="ventaindirecta" id="ventaindirectasi" value="1">@ViewBag.Si;
+                                    }
 
-                            </label>
-                        </div>
-                        <div class="radio radio-inline">
-                            <label class="radio-label" for="ventadirectano">
-                                @if (!pedido.esVentaIndirecta)
-                                {
-                                    <input class="radio-input" checked type="radio" name="ventaindirecta" id="ventaindirectano" value="0">@ViewBag.No;
-                                }
-                                else
-                                {
-                                    <input class="radio-input" type="radio" name="ventaindirecta" id="ventaindirectano" value="0">@ViewBag.No;
-                                }
-                            </label>
+                                </label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <label class="radio-label" for="ventadirectano">
+                                    @if (!pedido.esVentaIndirecta)
+                                    {
+                                        <input class="radio-input" checked type="radio" name="ventaindirecta" id="ventaindirectano" value="0">@ViewBag.No;
+                                    }
+                                    else
+                                    {
+                                        <input class="radio-input" type="radio" name="ventaindirecta" id="ventaindirectano" value="0">@ViewBag.No;
+                                    }
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             }
         </div>
 

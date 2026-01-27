@@ -71,7 +71,10 @@ namespace Model
                 this._precioNeto = value;
             }
         }
-
+        public new Decimal precioNetoMP
+        {
+            get { return Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, this._precioNeto)); }
+        }
 
         public Decimal precioNetoAlterno
         {

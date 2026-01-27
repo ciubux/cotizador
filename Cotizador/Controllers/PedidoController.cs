@@ -1227,6 +1227,7 @@ namespace Cotizador.Controllers
                 Decimal fleteDetalle = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, producto.costoLista * (0) / 100));
                 Decimal precioUnitario = Decimal.Parse(String.Format(Constantes.formatoCuatroDecimales, fleteDetalle + producto.precioLista));
                 bool precioEditable = true;
+                decimal precioNeto = producto.precioLista;
 
                 //Se calcula el porcentaje de descuento
                 Decimal porcentajeDescuento = 0;
@@ -1245,8 +1246,9 @@ namespace Cotizador.Controllers
                 if (pedido.ordenCompracliente != null && !pedido.ordenCompracliente.idOrdenCompraCliente.Equals(Guid.Empty))
                 {
                     OrdenCompraClienteDetalle occDet = pedido.ordenCompracliente.detalleList.Where(d => d.producto.idProducto == idProducto).FirstOrDefault();
-                    precioUnitario = occDet.precioUnitario;
+                    precioNeto = occDet.precioNetoMP;
                     fleteDetalle = occDet.flete;
+                    precioUnitario = fleteDetalle + precioNeto;
                     cantidadMaxima = occDet.cantidadPorAsignar;
                     cantidadMaximaAlternativa = cantidadMaxima * producto.equivalenciaAlternativa;
                     cantidadMaximaProveedor = cantidadMaxima / producto.equivalenciaProveedor;
@@ -1256,7 +1258,7 @@ namespace Cotizador.Controllers
                 if (producto.precioLista == 0)
                     porcentajeDescuento = 100;
                 else
-                    porcentajeDescuento = 100 - (producto.precioClienteProducto.precioNeto * 100 / producto.precioLista);
+                    porcentajeDescuento = 100 - (precioNeto * 100 / producto.precioLista);
 
                 String jsonPrecioLista = JsonConvert.SerializeObject(producto.precioListaList);
                 String jsonProductoPresentacion = JsonConvert.SerializeObject(producto.ProductoPresentacionList);
@@ -1283,6 +1285,7 @@ namespace Cotizador.Controllers
                     costoSinIGV = producto.costoSinIgv,
                     //       costoAlternativoSinIGV = producto.costoAlternativoSinIgv,
                     fleteDetalle = fleteDetalle,
+                    precioNeto = precioNeto,
                     precioUnitario = precioUnitario, 
                     porcentajeDescuento = porcentajeDescuento,
                     descontinuado = producto.descontinuado.ToString(), 
@@ -1407,7 +1410,6 @@ namespace Cotizador.Controllers
                         detalle.producto.precioClienteProducto.precioUnitario =
                        detalle.producto.precioClienteProducto.precioUnitario / detalle.ProductoPresentacion.Equivalencia;
                     }
-
                 }
                 else
                 {
@@ -1418,7 +1420,7 @@ namespace Cotizador.Controllers
 
                 if (success == 0)
                 {
-                    ogger.Error(agregarUsuarioAlMensaje(mensajeError));
+                    logger.Error(agregarUsuarioAlMensaje(mensajeError));
                     return JsonConvert.SerializeObject(new
                     {
                         success = success,

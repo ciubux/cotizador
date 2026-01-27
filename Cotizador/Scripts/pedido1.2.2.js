@@ -7,6 +7,8 @@ jQuery(function ($) {
     var TITLE_EXITO = 'Operación Realizada';
     var MOSTRAR_OPCION_GENERAR_COTIZACION = false;
 
+    var ID_OCC = "";
+
     $(document).ready(function () {
         obtenerConstantes();
       //  setTimeout(autoGuardarPedido, MILISEGUNDOS_AUTOGUARDADO);
@@ -22,6 +24,8 @@ jQuery(function ($) {
         var tipoPedido = $("#pedido_tipoPedido").val();
         validarTipoPedido(tipoPedido);
 
+        ID_OCC = $("#idOcc").val();
+        
         if ($("#pagina").val() == 2) {
             if ($("#idPedido").val() != "") {
                 showPedido($("#idPedido").val());
@@ -1593,7 +1597,7 @@ jQuery(function ($) {
         }
 
 
-        if (cantidadMaxima < cantidad) {
+        if (cantidadMaxima >= 0 && cantidadMaxima < cantidad) {
             cantidad = Math.trunc(cantidadMaxima);
             $.alert({
                 title: 'ADVERTENCIA',
@@ -5473,13 +5477,15 @@ jQuery(function ($) {
     /*Evento que se dispara cuando se hace clic en el boton EDITAR en la edición de la grilla*/
     $(document).on('click', "button.footable-show", function () {
 
-
-
-
         //Cambiar estilos a los botones
         $("button.footable-add").attr("class", "btn btn-default footable-add");
         $("button.footable-hide").attr("class", "btn btn-primary footable-hide");
 
+        var precioEditable = true;
+
+        if (ID_OCC != "") {
+            precioEditable = false;
+        }
 
         //Se deshabilitan controles que recargan la página o que interfieren con la edición del detalle
         $("#considerarCantidades").attr('disabled', 'disabled');
@@ -5557,8 +5563,12 @@ jQuery(function ($) {
             var arrId = value.getAttribute("class").split(" ");
             var porcentajedescuento = value.innerText.trim();
             porcentajedescuento = porcentajedescuento.replace("%", "").trim();
-            $(".detporcentajedescuentoMostrar." + arrId[0]).html("<div style='width: 150px' ><div style='float:left' ><input style='width: 100px' class='" + arrId[0] + " detinporcentajedescuento form-control' value='" + porcentajedescuento + "' type='number'/></div><div > <button type='button' class='" + arrId[0] + " btnCalcularDescuento btn btn-primary bouton-image monBouton' data-toggle='modal' data-target='#modalCalculadora' ></button ></div></div>");
-
+            if (precioEditable) {
+                $(".detporcentajedescuentoMostrar." + arrId[0]).html("<div style='width: 150px' ><div style='float:left' ><input style='width: 100px' class='" + arrId[0] + " detinporcentajedescuento form-control' value='" + porcentajedescuento + "' type='number'/></div><div > <button type='button' class='" + arrId[0] + " btnCalcularDescuento btn btn-primary bouton-image monBouton' data-toggle='modal' data-target='#modalCalculadora' ></button ></div></div>");
+            }
+            else {
+                $(".detporcentajedescuentoMostrar." + arrId[0]).html("<div style='width: 150px' ><div style='float:left' ><input disabled style='width: 100px' class='" + arrId[0] + " detinporcentajedescuento form-control' value='" + porcentajedescuento + "' type='number'/></div><div> </div></div>");
+            }
         });
 
 
@@ -5567,7 +5577,11 @@ jQuery(function ($) {
 
             var arrId = value.getAttribute("class").split(" ");
             var flete = value.innerText.trim();
-            value.innerHTML = "<input style='width: 100px' class='" + arrId[0] + " detinflete form-control' value='" + flete + "' type='number'/>";
+            if (precioEditable) {
+                value.innerHTML = "<input style='width: 100px' class='" + arrId[0] + " detinflete form-control' value='" + flete + "' type='number'/>";
+            } else {
+                value.innerHTML = "<input disabled style='width: 100px' class='" + arrId[0] + " detinflete form-control' value='" + flete + "' type='number'/>";
+            }
         });
 
 

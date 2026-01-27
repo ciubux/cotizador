@@ -171,3 +171,4 @@ Nombre del parámetro: source
 2026-01-21 14:42:32.0851|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Producto ya se encuentra en la lista.
 2026-01-23 13:46:21.9799|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Producto ya se encuentra en la lista.
 2026-01-23 13:46:41.3890|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Producto ya se encuentra en la lista.
+2026-01-27 00:26:12.8112|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Debe ingresar una cantidad mayor a 0.
