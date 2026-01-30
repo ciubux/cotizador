@@ -2672,7 +2672,7 @@ namespace Cotizador.Controllers
             }
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (!usuario.visualizaProductos || !usuario.modificaMaestroProductos)
+            if (!usuario.visualizaProductos && !usuario.modificaMaestroProductos)
             {
                 return RedirectToAction("Login", "Account");
             }

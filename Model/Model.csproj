@@ -68,6 +68,8 @@
     <Compile Include="DocumentoExterno.cs" />
     <Compile Include="NotificacionPendiente.cs" />
     <Compile Include="NextSoft\ServiceResponse.cs" />
+    <Compile Include="PersonalAlmacen.cs" />
+    <Compile Include="Vehiculo.cs" />
     <Compile Include="PrecioEspecialDetalle.cs" />
     <Compile Include="PrecioEspecialCabecera.cs" />
     <Compile Include="NextSoft\FactorNS.cs" />

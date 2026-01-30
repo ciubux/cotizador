@@ -11,7 +11,7 @@ namespace BusinessLayer
     {
         public Origen getOrigen(int idOrigen)
         {
-            using (var dal = new OrigenDAL())
+            using (OrigenDAL dal = new OrigenDAL())
             {
                 Origen origen = dal.getOrigen(idOrigen);
                 
@@ -21,7 +21,7 @@ namespace BusinessLayer
 
         public List<Origen> getOrigenes(Origen obj)
         {
-            using (var dal = new OrigenDAL())
+            using (OrigenDAL dal = new OrigenDAL())
             {
                 return dal.getOrigenes(obj);
             }
@@ -29,7 +29,7 @@ namespace BusinessLayer
 
         public Origen getOrigenById(int idOrigen) 
         {
-            using (var dal = new OrigenDAL())
+            using (OrigenDAL dal = new OrigenDAL())
             {
                 Origen obj = dal.getOrigen(idOrigen); 
 
@@ -39,7 +39,7 @@ namespace BusinessLayer
 
         public Origen insertOrigen(Origen obj)
         {
-            using (var dal = new OrigenDAL())
+            using (OrigenDAL dal = new OrigenDAL())
             {
                 return dal.insertOrigen(obj);
             }
@@ -47,7 +47,7 @@ namespace BusinessLayer
 
         public Origen updateOrigen(Origen obj)
         {
-            using (var dal = new OrigenDAL())
+            using (OrigenDAL dal = new OrigenDAL())
             {
                 return dal.updateOrigen(obj);
             }
