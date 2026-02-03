@@ -235,6 +235,7 @@
     <Compile Include="Controllers\DocumentoExternoController.cs" />
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Controllers\EmpresaDescuentoController.cs" />
+    <Compile Include="Controllers\VehiculoController.cs" />
     <Compile Include="Controllers\PrecioEspecialController.cs" />
     <Compile Include="Controllers\ArchivoAdjuntoController.cs" />
     <Compile Include="Controllers\AlmacenController.cs" />
@@ -494,6 +495,7 @@
     <Content Include="images\user_icon_2.png" />
     <Content Include="Scripts\excellib\exceljs.min.js" />
     <Content Include="Scripts\empresaDescuento.js" />
+    <Content Include="Scripts\vehiculo.js" />
     <Content Include="Scripts\precioEspecial.js" />
     <Content Include="Scripts\app\cotizador\cotizador.js" />
     <Content Include="Scripts\archivoAdjunto1.0.0.js" />
@@ -798,6 +800,7 @@
     <Content Include="Views\PrecioEspecial\LogCostosProducto.cshtml" />
     <Content Include="Views\DocumentoExterno\_ModalDescargarFacturasTC.cshtml" />
     <Content Include="Views\OrdenCompraCliente\_ModalImportarDetallesExcel.cshtml" />
+    <Content Include="Views\Vehiculo\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

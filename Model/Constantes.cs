@@ -185,7 +185,10 @@ namespace Model
         public static String VAR_SESSION_EMPRESADESCUENTO_BUSQUEDA = "empresaDescuentoBusqueda";
         public static String VAR_SESSION_EMPRESADESCUENTO_LISTA = "empresaDescuentoList";
 
-        
+        public static String VAR_SESSION_VEHICULO = "vehiculo";
+        public static String VAR_SESSION_VEHICULO_BUSQUEDA = "vehiculoBusqueda";
+        public static String VAR_SESSION_VEHICULO_LISTA = "vehiculoList";
+        public static String VAR_SESSION_VEHICULO_VER = "vehiculoVer";
 
         public static String VAR_SESSION_RUBRO = "rubro";
         public static String VAR_SESSION_RUBRO_BUSQUEDA = "rubroBusqueda";
@@ -585,7 +588,12 @@ namespace Model
 
         public const String ANULA_GUIAS_REMISION = "P331";
 
+        public const String MODIFICA_MAESTRO_VEHICULOS= "P705";
+
+        public const String MODIFICA_MAESTRO_PERSONAL_ALMACEN = "P706";
+
         public const String MODIFICA_MAESTRO_FABRICANTES = "P710";
+
         public const String MODIFICA_MAESTRO_EMPRESADESCUENTO = "P712";
 
         public const String EXTORNA_FICTICIAS = "P336";
@@ -825,6 +833,15 @@ namespace Model
 
             [Display(Name = "ACTUALIZAR COSTOS ESPECIALES")]
             ActualizarCostosEspeciales = 226,
+
+            [Display(Name = "BUSQUEDA CONSOLIDADO ATENCION")]
+            BusquedaConsolidadoAtencion = 701,
+
+            [Display(Name = "BUSQUEDA VEHICULOS")]
+            BusquedaVehiculos = 705,
+
+            [Display(Name = "BUSQUEDA PERSONAL ALMACEN")]
+            BusquedaPersonalAlmacen = 706,
 
             [Display(Name = "BUSQUEDA FABRICANTES")]
             BusquedaFabricantes = 1710,

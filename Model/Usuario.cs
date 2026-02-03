@@ -264,6 +264,12 @@ namespace Model
 
         public bool saltaValidacionStock { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.SALTA_VALIDACION_STOCK)).FirstOrDefault() != null; } }
 
+
+        public bool modificaMaestroVehiculos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_MAESTRO_VEHICULOS)).FirstOrDefault() != null; } }
+        public bool modificaMaestroPersonalAlmacen { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_MAESTRO_PERSONAL_ALMACEN)).FirstOrDefault() != null; } }
+
+
+
         //public bool modificaProducto { get; set; }
         public bool realizaCargaProductosWEB { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REALIZA_CARGA_MASIVA_PRODUCTOS)).FirstOrDefault() != null; } }
 

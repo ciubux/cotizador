@@ -30,6 +30,9 @@ namespace Cotizador
             bundles.Add(new ScriptBundle("~/bundles/fabricante").Include(
                         "~/Scripts/fabricante.js"
                         ));
+            bundles.Add(new ScriptBundle("~/bundles/vehiculo").Include(
+                        "~/Scripts/vehiculo.js"
+                        ));
 
             bundles.Add(new ScriptBundle("~/bundles/empresaDescuento").Include(
                         "~/Scripts/empresaDescuento.js"
