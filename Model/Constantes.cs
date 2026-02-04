@@ -190,6 +190,11 @@ namespace Model
         public static String VAR_SESSION_VEHICULO_LISTA = "vehiculoList";
         public static String VAR_SESSION_VEHICULO_VER = "vehiculoVer";
 
+        public static String VAR_SESSION_PERSONALALMACEN = "personalALmacen";
+        public static String VAR_SESSION_PERSONALALMACEN_BUSQUEDA = "personalALmacenBusqueda";
+        public static String VAR_SESSION_PERSONALALMACEN_LISTA = "personalALmacenList";
+        public static String VAR_SESSION_PERSONALALMACEN_VER = "personalALmacenVer";
+
         public static String VAR_SESSION_RUBRO = "rubro";
         public static String VAR_SESSION_RUBRO_BUSQUEDA = "rubroBusqueda";
         public static String VAR_SESSION_RUBRO_LISTA = "rubroList";

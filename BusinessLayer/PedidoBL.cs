@@ -161,7 +161,7 @@ namespace BusinessLayer
                                     if (pedidoDetalle.precioUnitario > pedidoDetalle.producto.precioClienteProducto.precioUnitario + Constantes.VARIACION_PRECIO_ITEM_PEDIDO ||
                                         pedidoDetalle.precioUnitario < pedidoDetalle.producto.precioClienteProducto.precioUnitario - Constantes.VARIACION_PRECIO_ITEM_PEDIDO)
                                     {
-                                        pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + pedidoDetalle.producto.sku + ": Precio varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio registrado. \n";
+                                        pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + pedidoDetalle.producto.sku + ": Precio es diferente al precio registrado. \n";
                                         pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
                                         pedidoDetalle.indicadorAprobacion = PedidoDetalle.IndicadorAprobacion.RechazadoSinPrecio;
                                     }
@@ -184,7 +184,7 @@ namespace BusinessLayer
                                         if (evaluarVariacion == 1)
                                         {
                                             //pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista. El precio unitario registrado en facturación se registro hace más de " + Constantes.DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION + " días.\n";
-                                            pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + pedidoDetalle.producto.sku + ": Precio varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista. El precio registrado ya venció. \n";
+                                            pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + pedidoDetalle.producto.sku + ": Precio es diferente al precio lista. El precio registrado ya venció. \n";
                                             pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
                                             if (pedidoDetalle.indicadorAprobacion != PedidoDetalle.IndicadorAprobacion.RechazadoSinPrecio)
                                                 pedidoDetalle.indicadorAprobacion = PedidoDetalle.IndicadorAprobacion.RechazadoSinVigencia;
@@ -192,14 +192,14 @@ namespace BusinessLayer
                                         if (evaluarVariacion == 4)
                                         {
                                             //pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + "El precio untario indicado en el producto " + pedidoDetalle.producto.sku + " varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista. El precio unitario registrado en facturación tuvo vigencia hasta " + precioClienteProducto.fechaFinVigencia.Value.ToString(Constantes.formatoFecha) + ".\n";
-                                            pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + pedidoDetalle.producto.sku + ": Precio varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista. El precio registrado ya venció. \n";
+                                            pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + pedidoDetalle.producto.sku + ": Precio es diferente al precio lista. El precio registrado ya venció. \n";
                                             pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
                                             if (pedidoDetalle.indicadorAprobacion != PedidoDetalle.IndicadorAprobacion.RechazadoSinPrecio)
                                                 pedidoDetalle.indicadorAprobacion = PedidoDetalle.IndicadorAprobacion.RechazadoSinVigencia;
                                         }
                                         else
                                         {
-                                            pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + pedidoDetalle.producto.sku + ": Precio varía por más de: " + Constantes.VARIACION_PRECIO_ITEM_PEDIDO + " con respecto al precio lista. \n";
+                                            pedido.seguimientoPedido.observacion = pedido.seguimientoPedido.observacion + pedidoDetalle.producto.sku + ": Precio es diferente al precio lista. \n";
                                             pedido.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion;
                                             pedidoDetalle.indicadorAprobacion = PedidoDetalle.IndicadorAprobacion.RechazadoSinPrecio;
                                         }

@@ -346,6 +346,7 @@ namespace DataLayer
                 cotizacion.aceptacionAutomatica = Converter.GetInt(row, "aceptacion_automatica") == 1 ? true: false;
 
                 cotizacion.idPedidoOrigen = Converter.GetGuid(row, "id_pedido_origen");
+                cotizacion.nroPedidoOrigen = Converter.GetString(row, "numero_pedido_origen");
 
                 //CLIENTE
                 cotizacion.cliente = new Cliente();
@@ -646,7 +647,8 @@ namespace DataLayer
                 cotizacion.maximoPorcentajeDescuentoPermitido = Converter.GetDecimal(row, "maximo_porcentaje_descuento");
                 cotizacion.minimoMargen = Converter.GetDecimal(row, "minimo_margen");
 
-                
+                cotizacion.idPedidoOrigen = Converter.GetGuid(row, "id_pedido_origen");
+                cotizacion.nroPedidoOrigen = Converter.GetString(row, "numero_pedido_origen");
 
                 ///Mover "{0:0.00}" a clase de constantes
                 cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacion.montoTotal / (1 + cotizacion.igv)));

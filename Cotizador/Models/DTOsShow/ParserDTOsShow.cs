@@ -1,5 +1,6 @@
 ﻿using Cotizador.Models.DTOs;
 using Cotizador.Models.DTOshow;
+using DataLayer;
 using Model;
 using Model.UTILES;
 using System;
@@ -67,6 +68,7 @@ namespace Cotizador.Models.DTOsShow
             cotizacionDTOshow.promocionesList = cotizacion.promociones;
             cotizacionDTOshow.fechaFinVigenciaPreciosExtendida = cotizacion.fechaFinVigenciaPreciosExtendida;
             cotizacionDTOshow.estadoExtendida = cotizacion.estadoExtendida;
+            cotizacionDTOshow.pedidoOrigen_numero = cotizacion.nroPedidoOrigen;
 
             cotizacionDTOshow.usuario_id = cotizacion.UsuarioRegistro.idUsuario;
             cotizacionDTOshow.usuario_nombre = cotizacion.UsuarioRegistro.nombre;

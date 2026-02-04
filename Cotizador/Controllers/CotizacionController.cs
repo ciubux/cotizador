@@ -1744,6 +1744,7 @@ namespace Cotizador.Controllers
                     item.producto = pedDet.producto;
                     item.cantidad = pedDet.cantidad;
                     item.unidad = pedDet.unidad;
+                    item.ProductoPresentacion = pedDet.ProductoPresentacion;
                     item.flete = pedDet.flete;
                     item.precioNeto = pedDet.precioNetoItem;
                     item.esPrecioAlternativo = pedDet.esPrecioAlternativo;

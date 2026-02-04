@@ -3080,7 +3080,7 @@ jQuery(function ($) {
         MOSTRAR_OPCION_GENERAR_COTIZACION = false;
 
         $.confirm({
-            title: 'GENERAR COTIAZACIÓN PARA PRODUCTOS CON PRECIOS NO APROBADOS',
+            title: 'GENERAR COTIZACIÓN PARA PRODUCTOS CON PRECIOS NO APROBADOS',
             content: 'El pedido tiene productos con precios no aprobados para el cliente. ¿Desea iniciar una cotización para estos productos?',
             type: 'yellow',
             buttons: {

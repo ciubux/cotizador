@@ -29,6 +29,8 @@ namespace Cotizador.Models.DTOshow
         public DateTime? fechaFinVigenciaPreciosExtendida { get; set; }
         public int estadoExtendida { get; set; }
 
+        public String pedidoOrigen_numero { get; set; }
+
         public Guid usuario_id { get; set; }
         public String usuario_nombre { get; set; }
 

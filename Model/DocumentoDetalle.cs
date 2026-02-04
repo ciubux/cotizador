@@ -182,7 +182,8 @@ namespace Model
 
         public Decimal precioNeto
         {
-            get { if (esPrecioAlternativo)
+            get { 
+                if (esPrecioAlternativo)
                 {
                     return Decimal.Parse(String.Format(Constantes.formatoDecimalesPrecioNeto, _precioNeto / ProductoPresentacion.Equivalencia));
                 }

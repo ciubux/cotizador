@@ -13,6 +13,7 @@ namespace Cotizador.Models.DTOs
         public String usuario_nombre { get; set; }
         public DateTime? fecha { get; set; }
         public String cliente_razonSocial { get; set; }
+        public String pedidoOrigen_numero { get; set; }
         public String cliente_ruc { get; set; }
         public String ciudad_nombre { get; set; }       
         public Decimal montoSubTotal { get; set; }

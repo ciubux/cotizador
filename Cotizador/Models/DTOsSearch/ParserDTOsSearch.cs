@@ -60,6 +60,7 @@ namespace Cotizador.Models.DTOsSearch
                 cotizacionDTO.idCotizacion = cotizacionTmp.idCotizacion;
                 cotizacionDTO.codigo = cotizacionTmp.codigo;
                 cotizacionDTO.usuario_nombre = cotizacionTmp.usuario.nombre;
+                cotizacionDTO.pedidoOrigen_numero = cotizacionTmp.nroPedidoOrigen;
                 cotizacionDTO.fecha = cotizacionTmp.fecha;
                 cotizacionDTO.grupo_nombre = cotizacionTmp.grupo.nombre;
                 cotizacionDTO.empresa_codigo = cotizacionTmp.empresa.codigo;

@@ -2325,6 +2325,11 @@ jQuery(function ($) {
                     numeroCot = numeroCot + " (Recotizado desde " + cotizacion.codigoAntecedente + ")";
                 }
 
+                if (cotizacion.pedidoOrigen_numero != undefined && cotizacion.pedidoOrigen_numero != "") {
+                    numeroCot = numeroCot + '<br/><span class="spn-nombre-comercial">Desde Pedido ' + cotizacion.pedidoOrigen_numero + '</span>';
+                }
+
+
                 $("#verImagenLogoCot").attr("src", "/images/logos/logo_" + cotizacion.empresa_codigo + ".png");
                 
                 $("#verIdGrupoCliente").val(cotizacion.grupo_idGrupoCliente);
@@ -4416,9 +4421,14 @@ jQuery(function ($) {
                         clienteRUC = cotizacionList[i].cliente_ruc;
                     }
 
+                    var nroPedidoOrigen = "";
+                    if (cotizacionList[i].pedidoOrigen_numero != undefined && cotizacionList[i].pedidoOrigen_numero != "") {
+                        nroPedidoOrigen = '<br/><span class="spn-nombre-comercial">Desde Pedido ' + cotizacionList[i].pedidoOrigen_numero + '</span>';
+                    }
+
                     var cotizacion = '<tr data-expanded="false">' +
                         '<td>' + cotizacionList[i].idCotizacion + '</td>' +
-                        '<td>' + cotizacionList[i].codigo + '</td>' +
+                        '<td>' + cotizacionList[i].codigo + nroPedidoOrigen + '</td>' +
                         '<td><img src="/images/logos/icon_' + cotizacionList[i].empresa_codigo + '.png" height="27"/></td>' +
                         '<td>' + cotizacionList[i].usuario_nombre + '</td>' +
                         //ToString("dd/MM/yyyy")
