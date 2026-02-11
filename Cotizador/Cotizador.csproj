@@ -236,6 +236,7 @@
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Controllers\EmpresaDescuentoController.cs" />
     <Compile Include="Controllers\PersonalAlmacenController.cs" />
+    <Compile Include="Controllers\ConsolidadoAtencionController.cs" />
     <Compile Include="Controllers\VehiculoController.cs" />
     <Compile Include="Controllers\PrecioEspecialController.cs" />
     <Compile Include="Controllers\ArchivoAdjuntoController.cs" />

@@ -1234,6 +1234,7 @@ namespace Cotizador.Controllers
                 if (producto.precioClienteProducto.idPrecioClienteProducto != Guid.Empty)
                 {
                     fleteDetalle = producto.precioClienteProducto.flete;
+                    precioNeto = producto.precioClienteProducto.precioNeto;
                     //Solo en caso de que el precioNetoEquivalente sea distinto a 0 se calcula el porcentaje de descuento
                     //si no se obtiene precioNetoEquivalente quiere decir que no hay precioRegistrado
 

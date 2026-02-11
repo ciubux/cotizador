@@ -51,6 +51,7 @@
     <Compile Include="ClienteContactoTipoDAL.cs" />
     <Compile Include="EmpresaDAL.cs" />
     <Compile Include="PersonalAlmacenDAL.cs" />
+    <Compile Include="ConsolidadoAtencionDAL.cs" />
     <Compile Include="VehiculoDAL.cs" />
     <Compile Include="ReporteDAL.cs" />
     <Compile Include="MensajeDAL.cs" />

@@ -102,6 +102,7 @@
     <Compile Include="EmpresaBL.cs" />
     <Compile Include="EmpresaDescuentoBL.cs" />
     <Compile Include="PersonalAlmacenBL.cs" />
+    <Compile Include="ConsolidadoAtencionBL.cs" />
     <Compile Include="VehiculoBL.cs" />
     <Compile Include="ReporteBL.cs" />
     <Compile Include="MensajeBL.cs" />
