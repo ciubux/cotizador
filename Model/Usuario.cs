@@ -259,6 +259,7 @@ namespace Model
         public bool realizaCargaMasivaStock { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CARGA_MASIVA_STOCK)).FirstOrDefault() != null; } }
         public bool visualizaReporteGlobalStock { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_REPORTE_GLOBAL_STOCK)).FirstOrDefault() != null; } }
 
+        //ALMACEN
         public bool registraAjusteStock { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REGISTRA_AJUSTE_STOCK)).FirstOrDefault() != null; } }
         public bool apruebaAjusteStock { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.APRUEBA_AJUSTE_STOCK)).FirstOrDefault() != null; } }
 
@@ -268,6 +269,8 @@ namespace Model
         public bool modificaMaestroVehiculos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_MAESTRO_VEHICULOS)).FirstOrDefault() != null; } }
         public bool modificaMaestroPersonalAlmacen { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_MAESTRO_PERSONAL_ALMACEN)).FirstOrDefault() != null; } }
 
+        public bool visualizaConsolidadoAtencion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_CONSOLIDADO_ATENCION)).FirstOrDefault() != null; } }
+        public bool modificaMaestroConsolidadoAtencion { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_CONSOLIDADO_ATENCION)).FirstOrDefault() != null; } }
 
 
         //public bool modificaProducto { get; set; }

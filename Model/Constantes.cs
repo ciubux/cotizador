@@ -195,6 +195,14 @@ namespace Model
         public static String VAR_SESSION_PERSONALALMACEN_LISTA = "personalALmacenList";
         public static String VAR_SESSION_PERSONALALMACEN_VER = "personalALmacenVer";
 
+
+        public static String VAR_SESSION_CONSOLIDADOATENCION = "consolidadoAtencion";
+        public static String VAR_SESSION_CONSOLIDADOATENCION_BUSQUEDA = "consolidadoAtencionBusqueda";
+        public static String VAR_SESSION_CONSOLIDADOATENCION_LISTA = "consolidadoAtencionList";
+        public static String VAR_SESSION_CONSOLIDADOATENCION_VER = "consolidadoAtencionVer";
+
+        
+
         public static String VAR_SESSION_RUBRO = "rubro";
         public static String VAR_SESSION_RUBRO_BUSQUEDA = "rubroBusqueda";
         public static String VAR_SESSION_RUBRO_LISTA = "rubroList";
@@ -596,6 +604,9 @@ namespace Model
         public const String MODIFICA_MAESTRO_VEHICULOS= "P705";
 
         public const String MODIFICA_MAESTRO_PERSONAL_ALMACEN = "P706";
+
+        public const String VISUALIZA_CONSOLIDADO_ATENCION = "P701";
+        public const String MODIFICA_CONSOLIDADO_ATENCION = "P702";
 
         public const String MODIFICA_MAESTRO_FABRICANTES = "P710";
 

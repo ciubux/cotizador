@@ -498,6 +498,7 @@
     <Content Include="Scripts\excellib\exceljs.min.js" />
     <Content Include="Scripts\empresaDescuento.js" />
     <Content Include="Scripts\personalAlmacen.js" />
+    <Content Include="Scripts\consolidadoAtencion.js" />
     <Content Include="Scripts\vehiculo.js" />
     <Content Include="Scripts\precioEspecial.js" />
     <Content Include="Scripts\app\cotizador\cotizador.js" />
@@ -805,6 +806,7 @@
     <Content Include="Views\OrdenCompraCliente\_ModalImportarDetallesExcel.cshtml" />
     <Content Include="Views\Vehiculo\List.cshtml" />
     <Content Include="Views\PersonalAlmacen\List.cshtml" />
+    <Content Include="Views\ConsolidadoAtencion\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

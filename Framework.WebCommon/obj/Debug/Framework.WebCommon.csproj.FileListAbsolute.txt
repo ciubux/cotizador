@@ -82,3 +82,9 @@ D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.cspr
 D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
 D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
 D:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb
+C:\Repo\freelos\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.dll
+C:\Repo\freelos\cotizador\Framework.WebCommon\bin\Debug\Framework.WebCommon.pdb
+C:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.AssemblyReference.cache
+C:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.csproj.CoreCompileInputs.cache
+C:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.dll
+C:\Repo\freelos\cotizador\Framework.WebCommon\obj\Debug\Framework.WebCommon.pdb

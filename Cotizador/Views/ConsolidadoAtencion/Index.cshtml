@@ -1,0 +1,105 @@
+﻿@{
+    ViewBag.Title = "Consolidado de Atención";
+    Model.ConsolidadoAtencion search = ViewBag.consolidado;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+
+    <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
+        <button id="btnBusqueda" type="button" class="btn btn-primary bouton-image botonSearch">Buscar</button>
+    </div>
+
+    <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px;">
+        <button id="btnAgregarConsolidado" type="button" class="btn btn-primary">Nuevo Consolidado</button>
+    </div>
+
+    <table id="tableConsolidados" class="table" data-paging="true">
+        <thead>
+            <tr>
+                <th data-name="fecha">Fecha</th>
+                <th data-name="vehiculo">Vehículo (Placa)</th>
+                <th data-name="chofer">Chofer</th>
+                <th data-name="asistente">Asistente</th>
+                <th data-name="opciones">Opciones</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="modalEditarConsolidado" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalTitle"></h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <input type="hidden" id="consolidado_id" />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Fecha:</label>
+                                <div class="col-xs-8">
+                                    <input type="date" id="consolidado_fecha" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Vehículo:</label>
+                                <div class="col-xs-8">
+                                    @Html.Action("GetVehiculosSelect", "Vehiculo", new { selectId = "consolidado_idVehiculo" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Chofer:</label>
+                                <div class="col-xs-8">
+                                    @Html.Action("GetPersonalSelect", "PersonalAlmacen", new { selectId = "consolidado_idChofer" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Asistente:</label>
+                                <div class="col-xs-8">
+                                    @Html.Action("GetPersonalSelect", "PersonalAlmacen", new { selectId = "consolidado_idAsistente" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-xs-2">Observaciones:</label>
+                                <div class="col-xs-10">
+                                    <textarea id="consolidado_observaciones" class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnGuardarConsolidado" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/consolidadoAtencion")
+}

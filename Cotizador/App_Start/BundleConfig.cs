@@ -36,6 +36,9 @@ namespace Cotizador
             bundles.Add(new ScriptBundle("~/bundles/personalAlmacen").Include(
                         "~/Scripts/personalAlmacen.js"
                         ));
+            bundles.Add(new ScriptBundle("~/bundles/consolidadoAtencion").Include(
+                        "~/Scripts/consolidadoAtencion.js"
+                        ));
 
             bundles.Add(new ScriptBundle("~/bundles/empresaDescuento").Include(
                         "~/Scripts/empresaDescuento.js"

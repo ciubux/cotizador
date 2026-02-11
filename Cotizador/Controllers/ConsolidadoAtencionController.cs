@@ -15,166 +15,86 @@ using System.Web.Mvc;
 
 namespace Cotizador.Controllers
 {
-    public class VehiculoController : ParentController
+    public class ConsolidadoAtencionController : ParentController
     {
         [HttpGet]
         public ActionResult List()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            // Asumiendo que existe este permiso en tu clase Usuario
-            if (!usuario.modificaMaestroVehiculos)
+            if (!usuario.visualizaConsolidadoAtencion && !usuario.modificaMaestroConsolidadoAtencion) // Verifica tu constante de permiso
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaVehiculos;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaConsolidadoAtencion;
 
-            if (this.Session[Constantes.VAR_SESSION_VEHICULO_BUSQUEDA] == null)
+            if (this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION_BUSQUEDA] == null)
             {
-                instanciarVehiculoBusqueda();
+                instanciarConsolidadoBusqueda();
             }
 
-            Vehiculo objSearch = (Vehiculo)this.Session[Constantes.VAR_SESSION_VEHICULO_BUSQUEDA];
+            ConsolidadoAtencion objSearch = (ConsolidadoAtencion)this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION_BUSQUEDA];
 
-            ViewBag.pagina = (int)Constantes.paginas.BusquedaVehiculos;
-            ViewBag.vehiculo = objSearch;
+            ViewBag.pagina = (int)Constantes.paginas.BusquedaConsolidadoAtencion;
+            ViewBag.consolidado = objSearch;
 
             return View();
         }
 
         public String SearchList()
         {
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaVehiculos;
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaConsolidadoAtencion;
+            ConsolidadoAtencion obj = (ConsolidadoAtencion)this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION_BUSQUEDA];
 
-            Vehiculo obj = (Vehiculo)this.Session[Constantes.VAR_SESSION_VEHICULO_BUSQUEDA];
+            ConsolidadoAtencionBL bL = new ConsolidadoAtencionBL();
+            List<ConsolidadoAtencion> list = bL.getConsolidadosAtencion(obj);
 
-            VehiculoBL bL = new VehiculoBL();
-            // Se asume que el método Listar acepta los mismos parámetros base
-            List<Vehiculo> list = bL.getVehiculos(obj);
-
-            this.Session[Constantes.VAR_SESSION_VEHICULO_LISTA] = list;
+            this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION_LISTA] = list;
             return JsonConvert.SerializeObject(list);
         }
 
-        private void instanciarVehiculo()
+        private void instanciarConsolidadoBusqueda()
         {
-            Vehiculo obj = new Vehiculo();
-            obj.idVehiculo = 0;
+            ConsolidadoAtencion obj = new ConsolidadoAtencion();
+            obj.idConsolidadoAtencion = Guid.Empty;
+            obj.fecha = DateTime.Now;
             obj.Estado = 1;
-            obj.placa = String.Empty;
-            obj.marca = String.Empty;
-            obj.modelo = String.Empty;
-            obj.ciudad = new Ciudad(); 
-
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            obj.IdUsuarioRegistro = usuario.idUsuario;
-            obj.usuario = usuario;
-
-            this.Session[Constantes.VAR_SESSION_VEHICULO] = obj;
-        }
-
-        private void instanciarVehiculoBusqueda()
-        {
-            Vehiculo obj = new Vehiculo();
-            obj.idVehiculo = 0;
-            obj.Estado = 1;
-            obj.placa = String.Empty;
-            obj.marca = String.Empty;
-            obj.modelo = String.Empty;
-            obj.ciudad = new Ciudad();
-
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            obj.IdUsuarioRegistro = usuario.idUsuario;
-            obj.usuario = usuario;
-
-            this.Session[Constantes.VAR_SESSION_VEHICULO_BUSQUEDA] = obj;
-        }
-
-        [HttpGet]
-        public ActionResult Index()
-        {
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (!usuario.modificaMaestroVehiculos)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            return View();
+            this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION_BUSQUEDA] = obj;
         }
 
         public String Create()
         {
-            VehiculoBL bL = new VehiculoBL();
-            Vehiculo obj = new Vehiculo();
+            ConsolidadoAtencionBL bL = new ConsolidadoAtencionBL();
+            ConsolidadoAtencion obj = new ConsolidadoAtencion();
 
-            obj.placa = Request["placa"].ToString();
-            obj.marca = Request["marca"].ToString();
-            obj.modelo = Request["modelo"].ToString();
+            obj.fecha = DateTime.Parse(Request["fecha"]);
+            obj.observaciones = Request["observaciones"] ?? "";
+            obj.vehiculo = new Vehiculo { idVehiculo = int.Parse(Request["idVehiculo"]) };
+            obj.chofer = new PersonalAlmacen { idPersonalAlmacen = int.Parse(Request["idChofer"]) };
+            obj.asistente = new PersonalAlmacen { idPersonalAlmacen = int.Parse(Request["idAsistente"]) };
             obj.Estado = 1;
-
-            // Mapeo de la ciudad desde el Select (ID 1 o 2)
-            obj.ciudad = new Ciudad { idCiudad = Guid.Parse(Request["idCiudad"].ToString()) };
-
             obj.IdUsuarioRegistro = Logueado.idUsuario;
 
-            obj = bL.insertVehiculo(obj);
-            this.Session[Constantes.VAR_SESSION_VEHICULO] = null;
+            obj = bL.insertConsolidadoAtencion(obj);
             return JsonConvert.SerializeObject(obj);
         }
 
         public String Update()
         {
-            VehiculoBL bL = new VehiculoBL();
-            Vehiculo obj = new Vehiculo();
+            ConsolidadoAtencionBL bL = new ConsolidadoAtencionBL();
+            ConsolidadoAtencion obj = new ConsolidadoAtencion();
 
-            obj.idVehiculo = int.Parse(Request["idVehiculo"].ToString());
-            obj.placa = Request["placa"].ToString();
-            obj.marca = Request["marca"].ToString();
-            obj.modelo = Request["modelo"].ToString();
+            obj.idConsolidadoAtencion = Guid.Parse(Request["idConsolidadoAtencion"]);
+            obj.fecha = DateTime.Parse(Request["fecha"]);
+            obj.observaciones = Request["observaciones"] ?? "";
+            obj.vehiculo = new Vehiculo { idVehiculo = int.Parse(Request["idVehiculo"]) };
+            obj.chofer = new PersonalAlmacen { idPersonalAlmacen = int.Parse(Request["idChofer"]) };
+            obj.asistente = new PersonalAlmacen { idPersonalAlmacen = int.Parse(Request["idAsistente"]) };
 
-            // Asignación de ciudad
-            if (!string.IsNullOrEmpty(Request["idCiudad"]))
-            {
-                obj.ciudad = new Ciudad { idCiudad = Guid.Parse(Request["idCiudad"]) };
-            }
-
-            obj.Estado = 1;
             obj.IdUsuarioRegistro = Logueado.idUsuario;
 
-            if (obj.idVehiculo == 0)
-            {
-                obj = bL.insertVehiculo(obj);
-            }
-            else
-            {
-                obj = bL.updateVehiculo(obj);
-            }
-
-            this.Session[Constantes.VAR_SESSION_VEHICULO] = null;
+            obj = bL.updateConsolidadoAtencion(obj);
             return JsonConvert.SerializeObject(obj);
-        }
-
-        private Vehiculo VehiculoSession
-        {
-            get
-            {
-                Vehiculo obj = null;
-                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
-                {
-                    case Constantes.paginas.BusquedaVehiculos:
-                        obj = (Vehiculo)this.Session[Constantes.VAR_SESSION_VEHICULO_BUSQUEDA]; break;
-                }
-                return obj;
-            }
-            set
-            {
-                switch ((Constantes.paginas)this.Session[Constantes.VAR_SESSION_PAGINA])
-                {
-                    case Constantes.paginas.BusquedaVehiculos:
-                        this.Session[Constantes.VAR_SESSION_VEHICULO_BUSQUEDA] = value; break;
-                }
-            }
         }
     }
 }

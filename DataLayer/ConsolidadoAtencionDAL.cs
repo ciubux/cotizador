@@ -57,7 +57,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "idAsistente", obj.asistente.idPersonalAlmacen);
             InputParameterAdd.Guid(objCommand, "idUsuario", obj.IdUsuarioRegistro);
 
-            OutputParameterAdd.Guid(objCommand, "newId");
+            OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
             ExecuteNonQuery(objCommand);
 
             obj.idConsolidadoAtencion = (Guid)objCommand.Parameters["@newId"].Value;
