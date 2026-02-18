@@ -1,0 +1,114 @@
+﻿@{
+    ViewBag.Title = "Crear/Modificar Consolidado Atencón";
+    Model.ConsolidadoAtencion item = ViewBag.origen;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" value="@ViewBag.debug" />
+    <form class="form-horizontal">
+        <div class="row">
+            <input type="hidden" id="idConsolidadoAtencion" name="idConsolidadoAtencion" value="@item.idConsolidadoAtencion" />
+
+            <div class="row">
+                <div class="col-lg-4 col-xs-6">
+                    <div class="form-group">
+                        <label class="control-label col-xs-4">Sede:</label>
+                        <div class="col-xs-8">
+                            @Html.Action("GetCiudades", "Ciudad",
+                                new
+                                {
+                                    ciudadSelectId = "consolidado_idCiudad",
+                                    selectedValue = item.ciudad.idCiudad
+                                })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-xs-6">
+                    <div class="form-group">
+                        <label class="control-label col-xs-4">Fecha:</label>
+                        <div class="col-xs-8">
+                            <input type="text" id="consolidado_fecha" class="form-control" value="@item.fechaDesc" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4 col-xs-6">
+                    <div class="form-group">
+                        <label class="control-label col-xs-4">Vehículo:</label>
+                        <div class="col-xs-8">
+                            <select class="form-control" id="consolidado_idVehiculo">
+                                <option>Seleccione</option>
+                                @foreach (Model.Vehiculo ve in ViewBag.vehiculos)
+                                {
+                                    <option @(item.vehiculo.idVehiculo.Equals(ve.idVehiculo) ? "selected" : "") value="@ve.idVehiculo">@ve.ToString()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-xs-6">
+                    <div class="form-group">
+                        <label class="control-label col-xs-4">Chofer:</label>
+                        <div class="col-xs-8">
+                            <select class="form-control" id="consolidado_idChofer">
+                                <option>Seleccione</option>
+                                @foreach (Model.PersonalAlmacen cho in ViewBag.choferes)
+                                {
+                                    <option @(item.chofer.idPersonalAlmacen.Equals(cho.idPersonalAlmacen) ? "selected" : "") value="@cho.idPersonalAlmacen">@cho.ToString()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-xs-6">
+                    <div class="form-group">
+                        <label class="control-label col-xs-4">Asistente:</label>
+                        <div class="col-xs-8">
+                            <select class="form-control" id="consolidado_idAsistente">
+                                <option>Seleccione</option>
+                                @foreach (Model.PersonalAlmacen asis in ViewBag.asistentes)
+                                {
+                                    <option @(item.asistente.idPersonalAlmacen.Equals(asis.idPersonalAlmacen) ? "selected" : "") value="@asis.idPersonalAlmacen">@asis.ToString()</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label class="control-label col-xs-2">Observaciones:</label>
+                        <div class="col-xs-10">
+                            <textarea id="consolidado_observaciones" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="row">
+            <div class="pull-right">
+                <button type="button" id="btnCancelarConsolidado" class="btn btn-danger">Cancelar</button>
+                <button id="btnFinalizarEdicionConsolidado" type="button" class="btn btn-success">Finalizar Creación</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/consolidadoAtencion")
+}
