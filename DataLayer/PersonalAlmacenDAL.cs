@@ -51,6 +51,13 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("ps_personales_almacen");
             InputParameterAdd.Int(objCommand, "estado", personal.Estado);
+            InputParameterAdd.VarcharEmpty(objCommand, "tipo", personal.tipo);
+
+            if (personal.sedePrincipal != null && !personal.sedePrincipal.idCiudad.Equals(Guid.Empty))
+            {
+                InputParameterAdd.Guid(objCommand, "idCiudad", personal.sedePrincipal.idCiudad);
+            }
+
             DataTable dataTable = Execute(objCommand);
             List<PersonalAlmacen> lista = new List<PersonalAlmacen>();
 

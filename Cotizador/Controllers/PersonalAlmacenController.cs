@@ -21,7 +21,7 @@ namespace Cotizador.Controllers
         public ActionResult List()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            // Asumiendo el permiso correspondiente
+            
             if (usuario != null || !usuario.modificaMaestroPersonalAlmacen)
             {
                 return RedirectToAction("Login", "Account");
@@ -55,6 +55,25 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_PERSONALALMACEN_LISTA] = list;
             return JsonConvert.SerializeObject(list);
         }
+
+        public String SearchAjax()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            Guid idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
+            string tipo = this.Request.Params["tipo"].ToString();
+            PersonalAlmacen obj = new PersonalAlmacen();
+            obj.Estado = 1;
+            obj.tipo = tipo;
+            obj.sedePrincipal = new Ciudad();
+            obj.sedePrincipal.idCiudad = idCiudad;
+
+            PersonalAlmacenBL bL = new PersonalAlmacenBL();
+            List<PersonalAlmacen> list = bL.getPersonalesAlmacen(obj);
+
+            return JsonConvert.SerializeObject(list);
+        }
+
 
         private void instanciarPersonalBusqueda()
         {

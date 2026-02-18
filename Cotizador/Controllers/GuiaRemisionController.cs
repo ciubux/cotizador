@@ -1667,8 +1667,14 @@ namespace Cotizador.Controllers
 
                 if (gr.pedido.seguimientoCrediticioPedido.estado != SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
                 {
-                    resultado = "{\"success\":false, \"message\":\"El pedido debe estar liberado para poder registrar la guía de atención.\"}";
-                    return resultado;
+                    return JsonConvert.SerializeObject(new
+                    {
+                        success = false,
+                        successRegistro = successRegistro,
+                        successNextSoft = successNextSoft,
+                        message = "El pedido debe estar liberado para poder registrar la guía de atención.",
+                        serieNumeroGuia = ""
+                    });
                 }
 
                 String error = String.Empty;

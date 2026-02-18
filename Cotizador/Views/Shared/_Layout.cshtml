@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "330";
+    TempData["ScriptVersion"] = "331";
 
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
@@ -167,7 +167,9 @@
 
                         var linkBusquedaVehiculos = "";
                         var linkBusquedaPersonalAlmacen = "";
-                        
+                        var linkBusquedaConsolidadoAtencion = "";
+                        var linkRegistroConsolidadoAtencion = "";
+
                         var linkRegistrarAjusteStock = "";
                         var linkBusquedaAjusteStock = "";
                         var linkActualizarCostosEspeciales = "";
@@ -229,6 +231,9 @@
 
                             case 705: linkBusquedaVehiculos = "active"; linkMovimientosAlmacen = "active"; break;
                             case 706: linkBusquedaPersonalAlmacen = "active"; linkMovimientosAlmacen = "active"; break;
+
+                            case 701: linkBusquedaConsolidadoAtencion = "active"; linkMovimientosAlmacen = "active"; break;
+                            case 702: linkRegistroConsolidadoAtencion = "active"; linkMovimientosAlmacen = "active"; break;
 
                             case 740: linkCargaProductosWeb = "active"; linkMaestros = "active"; break;
                             case 741: linkBusquedaProductosWeb = "active"; linkMaestros = "active"; break;
@@ -412,6 +417,16 @@
                                     @if (usuario.registraAjusteStock)
                                     {
                                         <li id="linkRegistraAjusteStock" class="@linkRegistrarAjusteStock">@Html.ActionLink("Almacén - Registrar Ajuste Stock", "Editar", "AjusteAlmacen")</li>
+                                    }
+
+                                    @if (usuario.visualizaConsolidadoAtencion)
+                                    {
+                                        <li id="linkBusquedaConsolidadoAtencion" class="@linkBusquedaConsolidadoAtencion">@Html.ActionLink("Consolidado Atención - Búsqueda", "List", "ConsolidadoAtencion")</li>
+                                    }
+
+                                    @if (usuario.modificaMaestroConsolidadoAtencion)
+                                    {
+                                        <li id="linkRegistroConsolidadoAtencion" class="@linkRegistroConsolidadoAtencion">@Html.ActionLink("Consolidado Atención - Registro/Edición", "Editar", "ConsolidadoAtencion")</li>
                                     }
 
                                     @if (usuario.modificaMaestroVehiculos)

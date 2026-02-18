@@ -853,6 +853,9 @@ namespace Model
             [Display(Name = "BUSQUEDA CONSOLIDADO ATENCION")]
             BusquedaConsolidadoAtencion = 701,
 
+            [Display(Name = "REGISTRO/EDICION CONSOLIDADO ATENCION")]
+            RegistroConsolidadoAtencion = 701,
+
             [Display(Name = "BUSQUEDA VEHICULOS")]
             BusquedaVehiculos = 705,
 

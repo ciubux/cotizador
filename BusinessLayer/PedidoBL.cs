@@ -1607,5 +1607,14 @@ namespace BusinessLayer
                 return dal.getDetallesPedidoRelacionado(idPedido, idUsuario);
             }
         }
+
+        public List<Pedido> SelectPedidosConsolidar(Guid idCiudad, Guid idUsuario, DateTime fecha)
+        {
+            using (PedidoDAL dal = new PedidoDAL())
+            {
+                return dal.SelectPedidosConsolidar(idCiudad, idUsuario, fecha);
+            }
+        }
+
     }
 }

@@ -10,9 +10,14 @@ namespace Model
         public Guid idConsolidadoAtencion { get; set; }
         public DateTime fecha { get; set; }
         public string observaciones { get; set; }
+        public Ciudad ciudad { get; set; }
         public Vehiculo vehiculo { get; set; }
         public PersonalAlmacen chofer { get; set; }
         public PersonalAlmacen asistente { get; set; }
+
+        public string fechaDesc { 
+            get { return fecha.ToString(Constantes.formatoFecha); }
+        }
 
         public ConsolidadoAtencion()
         {

@@ -44,6 +44,11 @@ namespace DataLayer
         {
             var objCommand = GetSqlCommand("ps_vehiculos");
             InputParameterAdd.Int(objCommand, "estado", vehiculo.Estado);
+            if (vehiculo.ciudad != null && !vehiculo.ciudad.idCiudad.Equals(Guid.Empty))
+            {
+                InputParameterAdd.Guid(objCommand, "idCiudad", vehiculo.ciudad.idCiudad);
+            }
+
             DataTable dataTable = Execute(objCommand);
             List<Vehiculo> lista = new List<Vehiculo>();
 

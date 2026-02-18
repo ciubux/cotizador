@@ -806,7 +806,8 @@
     <Content Include="Views\OrdenCompraCliente\_ModalImportarDetallesExcel.cshtml" />
     <Content Include="Views\Vehiculo\List.cshtml" />
     <Content Include="Views\PersonalAlmacen\List.cshtml" />
-    <Content Include="Views\ConsolidadoAtencion\Index.cshtml" />
+    <Content Include="Views\ConsolidadoAtencion\List.cshtml" />
+    <Content Include="Views\ConsolidadoAtencion\Editar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

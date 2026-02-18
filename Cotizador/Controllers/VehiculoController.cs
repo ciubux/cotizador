@@ -21,7 +21,6 @@ namespace Cotizador.Controllers
         public ActionResult List()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            // Asumiendo que existe este permiso en tu clase Usuario
             if (!usuario.modificaMaestroVehiculos)
             {
                 return RedirectToAction("Login", "Account");
@@ -50,10 +49,25 @@ namespace Cotizador.Controllers
             Vehiculo obj = (Vehiculo)this.Session[Constantes.VAR_SESSION_VEHICULO_BUSQUEDA];
 
             VehiculoBL bL = new VehiculoBL();
-            // Se asume que el método Listar acepta los mismos parámetros base
             List<Vehiculo> list = bL.getVehiculos(obj);
 
             this.Session[Constantes.VAR_SESSION_VEHICULO_LISTA] = list;
+            return JsonConvert.SerializeObject(list);
+        }
+
+        public String SearchAjax()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            Guid idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
+            Vehiculo obj = new Vehiculo();
+            obj.Estado = 1;
+            obj.ciudad = new Ciudad();
+            obj.ciudad.idCiudad = idCiudad;
+            
+            VehiculoBL bL = new VehiculoBL();
+            List<Vehiculo> list = bL.getVehiculos(obj);
+
             return JsonConvert.SerializeObject(list);
         }
 
@@ -113,7 +127,6 @@ namespace Cotizador.Controllers
             obj.modelo = Request["modelo"].ToString();
             obj.Estado = 1;
 
-            // Mapeo de la ciudad desde el Select (ID 1 o 2)
             obj.ciudad = new Ciudad { idCiudad = Guid.Parse(Request["idCiudad"].ToString()) };
 
             obj.IdUsuarioRegistro = Logueado.idUsuario;
@@ -133,7 +146,6 @@ namespace Cotizador.Controllers
             obj.marca = Request["marca"].ToString();
             obj.modelo = Request["modelo"].ToString();
 
-            // Asignación de ciudad
             if (!string.IsNullOrEmpty(Request["idCiudad"]))
             {
                 obj.ciudad = new Ciudad { idCiudad = Guid.Parse(Request["idCiudad"]) };

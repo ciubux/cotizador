@@ -13,6 +13,36 @@ jQuery(function($) {
         $("#consolidado_observaciones").val("");
     }
 
+    
+    $("select#idVehiculo").chosen({ placeholder_text_single: "Buscar Vehiculo", no_results_text: "No se encontró Vehículo" }).on('chosen:showing_dropdown', function (evt, params) {
+        if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
+            alert("Debe seleccionar la sede MP previamente.");
+            $("#idVehiculo").trigger('chosen:close');
+            $("#idCiudad").focus();
+            return false;
+        }
+    });
+
+    
+    $("#idCiudad").change(function () {
+        var idCiudad = $("#idCiudad").val();
+
+        $.ajax({
+            url: "/Cotizacion/ChangeIdCiudad",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCiudad: idCiudad
+            },
+            error: function (detalle) {
+                alert('Debe eliminar los productos agregados antes de cambiar de Sede.');
+                location.reload();
+            },
+            success: function (ciudad) {
+            }
+        });
+    });  
+
     $("#btnGuardarConsolidado").click(function() {
         var id = $("#consolidado_id").val();
         var url = (id == GUID_EMPTY) ? "/ConsolidadoAtencion/Create" : "/ConsolidadoAtencion/Update";
@@ -42,6 +72,13 @@ jQuery(function($) {
         $.post("/ConsolidadoAtencion/SearchList", function(list) {
             CONSOLIDADO_LAST_SEARCH = list;
             var rows = "";
+            $("#tableConsolidados > tbody").empty();
+            $("#tableConsolidados").footable({
+                "paging": {
+                    "enabled": true
+                }
+            });
+
             for (var i = 0; i < list.length; i++) {
                 var c = list[i];
                 // Formatear fecha de JSON
