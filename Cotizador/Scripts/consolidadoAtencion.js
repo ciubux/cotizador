@@ -5,7 +5,6 @@ jQuery(function($) {
     $(document).ready(function() { $("#btnBusqueda").click(); });
 
     function limpiarFormulario() {
-        $("#consolidado_id").val(GUID_EMPTY);
         $("#consolidado_fecha").val(new Date().toISOString().split('T')[0]);
         $("#consolidado_idVehiculo").val("");
         $("#consolidado_idChofer").val("");
@@ -13,6 +12,48 @@ jQuery(function($) {
         $("#consolidado_observaciones").val("");
     }
 
+    $("#consolidado_idCiudad").change(function () {
+        var idVehiculo = $("#consolidado_idCiudad").val();
+        changeInputForm("ciudad", "ciudad", idVehiculo);
+    }); 
+
+    $("#consolidado_idVehiculo").change(function () {
+        var idVehiculo = $("#consolidado_idVehiculo").val();
+        changeInputForm("vehiculo", "vehiculo", idVehiculo);
+    });  
+
+    $("#consolidado_idChofer").change(function () {
+        var idVehiculo = $("#consolidado_idChofer").val();
+        changeInputForm("chofer", "chofer", idVehiculo);
+    });
+
+    $("#consolidado_idAsistente").change(function () {
+        var idVehiculo = $("#consolidado_idAsistente").val();
+        changeInputForm("asistente", "asistente", idVehiculo);
+    });
+
+    $("#consolidado_fecha").change(function () {
+        var idVehiculo = $("#consolidado_fecha").val();
+        changeInputForm("date", "fecha", idVehiculo);
+    });
+    
+    $("#consolidado_observaciones").change(function () {
+        var idVehiculo = $("#consolidado_observaciones").val();
+        changeInputForm("string", "observaciones", idVehiculo);
+    });
+
+    function changeInputForm(tipo, propiedad, valor) {
+        $.ajax({
+            url: "/ConsolidadoAlmacen/changeInputForm",
+            type: 'POST',
+            data: {
+                tipo: tipo,
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
     
     $("select#idVehiculo").chosen({ placeholder_text_single: "Buscar Vehiculo", no_results_text: "No se encontró Vehículo" }).on('chosen:showing_dropdown', function (evt, params) {
         if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {

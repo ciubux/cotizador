@@ -21,8 +21,7 @@ namespace Cotizador.Controllers
         [HttpGet]
         public ActionResult List()
         {
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (!usuario.visualizaConsolidadoAtencion && !usuario.modificaMaestroConsolidadoAtencion) 
+            if (!Logueado.visualizaConsolidadoAtencion && !Logueado.modificaMaestroConsolidadoAtencion) 
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -79,8 +78,7 @@ namespace Cotizador.Controllers
         [HttpGet]
         public ActionResult Editar()
         {
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            if (!usuario.modificaMaestroConsolidadoAtencion) 
+            if (!Logueado.modificaMaestroConsolidadoAtencion) 
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -97,7 +95,7 @@ namespace Cotizador.Controllers
             List<Vehiculo> vehiculos = new List<Vehiculo>();
             List<PersonalAlmacen> choferes = new List<PersonalAlmacen> ();
             List<PersonalAlmacen> asistentes = new List<PersonalAlmacen>();
-
+            List<Pedido> pedidos = new List<Pedido>();
             if (item.ciudad != null && !item.ciudad.idCiudad.Equals(Guid.Empty))
             {
                 VehiculoBL blVehiculo = new VehiculoBL();
@@ -112,12 +110,16 @@ namespace Cotizador.Controllers
 
                 choferes = blPersonal.getPersonalesAlmacen(choferSe);
                 asistentes = blPersonal.getPersonalesAlmacen(asistenteSe);
+
+                PedidoBL blPedido = new PedidoBL();
+                pedidos = blPedido.SelectPedidosConsolidar(item.ciudad.idCiudad, Logueado.idUsuario, item.fecha);
             }
 
 
             ViewBag.vehiculos = vehiculos;
             ViewBag.choferes = choferes;
             ViewBag.asistentes = asistentes;
+            ViewBag.pedidos = pedidos;
 
             ViewBag.pagina = (int)Constantes.paginas.RegistroConsolidadoAtencion;
             ViewBag.item = item;
@@ -129,12 +131,11 @@ namespace Cotizador.Controllers
         [HttpPost]
         public string GetPedidosConsolidar()
         {
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             ConsolidadoAtencion obj = (ConsolidadoAtencion)this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION];
 
             //SelectPedidosConsolidar
             PedidoBL blPedido = new PedidoBL();
-            List<Pedido> lista = blPedido.SelectPedidosConsolidar(obj.ciudad.idCiudad, usuario.idUsuario, obj.fecha);
+            List<Pedido> lista = blPedido.SelectPedidosConsolidar(obj.ciudad.idCiudad, Logueado.idUsuario, obj.fecha);
 
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.RegistroConsolidadoAtencion;
 
@@ -207,6 +208,10 @@ namespace Cotizador.Controllers
 
                 case "ciudad":
                     obj.ciudad.idCiudad = Guid.Parse(this.Request.Params["valor"]);
+                    break;
+
+                case "vehiculo":
+                    obj.vehiculo.idVehiculo = Int32.Parse(this.Request.Params["valor"]);
                     break;
 
                 case "chofer":
