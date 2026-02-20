@@ -13,38 +13,39 @@ jQuery(function($) {
     }
 
     $("#consolidado_idCiudad").change(function () {
-        var idVehiculo = $("#consolidado_idCiudad").val();
-        changeInputForm("ciudad", "ciudad", idVehiculo);
+        var valor = $("#consolidado_idCiudad").val();
+        changeInputForm("ciudad", "ciudad", valor);
+        setTimeout(function () { location.reload(); }, 200);
     }); 
 
     $("#consolidado_idVehiculo").change(function () {
-        var idVehiculo = $("#consolidado_idVehiculo").val();
-        changeInputForm("vehiculo", "vehiculo", idVehiculo);
+        var valor = $("#consolidado_idVehiculo").val();
+        changeInputForm("vehiculo", "vehiculo", valor);
     });  
 
     $("#consolidado_idChofer").change(function () {
-        var idVehiculo = $("#consolidado_idChofer").val();
-        changeInputForm("chofer", "chofer", idVehiculo);
+        var valor = $("#consolidado_idChofer").val();
+        changeInputForm("chofer", "chofer", valor);
     });
 
     $("#consolidado_idAsistente").change(function () {
-        var idVehiculo = $("#consolidado_idAsistente").val();
-        changeInputForm("asistente", "asistente", idVehiculo);
+        var valor = $("#consolidado_idAsistente").val();
+        changeInputForm("asistente", "asistente", valor);
     });
 
     $("#consolidado_fecha").change(function () {
-        var idVehiculo = $("#consolidado_fecha").val();
-        changeInputForm("date", "fecha", idVehiculo);
+        var valor = $("#consolidado_fecha").val();
+        changeInputForm("date", "fecha", valor);
     });
     
     $("#consolidado_observaciones").change(function () {
-        var idVehiculo = $("#consolidado_observaciones").val();
-        changeInputForm("string", "observaciones", idVehiculo);
+        var valor = $("#consolidado_observaciones").val();
+        changeInputForm("string", "observaciones", valor);
     });
 
     function changeInputForm(tipo, propiedad, valor) {
         $.ajax({
-            url: "/ConsolidadoAlmacen/changeInputForm",
+            url: "/ConsolidadoAtencion/ChangeInputForm",
             type: 'POST',
             data: {
                 tipo: tipo,
@@ -65,24 +66,6 @@ jQuery(function($) {
     });
 
     
-    $("#idCiudad").change(function () {
-        var idCiudad = $("#idCiudad").val();
-
-        $.ajax({
-            url: "/Cotizacion/ChangeIdCiudad",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                idCiudad: idCiudad
-            },
-            error: function (detalle) {
-                alert('Debe eliminar los productos agregados antes de cambiar de Sede.');
-                location.reload();
-            },
-            success: function (ciudad) {
-            }
-        });
-    });  
 
     $("#btnGuardarConsolidado").click(function() {
         var id = $("#consolidado_id").val();

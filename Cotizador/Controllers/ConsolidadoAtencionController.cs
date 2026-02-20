@@ -71,6 +71,7 @@ namespace Cotizador.Controllers
             obj.vehiculo = new Vehiculo();
             obj.chofer = new PersonalAlmacen();
             obj.asistente = new PersonalAlmacen();
+            obj.ciudad = Logueado.sedeMP;
 
             this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION] = obj;
         }
@@ -111,15 +112,15 @@ namespace Cotizador.Controllers
                 choferes = blPersonal.getPersonalesAlmacen(choferSe);
                 asistentes = blPersonal.getPersonalesAlmacen(asistenteSe);
 
-                PedidoBL blPedido = new PedidoBL();
-                pedidos = blPedido.SelectPedidosConsolidar(item.ciudad.idCiudad, Logueado.idUsuario, item.fecha);
+                //PedidoBL blPedido = new PedidoBL();
+                //pedidos = blPedido.SelectPedidosConsolidar(item.ciudad.idCiudad, Logueado.idUsuario, item.fecha);
             }
 
 
             ViewBag.vehiculos = vehiculos;
             ViewBag.choferes = choferes;
             ViewBag.asistentes = asistentes;
-            ViewBag.pedidos = pedidos;
+            //ViewBag.pedidos = pedidos;
 
             ViewBag.pagina = (int)Constantes.paginas.RegistroConsolidadoAtencion;
             ViewBag.item = item;
@@ -207,7 +208,13 @@ namespace Cotizador.Controllers
                     break;
 
                 case "ciudad":
-                    obj.ciudad.idCiudad = Guid.Parse(this.Request.Params["valor"]);
+                    Guid idCiudad = Guid.Parse(this.Request.Params["valor"]);
+                    if (!idCiudad.Equals(obj.ciudad.idCiudad)) {
+                        obj.ciudad.idCiudad = idCiudad;
+                        obj.vehiculo = new Vehiculo();
+                        obj.chofer = new PersonalAlmacen();
+                        obj.asistente = new PersonalAlmacen();
+                    }
                     break;
 
                 case "vehiculo":

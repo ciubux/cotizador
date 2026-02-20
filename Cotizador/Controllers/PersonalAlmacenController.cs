@@ -22,7 +22,7 @@ namespace Cotizador.Controllers
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             
-            if (usuario != null || !usuario.modificaMaestroPersonalAlmacen)
+            if (Logueado == null || !Logueado.modificaMaestroPersonalAlmacen)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -81,6 +81,7 @@ namespace Cotizador.Controllers
             obj.idPersonalAlmacen = 0;
             obj.Estado = 1;
             obj.nombres = String.Empty;
+            obj.tipo = String.Empty;
             obj.apellidoPaterno = String.Empty;
             obj.sedePrincipal = new Ciudad();
 

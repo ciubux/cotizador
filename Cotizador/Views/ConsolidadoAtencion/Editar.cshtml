@@ -1,6 +1,6 @@
-﻿@{
-    ViewBag.Title = "Crear/Modificar Consolidado Atencón";
-    Model.ConsolidadoAtencion item = ViewBag.origen;
+﻿@{ 
+    ViewBag.Title = "Crear/Modificar Consolidado Atención";
+    Model.ConsolidadoAtencion item = ViewBag.item;
 }
 
 <div class="page-header">
@@ -9,7 +9,6 @@
 
 <div class="container">
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
-    <input type="hidden" value="@ViewBag.debug" />
     <form class="form-horizontal">
         <div class="row">
             <input type="hidden" id="idConsolidadoAtencion" name="idConsolidadoAtencion" value="@item.idConsolidadoAtencion" />
