@@ -2888,7 +2888,7 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
         public List<Pedido> SelectPedidosConsolidar(Guid idCiudad, Guid idUsuario, DateTime fecha)
         {
             var objCommand = GetSqlCommand("ps_pedidos_consolidar_atencion");
-            InputParameterAdd.Date(objCommand, "fecha", fecha);
+            InputParameterAdd.DateTime(objCommand, "fecha", fecha);
             InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
             InputParameterAdd.Guid(objCommand, "idUsuario",idUsuario);
             

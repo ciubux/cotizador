@@ -1,9 +1,154 @@
 var CONSOLIDADO_LAST_SEARCH;
 var GUID_EMPTY = "00000000-0000-0000-0000-000000000000";
+var CODIGO_PAGINA_REGISTRO = 701;
+
+const GridSelector = {
+    isSelectionMode: false,
+    data: [],
+
+    init: async function () {
+        this.cacheDOM();
+        this.bindEvents();
+        //this.render();
+        await this.fetchFromDB();
+    },
+
+    cacheDOM: function () {
+        this.container = document.getElementById('gs-wrapper');
+        this.body = document.getElementById('gs-body');
+        this.btn = document.getElementById('gs-toggle-btn');
+        this.title = document.getElementById('gs-title');
+        this.checkHeaders = document.querySelectorAll('.gs-col-check');
+    },
+
+    bindEvents: function () {
+        this.btn.addEventListener('click', () => this.toggleMode());
+    },
+
+    // Simulación de llamada AJAX
+    fetchFromDB: async function () {
+ 
+        try {
+            this.body.innerHTML = `<div class="grid-selector-cell" style="grid-column: 1 / -1; justify-content: center; padding: 20px;">Cargando datos...</div>`;
+
+            const response = await fetch('/ConsolidadoAtencion/GetPedidosConsolidar', {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error en la respuesta del servidor');
+            }
+
+            // Convertimos la respuesta a JSON
+            const rawData = await response.json();
+
+            this.data = rawData.map(item => ({
+                id: item.idPedido,
+                numero: item.numeroPedidoNumeroGrupoString,
+                cliente: item.cliente.nombreCliente,
+                fecha: item.rangoFechasEntrega,
+                estado: item.stockConfirmado,
+                obs: item.observaciones || "",
+                selected: false 
+            }));
+
+            this.render();
+
+        } catch (error) {
+            console.error('Error al obtener datos:', error);
+            this.body.innerHTML = `<div class="grid-selector-cell" style="grid-column: 1 / -1; justify-content: center; padding: 20px; color: red;">Error al conectar con la base de datos</div>`;
+        }
+
+        /*this.data = [
+            { id: 1, cliente: "Inversiones Lima", fecha: "2026-01-10", estado: "Completo", obs: "Prioridad alta", selected: false },
+            { id: 2, cliente: "Tech Solutions", fecha: "2026-01-15", estado: "Completo", obs: "Revisar contrato", selected: true },
+            { id: 3, cliente: "Logística S.A.", fecha: "2026-01-20", estado: "Incompleto", obs: "Pendiente de pago", selected: false }
+        ];*/
+        this.render();
+    },
+
+    toggleSelection: function (id) {
+        const item = this.data.find(d => d.id === id);
+        if (item) item.selected = !item.selected;
+        this.updateButtonLabel();
+    },
+
+    updateButtonLabel: function () {
+        const count = this.data.filter(d => d.selected).length;
+        this.btn.innerText = this.isSelectionMode ? `Ver Seleccionados (${count})` : "Seleccionar Pedidos";
+    },
+
+    toggleMode: function () {
+        this.isSelectionMode = !this.isSelectionMode;
+        this.render();
+    },
+
+    render: function () {
+        this.body.innerHTML = '';
+
+        // 1. Manejar visualización de columnas
+        if (this.isSelectionMode) {
+            this.container.classList.remove('no-check');
+            this.checkHeaders.forEach(el => el.classList.remove('grid-selector-hidden'));
+            this.title.innerText = "Selección de Pedidos";
+        } else {
+            this.container.classList.add('no-check');
+            this.checkHeaders.forEach(el => el.classList.add('grid-selector-hidden'));
+            this.title.innerText = "Pedidos Seleccionados";
+        }
+
+        this.updateButtonLabel();
+
+        // 2. Filtrar items
+        const visibleItems = this.isSelectionMode ? this.data : this.data.filter(d => d.selected);
+
+        if (visibleItems.length === 0) {
+            this.body.innerHTML = `<div class="grid-selector-cell" style="grid-column: 1 / -1; justify-content: center; padding: 40px; color: var(--gs-text-muted);">No hay registros para mostrar</div>`;
+            return;
+        }
+
+        // 3. Crear fragmento para rendimiento
+        visibleItems.forEach(item => {
+            const rowContent = `
+                    <div class="grid-selector-cell gs-col-check ${this.isSelectionMode ? '' : 'grid-selector-hidden'}">
+                        <input type="checkbox" class="grid-selector-check-input" ${item.selected ? 'checked' : ''} onchange="GridSelector.toggleSelection('${item.id}')">
+                    </div>
+                    <div class="grid-selector-cell"><b>${item.numero}</b></div>
+                    <div class="grid-selector-cell">${item.cliente}</div>
+                    <div class="grid-selector-cell">${item.fecha}</div>
+                    <div class="grid-selector-cell">
+                        <span class="grid-selector-badge ${item.estado == 1 ? 'grid-selector-badge-active' : 'grid-selector-badge-partial'}">
+                            ${item.estado == 1 ? 'Completo' : 'Imcompleto'}
+                        </span>
+                    </div>
+                    <div class="grid-selector-cell" title="${item.obs}">${item.obs}</div>
+                `;
+
+            const rowWrapper = document.createElement('div');
+            rowWrapper.style.display = 'contents';
+            rowWrapper.className = 'grid-selector-row';
+            rowWrapper.innerHTML = rowContent;
+            this.body.appendChild(rowWrapper);
+        });
+    }
+};
+
 
 jQuery(function($) {
     $(document).ready(function() { $("#btnBusqueda").click(); });
 
+    var pagina = $("#pagina").val();
+    if (pagina == CODIGO_PAGINA_REGISTRO) {
+        var idCiudad = $("#consolidado_idCiudad").val();
+        var fecha = $("#consolidado_fecha").val();
+
+        if (idCiudad != GUID_EMPTY && fecha != "") {
+            GridSelector.init();
+        }
+    }
     function limpiarFormulario() {
         $("#consolidado_fecha").val(new Date().toISOString().split('T')[0]);
         $("#consolidado_idVehiculo").val("");

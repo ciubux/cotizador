@@ -321,9 +321,10 @@ namespace Model
 
         public IDocumentoPago documentoPago { get; set; }
 
+        // 0: No Revisado, 1: Stock Completo, 2: Sin Stock, 3: Stock Parcial
         [Display(Name = "Stock Confirmado:")]
         public int stockConfirmado { get; set; }
-
+        
 
         public DateTime fechaModificacion { get; set; }
 
