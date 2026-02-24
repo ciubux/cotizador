@@ -2152,7 +2152,22 @@ namespace Cotizador.Controllers
 
         }
 
+        public async Task<String> ValidarProductosNextSoft()
+        {
+            CotizacionBL bl = new CotizacionBL();
+            Cotizacion obj = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_VER];
 
+            ServiceResponse res = new ServiceResponse();
+            res.code = 0;
+
+            if (obj.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_TECNICA)
+                && obj.empresa.atencionTerciarizada && !obj.productosNextSoftHomologados)
+            {
+                res = await bl.validarProductosNextSoftTecnica(obj);
+                //if (res.code == 0) { }
+            }
+            return JsonConvert.SerializeObject(res);
+        }
 
 
         public void recotizarCliente()

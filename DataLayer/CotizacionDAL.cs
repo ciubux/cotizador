@@ -557,7 +557,7 @@ namespace DataLayer
                 decimal costoEspecial = Converter.GetDecimal(row, "costo_unitario");
                 int idProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion_costo");
 
-                CotizacionDetalle det = cotizacion.cotizacionDetalleList.Where(d => d.producto.idProducto.Equals(idProducto)).First();
+                CotizacionDetalle det = cotizacion.cotizacionDetalleList.Where(d => d.producto.idProducto.Equals(idProducto)).FirstOrDefault();
                 if (det != null)
                 {
                     switch (idProductoPresentacion)

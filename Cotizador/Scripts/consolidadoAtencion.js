@@ -39,7 +39,7 @@ const GridSelector = {
             });
 
             if (!response.ok) {
-                throw new Error('Error en la respuesta del servidor');
+                throw new Error('Error al consultar Pedidos disponibles');
             }
 
             // Convertimos la respuesta a JSON
@@ -52,7 +52,7 @@ const GridSelector = {
                 fecha: item.rangoFechasEntrega,
                 estado: item.stockConfirmado,
                 obs: item.observaciones || "",
-                selected: false 
+                selected: item.IUEstadoSeleccion 
             }));
 
             this.render();
@@ -78,26 +78,52 @@ const GridSelector = {
 
     updateButtonLabel: function () {
         const count = this.data.filter(d => d.selected).length;
-        this.btn.innerText = this.isSelectionMode ? `Ver Seleccionados (${count})` : "Seleccionar Pedidos";
+        this.btn.innerText = this.isSelectionMode ? `Terminar Selección (${count})` : "Seleccionar Pedidos";
     },
 
-    toggleMode: function () {
+    toggleMode: async function () {
         this.isSelectionMode = !this.isSelectionMode;
+        if (!this.isSelectionMode) {
+            const selectedIds = this.data
+                .filter(item => item.selected)
+                .map(item => item.id);
+
+            const response = await fetch('/ConsolidadoAtencion/SetPedidosSeleccionados', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                // El arreglo debe convertirse a una cadena JSON
+                body: JSON.stringify({
+                    listaIds: selectedIds
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error('Error al guardar pedidos seleccionados');
+            }
+        }
+
         this.render();
     },
 
     render: function () {
         this.body.innerHTML = '';
 
-        // 1. Manejar visualización de columnas
+        var botonGuardar = document.getElementById('btnFinalizarEdicionConsolidado');
+
         if (this.isSelectionMode) {
             this.container.classList.remove('no-check');
             this.checkHeaders.forEach(el => el.classList.remove('grid-selector-hidden'));
             this.title.innerText = "Selección de Pedidos";
+            
+            botonGuardar.style.visibility = 'hidden';
         } else {
             this.container.classList.add('no-check');
             this.checkHeaders.forEach(el => el.classList.add('grid-selector-hidden'));
             this.title.innerText = "Pedidos Seleccionados";
+
+            botonGuardar.style.visibility = 'visible';
         }
 
         this.updateButtonLabel();
@@ -136,12 +162,34 @@ const GridSelector = {
     }
 };
 
+$.datepicker.regional['es'] = {
+    closeText: 'Cerrar',
+    prevText: '< Ant',
+    nextText: 'Sig >',
+    currentText: 'Hoy',
+    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+    monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+    dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+    dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+    dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+    weekHeader: 'Sm',
+    dateFormat: 'dd/mm/yy',
+    firstDay: 1,
+    isRTL: false,
+    showMonthAfterYear: false,
+    yearSuffix: ''
+};
+$.datepicker.setDefaults($.datepicker.regional['es']);
+
 
 jQuery(function($) {
     $(document).ready(function() { $("#btnBusqueda").click(); });
 
+    
     var pagina = $("#pagina").val();
     if (pagina == CODIGO_PAGINA_REGISTRO) {
+        $("#consolidado_fecha").datepicker({ dateFormat: "dd/mm/yy" });
+
         var idCiudad = $("#consolidado_idCiudad").val();
         var fecha = $("#consolidado_fecha").val();
 
@@ -181,6 +229,7 @@ jQuery(function($) {
     $("#consolidado_fecha").change(function () {
         var valor = $("#consolidado_fecha").val();
         changeInputForm("date", "fecha", valor);
+        setTimeout(function () { location.reload(); }, 200);
     });
     
     $("#consolidado_observaciones").change(function () {
@@ -200,7 +249,8 @@ jQuery(function($) {
             success: function () { }
         });
     }
-    
+
+
     $("select#idVehiculo").chosen({ placeholder_text_single: "Buscar Vehiculo", no_results_text: "No se encontró Vehículo" }).on('chosen:showing_dropdown', function (evt, params) {
         if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
             alert("Debe seleccionar la sede MP previamente.");

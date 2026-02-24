@@ -1,18 +1,22 @@
 ﻿
 using DataLayer;
-using System.Collections.Generic;
-using System;
+using Framework.DAL;
 using Model;
+using Model.NextSoft;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Framework.DAL;
+using System.Threading.Tasks;
+using ServiceLayer;
+using BusinessLayer.Email;
 
 namespace BusinessLayer
 {
     public class CotizacionBL
     {
 
-        private void validarCotizacion(Cotizacion cotizacion, Cotizacion cotizacionAprobada = null)
+        private async Task validarCotizacion(Cotizacion cotizacion, Cotizacion cotizacionAprobada = null)
         {
             bool enviaAprobacion = false;
             ParametroBL blParametro = new ParametroBL();
@@ -287,38 +291,23 @@ namespace BusinessLayer
                 throw new Exception("Una cotización Trivial no debe contener productos con precios que no están vigentes o no son precios de Lista, para estos casos crear una cotización Normal.");
             }
 
-
-        }
-
-
-        public void InsertCotizacion(Cotizacion cotizacion)
-        {
-            using (var dal = new CotizacionDAL())
+            cotizacion.productosNextSoftHomologados = true;
+            if (cotizacion.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_TECNICA))
             {
-                // Si no es una cotizacion MP, se revisa si tiene inframargen
-                if (!cotizacion.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP))
+                ServiceResponse res = await this.validarProductosNextSoftTecnica(cotizacion);
+
+                if (res.code != 0)
                 {
-                    UsuarioDAL usuarioDal = new UsuarioDAL();
-                    Usuario usuarioEmpresa = usuarioDal.getUsuario(cotizacion.usuario.idUsuario);
-
-                    foreach (CotizacionDetalle det in cotizacion.cotizacionDetalleList)
-                    {
-                        decimal margenDet = ((det.precioNeto - det.producto.costoLista) / det.precioNeto) * 100;
-                        det.tieneInfraMargenEmpresaExterna = false;
-
-                        if (margenDet < usuarioEmpresa.pMargenMinimo)
-                        {
-                            det.tieneInfraMargenEmpresaExterna = true;
-                        }
-                    }
-                }
-
-                validarCotizacion(cotizacion);
-                dal.InsertCotizacion(cotizacion);
+                    cotizacion.seguimientoCotizacion.observacion = cotizacion.seguimientoCotizacion.observacion + "\nProblema de homologación de productos Nextsoft: " + res.message;
+                    cotizacion.mensajeErrorValidacionProductosNextsoft = "Problema de homologación de productos Nextsoft: " + res.message;
+                    cotizacion.productosNextSoftHomologados = false;
+                    cotizacion.enviarMailProductosInvalidosNextsoft = true;
+                }                
             }
         }
 
-        public void UpdateCotizacion(Cotizacion cotizacion, Cotizacion cotizacionAprobada)
+
+        public async Task InsertCotizacion(Cotizacion cotizacion)
         {
             using (var dal = new CotizacionDAL())
             {
@@ -340,8 +329,49 @@ namespace BusinessLayer
                     }
                 }
 
-                validarCotizacion(cotizacion, cotizacionAprobada);
+                await validarCotizacion(cotizacion);
+                dal.InsertCotizacion(cotizacion);
+
+                if (cotizacion.enviarMailProductosInvalidosNextsoft)
+                {
+                    List<String> destinatarios = mailsDestinatarios("TC_EMAILS_PRODUCTOS_NO_HOMOLOGADOS");
+
+                    this.EnviarMailTecnica(cotizacion, "Se requiere homologar Productos en Nextsoft para la cotización Nro {{nroCotizacion}}", cotizacion.mensajeErrorValidacionProductosNextsoft, destinatarios);
+                }
+            }
+        }
+
+        public async Task UpdateCotizacion(Cotizacion cotizacion, Cotizacion cotizacionAprobada)
+        {
+            using (var dal = new CotizacionDAL())
+            {
+                // Si no es una cotizacion MP, se revisa si tiene inframargen
+                if (!cotizacion.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP))
+                {
+                    UsuarioDAL usuarioDal = new UsuarioDAL();
+                    Usuario usuarioEmpresa = usuarioDal.getUsuario(cotizacion.usuario.idUsuario);
+
+                    foreach (CotizacionDetalle det in cotizacion.cotizacionDetalleList)
+                    {
+                        decimal margenDet = ((det.precioNeto - det.producto.costoLista) / det.precioNeto) * 100;
+                        det.tieneInfraMargenEmpresaExterna = false;
+
+                        if (margenDet < usuarioEmpresa.pMargenMinimo)
+                        {
+                            det.tieneInfraMargenEmpresaExterna = true;
+                        }
+                    }
+                }
+
+                await validarCotizacion(cotizacion, cotizacionAprobada);
                 dal.UpdateCotizacion(cotizacion);
+
+                if (cotizacion.enviarMailProductosInvalidosNextsoft)
+                {
+                    List<String> destinatarios = mailsDestinatarios("TC_EMAILS_PRODUCTOS_NO_HOMOLOGADOS");
+
+                    this.EnviarMailTecnica(cotizacion, "Se requiere homologar Productos en Nextsoft para la cotización Nro {{nroCotizacion}}", cotizacion.mensajeErrorValidacionProductosNextsoft, destinatarios);
+                }
             }
         }
 
@@ -676,5 +706,98 @@ namespace BusinessLayer
             return seguimientoList;
         }
 
+        public async Task<ServiceResponse> validarProductosNextSoftTecnica(Cotizacion obj)
+        {
+            List<String> skus = new List<String>();
+            List<int> factores = new List<int>();
+
+            foreach (CotizacionDetalle det in obj.cotizacionDetalleList)
+            {
+                skus.Add(det.producto.sku);
+                int factor = 1;
+                switch (det.idProductoPresentacion)
+                {
+                    case 0:
+                        factor = det.producto.equivalenciaAlternativa;
+                        break;
+                    case 1:
+                        factor = 1;
+                        break;
+                    case 2:
+                        factor = det.producto.equivalenciaAlternativa * det.producto.equivalenciaProveedor;
+                        break;
+                    case 3:
+                        ;
+                        factor = 1;
+                        break;
+
+                }
+                factores.Add(factor);
+            }
+
+            NextSoftBL nsBL = new NextSoftBL();
+            return await nsBL.validarProductos(skus, factores);
+        }
+
+        public void EnviarMailTecnica(Cotizacion obj, string asunto = "", string mensajePrincipal = "", List<String> destinatarios = null)
+        {
+            MailService mail = new MailService();
+            //try
+            //{
+
+            ParametroBL parametroBL = new ParametroBL();
+
+            if (obj.cliente != null)
+            {
+                if (destinatarios == null)
+                {
+                    destinatarios = mailsDestinatarios("TC_EMAILS_PEDIDO_ATENDER"); ;
+
+                    if (!obj.UsuarioRegistro.email.Equals(String.Empty))
+                    {
+                        destinatarios.Add(obj.UsuarioRegistro.email);
+                    }
+                }
+
+                if (destinatarios.Count > 0)
+                {
+                    asunto = asunto.Equals(string.Empty) ? "Cotización Nro " + obj.numeroCotizacionString : asunto.Replace("{{nroCotizacion}}", obj.numeroCotizacionString);
+
+                    String template = "";
+
+                    CotizacionTecnica emailTemplate = new CotizacionTecnica();
+                    template = emailTemplate.BuildTemplate(obj);
+
+                    if (!mensajePrincipal.Equals(string.Empty))
+                    {
+                        template = "<p>" + mensajePrincipal + "</p>" + template;
+                    }
+
+                    mail.enviar(destinatarios, asunto, template, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
+                }
+            }
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    mail.enviar(new List<string> { "ti@mpinstitucional.com" }, "ERROR al enviar pedido " + pedido.numeroPedidoString + " a ténica", ex.Message + ex.InnerException, Constantes.MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, Constantes.PASSWORD_MAIL_COMUNICACION_PEDIDOS_NO_ATENDIDOS, new Usuario());
+            //}
+
+        }
+
+        protected List<string> mailsDestinatarios(string parametro)
+        {
+            ParametroBL parametroBL = new ParametroBL();
+            string emailsNotificar = parametroBL.getParametro(parametro);
+            List<String> destinatarios = new List<String>();
+            string[] emails = emailsNotificar.Split(';');
+
+            foreach (string email in emails)
+            {
+                destinatarios.Add(email.Trim());
+            }
+
+            return destinatarios;
+        }
     }
 }

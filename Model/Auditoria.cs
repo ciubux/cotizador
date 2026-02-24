@@ -74,7 +74,6 @@ namespace Model
         }
 
         
-
         [Display(Name = "Creado Hasta:")]
         public DateTime? fechaRegistroHasta { get; set; }
 
@@ -82,5 +81,8 @@ namespace Model
         {
             get { return fechaRegistroHasta == null ? "" : fechaRegistroHasta.Value.ToString(Constantes.formatoFecha); }
         }
+
+        //IU UTIL PROPERTIES 
+        public bool IUEstadoSeleccion { get; set; }
     }
 }

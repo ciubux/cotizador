@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Web.Management;
 using System.Web.Mvc;
 
 namespace Cotizador.Controllers
@@ -128,6 +129,26 @@ namespace Cotizador.Controllers
             return View();
         }
 
+        
+        [HttpPost]
+        public string SetPedidosSeleccionados(List<Guid> listaIds)
+        {
+            ConsolidadoAtencion obj = (ConsolidadoAtencion)this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION];
+            obj.pedidos = new List<Pedido>();
+
+            if (listaIds != null)
+            {
+                foreach (Guid idPed in listaIds)
+                {
+                    Pedido ped = new Pedido();
+                    ped.idPedido = idPed;
+                    obj.pedidos.Add(ped);
+                }
+            }
+            this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION] = obj;
+
+            return JsonConvert.SerializeObject(new { success = 1 });
+        }
 
         [HttpPost]
         public string GetPedidosConsolidar()
@@ -138,7 +159,15 @@ namespace Cotizador.Controllers
             PedidoBL blPedido = new PedidoBL();
             List<Pedido> lista = blPedido.SelectPedidosConsolidar(obj.ciudad.idCiudad, Logueado.idUsuario, obj.fecha);
 
-            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.RegistroConsolidadoAtencion;
+            foreach (Pedido pedSel in obj.pedidos)
+            {
+                Pedido item = lista.Where(p => p.idPedido.Equals(pedSel.idPedido)).FirstOrDefault();
+                
+                if(item != null)
+                {
+                    item.IUEstadoSeleccion = true;
+                }
+            }
 
             return JsonConvert.SerializeObject(lista);
         }

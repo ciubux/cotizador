@@ -49,8 +49,11 @@ namespace Model
         public bool integraEmpresas { get; set; }
         public Guid idCotizacionAntecedente { get; set; }
 
-        public bool productosInactivosRemovidos { get; set; }
+        public string mensajeErrorValidacionProductosNextsoft { get; set; }
+        public bool enviarMailProductosInvalidosNextsoft { get; set; }
+        public bool productosNextSoftHomologados { get; set; }
 
+        public bool productosInactivosRemovidos { get; set; }
         public bool noAfectoCambiosPrecio { get; set; }
 
         [Display(Name = "Aceptación Automática:")]

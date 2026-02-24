@@ -104,9 +104,9 @@
 
                     <div id="gs-wrapper" class="grid-selector-wrapper">
                         <div class="grid-selector-header-cell gs-col-check"></div>
-                        <div class="grid-selector-header-cell">Nro</div>
+                        <div class="grid-selector-header-cell">Nro.</div>
                         <div class="grid-selector-header-cell">Cliente</div>
-                        <div class="grid-selector-header-cell">Fecha</div>
+                        <div class="grid-selector-header-cell">Fecha Entrega</div>
                         <div class="grid-selector-header-cell">Estado Stock</div>
                         <div class="grid-selector-header-cell">Observaciones</div>
 
@@ -120,7 +120,7 @@
         <div class="row">
             <div class="pull-right">
                 <button type="button" id="btnCancelarConsolidado" class="btn btn-danger">Cancelar</button>
-                <button id="btnFinalizarEdicionConsolidado" type="button" class="btn btn-success">Finalizar Creación</button>
+                <button id="btnFinalizarEdicionConsolidado" type="button" class="btn btn-success">Finalizar @(item.idConsolidadoAtencion.Equals(Guid.Empty) ? "Creación" : "Edición")</button>
             </div>
         </div>
 
