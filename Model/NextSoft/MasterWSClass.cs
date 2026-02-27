@@ -15,7 +15,7 @@ namespace Model.NextSoft
         public string urlApiWeb { get; set; }
         public string apiWebToken { get; set; }
         public string apiWebRUC { get; set; }
-
+        
         protected async Task<object> callService(object sendData, string  nombreServicio) {
 
             var handler = new HttpClientHandler();
@@ -41,6 +41,39 @@ namespace Model.NextSoft
 
             return dataResult;
         }
+        
+        /*
+        protected async Task<object> callService(object sendData, string nombreServicio)
+        {
+            var handler = new HttpClientHandler();
+            handler.SslProtocols = System.Security.Authentication.SslProtocols.Tls12;
+
+            using (var httpClient = new HttpClient(handler))
+            {
+                string sendJson = JsonConvert.SerializeObject(sendData);
+                object dataResult = null; // No deserialices un "" vacío, inicializa en null
+
+                try
+                {
+                    var content = new StringContent(sendJson, Encoding.UTF8, "application/json");
+
+                    var result = await httpClient.PostAsync(this.fullUrl(nombreServicio), content).ConfigureAwait(false);
+
+                    result.EnsureSuccessStatusCode();
+
+                    string resultContent = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                    dataResult = JsonConvert.DeserializeObject(resultContent);
+                }
+                catch (Exception ex)
+                {
+                    string errmes = ex.Message;
+                    throw; 
+                }
+
+                return dataResult;
+            }
+        }*/
 
         protected async Task<object> callServiceWeb(object sendData, string nombreServicio)
         {

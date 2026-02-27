@@ -1,12 +1,13 @@
 ﻿using Framework.DAL;
 using Framework.DAL.Settings.Implementations;
+using Model;
+using Model.NextSoft;
+using Model.UTILES;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using Model;
 using System.Linq;
-using Model.UTILES;
 
 namespace DataLayer
 {
@@ -1021,6 +1022,8 @@ namespace DataLayer
                 pedido.cliente.asistenteServicioCliente.usuario.email = Converter.GetString(row, "asistente_servicio_cliente_email");
 
                 pedido.cliente.grupoCliente = new GrupoCliente();
+                pedido.cliente.grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
+                pedido.cliente.grupoCliente.codigo = Converter.GetString(row, "grupo_codigo");
                 pedido.cliente.grupoCliente.nombre = Converter.GetString(row, "grupo_nombre");
 
                 pedido.vendedor = new Vendedor();
@@ -1560,6 +1563,11 @@ namespace DataLayer
                 pedido.cliente.habilitadoModificarDireccionEntrega = Converter.GetBool(row, "habilitado_modificar_direccion_entrega");
                 pedido.cliente.tipoLiberacionCrediticia = (Persona.TipoLiberacionCrediticia)Converter.GetInt(row, "estado_liberacion_creditica");
                 pedido.cliente.esSubDistribuidor = Converter.GetBool(row, "cliente_es_sub_distribuidor");
+
+                pedido.cliente.grupoCliente = new GrupoCliente();
+                pedido.cliente.grupoCliente.idGrupoCliente = Converter.GetInt(row, "id_grupo_cliente");
+                pedido.cliente.grupoCliente.codigo = Converter.GetString(row, "grupo_codigo");
+                pedido.cliente.grupoCliente.nombre = Converter.GetString(row, "grupo_nombre");
 
                 pedido.empresa = new Empresa();
                 pedido.empresa.idEmpresa = Converter.GetInt(row, "id_empresa");

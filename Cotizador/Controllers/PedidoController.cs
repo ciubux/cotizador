@@ -2312,7 +2312,8 @@ namespace Cotizador.Controllers
 
             var v = new { success = success, mensajeError = mensajeError,
                 numeroPedido = numeroPedidoString, estado = estado,
-                requiereCotizacion = requiereCotizacion,
+                requiereCotizacion = requiereCotizacion, 
+                clientePerteneceGrupo = pedido.cliente.grupoCliente != null && pedido.cliente.grupoCliente.idGrupoCliente > 0 ? true : false,
                 mostrarAlertaHomologacionNextsoft = mostrarAlertaHomologacionNextsoft,
                 observacion = observacion, idPedido = idPedido };
             String resultado = JsonConvert.SerializeObject(v);
@@ -2399,6 +2400,7 @@ namespace Cotizador.Controllers
             var v = new { success = success, mensajeError = mensajeError,  
                 numeroPedido = numeroPedidoString, estado = estado,
                 requiereCotizacion = requiereCotizacion,
+                clientePerteneceGrupo = pedido.cliente.grupoCliente != null && pedido.cliente.grupoCliente.idGrupoCliente > 0 ? true : false,
                 mostrarAlertaHomologacionNextsoft = mostrarAlertaHomologacionNextsoft,
                 observacion = observacion, idPedido = idPedido };
             String resultado = JsonConvert.SerializeObject(v);

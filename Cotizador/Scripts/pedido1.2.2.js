@@ -6,7 +6,7 @@ jQuery(function ($) {
     var TITLE_VALIDACION_PEDIDO = 'Revisar Datos del Pedido';
     var TITLE_EXITO = 'Operación Realizada';
     var MOSTRAR_OPCION_GENERAR_COTIZACION = false;
-
+    var MOSTRAR_OPCION_GENERAR_COTIZACION_GRUPAL = false;
     var ID_OCC = "";
 
     $(document).ready(function () {
@@ -2905,6 +2905,10 @@ jQuery(function ($) {
 
                         if (resultado.requiereCotizacion) {
                             MOSTRAR_OPCION_GENERAR_COTIZACION = true;
+                            MOSTRAR_OPCION_GENERAR_COTIZACION_GRUPAL = false;
+                            if (resultado.clientePerteneceGrupo) {
+                                MOSTRAR_OPCION_GENERAR_COTIZACION_GRUPAL = true;
+                            }
                         }
                     }
                     else if (resultado.estado == ESTADO_EN_EDICION) {
@@ -2986,6 +2990,11 @@ jQuery(function ($) {
 
                         if (resultado.requiereCotizacion) {
                             MOSTRAR_OPCION_GENERAR_COTIZACION = true;
+                            MOSTRAR_OPCION_GENERAR_COTIZACION_GRUPAL = false;
+
+                            if (resultado.clientePerteneceGrupo) {
+                                MOSTRAR_OPCION_GENERAR_COTIZACION_GRUPAL = true;
+                            }
                         }
                     }
                     else if (resultado.estado == ESTADO_EN_EDICION) {
@@ -3079,30 +3088,64 @@ jQuery(function ($) {
     function mostrarOpcionCotizacion(urlReturn = "") {
         MOSTRAR_OPCION_GENERAR_COTIZACION = false;
 
-        $.confirm({
-            title: 'GENERAR COTIZACIÓN PARA PRODUCTOS CON PRECIOS NO APROBADOS',
-            content: 'El pedido tiene productos con precios no aprobados para el cliente. ¿Desea iniciar una cotización para estos productos?',
-            type: 'yellow',
-            buttons: {
-                NO: {
-                    text: 'NO',
-                    btnClass: 'btn-success',
-                    action: function () {
-                        if (urlReturn != "") {
-                            window.location = urlReturn;
+        if (MOSTRAR_OPCION_GENERAR_COTIZACION_GRUPAL) {
+            MOSTRAR_OPCION_GENERAR_COTIZACION_GRUPAL = false;
+            $.confirm({
+                title: 'GENERAR COTIZACIÓN PARA PRODUCTOS CON PRECIOS NO APROBADOS',
+                content: 'El pedido tiene productos con precios no aprobados para el cliente. ¿Desea iniciar una cotización para estos productos?',
+                type: 'yellow',
+                buttons: {
+                    NO: {
+                        text: 'NO',
+                        btnClass: 'btn-success',
+                        action: function () {
+                            if (urlReturn != "") {
+                                window.location = urlReturn;
+                            }
+                        }
+                    },
+                    CLIENTE: {
+                        text: 'COTIZACIÓN CLIENTE',
+                        btnClass: 'btn-info',
+                        action: function () {
+                            window.location = '/Cotizacion/IniciarEdicionDesdePedidoRequeiereCotizar';
+                        }
+                    },
+                    GRUPAL: {
+                        text: 'COTIZACIÓN GRUPAL',
+                        btnClass: 'btn-warning',
+                        action: function () {
+                            window.location = '/Cotizacion/IniciarEdicionDesdePedidoRequeiereCotizarGrupo';
                         }
                     }
-                },
-                SI: {
-                    text: 'SI',
-                    btnClass: 'btn-warning',
-                    action: function () {
-                        window.location = '/Cotizacion/IniciarEdicionDesdePedidoRequeiereCotizar';
+                }
+            });
+        } else {
+            $.confirm({
+                title: 'GENERAR COTIZACIÓN PARA PRODUCTOS CON PRECIOS NO APROBADOS',
+                content: 'El pedido tiene productos con precios no aprobados para el cliente. ¿Desea iniciar una cotización para estos productos?',
+                type: 'yellow',
+                buttons: {
+                    NO: {
+                        text: 'NO',
+                        btnClass: 'btn-success',
+                        action: function () {
+                            if (urlReturn != "") {
+                                window.location = urlReturn;
+                            }
+                        }
+                    },
+                    SI: {
+                        text: 'SI',
+                        btnClass: 'btn-warning',
+                        action: function () {
+                            window.location = '/Cotizacion/IniciarEdicionDesdePedidoRequeiereCotizar';
+                        }
                     }
                 }
-            }
-        });
+            });
 
+        }
     }
 
 

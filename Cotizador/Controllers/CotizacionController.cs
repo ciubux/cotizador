@@ -1522,7 +1522,7 @@ namespace Cotizador.Controllers
                     }
                 }
 
-                bl.InsertCotizacion(cotizacion);
+                await bl.InsertCotizacion(cotizacion);
                 long codigo = cotizacion.codigo;
                 int estado = (int)cotizacion.seguimientoCotizacion.estado;
                 String observacion = cotizacion.seguimientoCotizacion.observacion;
@@ -1610,7 +1610,7 @@ namespace Cotizador.Controllers
             }
 
             Cotizacion cotizacionAprobada = (Cotizacion)this.Session[Constantes.VAR_SESSION_COTIZACION_APROBADA];
-            bl.UpdateCotizacion(cotizacion, cotizacionAprobada);
+            await bl.UpdateCotizacion(cotizacion, cotizacionAprobada);
             long codigo = cotizacion.codigo;
             int estado = (int)cotizacion.seguimientoCotizacion.estado; 
             String observacion = cotizacion.seguimientoCotizacion.observacion;
@@ -1718,19 +1718,36 @@ namespace Cotizador.Controllers
             this.CotizacionSession = cotizacion;
         }
 
-        public ActionResult IniciarEdicionDesdePedidoRequeiereCotizar()
+        protected void IniciarCotizacionPedidoRequeiereCotizar(bool esGrupal = false)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            Pedido pedido = (Pedido) this.Session[Constantes.VAR_SESSION_PEDIDO_PARA_COTIZAR];
+            Pedido pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_PARA_COTIZAR];
 
-            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoCotizacion;
+            if (esGrupal)
+            {
+                this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoCotizacionGrupal;
+            }
+            else
+            {
+                this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.MantenimientoCotizacion;
+            }
+            
 
             instanciarCotizacion();
             Cotizacion cotizacion = this.CotizacionSession;
 
             cotizacion.empresa = pedido.empresa;
-            cotizacion.cliente = pedido.cliente;
-            cotizacion.ciudad = pedido.ciudad;
+            
+            if (esGrupal)
+            {
+                cotizacion.grupo = pedido.cliente.grupoCliente;
+                cotizacion.grupo.ciudad = pedido.ciudad;
+            } else
+            {
+                cotizacion.cliente = pedido.cliente;
+                cotizacion.ciudad = pedido.ciudad;
+            }
+
             cotizacion.aceptacionAutomatica = true;
             cotizacion.idPedidoOrigen = pedido.idPedido;
 
@@ -1749,14 +1766,27 @@ namespace Cotizador.Controllers
                     item.precioNeto = pedDet.precioNetoItem;
                     item.esPrecioAlternativo = pedDet.esPrecioAlternativo;
                     item.porcentajeDescuento = (1 - (item.precioNeto / item.precioLista)) * 100;
-                    
+
                     cotizacion.cotizacionDetalleList.Add(item);
                 }
             }
             HelperDocumento.calcularMontosTotales(cotizacion);
+        }
 
+        public ActionResult IniciarEdicionDesdePedidoRequeiereCotizar()
+        {
+            IniciarCotizacionPedidoRequeiereCotizar(false);
             return RedirectToAction("Cotizar", "Cotizacion");
         }
+
+        public ActionResult IniciarEdicionDesdePedidoRequeiereCotizarGrupo()
+        {
+            IniciarCotizacionPedidoRequeiereCotizar(true);
+
+            return RedirectToAction("CotizarGrupo", "Cotizacion");
+        }
+
+
 
         public void iniciarEdicionCotizacion()
         {
