@@ -44,7 +44,7 @@
                     <label class="control-label col-xs-4">Vehículo:</label>
                     <div class="col-xs-8">
                         <select class="form-control" id="consolidado_idVehiculo">
-                            <option>Seleccione</option>
+                            <option value="">Seleccione</option>
                             @foreach (Model.Vehiculo ve in ViewBag.vehiculos)
                             {
                                 <option @(item.vehiculo.idVehiculo.Equals(ve.idVehiculo) ? "selected" : "") value="@ve.idVehiculo">@ve.ToString()</option>
@@ -58,7 +58,7 @@
                     <label class="control-label col-xs-4">Chofer:</label>
                     <div class="col-xs-8">
                         <select class="form-control" id="consolidado_idChofer">
-                            <option>Seleccione</option>
+                            <option value="">Seleccione</option>
                             @foreach (Model.PersonalAlmacen cho in ViewBag.choferes)
                             {
                                 <option @(item.chofer.idPersonalAlmacen.Equals(cho.idPersonalAlmacen) ? "selected" : "") value="@cho.idPersonalAlmacen">@cho.ToString()</option>
@@ -72,7 +72,7 @@
                     <label class="control-label col-xs-4">Asistente:</label>
                     <div class="col-xs-8">
                         <select class="form-control" id="consolidado_idAsistente">
-                            <option>Seleccione</option>
+                            <option value="">Seleccione</option>
                             @foreach (Model.PersonalAlmacen asis in ViewBag.asistentes)
                             {
                                 <option @(item.asistente.idPersonalAlmacen.Equals(asis.idPersonalAlmacen) ? "selected" : "") value="@asis.idPersonalAlmacen">@asis.ToString()</option>

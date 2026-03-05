@@ -157,7 +157,7 @@ namespace Cotizador.Controllers
 
             //SelectPedidosConsolidar
             PedidoBL blPedido = new PedidoBL();
-            List<Pedido> lista = blPedido.SelectPedidosConsolidar(obj.ciudad.idCiudad, Logueado.idUsuario, obj.fecha);
+            List<Pedido> lista = blPedido.SelectPedidosConsolidar(obj.ciudad.idCiudad, Logueado.idUsuario, obj.fecha, obj.idConsolidadoAtencion);
 
             foreach (Pedido pedSel in obj.pedidos)
             {
@@ -176,14 +176,7 @@ namespace Cotizador.Controllers
         public String Create()
         {
             ConsolidadoAtencionBL bL = new ConsolidadoAtencionBL();
-            ConsolidadoAtencion obj = new ConsolidadoAtencion();
-
-            obj.fecha = DateTime.Parse(Request["fecha"]);
-            obj.observaciones = Request["observaciones"] ?? "";
-            obj.vehiculo = new Vehiculo { idVehiculo = int.Parse(Request["idVehiculo"]) };
-            obj.chofer = new PersonalAlmacen { idPersonalAlmacen = int.Parse(Request["idChofer"]) };
-            obj.asistente = new PersonalAlmacen { idPersonalAlmacen = int.Parse(Request["idAsistente"]) };
-            obj.Estado = 1;
+            ConsolidadoAtencion obj = (ConsolidadoAtencion)this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION];
             obj.IdUsuarioRegistro = Logueado.idUsuario;
 
             obj = bL.insertConsolidadoAtencion(obj);
@@ -193,15 +186,7 @@ namespace Cotizador.Controllers
         public String Update()
         {
             ConsolidadoAtencionBL bL = new ConsolidadoAtencionBL();
-            ConsolidadoAtencion obj = new ConsolidadoAtencion();
-
-            obj.idConsolidadoAtencion = Guid.Parse(Request["idConsolidadoAtencion"]);
-            obj.fecha = DateTime.Parse(Request["fecha"]);
-            obj.observaciones = Request["observaciones"] ?? "";
-            obj.vehiculo = new Vehiculo { idVehiculo = int.Parse(Request["idVehiculo"]) };
-            obj.chofer = new PersonalAlmacen { idPersonalAlmacen = int.Parse(Request["idChofer"]) };
-            obj.asistente = new PersonalAlmacen { idPersonalAlmacen = int.Parse(Request["idAsistente"]) };
-
+            ConsolidadoAtencion obj = (ConsolidadoAtencion)this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION];
             obj.IdUsuarioRegistro = Logueado.idUsuario;
 
             obj = bL.updateConsolidadoAtencion(obj);

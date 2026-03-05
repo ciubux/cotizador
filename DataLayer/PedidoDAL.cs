@@ -2893,13 +2893,18 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             return lista;
         }
 
-        public List<Pedido> SelectPedidosConsolidar(Guid idCiudad, Guid idUsuario, DateTime fecha)
+        public List<Pedido> SelectPedidosConsolidar(Guid idCiudad, Guid idUsuario, DateTime fecha, Guid idConsolidadoAtencion)
         {
             var objCommand = GetSqlCommand("ps_pedidos_consolidar_atencion");
             InputParameterAdd.DateTime(objCommand, "fecha", fecha);
             InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
             InputParameterAdd.Guid(objCommand, "idUsuario",idUsuario);
-            
+
+            if(!idConsolidadoAtencion.Equals(Guid.Empty))
+            {
+                InputParameterAdd.Guid(objCommand, "idConsolidado", idConsolidadoAtencion);
+            }
+
             DataTable dataTable = Execute(objCommand);
 
             List<Pedido> pedidoList = new List<Pedido>();

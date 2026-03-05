@@ -262,8 +262,8 @@ jQuery(function($) {
 
     
 
-    $("#btnGuardarConsolidado").click(function() {
-        var id = $("#consolidado_id").val();
+    $("#btnFinalizarEdicionConsolidado").click(function() {
+        var id = $("#idConsolidadoAtencion").val();
         var url = (id == GUID_EMPTY) ? "/ConsolidadoAtencion/Create" : "/ConsolidadoAtencion/Update";
 
         var data = {
@@ -275,15 +275,37 @@ jQuery(function($) {
             observaciones: $("#consolidado_observaciones").val()
         };
 
-        if (!data.idVehiculo || !data.idChofer) {
-            alert("Vehículo y Chofer son obligatorios");
+
+        if (data.idVehiculo == "" || data.idVehiculo == "0") {
+             $.alert({
+                title: 'Datos Incompletos',
+                content: 'Debe seleccionar un vehículo.',
+                type: 'orange',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            $("#consolidado_idVehiculo").focus();
+            return;
+        }
+
+        if (data.idChofer == "" || data.idChofer == "0") {
+            $.alert({
+                title: 'Datos Incompletos',
+                content: 'Debe seleccionar un chofer.',
+                type: 'orange',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+            $("#consolidado_idChofer").focus();
             return;
         }
 
         $('body').loadingModal({ text: 'Guardando...' });
         $.post(url, data, function(res) {
             $('body').loadingModal('hide');
-            window.location.reload();
+            window.location = '/ConsolidadoAtencion/List';
         }, 'JSON');
     });
 
@@ -333,6 +355,75 @@ jQuery(function($) {
             $("#modalEditarConsolidado").modal("show");
         }
     });
+
+    $(document).on('click', "button.btnVerConsolidadoAtencion", function () {
+        $('body').loadingModal({
+            text: 'Abriendo Consolidado Atención...'
+        });
+        $('body').loadingModal('show');
+
+        var idConsolidado = event.target.getAttribute("idConsolidadoAtencion");
+        
+        $.ajax({
+            url: "/ConsolidadoAtencion/Show",
+            data: {
+                idConsolidadoAtencion: idConsolidado
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            error: function (detalle) {
+                $('body').loadingModal('hide');
+                $.alert({
+                    title: 'ERROR',
+                    content: 'OCURRIÓ UN ERROR AL CONSULTAR EL CONSOLIDADO DE ATENCIÓN.',
+                    type: 'red',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            },
+            success: function (result) {
+                var obj = result.consolidadoAtencion;
+                $('body').loadingModal('hide')
+                $("#ver_idConsolidadoAtencion").html(obj.idConsolidadoAtencion);
+                $("#ver_ciudad").html(obj.ciudad.nombre);
+                $("#ver_fecha").html(obj.fechaDesc);
+                $("#ver_vehiculo").html(obj.vehiculo.placa);
+                $("#ver_chofer").html(obj.chofer.nombreCompleto);
+                $("#ver_asistente").html(obj.asistente.nombreCompleto);
+                $("#ver_observaciones").html(obj.observaciones);
+             
+                var pedidosList = obj.pedidos;
+
+                $("#tablePedidosConsolidado > tbody").empty();
+                for (var i = 0; i < clienteList.length; i++) {
+                    var textoHeredaPrecios = 'No';
+                    if (clienteList[i].habilitadoNegociacionGrupal) {
+                        textoHeredaPrecios = 'Si';
+                    }
+
+                    var clienteRow = '<tr data-expanded="true">' +
+                        '<td>  ' + clienteList[i].idPedido + '</td>' +
+                        '<td>  ' + clienteList[i].codigo + '  </td>' +
+                        '<td>  ' + clienteList[i].razonSocialSunat + '  </td>' +
+                        '<td>  ' + clienteList[i].nombreComercial + ' </td>' +
+                        '<td>  ' + clienteList[i].tipoDocumentoIdentidadToString + '</td>' +
+                        '<td>  ' + clienteList[i].ruc + '  </td>' +
+                        '<td>  ' + clienteList[i].ciudad.nombre + '  </td>' +
+                        '<td>  ' + textoHeredaPrecios + '  </td>' +
+                        '</tr>';
+
+                    $("#tablePedidosConsolidado").append(clienteRow);
+
+                }
+                FooTable.init('#tablePedidosConsolidado');
+
+
+                $("#modalVerConsolidadoAtencion").modal('show');
+            }
+        });
+    });
+
 
     $("#btnAgregarConsolidado").click(function() {
         limpiarFormulario();

@@ -2684,8 +2684,8 @@ jQuery(function ($) {
                 
                 /*ACEPTAR COTIZACIÓN*/
                 if (
-                    cotizacion.seguimientoCotizacion_estado == ESTADO_APROBADA ||
-                    cotizacion.seguimientoCotizacion_estado == ESTADO_RECHAZADA
+                    cotizacion.seguimientoCotizacion_estado == ESTADO_APROBADA /*||
+                    cotizacion.seguimientoCotizacion_estado == ESTADO_RECHAZADA*/
                 ) {
                     $("#btnAceptarCotizacion").show(); 
                 }

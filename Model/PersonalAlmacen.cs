@@ -34,5 +34,10 @@ namespace Model
         {
             return $"{this.apellidoPaterno} {this.apellidoMaterno}, {this.nombres}".Trim();
         }
+        public string nombreCompleto { get {
+                return $"{this.apellidoPaterno} {this.apellidoMaterno}, {this.nombres}".Trim();
+            } 
+        }
+
     }
 }

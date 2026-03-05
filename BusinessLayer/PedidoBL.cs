@@ -1608,11 +1608,11 @@ namespace BusinessLayer
             }
         }
 
-        public List<Pedido> SelectPedidosConsolidar(Guid idCiudad, Guid idUsuario, DateTime fecha)
+        public List<Pedido> SelectPedidosConsolidar(Guid idCiudad, Guid idUsuario, DateTime fecha, Guid idConsolidadoAtencion)
         {
             using (PedidoDAL dal = new PedidoDAL())
             {
-                return dal.SelectPedidosConsolidar(idCiudad, idUsuario, fecha);
+                return dal.SelectPedidosConsolidar(idCiudad, idUsuario, fecha, idConsolidadoAtencion);
             }
         }
 
