@@ -110,6 +110,7 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fecha", filtro.fecha);
             InputParameterAdd.Bit(objCommand, "estado", filtro.Estado == 1);
             InputParameterAdd.Guid(objCommand, "idUsuario", filtro.IdUsuarioRegistro);
+            InputParameterAdd.Guid(objCommand, "idCiudad", filtro.ciudad.idCiudad);
 
             DataTable dataTable = Execute(objCommand);
             List<ConsolidadoAtencion> lista = new List<ConsolidadoAtencion>();
@@ -128,6 +129,7 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pi_consolidado_atencion");
             InputParameterAdd.DateTime(objCommand, "fecha", obj.fecha);
             InputParameterAdd.Varchar(objCommand, "observaciones", obj.observaciones?.Trim());
+            InputParameterAdd.Guid(objCommand, "idCiudad", obj.ciudad.idCiudad);
             InputParameterAdd.Int(objCommand, "idVehiculo", obj.vehiculo.idVehiculo);
             InputParameterAdd.Int(objCommand, "idChofer", obj.chofer.idPersonalAlmacen);
             InputParameterAdd.Int(objCommand, "idAsistente", obj.asistente.idPersonalAlmacen);
@@ -161,6 +163,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idConsolidado", obj.idConsolidadoAtencion);
             InputParameterAdd.DateTime(objCommand, "fecha", obj.fecha);
             InputParameterAdd.Varchar(objCommand, "observaciones", obj.observaciones?.Trim());
+            InputParameterAdd.Guid(objCommand, "idCiudad", obj.ciudad.idCiudad);
             InputParameterAdd.Int(objCommand, "idVehiculo", obj.vehiculo.idVehiculo);
             InputParameterAdd.Int(objCommand, "idChofer", obj.chofer.idPersonalAlmacen);
             InputParameterAdd.Int(objCommand, "idAsistente", obj.asistente.idPersonalAlmacen);
@@ -192,6 +195,10 @@ namespace DataLayer
             obj.fecha = Converter.GetDateTime(row, "fecha");
             obj.observaciones = Converter.GetString(row, "observaciones");
             obj.Estado = Converter.GetBool(row, "estado") ? 1 : 0;
+
+            obj.ciudad = new Ciudad();
+            obj.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+            obj.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
 
             obj.vehiculo.idVehiculo = Converter.GetInt(row, "id_vehiculo");
             obj.vehiculo.placa = Converter.GetString(row, "placa_vehiculo");

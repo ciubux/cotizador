@@ -81,6 +81,10 @@ textarea {
 @media screen and (min-width: 768px) {
 
 
+    #modalVerConsolidadoAtencion .modal-dialog {
+        width: 850px;
+    }
+
     #modalVerPedidosOCC .modal-dialog {
         width: 800px;
     }
@@ -1449,4 +1453,6 @@ $darkred: darken($red, 0.2);*/
     color: #3276b1;
     font-weight: bold;
     font-size: 11px;
-} 
+}
+
+

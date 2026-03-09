@@ -1,9 +1,11 @@
 ﻿using BusinessLayer;
 using Cotizador.ExcelExport;
 using Cotizador.Models;
+using Cotizador.Models.DTOsShow;
 using Model;
 using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
+using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using System;
 using System.Collections;
@@ -60,6 +62,8 @@ namespace Cotizador.Controllers
             obj.idConsolidadoAtencion = Guid.Empty;
             obj.fecha = DateTime.Now;
             obj.Estado = 1;
+            obj.usuario = Logueado;
+            obj.ciudad = Logueado.sedeMP;
             this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION_BUSQUEDA] = obj;
         }
 
@@ -73,6 +77,7 @@ namespace Cotizador.Controllers
             obj.chofer = new PersonalAlmacen();
             obj.asistente = new PersonalAlmacen();
             obj.ciudad = Logueado.sedeMP;
+            obj.usuario = Logueado;
 
             this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION] = obj;
         }
@@ -171,7 +176,21 @@ namespace Cotizador.Controllers
 
             return JsonConvert.SerializeObject(lista);
         }
-        
+
+
+        public String Show()
+        {
+            ConsolidadoAtencionBL bl = new ConsolidadoAtencionBL();
+            
+            Guid idConsolidadoAtencion= Guid.Parse(Request["idConsolidadoAtencion"].ToString());
+            ConsolidadoAtencion obj = bl.getConsolidadoAtencion(idConsolidadoAtencion);
+
+            return JsonConvert.SerializeObject(new
+            {
+                consolidadoAtencion = obj
+            }); 
+        }
+
 
         public String Create()
         {
@@ -196,8 +215,18 @@ namespace Cotizador.Controllers
         public void ChangeInputForm()
         {
             string tipo = this.Request.Params["tipo"].ToString();
-            ConsolidadoAtencion obj = (ConsolidadoAtencion)this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION];
+
+            string sesionVar = Constantes.VAR_SESSION_CONSOLIDADOATENCION_BUSQUEDA;
+            int pagina = (int)this.Session[Constantes.VAR_SESSION_PAGINA];
+
+            if (pagina == (int) Constantes.paginas.RegistroConsolidadoAtencion)
+            {
+                sesionVar = Constantes.VAR_SESSION_CONSOLIDADOATENCION;
+            }
+
+            ConsolidadoAtencion obj = (ConsolidadoAtencion)this.Session[sesionVar];
             PropertyInfo propertyInfo = null;
+
             switch (tipo)
             {
                 case "string":

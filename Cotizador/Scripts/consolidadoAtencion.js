@@ -188,13 +188,20 @@ jQuery(function($) {
     
     var pagina = $("#pagina").val();
     if (pagina == CODIGO_PAGINA_REGISTRO) {
-        $("#consolidado_fecha").datepicker({ dateFormat: "dd/mm/yy" });
+        
+        
+        if (document.getElementById('consolidado_fecha')) {
+            $("#consolidado_fecha").datepicker({ dateFormat: "dd/mm/yy" });
+            var idCiudad = $("#consolidado_idCiudad").val();
+            var fecha = $("#consolidado_fecha").val();
 
-        var idCiudad = $("#consolidado_idCiudad").val();
-        var fecha = $("#consolidado_fecha").val();
+            if (idCiudad != GUID_EMPTY && fecha != "") {
+                GridSelector.init();
+            }
+        }
 
-        if (idCiudad != GUID_EMPTY && fecha != "") {
-            GridSelector.init();
+        if (document.getElementById('search_fecha')) {
+            $("#search_fecha").datepicker({ dateFormat: "dd/mm/yy" });
         }
     }
     function limpiarFormulario() {
@@ -236,6 +243,16 @@ jQuery(function($) {
         var valor = $("#consolidado_observaciones").val();
         changeInputForm("string", "observaciones", valor);
     });
+
+    $("#search_fecha").change(function () {
+        var valor = $("#search_fecha").val();
+        changeInputForm("date", "fecha", valor);
+    });
+
+    $("#search_ciudad").change(function () {
+        var valor = $("#search_ciudad").val();
+        changeInputForm("ciudad", "ciudad", valor);
+    }); 
 
     function changeInputForm(tipo, propiedad, valor) {
         $.ajax({
@@ -309,8 +326,26 @@ jQuery(function($) {
         }, 'JSON');
     });
 
-    $("#btnBusqueda").click(function() {
-        $.post("/ConsolidadoAtencion/SearchList", function(list) {
+    $("#btnBusqueda").click(function () {
+        var data = {
+            idCiudad: $("#search_ciudad").val(),
+            fecha: $("#search_fecha").val(),
+        };
+
+        if (data.idCiudad == "" || data.idCiudad == "0" || data.fecha == "") {
+            $.alert({
+                title: 'Datos Incompletos',
+                content: 'Debe seleccionar una Sede y una Fecha.',
+                type: 'orange',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+
+            return;
+        }
+
+        $.post("/ConsolidadoAtencion/SearchList", data, function(list) {
             CONSOLIDADO_LAST_SEARCH = list;
             var rows = "";
             $("#tableConsolidados > tbody").empty();
@@ -322,15 +357,13 @@ jQuery(function($) {
 
             for (var i = 0; i < list.length; i++) {
                 var c = list[i];
-                // Formatear fecha de JSON
-                var fechaStr = c.fecha ? new Date(parseInt(c.fecha.substr(6))).toLocaleDateString() : "";
                 
                 rows += '<tr>' +
-                    '<td>' + fechaStr + '</td>' +
+                    '<td>' + c.fechaDesc + '</td>' +
                     '<td>' + (c.vehiculo ? c.vehiculo.placa : "") + '</td>' +
                     '<td>' + (c.chofer ? c.chofer.apellidoPaterno + ' ' + c.chofer.nombres : "") + '</td>' +
                     '<td>' + (c.asistente ? c.asistente.apellidoPaterno + ' ' + c.asistente.nombres : "") + '</td>' +
-                    '<td><button type="button" class="btn btn-primary btnEditar" data-id="' + c.idConsolidadoAtencion + '">Editar</button></td>' +
+                    '<td><button type="button" class="btn btn-primary btnVerConsolidadoAtencion" idConsolidadoAtencion="' + c.idConsolidadoAtencion + '">Ver</button></td>' +
                     '</tr>';
             }
             $("#tableConsolidados tbody").html(rows);
@@ -395,22 +428,23 @@ jQuery(function($) {
              
                 var pedidosList = obj.pedidos;
 
+                if (obj.esEditable) {
+                    $("#btnEditar").show();
+                } else {
+                    $("#btnEditar").hide();
+                }
+
                 $("#tablePedidosConsolidado > tbody").empty();
-                for (var i = 0; i < clienteList.length; i++) {
-                    var textoHeredaPrecios = 'No';
-                    if (clienteList[i].habilitadoNegociacionGrupal) {
-                        textoHeredaPrecios = 'Si';
-                    }
+                for (var i = 0; i < pedidosList.length; i++) {
+                    var estadoStock = pedidosList.stockConfirmado == 1 ? 'Completo' : 'Imcompleto';
 
                     var clienteRow = '<tr data-expanded="true">' +
-                        '<td>  ' + clienteList[i].idPedido + '</td>' +
-                        '<td>  ' + clienteList[i].codigo + '  </td>' +
-                        '<td>  ' + clienteList[i].razonSocialSunat + '  </td>' +
-                        '<td>  ' + clienteList[i].nombreComercial + ' </td>' +
-                        '<td>  ' + clienteList[i].tipoDocumentoIdentidadToString + '</td>' +
-                        '<td>  ' + clienteList[i].ruc + '  </td>' +
-                        '<td>  ' + clienteList[i].ciudad.nombre + '  </td>' +
-                        '<td>  ' + textoHeredaPrecios + '  </td>' +
+                        '<td>  ' + pedidosList[i].idPedido + '</td>' +
+                        '<td>  ' + pedidosList[i].numeroPedido + '  </td>' +
+                        '<td>  ' + pedidosList[i].cliente.nombreCliente + '  </td>' +
+                        '<td>  ' + pedidosList[i].rangoFechasEntrega + ' </td>' +
+                        '<td>  ' + estadoStock + '</td>' +
+                        '<td>  ' + pedidosList[i].observaciones + '  </td>' +
                         '</tr>';
 
                     $("#tablePedidosConsolidado").append(clienteRow);
