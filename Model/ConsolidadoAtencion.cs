@@ -31,6 +31,8 @@ namespace Model
         public List<Pedido> pedidos { get; set; }
         public List<GuiaRemision> guias { get; set; }
 
+        public List<DocumentoDetalle> resumenDetalleGuias { get; set; }
+
         public string fechaDesc { 
             get { return fecha.ToString(Constantes.formatoFecha); }
         }

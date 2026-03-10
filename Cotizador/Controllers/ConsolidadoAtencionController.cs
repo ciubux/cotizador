@@ -4,6 +4,7 @@ using Cotizador.Models;
 using Cotizador.Models.DTOsShow;
 using Model;
 using Newtonsoft.Json;
+using NLog.Targets;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
@@ -16,6 +17,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Management;
 using System.Web.Mvc;
+using System.Web.Razor.Tokenizer.Symbols;
 
 namespace Cotizador.Controllers
 {
@@ -153,6 +155,20 @@ namespace Cotizador.Controllers
             this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION] = obj;
 
             return JsonConvert.SerializeObject(new { success = 1 });
+        }
+
+        [HttpPost]
+        public string DataRutas(List<Guid> idsConsolidados)
+        {
+            List<ConsolidadoAtencion> lista = new List<ConsolidadoAtencion>();
+
+            if (idsConsolidados != null && idsConsolidados.Count > 0)
+            {
+                ConsolidadoAtencionBL bl = new ConsolidadoAtencionBL();
+                lista = bl.getConsolidadosAtencionPedidos(idsConsolidados);
+            }
+
+            return JsonConvert.SerializeObject(new { success = 1, lista = lista });
         }
 
         [HttpPost]

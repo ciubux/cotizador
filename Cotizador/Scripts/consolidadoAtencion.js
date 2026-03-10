@@ -358,7 +358,7 @@ jQuery(function($) {
             for (var i = 0; i < list.length; i++) {
                 var c = list[i];
                 
-                rows += '<tr>' +
+                rows += '<tr idConsolidadoAtencion="' + c.idConsolidadoAtencion + '">' +
                     '<td>' + c.fechaDesc + '</td>' +
                     '<td>' + (c.vehiculo ? c.vehiculo.placa : "") + '</td>' +
                     '<td>' + (c.chofer ? c.chofer.apellidoPaterno + ' ' + c.chofer.nombres : "") + '</td>' +
@@ -464,4 +464,77 @@ jQuery(function($) {
         $("#modalTitle").text("Nuevo Consolidado");
         $("#modalEditarConsolidado").modal("show");
     });
+
+    $("#btnExportarExcelRutasLista").click(function () {
+        var listaIds = [];
+
+        $("#tableConsolidados > tbody tr").each(function () {
+            listaIds.push($(this).attr("idConsolidadoAtencion"));
+        });
+
+
+        if (listaIds.length > 0) {
+            GenerarExcelRutas();
+        }        
+    });
+
+    function GenerarExcelRutas(listaIds) {
+        var data = {
+            idsConsolidados: listaIds
+        };
+
+        $.post("/ConsolidadoAtencion/DataRutas", data, function (res) {
+            var lista = res.lista;
+
+            //Convertir dataRutas a filas para excel.
+
+        }, 'JSON');
+    }
+
+    async function ExportarExcelRutas(dataExcel, nombreArchivo, nombreHoja, dataValidations = []) {
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet(nombreHoja);
+
+        dataExcel.forEach(row => worksheet.addRow(row));
+
+        // Estilos para la cabecera
+        worksheet.getRow(2).eachCell((cell) => {
+            cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };  // Texto blanco en negrita
+            cell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: 'ff0066cc' }  // Fondo azul
+            };
+            cell.alignment = { horizontal: 'center' };  // Alineación centrada
+        });
+        worksheet.getRow(3).eachCell((cell) => {
+            cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };  // Texto blanco en negrita
+            cell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: 'ff0066cc' }  // Fondo azul
+            };
+            cell.alignment = { horizontal: 'center' };  // Alineación centrada
+        });
+
+        
+
+        // Obtener la fecha y hora actual para el nombre del archivo
+        const now = new Date();
+        const formattedDate = now.toISOString().slice(0, 10).replace(/-/g, "");  // yyyymmdd
+        const formattedTime = now.toTimeString().slice(0, 8).replace(/:/g, "");  // hhmmss
+        const fileName = `${nombreArchivo}_${formattedDate}${formattedTime}.xlsx`;
+
+        // Generar el archivo Excel como un blob
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+        // Crear un enlace de descarga y simular el clic
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 });

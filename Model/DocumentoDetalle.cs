@@ -389,6 +389,7 @@ namespace Model
         }
 
         public bool tieneInfraMargenEmpresaExterna { get; set; }
+
     }
 
 

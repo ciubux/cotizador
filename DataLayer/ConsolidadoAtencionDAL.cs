@@ -276,7 +276,7 @@ namespace DataLayer
         }
 
 
-        public List<ConsolidadoAtencion> GetConsolidadoAtencionsReparto(List<Guid> idsConsolidados)
+        public List<ConsolidadoAtencion> getConsolidadoAtencionsReparto(List<Guid> idsConsolidados)
         {
             var objCommand = GetSqlCommand("ps_consolidados_atencion_reparto");
 
@@ -365,8 +365,7 @@ namespace DataLayer
                 documentoDetalle.producto.codigoFactorUnidadConteo = Converter.GetString(row, "codigo_factor_unidad_conteo");
                 documentoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * documentoDetalle.ProductoPresentacion.Equivalencia;
 
-
-                
+                guia.documentoDetalle.Add(documentoDetalle);
             }
 
             return lista;
