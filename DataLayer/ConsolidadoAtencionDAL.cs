@@ -1,10 +1,13 @@
 ﻿using Framework.DAL;
 using Framework.DAL.Settings.Implementations;
 using Model;
+using Model.CONFIGCLASSES;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -187,6 +190,188 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
             return obj;
         }
+
+
+        public List<ConsolidadoAtencion> getConsolidadosAtencionPedidos(List<Guid> idsConsolidados)
+        {
+            var objCommand = GetSqlCommand("ps_consolidados_atencion_presentacion");
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            foreach (Guid item in idsConsolidados)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = item;
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idsConsolidados", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+            DataSet dataSet = ExecuteDataSet(objCommand);
+            DataTable consolidadosTable = dataSet.Tables[0];
+            DataTable pedidosTable = dataSet.Tables[1];
+
+            List<ConsolidadoAtencion> lista = new List<ConsolidadoAtencion>();
+
+            foreach (DataRow row in consolidadosTable.Rows)
+            {
+                ConsolidadoAtencion obj = new ConsolidadoAtencion();
+                MapearObjeto(obj, row);
+                lista.Add(obj);
+            }
+
+            foreach (DataRow row in pedidosTable.Rows)
+            {
+                Guid idConsolidado = Converter.GetGuid(row, "id_consolidado_atencion");
+
+                ConsolidadoAtencion obj = lista.Where(c => c.idConsolidadoAtencion.Equals(idConsolidado)).FirstOrDefault();
+
+                Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
+                pedido.numeroPedido = Converter.GetLong(row, "numero_pedido");
+                pedido.numeroGrupoPedido = Converter.GetLong(row, "numero_grupo_pedido");
+                pedido.idPedido = Converter.GetGuid(row, "id_pedido");
+                pedido.fechaSolicitud = Converter.GetDateTime(row, "fecha_solicitud");
+                pedido.fechaEntregaDesde = Converter.GetDateTime(row, "fecha_entrega_desde");
+                pedido.fechaEntregaHasta = Converter.GetDateTime(row, "fecha_entrega_hasta");
+                pedido.horaEntregaDesde = Converter.GetString(row, "hora_entrega_desde");
+                pedido.horaEntregaHasta = Converter.GetString(row, "hora_entrega_hasta");
+                pedido.horaEntregaAdicionalDesde = Converter.GetString(row, "hora_entrega_adicional_desde");
+                pedido.horaEntregaAdicionalHasta = Converter.GetString(row, "hora_entrega_adicional_hasta");
+                pedido.fechaEntregaExtendida = Converter.GetDateTimeNullable(row, "fecha_entrega_extendida");
+                
+                pedido.FechaRegistro = Converter.GetDateTime(row, "fecha_registro");
+                pedido.stockConfirmado = Converter.GetInt(row, "stock_confirmado");
+                pedido.fechaProgramacion = Converter.GetDateTimeNullable(row, "fecha_programacion");
+
+                pedido.numeroPedidoRelacionado = Converter.GetInt(row, "numero_pedido_rel");
+                pedido.codigoEmpresaPedidoRelacionado = Converter.GetString(row, "codigo_empresa_pedido_rel");
+
+                pedido.entregaATerceros = Converter.GetInt(row, "entrega_terceros") == 1 ? true : false;
+                if (pedido.entregaATerceros)
+                {
+                    pedido.nombreClienteTercero = Converter.GetString(row, "nombre_cliente_rel");
+                }
+                pedido.cliente = new Cliente();
+                pedido.cliente.codigo = Converter.GetString(row, "codigo");
+                pedido.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
+                pedido.cliente.razonSocial = Converter.GetString(row, "razon_social");
+                pedido.cliente.ruc = Converter.GetString(row, "ruc");
+                pedido.cliente.nombreComercial = Converter.GetString(row, "nombre_comercial_cliente");
+                pedido.cliente.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento_cliente");
+
+                pedido.empresa = new Empresa();
+                pedido.empresa.codigo = Converter.GetString(row, "codigo_empresa");
+
+                pedido.ubigeoEntrega = new Ubigeo();
+                pedido.ubigeoEntrega.Id = Converter.GetString(row, "codigo_ubigeo");
+                pedido.ubigeoEntrega.Distrito = Converter.GetString(row, "distrito");
+
+                obj.pedidos.Add(pedido);
+            }
+
+            return lista;
+        }
+
+
+        public List<ConsolidadoAtencion> GetConsolidadoAtencionsReparto(List<Guid> idsConsolidados)
+        {
+            var objCommand = GetSqlCommand("ps_consolidados_atencion_reparto");
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            foreach (Guid item in idsConsolidados)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = item;
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idsConsolidados", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+            DataSet dataSet = ExecuteDataSet(objCommand);
+            DataTable consolidadosTable = dataSet.Tables[0];
+            DataTable guiasTable = dataSet.Tables[1];
+
+            List<ConsolidadoAtencion> lista = new List<ConsolidadoAtencion>();
+
+            foreach (DataRow row in consolidadosTable.Rows)
+            {
+                ConsolidadoAtencion obj = new ConsolidadoAtencion();
+                MapearObjeto(obj, row);
+                lista.Add(obj);
+            }
+
+            foreach (DataRow row in guiasTable.Rows)
+            {
+                Guid idConsolidado = Converter.GetGuid(row, "id_consolidado_atencion");
+
+                ConsolidadoAtencion obj = lista.Where(c => c.idConsolidadoAtencion.Equals(idConsolidado)).FirstOrDefault();
+
+                Guid idGuia = Converter.GetGuid(row, "id_movimiento_almacen");
+
+                GuiaRemision guia = obj.guias.Where(g => g.idMovimientoAlmacen.Equals(idGuia)).FirstOrDefault();
+
+                if (guia == null)
+                {
+                    guia = new GuiaRemision();
+                    //DATOS DE LA GUIA
+                    guia.serieDocumento = Converter.GetString(row, "serie_documento");
+                    guia.numeroDocumento = Converter.GetLong(row, "numero_documento");
+                    guia.idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
+
+                    //PEDIDO
+                    guia.pedido = new Pedido();
+                    guia.pedido.idPedido = Converter.GetGuid(row, "id_pedido");
+                    guia.pedido.numeroPedido = Converter.GetLong(row, "numero");
+                    guia.documentoDetalle = new List<DocumentoDetalle>();
+
+                    obj.guias.Add(guia);
+                }
+
+
+                DocumentoDetalle documentoDetalle = new DocumentoDetalle();
+                documentoDetalle.idDocumentoDetalle = Converter.GetGuid(row, "id_movimiento_almacen_detalle");
+                documentoDetalle.cantidad = Converter.GetInt(row, "cantidad");
+                documentoDetalle.cantidadPorAtender = documentoDetalle.cantidad;
+                documentoDetalle.cantidadPermitida = documentoDetalle.cantidad;
+                documentoDetalle.cantidadGuiada = 0;
+                documentoDetalle.cantidadTotalAtencion = Converter.GetInt(row, "cantidad_pedido");
+
+                documentoDetalle.ProductoPresentacion = new ProductoPresentacion();
+                documentoDetalle.ProductoPresentacion.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion");
+                documentoDetalle.ProductoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
+
+                documentoDetalle.unidad = Converter.GetString(row, "unidad");
+                documentoDetalle.producto = new Producto();
+                documentoDetalle.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                documentoDetalle.producto.sku = Converter.GetString(row, "sku");
+                documentoDetalle.producto.skuProveedor = Converter.GetString(row, "sku_proveedor");
+                documentoDetalle.producto.descripcion = Converter.GetString(row, "descripcion");
+                documentoDetalle.producto.descripcionLarga = Converter.GetString(row, "descripcion_larga");
+                documentoDetalle.producto.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");
+                documentoDetalle.producto.motivoRestriccion = Converter.GetString(row, "motivo_restriccion");
+                documentoDetalle.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia_producto");
+                documentoDetalle.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor_producto");
+                documentoDetalle.producto.codigoNextSoft = Converter.GetString(row, "codigo_nextsoft");
+                documentoDetalle.producto.codigoFactorUnidadMP = Converter.GetString(row, "codigo_factor_unidad_mp");
+                documentoDetalle.producto.codigoFactorUnidadAlternativa = Converter.GetString(row, "codigo_factor_unidad_alternativa");
+                documentoDetalle.producto.codigoFactorUnidadProveedor = Converter.GetString(row, "codigo_factor_unidad_proveedor");
+                documentoDetalle.producto.codigoFactorUnidadConteo = Converter.GetString(row, "codigo_factor_unidad_conteo");
+                documentoDetalle.precioNeto = Converter.GetDecimal(row, "precio_neto") * documentoDetalle.ProductoPresentacion.Equivalencia;
+
+
+                
+            }
+
+            return lista;
+        }
+
 
         // Método privado para evitar repetir código de mapeo entre SELECT individual y lista
         private void MapearObjeto(ConsolidadoAtencion obj, DataRow row)

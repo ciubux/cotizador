@@ -29,6 +29,7 @@ namespace Model
         public PersonalAlmacen asistente { get; set; }
 
         public List<Pedido> pedidos { get; set; }
+        public List<GuiaRemision> guias { get; set; }
 
         public string fechaDesc { 
             get { return fecha.ToString(Constantes.formatoFecha); }
@@ -45,6 +46,7 @@ namespace Model
             chofer = new PersonalAlmacen();
             asistente = new PersonalAlmacen();
             pedidos = new List<Pedido>();
+            guias = new List<GuiaRemision>();
         }
     }
 }
