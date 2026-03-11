@@ -158,6 +158,21 @@ namespace Cotizador.Controllers
         }
 
         [HttpPost]
+        public string DataReparto(List<Guid> idsConsolidados)
+        {
+            List<ConsolidadoAtencion> lista = new List<ConsolidadoAtencion>();
+
+            if (idsConsolidados != null && idsConsolidados.Count > 0)
+            {
+                ConsolidadoAtencionBL bl = new ConsolidadoAtencionBL();
+                lista = bl.getConsolidadoAtencionsReparto(idsConsolidados);
+            }
+
+            return JsonConvert.SerializeObject(new { success = 1, lista = lista });
+        }
+
+
+        [HttpPost]
         public string DataRutas(List<Guid> idsConsolidados)
         {
             List<ConsolidadoAtencion> lista = new List<ConsolidadoAtencion>();

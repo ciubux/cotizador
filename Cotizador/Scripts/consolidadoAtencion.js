@@ -357,8 +357,10 @@ jQuery(function($) {
 
             if (list.length > 0) {
                 $("#btnExportarExcelRutasLista").show();
+                $("#btnExportarExcelConsolidadoRepartoLista").show();
             } else {
                 $("#btnExportarExcelRutasLista").hide();
+                $("#btnExportarExcelConsolidadoRepartoLista").hide();
             }
 
             for (var i = 0; i < list.length; i++) {
@@ -465,11 +467,275 @@ jQuery(function($) {
     });
 
 
-    $("#btnAgregarConsolidado").click(function() {
-        limpiarFormulario();
-        $("#modalTitle").text("Nuevo Consolidado");
-        $("#modalEditarConsolidado").modal("show");
+    $("#btnExportarExcelConsolidadoRepartoLista").click(function () {
+        var listaIds = [];
+
+        $("#tableConsolidados > tbody tr").each(function () {
+            listaIds.push($(this).attr("idConsolidadoAtencion"));
+        });
+
+
+        if (listaIds.length > 0) {
+            GenerarExcelReparto(listaIds);
+        }
     });
+
+    function GenerarExcelReparto(listaIds) {
+        var data = {
+            idsConsolidados: listaIds
+        };
+
+        $.post("/ConsolidadoAtencion/DataReparto", data, function (res) {
+            var lista = res.lista;
+            if (!lista || lista.length === 0) return;
+
+            var dataExcel = [];
+
+            var maxPedidos = 0;
+            var nombreArchivo = "";
+            lista.forEach(function (c) {
+                if (c.pedidos && c.pedidos.length > maxPedidos) {
+                    maxPedidos = c.pedidos.length;
+                }
+
+                nombreArchivo = "CONSOLIDADO_REPARTO_" + c.fechaDesc.split('/').reverse().join('') + c.ciudad.nombre;
+            });
+
+            maxPedidos = maxPedidos > 10 ? maxPedidos : 10;
+
+            lista.forEach(function (c) {
+                let cabecera = {
+                    placaVehiculo: c.vehiculo.placa,
+                    fecha: c.fechaDesc,
+                    numero: "",
+                    responsable: c.chofer.nombres + ' ' + c.chofer.apellidoPaterno,
+                    asistente: c.asistente ? c.asistente.nombres + ' ' + c.asistente.apellidoPaterno : "-",
+                    unidad: c.vehiculo.placa
+                };
+
+                let productos = [];
+
+
+                let guias = [];
+
+                dataExcel.push(
+                    {
+                        cabecera: cabecera,
+                        productos: productos, 
+                        guias: guias
+                    }
+                );
+            });
+
+
+            const urlLogo = "http://localhost:55996/images/logos/logo_MP.png"; 
+            ExportarExcelConsolidadoReparto(misConsolidados, urlLogo, nombreArchivo);
+
+        }, 'JSON');
+
+        // Estructura de prueba con 2 consolidados 
+        const misConsolidados = [
+            {
+                cabecera: {
+                    placaVehiculo: "ABC-123", 
+                    fecha: "27-Ene",
+                    numero: "1024",
+                    responsable: "Luis Tapahuasco",
+                    asistente: "Miguel Campos",
+                    unidad: "ABC-123"
+                },
+                productos: [
+                    { sku: "HT2S41", cantidad: 4, unidad: "CAJA X 4", descripcion: "PT Scott JRT Airflex Ahorramax nvo. emp. (20 gr.), rollo x 200 mts" },
+                    { sku: "HT0S32", cantidad: 4, unidad: "CAJA X 25", descripcion: "PT interf. Scott Airflex 1 ply (28 gr.), pqte x 150 hjs" },
+                    { sku: "HJ3F40", cantidad: 1, unidad: "SACHET", descripcion: "Jabón espuma Scott Pure Supreme antib. sin triclosán, sachet x 800 ml" },
+                    { sku: "HH2S80", cantidad: 12, unidad: "ROLLO", descripcion: "PH Scott JRT Rindemax gofrado con pre-corte, rollo x 550 mts" }
+                ],
+                guias: [
+                    { numero: "11486", cliente: "J & H INVERSIONES PUNTO AZUL S.A.C." },
+                    { numero: "11487", cliente: "PESCADOS PERUANOS P & A S.A.C." }
+                ]
+            },
+            {
+                cabecera: {
+                    placaVehiculo: "XYZ-789", 
+                    fecha: "27-Ene",
+                    numero: "1025",
+                    responsable: "Xavier Rivas",
+                    asistente: "Moises Atienza",
+                    unidad: "XYZ-789"
+                },
+                productos: [
+                    { sku: "HT0S32", cantidad: 13, unidad: "CAJA X 25", descripcion: "PT interf. Scott Airflex 1 ply (28 gr.), pqte x 150 hjs" },
+                    { sku: "HH2S80", cantidad: 3, unidad: "CAJA X 12", descripcion: "PH Scott JRT Rindemax gofrado con pre-corte, rollo x 550 mts" },
+                    { sku: "HJ1F10", cantidad: 6, unidad: "SACHET", descripcion: "Jabón spray Scott Handlotion Rindemax, sachet x 800 ml" },
+                    { sku: "HT2S41", cantidad: 90, unidad: "CAJA X 4", descripcion: "PT Scott JRT Airflex Ahorramax nvo. emp. (20 gr.), rollo x 200 mts" }
+                ],
+                guias: [
+                    { numero: "11492", cliente: "UNION PAK DEL PERU S.A." },
+                    { numero: "", cliente: "SERVICIOS GASTRONOMICOS P&A S.A.C." }, 
+                    { numero: "1218", cliente: "DISTRIPLUS SOCIEDAD ANONIMA CERRADA" }
+                ]
+            }
+        ];
+
+        const urlLogo = "http://localhost:55996/images/logos/logo_MP.png"; 
+
+        ExportarExcelConsolidadoReparto(misConsolidados, urlLogo, "ConsolidadoReparto_");
+    }
+
+    async function ExportarExcelConsolidadoReparto(listaConsolidados, urlLogo, nombreArchivo) {
+        const workbook = new ExcelJS.Workbook();
+
+        let imageId = null;
+        let originalWidth = 0;
+        let originalHeight = 0;
+
+        const imgData = obtenerBase64DeImagen('imagenMP');
+
+        if (imgData) {
+            imageId = workbook.addImage({
+                base64: imgData.base64,
+                extension: 'png',
+            });
+
+            originalWidth = imgData.width;
+            originalHeight = imgData.height;
+        }
+
+        const bordeFino = { style: 'thin', color: { argb: 'FF000000' } };
+        const bordesCompletos = { top: bordeFino, left: bordeFino, bottom: bordeFino, right: bordeFino };
+        const fondoGrisClaro = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ff0066cc' } };
+        const fondoGrisOscuro = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ff0066cc' } };
+
+        let nroHoja = 0;
+        listaConsolidados.forEach((consolidado) => {
+            nroHoja = nroHoja + 1:
+            const nombreHoja = consolidado.cabecera.placaVehiculo || `Consolidado_${nroHoja}`;
+
+            const worksheet = workbook.addWorksheet(nombreHoja);
+
+            worksheet.getColumn('A').width = 3;
+            worksheet.getColumn('B').width = 18;
+            worksheet.getColumn('C').width = 12;
+            worksheet.getColumn('D').width = 25;
+            worksheet.getColumn('E').width = 70;
+
+            worksheet.views = [{ state: 'frozen', xSplit: 0, ySplit: 13 }];
+
+            if (imageId !== null) {
+                const anchoDeseado = 200;
+                const altoProporcional = (originalHeight / originalWidth) * anchoDeseado;
+
+                worksheet.addImage(imageId, {
+                    tl: { col: 4.9, row: 0.2 },
+                    ext: { width: anchoDeseado, height: altoProporcional },
+                    editAs: 'oneCell'
+                });
+            }
+
+            worksheet.getCell('B2').value = "FECHA:";
+            worksheet.getCell('B2').font = { bold: true };
+            worksheet.getCell('B2').alignment = { horizontal: 'right' };
+
+            worksheet.getCell('C2').value = consolidado.cabecera.fecha;
+            worksheet.getCell('C2').font = { bold: true };
+            worksheet.getCell('C2').border = bordesCompletos;
+            worksheet.getCell('C2').alignment = { horizontal: 'center' };
+
+            worksheet.getCell('B3').value = "N°";
+            worksheet.getCell('B3').font = { bold: true };
+            worksheet.getCell('B3').alignment = { horizontal: 'right' };
+
+            worksheet.getCell('C3').value = consolidado.cabecera.numero;
+            worksheet.getCell('C3').border = bordesCompletos;
+            worksheet.getCell('C3').alignment = { horizontal: 'center' };
+
+            worksheet.mergeCells('B5:E5');
+            const celdaTitulo = worksheet.getCell('B5');
+            celdaTitulo.value = "CONSOLIDADO DE CARGA";
+            celdaTitulo.alignment = { horizontal: 'center' };
+            celdaTitulo.font = { bold: true, color: { argb: 'FFFFFFFF' } };  
+            celdaTitulo.fill = fondoGrisOscuro;
+
+            worksheet.getRow(8).height = 5;
+            worksheet.getRow(10).height = 5;
+
+            const etiquetas = [
+                { fila: 7, label: "RESPONSABLE", valor: consolidado.cabecera.responsable },
+                { fila: 9, label: "ASISTENTE", valor: consolidado.cabecera.asistente },
+                { fila: 11, label: "UNIDAD", valor: consolidado.cabecera.unidad }
+            ];
+
+            etiquetas.forEach(item => {
+                let celdaLabel = worksheet.getCell(`B${item.fila}`);
+                celdaLabel.value = item.label;
+                celdaLabel.font = { bold: true, color: { argb: 'FFFFFFFF' } };  
+                celdaLabel.fill = fondoGrisClaro;
+
+                let celdaValor = worksheet.getCell(`C${item.fila}`);
+                celdaValor.value = item.valor;
+                celdaValor.font = { bold: true };
+            });
+
+            const filaCabeceraProd = worksheet.getRow(13);
+            filaCabeceraProd.values = [null, "SKU", "CANT.", "UNIDAD", "DESCRIPCIÓN"];
+
+            ['B', 'C', 'D', 'E'].forEach(col => {
+                let celda = worksheet.getCell(`${col}13`);
+                celda.fill = fondoGrisOscuro;
+                celda.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+                celda.alignment = { horizontal: 'center', vertical: 'middle' };
+                celda.border = bordesCompletos;
+            });
+
+            worksheet.autoFilter = 'B13:E13';
+
+            let filaActual = 14;
+            consolidado.productos.forEach(prod => {
+                const row = worksheet.getRow(filaActual);
+                row.values = [null, prod.sku, prod.cantidad, prod.unidad, prod.descripcion];
+
+                ['B', 'C', 'D', 'E'].forEach(col => {
+                    row.getCell(col).border = { left: bordeFino, right: bordeFino };
+                });
+
+                row.getCell('C').alignment = { horizontal: 'center' };
+                filaActual++;
+            });
+
+            ['B', 'C', 'D', 'E'].forEach(col => {
+                worksheet.getCell(`${col}${filaActual - 1}`).border = {
+                    left: bordeFino, right: bordeFino, bottom: bordeFino
+                };
+            });
+
+            filaActual += 2;
+
+            worksheet.getCell(`B${filaActual}`).value = "GUÍA N°";
+            worksheet.getCell(`B${filaActual}`).font = { bold: true };
+
+            worksheet.getCell(`C${filaActual}`).value = "CLIENTE";
+            worksheet.getCell(`C${filaActual}`).font = { bold: true };
+            filaActual++;
+
+            consolidado.guias.forEach(guia => {
+                const row = worksheet.getRow(filaActual);
+                row.values = [null, guia.numero, guia.cliente];
+                row.getCell('B').alignment = { horizontal: 'center' };
+                filaActual++;
+            });
+        }); 
+
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `${nombreArchivo}.xlsx`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 
     $("#btnExportarExcelRutasLista").click(function () {
         var listaIds = [];
@@ -502,8 +768,7 @@ jQuery(function($) {
                     maxPedidos = c.pedidos.length;
                 }
 
-                //nombreArchivo = "RUTAS_" + c.fechaDesc + c.ciudad.nombre;
-                nombreArchivo = "RUTAS_" + c.ciudad.nombre;
+                nombreArchivo = "RUTAS_" + c.fechaDesc.split('/').reverse().join('') + c.ciudad.nombre;
             });
 
             maxPedidos = maxPedidos > 10 ? maxPedidos : 10;
@@ -636,6 +901,61 @@ jQuery(function($) {
         link.click();
         document.body.removeChild(link);
     }
+
+    async function obtenerImagenBase64(url) {
+        try {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+            });
+        } catch (error) {
+            console.error("Error al cargar la imagen:", error);
+            return null;
+        }
+    }
+
+    function obtenerBase64DeImagen(imgId) {
+        const img = document.getElementById(imgId);
+        if (!img) return null;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth || img.width;
+        canvas.height = img.naturalHeight || img.height;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+
+        // Ahora devolvemos un objeto con la imagen y sus medidas
+        return {
+            base64: canvas.toDataURL('image/png'),
+            width: canvas.width,
+            height: canvas.height
+        };
+    }
+    /*
+    function obtenerBase64DeImagen(imgId) {
+        const img = document.getElementById(imgId);
+        if (!img) {
+            console.error("No se encontró la imagen con el ID:", imgId);
+            return null;
+        }
+
+        // Crear un canvas para dibujar la imagen y extraer su código Base64
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth || img.width;
+        canvas.height = img.naturalHeight || img.height;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+
+        // Retorna el string en base64
+        return canvas.toDataURL('image/png');
+    }*/
+
     /*
     async function ExportarExcelRutas(dataExcel, nombreArchivo, nombreHoja) {
         const workbook = new ExcelJS.Workbook();
