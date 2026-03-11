@@ -355,6 +355,12 @@ jQuery(function($) {
                 }
             });
 
+            if (list.length > 0) {
+                $("#btnExportarExcelRutasLista").show();
+            } else {
+                $("#btnExportarExcelRutasLista").hide();
+            }
+
             for (var i = 0; i < list.length; i++) {
                 var c = list[i];
                 
@@ -474,7 +480,7 @@ jQuery(function($) {
 
 
         if (listaIds.length > 0) {
-            GenerarExcelRutas();
+            GenerarExcelRutas(listaIds);
         }        
     });
 
@@ -485,13 +491,153 @@ jQuery(function($) {
 
         $.post("/ConsolidadoAtencion/DataRutas", data, function (res) {
             var lista = res.lista;
+            if (!lista || lista.length === 0) return;
 
-            //Convertir dataRutas a filas para excel.
+            var dataExcel = [];
+
+            var maxPedidos = 0;
+            var nombreArchivo = "";
+            lista.forEach(function (c) {
+                if (c.pedidos && c.pedidos.length > maxPedidos) {
+                    maxPedidos = c.pedidos.length;
+                }
+
+                //nombreArchivo = "RUTAS_" + c.fechaDesc + c.ciudad.nombre;
+                nombreArchivo = "RUTAS_" + c.ciudad.nombre;
+            });
+
+            maxPedidos = maxPedidos > 10 ? maxPedidos : 10;
+
+            var fila1 = [""];
+            var fila2 = [""];
+
+            lista.forEach(function (c) {
+                var nombreChoferAsistente = c.chofer.nombres + ' ' + c.chofer.apellidoPaterno;
+
+                if (c.asistente) {
+                    nombreChoferAsistente = nombreChoferAsistente + '/' + c.asistente.nombres + ' ' + c.asistente.apellidoPaterno;
+                }
+                
+                fila1.push(c.vehiculo.placa || "", "", nombreChoferAsistente || "", "");
+                fila2.push("N°", "N° Pedido", "Cliente", "");
+            });
+
+            dataExcel.push([""]);
+            dataExcel.push(fila1);
+            dataExcel.push(fila2);
+
+            for (var i = 0; i < maxPedidos; i++) {
+                var filaDatos = [""];
+
+                lista.forEach(function (c) {
+                    if (c.pedidos && c.pedidos[i]) {
+                        var ped = c.pedidos[i];
+                        filaDatos.push((i + 1) || "", ped.numeroPedido || "", ped.cliente.nombreCliente || "", "");
+                    } else {
+                        filaDatos.push("", "", "", "");
+                    }
+                });
+
+                dataExcel.push(filaDatos);
+            }
+
+            ExportarExcelRutas(dataExcel, nombreArchivo, "RUTA", lista.length);
 
         }, 'JSON');
     }
 
-    async function ExportarExcelRutas(dataExcel, nombreArchivo, nombreHoja, dataValidations = []) {
+    async function ExportarExcelRutas(dataExcel, nombreArchivo, nombreHoja, cantidadConsolidados) {
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet(nombreHoja);
+
+        dataExcel.forEach(row => worksheet.addRow(row));
+
+        for (let i = 0; i < cantidadConsolidados; i++) {
+            let colInicio = (i * 4) + 2;      
+            let colFin = colInicio + 1;        
+            worksheet.mergeCells(2, colInicio, 2, colFin); 
+        }
+
+        [2, 3].forEach(numFila => {
+            worksheet.getRow(numFila).eachCell((cell, colNumber) => {
+                cell.alignment = { horizontal: 'center', vertical: 'middle' }; 
+
+                if ((colNumber - 1) % 4 === 0) {
+                    cell.font = { bold: true, color: { argb: 'FF000000' } };
+                    cell.fill = { type: 'pattern', pattern: 'none' };
+                } else {
+                    cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };  
+                    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ff0066cc' }  
+                    };
+
+                }
+            });
+        });
+
+
+        const patronAnchos = [4, 6, 12, 40];
+
+        for (let i = 1; i <= worksheet.columnCount; i++) {
+            let indicePatron = (i - 1) % patronAnchos.length;
+
+            worksheet.getColumn(i).width = patronAnchos[indicePatron];
+        }
+
+        const bordeNegro = { style: 'thin', color: { argb: 'FF000000' } };
+
+        worksheet.eachRow((row, rowNumber) => {
+            row.eachCell((cell, colNumber) => {
+                if (!((colNumber - 1) % 4 === 0) && rowNumber > 1) {
+                    if (rowNumber === 2 || rowNumber === 3) {
+                        cell.border = {
+                            top: bordeNegro,
+                            left: bordeNegro,
+                            bottom: bordeNegro,
+                            right: bordeNegro
+                        };
+                    } else {
+                        let bordesDatos = {
+                            left: bordeNegro,
+                            right: bordeNegro
+                        };
+
+
+                        if (rowNumber === worksheet.rowCount) {
+                            bordesDatos.bottom = bordeNegro;
+                        }
+
+                        cell.border = bordesDatos;
+                        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffffffff' } };
+                    }
+                }
+            });
+        });
+
+        /*
+        worksheet.columns.forEach(col => {
+            col.width = 16;
+        });
+        */
+        // Obtener la fecha y hora actual para el nombre del archivo
+        const now = new Date();
+        const formattedDate = now.toISOString().slice(0, 10).replace(/-/g, "");  // yyyymmdd
+        const formattedTime = now.toTimeString().slice(0, 8).replace(/:/g, "");  // hhmmss
+        const fileName = `${nombreArchivo}_${formattedDate}${formattedTime}.xlsx`;
+
+        // Generar el archivo Excel como un blob
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+        // Crear un enlace de descarga y simular el clic
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    /*
+    async function ExportarExcelRutas(dataExcel, nombreArchivo, nombreHoja) {
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet(nombreHoja);
 
@@ -536,5 +682,5 @@ jQuery(function($) {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-    }
+    }*/
 });
