@@ -516,7 +516,27 @@ jQuery(function($) {
                 let productos = [];
 
 
+                c.resumenDetalleGuias.forEach(function (p) {
+                    let producto = {
+                        sku: p.producto.sku,
+                        cantidad: p.cantidad,
+                        unidad: p.unidad,
+                        descripcion: p.producto.descripcion
+                    };
+
+                    productos.push(producto);
+                });
+
                 let guias = [];
+
+                c.guias.forEach(function (g) {
+                    let guia = {
+                        numero: g.serieDocumento + '-' + g.numeroDocumento,
+                        cliente: g.clienteVer.razonSocial
+                    };
+
+                    guias.push(guia);
+                });
 
                 dataExcel.push(
                     {
@@ -529,12 +549,12 @@ jQuery(function($) {
 
 
             const urlLogo = "http://localhost:55996/images/logos/logo_MP.png"; 
-            ExportarExcelConsolidadoReparto(misConsolidados, urlLogo, nombreArchivo);
+            ExportarExcelConsolidadoReparto(dataExcel, urlLogo, nombreArchivo);
 
         }, 'JSON');
 
         // Estructura de prueba con 2 consolidados 
-        const misConsolidados = [
+        /*const misConsolidados = [
             {
                 cabecera: {
                     placaVehiculo: "ABC-123", 
@@ -580,7 +600,7 @@ jQuery(function($) {
 
         const urlLogo = "http://localhost:55996/images/logos/logo_MP.png"; 
 
-        ExportarExcelConsolidadoReparto(misConsolidados, urlLogo, "ConsolidadoReparto_");
+        ExportarExcelConsolidadoReparto(misConsolidados, urlLogo, "ConsolidadoReparto_");*/
     }
 
     async function ExportarExcelConsolidadoReparto(listaConsolidados, urlLogo, nombreArchivo) {
@@ -609,7 +629,7 @@ jQuery(function($) {
 
         let nroHoja = 0;
         listaConsolidados.forEach((consolidado) => {
-            nroHoja = nroHoja + 1:
+            nroHoja = nroHoja + 1;
             const nombreHoja = consolidado.cabecera.placaVehiculo || `Consolidado_${nroHoja}`;
 
             const worksheet = workbook.addWorksheet(nombreHoja);

@@ -331,6 +331,15 @@ namespace DataLayer
                     guia.pedido.numeroPedido = Converter.GetLong(row, "numero");
                     guia.documentoDetalle = new List<DocumentoDetalle>();
 
+                    guia.clienteVer = new Cliente();
+                    guia.clienteVer.razonSocial = Converter.GetString(row, "nombre_cliente");
+                    string nombreClienteRel = Converter.GetString(row, "nombre_cliente_rel");
+
+                    if (nombreClienteRel != null && !nombreClienteRel.Equals(String.Empty)) {
+                        guia.clienteVer.razonSocial = nombreClienteRel + " (" + guia.clienteVer.razonSocial + ")";
+                    }
+
+
                     obj.guias.Add(guia);
                 }
 
