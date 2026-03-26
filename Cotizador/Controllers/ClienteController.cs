@@ -864,7 +864,25 @@ namespace Cotizador.Controllers
             return "{\"success\": " + success.ToString() + ", \"message\": \"" + message + "\"}";
         }
 
-        
+        public String OtrasEmpresasCliente(Guid? idCliente, string ruc, Guid? idCiudad)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            List<List<string>> listaEmpresas = new List<List<string>>();
+            ClienteBL bl = new ClienteBL();
+
+            if (idCliente.HasValue)
+            {
+                listaEmpresas = bl.OtrasEmpresasCliente(usuario.idUsuario, idCliente.Value, "", Guid.Empty);
+            }
+            else
+            {
+                listaEmpresas = bl.OtrasEmpresasCliente(usuario.idUsuario, Guid.Empty, ruc, idCiudad.Value);
+            }
+
+            return JsonConvert.SerializeObject(listaEmpresas);
+        }
+
         public String ChangeDireccionDomicilioLegalSunat()
         {
             String direccionDomicilioLegalSunat = Request["direccionDomicilioLegalSunat"].ToString();

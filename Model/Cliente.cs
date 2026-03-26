@@ -76,6 +76,7 @@ namespace Model
 
         public Boolean sinMontoCreditoAprobado { get; set; }
 
+        public Boolean esClientePrioritario { get; set; }
         public Boolean esAgenteRetencion { get; set; }
         public Boolean facturaUnica { get; set; }
         public Boolean atencionSoloOc { get; set; }

@@ -6,6 +6,7 @@ jQuery(function ($) {
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
     var TITLE_EXITO = 'Operación Realizada';
 
+    var OTRAS_EMPRESA_CLIENTE_SEDE = [];
 
     var columns = new Array(
         { name: "idDireccionEntrega", title: "idDireccionEntrega" },
@@ -462,7 +463,20 @@ jQuery(function ($) {
         });
     }
 
-
+    function otrasEmpresasClienteSede(idCiudad, ruc) {
+        $.ajax({
+            url: "/Cliente/OtrasEmpresasCliente",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCiudad: idCiudad,
+                ruc: ruc
+            },
+            success: function (lista) {
+                OTRAS_EMPRESA_CLIENTE_SEDE = lista;
+            }
+        });
+    }
 
 
     function verificarSiExisteCliente() {
@@ -1221,6 +1235,38 @@ jQuery(function ($) {
 
 
     $("#btnFinalizarEdicionCliente").click(function () {
+
+        if (OTRAS_EMPRESA_CLIENTE_SEDE.length > 0) {
+            var nombreEmpresa = $("#imagenMP").attr("tooltip");
+
+            $.confirm({
+                title: 'CLIENTE EXITE EN OTRA EMPRESA',
+                content: 'El cliente ya está siendo atendido por otro asesor de otra empresa. Si el cliente pertenece a ' + nombreEmpresa + ' debe marcarlo como prioritario, si no puede marcarlo como prioritario contáctese con su supervisor. ¿DESEA REGISTRAR EL CLIENTE DE TODO MODOS?',
+                type: 'orange',
+                buttons: {
+                    SI: {
+                        text: 'SI',
+                        btnClass: 'btn-warning',
+                        action: function () {
+                            iniciarRegistro();
+                        }
+                    },
+                    NO: {
+                        text: 'NO',
+                        btnClass: 'btn-success',
+                        action: function () {
+                        }
+                    }
+                },
+            });
+        } else {
+            iniciarRegistro();
+        }
+
+        
+    });
+
+    function iniciarRegistro() {
         /*Si no tiene codigo el cliente se está creando*/
         if ($("#cliente_codigo").val().length == 0) {
             crearCliente();
@@ -1228,9 +1274,7 @@ jQuery(function ($) {
         else {
             editarCliente();
         }
-    });
-
-    
+    }
 
     function crearCliente() {
         if (!validacionDatosCliente())
@@ -1780,9 +1824,12 @@ jQuery(function ($) {
 
     $("#cliente_ruc").change(function () {
         var ruc = $("#cliente_ruc").val();
+        var idCiudad = $("#idCiudad").val();
+
         changeInputString("ruc", ruc);
 
-        validarExisteCliente(ruc, $("#idCiudad").val());
+        validarExisteCliente(ruc, idCiudad);
+        otrasEmpresasClienteSede(idCiudad, ruc);
     });
 
     $("#cliente_razonSocial").change(function () {
@@ -2322,6 +2369,7 @@ jQuery(function ($) {
     $("#idCiudad").change(function () {
         var idCiudad = $("#idCiudad").val();
         var textCiudad = $("#idCiudad option:selected").text();
+        var ruc = $("#cliente_ruc").val();
 
         if ($("#pagina").val() == PAGINA_MantenimientoCliente) {            
             /*
@@ -2340,7 +2388,8 @@ jQuery(function ($) {
             }
             */
 
-            validarExisteCliente($("#cliente_ruc").val(), $("#idCiudad").val());
+            validarExisteCliente(ruc, idCiudad);
+            otrasEmpresasClienteSede(idCiudad, ruc);
         }
 
         $("#spn_vercliente_mp_registracotizaciones").html($("#idCiudad option:selected").text());
@@ -2849,6 +2898,29 @@ jQuery(function ($) {
             valor = 0;
         }
         changeInputBoolean('atencionSoloOc', valor)
+    }
+
+    $("#lblChkEsClientePrioritario").click(function () {
+        if ($("#chkEsClientePrioritario").is(":checked")) {
+            $("#chkEsClientePrioritario").prop("checked", false);
+        } else {
+            $("#chkEsClientePrioritario").prop("checked", true);
+        }
+
+        actualizarValorChkEsClientePrioritario();
+    });
+
+
+    $("#chkEsClientePrioritario").change(function () {
+        actualizarValorChkEsClientePrioritario();
+    });
+
+    function actualizarValorChkEsClientePrioritario() {
+        var valor = 1;
+        if (!$('#chkEsClientePrioritario').prop('checked')) {
+            valor = 0;
+        }
+        changeInputBoolean('esClientePrioritario', valor)
     }
 
     $("#lblChkConfigAgregarNombreSedeObservacionFactura").click(function () {

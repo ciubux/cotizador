@@ -516,10 +516,11 @@ namespace DataLayer
             return cliente;
         }
 
-        public List<Cliente> getClientesByRUC(string ruc)
+        public List<Cliente> getClientesByRUC(string ruc, Guid idUsuario)
         {
             var objCommand = GetSqlCommand("ps_clientes_ruc");
             InputParameterAdd.Varchar(objCommand, "ruc", ruc?.Trim());
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             DataTable dataTable = Execute(objCommand);
 
             List<Cliente> lista = new List<Cliente>();
@@ -1621,6 +1622,41 @@ namespace DataLayer
             Constantes.PASSWORD_EOL_PROD = passwordEol; 
 
             return idEmpresa;
+        }
+
+        public List<List<string>> OtrasEmpresasCliente(Guid idUsuario, Guid idCliente, String ruc, Guid idCiudad)
+        {
+            var objCommand = GetSqlCommand("ps_validar_cliente_sede_otras_empresas");
+            
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            if (!idCliente.Equals(Guid.Empty))
+            {
+                InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
+            }
+            else
+            {
+                InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
+                InputParameterAdd.Varchar(objCommand, "ruc", ruc?.Trim());
+            }
+
+            
+            DataTable dataTable = Execute(objCommand);
+
+            List<List<string>> lista = new List<List<string>>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                List<string> item = new List<string>();
+
+                item.Add(Converter.GetGuid(row, "id_cliente").ToString());
+                item.Add(Converter.GetInt(row, "id_empresa").ToString());
+                item.Add(Converter.GetString(row, "codigo"));
+                item.Add(Converter.GetString(row, "nombre"));
+
+                lista.Add(item);
+            }
+
+            return lista;
         }
     }
 }

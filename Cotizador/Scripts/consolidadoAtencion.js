@@ -187,23 +187,21 @@ jQuery(function($) {
 
     
     var pagina = $("#pagina").val();
-    if (pagina == CODIGO_PAGINA_REGISTRO) {
         
-        
-        if (document.getElementById('consolidado_fecha')) {
-            $("#consolidado_fecha").datepicker({ dateFormat: "dd/mm/yy" });
-            var idCiudad = $("#consolidado_idCiudad").val();
-            var fecha = $("#consolidado_fecha").val();
+    if (document.getElementById('consolidado_fecha')) {
+        $("#consolidado_fecha").datepicker({ dateFormat: "dd/mm/yy" });
+        var idCiudad = $("#consolidado_idCiudad").val();
+        var fecha = $("#consolidado_fecha").val();
 
-            if (idCiudad != GUID_EMPTY && fecha != "") {
-                GridSelector.init();
-            }
-        }
-
-        if (document.getElementById('search_fecha')) {
-            $("#search_fecha").datepicker({ dateFormat: "dd/mm/yy" });
+        if (idCiudad != GUID_EMPTY && fecha != "") {
+            GridSelector.init();
         }
     }
+
+    if (document.getElementById('search_fecha')) {
+        $("#search_fecha").datepicker({ dateFormat: "dd/mm/yy" });
+    }
+    
     function limpiarFormulario() {
         $("#consolidado_fecha").val(new Date().toISOString().split('T')[0]);
         $("#consolidado_idVehiculo").val("");
@@ -370,31 +368,49 @@ jQuery(function($) {
                     '<td>' + c.fechaDesc + '</td>' +
                     '<td>' + (c.vehiculo ? c.vehiculo.placa : "") + '</td>' +
                     '<td>' + (c.chofer ? c.chofer.apellidoPaterno + ' ' + c.chofer.nombres : "") + '</td>' +
-                    '<td>' + (c.asistente ? c.asistente.apellidoPaterno + ' ' + c.asistente.nombres : "") + '</td>' +
+                    '<td>' + (c.asistente && c.asistente.idPersonalAlmacen > 0 ? c.asistente.apellidoPaterno + ' ' + c.asistente.nombres : "") + '</td>' +
                     '<td><button type="button" class="btn btn-primary btnVerConsolidadoAtencion" idConsolidadoAtencion="' + c.idConsolidadoAtencion + '">Ver</button></td>' +
                     '</tr>';
             }
             $("#tableConsolidados tbody").html(rows);
         }, 'JSON');
     });
+    
+    $("#btnEditar").click(function () {
+        var idConsolidado = $("#ver_idConsolidadoAtencion").val();
 
-    $(document).on('click', '.btnEditar', function() {
-        var id = $(this).data("id");
-        var c = CONSOLIDADO_LAST_SEARCH.find(x => x.idConsolidadoAtencion == id);
-        if (c) {
-            $("#consolidado_id").val(c.idConsolidadoAtencion);
-            // Formatear fecha para input date (yyyy-mm-dd)
-            var dateObj = new Date(parseInt(c.fecha.substr(6)));
-            $("#consolidado_fecha").val(dateObj.toISOString().split('T')[0]);
-            
-            $("#consolidado_idVehiculo").val(c.vehiculo ? c.vehiculo.idVehiculo : "");
-            $("#consolidado_idChofer").val(c.chofer ? c.chofer.idPersonalAlmacen : "");
-            $("#consolidado_idAsistente").val(c.asistente ? c.asistente.idPersonalAlmacen : "");
-            $("#consolidado_observaciones").val(c.observaciones);
+        $.ajax({
+            url: "/ConsolidadoAtencion/ConsultarSiExisteConsolidado",
+            type: 'POST',
+            async: false,
+            dataType: 'JSON',
+            data: {
+                idConsolidado: idConsolidado
+            },
+            success: function (resultado) {
+                if (resultado.existe == "false") {
 
-            $("#modalTitle").text("Editar Consolidado");
-            $("#modalEditarConsolidado").modal("show");
-        }
+                    $.ajax({
+                        url: "/ConsolidadoAtencion/IniciarEdicionConsolidado",
+                        type: 'POST',
+                        error: function (detalle) { alert("Ocurrió un problema al iniciar la edición."); },
+                        success: function (fileName) {
+                            window.location = '/ConsolidadoAtencion/Editar';
+                        }
+                    });
+
+                }
+                else {
+                    if (resultado.idConsolidado == 0) {
+                        alert('Está creando un nuevo consolidado; para continuar por favor diríjase a la página "Consolidado Atención - Registro/Edición" y luego haga clic en el botón Cancelar.');
+                    }
+
+                    else {
+                        alert('Ya se encuentra editando un consolidado para continuar por favor dirigase a la página "Consolidado Atención - Registro/Edición".');
+                    }
+                }
+            }
+        });
     });
 
     $(document).on('click', "button.btnVerConsolidadoAtencion", function () {
@@ -426,7 +442,7 @@ jQuery(function($) {
             success: function (result) {
                 var obj = result.consolidadoAtencion;
                 $('body').loadingModal('hide')
-                $("#ver_idConsolidadoAtencion").html(obj.idConsolidadoAtencion);
+                $("#ver_idConsolidadoAtencion").val(obj.idConsolidadoAtencion);
                 $("#ver_ciudad").html(obj.ciudad.nombre);
                 $("#ver_fecha").html(obj.fechaDesc);
                 $("#ver_vehiculo").html(obj.vehiculo.placa);
@@ -466,6 +482,44 @@ jQuery(function($) {
         });
     });
 
+    $("#btnCancelarConsolidado").click(function () {
+        $.confirm({
+            title: 'CONFIRMAR CANCELACIÓN',
+            content: '¿Esta seguro que desea cancelar el registro de consolidado?.',
+            type: 'orange',
+            buttons: {
+                SI: {
+                    text: 'SI',
+                    btnClass: 'btn-warning',
+                    action: function () {
+                        $.ajax({
+                            url: "/ConsolidadoAtencion/CancelarRegistro",
+                            type: 'POST',
+                            success: function () {
+                                window.location = '/ConsolidadoAtencion/List';
+                            }
+                        });
+                    }
+                },
+                NO: {
+                    text: 'NO',
+                    btnClass: 'btn-success',
+                    action: function () {
+
+                    }
+                }
+            }
+        });
+
+    });
+
+    $("#btnExportarExcelConsolidadoRepartoVer").click(function () {
+        var listaIds = [];
+
+        listaIds.push($("#ver_idConsolidadoAtencion").val());
+
+        GenerarExcelReparto(listaIds);
+    });
 
     $("#btnExportarExcelConsolidadoRepartoLista").click(function () {
         var listaIds = [];
@@ -498,7 +552,7 @@ jQuery(function($) {
                     maxPedidos = c.pedidos.length;
                 }
 
-                nombreArchivo = "CONSOLIDADO_REPARTO_" + c.fechaDesc.split('/').reverse().join('') + c.ciudad.nombre;
+                nombreArchivo = "CONSOLIDADO_REPARTO_" + c.fechaDesc.split('/').reverse().join('') + "_" + c.ciudad.nombre;
             });
 
             maxPedidos = maxPedidos > 10 ? maxPedidos : 10;
@@ -509,7 +563,7 @@ jQuery(function($) {
                     fecha: c.fechaDesc,
                     numero: "",
                     responsable: c.chofer.nombres + ' ' + c.chofer.apellidoPaterno,
-                    asistente: c.asistente ? c.asistente.nombres + ' ' + c.asistente.apellidoPaterno : "-",
+                    asistente: c.asistente && c.asistente.idPersonalAlmacen > 0 ? c.asistente.nombres + ' ' + c.asistente.apellidoPaterno : "-",
                     unidad: c.vehiculo.placa
                 };
 
@@ -746,16 +800,31 @@ jQuery(function($) {
             });
         }); 
 
+        const now = new Date();
+        const formattedDate = now.toISOString().slice(0, 10).replace(/-/g, "");  // yyyymmdd
+        const formattedTime = now.toTimeString().slice(0, 8).replace(/:/g, "");  // hhmmss
+        const fileName = `${nombreArchivo}_${formattedDate}${formattedTime}.xlsx`;
+
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = `${nombreArchivo}.xlsx`;
+        link.download = fileName;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
     }
+
+
+    $("#btnExportarExcelRutasVer").click(function () {
+        var listaIds = [];
+
+        listaIds.push($("#ver_idConsolidadoAtencion").val());
+
+        GenerarExcelRutas(listaIds);
+    });
+
 
     $("#btnExportarExcelRutasLista").click(function () {
         var listaIds = [];
@@ -788,7 +857,7 @@ jQuery(function($) {
                     maxPedidos = c.pedidos.length;
                 }
 
-                nombreArchivo = "RUTAS_" + c.fechaDesc.split('/').reverse().join('') + c.ciudad.nombre;
+                nombreArchivo = "RUTAS_" + c.fechaDesc.split('/').reverse().join('') + "_" + c.ciudad.nombre;
             });
 
             maxPedidos = maxPedidos > 10 ? maxPedidos : 10;
@@ -799,7 +868,7 @@ jQuery(function($) {
             lista.forEach(function (c) {
                 var nombreChoferAsistente = c.chofer.nombres + ' ' + c.chofer.apellidoPaterno;
 
-                if (c.asistente) {
+                if (c.asistente && c.asistente.idPersonalAlmacen > 0) {
                     nombreChoferAsistente = nombreChoferAsistente + '/' + c.asistente.nombres + ' ' + c.asistente.apellidoPaterno;
                 }
                 
@@ -817,7 +886,13 @@ jQuery(function($) {
                 lista.forEach(function (c) {
                     if (c.pedidos && c.pedidos[i]) {
                         var ped = c.pedidos[i];
-                        filaDatos.push((i + 1) || "", ped.numeroPedido || "", ped.cliente.nombreCliente || "", "");
+
+                        var nombreClientePedido = ped.cliente.nombreCliente;
+                        if (ped.entregaATerceros) {
+                            nombreClientePedido = nombreClientePedido + " (" + ped.nombreClienteTercero + ")";
+                        }
+
+                        filaDatos.push((i + 1) || "", ped.numeroPedido || "", nombreClientePedido || "", "");
                     } else {
                         filaDatos.push("", "", "", "");
                     }

@@ -344,7 +344,7 @@ namespace Cotizador.Controllers
                 return "";
             }
             
-            List<Cliente> lista = clienteBl.getClientesByRUC(ruc);
+            List<Cliente> lista = clienteBl.getClientesByRUC(ruc, usuario.idUsuario);
             List<Cliente> listaAgregados = new List<Cliente>();
 
             encontrados = lista.Count;

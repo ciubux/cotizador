@@ -215,7 +215,7 @@ namespace Cotizador.Controllers
             
             Guid idConsolidadoAtencion= Guid.Parse(Request["idConsolidadoAtencion"].ToString());
             ConsolidadoAtencion obj = bl.getConsolidadoAtencion(idConsolidadoAtencion);
-
+            this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION_VER] = obj;
             return JsonConvert.SerializeObject(new
             {
                 consolidadoAtencion = obj
@@ -230,6 +230,7 @@ namespace Cotizador.Controllers
             obj.IdUsuarioRegistro = Logueado.idUsuario;
 
             obj = bL.insertConsolidadoAtencion(obj);
+            this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION] = null;
             return JsonConvert.SerializeObject(obj);
         }
 
@@ -240,7 +241,38 @@ namespace Cotizador.Controllers
             obj.IdUsuarioRegistro = Logueado.idUsuario;
 
             obj = bL.updateConsolidadoAtencion(obj);
+            this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION] = null;
             return JsonConvert.SerializeObject(obj);
+        }
+
+        public String CancelarRegistro()
+        {
+            this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION] = null;
+            return "";
+        }
+
+        public String ConsultarSiExisteConsolidado()
+        {
+            Guid idConsolidado = Guid.Parse(Request["idConsolidado"].ToString());
+            ConsolidadoAtencionBL bL = new ConsolidadoAtencionBL();
+            ConsolidadoAtencion obj = bL.getConsolidadoAtencion(idConsolidado);
+            obj.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            String resultado = JsonConvert.SerializeObject(obj);
+            this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION_VER] = obj;
+
+            obj = (ConsolidadoAtencion)this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION];
+            if (obj == null)
+                return "{\"existe\":\"false\",\"idConsolidado\":\"\"}";
+            else
+                return "{\"existe\":\"true\",\"idConsolidado\":\"" + obj.idConsolidadoAtencion + "\"}";
+        }
+
+
+        public void IniciarEdicionConsolidado()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            ConsolidadoAtencion obj = (ConsolidadoAtencion)this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION_VER];
+            this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION] = obj;
         }
 
         public void ChangeInputForm()

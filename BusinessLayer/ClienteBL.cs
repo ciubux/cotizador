@@ -370,11 +370,11 @@ namespace BusinessLayer
             }
         }
 
-        public List<Cliente> getClientesByRUC(string ruc)
+        public List<Cliente> getClientesByRUC(string ruc, Guid idUsuario)
         {
             using (var clienteDAL = new ClienteDAL())
             {
-                List<Cliente> lista = clienteDAL.getClientesByRUC(ruc);
+                List<Cliente> lista = clienteDAL.getClientesByRUC(ruc, idUsuario);
 
                 return lista;
             }
@@ -992,6 +992,14 @@ namespace BusinessLayer
             using (var dal = new ClienteDAL())
             {
                 dal.UpdateReasignarCartera(idsCliente, idsVendedor, idsClienteSup, idsSupervisores, idsClienteAsis, idsAsistentes, fechaInicioVigencia, idUsuario);
+            }
+        }
+
+        public List<List<string>> OtrasEmpresasCliente(Guid idUsuario, Guid idCliente, String ruc, Guid idCiudad)
+        {
+            using (ClienteDAL dal = new ClienteDAL())
+            {
+                return dal.OtrasEmpresasCliente(idUsuario, idCliente, ruc, idCiudad);
             }
         }
     }

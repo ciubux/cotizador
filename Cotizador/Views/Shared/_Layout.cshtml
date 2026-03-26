@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "360";
+    TempData["ScriptVersion"] = "368";
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
 }
@@ -39,7 +39,7 @@
                 }
                 else
                 {
-                    <img src="~/images/logos/logo_@(usuario.codigoEmpresa).png" id="imagenMP" height="42" style="margin:3px; margin-right: 10px;" />
+                    <img src="~/images/logos/logo_@(usuario.codigoEmpresa).png" tooltip="@(usuario.razonSocialEmpresa)" id="imagenMP" height="42" style="margin:3px; margin-right: 10px;" />
                 }
 
             </div>

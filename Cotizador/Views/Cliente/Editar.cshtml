@@ -1085,20 +1085,37 @@
             </div>
             @if (cliente.usuario.restringeAtencionClienteSoloOC)
             {
-            <div class="row">
-                <div class="col-sm-12 col-lg-6">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <div class="onoffswitch">
-                                <input type="checkbox" name="onoffswitch" @(cliente.atencionSoloOc ? "checked" : "") class="onoffswitch-checkbox" id="chkAtencionSoloOc">
-                                <label class="onoffswitch-label" for="chkAtencionSoloOc"></label>
+                <div class="row">
+                    <div class="col-sm-12 col-lg-6">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="onoffswitch">
+                                    <input type="checkbox" name="onoffswitch" @(cliente.atencionSoloOc ? "checked" : "") class="onoffswitch-checkbox" id="chkAtencionSoloOc">
+                                    <label class="onoffswitch-label" for="chkAtencionSoloOc"></label>
+                                </div>
+                                <h5 id="lblChkAtencionSoloOc" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Atención sólo mediante Orden de Compra</h5>
                             </div>
-                            <h5 id="lblChkAtencionSoloOc" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Atención sólo mediante Orden de Compra</h5>
                         </div>
                     </div>
                 </div>
-            </div>
             }
+            @if (cliente.usuario.marcaClientePrioritario)
+            {
+                <div class="row">
+                    <div class="col-sm-12 col-lg-6">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="onoffswitch">
+                                    <input type="checkbox" name="onoffswitch" @(cliente.esClientePrioritario ? "checked" : "") class="onoffswitch-checkbox" id="chkEsClientePrioritario">
+                                    <label class="onoffswitch-label" for="chkEsClientePrioritario"></label>
+                                </div>
+                                <h5 id="lblChkEsClientePrioritario" style="width: 90%; font-size: 16px; margin-left: 45px; margin-top: -24px; font-weight:bold; cursor:pointer;">Es cliente prioritario de esta Empresa.</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            
             <div class="row">
                 <div class="col-sm-12 col-lg-6">
                     <div class="col-sm-12">
