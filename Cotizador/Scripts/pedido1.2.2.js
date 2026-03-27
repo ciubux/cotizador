@@ -32,6 +32,8 @@ jQuery(function ($) {
             }
         }
 
+        
+
         cargarChosenClienteSunat();
     });
 
@@ -69,6 +71,55 @@ jQuery(function ($) {
             success: function () { }
         });
     }
+
+    function otrasEmpresasClienteSede(idCliente, funcionContinuar) {
+        if ($("#pagina").val() == PAGINA_MANTENIMIENTO_PEDIDO_VENTA) {
+            $.ajax({
+                url: "/Cliente/OtrasEmpresasCliente",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idCliente: idCliente
+                },
+                success: function (lista) {
+                    if (lista.length > 0) {
+                        $.confirm({
+                            title: 'CLIENTE CRUZADO',
+                            content: 'El cliente ya está siendo atendido por un asesor de otra empresa. ¿Desea continuar con el registro?',
+                            type: 'orange',
+                            buttons: {
+                                SI: {
+                                    text: 'SI',
+                                    btnClass: 'btn-warning',
+                                    action: function () {
+                                        if (typeof funcionContinuar === 'function') {
+                                            funcionContinuar();
+                                        }
+                                    }
+                                },
+                                NO: {
+                                    text: 'NO',
+                                    btnClass: 'btn-success',
+                                    action: function () {
+                                        window.location = '/Pedido/CancelarCreacionPedido';
+                                    }
+                                }
+                            }
+                        });
+                    } else {
+                        if (typeof funcionContinuar === 'function') {
+                            funcionContinuar();
+                        }
+                    }
+                }
+            });
+        } else {
+            if (typeof funcionContinuar === 'function') {
+                funcionContinuar();
+            }
+        }
+    }
+
 
     function ConfirmDialogReload(message) {
         $('<div></div>').appendTo('body')
@@ -326,171 +377,169 @@ jQuery(function ($) {
 
         var idCliente = $(this).val();
 
-        $.ajax({
-            url: "/Pedido/GetCliente",
-            type: 'POST',
-            dataType: 'JSON',
-            data: {
-                idCliente: idCliente
-            },
-            success: function (cliente)
-            {
-                $("#pedido_cliente_habilitadoModificarDireccionEntrega").val(cliente.habilitadoModificarDireccionEntrega)
+        otrasEmpresasClienteSede(idCliente, function () {
+            $.ajax({
+                url: "/Pedido/GetCliente",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idCliente: idCliente
+                },
+                success: function (cliente) {
+                    $("#pedido_cliente_habilitadoModificarDireccionEntrega").val(cliente.habilitadoModificarDireccionEntrega)
 
 
-                if (cliente.correoEnvioFactura == null || cliente.correoEnvioFactura == "") {
-                    $.alert({
-                        title: '¡Advertencia!',
-                        type: 'orange',
-                        content: "Cliente no cuenta con correo para enviarle la factura electrónica, edite el cliente e intente seleccionarlo nuevamente.",
-                        buttons: {
-                            OK: function () {
-                                window.location = '/Pedido/Pedir';
+                    if (cliente.correoEnvioFactura == null || cliente.correoEnvioFactura == "") {
+                        $.alert({
+                            title: '¡Advertencia!',
+                            type: 'orange',
+                            content: "Cliente no cuenta con correo para enviarle la factura electrónica, edite el cliente e intente seleccionarlo nuevamente.",
+                            buttons: {
+                                OK: function () {
+                                    window.location = '/Pedido/Pedir';
+                                }
                             }
-                        }
-                    });
-                    return false;
-                }
+                        });
+                        return false;
+                    }
 
-                if (cliente.atencionSoloOc) {
-                    $.alert({
-                        title: '¡Advertencia!',
-                        type: 'orange',
-                        content: "Solo se pueden generar pedidos a este cliente por medio de Ordenes de Compra.",
-                        buttons: {
-                            OK: function () {
-                                window.location = '/Pedido/Pedir';
+                    if (cliente.atencionSoloOc) {
+                        $.alert({
+                            title: '¡Advertencia!',
+                            type: 'orange',
+                            content: "Solo se pueden generar pedidos a este cliente por medio de Ordenes de Compra.",
+                            buttons: {
+                                OK: function () {
+                                    window.location = '/Pedido/Pedir';
+                                }
                             }
-                        }
-                    });
-                    return false;
-                }
+                        });
+                        return false;
+                    }
 
-                if (cliente.facturaUnica) {
-                    $("#chkFacturaUnica").prop("checked", true);
-                } else {
-                    $("#chkFacturaUnica").prop("checked", false);
-                }
-             
-                
-                if ($("#pagina").val() == PAGINA_MANTENIMIENTO_PEDIDO_VENTA)
+                    if (cliente.facturaUnica) {
+                        $("#chkFacturaUnica").prop("checked", true);
+                    } else {
+                        $("#chkFacturaUnica").prop("checked", false);
+                    }
+
+
+                    if ($("#pagina").val() == PAGINA_MANTENIMIENTO_PEDIDO_VENTA)
+                        $("#idCiudad").attr("disabled", "disabled");
+
                     $("#idCiudad").attr("disabled", "disabled");
 
-                $("#idCiudad").attr("disabled", "disabled");
 
-
-                ////Direccion Entrega
-                var direccionEntregaListTmp = cliente.direccionEntregaList;
+                    ////Direccion Entrega
+                    var direccionEntregaListTmp = cliente.direccionEntregaList;
 
 
 
 
-                $('#pedido_direccionEntrega')
-                    .find('option')
-                    .remove()
-                    .end()
-                    ;
+                    $('#pedido_direccionEntrega')
+                        .find('option')
+                        .remove()
+                        .end()
+                        ;
 
-                window.setInterval($("#pedido_direccionEntrega").trigger("chosen:updated"), 15000);    
-              
-                $('#pedido_direccionEntrega').append($('<option>', {
-                    value: "",
-                    text: "Seleccione Dirección de Entrega"
-                }));
-              
+                    window.setInterval($("#pedido_direccionEntrega").trigger("chosen:updated"), 15000);
 
-                for (var i = 0; i < direccionEntregaListTmp.length; i++) {
                     $('#pedido_direccionEntrega').append($('<option>', {
-                        value: direccionEntregaListTmp[i].idDireccionEntrega,
-                        text: direccionEntregaListTmp[i].direccionConSede
+                        value: "",
+                        text: "Seleccione Dirección de Entrega"
                     }));
-                }
-                //$('#pedido_direccionEntrega').trigger('liszt:updated');
-                $('#pedido_direccionEntrega').prop('disabled', false)
-                
-
-            /*    window.setInterval($("#pedido_direccionEntrega").trigger("liszt:updated"), 15000);  
-                window.setInterval($("#pedido_direccionEntrega").trigger("chosen:updated"), 15000); */
-                $("#pedido_direccionEntrega").trigger("liszt:updated")
-                $("#pedido_direccionEntrega").trigger("chosen:updated")
-                $('#pedido_direccionEntrega').prop('disabled', false)
 
 
-                //Se limpia controles de Ubigeo
-                $("#ActualDepartamento").val("");
-                $("#ActualProvincia").val("");
-                $("#ActualDistrito").val("");
-               
-                toggleControlesUbigeo();
-             
-                $("#pedido_textoCondicionesPago").val(cliente.textoCondicionesPago);
+                    for (var i = 0; i < direccionEntregaListTmp.length; i++) {
+                        $('#pedido_direccionEntrega').append($('<option>', {
+                            value: direccionEntregaListTmp[i].idDireccionEntrega,
+                            text: direccionEntregaListTmp[i].direccionConSede
+                        }));
+                    }
+                    //$('#pedido_direccionEntrega').trigger('liszt:updated');
+                    $('#pedido_direccionEntrega').prop('disabled', false)
+
+
+                    /*    window.setInterval($("#pedido_direccionEntrega").trigger("liszt:updated"), 15000);  
+                        window.setInterval($("#pedido_direccionEntrega").trigger("chosen:updated"), 15000); */
+                    $("#pedido_direccionEntrega").trigger("liszt:updated")
+                    $("#pedido_direccionEntrega").trigger("chosen:updated")
+                    $('#pedido_direccionEntrega').prop('disabled', false)
+
+
+                    //Se limpia controles de Ubigeo
+                    $("#ActualDepartamento").val("");
+                    $("#ActualProvincia").val("");
+                    $("#ActualDistrito").val("");
+
+                    toggleControlesUbigeo();
+
+                    $("#pedido_textoCondicionesPago").val(cliente.textoCondicionesPago);
 
 
 
-                ///Solicitante
-                var solicitanteListTmp = cliente.solicitanteList;
+                    ///Solicitante
+                    var solicitanteListTmp = cliente.solicitanteList;
 
-                $('#pedido_solicitante')
-                    .find('option')
-                    .remove()
-                    .end()
-                    ;
+                    $('#pedido_solicitante')
+                        .find('option')
+                        .remove()
+                        .end()
+                        ;
 
-                $('#pedido_solicitante').append($('<option>', {
-                    value: "",
-                    text: "Seleccione Solicitante"
-                }));
-
-
-                for (var i = 0; i < solicitanteListTmp.length; i++) {
                     $('#pedido_solicitante').append($('<option>', {
-                        value: solicitanteListTmp[i].idSolicitante,
-                        text: solicitanteListTmp[i].nombre
+                        value: "",
+                        text: "Seleccione Solicitante"
                     }));
-                }
-
-                //To Do: Set horarios
-                $("#pedido_horaEntregaDesde").val(cliente.horaInicioPrimerTurnoEntregaFormat);
-                $("#pedido_horaEntregaHasta").val(cliente.horaFinPrimerTurnoEntregaFormat);
-                $("#pedido_horaEntregaAdicionalDesde").val(cliente.horaInicioSegundoTurnoEntregaFormat);
-                $("#pedido_horaEntregaAdicionalHasta").val(cliente.horaFinSegundoTurnoEntregaFormat);
-
-                $("#pedido_direccionEntrega_descripcion").val("")
-                $("#pedido_direccionEntrega_contacto").val("")
-                $("#pedido_direccionEntrega_telefono").val("")
-                $("#pedido_direccionEntrega_nombre").val("")
-                $("#pedido_direccionEntrega_codigoCliente").val("")
-                $("#pedido_direccionEntrega_direccionDomicilioLegal").val("")  
-                $("#ActualDepartamento").val("");
-                $("#ActualProvincia").val("");
-                $("#ActualDistrito").val("");
-                
-               // alert("asas")
-            //    return;
-                location.reload();
-
-                //window.setInterval($("#pedido_direccionEntrega").trigger("chosen:updated"), 5000);     
-                //$("#pedido_direccionEntrega").chosen({ placeholder_text_single: "Seleccione la Dirección de Entrega", no_results_text: "No se encontró Dirección de Entrega" }).on('chosen:showing_dropdown');
-                //$("#pedido_direccionEntrega").trigger("chosen:updated");
-          /*      $('#pedido_direccionEntrega')
-                    .val(1)
-                    .trigger('liszt:update')
-                    .removeClass('chzn-done');
-                */
-              /*  $('#test_chzn').remove();
 
 
-                $("#test").chosen({
-                    width: "220px",
-                    no_results_text: "test"
-                });*/
-              //  $('#pedido_direccionEntrega').chosen("destroy").chosen();
-           //     window.setInterval($("#pedido_direccionEntrega").trigger("chosen:updated"), 15000);     
-             //   $("#pedido_direccionEntrega").chosen({ placeholder_text_single: "Seleccione la Dirección de Entrega", no_results_text: "No se encontró Dirección de Entrega" }).on('chosen:showing_dropdown');
-                //location.reload();
-            }
-        });
+                    for (var i = 0; i < solicitanteListTmp.length; i++) {
+                        $('#pedido_solicitante').append($('<option>', {
+                            value: solicitanteListTmp[i].idSolicitante,
+                            text: solicitanteListTmp[i].nombre
+                        }));
+                    }
+
+                    $("#pedido_horaEntregaDesde").val(cliente.horaInicioPrimerTurnoEntregaFormat);
+                    $("#pedido_horaEntregaHasta").val(cliente.horaFinPrimerTurnoEntregaFormat);
+                    $("#pedido_horaEntregaAdicionalDesde").val(cliente.horaInicioSegundoTurnoEntregaFormat);
+                    $("#pedido_horaEntregaAdicionalHasta").val(cliente.horaFinSegundoTurnoEntregaFormat);
+
+                    $("#pedido_direccionEntrega_descripcion").val("")
+                    $("#pedido_direccionEntrega_contacto").val("")
+                    $("#pedido_direccionEntrega_telefono").val("")
+                    $("#pedido_direccionEntrega_nombre").val("")
+                    $("#pedido_direccionEntrega_codigoCliente").val("")
+                    $("#pedido_direccionEntrega_direccionDomicilioLegal").val("")
+                    $("#ActualDepartamento").val("");
+                    $("#ActualProvincia").val("");
+                    $("#ActualDistrito").val("");
+
+                    //    return;
+                    location.reload();
+
+                    //window.setInterval($("#pedido_direccionEntrega").trigger("chosen:updated"), 5000);     
+                    //$("#pedido_direccionEntrega").chosen({ placeholder_text_single: "Seleccione la Dirección de Entrega", no_results_text: "No se encontró Dirección de Entrega" }).on('chosen:showing_dropdown');
+                    //$("#pedido_direccionEntrega").trigger("chosen:updated");
+                    /*      $('#pedido_direccionEntrega')
+                              .val(1)
+                              .trigger('liszt:update')
+                              .removeClass('chzn-done');
+                          */
+                    /*  $('#test_chzn').remove();
       
+      
+                      $("#test").chosen({
+                          width: "220px",
+                          no_results_text: "test"
+                      });*/
+                    //  $('#pedido_direccionEntrega').chosen("destroy").chosen();
+                    //     window.setInterval($("#pedido_direccionEntrega").trigger("chosen:updated"), 15000);     
+                    //   $("#pedido_direccionEntrega").chosen({ placeholder_text_single: "Seleccione la Dirección de Entrega", no_results_text: "No se encontró Dirección de Entrega" }).on('chosen:showing_dropdown');
+                    //location.reload();
+                }
+            });
+        });      
     });
 
     

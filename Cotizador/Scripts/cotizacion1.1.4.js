@@ -70,7 +70,6 @@ jQuery(function ($) {
 
         $('#tipoCotizacion option[value="2"]').remove();
 
-        
     });
 
     function Alerta(message) {
@@ -91,6 +90,55 @@ jQuery(function ($) {
             });
         document.body.scrollTop = default_scrollTop;
     };
+
+    function otrasEmpresasClienteSede(idCliente, funcionContinuar) {
+        if ($("#pagina").val() == 1) {
+            $.ajax({
+                url: "/Cliente/OtrasEmpresasCliente",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idCliente: idCliente
+                },
+                success: function (lista) {
+                    if (lista.length > 0) {
+                        $.confirm({
+                            title: 'CLIENTE CRUZADO',
+                            content: 'El cliente ya está siendo atendido por un asesor de otra empresa. ¿Desea continuar con el registro?',
+                            type: 'orange',
+                            buttons: {
+                                SI: {
+                                    text: 'SI',
+                                    btnClass: 'btn-warning',
+                                    action: function () {
+                                        if (typeof funcionContinuar === 'function') {
+                                            funcionContinuar();
+                                        }
+                                    }
+                                },
+                                NO: {
+                                    text: 'NO',
+                                    btnClass: 'btn-success',
+                                    action: function () {
+                                        window.location = '/Cotizacion/CancelarCreacionCotizacion';
+                                    }
+                                }
+                            }
+                        });
+                    } else {
+                        if (typeof funcionContinuar === 'function') {
+                            funcionContinuar();
+                        }
+                    }
+                }
+            });
+        } else {
+            if (typeof funcionContinuar === 'function') {
+                funcionContinuar();
+            }
+        }
+    }
+
 
     function ConfirmDialogReload(message) {
         $('<div></div>').appendTo('body')
@@ -547,6 +595,7 @@ jQuery(function ($) {
     }
 
     $("#idCliente").change(function () {
+        
         $("#contacto").val("");
         var idClienteGrupo = $(this).val();
 
@@ -555,25 +604,27 @@ jQuery(function ($) {
         idClienteGrupo = idClienteGrupo.substr(1);
 
         if (tipoCliente == "c") {
-            $.ajax({
-                url: "/Cotizacion/GetCliente",
-                type: 'POST',
-                dataType: 'JSON',
-                data: {
-                    idCliente: idClienteGrupo
-                },
-                success: function (cliente) {
+            otrasEmpresasClienteSede(idClienteGrupo, function () {
+                $.ajax({
+                    url: "/Cotizacion/GetCliente",
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: {
+                        idCliente: idClienteGrupo
+                    },
+                    success: function (cliente) {
 
-                    if ($("#pagina").val() == 1) {
-                        $("#idCiudad").attr("disabled", "disabled");
-                        
+                        if ($("#pagina").val() == 1) {
+                            $("#idCiudad").attr("disabled", "disabled");
+
+                        }
+                        $("#cotizacion_textoCondicionesPago").val(cliente.textoCondicionesPago);
+                        $("#contacto").val(cliente.contacto);
+                        $("#clienteSedePrincipal").val(cliente.sedePrincipal);
+                        listaTextoSedesCliente = cliente.sedesString;
                     }
-                    $("#cotizacion_textoCondicionesPago").val(cliente.textoCondicionesPago);
-                    $("#contacto").val(cliente.contacto);
-                    $("#clienteSedePrincipal").val(cliente.sedePrincipal);
-                    listaTextoSedesCliente = cliente.sedesString;
-                }
-            });
+                });
+            });  
         }
         else {
             $.ajax({
@@ -588,7 +639,6 @@ jQuery(function ($) {
                     $("#contacto").val(grupo.contacto);
                 }
             });
-
         }
     });
 

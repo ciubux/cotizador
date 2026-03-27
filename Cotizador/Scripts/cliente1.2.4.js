@@ -405,7 +405,16 @@ jQuery(function ($) {
             }
         });
 
-        
+
+        var $inputRuc = $("#cliente_ruc");
+
+        if ($inputRuc.length > 0 && $inputRuc.val().trim().length > 8) {
+            var ruc = $inputRuc.val();
+            var idCiudad = $("#idCiudad").val();
+
+            otrasEmpresasClienteSede(idCiudad, ruc);
+        }
+
         var fecha = $("#chrFechaInicioVigenciaAsesor").val();
         $("#chrFechaInicioVigenciaAsesor").datepicker({ dateFormat: "dd/mm/yy", minDate: $("#fechaRegistro").val() }).datepicker("setDate", fecha);
 
@@ -1235,12 +1244,13 @@ jQuery(function ($) {
 
 
     $("#btnFinalizarEdicionCliente").click(function () {
+        var esClientePrioritario = $("#chkEsClientePrioritario").prop("checked");
 
-        if (OTRAS_EMPRESA_CLIENTE_SEDE.length > 0) {
+        if (OTRAS_EMPRESA_CLIENTE_SEDE.length > 0 && !esClientePrioritario) {
             var nombreEmpresa = $("#imagenMP").attr("tooltip");
 
             $.confirm({
-                title: 'CLIENTE EXITE EN OTRA EMPRESA',
+                title: 'CLIENTE EXISTE EN OTRA EMPRESA',
                 content: 'El cliente ya está siendo atendido por otro asesor de otra empresa. Si el cliente pertenece a ' + nombreEmpresa + ' debe marcarlo como prioritario, si no puede marcarlo como prioritario contáctese con su supervisor. ¿DESEA REGISTRAR EL CLIENTE DE TODO MODOS?',
                 type: 'orange',
                 buttons: {
@@ -1261,9 +1271,7 @@ jQuery(function ($) {
             });
         } else {
             iniciarRegistro();
-        }
-
-        
+        } 
     });
 
     function iniciarRegistro() {
@@ -3582,6 +3590,14 @@ jQuery(function ($) {
                     } else {
                         $("#verChkAtencionSoloOc_SI").hide();
                         $("#verChkAtencionSoloOc_NO").show();
+                    }
+
+                    if (cliente.esClientePrioritario) {
+                        $("#verChkEsClientePrioritario_SI").show();
+                        $("#verChkEsClientePrioritario_NO").hide();
+                    } else {
+                        $("#verChkEsClientePrioritario_SI").hide();
+                        $("#verChkEsClientePrioritario_NO").show();
                     }
 
                     if (cliente.configuraciones.facturacionCompleja) {
