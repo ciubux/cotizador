@@ -353,7 +353,7 @@ namespace Cotizador.ExcelExport
                 * ub.provincia,  ub.departamento, ma.observaciones,*/
 
             /*Cabecera, Sub total*/
-            int cTotal = 14 + 10;
+            int cTotal = 14 + 20;
 
             /*Se crean todas las celdas*/
             for (int r = 0; r < rows; r++)

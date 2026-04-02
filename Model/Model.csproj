@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="AlertaValidacion.cs" />
     <Compile Include="ConsolidadoAtencion.cs" />
+    <Compile Include="EmpresaProductoReservado.cs" />
     <Compile Include="EmpresaDescuento.cs" />
     <Compile Include="Fabricante.cs" />
     <Compile Include="DocumentoExterno.cs" />

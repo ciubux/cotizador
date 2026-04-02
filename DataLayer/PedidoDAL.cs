@@ -213,6 +213,8 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "entregaATerceros", pedido.entregaATerceros ? 1 : 0);
             InputParameterAdd.Guid(objCommand, "idClienteTercero", pedido.idClienteTercero);
 
+            InputParameterAdd.Int(objCommand, "validaProductosReservados", pedido.validaProductosReservados? 1 : 0);
+
             if (pedido.clasePedido == Pedido.ClasesPedido.Venta)
             {
                 InputParameterAdd.Char(objCommand, "tipoPedido", ((char)pedido.tipoPedido).ToString());
@@ -367,6 +369,8 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "facturaUnica", pedido.facturaUnica ? 1 : 0);
             InputParameterAdd.Int(objCommand, "ventaIndirecta", pedido.esVentaIndirecta ? 1 : 0);
             InputParameterAdd.Int(objCommand, "usaSerieTI", pedido.usaSerieTI);
+
+            InputParameterAdd.Int(objCommand, "validaProductosReservados", pedido.validaProductosReservados ? 1 : 0);
 
             DateTime dtTmp = DateTime.Now;
             String[] horaEntregaDesdeArray = pedido.horaEntregaDesde.Split(':');

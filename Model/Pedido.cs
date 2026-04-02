@@ -374,6 +374,8 @@ namespace Model
 
         public Boolean esPagoContado { get; set; }
 
+        public Boolean validaProductosReservados { get; set; }
+
         public List<GuiaRemision> guiaRemisionList { get; set; }
 
 

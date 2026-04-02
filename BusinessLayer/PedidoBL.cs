@@ -1306,7 +1306,7 @@ namespace BusinessLayer
             pedido.idPedido = Guid.Empty;
 
             ClienteDAL clienteDal = new ClienteDAL();
-            
+
             Guid idCliente = clienteDal.getClienteEmpresa(pedido.usuario.idEmpresa, pedido.ciudad.idCiudad);
             Cliente clienteEmp = clienteDal.getCliente(idCliente);
             pMP.cliente = clienteEmp;
@@ -1334,9 +1334,12 @@ namespace BusinessLayer
 
             pMP.observaciones = pMP.observaciones + " N° Pedido " + pedido.usuario.razonSocialEmpresa + ": " + pedido.numeroPedido.ToString() + ". Cliente: " + pedido.cliente.nombreCliente;
 
+            List<Guid> idsProductos = new List<Guid>();
+
             foreach (PedidoDetalle det in pMP.pedidoDetalleList)
             {
                 decimal margenDet = 0;
+                idsProductos.Add(det.producto.idProducto);
 
                 if (det.precioNeto > 0)
                 {
@@ -1409,6 +1412,13 @@ namespace BusinessLayer
                 pMP.observacionesGuiaRemision = pMP.observacionesGuiaRemision + " // Dejar en " + pedido.cliente.razonSocial;
             }
             
+            EmpresaProductoReservadoBL eprBl = new EmpresaProductoReservadoBL();
+            List<EmpresaProductoReservado> productosReservadosEncontrados = eprBl.ValidarProductos(empresa.idEmpresa, usuarioZAS.idUsuario, idsProductos, 1);
+
+            if (productosReservadosEncontrados.Count > 0) {
+                pMP.validaProductosReservados = true;
+            }
+
 
             await this.InsertPedido(pMP, true);
             this.SetPedidoMP(idPedidoTec, pMP.idPedido, "// N° Pedido MP: " + pMP.numeroPedido.ToString());
