@@ -1345,6 +1345,10 @@ jQuery(function ($) {
                     $("#btnFacturarGuiaRemision").hide();
                 }
 
+                if (guiaRemision.contieneProductosReservados) {
+                    $("#btnFacturarGuiaRemision").hide();
+                }
+
                 $("#tableDetalleGuia > tbody").empty();
 
                 FooTable.init('#tableDetalleGuia');

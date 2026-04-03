@@ -642,22 +642,35 @@ function facturarPedidoRelacionado() {
         success: function (resultado) {
             $('body').loadingModal('hide')
 
-            if (resultado.CPE_RESPUESTA_BE.CODIGO == "001") {
-                $.alert({
-                    title: 'REGISTRO EXITOSO',
-                    content: 'Se generó el documento electrónico: ' + resultado.serieNumero + ' para el pedido original de la guía.',
-                    type: 'green',
-                    buttons: {
-                        OK: function () {
-                            recagarGuiaRemision(idGuia);
+            if (resultado.success == 1) {
+                if (resultado.CPE_RESPUESTA_BE.CODIGO == "001") {
+                    $.alert({
+                        title: 'REGISTRO EXITOSO',
+                        content: 'Se generó el documento electrónico: ' + resultado.serieNumero + ' para el pedido original de la guía.',
+                        type: 'green',
+                        buttons: {
+                            OK: function () {
+                                recagarGuiaRemision(idGuia);
+                            }
                         }
-                    }
-                });
-            }
-            else {
+                    });
+                }
+                else {
+                    $.alert({
+                        title: 'OCURRIÓ UN ERROR AL GENERAR FACTURA PEDIDO RELACIONADO',
+                        content: MENSAJE_ERROR + ".\n" + "Detalle Error: " + resultado.CPE_RESPUESTA_BE.DETALLE,
+                        type: 'red',
+                        buttons: {
+                            OK: function () {
+                                recagarGuiaRemision(idGuia);
+                            }
+                        }
+                    });
+                }
+            } else {
                 $.alert({
-                    title: 'OCURRIÓ UN ERROR AL GENERAR FACTURA PEDIDO RELACIONADO',
-                    content: MENSAJE_ERROR + ".\n" + "Detalle Error: " + resultado.CPE_RESPUESTA_BE.DETALLE,
+                    title: 'OCURRIÓ UN PROBLEMA AL GENERAR FACTURA PEDIDO RELACIONADO',
+                    content: resultado.errorMessage,
                     type: 'red',
                     buttons: {
                         OK: function () {

@@ -1000,6 +1000,8 @@ namespace DataLayer
                 guiaRemision.pedido.vendedor.codigoNextSoft = Converter.GetString(row, "codigo_nextsoft_vendedor");
 
                 guiaRemision.pedido.entregaATerceros = Converter.GetInt(row, "entrega_terceros") == 1 ? true : false;
+                guiaRemision.bloqueaFacturaEspejoAutomatica = Converter.GetInt(row, "bloquea_factura_espejo_automatica") == 1 ? true : false;
+                guiaRemision.contieneProductosReservados = Converter.GetInt(row, "contiene_productos_reservados") == 1 ? true : false;
                 if (guiaRemision.pedido.entregaATerceros)
                 {
                     guiaRemision.pedido.idClienteTercero = Converter.GetGuid(row, "id_cliente_rel");

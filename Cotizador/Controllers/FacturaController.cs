@@ -405,10 +405,18 @@ namespace Cotizador.Controllers
         {
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-            MovimientoAlmacen movimientoAlmacen = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+            GuiaRemision movimientoAlmacen = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+
+            int success = 0;
+            string errorMessage = "";
 
             try
             {
+                if (movimientoAlmacen.bloqueaFacturaEspejoAutomatica)
+                {
+                    throw new Exception("Se bloqueó la emisión de la factura al pedido original.");
+                }
+
                 // CREAR GUIA, VENTA Y CPE
                 Guid idGuiaFic = Guid.Empty;
                 Guid idVentaFic = Guid.Empty;
@@ -444,8 +452,12 @@ namespace Cotizador.Controllers
 
                 CPE_RESPUESTA_BE cPE_RESPUESTA_BE = documentoVentaBL.procesarCPE(documentoVenta);
 
+                success = 1;
+
                 var otmp = new
                 {
+                    success = success,
+                    errorMessage = errorMessage,
                     CPE_RESPUESTA_BE = cPE_RESPUESTA_BE,
                     serieNumero = documentoVenta.serieNumero,
                     idDocumentoVenta = documentoVenta.idDocumentoVenta
@@ -458,7 +470,17 @@ namespace Cotizador.Controllers
                 Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
                 LogBL logBL = new LogBL();
                 logBL.insertLog(log);
-                return ex.ToString();
+                //return ex.ToString();
+
+                errorMessage = ex.ToString();
+                success = 0;
+                var res = new
+                {
+                    success = success,
+                    errorMessage = errorMessage
+                };
+
+                return JsonConvert.SerializeObject(res);
             }
         }
 

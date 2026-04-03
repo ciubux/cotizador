@@ -66,5 +66,8 @@ namespace Cotizador.Models.DTOshow
         
         public bool extornoRequiereFacturar { get; set; }
 
+        public bool bloqueaFacturaEspejoAutomatica { get; set; }
+        public bool contieneProductosReservados { get; set; }
+
     }
 }

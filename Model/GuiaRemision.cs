@@ -44,6 +44,10 @@ namespace Model
 
         public Boolean facturadoExterno { get; set; }
 
+        public Boolean bloqueaFacturaEspejoAutomatica { get; set; }
+        public Boolean contieneProductosReservados { get; set; }
+
+
         [Display(Name = "Atención Parcial:")]
         public Boolean atencionParcial { get; set; }
 
