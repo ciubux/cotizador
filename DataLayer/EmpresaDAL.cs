@@ -82,7 +82,7 @@ namespace DataLayer
 
             foreach (DataRow row in dataTable.Rows)
             {
-                obj.idEmpresa = Converter.GetInt(row, "id_origen");
+                obj.idEmpresa = Converter.GetInt(row, "id_empresa");
                 obj.codigo = Converter.GetString(row, "codigo");
                 obj.ruc = Converter.GetString(row, "ruc");
                 obj.razonSocial = Converter.GetString(row, "razon_social");

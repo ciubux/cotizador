@@ -1595,10 +1595,50 @@ namespace Cotizador.Controllers
                 if (numeroFechaEmision < numeroFechaMin) { errorRezago = true; }
             }
 
+            
+            /* VALIDAR PRODUCTOS RESERVADOS*/
+            if (guiaRemision.pedido.validaProductosReservados)
+            {
+                List<Guid> idsProductos = new List<Guid>();
+                foreach (DocumentoDetalle det in guiaRemision.documentoDetalle)
+                {
+                    if (det.cantidadPorAtender > 0) { 
+                        idsProductos.Add(det.producto.idProducto);
+                    }
+                }
+
+                EmpresaProductoReservadoBL eprBl = new EmpresaProductoReservadoBL();
+                List<EmpresaProductoReservado> reservados = eprBl.ValidarProductos(guiaRemision.pedido.empresaRelacionada.idEmpresa, usuario.idUsuario, idsProductos, 1);
+
+                if (reservados.Count > 0 && !(reservados.Count == idsProductos.Count))
+                {
+                    string skusReservados = string.Empty;
+                    foreach (EmpresaProductoReservado epr in reservados)
+                    {
+                        if (!skusReservados.Equals(string.Empty))
+                        {
+                            skusReservados += ", ";
+                        }
+                        skusReservados += epr.producto.sku;
+                    }
+
+                    //throw new Exception("Todos los productos deben ser reservados o la guía no debe contener ninguno. Productos Reservados: " + skusReservados + ".");
+                    
+                    return JsonConvert.SerializeObject(new
+                    {
+                        success = 0,
+                        error = "No se puede combinar productos reservados con productos no reservado. Productos Reservados: " + skusReservados + "."
+                    });
+                }
+            }
+            
+
+
+
             String error = String.Empty;
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();
-            /*try
-            {*/
+            try
+            {
                 if (errorRezago)
                 {
                     throw new Exception("La fecha de emisión no puede tener más de " + diasRezago.ToString() + " días de retraso.");
@@ -1610,11 +1650,16 @@ namespace Cotizador.Controllers
                     this.Session["seAtiendeTrasladoSedes"] = false;
                     this.Session["seAtiendeEntregaTerceros"] = false;
                 }
-            /*}
-            catch (DuplicateNumberDocumentException ex)
+            }
+            catch (Exception ex)
             {
-                error = ex.Message;
-            }*/
+                return JsonConvert.SerializeObject(new
+                {
+                    success = 0,
+                    error = ex.Message
+                });
+                //error = ex.Message;
+            }
 
             long numeroGuiaRemision = guiaRemision.numero;
             Guid idGuiaRemision = guiaRemision.idMovimientoAlmacen;
@@ -1629,8 +1674,18 @@ namespace Cotizador.Controllers
                 this.GuiaRemisionSession = null;
             }
 
-            String resultado = "{ \"serieNumeroGuia\":\"" + serieNumeroGuia + "\", \"idGuiaRemision\":\"" + idGuiaRemision + "\", \"error\":\"" + error + "\",     \"guiaRemisionValidacion\": " + jsonGuiaRemisionValidacion + "  }";
-            return resultado;
+            //String resultado = "{ \"serieNumeroGuia\":\"" + serieNumeroGuia + "\", \"idGuiaRemision\":\"" + idGuiaRemision + "\", \"error\":\"" + error + "\",     \"guiaRemisionValidacion\": " + jsonGuiaRemisionValidacion + "  }";
+
+            return JsonConvert.SerializeObject(new
+            {
+                success = 1,
+                error = error,
+                serieNumeroGuia = serieNumeroGuia,
+                idGuiaRemision = idGuiaRemision,
+                guiaRemisionValidacion = guiaRemision.guiaRemisionValidacion
+            });
+
+            //return resultado;
         }
 
         public async System.Threading.Tasks.Task<string> AtenderGuiaDiferida()

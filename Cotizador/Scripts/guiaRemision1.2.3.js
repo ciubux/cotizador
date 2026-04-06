@@ -845,25 +845,39 @@ jQuery(function ($) {
             },
             success: function (resultado) {
                 $('body').loadingModal('hide')
-                if (resultado.guiaRemisionValidacion.tipoErrorValidacion == 0) {
+
+                if (resultado.success == 1) {
+                    if (resultado.guiaRemisionValidacion.tipoErrorValidacion == 0) {
+                        $.alert({
+                            //icon: 'fa fa-warning',
+                            title: TITLE_EXITO,
+                            content: "La guía de remisión número " + resultado.serieNumeroGuia + " fue creada correctamente.",
+                            type: 'green',
+                            buttons: {
+                                OK: function () {
+
+                                    window.location = '/GuiaRemision/Index?idMovimientoAlmacen=' + resultado.idGuiaRemision;
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        mostrarMensajeErrorProceso(resultado.guiaRemisionValidacion.tipoErrorValidacionString + " " + resultado.guiaRemisionValidacion.descripcionError);
+                        activarBotonesCreacionModificacion();
+                    }
+                } else {
+                    activarBotonesCreacionModificacion();
                     $.alert({
                         //icon: 'fa fa-warning',
-                        title: TITLE_EXITO,
-                        content: "La guía de remisión número " + resultado.serieNumeroGuia + " fue creada correctamente.",
-                        type: 'green',
+                        title: "NO SE GENERÓ LA GUÍA",
+                        content: resultado.error,
+                        type: 'orange',
                         buttons: {
                             OK: function () {
-
-                                window.location = '/GuiaRemision/Index?idMovimientoAlmacen=' + resultado.idGuiaRemision;
                             }
                         }
                     });
                 }
-                else {
-                    mostrarMensajeErrorProceso(resultado.guiaRemisionValidacion.tipoErrorValidacionString + " " + resultado.guiaRemisionValidacion.descripcionError);
-                    activarBotonesCreacionModificacion();
-                }
-
 
 
                 /*

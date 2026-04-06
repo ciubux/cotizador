@@ -27,7 +27,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "idEmpresa", idEmpresa);
 
             DataTable tvp = new DataTable();
-            tvp.Columns.Add(new DataColumn("ID", typeof(int)));
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
 
             foreach (Guid item in idsProductos)
             {

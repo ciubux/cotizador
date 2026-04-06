@@ -893,6 +893,8 @@ namespace DataLayer
                 pedido.numeroPedidoMP = Converter.GetLong(row, "numero_pedido_mp");
                 pedido.facturadoAnticipadamentePedidoMP = Converter.GetInt(row, "facturado_anticipadamente_pedido_mp") == 1 ? true : false;
 
+                pedido.validaProductosReservados = Converter.GetInt(row, "valida_productos_reservados") == 1 ? true : false;
+                
                 pedido.moneda = new Moneda();
                 pedido.moneda.codigo = Converter.GetString(row, "moneda");
 
