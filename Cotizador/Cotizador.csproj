@@ -808,6 +808,7 @@
     <Content Include="Views\PersonalAlmacen\List.cshtml" />
     <Content Include="Views\ConsolidadoAtencion\List.cshtml" />
     <Content Include="Views\ConsolidadoAtencion\Editar.cshtml" />
+    <Content Include="Views\ConsolidadoAtencion\AsignarGuias.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

@@ -46,6 +46,30 @@ namespace Cotizador.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult AsignarGuias()
+        {
+            if (!Logueado.visualizaConsolidadoAtencion && !Logueado.modificaMaestroConsolidadoAtencion)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.AsignarGuiasConsolidadoAtencion;
+
+            if (this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION_VER] == null)
+            {
+                return RedirectToAction("List", "ConsolidadoAtencion");
+            }
+
+            ConsolidadoAtencion item = (ConsolidadoAtencion)this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION_VER];
+            this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION_ASIGNAR_GUIAS] = item;
+
+            ViewBag.pagina = (int)Constantes.paginas.AsignarGuiasConsolidadoAtencion;
+            ViewBag.item = item;
+
+            return View();
+        }
+
         public String SearchList()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaConsolidadoAtencion;
@@ -158,6 +182,38 @@ namespace Cotizador.Controllers
         }
 
         [HttpPost]
+        public string SetGuiasSeleccionadas(List<Guid> listaIds)
+        {
+            ConsolidadoAtencion obj = (ConsolidadoAtencion)this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION_ASIGNAR_GUIAS];
+            obj.guias = new List<GuiaRemision>();
+
+            if (listaIds != null)
+            {
+                foreach (Guid idGuia in listaIds)
+                {
+                    GuiaRemision item = new GuiaRemision();
+                    item.idMovimientoAlmacen = idGuia;
+                    obj.guias.Add(item);
+                }
+            }
+            this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION_ASIGNAR_GUIAS] = obj;
+
+            return JsonConvert.SerializeObject(new { success = 1 });
+        }
+
+        [HttpPost]
+        public string GuardarAsignaciónGuias()
+        {
+            ConsolidadoAtencion obj = (ConsolidadoAtencion)this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION_ASIGNAR_GUIAS];
+
+            obj.usuario = this.Logueado;
+            ConsolidadoAtencionBL bl = new ConsolidadoAtencionBL();
+            bl.insertGuiasSalida(obj);
+
+            return JsonConvert.SerializeObject(new { success = 1 });
+        }
+
+        [HttpPost]
         public string DataReparto(List<Guid> idsConsolidados)
         {
             List<ConsolidadoAtencion> lista = new List<ConsolidadoAtencion>();
@@ -200,6 +256,29 @@ namespace Cotizador.Controllers
                 Pedido item = lista.Where(p => p.idPedido.Equals(pedSel.idPedido)).FirstOrDefault();
                 
                 if(item != null)
+                {
+                    item.IUEstadoSeleccion = true;
+                }
+            }
+
+            return JsonConvert.SerializeObject(lista);
+        }
+
+        [HttpPost]
+        public string GetGuiasConsolidar()
+        {
+            ConsolidadoAtencion obj = (ConsolidadoAtencion)this.Session[Constantes.VAR_SESSION_CONSOLIDADOATENCION_ASIGNAR_GUIAS];
+
+            //SelectPedidosConsolidar
+            ConsolidadoAtencionBL bl = new ConsolidadoAtencionBL();
+            obj.usuario = this.Logueado;
+            List<GuiaRemision> lista = bl.GetGuiasRemisionConsolidar(obj);
+
+            foreach (GuiaRemision sel in obj.guias)
+            {
+                GuiaRemision item = lista.Where(g => g.idMovimientoAlmacen.Equals(sel.idMovimientoAlmacen)).FirstOrDefault();
+
+                if (item != null)
                 {
                     item.IUEstadoSeleccion = true;
                 }

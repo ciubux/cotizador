@@ -1627,7 +1627,7 @@ namespace Cotizador.Controllers
                     return JsonConvert.SerializeObject(new
                     {
                         success = 0,
-                        error = "No se puede combinar productos reservados con productos no reservado. Productos Reservados: " + skusReservados + "."
+                        error = "No se puede combinar productos reservados con productos no reservados. Productos Reservados: " + skusReservados + ". Genere guías parciales y luego emita una factura consolidada al cliente final en el entorno del pedido original."
                     });
                 }
             }

@@ -401,20 +401,29 @@ namespace Cotizador.Controllers
             }
         }
 
-        public String FacturarAPedidoRelacionado()
+        public String FacturarAPedidoRelacionado(int facturacionManual = 0)
         {
 
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             GuiaRemision movimientoAlmacen = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA_VER];
+
+           
+            bool esFacturacionManual = facturacionManual == 1;
+            
 
             int success = 0;
             string errorMessage = "";
 
             try
             {
-                if (movimientoAlmacen.bloqueaFacturaEspejoAutomatica)
+                if (!esFacturacionManual && movimientoAlmacen.bloqueaFacturaEspejoAutomatica)
                 {
-                    throw new Exception("Se bloqueó la emisión de la factura al pedido original.");
+                    return JsonConvert.SerializeObject(new
+                    {
+                        success = success,
+                        errorMessage = "Se bloqueó la emisión de la factura al pedido original.",
+                    });
+                    //throw new Exception("Se bloqueó la emisión de la factura al pedido original.");
                 }
 
                 // CREAR GUIA, VENTA Y CPE

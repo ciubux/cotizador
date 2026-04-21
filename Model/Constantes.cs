@@ -200,8 +200,9 @@ namespace Model
         public static String VAR_SESSION_CONSOLIDADOATENCION_BUSQUEDA = "consolidadoAtencionBusqueda";
         public static String VAR_SESSION_CONSOLIDADOATENCION_LISTA = "consolidadoAtencionList";
         public static String VAR_SESSION_CONSOLIDADOATENCION_VER = "consolidadoAtencionVer";
+        public static String VAR_SESSION_CONSOLIDADOATENCION_ASIGNAR_GUIAS = "consolidadoAtencionAsingarGuias";
 
-        
+
 
         public static String VAR_SESSION_RUBRO = "rubro";
         public static String VAR_SESSION_RUBRO_BUSQUEDA = "rubroBusqueda";
@@ -857,6 +858,9 @@ namespace Model
 
             [Display(Name = "REGISTRO/EDICION CONSOLIDADO ATENCION")]
             RegistroConsolidadoAtencion = 702,
+
+            [Display(Name = "ASIGNAR GUIAS CONSOLIDADO ATENCION")]
+            AsignarGuiasConsolidadoAtencion = 703,
 
             [Display(Name = "BUSQUEDA VEHICULOS")]
             BusquedaVehiculos = 705,

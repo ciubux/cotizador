@@ -66,6 +66,21 @@ namespace BusinessLayer
             }
             return lista;
         }
+        public List<GuiaRemision> GetGuiasRemisionConsolidar(ConsolidadoAtencion filtro)
+        {
+            using (ConsolidadoAtencionDAL dal = new ConsolidadoAtencionDAL())
+            {
+                return dal.GetGuiasRemisionConsolidar(filtro);
+            }
+        }
+
+        public void insertGuiasSalida(ConsolidadoAtencion obj)
+        {
+            using (ConsolidadoAtencionDAL dal = new ConsolidadoAtencionDAL())
+            {
+                dal.insertGuiasSalida(obj);
+            }
+        }
 
         public ConsolidadoAtencion resumenDetalleGuias(ConsolidadoAtencion obj)
         {

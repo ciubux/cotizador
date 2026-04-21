@@ -1332,6 +1332,12 @@ jQuery(function ($) {
                     $("#btnFacturarGuiaRemision").attr("facturaPedidoRelacionado", "0");
                 }
 
+                if (guiaRemision.bloqueaFacturaEspejoAutomatica) {
+                    $("#btnFacturarGuiaRemision").attr("bloqueaFacturaEspejoAutomatica", "1");
+                } else {
+                    $("#btnFacturarGuiaRemision").attr("bloqueaFacturaEspejoAutomatica", "0");
+                }
+
                 if (guiaRemision.esGuiaDiferida && guiaRemision.existeMovRelacionado && !guiaRemision.habilitaDescargarFacturaPedidoRelacionado) {
                     $("#btnFacturarGuiaRemision").attr("bloquearGuiaRelacionadaNoFacturada", "1");
                 }
@@ -1439,7 +1445,8 @@ jQuery(function ($) {
                 url: "/Factura/FacturarAPedidoRelacionado",
                 type: 'POST',
                 dataType: 'JSON',
-                data: {
+                data: { 
+                    facturacionManual: 1
                 },
                 error: function (resultado) {
                     $('body').loadingModal('hide')
@@ -1885,6 +1892,7 @@ jQuery(function ($) {
         var numeroGrupo = parseInt($("#ver_guiaRemision_numeroGrupo").val());
         var guiaAtiendePedido = parseInt($("#ver_guiaRemision_guiaAtiendePedido").val());
         var facturaPedidoRelacionado = parseInt($("#btnFacturarGuiaRemision").attr("facturaPedidoRelacionado"));
+        var bloqueaFacturaEspejoAutomatica = parseInt($("#btnFacturarGuiaRemision").attr("bloqueaFacturaEspejoAutomatica"));
 
         if (esRefacturacion == 1) {
             $("#div_sustento_nc").show();
@@ -1927,7 +1935,7 @@ jQuery(function ($) {
                 }
             }
         } else {
-            if (facturaPedidoRelacionado == 1) {
+            if (facturaPedidoRelacionado == 1 && bloqueaFacturaEspejoAutomatica == 0) {
                 $.alert({
                     title: "FACTURA PEDIDO RELACIONADO",
                     content: "Al emitir la factura de esta guía se emitirá automáticamente la factura del pedido de origen.",

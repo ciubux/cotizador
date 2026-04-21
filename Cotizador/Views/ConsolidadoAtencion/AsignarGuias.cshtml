@@ -1,0 +1,330 @@
+﻿@{
+    ViewBag.Title = "Asignar guías a Consolidado Atención";
+    Model.ConsolidadoAtencion item = ViewBag.item;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <form class="form-horizontal">
+
+        <input type="hidden" id="idConsolidadoAtencion" name="idConsolidadoAtencion" value="@item.idConsolidadoAtencion" />
+
+        <div class="row">
+            <div class="col-lg-4 col-xs-6">
+                <div class="form-group">
+                    <label class="control-label col-xs-4">Sede:</label>
+                    <div class="col-xs-8">
+                        <p class="form-control-static">@item.ciudad.nombre</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-xs-6">
+                <div class="form-group">
+                    <label class="control-label col-xs-4">Fecha:</label>
+                    <div class="col-xs-8">
+                        <p class="form-control-static">@item.fechaDesc</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4 col-xs-6">
+                <div class="form-group">
+                    <label class="control-label col-xs-4">Vehículo:</label>
+                    <div class="col-xs-8">
+                        <p class="form-control-static">@item.vehiculo.placa</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-xs-6">
+                <div class="form-group">
+                    <label class="control-label col-xs-4">Chofer:</label>
+                    <div class="col-xs-8">
+                        <p class="form-control-static">@item.chofer.nombreCompleto</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-xs-6">
+                @if(item.asistente != null && item.asistente.idPersonalAlmacen > 0) 
+                { 
+                <div class="form-group">
+                    <label class="control-label col-xs-4">Asistente:</label>
+                    <div class="col-xs-8">
+                        <p class="form-control-static">@item.asistente.nombreCompleto</p>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+
+        
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="grid-selector-container">
+                    <div class="grid-selector-toolbar">
+                        <h2 class="grid-selector-title" id="gs-title">Selección de Guías</h2>
+                        <button class="grid-selector-btn" id="gs-toggle-btn" type="button">Ver Seleccionados (0)</button>
+                    </div>
+
+                    <div id="gs-wrapper" class="grid-selector-wrapper">
+                        <div class="grid-selector-header-cell gs-col-check"></div>
+                        <div class="grid-selector-header-cell">Nro Guia.</div>
+                        <div class="grid-selector-header-cell">Nro Pedido.</div>
+                        <div class="grid-selector-header-cell">Cliente</div>
+                        <div class="grid-selector-header-cell">Fecha Emisión</div>
+                        <div class="grid-selector-header-cell">Fecha Traslado</div>
+                        <div id="gs-body" style="display: contents;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <div class="row">
+            <div class="pull-right">
+                <button type="button" id="btnCancelarAsignacionGuias" class="btn btn-danger">Cancelar</button>
+                <button id="btnFinalizarAsignacionGuias" type="button" class="btn btn-success">Finalizar</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+<script type="text/javascript">
+
+const GridGuiasSelector = {
+    isSelectionMode: false,
+    data: [],
+
+    init: async function () {
+        this.cacheDOM();
+        this.bindEvents();
+        //this.render();
+        await this.fetchFromDB();
+    },
+
+    cacheDOM: function () {
+        this.container = document.getElementById('gs-wrapper');
+        this.body = document.getElementById('gs-body');
+        this.btn = document.getElementById('gs-toggle-btn');
+        this.title = document.getElementById('gs-title');
+        this.checkHeaders = document.querySelectorAll('.gs-col-check');
+    },
+
+    bindEvents: function () {
+        this.btn.addEventListener('click', () => this.toggleMode());
+    },
+
+    // Simulación de llamada AJAX
+    fetchFromDB: async function () {
+
+        try {
+            this.body.innerHTML = `<div class="grid-selector-cell" style="grid-column: 1 / -1; justify-content: center; padding: 20px;">Cargando datos...</div>`;
+
+            const response = await fetch('/ConsolidadoAtencion/GetGuiasConsolidar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al consultar Guías disponibles');
+            }
+
+            // Convertimos la respuesta a JSON
+            const rawData = await response.json();
+
+            this.data = rawData.map(item => ({
+                id: item.idMovimientoAlmacen,
+                guia: item.serieDocumento + "-" + item.numeroDocumento,
+                pedido: item.pedido.numeroPedido,
+                cliente: item.clienteVer.nombreCliente,
+                fechaEmision: item.fechaEmisionFormatoImpresion,
+                fechaTraslado: item.fechaTrasladoFormatoImpresion,
+                selected: item.IUEstadoSeleccion
+            }));
+
+            this.render();
+
+        } catch (error) {
+            console.error('Error al obtener datos:', error);
+            this.body.innerHTML = `<div class="grid-selector-cell" style="grid-column: 1 / -1; justify-content: center; padding: 20px; color: red;">Error al conectar con la base de datos</div>`;
+        }
+
+        /*this.data = [
+            { id: 1, cliente: "Inversiones Lima", fecha: "2026-01-10", estado: "Completo", obs: "Prioridad alta", selected: false },
+            { id: 2, cliente: "Tech Solutions", fecha: "2026-01-15", estado: "Completo", obs: "Revisar contrato", selected: true },
+            { id: 3, cliente: "Logística S.A.", fecha: "2026-01-20", estado: "Incompleto", obs: "Pendiente de pago", selected: false }
+        ];*/
+        this.render();
+    },
+
+    toggleSelection: function (id) {
+        const item = this.data.find(d => d.id === id);
+        if (item) item.selected = !item.selected;
+        this.updateButtonLabel();
+    },
+
+    updateButtonLabel: function () {
+        const count = this.data.filter(d => d.selected).length;
+        this.btn.innerText = this.isSelectionMode ? `Terminar Selección (${count})` : "Seleccionar Guías";
+    },
+
+    toggleMode: async function () {
+        this.isSelectionMode = !this.isSelectionMode;
+        if (!this.isSelectionMode) {
+            const selectedIds = this.data
+                .filter(item => item.selected)
+                .map(item => item.id);
+
+            const response = await fetch('/ConsolidadoAtencion/SetGuiasSeleccionadas', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                // El arreglo debe convertirse a una cadena JSON
+                body: JSON.stringify({
+                    listaIds: selectedIds
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al guardar guías seleccionadas');
+            }
+        }
+
+        this.render();
+    },
+
+    render: function () {
+        this.body.innerHTML = '';
+
+        var botonGuardar = document.getElementById('btnFinalizarAsignacionGuias');
+
+        if (this.isSelectionMode) {
+            this.container.classList.remove('no-check');
+            this.checkHeaders.forEach(el => el.classList.remove('grid-selector-hidden'));
+            this.title.innerText = "Selección de Guías";
+
+            botonGuardar.style.visibility = 'hidden';
+        } else {
+            this.container.classList.add('no-check');
+            this.checkHeaders.forEach(el => el.classList.add('grid-selector-hidden'));
+            this.title.innerText = "Guías Seleccionados";
+
+            botonGuardar.style.visibility = 'visible';
+        }
+
+        this.updateButtonLabel();
+
+        // 2. Filtrar items
+        const visibleItems = this.isSelectionMode ? this.data : this.data.filter(d => d.selected);
+
+        if (visibleItems.length === 0) {
+            this.body.innerHTML = `<div class="grid-selector-cell" style="grid-column: 1 / -1; justify-content: center; padding: 40px; color: var(--gs-text-muted);">No hay registros para mostrar</div>`;
+            return;
+        }
+
+        // 3. Crear fragmento para rendimiento
+        visibleItems.forEach(item => {
+            const rowContent = `
+                <div class="grid-selector-cell gs-col-check ${this.isSelectionMode ? '' : 'grid-selector-hidden'}">
+                    <input type="checkbox" class="grid-selector-check-input" ${item.selected ? 'checked' : ''} onchange="GridGuiasSelector.toggleSelection('${item.id}')">
+                </div>
+                <div class="grid-selector-cell"><b>${item.guia}</b></div>
+                <div class="grid-selector-cell"><b>${item.pedido}</b></div>
+                <div class="grid-selector-cell">${item.cliente}</div>
+                <div class="grid-selector-cell">${item.fechaEmision}</div>
+                <div class="grid-selector-cell">${item.fechaTraslado}</div>
+            `;
+
+            const rowWrapper = document.createElement('div');
+            rowWrapper.style.display = 'contents';
+            rowWrapper.className = 'grid-selector-row';
+            rowWrapper.innerHTML = rowContent;
+            this.body.appendChild(rowWrapper);
+        });
+    }
+};
+
+    
+    
+
+function funcionesAsignarGuias() {
+    $(document).ready(function () {
+        GridGuiasSelector.init();
+    });
+
+    $("#btnCancelarAsignacionGuias").click(function () {
+        $.confirm({
+            title: 'CONFIRMAR CANCELACIÓN',
+            content: '¿Esta seguro que desea cancelar la asignación de guías?.',
+            type: 'orange',
+            buttons: {
+                SI: {
+                    text: 'SI',
+                    btnClass: 'btn-warning',
+                    action: function () {
+                        window.location = '/ConsolidadoAtencion/List';
+                    }
+                },
+                NO: {
+                    text: 'NO',
+                    btnClass: 'btn-success',
+                    action: function () {
+
+                    }
+                }
+            }
+        });
+
+    });
+
+    $("#btnFinalizarAsignacionGuias").click(function () {
+        var url = "/ConsolidadoAtencion/GuardarAsignaciónGuias";
+
+        var count = GridGuiasSelector.data.filter(d => d.selected).length;
+
+        if (count <= 0) {
+            $.alert({
+                title: 'Datos Incompletos',
+                content: 'Debe seleccionar por lo menos una guía.',
+                type: 'orange',
+                buttons: {
+                    OK: function () { }
+                }
+            });
+
+            return;
+        }
+
+        var data = {
+        };
+
+
+        $('body').loadingModal({ text: 'Guardando...' });
+        $.post(url, data, function (res) {
+            $('body').loadingModal('hide');
+            window.location = '/ConsolidadoAtencion/List';
+        }, 'JSON');
+    });
+}
+
+if (window.addEventListener) 
+{
+    window.addEventListener('load', funcionesAsignarGuias, false); 
+}
+else if (window.attachEvent) 
+{
+    window.attachEvent('onload', funcionesAsignarGuias);
+}
+</script>
+

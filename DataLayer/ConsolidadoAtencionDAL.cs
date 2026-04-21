@@ -4,6 +4,7 @@ using Model;
 using Model.CONFIGCLASSES;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -25,6 +26,7 @@ namespace DataLayer
             DataSet dataSet = ExecuteDataSet(objCommand);
             DataTable consolidadoTable = dataSet.Tables[0];
             DataTable pedidosTable = dataSet.Tables[1];
+            DataTable guiasTable = dataSet.Tables[2];
 
             ConsolidadoAtencion obj = new ConsolidadoAtencion();
 
@@ -103,6 +105,36 @@ namespace DataLayer
                 obj.pedidos.Add(pedido);
             }
 
+            obj.guias = new List<GuiaRemision>();
+            foreach (DataRow row in guiasTable.Rows)
+            {
+                GuiaRemision guia = new GuiaRemision();
+
+                guia.idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
+                guia.serieDocumento = Converter.GetString(row, "serie_documento");
+                guia.numeroDocumento = Converter.GetLong(row, "numero_documento");
+                guia.fechaTraslado = Converter.GetDateTime(row, "fecha_traslado");
+                guia.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
+
+                guia.pedido = new Pedido();
+                guia.pedido.idPedido = Converter.GetGuid(row, "id_pedido");
+                guia.pedido.numeroPedido = Converter.GetLong(row, "numero_pedido");
+                guia.pedido.entregaATerceros = Converter.GetInt(row, "entrega_terceros") == 1 ? true : false;
+
+                guia.clienteVer = new Cliente();
+                guia.clienteVer.ruc = Converter.GetString(row, "ruc");
+                guia.clienteVer.nombreComercial = Converter.GetString(row, "nombre_comercial_cliente");
+                guia.clienteVer.codigo = Converter.GetString(row, "codigo");
+                guia.clienteVer.razonSocial = Converter.GetString(row, "razon_social");
+                guia.clienteVer.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento_cliente");
+
+                if (guia.pedido.entregaATerceros)
+                {
+                    string nombreClienteRel = Converter.GetString(row, "nombre_cliente_rel");
+                    guia.clienteVer.razonSocial = nombreClienteRel + " (" + guia.clienteVer.razonSocial + ")";
+                }
+                obj.guias.Add(guia);
+            }
 
             return obj;
         }
@@ -380,6 +412,73 @@ namespace DataLayer
             return lista;
         }
 
+        public List<GuiaRemision> GetGuiasRemisionConsolidar(ConsolidadoAtencion filtro)
+        {
+            var objCommand = GetSqlCommand("ps_guias_consolidar_atencion");
+
+            InputParameterAdd.Guid(objCommand, "idConsolidado", filtro.idConsolidadoAtencion);
+            InputParameterAdd.Guid(objCommand, "idUsuario", filtro.usuario.idUsuario);
+            
+            DataTable dataTable = Execute(objCommand);
+            List<GuiaRemision> lista = new List<GuiaRemision>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                GuiaRemision obj = new GuiaRemision();
+
+                obj.idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
+                obj.serieDocumento = Converter.GetString(row, "serie_documento");
+                obj.numeroDocumento = Converter.GetLong(row, "numero_documento");
+                obj.fechaTraslado = Converter.GetDateTime(row, "fecha_traslado");
+                obj.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
+                
+                obj.pedido = new Pedido();
+                obj.pedido.idPedido = Converter.GetGuid(row, "id_pedido");
+                obj.pedido.numeroPedido = Converter.GetLong(row, "numero_pedido");
+                obj.pedido.entregaATerceros = Converter.GetInt(row, "entrega_terceros") == 1 ? true : false;
+
+                obj.clienteVer = new Cliente();
+                obj.clienteVer.ruc = Converter.GetString(row, "ruc");
+                obj.clienteVer.nombreComercial = Converter.GetString(row, "nombre_comercial_cliente");
+                obj.clienteVer.codigo = Converter.GetString(row, "codigo");
+                obj.clienteVer.razonSocial = Converter.GetString(row, "razon_social");
+                obj.clienteVer.tipoDocumentoIdentidad = (DocumentoVenta.TiposDocumentoIdentidad)Converter.GetInt(row, "tipo_documento_cliente");
+
+                if (obj.pedido.entregaATerceros)
+                {
+                    string nombreClienteRel = Converter.GetString(row, "nombre_cliente_rel");
+                    obj.clienteVer.razonSocial = nombreClienteRel + " (" + obj.clienteVer.razonSocial + ")";
+                }
+                lista.Add(obj);
+            }
+            return lista;
+        }
+
+
+        public void insertGuiasSalida(ConsolidadoAtencion obj)
+        {
+            var objCommand = GetSqlCommand("pi_guias_consolidado_atencion");
+            InputParameterAdd.Guid(objCommand, "idConsolidado", obj.idConsolidadoAtencion);
+            InputParameterAdd.Guid(objCommand, "idUsuario", obj.usuario.idUsuario);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            foreach (GuiaRemision item in obj.guias)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = item.idMovimientoAlmacen;
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idsMovimientosAlmacen", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+
+            ExecuteNonQuery(objCommand);
+        }
+
 
         // Método privado para evitar repetir código de mapeo entre SELECT individual y lista
         private void MapearObjeto(ConsolidadoAtencion obj, DataRow row)
@@ -406,5 +505,6 @@ namespace DataLayer
             obj.asistente.apellidoMaterno = Converter.GetString(row, "asistente_apellido_materno");
             obj.asistente.nombres = Converter.GetString(row, "asistente_nombres");
         }
+
     }
 }

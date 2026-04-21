@@ -513,6 +513,10 @@ jQuery(function($) {
 
     });
 
+    $("#btnAsignarGuiasRemision").click(function () {
+        window.location = '/ConsolidadoAtencion/AsignarGuias';
+    });
+
     $("#btnExportarExcelConsolidadoRepartoVer").click(function () {
         var listaIds = [];
 
