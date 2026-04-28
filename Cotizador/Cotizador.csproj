@@ -235,6 +235,7 @@
     <Compile Include="Controllers\DocumentoExternoController.cs" />
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Controllers\EmpresaDescuentoController.cs" />
+    <Compile Include="Controllers\ProductoControlStockController.cs" />
     <Compile Include="Controllers\PersonalAlmacenController.cs" />
     <Compile Include="Controllers\ConsolidadoAtencionController.cs" />
     <Compile Include="Controllers\VehiculoController.cs" />
@@ -497,6 +498,7 @@
     <Content Include="images\user_icon_2.png" />
     <Content Include="Scripts\excellib\exceljs.min.js" />
     <Content Include="Scripts\empresaDescuento.js" />
+    <Content Include="Scripts\productoControlStock.js" />
     <Content Include="Scripts\personalAlmacen.js" />
     <Content Include="Scripts\consolidadoAtencion.js" />
     <Content Include="Scripts\vehiculo.js" />
@@ -809,6 +811,7 @@
     <Content Include="Views\ConsolidadoAtencion\List.cshtml" />
     <Content Include="Views\ConsolidadoAtencion\Editar.cshtml" />
     <Content Include="Views\ConsolidadoAtencion\AsignarGuias.cshtml" />
+    <Content Include="Views\ProductoControlStock\ControlAlertaStock.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

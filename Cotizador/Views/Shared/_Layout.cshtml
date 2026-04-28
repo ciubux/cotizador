@@ -176,6 +176,7 @@
                         var linkMantenimientoFabricante = "";
                         var linkMantenimientoEmpresaDescuento = "";
 
+                        var linkControlStock = "";
                     }
                     @if (this.Session["pagina"] != null)
                     {
@@ -227,6 +228,7 @@
                             case 722: linkReporteStock = "active"; linkMaestros = "active"; break;
                             case 725: linkRegistrarAjusteStock = "active"; linkMovimientosAlmacen = "active"; break;
                             case 726: linkBusquedaAjusteStock = "active"; linkMovimientosAlmacen = "active"; break;
+                            case 728: linkControlStock = "active"; linkMovimientosAlmacen = "active"; break;
 
                             case 705: linkBusquedaVehiculos = "active"; linkMovimientosAlmacen = "active"; break;
                             case 706: linkBusquedaPersonalAlmacen = "active"; linkMovimientosAlmacen = "active"; break;
@@ -380,7 +382,7 @@
                             </li>
                         }
 
-                        if (usuario.creaGuias || usuario.administraGuias || usuario.visualizaGuias || usuario.registraAjusteStock)
+                        if (usuario.creaGuias || usuario.administraGuias || usuario.visualizaGuias || usuario.registraAjusteStock || usuario.visualizaControlStock)
                         {
 
                             <li class="@linkMovimientosAlmacen">
@@ -416,6 +418,11 @@
                                     @if (usuario.registraAjusteStock)
                                     {
                                         <li id="linkRegistraAjusteStock" class="@linkRegistrarAjusteStock">@Html.ActionLink("Almacén - Registrar Ajuste Stock", "Editar", "AjusteAlmacen")</li>
+                                    }
+
+                                    @if (usuario.visualizaControlStock)
+                                    {
+                                        <li id="linkControlStock" class="@linkControlStock">@Html.ActionLink("Control Stock", "ControlAlertaStock", "ProductoControlStock")</li>
                                     }
 
                                     @if (usuario.visualizaConsolidadoAtencion)

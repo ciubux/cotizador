@@ -619,6 +619,8 @@ namespace Model
 
         public const String EDITA_CONFIGURACION_EMPRESA = "P151";
 
+        public const String VISUALIZA_CONTROL_STOCK = "P728";
+
         public enum paginas
         {
             /*COTIZACION*/
@@ -812,6 +814,9 @@ namespace Model
             RegistrarAjusteAlmacen = 725,
             [Display(Name = "BÚSQUEDA AJUSTE STOCK")]
             BusquedaAjusteAlmacen = 726,
+
+            [Display(Name = "CONTROL STOCK")]
+            ControlStock = 728,
 
             [Display(Name = "REPORTE SELLOUT PERSONALIZADO")]
             ReporteSellOutPersonalizado = 901,

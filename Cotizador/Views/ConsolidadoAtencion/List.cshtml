@@ -144,21 +144,49 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <table id="tablePedidosConsolidado" class="table" data-editing="false">
-                                <thead>
-                                    <tr>
-                                        <th data-name="idPedido" data-visible="false"></th>
-                                        <th data-name="numero" data-sortable="false">Número Pedido</th>
-                                        <th data-name="cliente" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cliente</th>
-                                        <th data-name="fechaEntrega" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Fecha Entrega</th>
-                                        <th data-name="Estado Stock" data-sortable="false" data-breakpoints="xs">Estado Stock</th>
-                                        <th data-name="Observaciones" data-sortable="false">Observaciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" id="showGuias" href="#verconsolidado_guias">GUÍAS</a></li>
+                        <li><a data-toggle="tab" id="showPedidos" href="#verconsolidado_pedidos">PEDIDOS</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="verconsolidado_guias" class="tab-pane fade in active">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <table id="tableGuiasConsolidado" class="table" data-editing="false">
+                                        <thead>
+                                            <tr>
+                                                <th data-name="idGuia" data-visible="false"></th>
+                                                <th data-name="numeroGuia" data-sortable="false">N° Guía</th>
+                                                <th data-name="numeroPedido" data-sortable="false" data-visible="true" data-breakpoints="xs sm">N° Pedido</th>
+                                                <th data-name="cliente" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cliente</th>
+                                                <th data-name="fechaEmision" data-sortable="false" data-breakpoints="xs">Fecha Emisión</th>
+                                                <th data-name="Observaciones" data-sortable="false">Fecha Traslado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="verconsolidado_pedidos" class="tab-pane fade">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <table id="tablePedidosConsolidado" class="table" data-editing="false">
+                                        <thead>
+                                            <tr>
+                                                <th data-name="idPedido" data-visible="false"></th>
+                                                <th data-name="numero" data-sortable="false">Número Pedido</th>
+                                                <th data-name="cliente" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Cliente</th>
+                                                <th data-name="fechaEntrega" data-sortable="false" data-visible="true" data-breakpoints="xs sm">Fecha Entrega</th>
+                                                <th data-name="Estado Stock" data-sortable="false" data-breakpoints="xs">Estado Stock</th>
+                                                <th data-name="Observaciones" data-sortable="false">Observaciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>

@@ -451,6 +451,7 @@ jQuery(function($) {
                 $("#ver_observaciones").html(obj.observaciones);
              
                 var pedidosList = obj.pedidos;
+                var guiasList = obj.guias;
 
                 if (obj.esEditable) {
                     $("#btnEditar").show();
@@ -458,11 +459,29 @@ jQuery(function($) {
                     $("#btnEditar").hide();
                 }
 
+                $("#tableGuiasConsolidado > tbody").empty();
+                for (var i = 0; i < guiasList.length; i++) {
+
+                    var guiaRow = '<tr data-expanded="true">' +
+                        '<td>  ' + guiasList[i].idMovimientoAlmacen + '</td>' +
+                        '<td>  ' + guiasList[i].serieDocumento + "-" + guiasList[i].numeroDocumento + '  </td>' +
+                        '<td>  ' + guiasList[i].pedido.numeroPedido + '  </td>' +
+                        '<td>  ' + guiasList[i].clienteVer.nombreCliente + '  </td>' +
+                        '<td>  ' + guiasList[i].fechaEmisionFormatoImpresion + ' </td>' +
+                        '<td>  ' + guiasList[i].fechaTrasladoFormatoImpresion + ' </td>' +
+                        '</tr>';
+
+                    $("#tableGuiasConsolidado").append(guiaRow);
+
+                }
+                FooTable.init('#tableGuiasConsolidado');
+
+
                 $("#tablePedidosConsolidado > tbody").empty();
                 for (var i = 0; i < pedidosList.length; i++) {
                     var estadoStock = pedidosList.stockConfirmado == 1 ? 'Completo' : 'Imcompleto';
 
-                    var clienteRow = '<tr data-expanded="true">' +
+                    var pedidoRow = '<tr data-expanded="true">' +
                         '<td>  ' + pedidosList[i].idPedido + '</td>' +
                         '<td>  ' + pedidosList[i].numeroPedido + '  </td>' +
                         '<td>  ' + pedidosList[i].cliente.nombreCliente + '  </td>' +
@@ -471,7 +490,7 @@ jQuery(function($) {
                         '<td>  ' + pedidosList[i].observaciones + '  </td>' +
                         '</tr>';
 
-                    $("#tablePedidosConsolidado").append(clienteRow);
+                    $("#tablePedidosConsolidado").append(pedidoRow);
 
                 }
                 FooTable.init('#tablePedidosConsolidado');

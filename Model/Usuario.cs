@@ -266,6 +266,8 @@ namespace Model
 
         public bool saltaValidacionStock { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.SALTA_VALIDACION_STOCK)).FirstOrDefault() != null; } }
 
+        public bool visualizaControlStock { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_CONTROL_STOCK)).FirstOrDefault() != null; } }
+
 
         public bool modificaMaestroVehiculos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_MAESTRO_VEHICULOS)).FirstOrDefault() != null; } }
         public bool modificaMaestroPersonalAlmacen { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_MAESTRO_PERSONAL_ALMACEN)).FirstOrDefault() != null; } }
