@@ -18,11 +18,19 @@ namespace DataLayer
         {
         }
 
-        public List<ProductoControlStock> SelectProductosControlStock(Guid idUsuario, int estado, Guid idCiudad)
+        public List<ProductoControlStock> SelectProductosControlStock(Guid idUsuario, int estado, Guid idCiudad, string sku, string proveedor, bool stockVerde, bool stockAmbar, bool stockRojo)
         {
             var objCommand = GetSqlCommand("ps_productosControlStock");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             InputParameterAdd.Int(objCommand, "estado", estado);
+
+            InputParameterAdd.VarcharEmpty(objCommand, "sku", sku);
+            InputParameterAdd.VarcharEmpty(objCommand, "proveedor", proveedor);
+
+            InputParameterAdd.Int(objCommand, "contarStockNormal", stockVerde ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "contarStockAmbar", stockAmbar ? 1 : 0);
+            InputParameterAdd.Int(objCommand, "contarStockRojo", stockRojo ? 1 : 0);
+
 
             if (!idCiudad.Equals(Guid.Empty))
             {
@@ -45,6 +53,13 @@ namespace DataLayer
                 obj.producto.sku = Converter.GetString(row, "sku");
                 obj.producto.descripcion = Converter.GetString(row, "descripcion");
                 obj.producto.unidadConteo = Converter.GetString(row, "unidad_conteo");
+
+                obj.producto.equivalenciaAlternativa= Converter.GetInt(row, "equivalencia");
+                obj.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+
+                obj.producto.unidad = Converter.GetString(row, "unidad");
+                obj.producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
+                obj.producto.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
 
                 obj.fechaCs = Converter.GetDateTime(row, "fecha_cs");
                 obj.unidadCs = Converter.GetString(row, "unidad_cs");

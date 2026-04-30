@@ -369,6 +369,7 @@
     <Compile Include="Models\MonedaViewModels.cs" />
     <Compile Include="Models\OBJsFiltro\ReporteSellInProveedoresFiltro.cs" />
     <Compile Include="Models\OBJsFiltro\ReporteSellOutVendedoresFiltro.cs" />
+    <Compile Include="Models\OBJsFiltro\ControlStockFiltro.cs" />
     <Compile Include="Models\OBJsFiltro\ReportePendientesAtencionFiltro.cs" />
     <Compile Include="Models\RolViewModels.cs" />
     <Compile Include="Models\ProductoMultipleViewModels.cs" />

@@ -1,17 +1,18 @@
 ﻿using BusinessLayer;
+using Cotizador.ExcelExport;
 using Cotizador.Models;
+using Cotizador.Models.OBJsFiltro;
 using Model;
 using Model.UTILES;
 using Newtonsoft.Json;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
-using Cotizador.ExcelExport;
-using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
 
 namespace Cotizador.Controllers
 {
@@ -31,10 +32,19 @@ namespace Cotizador.Controllers
             List<ProductoControlStock> lista = new List<ProductoControlStock>();
 
             ProductoControlStockBL bl = new ProductoControlStockBL();
-            lista = bl.SelectProductosControlStock(Logueado.idUsuario, 1, Guid.Empty);
+
+            ControlStockFiltro filtro = (ControlStockFiltro)this.Session["s_controlStockFiltro"];
+            if (filtro == null)
+            {
+                filtro = instanciarFiltroControlStock();
+                this.Session["s_controlStockFiltro"] = filtro;
+            }
+
+            lista = bl.SelectProductosControlStock(Logueado.idUsuario, 1, filtro.idCiudad, filtro.sku, filtro.proveedor, filtro.stockVerde, filtro.stockAmbar, filtro.stockRojo);
 
             ViewBag.pagina = (int)Constantes.paginas.ControlStock;
             ViewBag.lista = lista;
+            ViewBag.filtro = filtro;
 
             return View();
         }
@@ -51,6 +61,76 @@ namespace Cotizador.Controllers
             {
                 success = success
             });
+        }
+
+        public ControlStockFiltro instanciarFiltroControlStock()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            ControlStockFiltro obj = new ControlStockFiltro();
+            obj.proveedor = "Todos";
+            this.Session["proveedor"] = obj.proveedor;
+
+            obj.sku = string.Empty;
+
+            if (this.Logueado != null)
+            {
+                obj.idCiudad = this.Logueado.sedeMP.idCiudad;
+                obj.ciudad = this.Logueado.sedeMP;
+            }
+            else {
+                obj.idCiudad = Guid.Empty;
+                obj.ciudad = new Ciudad();
+                obj.ciudad.idCiudad = Guid.Empty;
+                obj.ciudad.nombre = "TODOS"; 
+            }            
+
+            obj.stockVerde = true;
+            obj.stockAmbar = true;
+            obj.stockRojo = true;
+
+            return obj;
+        }
+
+
+        public ActionResult LimpiarFiltroControlStock()
+        {
+            ControlStockFiltro obj = (ControlStockFiltro)this.Session["s_controlStockFiltro"];
+
+            obj = instanciarFiltroControlStock();
+            this.Session["s_controlStockFiltro"] = obj;
+
+            return RedirectToAction("ControlAlertaStock", "ProductoControlStock");
+        }
+
+        public void changeFiltroControlStock(string propiedad, string valor, string tipo)
+        {
+            ControlStockFiltro obj = (ControlStockFiltro)this.Session["s_controlStockFiltro"];
+
+            obj.changeDatoParametro(propiedad, valor, tipo);
+            
+            if (propiedad.Equals("proveedor"))
+            {
+                this.Session["proveedor"] = valor;
+            }
+
+            /*
+            if (propiedad.Equals("idCiudad") && obj.idCiudad != null && !obj.idCiudad.Equals(Guid.Empty))
+            {
+                CiudadBL blCiudad = new CiudadBL();
+                obj.ciudad = blCiudad.getCiudad(obj.idCiudad);
+            }
+            else
+            {
+                if (propiedad.Equals("idCiudad"))
+                {
+                    obj.ciudad = new Ciudad();
+                    obj.ciudad.idCiudad = Guid.Empty;
+                    obj.ciudad.nombre = "TODOS";
+                }
+            }*/
+
+            this.Session["s_controlStockFiltro"] = obj;
         }
     }
 }

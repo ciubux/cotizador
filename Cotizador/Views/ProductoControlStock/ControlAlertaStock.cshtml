@@ -2,6 +2,7 @@
     ViewBag.Title = "Control Stock";
 
     Model.ProductoControlStock search = new Model.ProductoControlStock();
+    Cotizador.Models.OBJsFiltro.ControlStockFiltro filtro = ViewBag.filtro;
 
     List<Model.ProductoControlStock> lista = ViewBag.lista;
 }
@@ -13,6 +14,71 @@
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
 
     <form class="form-horizontal">
+
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group row">
+                    <label class="control-label col-xs-4" for="idCiudad">
+                        Sede:
+                    </label>
+                    <div class="col-xs-8">
+                        @Html.Action("GetCiudades", "Ciudad",
+                                    new
+                                    {
+                                        ciudadSelectId = "idCiudad",
+                                        selectedValue = filtro.idCiudad
+                                    })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="skuProducto">SKU:</label>
+                    <div class="col-xs-8">
+                        <input class="form-control" type="text" id="skuProducto" name="skuProducto" value="@filtro.sku">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <!--Proveedor-->
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="proveedor">Proveedor:</label>
+                    <div class="col-xs-8">
+                        <div>
+                            @Html.Action("list", "Proveedor")
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="familia">Estado Stock:</label>
+                    <div class="col-xs-8">
+                        <!--Checks de estados de stock-->
+                        <label class="checkbox-inline">
+                            <span class="label label-success" style="padding: 5px 10px;">
+                                <input type="checkbox" id="filtroStockVerde" @(filtro.stockVerde ? "checked" : "")> Cubierto
+                            </span>
+                        </label>
+                        <label class="checkbox-inline">
+                            <span class="label label-warning" style="padding: 5px 10px;">
+                                <input type="checkbox" id="filtroStockAmbar" @(filtro.stockAmbar ? "checked" : "")> Alerta
+                            </span>
+                        </label>
+                        <label class="checkbox-inline">
+                            <span class="label label-danger" style="padding: 5px 10px;">
+                                <input type="checkbox" id="filtroStockRojo" @(filtro.stockRojo ? "checked" : "")> Bajo 
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="row">
 
@@ -41,44 +107,44 @@
                     <th data-name="sku" data-visible="true">SKU</th>
                     <th data-name="producto" data-visible="true" data-sortable="true">Producto</th>
                     <th data-name="unidad" data-visible="true" data-sortable="true">Unidad</th>
-                    <th data-name="cantidadMinima" data-visible="true" data-sortable="true">Cantidad Minima</th>
-                    <th data-name="cantidadMaxima" data-visible="true" data-sortable="true">Cantidad Máxima</th>
-                    <th data-name="cantidadAlerta" data-visible="true" data-sortable="true">Cantidad Alerta</th>
-                    <th data-name="fechaCalculoStock" data-visible="true" data-sortable="true">Fecha Cálculo Stock</th>
-                    <th data-name="unidadCalculoStock" data-visible="true" data-sortable="true">Unidad Cálculo Stock</th>
-                    <th data-name="cantidadCalculoStock" data-visible="true" data-sortable="true">Cantidad Cálculo Stock</th>
+                    <th data-name="cantidadMinima" data-visible="true" data-sortable="true">Stock Minima</th>
+                    <th data-name="cantidadMaxima" data-visible="true" data-sortable="true">Stock Máxima</th>
+                    <th data-name="cantidadAlerta" data-visible="true" data-sortable="true">Stock Alerta</th>
+                    <th data-name="fechaCalculoStock" data-visible="true" data-sortable="true">Fecha Stock</th>
+                    <th data-name="unidadCalculoStock" data-visible="true" data-sortable="true">Unidad Stock</th>
+                    <th data-name="cantidadCalculoStock" data-visible="true" data-sortable="true">Stock Real</th>
 
                     <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
                 </tr>
             </thead>
             <tbody>
-            @foreach (Model.ProductoControlStock item in lista)
-            {
-                <tr>
-                    <td>@item.producto.sku</td>
-                    <td>@item.producto.descripcion</td>
-                    <td>@item.producto.unidadConteo</td>
-                    <td>@item.cantidadMinima</td>
-                    <td>@item.cantidadMaxima</td>
-                    <td>@item.cantidadAlerta</td>
-                    <td>@item.FechaCsDesc</td>
-                    <td>@item.unidadCs</td>
-                    <td>
-                        @if (item.cantidadCs >= item.cantidadAlerta)
-                        {
-                            <span class="label label-success" style="font-size: 100%;">@item.cantidadCs</span>
-                        }
-                        else if (item.cantidadCs > item.cantidadMinima)
-                        {
-                            <span class="label label-warning" style="font-size: 100%;">@item.cantidadCs</span>
-                        }
-                        else
-                        {
-                            <span class="label label-danger" style="font-size: 100%;">@item.cantidadCs</span>
-                        }
-                    </td>
-                </tr>
-            }
+                @foreach (Model.ProductoControlStock item in lista)
+                {
+                    <tr>
+                        <td>@item.producto.sku</td>
+                        <td>@item.producto.descripcion</td>
+                        <td>@item.producto.unidadConteo</td>
+                        <td>@item.cantidadMinima</td>
+                        <td>@item.cantidadMaxima</td>
+                        <td>@item.cantidadAlerta</td>
+                        <td>@item.FechaCsDesc</td>
+                        <td>@item.unidadCs</td>
+                        <td>
+                            @if (item.cantidadCs <= item.cantidadMinima)
+                            {
+                                <span class="label label-danger" style="font-size: 100%;">@item.cantidadCs</span>
+                            }
+                            else if (item.cantidadCs <= item.cantidadAlerta)
+                            {
+                                <span class="label label-warning" style="font-size: 100%;">@item.cantidadCs</span>
+                            }
+                            else
+                            {
+                                <span class="label label-success" style="font-size: 100%;">@item.cantidadCs</span>
+                            }
+                        </td>
+                    </tr>
+                }
 
             </tbody>
         </table>
