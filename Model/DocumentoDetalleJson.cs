@@ -20,5 +20,6 @@ namespace Model
         public String codigoProductoCliente { get; set; }
         
         public int esUnidadAlternativa { get; set; }
+        public int idProductoPresentacion { get; set; }
     }
 }

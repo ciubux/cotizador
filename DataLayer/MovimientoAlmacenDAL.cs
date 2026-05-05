@@ -65,6 +65,12 @@ namespace DataLayer
 
                 ventaDetalle.esPrecioAlternativo = Converter.GetBool(row, "es_precio_alternativo");
 
+                ventaDetalle.producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
+                ventaDetalle.producto.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
+
+                ventaDetalle.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
+                ventaDetalle.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+
                 if (ventaDetalle.esPrecioAlternativo)
                 {
                     ventaDetalle.ProductoPresentacion = new ProductoPresentacion();
@@ -73,15 +79,14 @@ namespace DataLayer
                 
                 
 
-                ventaDetalle.producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
-
+                
                 //  ventaDetalle.sumCantidad =  Converter.GetDecimal(row, "sum_cantidad");
                 ventaDetalle.sumCantidadUnidadAlternativa = Converter.GetDecimal(row, "sum_cantidad_unidad_alternativa");
 
 
                 ventaDetalle.producto.unidad = Converter.GetString(row, "unidad");
                 ventaDetalle.sumCantidadUnidadEstandar = Converter.GetDecimal(row, "sum_cantidad_unidad_estandar");
-
+                ventaDetalle.sumCantidadUnidadProveedor = Converter.GetDecimal(row, "sum_cantidad_unidad_proveedor");
 
 
 
@@ -108,6 +113,7 @@ namespace DataLayer
                     producto.ProductoPresentacionList = new List<ProductoPresentacion>();
                     productoList.Add(producto);
                 }
+                
                 ProductoPresentacion productoPresentacion = new ProductoPresentacion();
                 productoPresentacion.Equivalencia = Converter.GetDecimal(row, "equivalencia");
                 productoPresentacion.Presentacion = Converter.GetString(row, "presentacion");

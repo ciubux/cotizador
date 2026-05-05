@@ -157,17 +157,28 @@ namespace Cotizador.Controllers
 
 
 
-
+                
                 pedidoDetalle.esPrecioAlternativo = documentoDetalleJson.esUnidadAlternativa == 1;
 
                 if (pedidoDetalle.esPrecioAlternativo)
                 {
                     pedidoDetalle.ProductoPresentacion = new ProductoPresentacion();
+                    pedidoDetalle.ProductoPresentacion.IdProductoPresentacion = documentoDetalleJson.idProductoPresentacion;
+
+                    foreach (ProductoPresentacion pres in ventaDetalle.producto.ProductoPresentacionList)
+                    {
+                        if (pres.IdProductoPresentacion == pedidoDetalle.ProductoPresentacion.IdProductoPresentacion)
+                        {
+                            pedidoDetalle.ProductoPresentacion.Equivalencia = pres.Equivalencia;
+                            pedidoDetalle.unidad = pres.Presentacion;
+                            pedidoDetalle.cantidad = documentoDetalleJson.cantidad;
+                        }
+                    }
+
                     pedidoDetalle.ProductoPresentacion.Equivalencia = ventaDetalle.producto.ProductoPresentacionList[0].Equivalencia;
 
-                    
                     //////REVISAR QUE LA CANTIDAD DEBE SER SIEMPRE ENTERO
-                    if (pedidoDetalle.ProductoPresentacion.Equivalencia < 1)
+                    /*if (pedidoDetalle.ProductoPresentacion.Equivalencia < 1)
                     {
                         pedidoDetalle.unidad = ventaDetalle.producto.ProductoPresentacionList[0].Presentacion;
                         pedidoDetalle.cantidad = documentoDetalleJson.cantidad;
@@ -176,7 +187,8 @@ namespace Cotizador.Controllers
                     {
                         pedidoDetalle.unidad = ventaDetalle.producto.unidad_alternativa;
                         pedidoDetalle.cantidad = Convert.ToInt32(ventaDetalle.sumCantidadUnidadAlternativa);
-                    }
+                    }*/
+
                     pedidoDetalle.precioNeto = (ventaDetalle.sumPrecioUnitario * pedidoDetalle.ProductoPresentacion.Equivalencia) / pedidoDetalle.cantidad;
                 }
                 else

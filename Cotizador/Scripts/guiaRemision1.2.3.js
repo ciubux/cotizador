@@ -3840,7 +3840,7 @@ jQuery(function ($) {
             }
             else {
                 unidad = "<select class='form-control selectUnidad'  sku='" + ventaDetalleList[i].producto.sku + "'  idProducto='" + ventaDetalleList[i].producto.idProducto + "'  >" +
-                    "<option esUnidadAlternativa='0' cantidad='" + ventaDetalleList[i].sumCantidadUnidadEstandar + "'>" + ventaDetalleList[i].producto.unidad + "</option>";
+                    "<option esUnidadAlternativa='0' idProductoPresentacion='0' cantidad='" + ventaDetalleList[i].sumCantidadUnidadEstandar + "'>" + ventaDetalleList[i].producto.unidad + "</option>";
 
                 var listTmp = ventaDetalleList[i].producto.ProductoPresentacionList;
                 //alert(listTmp.length)
@@ -3906,7 +3906,8 @@ jQuery(function ($) {
 
             json = json + '{"idProducto":"' + value.getAttribute("idProducto") + '", '+
                 '"cantidad":' + $(this).find('option:selected').attr("cantidad") + ', ' +
-                '"esUnidadAlternativa":' + $(this).find('option:selected').attr("esUnidadAlternativa") +
+                '"esUnidadAlternativa":' + $(this).find('option:selected').attr("esUnidadAlternativa") + ', ' +
+                '"idProductoPresentacion":' + $(this).find('option:selected').attr("idProductoPresentacion") +
             '},';
         });
 

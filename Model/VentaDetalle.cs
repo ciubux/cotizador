@@ -12,6 +12,7 @@ namespace Model
         public Decimal sumCantidad { get; set; }
         public Decimal sumCantidadUnidadAlternativa { get; set; }
         public Decimal sumCantidadUnidadEstandar { get; set; }
+        public Decimal sumCantidadUnidadProveedor { get; set; }
         public Decimal sumPrecioNeto { get; set; }
         public Decimal sumPrecioUnitario { get; set; }
 

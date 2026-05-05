@@ -129,6 +129,7 @@ namespace DataLayer
                     InputParameterAdd.Decimal(objCommand, "equivalencia", 1);
                 InputParameterAdd.Varchar(objCommand, "unidad", documentoDetalle.unidad);
                 InputParameterAdd.Int(objCommand, "esPrecioAlternativo", documentoDetalle.esPrecioAlternativo ? 1 : 0);
+                InputParameterAdd.Int(objCommand, "idProductoPresentacion", documentoDetalle.idProductoPresentacion);
 
                 ExecuteNonQuery(objCommand);
             }
