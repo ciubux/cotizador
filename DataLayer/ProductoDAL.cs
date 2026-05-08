@@ -1814,7 +1814,15 @@ namespace DataLayer
                 item.cantidadSeparadaProveedorCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadSeparadaProveedorCalc));
                 item.cantidadSeparadaAlternativaCalc = item.cantidadSeparadaMpCalc * ((Decimal)item.producto.equivalenciaAlternativa);
                 item.cantidadSeparadaAlternativaCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadSeparadaAlternativaCalc));
-                
+
+                item.cantidadEsperadaConteo = (int)Converter.GetDecimal(row, "stock_esperado_unidad_conteo");
+                item.cantidadEsperadaMpCalc = ((Decimal)item.cantidadEsperadaConteo) / ((Decimal)item.producto.equivalenciaUnidadEstandarUnidadConteo);
+                item.cantidadEsperadaMpCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadEsperadaMpCalc));
+                item.cantidadEsperadaProveedorCalc = item.cantidadEsperadaMpCalc / ((Decimal)item.producto.equivalenciaProveedor);
+                item.cantidadEsperadaProveedorCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadEsperadaProveedorCalc));
+                item.cantidadEsperadaAlternativaCalc = item.cantidadEsperadaMpCalc * ((Decimal)item.producto.equivalenciaAlternativa);
+                item.cantidadEsperadaAlternativaCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadEsperadaAlternativaCalc));
+
 
                 item.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 item.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
@@ -2005,6 +2013,14 @@ namespace DataLayer
                 item.cantidadSeparadaAlternativaCalc = item.cantidadSeparadaMpCalc * ((Decimal)item.producto.equivalenciaAlternativa);
                 item.cantidadSeparadaAlternativaCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadSeparadaAlternativaCalc));
 
+                item.cantidadEsperadaConteo = (int)Converter.GetDecimal(row, "stock_esperado_unidad_conteo");
+                item.cantidadEsperadaMpCalc = ((Decimal)item.cantidadEsperadaConteo) / ((Decimal)item.producto.equivalenciaUnidadEstandarUnidadConteo);
+                item.cantidadEsperadaMpCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadEsperadaMpCalc));
+                item.cantidadEsperadaProveedorCalc = item.cantidadEsperadaMpCalc / ((Decimal)item.producto.equivalenciaProveedor);
+                item.cantidadEsperadaProveedorCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadEsperadaProveedorCalc));
+                item.cantidadEsperadaAlternativaCalc = item.cantidadEsperadaMpCalc * ((Decimal)item.producto.equivalenciaAlternativa);
+                item.cantidadEsperadaAlternativaCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadEsperadaAlternativaCalc));
+
                 item.tieneRegistroStock = Converter.GetInt(row, "tiene_registro_stock") > 0 ? true : false;
                 item.registradoPeridoAplicable = Converter.GetInt(row, "registrado_periodo_aplicable") > 0 ? true : false;
 
@@ -2075,6 +2091,14 @@ namespace DataLayer
                 item.cantidadSeparadaProveedorCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadSeparadaProveedorCalc));
                 item.cantidadSeparadaAlternativaCalc = item.cantidadSeparadaMpCalc * ((Decimal)item.producto.equivalenciaAlternativa);
                 item.cantidadSeparadaAlternativaCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadSeparadaAlternativaCalc));
+
+                item.cantidadEsperadaConteo = (int)Converter.GetDecimal(row, "stock_esperado_unidad_conteo");
+                item.cantidadEsperadaMpCalc = ((Decimal)item.cantidadEsperadaConteo) / ((Decimal)item.producto.equivalenciaUnidadEstandarUnidadConteo);
+                item.cantidadEsperadaMpCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadEsperadaMpCalc));
+                item.cantidadEsperadaProveedorCalc = item.cantidadEsperadaMpCalc / ((Decimal)item.producto.equivalenciaProveedor);
+                item.cantidadEsperadaProveedorCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadEsperadaProveedorCalc));
+                item.cantidadEsperadaAlternativaCalc = item.cantidadEsperadaMpCalc * ((Decimal)item.producto.equivalenciaAlternativa);
+                item.cantidadEsperadaAlternativaCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadEsperadaAlternativaCalc));
 
                 item.tieneRegistroStock = Converter.GetBool(row, "tiene_registro_stock");
                 item.registradoPeridoAplicable = Converter.GetBool(row, "registrado_periodo_aplicable");
@@ -2148,6 +2172,14 @@ namespace DataLayer
                 item.cantidadSeparadaProveedorCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadSeparadaProveedorCalc));
                 item.cantidadSeparadaAlternativaCalc = item.cantidadSeparadaMpCalc * ((Decimal)item.producto.equivalenciaAlternativa);
                 item.cantidadSeparadaAlternativaCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadSeparadaAlternativaCalc));
+
+                item.cantidadEsperadaConteo = (int)Converter.GetDecimal(row, "stock_esperado_unidad_conteo");
+                item.cantidadEsperadaMpCalc = ((Decimal)item.cantidadEsperadaConteo) / ((Decimal)item.producto.equivalenciaUnidadEstandarUnidadConteo);
+                item.cantidadEsperadaMpCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadEsperadaMpCalc));
+                item.cantidadEsperadaProveedorCalc = item.cantidadEsperadaMpCalc / ((Decimal)item.producto.equivalenciaProveedor);
+                item.cantidadEsperadaProveedorCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadEsperadaProveedorCalc));
+                item.cantidadEsperadaAlternativaCalc = item.cantidadEsperadaMpCalc * ((Decimal)item.producto.equivalenciaAlternativa);
+                item.cantidadEsperadaAlternativaCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadEsperadaAlternativaCalc));
 
                 item.tieneRegistroStock = Converter.GetBool(row, "tiene_registro_stock");
                 item.registradoPeridoAplicable = Converter.GetBool(row, "registrado_periodo_aplicable");

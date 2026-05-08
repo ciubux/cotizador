@@ -10,11 +10,13 @@ using Model.UTILES;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NPOI.HSSF.Model;
+using NPOI.HSSF.Record;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
 //using NPOI.SS.Formula.Functions;
 
 using NPOI.SS.UserModel;
+using NPOI.Util;
 using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
@@ -905,10 +907,11 @@ namespace Cotizador.Controllers
                     pedido = (Pedido)this.Session[Constantes.VAR_SESSION_PEDIDO_ALMACEN_VER];
                 }
 
-                if (this.Session[Constantes.VAR_SESSION_GUIA] == null)
+                /*if (this.Session[Constantes.VAR_SESSION_GUIA] == null)
                 {
-                    instanciarGuiaRemision();
-                }
+                    
+                }*/
+                instanciarGuiaRemision();
                 GuiaRemision guiaRemision = (GuiaRemision)this.Session[Constantes.VAR_SESSION_GUIA];
                 guiaRemision.pedido = pedido;
 
@@ -1630,10 +1633,38 @@ namespace Cotizador.Controllers
                         error = "No se puede combinar productos reservados con productos no reservados. Productos Reservados: " + skusReservados + ". Genere guías parciales y luego emita una factura consolidada al cliente final en el entorno del pedido original."
                     });
                 }
+
+                // Valida cantidadPendienteAtención
+                if (reservados.Count > 0)
+                {
+                    foreach (EmpresaProductoReservado epr in reservados)
+                    {
+                        DocumentoDetalle det = guiaRemision.documentoDetalle.Where(d => d.producto.idProducto.Equals(epr.producto.idProducto)).FirstOrDefault();
+
+                        int cantidadRestante = epr.cantidadReservada - epr.cantidadAtendida;
+                        decimal cantidadRestanteUnidDet = Decimal.Parse(cantidadRestante.ToString()); 
+                        decimal cantidadDet = Decimal.Parse(det.cantidad.ToString());
+
+
+                        switch (det.idProductoPresentacion)
+                        {
+                            case 0: cantidadRestanteUnidDet = cantidadRestanteUnidDet / epr.producto.equivalenciaUnidadEstandarUnidadConteo; break;
+                            case 1: cantidadRestanteUnidDet = cantidadRestanteUnidDet / epr.producto.equivalenciaUnidadAlternativaUnidadConteo; break;
+                            case 2: cantidadRestanteUnidDet = cantidadRestanteUnidDet / epr.producto.equivalenciaUnidadProveedorUnidadConteo; break;
+                        }
+
+                        if (cantidadDet > cantidadRestanteUnidDet)
+                        {
+                            return JsonConvert.SerializeObject(new
+                            {
+                                success = 0,
+                                error = "El producto reservado " + det.producto.sku + " solo tiene " + String.Format(Constantes.formatoDosDecimales, cantidadRestanteUnidDet) + " por atender para llegar a la cantidad reservada."
+                            });
+                        }
+                    }
+                }
             }
             
-
-
 
             String error = String.Empty;
             MovimientoAlmacenBL movimientoAlmacenBL = new MovimientoAlmacenBL();

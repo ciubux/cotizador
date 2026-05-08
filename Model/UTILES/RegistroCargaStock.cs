@@ -37,10 +37,14 @@ namespace Model.UTILES
         public int cantidadConteo { get; set; }
 
         public int cantidadSeparadaConteo { get; set; }
-
         public decimal cantidadSeparadaProveedorCalc { get; set; }
         public decimal cantidadSeparadaMpCalc { get; set; }
         public decimal cantidadSeparadaAlternativaCalc { get; set; }
+
+        public int cantidadEsperadaConteo { get; set; }
+        public decimal cantidadEsperadaProveedorCalc { get; set; }
+        public decimal cantidadEsperadaMpCalc { get; set; }
+        public decimal cantidadEsperadaAlternativaCalc { get; set; }
 
         public int cantidadTrasladosSumarConteo { get; set; }
         public decimal cantidadTrasladosSumarProveedorCalc { get; set; }

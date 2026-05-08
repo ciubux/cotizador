@@ -45,9 +45,9 @@
                 <div class="row">
                     <div class="col-sm-4 col-lg-4">
                         <div class="form-group">
-                            <label for="numero" class="control-label col-xs-6"><span id="verNombreSedeProductoStock"></span>:</label>
+                            <label for="numero" class="control-label col-xs-4"><span id="verNombreSedeProductoStock"></span>:</label>
 
-                            <div class="col-xs-6">
+                            <div class="col-xs-8">
                                 <span class="form-control-static text-center stock-sede" id="verStockSedeProducto"></span>
                             </div>
                         </div>
@@ -60,9 +60,9 @@
                 <div class="row">
                     <div class="col-sm-4 col-lg-4">
                         <div class="form-group">
-                            <label class="control-label col-xs-6">TOTAL:</label>
+                            <label class="control-label col-xs-4">TOTAL:</label>
 
-                            <div class="col-xs-6">
+                            <div class="col-xs-8">
                                 <span class="form-control-static text-center stock-sede" id="verStockTodasSedes"></span>
                             </div>
                         </div>
@@ -128,19 +128,19 @@
 
                     var htmlStockSedes = "";
                     var htmlOptionsUnidad = "";
-                    var stock, stockSeparado;
-                    var stockTotal, stockTotalSeparado;
-                    var stockTotalMP, stockTotalSeparadoMP;
-                    var stockTotalAlternativa, stockTotalSeparadoAlternativa;
-                    var stockTotalProveedor, stockTotalSeparadoProveedor;
-                    var stockTotalConteo, stockTotalSeparadoConteo;
+                    var stock, stockSeparado, stockEsperado;
+                    var stockTotal, stockTotalSeparado, stockTotalEsperado;
+                    var stockTotalMP, stockTotalSeparadoMP, stockTotalEsperadoMP;
+                    var stockTotalAlternativa, stockTotalSeparadoAlternativa, stockTotalEsperadoAlternativa;
+                    var stockTotalProveedor, stockTotalSeparadoProveedor, stockTotalEsperadoProveedor;
+                    var stockTotalConteo, stockTotalSeparadoConteo, stockTotalEsperadoConteo;
                     var disponible = false;
                     var unidadSelected = "";
-                    stockTotal = 0; stockTotalSeparado = 0;
-                    stockTotalMP = 0; stockTotalSeparadoMP = 0;
-                    stockTotalAlternativa = 0; stockTotalSeparadoAlternativa = 0;
-                    stockTotalProveedor = 0; stockTotalSeparadoProveedor = 0;
-                    stockTotalConteo = 0; stockTotalSeparadoConteo = 0;
+                    stockTotal = 0; stockTotalSeparado = 0; stockTotalEsperado = 0;
+                    stockTotalMP = 0; stockTotalSeparadoMP = 0; stockTotalEsperadoMP = 0;
+                    stockTotalAlternativa = 0; stockTotalSeparadoAlternativa = 0; stockTotalEsperadoAlternativa = 0;
+                    stockTotalProveedor = 0; stockTotalSeparadoProveedor = 0; stockTotalEsperadoProveedor = 0;
+                    stockTotalConteo = 0; stockTotalSeparadoConteo = 0; stockTotalEsperadoConteo = 0;
 
                     var stockMP = "";
                     var stockAlternativo = "";
@@ -149,7 +149,7 @@
 
 
                     for (var i = 0; i < lista.length; i++) {
-                        stock = 0; stockSeparado = 0;
+                        stock = 0; stockSeparado = 0; stockEsperado = 0;
                         atributosStockSede = "";
 
                         if (lista[i].ciudad.idCiudad == idCiudad) {
@@ -177,28 +177,36 @@
                                 if (idProductoPresentacion == '0') {
                                     stock = lista[i].cantidadMpCalc;
                                     stockSeparado = lista[i].cantidadSeparadaMpCalc;
+                                    stockEsperado = lista[i].cantidadEsperadaMpCalc;
                                 }
 
                                 if (idProductoPresentacion == '1') {
                                     stock = lista[i].cantidadAlternativaCalc;
                                     stockSeparado = lista[i].cantidadSeparadaAlternativaCalc;
+                                    stockEsperado = lista[i].cantidadEsperadaAlternativaCalc;
                                 }
                                 if (idProductoPresentacion == '2') {
                                     stock = lista[i].cantidadProveedorCalc;
                                     stockSeparado = lista[i].cantidadSeparadaProveedorCalc;
+                                    stockEsperado = lista[i].cantidadEsperadaProveedorCalc;
                                 }
 
                                 stockTotal = stockTotal + stock;
                                 stockTotalSeparado = stockTotalSeparado + stockSeparado;
+                                stockTotalEsperado = stockTotalEsperado + stockEsperado;
 
                                 stockTotalMP = stockTotalMP + lista[i].cantidadMpCalc;
                                 stockTotalSeparadoMP = stockTotalSeparadoMP + lista[i].cantidadSeparadaMpCalc;
+                                stockTotalEsperadoMP = stockTotalEsperadoMP + lista[i].cantidadEsperadaMpCalc;
                                 stockTotalAlternativa = stockTotalAlternativa + lista[i].cantidadAlternativaCalc;
                                 stockTotalSeparadoAlternativa = stockTotalSeparadoAlternativa + lista[i].cantidadSeparadaAlternativaCalc;
+                                stockTotalEsperadoAlternativa = stockTotalEsperadoAlternativa + lista[i].cantidadEsperadaAlternativaCalc;
                                 stockTotalProveedor = stockTotalProveedor + lista[i].cantidadProveedorCalc;
                                 stockTotalSeparadoProveedor = stockTotalSeparadoProveedor + lista[i].cantidadSeparadaProveedorCalc;
+                                stockTotalEsperadoProveedor = stockTotalEsperadoProveedor + lista[i].cantidadEsperadaProveedorCalc;
                                 stockTotalConteo = stockTotalConteo + lista[i].cantidadConteo;
                                 stockTotalSeparadoConteo = stockTotalSeparadoConteo + lista[i].cantidadSeparadaConteo;
+                                stockTotalEsperadoConteo = stockTotalEsperadoConteo + lista[i].cantidadEsperadaConteo;
 
                                 if (stockSeparado > 0) {
                                     stock = stock + ' [-' + stockSeparado + ']';
@@ -207,6 +215,15 @@
                                     stockAlternativo = stockAlternativo + ' [-' + lista[i].cantidadSeparadaAlternativaCalc + ']';
                                     stockProveedor = stockProveedor + ' [-' + lista[i].cantidadSeparadaProveedorCalc + ']';
                                     stockConteo = stockConteo + ' [-' + lista[i].cantidadSeparadaConteo + ']';
+                                }
+
+                                if (stockEsperado > 0) {
+                                    stock = stock + ' [+' + stockEsperado + ']';
+                                    stock = armarHtmlLinkPendienteAtencion(stock, lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', '');
+                                    stockMP = stockMP + ' [+' + lista[i].cantidadEsperadaMpCalc + ']';
+                                    stockAlternativo = stockAlternativo + ' [+' + lista[i].cantidadEsperadaAlternativaCalc + ']';
+                                    stockProveedor = stockProveedor + ' [+' + lista[i].cantidadEsperadaProveedorCalc + ']';
+                                    stockConteo = stockConteo + ' [+' + lista[i].cantidadEsperadaConteo + ']';
                                 }
                             }
 
@@ -265,26 +282,35 @@
                                 if (idProductoPresentacion == '0') {
                                     stock = lista[i].cantidadMpCalc;
                                     stockSeparado = lista[i].cantidadSeparadaMpCalc;
+                                    stockEsperado = lista[i].cantidadEsperadaMpCalc;
                                 }
+
                                 if (idProductoPresentacion == '1') {
                                     stock = lista[i].cantidadAlternativaCalc;
                                     stockSeparado = lista[i].cantidadSeparadaAlternativaCalc;
+                                    stockEsperado = lista[i].cantidadEsperadaAlternativaCalc;
                                 }
                                 if (idProductoPresentacion == '2') {
                                     stock = lista[i].cantidadProveedorCalc;
                                     stockSeparado = lista[i].cantidadSeparadaProveedorCalc;
+                                    stockEsperado = lista[i].cantidadEsperadaProveedorCalc;
                                 }
                                 stockTotal = stockTotal + stock;
                                 stockTotalSeparado = stockTotalSeparado + stockSeparado;
+                                stockTotalEsperado = stockTotalEsperado + stockEsperado;
 
                                 stockTotalMP = stockTotalMP + lista[i].cantidadMpCalc;
                                 stockTotalSeparadoMP = stockTotalSeparadoMP + lista[i].cantidadSeparadaMpCalc;
+                                stockTotalEsperadoMP = stockTotalEsperadoMP + lista[i].cantidadEsperadaMpCalc;
                                 stockTotalAlternativa = stockTotalAlternativa + lista[i].cantidadAlternativaCalc;
                                 stockTotalSeparadoAlternativa = stockTotalSeparadoAlternativa + lista[i].cantidadSeparadaAlternativaCalc;
+                                stockTotalEsperadoAlternativa = stockTotalEsperadoAlternativa + lista[i].cantidadEsperadaAlternativaCalc;
                                 stockTotalProveedor = stockTotalProveedor + lista[i].cantidadProveedorCalc;
                                 stockTotalSeparadoProveedor = stockTotalSeparadoProveedor + lista[i].cantidadSeparadaProveedorCalc;
+                                stockTotalEsperadoProveedor = stockTotalEsperadoProveedor + lista[i].cantidadEsperadaProveedorCalc;
                                 stockTotalConteo = stockTotalConteo + lista[i].cantidadConteo;
                                 stockTotalSeparadoConteo = stockTotalSeparadoConteo + lista[i].cantidadSeparadaConteo;
+                                stockTotalEsperadoConteo = stockTotalEsperadoConteo + lista[i].cantidadEsperadaConteo;
 
                                 if (stockSeparado > 0) {
                                     stock = stock + ' [-' + stockSeparado + ']';
@@ -294,12 +320,21 @@
                                     stockProveedor = stockProveedor + ' [-' + lista[i].cantidadSeparadaProveedorCalc + ']';
                                     stockConteo = stockConteo + ' [-' + lista[i].cantidadSeparadaConteo + ']';
                                 }
+
+                                if (stockEsperado > 0) {
+                                    stock = stock + ' [+' + stockEsperado + ']';
+                                    stock = armarHtmlLinkPendienteAtencion(stock, lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', '');
+                                    stockMP = stockMP + ' [+' + lista[i].cantidadEsperadaMpCalc + ']';
+                                    stockAlternativo = stockAlternativo + ' [+' + lista[i].cantidadEsperadaAlternativaCalc + ']';
+                                    stockProveedor = stockProveedor + ' [+' + lista[i].cantidadEsperadaProveedorCalc + ']';
+                                    stockConteo = stockConteo + ' [+' + lista[i].cantidadEsperadaConteo + ']';
+                                }
                             }
 
                             atributosStockSede = ' mp="' + stockMP + '" alternativa="' + stockAlternativo + '" proveedor="' + stockProveedor + '" conteo="' + stockConteo + '" ';
 
-                            htmlStockSedes = htmlStockSedes + '<div class="col-sm-4 col-lg-4"><div class="form-group"><label class="control-label col-xs-6">' +
-                                lista[i].ciudad.nombre + ':</label><div class="col-xs-6"><span class="stock-sede form-control-static" idCiudad="'
+                            htmlStockSedes = htmlStockSedes + '<div class="col-sm-4 col-lg-4"><div class="form-group"><label class="control-label col-xs-4">' +
+                                lista[i].ciudad.nombre + ':</label><div class="col-xs-8"><span class="stock-sede form-control-static" idCiudad="'
                                 + lista[i].ciudad.idCiudad + '" idProducto="' + lista[i].producto.idProducto + '" '
                                 + atributosStockSede + '>' + stock + '</span></div></div></div>';
                         }
@@ -307,16 +342,16 @@
 
                     if (disponible) {
                         $("#divCiudadModalStockSedeProducto").show();
-                        var stockTotalText = stockTotal.toFixed(2) + "[-" + stockTotalSeparado + "]";
+                        var stockTotalText = stockTotal.toFixed(2) + " [-" + stockTotalSeparado + "]" + " [+" + stockTotalEsperado + "]";
                         stockTotalText = armarHtmlLinkPendienteAtencion(stockTotalText, idProducto, idProductoPresentacion, "@Guid.Empty", '', '');
 
                         $("#verStockTodasSedes").html(stockTotalText);
                         $("#verStockTodasSedes").attr("idProducto", idProducto);
                         $("#verStockTodasSedes").attr("idCiudad", "@Guid.Empty");
-                        $("#verStockTodasSedes").attr("mp", stockTotalMP.toFixed(2) + '[-' + stockTotalSeparadoMP + ']');
-                        $("#verStockTodasSedes").attr("alternativa", stockTotalAlternativa.toFixed(2) + '[-' + stockTotalSeparadoAlternativa + ']');
-                        $("#verStockTodasSedes").attr("proveedor", stockTotalProveedor.toFixed(2) + '[-' + stockTotalSeparadoProveedor + ']');
-                        $("#verStockTodasSedes").attr("conteo", stockTotalConteo.toFixed(2) + '[-' + stockTotalSeparadoConteo + ']');
+                        $("#verStockTodasSedes").attr("mp", stockTotalMP.toFixed(2) + ' [-' + stockTotalSeparadoMP + ']' + ' [+' + stockTotalEsperadoMP + ']');
+                        $("#verStockTodasSedes").attr("alternativa", stockTotalAlternativa.toFixed(2) + ' [-' + stockTotalSeparadoAlternativa + ']' + ' [+' + stockTotalEsperadoAlternativa + ']');
+                        $("#verStockTodasSedes").attr("proveedor", stockTotalProveedor.toFixed(2) + ' [-' + stockTotalSeparadoProveedor + ']' + ' [+' + stockTotalEsperadoProveedor + ']');
+                        $("#verStockTodasSedes").attr("conteo", stockTotalConteo.toFixed(2) + ' [-' + stockTotalSeparadoConteo + ']' + ' [+' + stockTotalEsperadoConteo + ']');
                     } else {
                         $("#divCiudadModalStockSedeProducto").hide();
                         $("#verStockTodasSedes").html("No Registrado");
@@ -347,16 +382,20 @@
             });
         });
 
+
         function armarHtmlLinkPendienteAtencion(stockText, idProducto, idProductoPresentacion, idCiudad, fechaInicio, fechaFin) {
+            const dataAttrs = `idProducto="${idProducto}" idProductoPresentacion="${idProductoPresentacion}" idCiudad="${idCiudad}" fechaInicio="${fechaInicio}" fechaFin="${fechaFin}"`;
 
-            var textLink = '<a class="verModalStockPendienteAtencion" idProducto="' + idProducto + '" idProductoPresentacion="' + idProductoPresentacion
-                + '" idCiudad="' + idCiudad + '" fechaInicio="' + fechaInicio + '" fechaFin="' + fechaFin + '">[';
-            stockText = stockText.replace("[", textLink);
-            stockText = stockText.replace("]", "]</a>");
+            const linkAtencion = `<a class="verModalStockPendienteAtencion" ${dataAttrs}>[-`;
+            stockText = stockText.replace("[-", linkAtencion);
 
-            return stockText;
-        };
+            const linkRecepcion = `<a class="verModalStockPendienteRecepcion" ${dataAttrs}>[+`;
+            stockText = stockText.replace("[+", linkRecepcion);
 
+            return stockText.replace(/\]/g, "]</a>");
+        }
+
+        
         $(document).on('change', "#idCiudadModalStockSedeProducto", function () {
             $(".verModalStockProductoKardex").attr("idCiudad", $(this).val());
             $(".verModalStockProductoKardex").attr("nombreCiudad", $(this).closest("option:selected").text());

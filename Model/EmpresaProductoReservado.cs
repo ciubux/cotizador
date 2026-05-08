@@ -10,6 +10,11 @@ namespace Model
     {
         public Guid idEmpresaProductoReservado { get; set; }
 
+        public string unidadConteo { get; set; }
+
+        public int cantidadReservada { get; set; }
+        public int cantidadAtendida { get; set; }
+
         public Empresa empresa { get; set; }
 
         public Producto producto { get; set; }

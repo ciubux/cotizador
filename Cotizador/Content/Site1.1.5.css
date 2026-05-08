@@ -1424,7 +1424,7 @@ $darkred: darken($red, 0.2);*/
     margin-bottom: 0px;
 }
 
-.verModalStockPendienteAtencion {
+.verModalStockPendienteAtencion, .verModalStockPendienteRecepcion {
     cursor: pointer;
 }
 

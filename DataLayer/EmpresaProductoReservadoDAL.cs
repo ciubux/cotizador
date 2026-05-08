@@ -50,7 +50,11 @@ namespace DataLayer
 
                 obj.idEmpresaProductoReservado = Converter.GetGuid(row, "id_empresa_producto_reservado");
 
-                obj.Estado = Converter.GetInt(row, "estado"); 
+                obj.Estado = Converter.GetInt(row, "estado");
+
+                obj.unidadConteo = Converter.GetString(row, "unidad_conteo");
+                obj.cantidadReservada = Converter.GetInt(row, "cantidad_reservada");
+                obj.cantidadAtendida = Converter.GetInt(row, "cantidad_atendida");
 
                 obj.empresa = new Empresa();
                 obj.empresa.idEmpresa = Converter.GetInt(row, "id_empresa");
@@ -61,6 +65,12 @@ namespace DataLayer
                 obj.producto.idProducto = Converter.GetGuid(row, "id_producto");
                 obj.producto.sku = Converter.GetString(row, "producto_sku");
                 obj.producto.descripcion = Converter.GetString(row, "producto_descripcion");
+
+                obj.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
+                obj.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+                obj.producto.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_estandar_unidad_conteo");
+                obj.producto.equivalenciaUnidadAlternativaUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_alternativa_unidad_conteo");
+                obj.producto.equivalenciaUnidadProveedorUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_proveedor_unidad_conteo");
 
                 lista.Add(obj);
             }
