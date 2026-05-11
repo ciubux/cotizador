@@ -1526,6 +1526,14 @@ namespace BusinessLayer
             }
         }
 
+        public List<List<String>> pedidosPendientesRecibirPorProducto(Guid idProducto, DateTime fechaInicio, DateTime fechaFin, Guid idCiudad, Guid idUsuario)
+        {
+            using (var dal = new PedidoDAL())
+            {
+                return dal.pedidosPendientesRecibirPorProducto(idProducto, fechaInicio, fechaFin, idCiudad, idUsuario);
+            }
+        }
+
         public bool SetPedidoMP(Guid idPedido, Guid idPedidoMP, String agregarObservacion, bool duplicarArchivos = false)
         {
             using (var dal = new PedidoDAL())

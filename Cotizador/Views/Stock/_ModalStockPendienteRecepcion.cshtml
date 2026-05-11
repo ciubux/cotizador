@@ -1,0 +1,282 @@
+﻿
+<div class="modal fade" tabindex="-1" id="modalStockPendienteRecepcion">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalStockPendienteRecepcionTitle"><b>Pedidos Pendientes de Recepción por Producto</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal" >
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label class="control-label col-xs-2">Producto:</label>
+                                <div class="col-xs-10">
+                                    <span class="form-control-static" id="verNombreProductoStockPendienteRecepcion"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Código:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCodigoProductoStockPendienteRecepcion"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label class="control-label col-xs-2">Unidad:</label>
+                                <div class="col-xs-10">
+                                    <select id="selectUnidadProductoStockPendienteRecepcion" class="form-control">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Sede:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verSedeStockPendienteRecepcion"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12 tableFixHead modalDivResultsTable">
+                        <table id="tablePedidosStockPendienteRecepcion" class="table table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Sede</th>
+                                    <th>Número Pedido</th>
+                                    <th>Tipo Pedido</th>
+                                    <th>Cliente</th>
+                                    @*<th>Grupo Cliente</th>*@
+                                    <th>Fecha Pedido</th>
+                                    <th>Fecha Entrega</th>
+                                    <th>Cant. Pedido</th>
+                                    <th>Cant. Recibida</th>
+                                    <th>Cant. Pendiente</th>
+                                    <th style="width: 30px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-sm-12 col-lg-12 text-right">
+                        <button id="btnExportStockPendienteRecepcionExcel" type="button" class="btn btn-primary  bouton-image botonExcel" actionLink="@Url.Action("ReporteStockPendienteRecepcionExcel", "Stock")">Exportar</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    function funcionesModalStockPendienteRecepcion() {
+        var idCiudad = '';
+        var idProducto = '';
+        var fechaInicio = '';
+        var fechaFin = '';
+        var idProductoPresentacion = 0;
+
+        $(document).on('click', ".verModalStockPendienteRecepcion", function () {
+            idCiudad = $(this).attr("idCiudad");
+            idProducto = $(this).attr("idProducto");
+            fechaInicio = $(this).attr("fechaInicio");
+            fechaFin = $(this).attr("fechaFin");
+            idProductoPresentacion = $(this).attr("idProductoPresentacion");
+
+            llenarPedidosPendientes();
+
+        });
+
+        $(document).on('change', "#selectUnidadProductoStockPendienteRecepcion", function () {
+            var idPresentacion = $(this).val();
+            idProductoPresentacion = idPresentacion;
+
+            $("td.tdRSPACantidadPedido").each(function () {
+                if (idPresentacion == 0) { $(this).html($(this).attr("cMP")); }
+                if (idPresentacion == 1) { $(this).html($(this).attr("cAlternativa")); }
+                if (idPresentacion == 2) { $(this).html($(this).attr("cProveedor")); }
+            });
+
+            $("td.tdRSPACantidadRecibida").each(function () {
+                if (idPresentacion == 0) { $(this).html($(this).attr("cMP")); }
+                if (idPresentacion == 1) { $(this).html($(this).attr("cAlternativa")); }
+                if (idPresentacion == 2) { $(this).html($(this).attr("cProveedor")); }
+            });
+
+            $("td.tdRSPACantidadPendiente").each(function () {
+                if (idPresentacion == 0) { $(this).html($(this).attr("cMP")); }
+                if (idPresentacion == 1) { $(this).html($(this).attr("cAlternativa")); }
+                if (idPresentacion == 2) { $(this).html($(this).attr("cProveedor")); }
+            });
+        });
+
+        $(document).on('click', "#btnExportStockPendienteRecepcionExcel", function () {
+            window.location.href = $(this).attr("actionLink") + "?idProductoPresentacion=" + idProductoPresentacion;
+        });
+
+        function llenarPedidosPendientes() {
+            $('body').loadingModal({
+                text: 'Cargando...'
+            });
+            $('body').loadingModal('show');
+
+            $.ajax({
+                url: "/Stock/ReporteStockPendienteRecepcion",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idCiudad: idCiudad,
+                    idProducto: idProducto,
+                    idProductoPresentacion: idProductoPresentacion,
+                    fechaInicio: fechaInicio,
+                    fechaFin: fechaFin
+                },
+                error: function (detalle) {
+                    $('body').loadingModal('hide');
+                },
+                success: function (result) {
+                    producto = result.producto;
+                    ciudad = result.ciudad;
+                    lista = result.lista;
+
+                    var htmlOptionsUnidad = "";
+                    unidadSelected = "";
+                    if (idProductoPresentacion == '1') {
+                        unidadSelected = "selected";
+                    }
+
+                    if (producto.equivalenciaAlternativa > 1) {
+                        htmlOptionsUnidad = htmlOptionsUnidad + '<option value="1" ' + unidadSelected + '>' + producto.unidad_alternativa + '</option>';
+                    }
+
+                    unidadSelected = "";
+                    if (idProductoPresentacion == '0') {
+                        unidadSelected = "selected";
+                    }
+
+                    htmlOptionsUnidad = htmlOptionsUnidad + '<option value="0" ' + unidadSelected + '>' + producto.unidad + '</option>';
+
+
+                    unidadSelected = "";
+                    if (idProductoPresentacion == '2') {
+                        unidadSelected = "selected";
+                    }
+
+                    if (producto.equivalenciaProveedor > 1) {
+                        htmlOptionsUnidad = htmlOptionsUnidad + '<option value="2" ' + unidadSelected + '>' + producto.unidadProveedor + '</option>';
+                    }
+
+                    $("#selectUnidadProductoStockPendienteRecepcion").html(htmlOptionsUnidad);
+
+                    $("#verSedeStockPendienteRecepcion").html(ciudad.nombre);
+                    $("#verNombreProductoStockPendienteRecepcion").html(producto.descripcion);
+                    $("#verCodigoProductoStockPendienteRecepcion").html(producto.sku);
+
+
+                    var htmlList = "";
+
+                    for (var i = 0; i < lista.length; i++) {
+                        var cantidadPedido = parseFloat(lista[i][10]);
+                        var cantidadRecibida = parseFloat(lista[i][11]);
+                        var cantidadPendiente = parseFloat(lista[i][12]);
+
+                        var cantidadPedidoAlternativa = 0;
+                        var cantidadPedidoMP = 0;
+                        var cantidadPedidoProveedor = 0;
+
+                        var cantidadRecibidaAlternativa = 0;
+                        var cantidadRecibidaMP = 0;
+                        var cantidadRecibidaProveedor = 0;
+
+                        var cantidadPendienteAlternativa = 0;
+                        var cantidadPendienteMP = 0;
+                        var cantidadPendienteProveedor = 0;
+
+                        cantidadPedidoMP = cantidadPedido / producto.equivalenciaUnidadEstandarUnidadConteo;
+                        cantidadRecibidaMP = cantidadRecibida / producto.equivalenciaUnidadEstandarUnidadConteo;
+                        cantidadPendienteMP = cantidadPendiente / producto.equivalenciaUnidadEstandarUnidadConteo;
+
+                        cantidadPedidoAlternativa = cantidadPedido / (producto.equivalenciaUnidadEstandarUnidadConteo / producto.equivalenciaAlternativa);
+                        cantidadRecibidaAlternativa = cantidadRecibida / (producto.equivalenciaUnidadEstandarUnidadConteo / producto.equivalenciaAlternativa);
+                        cantidadPendienteAlternativa = cantidadPendiente / (producto.equivalenciaUnidadEstandarUnidadConteo / producto.equivalenciaAlternativa);
+
+                        cantidadPedidoProveedor = cantidadPedido / (producto.equivalenciaUnidadEstandarUnidadConteo * producto.equivalenciaProveedor);
+                        cantidadRecibidaProveedor = cantidadRecibida / (producto.equivalenciaUnidadEstandarUnidadConteo * producto.equivalenciaProveedor);
+                        cantidadPendienteProveedor = cantidadPendiente / (producto.equivalenciaUnidadEstandarUnidadConteo * producto.equivalenciaProveedor);
+
+                        if (idProductoPresentacion == 0) {
+                            cantidadPedido = cantidadPedidoMP;
+                            cantidadRecibida = cantidadRecibidaMP;
+                            cantidadPendiente = cantidadPendienteMP;
+                        }
+
+                        if (idProductoPresentacion == 1) {
+                            cantidadPedido = cantidadPedidoAlternativa;
+                            cantidadRecibida = cantidadRecibidaAlternativa;
+                            cantidadPendiente = cantidadPendienteAlternativa;
+                        }
+
+                        if (idProductoPresentacion == 2) {
+                            cantidadPedido = cantidadPedidoProveedor;
+                            cantidadRecibida = cantidadRecibidaProveedor;
+                            cantidadPendiente = cantidadPendienteProveedor;
+                        }
+
+
+                        htmlList = htmlList +
+                            '<tr>' +
+                            '<td>' + lista[i][0] + '</td>' +
+                            '<td><a href="#" class="verModalPedidoReadOnly" idPedido="' + lista[i][13] + '">' + lista[i][1] + '</a></td>' +
+                            '<td><b>' + lista[i][2] + '</b>: ' + lista[i][3] + '</td>' +
+                            '<td>' + lista[i][4] + ' - ' + lista[i][5] + '</td>' +
+                            //'<td>' + lista[i][6] + '</td>' +
+                            '<td>' + lista[i][7] + '</td>' +
+                            '<td>' + lista[i][8] + ' - ' + lista[i][9] + '</td>' +
+                            '<td class="tdRSPACantidadPedido" cMP="' + cantidadPedidoMP.toFixed(2) + '" cAlternativa="' + cantidadPedidoAlternativa.toFixed(2) + '" cProveedor="' + cantidadPedidoProveedor.toFixed(2) + '">' + cantidadPedido.toFixed(2) + '</td>' +
+                            '<td class="tdRSPACantidadRecibida" cMP="' + cantidadRecibidaMP.toFixed(2) + '" cAlternativa="' + cantidadRecibidaAlternativa.toFixed(2) + '" cProveedor="' + cantidadRecibidaProveedor.toFixed(2) + '">' + cantidadRecibida.toFixed(2) + '</td>' +
+                            '<td class="tdRSPACantidadPendiente" cMP="' + cantidadPendienteMP.toFixed(2) + '" cAlternativa="' + cantidadPendienteAlternativa.toFixed(2) + '" cProveedor="' + cantidadPendienteProveedor.toFixed(2) + '">' + cantidadPendiente.toFixed(2) + '</td>' +
+                            '<td></td>' +
+                            '</tr>';
+                    }
+
+                    $("#tablePedidosStockPendienteRecepcion tbody").html(htmlList);
+
+                    $('body').loadingModal('hide');
+                    $("#modalStockPendienteRecepcion").modal();
+                }
+            });
+
+        };
+    };
+
+    
+
+    if (window.addEventListener) // W3C standard
+    {
+        window.addEventListener('load', funcionesModalStockPendienteRecepcion, false); // NB **not** 'onload'
+    }
+    else if (window.attachEvent) // Microsoft
+    {
+        window.attachEvent('onload', funcionesModalStockPendienteRecepcion);
+    }
+
+
+
+
+</script>

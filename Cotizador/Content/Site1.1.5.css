@@ -122,6 +122,10 @@ textarea {
         width: 850px;
     }
 
+    #modalStockPendienteRecepcion .modal-dialog {
+        width: 850px;
+    }
+
     #modalAgregarProducto .modal-dialog {
         width: 900px;
     }

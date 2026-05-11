@@ -172,3 +172,7 @@ Nombre del parámetro: source
 2026-01-23 13:46:21.9799|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Producto ya se encuentra en la lista.
 2026-01-23 13:46:41.3890|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Producto ya se encuentra en la lista.
 2026-01-27 00:26:12.8112|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / Debe ingresar una cantidad mayor a 0.
+2026-05-11 14:59:40.2206|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / El valor no puede ser nulo.
+Nombre del parámetro: source
+2026-05-11 14:59:45.8495|ERROR|Cotizador.Controllers.ParentController|y.ramirez@mpinstitucional.com / El valor no puede ser nulo.
+Nombre del parámetro: source
