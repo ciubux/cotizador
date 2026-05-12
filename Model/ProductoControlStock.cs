@@ -19,6 +19,11 @@ namespace Model
 
         public DateTime fechaCs { get; set; }
         public int cantidadCs { get; set; }
+        public int cantidadAtenderCs { get; set; }
+        public int cantidadRecibirCs { get; set; }
+
+        public int cantidadVirtualCs { get { return this.cantidadCs + this.cantidadRecibirCs - this.cantidadAtenderCs; } }
+
         public string unidadCs { get; set; }
 
         public string FechaCsDesc

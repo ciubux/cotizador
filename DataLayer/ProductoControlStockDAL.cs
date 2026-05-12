@@ -54,8 +54,11 @@ namespace DataLayer
                 obj.producto.descripcion = Converter.GetString(row, "descripcion");
                 obj.producto.unidadConteo = Converter.GetString(row, "unidad_conteo");
 
-                obj.producto.equivalenciaAlternativa= Converter.GetInt(row, "equivalencia");
+                obj.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
                 obj.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+                obj.producto.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_estandar_unidad_conteo");
+                obj.producto.equivalenciaUnidadAlternativaUnidadConteo = obj.producto.equivalenciaUnidadEstandarUnidadConteo / obj.producto.equivalenciaAlternativa;
+                obj.producto.equivalenciaUnidadProveedorUnidadConteo = obj.producto.equivalenciaUnidadEstandarUnidadConteo * obj.producto.equivalenciaProveedor;
 
                 obj.producto.unidad = Converter.GetString(row, "unidad");
                 obj.producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
@@ -64,7 +67,9 @@ namespace DataLayer
                 obj.fechaCs = Converter.GetDateTime(row, "fecha_cs");
                 obj.unidadCs = Converter.GetString(row, "unidad_cs");
                 obj.cantidadCs = Converter.GetInt(row, "cantidad_cs");
-                
+                obj.cantidadAtenderCs = Converter.GetInt(row, "cantidad_atender_cs");
+                obj.cantidadRecibirCs = Converter.GetInt(row, "cantidad_recibir_cs");
+
                 obj.Estado = Converter.GetInt(row, "estado");
 
                 lista.Add(obj);
