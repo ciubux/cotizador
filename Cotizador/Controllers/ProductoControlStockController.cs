@@ -92,6 +92,28 @@ namespace Cotizador.Controllers
             return obj;
         }
 
+        [HttpPost]
+        public string ActualizarControlStock(string idCiudad, List<Guid> controlStockIds)
+        {
+            int success = 0;
+
+            Guid ciudadId = Guid.Empty;
+
+            if (!idCiudad.Equals(string.Empty)) { ciudadId = Guid.Parse(idCiudad); }
+
+            ProductoControlStockBL bl = new ProductoControlStockBL();
+
+            if (controlStockIds == null) { controlStockIds = new List<Guid>(); }
+
+            bl.CalcularControlStock(Logueado.idUsuario, ciudadId, controlStockIds);
+            success = 1;
+
+            return JsonConvert.SerializeObject(new
+            {
+                success = success
+            });
+        }
+
 
         public ActionResult LimpiarFiltroControlStock()
         {

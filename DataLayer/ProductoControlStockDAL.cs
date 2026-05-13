@@ -1,9 +1,10 @@
 ﻿using Framework.DAL;
 using Framework.DAL.Settings.Implementations;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using Model;
+using System.Data.SqlClient;
 using System.Runtime.Remoting;
 
 namespace DataLayer
@@ -78,6 +79,31 @@ namespace DataLayer
             return lista;
         }
 
-        
+        public void CalcularControlStock(Guid idUsuario, Guid idCiudad, List<Guid> controlStockIds)
+        {
+            var objCommand = GetSqlCommand("pu_stock_calcular_control_productos");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            if (!idCiudad.Equals(Guid.Empty))
+            {
+                InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
+            }
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            foreach (Guid item in controlStockIds)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = item;
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idsControlStock", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+            ExecuteNonQuery(objCommand);
+        }
     }
 }

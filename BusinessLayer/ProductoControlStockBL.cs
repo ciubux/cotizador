@@ -16,5 +16,13 @@ namespace BusinessLayer
                 return dal.SelectProductosControlStock(idUsuario, estado, idCiudad, sku, proveedor, stockVerde, stockAmbar, stockRojo);
             }
         }
+
+        public void CalcularControlStock(Guid idUsuario, Guid idCiudad, List<Guid> controlStockIds)
+        {
+            using (ProductoControlStockDAL dal = new ProductoControlStockDAL())
+            {
+                dal.CalcularControlStock(idUsuario, idCiudad, controlStockIds);
+            }
+        }
     }
 }

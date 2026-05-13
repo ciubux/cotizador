@@ -54,6 +54,11 @@ jQuery(function ($) {
         location.reload();
     });
 
+    $("#btnAculizarControlCiudad").click(function () {
+        actualizarControlStock($("#idCiudad").val(), []);
+    });
+    
+
     function changeInputFiltro(propiedad, valor, tipo) {
         $.ajax({
             url: "/ProductoControlStock/changeFiltroControlStock",
@@ -64,6 +69,47 @@ jQuery(function ($) {
                 valor: valor
             },
             success: function () { }
+        });
+    }
+
+    function actualizarControlStock(idCiudad, idsControl) {
+        $('body').loadingModal({
+            text: 'Calculando stock...'
+        });
+
+        $.ajax({
+            url: "/ProductoControlStock/ActualizarControlStock",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCiudad: idCiudad,
+                controlStockIds: idsControl
+            },
+            error: function () {
+                $.alert({
+                    title: "ERROR",
+                    type: 'red',
+                    content: 'Ocurrió un error al actulizar el stock actual.',
+                    buttons: {
+                        OK: function () {
+                        }
+                    }
+                });
+            },
+            success: function (res) {
+                if (res.success == 1) {
+                    $.alert({
+                        title: "OPERACIÓN EXITOSA",
+                        type: 'green',
+                        content: 'Se actualizó el stock actual.',
+                        buttons: {
+                            OK: function () {
+                                location.reload();
+                            }
+                        }
+                    });
+                }
+            }
         });
     }
 });
