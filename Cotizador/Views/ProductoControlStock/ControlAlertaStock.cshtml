@@ -5,6 +5,9 @@
     Cotizador.Models.OBJsFiltro.ControlStockFiltro filtro = ViewBag.filtro;
 
     List<Model.ProductoControlStock> lista = ViewBag.lista;
+
+    string idsControl = string.Join(";", lista.Select(x => x.idProductoControlStock));
+
 }
 
 <div class="page-header">
@@ -12,6 +15,7 @@
 </div>
 <div class="container">
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" id="idsControlResultados" value="@idsControl" />
 
     <form class="form-horizontal">
 
@@ -77,7 +81,7 @@
                         </label>
                         <label class="checkbox-inline">
                             <span class="label label-danger" style="padding: 5px 10px;">
-                                <input type="checkbox" id="filtroStockRojo" @(filtro.stockRojo ? "checked" : "")> Bajo 
+                                <input type="checkbox" id="filtroStockRojo" @(filtro.stockRojo ? "checked" : "")> Bajo
                             </span>
                         </label>
                     </div>

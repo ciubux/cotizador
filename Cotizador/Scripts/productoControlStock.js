@@ -58,6 +58,28 @@ jQuery(function ($) {
         actualizarControlStock($("#idCiudad").val(), []);
     });
     
+    $("#btnAculizarControlResultados").click(function () {
+        var cadenaIds = $("#idsControlResultados").val();
+
+        var idsControl = [];
+
+        if (cadenaIds && cadenaIds.trim() !== "") {
+            idsControl = cadenaIds.split(';').filter(function (id) {
+                return id.trim() !== "";
+            });
+        }
+
+        actualizarControlStock("", idsControl);
+    });
+
+    $("#btnAculizarControlCiudad").click(function () {
+        var idsControl = [];
+
+        //coger idsControl y separar ; para generar un array que hay que enviar a la funcion
+
+        actualizarControlStock("", ids);
+    });
+
 
     function changeInputFiltro(propiedad, valor, tipo) {
         $.ajax({
