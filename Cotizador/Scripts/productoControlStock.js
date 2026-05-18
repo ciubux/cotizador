@@ -18,6 +18,11 @@ jQuery(function ($) {
         changeInputFiltro("idCiudad", valor, "guid");
     });
 
+    $("#tipoUnidad").change(function () {
+        var valor = $(this).val();
+        changeInputFiltro("idPresentacionUnidad", valor, "int");
+    });
+
     $("#skuProducto").change(function () {
         var valor = $(this).val();
         changeInputFiltro("sku", valor, "string");

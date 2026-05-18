@@ -1643,7 +1643,7 @@ namespace Cotizador.Controllers
 
                         int cantidadRestante = epr.cantidadReservada - epr.cantidadAtendida;
                         decimal cantidadRestanteUnidDet = Decimal.Parse(cantidadRestante.ToString()); 
-                        decimal cantidadDet = Decimal.Parse(det.cantidad.ToString());
+                        decimal cantidadDet = Decimal.Parse(det.cantidadPorAtender.ToString());
 
 
                         switch (det.idProductoPresentacion)

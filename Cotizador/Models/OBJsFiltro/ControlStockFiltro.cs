@@ -5,6 +5,7 @@ using System.Web;
 using System.Reflection;
 
 using Model;
+using NPOI.HSSF.Record;
 
 namespace Cotizador.Models.OBJsFiltro
 {
@@ -21,6 +22,7 @@ namespace Cotizador.Models.OBJsFiltro
         public bool stockAmbar { get; set; }
         public bool stockRojo { get; set; }
         
+        public int idPresentacionUnidad { get; set; }
 
         public void changeDatoParametro(string propiedad, string valor, string tipo)
         {

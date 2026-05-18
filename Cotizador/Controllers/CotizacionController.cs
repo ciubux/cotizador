@@ -21,6 +21,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using static Model.SeguimientoCotizacion;
 
 namespace Cotizador.Controllers
 {
@@ -1547,7 +1548,7 @@ namespace Cotizador.Controllers
                         cotizacion.fechaModificacion = DateTime.Now;// cotizacionSession.fechaModificacion;
                         cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
                         cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Aceptada;
-                        cotizacion.seguimientoCotizacion.observacion = "[Aceptación Automática]";
+                        cotizacion.seguimientoCotizacion.observacion = "[Aceptación Automática] " + cotizacion.seguimientoCotizacion.observacion;
                         bl.cambiarEstadoCotizacion(cotizacion);
 
                         if (cotizacion.idPedidoOrigen != null && !cotizacion.idPedidoOrigen.Equals(Guid.Empty))

@@ -5,6 +5,7 @@
     Cotizador.Models.OBJsFiltro.ControlStockFiltro filtro = ViewBag.filtro;
 
     List<Model.ProductoControlStock> lista = ViewBag.lista;
+    string formatoDosDecimales = "{0:0.00}";
 
     string idsControl = string.Join(";", lista.Select(x => x.idProductoControlStock));
 
@@ -38,6 +39,19 @@
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group row">
                     <button id="btnAculizarControlCiudad" type="button" class="btn btn-warning">Actualizar Stock Actual Sede</button>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group row">
+                    <label class="control-label col-xs-4" for="tipoUnidad">Unidad:</label>
+                    <div class="col-xs-8">
+                        <select class="form-control" id="tipoUnidad" name="tipoUnidad">
+                            <option @(filtro.idPresentacionUnidad == 0 ? "selected" : "") value="0">MP</option>
+                            <option @(filtro.idPresentacionUnidad == 1 ? "selected" : "") value="1">Alternativa</option>
+                            <option @(filtro.idPresentacionUnidad == 2 ? "selected" : "") value="2">Proveedor</option>
+                            <option @(filtro.idPresentacionUnidad == 3 ? "selected" : "") value="3">Conteo</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
@@ -117,7 +131,6 @@
                 <tr>
                     <th data-name="sku" data-visible="true">SKU</th>
                     <th data-name="producto" data-visible="true" data-sortable="true">Producto</th>
-                    <th data-name="unidad" data-visible="true" data-sortable="true">Unidad</th>
                     <th data-name="cantidadMinima" data-visible="true" data-sortable="true">Stock Minima</th>
                     <th data-name="cantidadMaxima" data-visible="true" data-sortable="true">Stock Máxima</th>
                     <th data-name="cantidadAlerta" data-visible="true" data-sortable="true">Stock Alerta</th>
@@ -131,45 +144,45 @@
             <tbody>
                 @foreach (Model.ProductoControlStock item in lista)
                 {
+                    item.idProductoPresentacion = filtro.idPresentacionUnidad;
                     <tr>
                         <td>@item.producto.sku</td>
                         <td>@item.producto.descripcion</td>
-                        <td>@item.producto.unidadConteo</td>
                         <td>@item.cantidadMinima</td>
                         <td>@item.cantidadMaxima</td>
                         <td>@item.cantidadAlerta</td>
                         <td>@item.FechaCsDesc</td>
-                        <td>@item.unidadCs</td>
+                        <td>@item.unidadPresentacion</td>
                         <td>
                             @if (item.cantidadCs <= item.cantidadMinima)
                             {
-                                <span class="label label-danger" style="font-size: 100%;">@item.cantidadCs</span>
+                                <span class="label label-danger" style="font-size: 100%;">@String.Format(formatoDosDecimales, item.cantidadPresentacion)</span>
                             }
                             else if (item.cantidadCs <= item.cantidadAlerta)
                             {
-                                <span class="label label-warning" style="font-size: 100%;">@item.cantidadCs</span>
+                                <span class="label label-warning" style="font-size: 100%;">@String.Format(formatoDosDecimales, item.cantidadPresentacion)</span>
                             }
                             else
                             {
-                                <span class="label label-success" style="font-size: 100%;">@item.cantidadCs</span>
+                                <span class="label label-success" style="font-size: 100%;">@String.Format(formatoDosDecimales, item.cantidadPresentacion)</span>
                             }
                         </td>
                         <td>
                             @if (item.cantidadVirtualCs <= item.cantidadMinima)
                             {
-                                <span class="label label-danger" style="font-size: 100%;">@item.cantidadVirtualCs</span>
+                                <span class="label label-danger" style="font-size: 100%;">@String.Format(formatoDosDecimales, item.cantidadVirtualPresentacion)</span>
                             }
                             else if (item.cantidadVirtualCs <= item.cantidadAlerta)
                             {
-                                <span class="label label-warning" style="font-size: 100%;">@item.cantidadVirtualCs</span>
+                                <span class="label label-warning" style="font-size: 100%;">@String.Format(formatoDosDecimales, item.cantidadVirtualPresentacion)</span>
                             }
                             else
                             {
-                                <span class="label label-success" style="font-size: 100%;">@item.cantidadVirtualCs</span>
+                                <span class="label label-success" style="font-size: 100%;">@String.Format(formatoDosDecimales, item.cantidadVirtualPresentacion)</span>
                             }
                             <br />
-                            <span class="label label-default" style="font-size: 70%;">-@item.cantidadAtenderCs</span>
-                            <span class="label label-info" style="font-size: 70%;">+@item.cantidadRecibirCs</span>
+                            <span class="label label-default" style="font-size: 70%;">-@String.Format(formatoDosDecimales, item.cantidadAtenderPresentacion) </span>
+                            <span class="label label-info" style="font-size: 70%;">+@String.Format(formatoDosDecimales, item.cantidadRecibirPresentacion) </span>
                         </td>
                     </tr>
                 }

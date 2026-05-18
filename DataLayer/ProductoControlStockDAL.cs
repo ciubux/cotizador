@@ -70,6 +70,7 @@ namespace DataLayer
                 obj.cantidadCs = Converter.GetInt(row, "cantidad_cs");
                 obj.cantidadAtenderCs = Converter.GetInt(row, "cantidad_atender_cs");
                 obj.cantidadRecibirCs = Converter.GetInt(row, "cantidad_recibir_cs");
+                obj.idProductoPresentacion = 3;
 
                 obj.Estado = Converter.GetInt(row, "estado");
 
