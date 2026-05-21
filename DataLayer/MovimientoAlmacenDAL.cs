@@ -992,6 +992,7 @@ namespace DataLayer
                 guiaRemision.pedido.facturaUnica = Converter.GetInt(row, "factura_unica") == 1 ? true : false;
                 guiaRemision.pedido.numeroGrupoPedido = Converter.GetLong(row, "numero_grupo");
                 guiaRemision.pedido.numeroPedidoRelacionado = Converter.GetLong(row, "numero_pedido_relacionado");
+                guiaRemision.pedido.clasePedido = (Pedido.ClasesPedido)Char.Parse(Converter.GetString(row, "tipo_pedido"));
 
                 //UBIGEO
                 guiaRemision.pedido.ubigeoEntrega = new Ubigeo();

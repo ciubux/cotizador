@@ -222,7 +222,7 @@ namespace Cotizador.Models.DTOsShow
             guiaRemisionDTOshow.nombreClienteTercero = guiaRemisionDTOshow.entregaTerceros ? guiaRemision.pedido.nombreClienteTercero : "";
             guiaRemisionDTOshow.empresa_emite_guias = true; // guiaRemision.pedido.empresa.emiteGuias;
             guiaRemisionDTOshow.extornoRequiereFacturar = guiaRemision.fechaEmision.AddDays(Constantes.DIAS_VALIDO_EXTORNO_GUIA_MES_ANTERIOR).CompareTo(DateTime.Now) < 0 && 
-                guiaRemision.fechaEmision.Month < DateTime.Now.Month && !guiaRemision.estaFacturado;
+                guiaRemision.fechaEmision.Month < DateTime.Now.Month && !guiaRemision.estaFacturado && guiaRemision.pedido != null && guiaRemision.pedido.clasePedido == Pedido.ClasesPedido.Venta;
             guiaRemisionDTOshow.bloqueaFacturaEspejoAutomatica = guiaRemision.bloqueaFacturaEspejoAutomatica;
             guiaRemisionDTOshow.contieneProductosReservados = guiaRemision.contieneProductosReservados;
             return guiaRemisionDTOshow;
