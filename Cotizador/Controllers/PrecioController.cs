@@ -85,6 +85,30 @@ namespace Cotizador.Controllers
             return json;
         }
 
+        public String GetPreciosPuntualesRegistrados()
+        {
+            Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
+            Guid idCliente = Guid.Parse(Request["idCliente"].ToString());
+
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            //Para recuperar el producto se envia si la sede seleccionada es provincia o no
+            PrecioEspecialBL precioEspecialBl = new PrecioEspecialBL();
+
+            
+            PrecioClienteProductoBL precioClienteProductoBL = new PrecioClienteProductoBL();
+            List<PrecioClienteProducto> precioClienteProductoList = precioClienteProductoBL.getPreciosPuntalesRegistrados(idProducto, idCliente);
+
+            String jsonPrecioLista = JsonConvert.SerializeObject(precioClienteProductoList);
+
+            var retornar = new
+            {
+                precioLista = precioClienteProductoList
+            };
+
+            return JsonConvert.SerializeObject(retornar); 
+        }
+
         public String GetPreciosRegistradosGrupoCliente()
         {
             Guid idProducto = Guid.Parse(Request["idProducto"].ToString());

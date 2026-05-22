@@ -17,6 +17,15 @@ namespace BusinessLayer
             {
                 List<PrecioClienteProducto> precioClienteProductoList = dal.getPreciosRegistrados(idProducto, idCliente);
 
+                return precioClienteProductoList;
+            }
+        }
+
+        public List<PrecioClienteProducto> getPreciosPuntalesRegistrados(Guid idProducto, Guid idCliente)
+        {
+            using (var dal = new PrecioClienteProductoDAL())
+            {
+                List<PrecioClienteProducto> precioClienteProductoList = dal.getPreciosPuntalesRegistrados(idProducto, idCliente);
 
                 return precioClienteProductoList;
             }
@@ -27,7 +36,6 @@ namespace BusinessLayer
             using (var dal = new PrecioClienteProductoDAL())
             {
                 List<PrecioClienteProducto> precioGrupoClienteProductoList = dal.getPreciosRegistradosGrupo(idProducto, idGrupoCliente);
-
 
                 return precioGrupoClienteProductoList;
             }

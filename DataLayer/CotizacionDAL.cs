@@ -619,6 +619,8 @@ namespace DataLayer
 
             InputParameterAdd.Int(objCommand, "verTodasEmpresas", cotizacion.integraEmpresas ? 1 : 0);
 
+            InputParameterAdd.Int(objCommand, "tipoCotizacion", (int)cotizacion.tipoCotizacion);
+
             InputParameterAdd.Int(objCommand, "idAsesor", cotizacion.responsableComercial.idVendedor);
             InputParameterAdd.Guid(objCommand, "id_usuario", cotizacion.usuarioBusqueda.idUsuario);
             InputParameterAdd.Guid(objCommand, "idUsuario", cotizacion.usuario.idUsuario);

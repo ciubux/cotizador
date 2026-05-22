@@ -814,6 +814,7 @@
     <Content Include="Views\ConsolidadoAtencion\AsignarGuias.cshtml" />
     <Content Include="Views\ProductoControlStock\ControlAlertaStock.cshtml" />
     <Content Include="Views\Stock\_ModalStockPendienteRecepcion.cshtml" />
+    <Content Include="Views\Precio\_ModalPrecioCotizacionesPuntuales.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

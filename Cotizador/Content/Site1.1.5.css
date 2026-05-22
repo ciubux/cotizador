@@ -183,6 +183,10 @@ textarea {
         width: 900px;
     }
 
+    #modalMostrarPreciosPuntuales .modal-dialog {
+        width: 880px;
+    }
+
     #modalVerPedido .modal-dialog {
         width: 1200px;
     }

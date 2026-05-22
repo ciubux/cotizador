@@ -60,7 +60,7 @@ namespace Cotizador.Controllers
 
             Cotizacion cotizacionTmp = new Cotizacion();
             cotizacionTmp.esPagoContado = false;
-            cotizacionTmp.tipoCotizacion = Cotizacion.TiposCotizacion.Normal;
+            cotizacionTmp.tipoCotizacion = Cotizacion.TiposCotizacion.Todas;
             cotizacionTmp.fechaDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             DateTime fechaHasta = DateTime.Now;
             cotizacionTmp.fechaHasta = new DateTime(fechaHasta.Year, fechaHasta.Month, fechaHasta.Day, 23, 59, 59);

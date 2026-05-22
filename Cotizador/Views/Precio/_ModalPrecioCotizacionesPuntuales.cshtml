@@ -1,0 +1,165 @@
+﻿
+<div class="modal fade" id="modalMostrarPreciosPuntuales" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalMostrarPreciosPuntualesTitle"><b>Precios Registrados en Cotizaciones Puntuales <span id="spnNombreClienteMMPP"></span> </b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-8">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-2">Producto:</label>
+                                <div class="col-xs-10">
+                                    <p class="form-control-static" id="verProductoMMPP"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-4">Código:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="verCodigoProductoMMPP"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <table id="tableMostrarPreciosPuntuales" class="table" data-editing="false"
+                           data-editing-show-text='<span class="fooicon fooicon-pencil" aria-hidden="true"></span> Editar Detalle'
+                           data-editing-allow-add="true"
+                           data-editing-allow-delete="true"
+                           data-editing-allow-edit="false"
+                           data-sorting="true"
+                           data-show-toggle="false"
+                           data-editing-hide-text="Finalizar edición"
+                           data-editing-add-text="Descartar cambios">
+                        <thead>
+                            <tr>
+                                <th data-name="numero" data-visible="true">Número Cotización</th>
+                                <th data-name="fechaInicioVigencia" data-visible="true">Fecha Inicio Vigencia</th>
+                                <th data-name="fechaFinVigencia" data-visible="true">Fecha Fin Vigencia</th>
+                                <th data-name="Unidad" data-visible="true">Unidad</th>
+                                <th data-name="precioNeto" data-visible="true">Precio Neto</th>
+                                <th data-name="flete" data-visible="true">Flete</th>
+                                <th data-name="precioUnitario" data-visible="true">Precio Unitario</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    function funcionesModalPreciosCotizacionesPuntuales() {
+        $(document).on('click', ".btn-ver-precios-cotizaciones-puntuales", function () {
+            var idProducto = $(this).attr("idProducto");
+            var idCliente = $(this).attr("idCliente");
+
+            $("#spnNombreClienteMMPP").html($(this).attr("nombreCliente"));
+            $("#verProductoMMPP").html($(this).attr("nombreProducto"));
+            $("#verCodigoProductoMMPP").html($(this).attr("codigoProducto"));
+
+            llenarTablaPreciosPuntuales(idProducto, idCliente);
+        });
+
+        function llenarTablaPreciosPuntuales(idProducto, idCliente) {
+            $('body').loadingModal({
+                text: 'Cargando...'
+            });
+            $('body').loadingModal('show');
+
+            $.ajax({
+                url: "/Precio/GetPreciosPuntualesRegistrados",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idCliente: idCliente,
+                    idProducto: idProducto 
+                },
+                error: function (detalle) {
+                    $('body').loadingModal('hide');
+                },
+                success: function (result) {
+                    var precioListaList = result.precioLista;
+
+                    // var producto = $.parseJSON(respuesta);
+                    $("#tableMostrarPreciosPuntuales > tbody").empty();
+
+                    FooTable.init('#tableMostrarPreciosPuntuales');
+                    for (var i = 0; i < precioListaList.length; i++) {
+                        var fechaInicioVigencia = precioListaList[i].fechaInicioVigencia;
+                        var fechaFinVigencia = precioListaList[i].fechaFinVigencia;
+
+                        if (fechaInicioVigencia == null)
+                            fechaInicioVigencia = "No Definida";
+                        else
+                            fechaInicioVigencia = invertirFormatoFecha(precioListaList[i].fechaInicioVigencia.substr(0, 10));
+
+                        if (fechaFinVigencia == null)
+                            fechaFinVigencia = "No Definida";
+                        else
+                            fechaFinVigencia = invertirFormatoFecha(precioListaList[i].fechaFinVigencia.substr(0, 10));
+
+                        var numeroCotizacion = precioListaList[i].numeroCotizacion;
+                        if (numeroCotizacion == null)
+                            numeroCotizacion = "No Identificado";
+
+                        var simboloMoneda = precioListaList[i].moneda.simbolo;
+
+                        $("#tableMostrarPreciosPuntuales").append('<tr data-expanded="true">' +
+
+                            '<td>' + numeroCotizacion + '</td>' +
+                            '<td>' + fechaInicioVigencia + '</td>' +
+                            '<td>' + fechaFinVigencia + '</td>' +
+                            '<td>' + precioListaList[i].unidad + '</td>' +
+                            '<td>' + simboloMoneda + " " + Number(precioListaList[i].precioNeto).toFixed(2) + '</td>' +
+                            '<td>' + simboloMoneda + " " + Number(precioListaList[i].flete).toFixed(2) + '</td>' +
+                            '<td>' + simboloMoneda + " " + Number(precioListaList[i].precioUnitario).toFixed(2) + '</td>' +
+
+                            '</tr>');
+                    }
+
+                    $('body').loadingModal('hide');
+                    $("#modalMostrarPreciosPuntuales").modal();
+                }
+            });
+
+        };
+    };
+
+    
+
+    if (window.addEventListener) // W3C standard
+    {
+        window.addEventListener('load', funcionesModalPreciosCotizacionesPuntuales, false); // NB **not** 'onload'
+    }
+    else if (window.attachEvent) // Microsoft
+    {
+        window.attachEvent('onload', funcionesModalPreciosCotizacionesPuntuales);
+    }
+
+
+
+
+</script>

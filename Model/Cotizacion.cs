@@ -25,6 +25,8 @@ namespace Model
 
         public enum TiposCotizacion
         {
+            [Display(Name = "TODAS")]
+            Todas = -1,
             [Display(Name = "Permanente")]
             Normal = 0,
             [Display(Name = "Puntual")]

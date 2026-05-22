@@ -68,6 +68,11 @@ jQuery(function ($) {
         ajustarFormularioPorTipoCotizacion();
         $("#btnBusquedaCotizaciones").click();
 
+        
+        if (!document.getElementById("btnBusquedaCotizaciones")) {
+            $('#tipoCotizacion option[value="-1"]').remove();
+        }
+        
         $('#tipoCotizacion option[value="2"]').remove();
 
     });
@@ -1275,6 +1280,10 @@ jQuery(function ($) {
                 $("#verPrecioProvinciaMP").html(producto.precioProvincia);
                 $("#verPrecioProvinciaAlternativa").html(producto.precioProvinciaAlternativa);
 
+
+                $("#lnkMostrarLogPrecioProducto").attr("nombreProducto", producto.nombre);
+                $("#lnkMostrarLogPrecioProducto").attr("sku", producto.sku);
+
                 if ($("#verCostoMP").length) {
                     $("#verCostoProveedor").html(producto.costoProveedor);
                     $("#verCostoMP").html(producto.costo);
@@ -1294,6 +1303,12 @@ jQuery(function ($) {
                     $("#spnVerNombreCliente").html(" Grupo: " + producto.nombreGrupo);
                 } else {
                     $("#spnVerNombreCliente").html(" Cliente: " + producto.nombreCliente);
+
+                    $(".btn-ver-precios-cotizaciones-puntuales").attr("idProducto", idProducto);
+                    $(".btn-ver-precios-cotizaciones-puntuales").attr("idCliente", idCliente);
+                    $(".btn-ver-precios-cotizaciones-puntuales").attr("nombreCliente", producto.nombreCliente);
+                    $(".btn-ver-precios-cotizaciones-puntuales").attr("nombreProducto", producto.nombre);
+                    $(".btn-ver-precios-cotizaciones-puntuales").attr("codigoProducto", producto.sku);
                 }
                 
 
@@ -2392,8 +2407,10 @@ jQuery(function ($) {
                     $("#labelGrupo").show();
                     $("#spnTitleGrupo").show();
                     $("#verClienteGrupo").html(cotizacion.grupo_codigoNombre);
+                    $(".btn-ver-precios-cotizaciones-puntuales").hide();
                 }
                 else {
+                    $(".btn-ver-precios-cotizaciones-puntuales").show();
                     $("#labelCliente").show();
                     $("#labelGrupo").hide();
                     $("#spnTitleGrupo").hide();

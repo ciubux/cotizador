@@ -19,6 +19,37 @@ namespace DataLayer
         {
         }
 
+        public List<PrecioClienteProducto> getPreciosPuntalesRegistrados(Guid idProducto, Guid idCliente)
+        {
+            var objCommand = GetSqlCommand("ps_preciosPuntualesClienteProducto");
+            InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
+            InputParameterAdd.Guid(objCommand, "idCliente", idCliente);
+            DataTable preciosDataSet = Execute(objCommand);
+
+            List<PrecioClienteProducto> precioListaList = new List<PrecioClienteProducto>();
+            foreach (DataRow row in preciosDataSet.Rows)
+            {
+                PrecioClienteProducto precioLista = new PrecioClienteProducto();
+
+                precioLista.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia_precios");
+
+                precioLista.fechaFinVigencia = Converter.GetDateTime(row, "fecha_limite_validez_oferta");
+
+                precioLista.moneda = Moneda.ListaMonedasFija.Where(m => m.codigo.Equals(Converter.GetString(row, "codigo_moneda"))).First();
+
+                precioLista.unidad = Converter.GetString(row, "unidad");
+                precioLista.precioNeto = Converter.GetDecimal(row, "precio_neto");
+                precioLista.flete = Converter.GetDecimal(row, "flete");
+                precioLista.precioUnitario = Converter.GetDecimal(row, "precio_sin_igv");
+
+                precioLista.numeroCotizacion = Converter.GetInt(row, "numero_cotizacion").ToString().PadLeft(10, '0');
+                
+                precioListaList.Add(precioLista);
+            }
+
+            return precioListaList;
+        }
+
         public List<PrecioClienteProducto> getPreciosRegistrados(Guid idProducto, Guid idCliente)
         {
             var objCommand = GetSqlCommand("ps_getprecioClienteProducto");
