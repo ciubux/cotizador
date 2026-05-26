@@ -4488,6 +4488,16 @@ jQuery(function ($) {
                         clienteRUC = cotizacionList[i].cliente_ruc;
                     }
 
+                    if (cotizacionList[i].tipoCotizacion == 0) {
+                        creadoPara = creadoPara + " [Permanente]";
+                    }
+                    else if (cotizacionList[i].tipoCotizacion == 1) {
+                        creadoPara = creadoPara + " [Puntual]";
+                    }
+                    else if (cotizacionList[i].tipoCotizacion == 2) {
+                        creadoPara = creadoPara + " [Trivial]";
+                    }
+
                     var nroPedidoOrigen = "";
                     if (cotizacionList[i].pedidoOrigen_numero != undefined && cotizacionList[i].pedidoOrigen_numero != "") {
                         nroPedidoOrigen = '<br/><span class="spn-nombre-comercial">Desde Pedido ' + cotizacionList[i].pedidoOrigen_numero + '</span>';

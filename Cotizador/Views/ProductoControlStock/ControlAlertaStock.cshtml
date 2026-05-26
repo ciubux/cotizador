@@ -38,7 +38,7 @@
             </div>
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group row">
-                    <button id="btnAculizarControlCiudad" type="button" class="btn btn-warning">Actualizar Stock Actual Sede</button>
+                    <button id="btnAculizarControlCiudad" type="button" class="btn btn-warning">Actualizar Stocks Sede</button>
                 </div>
             </div>
             <div class="col-sm-6 col-lg-4">
@@ -80,7 +80,7 @@
 
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group">
-                    <label class="control-label col-xs-4" for="familia">Estado Stock:</label>
+                    <label class="control-label col-xs-4" for="familia">Estado Stock Viurtal:</label>
                     <div class="col-xs-8">
                         <!--Checks de estados de stock-->
                         <label class="checkbox-inline">
@@ -88,14 +88,16 @@
                                 <input type="checkbox" id="filtroStockVerde" @(filtro.stockVerde ? "checked" : "")> Cubierto
                             </span>
                         </label>
+                        <br />
                         <label class="checkbox-inline">
                             <span class="label label-warning" style="padding: 5px 10px;">
                                 <input type="checkbox" id="filtroStockAmbar" @(filtro.stockAmbar ? "checked" : "")> Alerta
                             </span>
                         </label>
+                        <br />
                         <label class="checkbox-inline">
                             <span class="label label-danger" style="padding: 5px 10px;">
-                                <input type="checkbox" id="filtroStockRojo" @(filtro.stockRojo ? "checked" : "")> Bajo
+                                <input type="checkbox" id="filtroStockRojo" @(filtro.stockRojo ? "checked" : "")> Crítico
                             </span>
                         </label>
                     </div>
@@ -111,7 +113,7 @@
             <button id="btnLimpiarBusqueda" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
             <button id="btnBusqueda" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
             <br /><br />
-            <button id="btnAculizarControlResultados" type="button" class="btn btn-warning right">Actualizar Stock Actual</button>
+            <button id="btnAculizarControlResultados" type="button" class="btn btn-warning right">Actualizar Stocks</button>
         </div>
 
         <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px; display: none;">
@@ -181,12 +183,22 @@
                                 <span class="label label-success" style="font-size: 100%;">@String.Format(formatoDosDecimales, item.cantidadVirtualPresentacion)</span>
                             }
                             <br />
-                            <span class="label label-default" style="font-size: 70%;">-@String.Format(formatoDosDecimales, item.cantidadAtenderPresentacion) </span>
-                            <span class="label label-info" style="font-size: 70%;">+@String.Format(formatoDosDecimales, item.cantidadRecibirPresentacion) </span>
+                            
+                            <a class="verModalStockPendienteAtencion" idproducto="@item.producto.idProducto" idproductopresentacion="@filtro.idPresentacionUnidad" idciudad="@filtro.idCiudad" fechainicio="" fechafin="">
+                                <span class="label label-stock-plus">+@String.Format(formatoDosDecimales, item.cantidadRecibirPresentacion) </span>
+                            </a>
+                            <a class="verModalStockPendienteAtencion" idproducto="@item.producto.idProducto" idproductopresentacion="@filtro.idPresentacionUnidad" idciudad="@filtro.idCiudad" fechainicio="" fechafin="">
+                                <span class="label label-stock-less" style="margin-left: 1px;">-@String.Format(formatoDosDecimales, item.cantidadAtenderPresentacion) </span>
+                            </a>
+                        </td>
+                        <td>
+                            <button type="button" title="Consultar Stock" class="verModalStockProducto btn" sku="@item.producto.sku" idProductoPresentacion="@filtro.idPresentacionUnidad"
+                                    idCiudad="@filtro.idCiudad" style="margin-top: 7px;">
+                                <img src="/images/icon_stock.png" height="25" />
+                            </button>
                         </td>
                     </tr>
                 }
-
             </tbody>
         </table>
     </form>
@@ -234,6 +246,16 @@
         </div>
     </div>
 </div>
+
+
+
+@Html.Partial("../Stock/_ModalStockProducto")
+
+@Html.Partial("../Stock/_ModalStockPendienteAtencion")
+
+@Html.Partial("../Stock/_ModalStockPendienteRecepcion")
+
+@Html.Partial("../Pedido/_ModalPedidoReadOnly")
 
 
 @section Scripts {

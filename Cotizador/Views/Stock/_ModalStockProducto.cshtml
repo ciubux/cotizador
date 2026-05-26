@@ -211,7 +211,6 @@
 
                                 if (stockSeparado > 0) {
                                     stock = stock + ' [-' + stockSeparado + ']';
-                                    stock = armarHtmlLinkPendienteAtencion(stock, lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', '');
                                     stockMP = stockMP + ' [-' + lista[i].cantidadSeparadaMpCalc + ']';
                                     stockAlternativo = stockAlternativo + ' [-' + lista[i].cantidadSeparadaAlternativaCalc + ']';
                                     stockProveedor = stockProveedor + ' [-' + lista[i].cantidadSeparadaProveedorCalc + ']';
@@ -220,12 +219,13 @@
 
                                 if (stockEsperado > 0) {
                                     stock = stock + ' [+' + stockEsperado + ']';
-                                    stock = armarHtmlLinkPendienteAtencion(stock, lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', '');
                                     stockMP = stockMP + ' [+' + lista[i].cantidadEsperadaMpCalc + ']';
                                     stockAlternativo = stockAlternativo + ' [+' + lista[i].cantidadEsperadaAlternativaCalc + ']';
                                     stockProveedor = stockProveedor + ' [+' + lista[i].cantidadEsperadaProveedorCalc + ']';
                                     stockConteo = stockConteo + ' [+' + lista[i].cantidadEsperadaConteo + ']';
                                 }
+
+                                stock = armarHtmlLinkPendienteAtencion(stock, lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', '');
                             }
 
                             unidadSelected = "";
@@ -315,7 +315,7 @@
 
                                 if (stockSeparado > 0) {
                                     stock = stock + ' [-' + stockSeparado + ']';
-                                    stock = armarHtmlLinkPendienteAtencion(stock, lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', '');
+                                    //stock = armarHtmlLinkPendienteAtencion(stock, lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', '');
                                     stockMP = stockMP + ' [-' + lista[i].cantidadSeparadaMpCalc + ']';
                                     stockAlternativo = stockAlternativo + ' [-' + lista[i].cantidadSeparadaAlternativaCalc + ']';
                                     stockProveedor = stockProveedor + ' [-' + lista[i].cantidadSeparadaProveedorCalc + ']';
@@ -324,17 +324,18 @@
 
                                 if (stockEsperado > 0) {
                                     stock = stock + ' [+' + stockEsperado + ']';
-                                    stock = armarHtmlLinkPendienteAtencion(stock, lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', '');
+                                    //stock = armarHtmlLinkPendienteAtencion(stock, lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', '');
                                     stockMP = stockMP + ' [+' + lista[i].cantidadEsperadaMpCalc + ']';
                                     stockAlternativo = stockAlternativo + ' [+' + lista[i].cantidadEsperadaAlternativaCalc + ']';
                                     stockProveedor = stockProveedor + ' [+' + lista[i].cantidadEsperadaProveedorCalc + ']';
                                     stockConteo = stockConteo + ' [+' + lista[i].cantidadEsperadaConteo + ']';
                                 }
+                                stock = armarHtmlLinkPendienteAtencion(stock + '', lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', '');
                             }
 
                             atributosStockSede = ' mp="' + stockMP + '" alternativa="' + stockAlternativo + '" proveedor="' + stockProveedor + '" conteo="' + stockConteo + '" ';
 
-                            htmlStockSedes = htmlStockSedes + '<div class="col-sm-4 col-lg-4"><div class="form-group"><label class="control-label col-xs-4">' +
+                            htmlStockSedes = htmlStockSedes + '<div class="col-sm-4 col-lg-4" style="height: 40px;"><div class="form-group"><label class="control-label col-xs-4">' +
                                 lista[i].ciudad.nombre + ':</label><div class="col-xs-8"><span class="stock-sede form-control-static" idCiudad="'
                                 + lista[i].ciudad.idCiudad + '" idProducto="' + lista[i].producto.idProducto + '" '
                                 + atributosStockSede + '>' + stock + '</span></div></div></div>';
@@ -343,16 +344,16 @@
 
                     if (disponible) {
                         $("#divCiudadModalStockSedeProducto").show();
-                        var stockTotalText = stockTotal.toFixed(2) + " [-" + stockTotalSeparado + "]" + " [+" + stockTotalEsperado + "]";
+                        var stockTotalText = stockTotal.toFixed(2) + " [-" + stockTotalSeparado.toFixed(2) + "]" + " [+" + stockTotalEsperado.toFixed(2) + "]";
                         stockTotalText = armarHtmlLinkPendienteAtencion(stockTotalText, idProducto, idProductoPresentacion, "@Guid.Empty", '', '');
 
                         $("#verStockTodasSedes").html(stockTotalText);
                         $("#verStockTodasSedes").attr("idProducto", idProducto);
                         $("#verStockTodasSedes").attr("idCiudad", "@Guid.Empty");
-                        $("#verStockTodasSedes").attr("mp", stockTotalMP.toFixed(2) + ' [-' + stockTotalSeparadoMP + ']' + ' [+' + stockTotalEsperadoMP + ']');
-                        $("#verStockTodasSedes").attr("alternativa", stockTotalAlternativa.toFixed(2) + ' [-' + stockTotalSeparadoAlternativa + ']' + ' [+' + stockTotalEsperadoAlternativa + ']');
-                        $("#verStockTodasSedes").attr("proveedor", stockTotalProveedor.toFixed(2) + ' [-' + stockTotalSeparadoProveedor + ']' + ' [+' + stockTotalEsperadoProveedor + ']');
-                        $("#verStockTodasSedes").attr("conteo", stockTotalConteo.toFixed(2) + ' [-' + stockTotalSeparadoConteo + ']' + ' [+' + stockTotalEsperadoConteo + ']');
+                        $("#verStockTodasSedes").attr("mp", stockTotalMP.toFixed(2) + ' [-' + stockTotalSeparadoMP.toFixed(2) + ']' + ' [+' + stockTotalEsperadoMP.toFixed(2) + ']');
+                        $("#verStockTodasSedes").attr("alternativa", stockTotalAlternativa.toFixed(2) + ' [-' + stockTotalSeparadoAlternativa.toFixed(2) + ']' + ' [+' + stockTotalEsperadoAlternativa.toFixed(2) + ']');
+                        $("#verStockTodasSedes").attr("proveedor", stockTotalProveedor.toFixed(2) + ' [-' + stockTotalSeparadoProveedor.toFixed(2) + ']' + ' [+' + stockTotalEsperadoProveedor.toFixed(2) + ']');
+                        $("#verStockTodasSedes").attr("conteo", stockTotalConteo.toFixed(2) + ' [-' + stockTotalSeparadoConteo.toFixed(2) + ']' + ' [+' + stockTotalEsperadoConteo.toFixed(2) + ']');
                     } else {
                         $("#divCiudadModalStockSedeProducto").hide();
                         $("#verStockTodasSedes").html("No Registrado");
@@ -387,16 +388,18 @@
         function armarHtmlLinkPendienteAtencion(stockText, idProducto, idProductoPresentacion, idCiudad, fechaInicio, fechaFin) {
             const dataAttrs = `idProducto="${idProducto}" idProductoPresentacion="${idProductoPresentacion}" idCiudad="${idCiudad}" fechaInicio="${fechaInicio}" fechaFin="${fechaFin}"`;
 
-            const linkAtencion = `<a class="verModalStockPendienteAtencion" ${dataAttrs}>[-`;
+            stockText = stockText.replace(/\[/, "<br/>[");
+
+            const linkAtencion = `<a class="verModalStockPendienteAtencion" ${dataAttrs}><span class="label label-stock-less">-`;
             stockText = stockText.replace("[-", linkAtencion);
 
-            const linkRecepcion = `<a class="verModalStockPendienteRecepcion" ${dataAttrs}>[+`;
+            const linkRecepcion = `<a class="verModalStockPendienteRecepcion" ${dataAttrs}><span class="label label-stock-plus">+`;
             stockText = stockText.replace("[+", linkRecepcion);
-
-            return stockText.replace(/\]/g, "]</a>");
+            
+            return stockText.replace(/\]/g, "</span></a>");
         }
 
-        
+
         $(document).on('change', "#idCiudadModalStockSedeProducto", function () {
             $(".verModalStockProductoKardex").attr("idCiudad", $(this).val());
             $(".verModalStockProductoKardex").attr("nombreCiudad", $(this).closest("option:selected").text());

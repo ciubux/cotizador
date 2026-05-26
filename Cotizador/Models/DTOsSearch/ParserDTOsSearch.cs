@@ -1,4 +1,5 @@
-﻿using Cotizador.Models.DTOs;
+﻿using BusinessLayer;
+using Cotizador.Models.DTOs;
 using Cotizador.Models.DTOshow;
 using Model;
 using System;
@@ -75,6 +76,7 @@ namespace Cotizador.Models.DTOsSearch
                 cotizacionDTO.montoIGV = cotizacionTmp.montoIGV;
                 cotizacionDTO.montoSubTotal = cotizacionTmp.montoSubTotal;
                 cotizacionDTO.minimoMargen = cotizacionTmp.minimoMargen;
+                cotizacionDTO.tipoCotizacion = (int)cotizacionTmp.tipoCotizacion;
                 cotizacionDTO.seguimientoCotizacion_estadoString = cotizacionTmp.seguimientoCotizacion.estadoString;
                 cotizacionDTO.seguimientoCotizacion_usuario_nombre = cotizacionTmp.seguimientoCotizacion.usuario.nombre;
                 cotizacionDTO.seguimientoCotizacion_observacion = cotizacionTmp.seguimientoCotizacion.observacion;

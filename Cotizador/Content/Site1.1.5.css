@@ -1584,3 +1584,14 @@ $darkred: darken($red, 0.2);*/
 }
 
 /* Fin Estilos Grid Selector */
+
+
+.label-stock-less {
+    font-size: 70%;
+    background-color: #df7575;
+}
+
+.label-stock-plus {
+    font-size: 70%;
+    background-color: #58cb70;
+}

@@ -655,7 +655,7 @@ namespace DataLayer
                 ///Mover "{0:0.00}" a clase de constantes
                 cotizacion.montoSubTotal = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, cotizacion.montoTotal / (1 + cotizacion.igv)));
                 cotizacion.montoIGV = cotizacion.montoTotal - cotizacion.montoSubTotal;
-                
+                cotizacion.tipoCotizacion = (Cotizacion.TiposCotizacion)Converter.GetInt(row, "tipo_cotizacion");
 
                 cotizacion.observaciones = Converter.GetString(row, "observaciones");
                 cotizacion.empresa = new Empresa();

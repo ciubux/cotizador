@@ -45,6 +45,7 @@ namespace Cotizador.Controllers
             ViewBag.pagina = (int)Constantes.paginas.ControlStock;
             ViewBag.lista = lista;
             ViewBag.filtro = filtro;
+            ViewBag.usuario = this.Logueado;
 
             return View();
         }
