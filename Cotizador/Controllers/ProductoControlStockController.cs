@@ -2,6 +2,7 @@
 using Cotizador.ExcelExport;
 using Cotizador.Models;
 using Cotizador.Models.OBJsFiltro;
+using DataLayer;
 using Model;
 using Model.UTILES;
 using Newtonsoft.Json;
@@ -42,10 +43,16 @@ namespace Cotizador.Controllers
 
             lista = bl.SelectProductosControlStock(Logueado.idUsuario, 1, filtro.idCiudad, filtro.sku, filtro.proveedor, filtro.stockVerde, filtro.stockAmbar, filtro.stockRojo);
 
+            ParametroBL parametroBL = new ParametroBL();
+            int diasConsiderarPedidosAnt = int.Parse(parametroBL.getParametro("STOCK_DIAS_PEDIDOS_ENTREGA_VENCIDA"));
+            int diasConsiderarPedidosPost = int.Parse(parametroBL.getParametro("STOCK_DIAS_PEDIDOS_ENTREGA_PENDIENTE"));
+
             ViewBag.pagina = (int)Constantes.paginas.ControlStock;
             ViewBag.lista = lista;
             ViewBag.filtro = filtro;
             ViewBag.usuario = this.Logueado;
+            ViewBag.diasConsiderarPedidosAnt = diasConsiderarPedidosAnt;
+            ViewBag.diasConsiderarPedidosPost = diasConsiderarPedidosPost;
 
             return View();
         }

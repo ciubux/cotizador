@@ -1595,3 +1595,49 @@ $darkred: darken($red, 0.2);*/
     font-size: 70%;
     background-color: #58cb70;
 }
+
+
+/* Estilos popup tooltip info */
+
+.popover {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    max-width: 300px; /* Ancho ajustado para mejor lectura */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+    
+.popover.bottom > .arrow:after {
+    border-bottom-color: #f8f9fa;
+}
+
+.popover-title {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #eaeaea;
+    border-radius: 8px 8px 0 0;
+    font-weight: bold;
+    color: #333;
+    padding: 10px 15px;
+}
+
+.popover-title-modern {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.popover-content {
+    padding: 12px 15px;
+    color: #555;
+    font-size: 0.95em;
+}
+
+.popover-body-modern p {
+    margin-bottom: 8px;
+}
+
+.popover-body-modern li {
+    margin-bottom: 4px;
+}
+
+/* Fin Estilos popup tooltip info */

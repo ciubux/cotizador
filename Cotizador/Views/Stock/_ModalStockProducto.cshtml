@@ -72,8 +72,8 @@
                 <br />
                 <div class="row">
                     <div class="col-sm-12 col-lg-12">
-                        <p><b>*</b> El número que esta entre corchetes "[- ]" al lado del stock de cada sede indica la cantidad del producto por atender en la sede (En pedidos que tienen plazo de entrega activo, o que su plazo de entrega comenzará dentro de los próximos <span class="spnRSPDiasPendientePost">14</span> días, o cuyo plazo de entrega se venció hace <span class="spnRSPDiasPendienteAnt">7</span> días o menos.</p>
-                        <p><b>*</b> El número que esta entre corchetes "[+ ]" al lado del stock de cada sede indica la cantidad del producto por recibir en la sede (En pedidos que tienen plazo de entrega activo, o que su plazo de recepción comenzará dentro de los próximos <span class="spnRSPDiasPendientePost">14</span> días, o cuyo plazo de recepción se venció hace <span class="spnRSPDiasPendienteAnt">7</span> días o menos.</p>
+                        <p><b>*</b> El número que esta en el cuadro verde en positivo "+" debajo del stock de cada sede indica la cantidad del producto por recibir en la sede (En pedidos que tienen plazo de entrega activo, o que su plazo de recepción comenzará dentro de los próximos <span class="spnRSPDiasPendientePost">14</span> días, o cuyo plazo de recepción se venció hace <span class="spnRSPDiasPendienteAnt">7</span> días o menos.</p>
+                        <p><b>*</b> El número que esta en el cuadro rojo en negativo "-" debajo del stock de cada sede indica la cantidad del producto por atender en la sede (En pedidos que tienen plazo de entrega activo, o que su plazo de entrega comenzará dentro de los próximos <span class="spnRSPDiasPendientePost">14</span> días, o cuyo plazo de entrega se venció hace <span class="spnRSPDiasPendienteAnt">7</span> días o menos.</p>
                     </div>
                 </div>
                 <br />
@@ -225,7 +225,7 @@
                                     stockConteo = stockConteo + ' [+' + lista[i].cantidadEsperadaConteo + ']';
                                 }
 
-                                stock = armarHtmlLinkPendienteAtencion(stock, lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', '');
+                                stock = armarHtmlLinkPendienteAtencion(stock + '', lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', '');
                             }
 
                             unidadSelected = "";

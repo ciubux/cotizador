@@ -55,17 +55,7 @@ namespace Model
         {
             get
             {
-                decimal cantidadCalc = 0;
-
-                switch (this.idProductoPresentacion)
-                {
-                    case 0: cantidadCalc = ((decimal)this.cantidadCs) / ((decimal)producto.equivalenciaUnidadEstandarUnidadConteo); break;
-                    case 1: cantidadCalc = ((decimal)this.cantidadCs) / ((decimal)producto.equivalenciaUnidadAlternativaUnidadConteo); break;
-                    case 2: cantidadCalc = ((decimal)this.cantidadCs) / ((decimal)producto.equivalenciaUnidadProveedorUnidadConteo); break;
-                    case 3: cantidadCalc = (decimal)this.cantidadCs; break;
-                }
-
-                return cantidadCalc;
+                return ConvertirCantidadPresentacion(this.cantidadCs);
             }
         }
 
@@ -73,17 +63,7 @@ namespace Model
         {
             get
             {
-                decimal cantidadCalc = 0;
-
-                switch (this.idProductoPresentacion)
-                {
-                    case 0: cantidadCalc = ((decimal)this.cantidadAtenderCs) / ((decimal)producto.equivalenciaUnidadEstandarUnidadConteo); break;
-                    case 1: cantidadCalc = ((decimal)this.cantidadAtenderCs) / ((decimal)producto.equivalenciaUnidadAlternativaUnidadConteo); break;
-                    case 2: cantidadCalc = ((decimal)this.cantidadAtenderCs) / ((decimal)producto.equivalenciaUnidadProveedorUnidadConteo); break;
-                    case 3: cantidadCalc = (decimal)this.cantidadAtenderCs; break;
-                }
-
-                return cantidadCalc;
+                return ConvertirCantidadPresentacion(this.cantidadAtenderCs);
             }
         }
 
@@ -91,17 +71,7 @@ namespace Model
         {
             get
             {
-                decimal cantidadCalc = 0;
-
-                switch (this.idProductoPresentacion)
-                {
-                    case 0: cantidadCalc = ((decimal)this.cantidadRecibirCs) / ((decimal)producto.equivalenciaUnidadEstandarUnidadConteo); break;
-                    case 1: cantidadCalc = ((decimal)this.cantidadRecibirCs) / ((decimal)producto.equivalenciaUnidadAlternativaUnidadConteo); break;
-                    case 2: cantidadCalc = ((decimal)this.cantidadRecibirCs) / ((decimal)producto.equivalenciaUnidadProveedorUnidadConteo); break;
-                    case 3: cantidadCalc = (decimal)this.cantidadRecibirCs; break;
-                }
-
-                return cantidadCalc;
+                return ConvertirCantidadPresentacion(this.cantidadRecibirCs);
             }
         }
 
@@ -109,18 +79,47 @@ namespace Model
         {
             get
             {
-                decimal cantidadCalc = 0;
-
-                switch (this.idProductoPresentacion)
-                {
-                    case 0: cantidadCalc = ((decimal)this.cantidadVirtualCs) / ((decimal)producto.equivalenciaUnidadEstandarUnidadConteo); break;
-                    case 1: cantidadCalc = ((decimal)this.cantidadVirtualCs) / ((decimal)producto.equivalenciaUnidadAlternativaUnidadConteo); break;
-                    case 2: cantidadCalc = ((decimal)this.cantidadVirtualCs) / ((decimal)producto.equivalenciaUnidadProveedorUnidadConteo); break;
-                    case 3: cantidadCalc = (decimal)this.cantidadVirtualCs; break;
-                }
-
-                return cantidadCalc;
+                return ConvertirCantidadPresentacion(this.cantidadVirtualCs);
             }
+        }
+
+        public decimal cantidadMinimaPresentacion
+        {
+            get
+            {
+                return ConvertirCantidadPresentacion(this.cantidadMinima);
+            }
+        }
+
+        public decimal cantidadMaximaPresentacion
+        {
+            get
+            {
+                return ConvertirCantidadPresentacion(this.cantidadMaxima);
+            }
+        }
+
+        public decimal cantidadAlertaPresentacion
+        {
+            get
+            {
+                return ConvertirCantidadPresentacion(this.cantidadAlerta);
+            }
+        }
+
+        private decimal ConvertirCantidadPresentacion(decimal cantidadOriginal)
+        {
+            decimal cantidadCalc = 0;
+
+            switch (this.idProductoPresentacion)
+            {
+                case 0: cantidadCalc = ((decimal)cantidadOriginal) / ((decimal)producto.equivalenciaUnidadEstandarUnidadConteo); break;
+                case 1: cantidadCalc = ((decimal)cantidadOriginal) / ((decimal)producto.equivalenciaUnidadAlternativaUnidadConteo); break;
+                case 2: cantidadCalc = ((decimal)cantidadOriginal) / ((decimal)producto.equivalenciaUnidadProveedorUnidadConteo); break;
+                case 3: cantidadCalc = (decimal)cantidadOriginal; break;
+            }
+
+            return cantidadCalc;
         }
     }
 }

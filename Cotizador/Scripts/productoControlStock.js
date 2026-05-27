@@ -11,6 +11,12 @@ jQuery(function ($) {
                 "enabled": true
             }
         });
+
+        // Inicializa todos los tooltips en la página
+        $('[data-toggle="popover"]').popover({
+            animation: true,
+            delay: { "show": 100, "hide": 100 }
+        });
     });
 
     $("#idCiudad").change(function () {

@@ -139,10 +139,21 @@
                     <th data-name="fechaCalculoStock" data-visible="true" data-sortable="true">Fecha Stock</th>
                     <th data-name="unidadCalculoStock" data-visible="true" data-sortable="true">Unidad Stock</th>
                     <th data-name="cantidadCalculoStock" data-visible="true" data-sortable="true">Stock Real</th>
-                    <th data-name="cantidadCalculoStockVirtual" data-visible="true" data-sortable="true">Stock Virtual</th>
+                    <th data-name="cantidadCalculoStockVirtual" data-visible="true" data-sortable="true">
+                        Stock Virtual
+                        <label class="lblInfoDescripcionLarga tooltip-label">
+                            <img src="/images/icon_info_22.png">
+
+                            <span id="spnPromocionTextMAP" class="tooltip-label-text tooltip-label-text-info tooltiptext" style="width: 350px; left: -350px;">
+                                Se calcula sumando al stock físico la cantidad pendiente por recibir (cuadro verde con signo "+") y restando la cantidad que esta pendiente de atención (cuadro rojo con signo "-") en pedidos que tienen plazo de entrega activo, o que su plazo de entrega comenzará dentro de los próximos @ViewBag.diasConsiderarPedidosPost días, o cuyo plazo de entrega se venció hace @ViewBag.diasConsiderarPedidosAnt días o menos.<br>
+                            </span>
+                        </label>
+
+                    </th>
                     <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
                 </tr>
             </thead>
+
             <tbody>
                 @foreach (Model.ProductoControlStock item in lista)
                 {
@@ -150,9 +161,9 @@
                     <tr>
                         <td>@item.producto.sku</td>
                         <td>@item.producto.descripcion</td>
-                        <td>@item.cantidadMinima</td>
-                        <td>@item.cantidadMaxima</td>
-                        <td>@item.cantidadAlerta</td>
+                        <td>@item.cantidadMinimaPresentacion</td>
+                        <td>@item.cantidadMaximaPresentacion</td>
+                        <td>@item.cantidadAlertaPresentacion</td>
                         <td>@item.FechaCsDesc</td>
                         <td>@item.unidadPresentacion</td>
                         <td>
@@ -183,8 +194,8 @@
                                 <span class="label label-success" style="font-size: 100%;">@String.Format(formatoDosDecimales, item.cantidadVirtualPresentacion)</span>
                             }
                             <br />
-                            
-                            <a class="verModalStockPendienteAtencion" idproducto="@item.producto.idProducto" idproductopresentacion="@filtro.idPresentacionUnidad" idciudad="@filtro.idCiudad" fechainicio="" fechafin="">
+
+                            <a class="verModalStockPendienteRecepcion" idproducto="@item.producto.idProducto" idproductopresentacion="@filtro.idPresentacionUnidad" idciudad="@filtro.idCiudad" fechainicio="" fechafin="">
                                 <span class="label label-stock-plus">+@String.Format(formatoDosDecimales, item.cantidadRecibirPresentacion) </span>
                             </a>
                             <a class="verModalStockPendienteAtencion" idproducto="@item.producto.idProducto" idproductopresentacion="@filtro.idPresentacionUnidad" idciudad="@filtro.idCiudad" fechainicio="" fechafin="">
