@@ -17,6 +17,7 @@
 <div class="container">
     <input type="hidden" id="pagina" value="@ViewBag.pagina" />
     <input type="hidden" id="idsControlResultados" value="@idsControl" />
+    <input type="hidden" id="jsonDataResultados" value="@ViewBag.jsonLista" />
 
     <form class="form-horizontal">
 
@@ -67,13 +68,16 @@
             </div>
 
             <div class="col-sm-6 col-lg-4">
-                <!--Proveedor-->
                 <div class="form-group">
                     <label class="control-label col-xs-4" for="proveedor">Proveedor:</label>
                     <div class="col-xs-8">
-                        <div>
-                            @Html.Action("list", "Proveedor")
-                        </div>
+                        @Html.Action("list", "Proveedor")
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="familia">Familia:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("list", "Familia")
                     </div>
                 </div>
             </div>
@@ -113,12 +117,12 @@
             <button id="btnLimpiarBusqueda" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
             <button id="btnBusqueda" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
             <br /><br />
-            <button id="btnAculizarControlResultados" type="button" class="btn btn-warning right">Actualizar Stocks</button>
+            <button id="btnAculizarControlResultados" type="button" class="btn btn-warning right">Actualizar Stocks Resultados</button>
         </div>
 
-        <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px; display: none;">
-            <button id="btnAgregarFabricante" type="button" class="btn btn-primary">Registrar Nuevo Fabricante</button>
-            <button id="btnExportExcel" type="button" class="btn btn-primary  bouton-image botonExcel">Exportar</button>
+        <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px;">
+            <button id="btnAgregarFabricante" type="button" class="btn btn-primary" style="display: none;">Registrar Nuevo Fabricante</button>
+            <button id="btnExportExcel" type="button" class="btn btn-primary bouton-image botonExcel">Exportar</button>
         </div>
 
         <table id="tableControlStock" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
@@ -133,19 +137,28 @@
                 <tr>
                     <th data-name="sku" data-visible="true">SKU</th>
                     <th data-name="producto" data-visible="true" data-sortable="true">Producto</th>
-                    <th data-name="cantidadMinima" data-visible="true" data-sortable="true">Stock Minima</th>
-                    <th data-name="cantidadMaxima" data-visible="true" data-sortable="true">Stock Máxima</th>
+                    <th data-name="unidadCalculoStock" data-visible="true" data-sortable="true">Unidad Stock</th>
+                    <th data-name="cantidadMinima" data-visible="true" data-sortable="true">Stock Minimo</th>
+                    <th data-name="cantidadMaxima" data-visible="true" data-sortable="true">Stock Máximo</th>
                     <th data-name="cantidadAlerta" data-visible="true" data-sortable="true">Stock Alerta</th>
                     <th data-name="fechaCalculoStock" data-visible="true" data-sortable="true">Fecha Stock</th>
-                    <th data-name="unidadCalculoStock" data-visible="true" data-sortable="true">Unidad Stock</th>
                     <th data-name="cantidadCalculoStock" data-visible="true" data-sortable="true">Stock Real</th>
                     <th data-name="cantidadCalculoStockVirtual" data-visible="true" data-sortable="true">
                         Stock Virtual
                         <label class="lblInfoDescripcionLarga tooltip-label">
                             <img src="/images/icon_info_22.png">
-
-                            <span id="spnPromocionTextMAP" class="tooltip-label-text tooltip-label-text-info tooltiptext" style="width: 350px; left: -350px;">
+                            <span class="tooltip-label-text tooltip-label-text-info tooltiptext" style="width: 350px; left: -350px;">
                                 Se calcula sumando al stock físico la cantidad pendiente por recibir (cuadro verde con signo "+") y restando la cantidad que esta pendiente de atención (cuadro rojo con signo "-") en pedidos que tienen plazo de entrega activo, o que su plazo de entrega comenzará dentro de los próximos @ViewBag.diasConsiderarPedidosPost días, o cuyo plazo de entrega se venció hace @ViewBag.diasConsiderarPedidosAnt días o menos.<br>
+                            </span>
+                        </label>
+
+                    </th>
+                    <th data-name="cantidadCalculoStockVirtual" data-visible="true" data-sortable="true">
+                        Pedido Sugerido
+                        <label class="lblInfoDescripcionLarga tooltip-label">
+                            <img src="/images/icon_info_22.png">
+                            <span class="tooltip-label-text tooltip-label-text-info tooltiptext" style="width: 200px; left: -200px;">
+                                Cantidad sugerida a comprar para que el stock virutal este cubierto. Se calcula restando al stock máximo el stock virtual.<br>
                             </span>
                         </label>
 
@@ -161,11 +174,11 @@
                     <tr>
                         <td>@item.producto.sku</td>
                         <td>@item.producto.descripcion</td>
-                        <td>@item.cantidadMinimaPresentacion</td>
-                        <td>@item.cantidadMaximaPresentacion</td>
-                        <td>@item.cantidadAlertaPresentacion</td>
-                        <td>@item.FechaCsDesc</td>
                         <td>@item.unidadPresentacion</td>
+                        <td>@String.Format(formatoDosDecimales, item.cantidadMinimaPresentacion)</td>
+                        <td>@String.Format(formatoDosDecimales, item.cantidadMaximaPresentacion)</td>
+                        <td>@String.Format(formatoDosDecimales, item.cantidadAlertaPresentacion)</td>
+                        <td>@item.FechaCsDesc</td>
                         <td>
                             @if (item.cantidadCs <= item.cantidadMinima)
                             {
@@ -202,6 +215,7 @@
                                 <span class="label label-stock-less" style="margin-left: 1px;">-@String.Format(formatoDosDecimales, item.cantidadAtenderPresentacion) </span>
                             </a>
                         </td>
+                        <td>@String.Format(formatoDosDecimales, item.cantidadSugeridaPedirPresentacion)</td>
                         <td>
                             <button type="button" title="Consultar Stock" class="verModalStockProducto btn" sku="@item.producto.sku" idProductoPresentacion="@filtro.idPresentacionUnidad"
                                     idCiudad="@filtro.idCiudad" style="margin-top: 7px;">

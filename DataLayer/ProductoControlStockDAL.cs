@@ -19,7 +19,7 @@ namespace DataLayer
         {
         }
 
-        public List<ProductoControlStock> SelectProductosControlStock(Guid idUsuario, int estado, Guid idCiudad, string sku, string proveedor, bool stockVerde, bool stockAmbar, bool stockRojo)
+        public List<ProductoControlStock> SelectProductosControlStock(Guid idUsuario, int estado, Guid idCiudad, string sku, string proveedor, string familia, bool stockVerde, bool stockAmbar, bool stockRojo)
         {
             var objCommand = GetSqlCommand("ps_productosControlStock");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
@@ -27,6 +27,7 @@ namespace DataLayer
 
             InputParameterAdd.VarcharEmpty(objCommand, "sku", sku);
             InputParameterAdd.VarcharEmpty(objCommand, "proveedor", proveedor);
+            InputParameterAdd.VarcharEmpty(objCommand, "familia", familia);
 
             InputParameterAdd.Int(objCommand, "contarStockNormal", stockVerde ? 1 : 0);
             InputParameterAdd.Int(objCommand, "contarStockAmbar", stockAmbar ? 1 : 0);

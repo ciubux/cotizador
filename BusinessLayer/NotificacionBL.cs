@@ -40,9 +40,10 @@ namespace BusinessLayer
 
                         String[] destinatarios = notificacion.destinatarios.Split('|');
                         mensaje.listUsuario = new List<Usuario>();
-                        Usuario dest = new Usuario();    
+                            
                         foreach (string item in destinatarios)
                         {
+                            Usuario dest = new Usuario();
                             dest.idUsuario = Guid.Parse(item);
                             mensaje.listUsuario.Add(dest);
                         }

@@ -195,7 +195,7 @@ namespace Cotizador.ExcelExport
 
                 IWorkbook newWorkbook = wb;
 
-                byte[] data = File.ReadAllBytes(AppDomain.CurrentDomain.BaseDirectory + "\\images\\logos\\logo_" + obj.usuario.codigoEmpresa + ".png");
+                byte[] data = File.ReadAllBytes(AppDomain.CurrentDomain.BaseDirectory + "\\images\\logos\\logo_" + obj.empresa.codigo + ".png");
                 int picInd = newWorkbook.AddPicture(data, PictureType.PNG);
                 HSSFCreationHelper helper = newWorkbook.GetCreationHelper() as HSSFCreationHelper;
                 IDrawing drawing = sheet.CreateDrawingPatriarch();
@@ -310,7 +310,7 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setColumnWidth(sheet, "D", 1800);
                 UtilesHelper.setColumnWidth(sheet, "E", 12000);
                 UtilesHelper.setColumnWidth(sheet, "F", 8000);
-                UtilesHelper.setColumnWidth(sheet, "G", 2000);
+                UtilesHelper.setColumnWidth(sheet, "G", 2200);
 
                 UtilesHelper.setColumnWidth(sheet, "H", 3000);
                 UtilesHelper.setColumnWidth(sheet, "I", 3000);

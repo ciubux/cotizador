@@ -209,20 +209,20 @@
                                 stockTotalSeparadoConteo = stockTotalSeparadoConteo + lista[i].cantidadSeparadaConteo;
                                 stockTotalEsperadoConteo = stockTotalEsperadoConteo + lista[i].cantidadEsperadaConteo;
 
-                                if (stockSeparado > 0) {
-                                    stock = stock + ' [-' + stockSeparado + ']';
-                                    stockMP = stockMP + ' [-' + lista[i].cantidadSeparadaMpCalc + ']';
-                                    stockAlternativo = stockAlternativo + ' [-' + lista[i].cantidadSeparadaAlternativaCalc + ']';
-                                    stockProveedor = stockProveedor + ' [-' + lista[i].cantidadSeparadaProveedorCalc + ']';
-                                    stockConteo = stockConteo + ' [-' + lista[i].cantidadSeparadaConteo + ']';
-                                }
-
                                 if (stockEsperado > 0) {
                                     stock = stock + ' [+' + stockEsperado + ']';
                                     stockMP = stockMP + ' [+' + lista[i].cantidadEsperadaMpCalc + ']';
                                     stockAlternativo = stockAlternativo + ' [+' + lista[i].cantidadEsperadaAlternativaCalc + ']';
                                     stockProveedor = stockProveedor + ' [+' + lista[i].cantidadEsperadaProveedorCalc + ']';
                                     stockConteo = stockConteo + ' [+' + lista[i].cantidadEsperadaConteo + ']';
+                                }
+
+                                if (stockSeparado > 0) {
+                                    stock = stock + ' [-' + stockSeparado + ']';
+                                    stockMP = stockMP + ' [-' + lista[i].cantidadSeparadaMpCalc + ']';
+                                    stockAlternativo = stockAlternativo + ' [-' + lista[i].cantidadSeparadaAlternativaCalc + ']';
+                                    stockProveedor = stockProveedor + ' [-' + lista[i].cantidadSeparadaProveedorCalc + ']';
+                                    stockConteo = stockConteo + ' [-' + lista[i].cantidadSeparadaConteo + ']';
                                 }
 
                                 stock = armarHtmlLinkPendienteAtencion(stock + '', lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', '');
@@ -313,23 +313,22 @@
                                 stockTotalSeparadoConteo = stockTotalSeparadoConteo + lista[i].cantidadSeparadaConteo;
                                 stockTotalEsperadoConteo = stockTotalEsperadoConteo + lista[i].cantidadEsperadaConteo;
 
+                                if (stockEsperado > 0) {
+                                    stock = stock + ' [+' + stockEsperado + ']';
+                                    stockMP = stockMP + ' [+' + lista[i].cantidadEsperadaMpCalc + ']';
+                                    stockAlternativo = stockAlternativo + ' [+' + lista[i].cantidadEsperadaAlternativaCalc + ']';
+                                    stockProveedor = stockProveedor + ' [+' + lista[i].cantidadEsperadaProveedorCalc + ']';
+                                    stockConteo = stockConteo + ' [+' + lista[i].cantidadEsperadaConteo + ']';
+                                }
+
                                 if (stockSeparado > 0) {
                                     stock = stock + ' [-' + stockSeparado + ']';
-                                    //stock = armarHtmlLinkPendienteAtencion(stock, lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', '');
                                     stockMP = stockMP + ' [-' + lista[i].cantidadSeparadaMpCalc + ']';
                                     stockAlternativo = stockAlternativo + ' [-' + lista[i].cantidadSeparadaAlternativaCalc + ']';
                                     stockProveedor = stockProveedor + ' [-' + lista[i].cantidadSeparadaProveedorCalc + ']';
                                     stockConteo = stockConteo + ' [-' + lista[i].cantidadSeparadaConteo + ']';
                                 }
 
-                                if (stockEsperado > 0) {
-                                    stock = stock + ' [+' + stockEsperado + ']';
-                                    //stock = armarHtmlLinkPendienteAtencion(stock, lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', '');
-                                    stockMP = stockMP + ' [+' + lista[i].cantidadEsperadaMpCalc + ']';
-                                    stockAlternativo = stockAlternativo + ' [+' + lista[i].cantidadEsperadaAlternativaCalc + ']';
-                                    stockProveedor = stockProveedor + ' [+' + lista[i].cantidadEsperadaProveedorCalc + ']';
-                                    stockConteo = stockConteo + ' [+' + lista[i].cantidadEsperadaConteo + ']';
-                                }
                                 stock = armarHtmlLinkPendienteAtencion(stock + '', lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', '');
                             }
 
@@ -344,16 +343,16 @@
 
                     if (disponible) {
                         $("#divCiudadModalStockSedeProducto").show();
-                        var stockTotalText = stockTotal.toFixed(2) + " [-" + stockTotalSeparado.toFixed(2) + "]" + " [+" + stockTotalEsperado.toFixed(2) + "]";
+                        var stockTotalText = stockTotal.toFixed(2) + " [+" + stockTotalEsperado.toFixed(2) + "]" + " [-" + stockTotalSeparado.toFixed(2) + "]";
                         stockTotalText = armarHtmlLinkPendienteAtencion(stockTotalText, idProducto, idProductoPresentacion, "@Guid.Empty", '', '');
 
                         $("#verStockTodasSedes").html(stockTotalText);
                         $("#verStockTodasSedes").attr("idProducto", idProducto);
                         $("#verStockTodasSedes").attr("idCiudad", "@Guid.Empty");
-                        $("#verStockTodasSedes").attr("mp", stockTotalMP.toFixed(2) + ' [-' + stockTotalSeparadoMP.toFixed(2) + ']' + ' [+' + stockTotalEsperadoMP.toFixed(2) + ']');
-                        $("#verStockTodasSedes").attr("alternativa", stockTotalAlternativa.toFixed(2) + ' [-' + stockTotalSeparadoAlternativa.toFixed(2) + ']' + ' [+' + stockTotalEsperadoAlternativa.toFixed(2) + ']');
-                        $("#verStockTodasSedes").attr("proveedor", stockTotalProveedor.toFixed(2) + ' [-' + stockTotalSeparadoProveedor.toFixed(2) + ']' + ' [+' + stockTotalEsperadoProveedor.toFixed(2) + ']');
-                        $("#verStockTodasSedes").attr("conteo", stockTotalConteo.toFixed(2) + ' [-' + stockTotalSeparadoConteo.toFixed(2) + ']' + ' [+' + stockTotalEsperadoConteo.toFixed(2) + ']');
+                        $("#verStockTodasSedes").attr("mp", stockTotalMP.toFixed(2) + ' [+' + stockTotalEsperadoMP.toFixed(2) + ']' + ' [-' + stockTotalSeparadoMP.toFixed(2) + ']');
+                        $("#verStockTodasSedes").attr("alternativa", stockTotalAlternativa.toFixed(2) + ' [+' + stockTotalEsperadoAlternativa.toFixed(2) + ']' + ' [-' + stockTotalSeparadoAlternativa.toFixed(2) + ']');
+                        $("#verStockTodasSedes").attr("proveedor", stockTotalProveedor.toFixed(2) + ' [+' + stockTotalEsperadoProveedor.toFixed(2) + ']' + ' [-' + stockTotalSeparadoProveedor.toFixed(2) + ']');
+                        $("#verStockTodasSedes").attr("conteo", stockTotalConteo.toFixed(2) + ' [+' + stockTotalEsperadoConteo.toFixed(2) + ']' + ' [-' + stockTotalSeparadoConteo.toFixed(2) + ']');
                     } else {
                         $("#divCiudadModalStockSedeProducto").hide();
                         $("#verStockTodasSedes").html("No Registrado");

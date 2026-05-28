@@ -41,7 +41,7 @@ namespace Cotizador.Controllers
                 this.Session["s_controlStockFiltro"] = filtro;
             }
 
-            lista = bl.SelectProductosControlStock(Logueado.idUsuario, 1, filtro.idCiudad, filtro.sku, filtro.proveedor, filtro.stockVerde, filtro.stockAmbar, filtro.stockRojo);
+            lista = bl.SelectProductosControlStock(Logueado.idUsuario, 1, filtro.idCiudad, filtro.sku, filtro.proveedor, filtro.familia, filtro.stockVerde, filtro.stockAmbar, filtro.stockRojo);
 
             ParametroBL parametroBL = new ParametroBL();
             int diasConsiderarPedidosAnt = int.Parse(parametroBL.getParametro("STOCK_DIAS_PEDIDOS_ENTREGA_VENCIDA"));
@@ -53,6 +53,35 @@ namespace Cotizador.Controllers
             ViewBag.usuario = this.Logueado;
             ViewBag.diasConsiderarPedidosAnt = diasConsiderarPedidosAnt;
             ViewBag.diasConsiderarPedidosPost = diasConsiderarPedidosPost;
+
+            List<object> listaExport = new List<object>();
+
+            foreach (ProductoControlStock item in lista)
+            {
+                listaExport.Add(new
+                {
+                    sku = item.producto.sku,
+                    producto = item.producto.descripcion,
+                    unidad = item.unidadPresentacion,
+                    //cantMin = String.Format(Constantes.formatoDosDecimales, item.cantidadMinimaPresentacion),
+                    //cantMax = String.Format(Constantes.formatoDosDecimales, item.cantidadMaximaPresentacion),
+                    //cantAle = String.Format(Constantes.formatoDosDecimales, item.cantidadAlertaPresentacion),
+                    cantMin = item.cantidadMinimaPresentacion,
+                    cantMax = item.cantidadMaximaPresentacion,
+                    cantAle = item.cantidadAlertaPresentacion,
+                    fechaStock = item.FechaCsDesc,
+                    //stockReal = String.Format(Constantes.formatoDosDecimales, item.cantidadPresentacion),
+                    //stockVirtual = String.Format(Constantes.formatoDosDecimales, item.cantidadVirtualPresentacion),
+                    //sugeridoPedir = String.Format(Constantes.formatoDosDecimales, item.cantidadSugeridaPedirPresentacion),
+                    stockReal = item.cantidadPresentacion,
+                    stockVirtual = item.cantidadVirtualPresentacion,
+                    sugeridoPedir = item.cantidadSugeridaPedirPresentacion,
+                    estadoStockReal = item.estadoStockReal,
+                    estadoStockVirtual = item.estadoStockVirtual
+                });
+            }
+
+            ViewBag.jsonLista = JsonConvert.SerializeObject(listaExport);
 
             return View();
         }
@@ -77,7 +106,9 @@ namespace Cotizador.Controllers
 
             ControlStockFiltro obj = new ControlStockFiltro();
             obj.proveedor = "Todos";
+            obj.familia = "Todas";
             this.Session["proveedor"] = obj.proveedor;
+            this.Session["familia"] = obj.familia;
 
             obj.sku = string.Empty;
 
@@ -142,6 +173,11 @@ namespace Cotizador.Controllers
             if (propiedad.Equals("proveedor"))
             {
                 this.Session["proveedor"] = valor;
+            }
+
+            if (propiedad.Equals("familia"))
+            {
+                this.Session["familia"] = valor;
             }
 
             /*

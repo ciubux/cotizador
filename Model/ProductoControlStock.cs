@@ -23,8 +23,9 @@ namespace Model
         public int cantidadRecibirCs { get; set; }
 
         public int cantidadVirtualCs { get { return this.cantidadCs + this.cantidadRecibirCs - this.cantidadAtenderCs; } }
+        public int cantidadSugeridaPedirCs { get { return this.cantidadVirtualCs > this.cantidadMaxima ? 0 : this.cantidadMaxima - this.cantidadVirtualCs; } }
 
-        
+
         public string unidadCs { get; set; }
 
         public string FechaCsDesc
@@ -104,6 +105,52 @@ namespace Model
             get
             {
                 return ConvertirCantidadPresentacion(this.cantidadAlerta);
+            }
+        }
+
+        public decimal cantidadSugeridaPedirPresentacion
+        {
+            get
+            {
+                return ConvertirCantidadPresentacion(this.cantidadSugeridaPedirCs);
+            }
+        }
+
+        public string estadoStockReal
+        {
+            get
+            {
+                string estado = "cubierto";
+                
+                if (this.cantidadCs <= this.cantidadMinima)
+                {
+                    estado = "critico";
+                }
+                else if(this.cantidadCs <= this.cantidadAlerta)
+                {
+                    estado = "alerta";
+                }
+
+                return estado;
+            }
+        }
+
+        public string estadoStockVirtual
+        {
+            get
+            {
+                string estado = "cubierto";
+
+                if (this.cantidadVirtualCs <= this.cantidadMinima)
+                {
+                    estado = "critico";
+                }
+                else if (this.cantidadVirtualCs <= this.cantidadAlerta)
+                {
+                    estado = "alerta";
+                }
+
+                return estado;
             }
         }
 

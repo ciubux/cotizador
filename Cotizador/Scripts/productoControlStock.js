@@ -12,11 +12,6 @@ jQuery(function ($) {
             }
         });
 
-        // Inicializa todos los tooltips en la página
-        $('[data-toggle="popover"]').popover({
-            animation: true,
-            delay: { "show": 100, "hide": 100 }
-        });
     });
 
     $("#idCiudad").change(function () {
@@ -37,6 +32,11 @@ jQuery(function ($) {
     $("#proveedor").change(function () {
         var valor = $(this).val();
         changeInputFiltro("proveedor", valor, "string");
+    });
+
+    $("#familia").change(function () {
+        var valor = $(this).val();
+        changeInputFiltro("familia", valor, "string");
     });
 
     $("#filtroStockVerde").change(function () {
@@ -89,6 +89,42 @@ jQuery(function ($) {
         //coger idsControl y separar ; para generar un array que hay que enviar a la funcion
 
         actualizarControlStock("", ids);
+    });
+
+
+    $("#btnExportExcel").click(function () {
+        const dataExcelDescargar = [["SKU", "PRODUCTO", "UNIDAD", "STOCK MÍNIMO", "STOCK MÁXIMO",
+                                    "STOCK ALERTA", "FECHA STOCK", "STOCK REAL", "STOCK VIRTUAL", "PEDIDO SUGERIDO"]];
+
+        var jsonTexto = $("#jsonDataResultados").val();
+        var listaData = JSON.parse(jsonTexto);
+
+        for (var i = 0; i < listaData.length; i++) {
+            var ItemRow = [listaData[i].sku, listaData[i].producto, listaData[i].unidad, listaData[i].cantMin, listaData[i].cantMax,
+                listaData[i].cantAle, listaData[i].fechaStock, listaData[i].stockReal, listaData[i].stockVirtual, listaData[i].sugeridoPedir];
+            dataExcelDescargar.push(ItemRow);
+        }
+
+        var ciudadNombre = $("#idCiudad option:selected").text();
+        
+        var nombreArchivo = 'ControlStock_' + ciudadNombre;
+
+        const estilosColumnas = [
+            { formatoCelda: "texto", anchoColumna: 10 }, // SKU
+            { formatoCelda: "texto", anchoColumna: 70 }, // PRODUCTO
+            { formatoCelda: "texto", anchoColumna: 15 }, // UNIDAD
+            { formatoCelda: "numero", anchoColumna: 15 }, // STOCK MÍNIMO
+            { formatoCelda: "numero", anchoColumna: 15 }, // STOCK MÁXIMO
+            { formatoCelda: "numero", anchoColumna: 15 }, // STOCK ALERTA
+            { formatoCelda: "fecha", anchoColumna: 18 }, // FECHA STOCK
+            { formatoCelda: "numero", anchoColumna: 15 }, // STOCK REAL
+            { formatoCelda: "numero", anchoColumna: 15 }, // STOCK VIRTUAL
+            { formatoCelda: "numero", anchoColumna: 15 } // PEDIDO SUGERIDO
+            //{ formatoCelda: "texto", anchoColumna: 70, colorTexto: "#0000FF" }, 
+            //{ formatoCelda: "numero", anchoColumna: 12, colorCelda: "#FFFF00" }, 
+        ];
+
+        ExportarTablaExcelJsFormat(dataExcelDescargar, nombreArchivo, ciudadNombre, [], estilosColumnas);
     });
 
 
@@ -146,5 +182,4 @@ jQuery(function ($) {
         });
     }
 });
-
 

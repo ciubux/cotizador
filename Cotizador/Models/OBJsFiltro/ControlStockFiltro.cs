@@ -17,7 +17,8 @@ namespace Cotizador.Models.OBJsFiltro
 
         public String sku { get; set; }
         public String proveedor { get; set; }
-        
+        public String familia { get; set; }
+
         public bool stockVerde { get; set; }
         public bool stockAmbar { get; set; }
         public bool stockRojo { get; set; }

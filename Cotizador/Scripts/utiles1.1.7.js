@@ -385,6 +385,132 @@ async function ExportarTablaExcelJs(dataExcel, nombreArchivo, nombreHoja, dataVa
     document.body.removeChild(link);
 }
 
+
+async function ExportarTablaExcelJsFormat(dataExcel, nombreArchivo, nombreHoja, dataValidations = [], columnStyles = []) {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet(nombreHoja);
+
+    dataExcel.forEach(row => worksheet.addRow(row));
+
+    // Estilos para la cabecera
+    worksheet.getRow(1).eachCell((cell) => {
+        cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };  // Texto blanco en negrita
+        cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'ff0066cc' }  // Fondo azul
+        };
+        cell.alignment = { horizontal: 'center' };  // Alineación centrada
+    });
+
+    // --- NUEVO: Aplicar estilos personalizados de columnas ---
+    if (columnStyles && columnStyles.length > 0) {
+        columnStyles.forEach((style, index) => {
+            const colNumber = index + 1; // Las columnas en Excel empiezan en 1
+            const column = worksheet.getColumn(colNumber);
+
+            // 1. Ancho de Columna (se aplica a toda la columna)
+            if (style.anchoColumna) {
+                column.width = style.anchoColumna;
+            }
+
+            // Recorrer las celdas de la columna para aplicar formatos de dato y color
+            column.eachCell((cell, rowNumber) => {
+                // Ignorar la cabecera (fila 1)
+                if (rowNumber > 1) {
+
+                    // 2. Formato de Celda
+                    if (style.formatoCelda === 'numero') {
+                        cell.numFmt = '#,##0.00';
+                    } else if (style.formatoCelda === 'fecha') {
+                        //cell.numFmt = 'dd/mm/yyyy'; // Nota: La celda debe recibir un objeto Date nativo de JS
+                        cell.numFmt = 'dd/mm/yyyy hh:mm:ss';
+
+                        // 2. Convertir el texto "DD/MM/YYYY HH:MM:SS" a un Date nativo de JS
+                        if (typeof cell.value === 'string' && cell.value.trim() !== "") {
+                            // Separamos el string por barras, espacios o dos puntos
+                            const partes = cell.value.split(/[\s/:]+/);
+                            if (partes.length >= 6) {
+                                const dia = parseInt(partes[0], 10);
+                                const mes = parseInt(partes[1], 10) - 1; // En JS los meses van de 0 a 11
+                                const anio = parseInt(partes[2], 10);
+                                const horas = parseInt(partes[3], 10);
+                                const minutos = parseInt(partes[4], 10);
+                                const segundos = parseInt(partes[5], 10);
+
+                                // Reemplazamos el texto plano por el objeto Date
+                                cell.value = new Date(anio, mes, dia, horas, minutos, segundos);
+                            }
+                        }
+                    } else {
+                        cell.numFmt = '@'; // Texto (por defecto)
+                    }
+
+                    // Asegurar que exista el objeto font antes de modificarlo
+                    cell.font = cell.font || {};
+
+                    // 3. Color de Texto
+                    if (style.colorTexto) {
+                        // Limpiar el '#' si existe y asegurar que tenga la opacidad (FF) requerida por ARGB
+                        let argbText = style.colorTexto.replace('#', '');
+                        if (argbText.length === 6) argbText = 'FF' + argbText;
+                        cell.font.color = { argb: argbText };
+                    } else {
+                        cell.font.color = { argb: 'FF000000' }; // Negro por defecto
+                    }
+
+                    // 4. Color de Fondo (Celda)
+                    if (style.colorCelda) {
+                        let argbBg = style.colorCelda.replace('#', '');
+                        if (argbBg.length === 6) argbBg = 'FF' + argbBg;
+                        cell.fill = {
+                            type: 'pattern',
+                            pattern: 'solid',
+                            fgColor: { argb: argbBg }
+                        };
+                    }
+                }
+            });
+        });
+    }
+
+    // Agregar validaciones
+    dataValidations.forEach(function (itemVal) {
+        worksheet.getColumn(itemVal[0]).eachCell((cell, rowNumber) => {
+            if (rowNumber > 1) {  // Excluir la cabecera
+                cell.dataValidation = {
+                    type: 'list',
+                    allowBlank: itemVal[1],
+                    formulae: [itemVal[2]], // Lista de opciones en formato adecuado
+                    showErrorMessage: true,
+                    errorTitle: 'Valor inválido',
+                    error: itemVal[3]
+                };
+            }
+        });
+    });
+
+    // Obtener la fecha y hora actual para el nombre del archivo
+    const now = new Date();
+    const formattedDate = now.toISOString().slice(0, 10).replace(/-/g, "");  // yyyymmdd
+    const formattedTime = now.toTimeString().slice(0, 8).replace(/:/g, "");  // hhmmss
+    const fileName = `${nombreArchivo}_${formattedDate}${formattedTime}.xlsx`;
+
+    // Generar el archivo Excel como un blob
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+    // Crear un enlace de descarga y simular el clic
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+
+
 $(document).on('click', ".botonExcelExportAction", function () {
     window.location.href = $(this).attr("actionLink");
 });
