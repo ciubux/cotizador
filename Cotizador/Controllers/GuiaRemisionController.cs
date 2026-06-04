@@ -25,6 +25,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Management;
 using System.Web.ModelBinding;
 using System.Web.Mvc;
@@ -2166,6 +2167,28 @@ namespace Cotizador.Controllers
 
             ProductoBL bl = new ProductoBL();
             List<RegistroCargaStock> stocks = bl.StockProductosSede(idProductos, guiaRemision.ciudadOrigen.idCiudad, usuario.idUsuario);
+
+
+            /* DESCONTAR CANTIDAD SEPARADA A OTRAS EMRPESAS */
+            EmpresaProductoSeparadoBL epsBl = new EmpresaProductoSeparadoBL();
+            List<EmpresaProductoSeparado> separados = epsBl.ValidarProductos(usuario.idUsuario, guiaRemision.ciudadOrigen.idCiudad, idProductos, 1);
+
+            foreach (EmpresaProductoSeparado sep in separados)
+            {
+                if (guiaRemision.pedido == null || guiaRemision.pedido.empresaRelacionada == null ||
+                    !guiaRemision.pedido.empresaRelacionada.idEmpresa.Equals(sep.empresa.idEmpresa))
+                {
+                    RegistroCargaStock rs = stocks.Where(t => t.producto.idProducto == sep.producto.idProducto).FirstOrDefault();
+
+                    if (rs != null)
+                    {
+                        rs.cantidadConteo = rs.cantidadConteo - sep.cantidadSeparada;
+                        rs.cantidadProveedorCalc = rs.cantidadProveedorCalc - sep.cantidadSeparadaProveedor;
+                        rs.cantidadAlternativaCalc = rs.cantidadAlternativaCalc - sep.cantidadSeparadaAlternativa;
+                        rs.cantidadMpCalc = rs.cantidadMpCalc - sep.cantidadSeparadaMp;
+                    }
+                }
+            }
 
             return JsonConvert.SerializeObject(stocks);
         }
