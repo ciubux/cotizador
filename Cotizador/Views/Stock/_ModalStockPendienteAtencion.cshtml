@@ -238,11 +238,16 @@
                             cantidadPendiente = cantidadPendienteProveedor;
                         }
 
+                        var txtPedido = '-'
+
+                        if (parseInt(lista[i][1]) > 0) {
+                            var txtPedido = '<a href="#" class="verModalPedidoReadOnly" idPedido="' + lista[i][13] + '">' + lista[i][1] + '</a>'
+                        }
 
                         htmlList = htmlList +
                             '<tr>' +
                             '<td>' + lista[i][0] + '</td>' +
-                            '<td><a href="#" class="verModalPedidoReadOnly" idPedido="' + lista[i][13] + '">' + lista[i][1] + '</a></td>' +
+                            '<td>' + txtPedido + '</td>' +
                             '<td><b>' + lista[i][2] + '</b>: ' + lista[i][3] + '</td>' +
                             '<td>' + lista[i][4] + ' - ' + lista[i][5] + '</td>' +
                             //'<td>' + lista[i][6] + '</td>' +

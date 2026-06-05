@@ -177,56 +177,67 @@
 
                                 if (idProductoPresentacion == '0') {
                                     stock = lista[i].cantidadMpCalc;
-                                    stockSeparado = lista[i].cantidadSeparadaMpCalc;
-                                    stockEsperado = lista[i].cantidadEsperadaMpCalc;
                                 }
 
                                 if (idProductoPresentacion == '1') {
                                     stock = lista[i].cantidadAlternativaCalc;
-                                    stockSeparado = lista[i].cantidadSeparadaAlternativaCalc;
-                                    stockEsperado = lista[i].cantidadEsperadaAlternativaCalc;
                                 }
                                 if (idProductoPresentacion == '2') {
                                     stock = lista[i].cantidadProveedorCalc;
-                                    stockSeparado = lista[i].cantidadSeparadaProveedorCalc;
-                                    stockEsperado = lista[i].cantidadEsperadaProveedorCalc;
                                 }
 
                                 stockTotal = stockTotal + stock;
-                                stockTotalSeparado = stockTotalSeparado + stockSeparado;
-                                stockTotalEsperado = stockTotalEsperado + stockEsperado;
-
+                                
                                 stockTotalMP = stockTotalMP + lista[i].cantidadMpCalc;
-                                stockTotalSeparadoMP = stockTotalSeparadoMP + lista[i].cantidadSeparadaMpCalc;
-                                stockTotalEsperadoMP = stockTotalEsperadoMP + lista[i].cantidadEsperadaMpCalc;
                                 stockTotalAlternativa = stockTotalAlternativa + lista[i].cantidadAlternativaCalc;
-                                stockTotalSeparadoAlternativa = stockTotalSeparadoAlternativa + lista[i].cantidadSeparadaAlternativaCalc;
-                                stockTotalEsperadoAlternativa = stockTotalEsperadoAlternativa + lista[i].cantidadEsperadaAlternativaCalc;
                                 stockTotalProveedor = stockTotalProveedor + lista[i].cantidadProveedorCalc;
-                                stockTotalSeparadoProveedor = stockTotalSeparadoProveedor + lista[i].cantidadSeparadaProveedorCalc;
-                                stockTotalEsperadoProveedor = stockTotalEsperadoProveedor + lista[i].cantidadEsperadaProveedorCalc;
-                                stockTotalConteo = stockTotalConteo + lista[i].cantidadConteo;
-                                stockTotalSeparadoConteo = stockTotalSeparadoConteo + lista[i].cantidadSeparadaConteo;
-                                stockTotalEsperadoConteo = stockTotalEsperadoConteo + lista[i].cantidadEsperadaConteo;
-
-                                if (stockEsperado > 0) {
-                                    stock = stock + ' [+' + stockEsperado + ']';
-                                    stockMP = stockMP + ' [+' + lista[i].cantidadEsperadaMpCalc + ']';
-                                    stockAlternativo = stockAlternativo + ' [+' + lista[i].cantidadEsperadaAlternativaCalc + ']';
-                                    stockProveedor = stockProveedor + ' [+' + lista[i].cantidadEsperadaProveedorCalc + ']';
-                                    stockConteo = stockConteo + ' [+' + lista[i].cantidadEsperadaConteo + ']';
-                                }
-
-                                if (stockSeparado > 0) {
-                                    stock = stock + ' [-' + stockSeparado + ']';
-                                    stockMP = stockMP + ' [-' + lista[i].cantidadSeparadaMpCalc + ']';
-                                    stockAlternativo = stockAlternativo + ' [-' + lista[i].cantidadSeparadaAlternativaCalc + ']';
-                                    stockProveedor = stockProveedor + ' [-' + lista[i].cantidadSeparadaProveedorCalc + ']';
-                                    stockConteo = stockConteo + ' [-' + lista[i].cantidadSeparadaConteo + ']';
-                                }
-
-                                stock = armarHtmlLinkPendienteAtencion(stock + '', lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', '');
+                                stockTotalConteo = stockTotalConteo + lista[i].cantidadConteo;    
                             }
+
+                            if (idProductoPresentacion == '0') {
+                                stockSeparado = lista[i].cantidadSeparadaMpCalc;
+                                stockEsperado = lista[i].cantidadEsperadaMpCalc;
+                            }
+
+                            if (idProductoPresentacion == '1') {
+                                stockSeparado = lista[i].cantidadSeparadaAlternativaCalc;
+                                stockEsperado = lista[i].cantidadEsperadaAlternativaCalc;
+                            }
+                            if (idProductoPresentacion == '2') {
+                                stockSeparado = lista[i].cantidadSeparadaProveedorCalc;
+                                stockEsperado = lista[i].cantidadEsperadaProveedorCalc;
+                            }
+
+                            stockTotalSeparado = stockTotalSeparado + stockSeparado;
+                            stockTotalEsperado = stockTotalEsperado + stockEsperado;
+
+                            stockTotalSeparadoMP = stockTotalSeparadoMP + lista[i].cantidadSeparadaMpCalc;
+                            stockTotalEsperadoMP = stockTotalEsperadoMP + lista[i].cantidadEsperadaMpCalc;
+                            stockTotalSeparadoAlternativa = stockTotalSeparadoAlternativa + lista[i].cantidadSeparadaAlternativaCalc;
+                            stockTotalEsperadoAlternativa = stockTotalEsperadoAlternativa + lista[i].cantidadEsperadaAlternativaCalc;
+                            stockTotalSeparadoProveedor = stockTotalSeparadoProveedor + lista[i].cantidadSeparadaProveedorCalc;
+                            stockTotalEsperadoProveedor = stockTotalEsperadoProveedor + lista[i].cantidadEsperadaProveedorCalc;
+                            stockTotalSeparadoConteo = stockTotalSeparadoConteo + lista[i].cantidadSeparadaConteo;
+                            stockTotalEsperadoConteo = stockTotalEsperadoConteo + lista[i].cantidadEsperadaConteo;
+
+                            if (stockEsperado > 0) {
+                                stock = stock + ' [+' + stockEsperado + ']';
+                                stockMP = stockMP + ' [+' + lista[i].cantidadEsperadaMpCalc + ']';
+                                stockAlternativo = stockAlternativo + ' [+' + lista[i].cantidadEsperadaAlternativaCalc + ']';
+                                stockProveedor = stockProveedor + ' [+' + lista[i].cantidadEsperadaProveedorCalc + ']';
+                                stockConteo = stockConteo + ' [+' + lista[i].cantidadEsperadaConteo + ']';
+                            }
+
+                            if (stockSeparado > 0) {
+                                stock = stock + ' [-' + stockSeparado + ']';
+                                stockMP = stockMP + ' [-' + lista[i].cantidadSeparadaMpCalc + ']';
+                                stockAlternativo = stockAlternativo + ' [-' + lista[i].cantidadSeparadaAlternativaCalc + ']';
+                                stockProveedor = stockProveedor + ' [-' + lista[i].cantidadSeparadaProveedorCalc + ']';
+                                stockConteo = stockConteo + ' [-' + lista[i].cantidadSeparadaConteo + ']';
+                            }
+
+                            stock = armarHtmlLinkPendienteAtencion(stock + '', lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', '');
+
 
                             unidadSelected = "";
                             if (idProductoPresentacion == '1') {
@@ -282,55 +293,66 @@
 
                                 if (idProductoPresentacion == '0') {
                                     stock = lista[i].cantidadMpCalc;
-                                    stockSeparado = lista[i].cantidadSeparadaMpCalc;
-                                    stockEsperado = lista[i].cantidadEsperadaMpCalc;
                                 }
 
                                 if (idProductoPresentacion == '1') {
                                     stock = lista[i].cantidadAlternativaCalc;
-                                    stockSeparado = lista[i].cantidadSeparadaAlternativaCalc;
-                                    stockEsperado = lista[i].cantidadEsperadaAlternativaCalc;
                                 }
                                 if (idProductoPresentacion == '2') {
                                     stock = lista[i].cantidadProveedorCalc;
-                                    stockSeparado = lista[i].cantidadSeparadaProveedorCalc;
-                                    stockEsperado = lista[i].cantidadEsperadaProveedorCalc;
                                 }
+
                                 stockTotal = stockTotal + stock;
-                                stockTotalSeparado = stockTotalSeparado + stockSeparado;
-                                stockTotalEsperado = stockTotalEsperado + stockEsperado;
 
                                 stockTotalMP = stockTotalMP + lista[i].cantidadMpCalc;
-                                stockTotalSeparadoMP = stockTotalSeparadoMP + lista[i].cantidadSeparadaMpCalc;
-                                stockTotalEsperadoMP = stockTotalEsperadoMP + lista[i].cantidadEsperadaMpCalc;
                                 stockTotalAlternativa = stockTotalAlternativa + lista[i].cantidadAlternativaCalc;
-                                stockTotalSeparadoAlternativa = stockTotalSeparadoAlternativa + lista[i].cantidadSeparadaAlternativaCalc;
-                                stockTotalEsperadoAlternativa = stockTotalEsperadoAlternativa + lista[i].cantidadEsperadaAlternativaCalc;
                                 stockTotalProveedor = stockTotalProveedor + lista[i].cantidadProveedorCalc;
-                                stockTotalSeparadoProveedor = stockTotalSeparadoProveedor + lista[i].cantidadSeparadaProveedorCalc;
-                                stockTotalEsperadoProveedor = stockTotalEsperadoProveedor + lista[i].cantidadEsperadaProveedorCalc;
                                 stockTotalConteo = stockTotalConteo + lista[i].cantidadConteo;
-                                stockTotalSeparadoConteo = stockTotalSeparadoConteo + lista[i].cantidadSeparadaConteo;
-                                stockTotalEsperadoConteo = stockTotalEsperadoConteo + lista[i].cantidadEsperadaConteo;
-
-                                if (stockEsperado > 0) {
-                                    stock = stock + ' [+' + stockEsperado + ']';
-                                    stockMP = stockMP + ' [+' + lista[i].cantidadEsperadaMpCalc + ']';
-                                    stockAlternativo = stockAlternativo + ' [+' + lista[i].cantidadEsperadaAlternativaCalc + ']';
-                                    stockProveedor = stockProveedor + ' [+' + lista[i].cantidadEsperadaProveedorCalc + ']';
-                                    stockConteo = stockConteo + ' [+' + lista[i].cantidadEsperadaConteo + ']';
-                                }
-
-                                if (stockSeparado > 0) {
-                                    stock = stock + ' [-' + stockSeparado + ']';
-                                    stockMP = stockMP + ' [-' + lista[i].cantidadSeparadaMpCalc + ']';
-                                    stockAlternativo = stockAlternativo + ' [-' + lista[i].cantidadSeparadaAlternativaCalc + ']';
-                                    stockProveedor = stockProveedor + ' [-' + lista[i].cantidadSeparadaProveedorCalc + ']';
-                                    stockConteo = stockConteo + ' [-' + lista[i].cantidadSeparadaConteo + ']';
-                                }
-
-                                stock = armarHtmlLinkPendienteAtencion(stock + '', lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', '');
                             }
+
+                            if (idProductoPresentacion == '0') {
+                                stockSeparado = lista[i].cantidadSeparadaMpCalc;
+                                stockEsperado = lista[i].cantidadEsperadaMpCalc;
+                            }
+
+                            if (idProductoPresentacion == '1') {
+                                stockSeparado = lista[i].cantidadSeparadaAlternativaCalc;
+                                stockEsperado = lista[i].cantidadEsperadaAlternativaCalc;
+                            }
+                            if (idProductoPresentacion == '2') {
+                                stockSeparado = lista[i].cantidadSeparadaProveedorCalc;
+                                stockEsperado = lista[i].cantidadEsperadaProveedorCalc;
+                            }
+
+                            stockTotalSeparado = stockTotalSeparado + stockSeparado;
+                            stockTotalEsperado = stockTotalEsperado + stockEsperado;
+
+                            stockTotalSeparadoMP = stockTotalSeparadoMP + lista[i].cantidadSeparadaMpCalc;
+                            stockTotalEsperadoMP = stockTotalEsperadoMP + lista[i].cantidadEsperadaMpCalc;
+                            stockTotalSeparadoAlternativa = stockTotalSeparadoAlternativa + lista[i].cantidadSeparadaAlternativaCalc;
+                            stockTotalEsperadoAlternativa = stockTotalEsperadoAlternativa + lista[i].cantidadEsperadaAlternativaCalc;
+                            stockTotalSeparadoProveedor = stockTotalSeparadoProveedor + lista[i].cantidadSeparadaProveedorCalc;
+                            stockTotalEsperadoProveedor = stockTotalEsperadoProveedor + lista[i].cantidadEsperadaProveedorCalc;
+                            stockTotalSeparadoConteo = stockTotalSeparadoConteo + lista[i].cantidadSeparadaConteo;
+                            stockTotalEsperadoConteo = stockTotalEsperadoConteo + lista[i].cantidadEsperadaConteo;
+
+                            if (stockEsperado > 0) {
+                                stock = stock + ' [+' + stockEsperado + ']';
+                                stockMP = stockMP + ' [+' + lista[i].cantidadEsperadaMpCalc + ']';
+                                stockAlternativo = stockAlternativo + ' [+' + lista[i].cantidadEsperadaAlternativaCalc + ']';
+                                stockProveedor = stockProveedor + ' [+' + lista[i].cantidadEsperadaProveedorCalc + ']';
+                                stockConteo = stockConteo + ' [+' + lista[i].cantidadEsperadaConteo + ']';
+                            }
+
+                            if (stockSeparado > 0) {
+                                stock = stock + ' [-' + stockSeparado + ']';
+                                stockMP = stockMP + ' [-' + lista[i].cantidadSeparadaMpCalc + ']';
+                                stockAlternativo = stockAlternativo + ' [-' + lista[i].cantidadSeparadaAlternativaCalc + ']';
+                                stockProveedor = stockProveedor + ' [-' + lista[i].cantidadSeparadaProveedorCalc + ']';
+                                stockConteo = stockConteo + ' [-' + lista[i].cantidadSeparadaConteo + ']';
+                            }
+
+                            stock = armarHtmlLinkPendienteAtencion(stock + '', lista[i].producto.idProducto, idProductoPresentacion, lista[i].ciudad.idCiudad, '', ''); 
 
                             atributosStockSede = ' mp="' + stockMP + '" alternativa="' + stockAlternativo + '" proveedor="' + stockProveedor + '" conteo="' + stockConteo + '" ';
 
