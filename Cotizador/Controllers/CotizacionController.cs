@@ -1917,13 +1917,20 @@ namespace Cotizador.Controllers
 
             List<Guid> idProductos = new List<Guid>();
 
+            Guid? idCliente = null;
+
+            if (cotizacion.cliente != null && !cotizacion.cliente.idCliente.Equals(Guid.Empty))
+            {
+                idCliente = cotizacion.cliente.idCliente;
+            }
+
             foreach (DocumentoDetalle det in cotizacion.documentoDetalle)
             {
                 idProductos.Add(det.producto.idProducto);
             }
 
             ProductoBL bl = new ProductoBL();
-            List<RegistroCargaStock> stocks = bl.StockProductosSede(idProductos, cotizacion.ciudad.idCiudad, usuario.idUsuario);
+            List<RegistroCargaStock> stocks = bl.StockProductosSede(idProductos, cotizacion.ciudad.idCiudad, usuario.idUsuario, idCliente);
 
             return JsonConvert.SerializeObject(stocks);
         }

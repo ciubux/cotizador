@@ -95,6 +95,24 @@ namespace DataLayer
             return obj;
         }
 
+        public List<Empresa> EmpresasVerStock(int idEmpresa)
+        {
+            var objCommand = GetSqlCommand("ps_empresasVerStock");
+            InputParameterAdd.Int(objCommand, "idEmpresa", idEmpresa);
+            DataTable dataTable = Execute(objCommand);
+            
+            List<Empresa> lista = new List<Empresa>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Empresa obj = new Empresa();
+
+                obj.idEmpresa = Converter.GetInt(row, "id_empresa");
+                obj.nombre = Converter.GetString(row, "nombre");
+                lista.Add(obj);
+            }
+
+            return lista;
+        }
     }
 }
 

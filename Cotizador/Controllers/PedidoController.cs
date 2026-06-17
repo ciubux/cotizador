@@ -3014,8 +3014,10 @@ namespace Cotizador.Controllers
                 idProductos.Add(det.producto.idProducto);
             }
 
+            Guid? idCliente = pedido.cliente.idCliente;
+
             ProductoBL bl = new ProductoBL();
-            List<RegistroCargaStock> stocks = bl.StockProductosSede(idProductos, pedido.ciudad.idCiudad, usuario.idUsuario);
+            List<RegistroCargaStock> stocks = bl.StockProductosSede(idProductos, pedido.ciudad.idCiudad, usuario.idUsuario, idCliente);
 
             return JsonConvert.SerializeObject(stocks);
         }

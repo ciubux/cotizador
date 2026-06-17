@@ -2798,6 +2798,8 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             InputParameterAdd.Guid(objCommand, "idProducto", idProducto);
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
 
+            //InputParameterAdd.Int(objCommand, "idEmpresaUI", idEmpresaUI);
+
             if (idCiudad != null && !idCiudad.Equals(Guid.Empty))
             {
                 InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);

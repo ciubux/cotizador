@@ -12,7 +12,8 @@
             </div>
 
             <div class="modal-body">
-                <form class="form-horizontal" >
+                <form class="form-horizontal">
+                    
                     <div class="row">
                         <div class="col-sm-6 col-lg-8">
                             <div class="form-group">
@@ -100,8 +101,9 @@
             idProductoPresentacion = $(this).attr("idProductoPresentacion");
 
             llenarPedidosPendientes();
-
         });
+
+        
 
         $(document).on('change', "#selectUnidadProductoStockPendienteAtencion", function () {
             var idPresentacion = $(this).val();
@@ -131,6 +133,11 @@
         });
 
         function llenarPedidosPendientes() {
+            /*var idEmpresa = 0;
+            if (document.getElementById("selectEmpresaStockProductoSedes")) {
+                idEmpresa = $("#selectEmpresaStockProductoSedes").val();
+            }*/
+        
             $('body').loadingModal({
                 text: 'Cargando...'
             });
@@ -146,6 +153,7 @@
                     idProductoPresentacion: idProductoPresentacion,
                     fechaInicio: fechaInicio,
                     fechaFin: fechaFin
+                    //idEmpresaUI: idEmpresa
                 },
                 error: function (detalle) {
                     $('body').loadingModal('hide');
@@ -265,9 +273,10 @@
                     $('body').loadingModal('hide');
                     $("#modalStockPendienteAtencion").modal();
                 }
-            });
-
+            });  
         };
+
+        
     };
 
     

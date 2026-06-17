@@ -642,15 +642,15 @@ namespace BusinessLayer
             }
         }
 
-        public List<RegistroCargaStock> StockProducto(string sku, Guid idUsuario)
+        public List<RegistroCargaStock> StockProducto(string sku, Guid idUsuario, int idEmpresaUI = 0)
         {
             using (var productoDAL = new ProductoDAL())
             {
-                return productoDAL.StockProducto(sku, idUsuario);
+                return productoDAL.StockProducto(sku, idUsuario, idEmpresaUI);
             }
         }
 
-        public List<RegistroCargaStock> StockProductosSede(List<Guid> idProductos, Guid idCiudad, Guid idUsuario)
+        public List<RegistroCargaStock> StockProductosSede(List<Guid> idProductos, Guid idCiudad, Guid idUsuario, Guid? idCliente = null)
         {
             using (var productoDAL = new ProductoDAL())
             {
@@ -659,7 +659,7 @@ namespace BusinessLayer
                     return productoDAL.StockProductosTodasSedes(idProductos, idUsuario);
                 } else
                 {
-                    return productoDAL.StockProductosSede(idProductos, idCiudad, idUsuario);
+                    return productoDAL.StockProductosSede(idProductos, idCiudad, idUsuario, idCliente);
                 }
             }
         }

@@ -1,22 +1,18 @@
 ﻿using BusinessLayer;
-using Cotizador.Models;
+using Cotizador.ExcelExport;
+using Cotizador.Models.DTOsShow;
 using Model;
 using Model.UTILES;
 using Newtonsoft.Json;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
-using Cotizador.ExcelExport;
-using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
-using System.IO;
-using Cotizador.Models.DTOshow;
-using Cotizador.Models.DTOsShow;
-using NPOI.XWPF.UserModel;
-using System.Globalization;
 
 namespace Cotizador.Controllers
 {
@@ -236,12 +232,51 @@ namespace Cotizador.Controllers
             return excel.generateExcel(lista, usuario, tipoUnidad, fechaStock);
         }
 
-        public String ReporteStockProducto(Guid idCiudad, String sku)
+        [HttpPost]
+        public string ReporteStockEmpresasVer()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            
+            List<Empresa> empresas = new List<Empresa>();
+
+            if (this.Session[Constantes.VAR_SESSION_EMPRESA_LISTA] == null)
+            {
+                UsuarioBL blUsuario = new UsuarioBL();
+                empresas = blUsuario.GetEmpresas(usuario.idUsuario, 1);
+                this.Session[Constantes.VAR_SESSION_EMPRESA_LISTA] = empresas;
+            }
+            else
+            {
+                empresas = (List<Empresa>)this.Session[Constantes.VAR_SESSION_EMPRESA_LISTA];
+            }
+
+            List<Empresa> lista = new List<Empresa>();
+            lista.Add(usuario.empresaVer);
+            var idEmpresaDefecto = usuario.empresaVer.idEmpresa;
+
+            if (usuario.empresaVer.idEmpresaVisualizaStock > 0)
+            {
+                Empresa empresaRel = empresas.Where(e => (e.idEmpresa == usuario.empresaVer.idEmpresaVisualizaStock)).FirstOrDefault();
+                if (!usuario.empresaVer.visualizaStockPropioDefecto)
+                {
+                    idEmpresaDefecto = empresaRel.idEmpresa;
+                }
+
+                if (empresaRel.idEmpresa != usuario.empresaVer.idEmpresa)
+                {
+                    lista.Add(empresaRel);
+                }
+            }
+
+            return JsonConvert.SerializeObject(new { idEmpresaDefecto = idEmpresaDefecto, lista = lista});
+        }
+
+        public String ReporteStockProducto(Guid idCiudad, String sku, int idEmpresaUI = 0)
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             ProductoBL bl = new ProductoBL();
-            List<RegistroCargaStock> stocks = bl.StockProducto(sku, usuario.idUsuario);
+            List<RegistroCargaStock> stocks = bl.StockProducto(sku, usuario.idUsuario, idEmpresaUI);
 
             ParametroBL parametroBL = new ParametroBL();
             int diasPasado = int.Parse(parametroBL.getParametro("STOCK_DIAS_PEDIDOS_ENTREGA_VENCIDA"));
@@ -289,6 +324,7 @@ namespace Cotizador.Controllers
 
             return excel.generateExcel(kardex, dateFechaInicio);
         }
+
 
         public String ReporteStockPendienteAtencion(Guid idCiudad, Guid idProducto, int idProductoPresentacion, string fechaInicio, string fechaFin)
         {

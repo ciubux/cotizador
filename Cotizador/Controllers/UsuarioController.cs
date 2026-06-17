@@ -321,7 +321,7 @@ namespace Cotizador.Controllers
                 usuario.razonSocialEmpresa = obj.nombre;
                 usuario.urlEmpresa = obj.urlWeb;
                 usuario.atencionTerciarizadaEmpresa = obj.atencionTerciarizada;
-
+                usuario.empresaVer = obj;
                 this.Session[Constantes.VAR_SESSION_USUARIO] = usuario;
             }
 

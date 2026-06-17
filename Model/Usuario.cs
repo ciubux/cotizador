@@ -25,6 +25,7 @@ namespace Model
         public decimal pDescuentoInfraMargen { get; set; }
         public bool atencionTerciarizadaEmpresa { get; set; }
 
+        public Empresa empresaVer { get; set; }
 
         public Vendedor vendedor { get; set; }
         public Area area { get; set; }

@@ -36,7 +36,11 @@ namespace Model
         [Display(Name = "Porcentaje Ganancia Máxima(Mk Down):")]
         public decimal porcentajeMDGanaciaMax { get; set; }
 
-        
+
+        public int idEmpresaVisualizaStock { get; set; }
+        public bool visualizaStockPropioDefecto { get; set; }
+
+
         public bool atencionTerciarizada { get; set; }
         public bool facturacionHabilitada { get; set; }
         public bool emiteGuias { get; set; }

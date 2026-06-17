@@ -204,6 +204,17 @@ namespace DataLayer
                 usuario.atencionTerciarizadaEmpresa = Converter.GetInt(row, "atencion_terciarizada") == 1 ? true : false;
                 usuario.sessionToken = Converter.GetString(row, "sesion_token");
 
+                usuario.empresaVer = new Empresa();
+                usuario.empresaVer.idEmpresa = usuario.idEmpresa;
+                usuario.empresaVer.codigo = usuario.codigoEmpresa;
+                usuario.empresaVer.nombre = usuario.razonSocialEmpresa;
+                usuario.empresaVer.razonSocial = usuario.razonSocialEmpresa;
+                usuario.empresaVer.urlWeb = usuario.urlEmpresa;
+                usuario.empresaVer.atencionTerciarizada = usuario.atencionTerciarizadaEmpresa;
+                usuario.empresaVer.idEmpresaVisualizaStock = Converter.GetInt(row, "id_empresa_stock"); 
+                usuario.empresaVer.visualizaStockPropioDefecto = Converter.GetInt(row, "visualiza_stock_propio_defecto") == 1 ? true : false;
+                usuario.empresaVer.Estado = 1;
+
                 usuario.area = new Area();
                 usuario.area.idArea = Converter.GetInt(row, "id_area");
                 usuario.area.nombre = Converter.GetString(row, "nombre_area");
@@ -863,6 +874,8 @@ namespace DataLayer
                 obj.razonSocial = Converter.GetString(row, "razon_social");
                 obj.urlWeb = Converter.GetString(row, "url_web");
                 obj.atencionTerciarizada = Converter.GetInt(row, "atencion_terciarizada") == 1 ? true : false;
+                obj.idEmpresaVisualizaStock = Converter.GetInt(row, "id_empresa_stock");
+                obj.visualizaStockPropioDefecto = Converter.GetInt(row, "visualiza_stock_propio_defecto") == 1 ? true : false;
                 obj.Estado = Converter.GetInt(row, "estado");
                 list.Add(obj);
             }

@@ -2871,16 +2871,16 @@ jQuery(function ($) {
                         noDisponible = 1;
                     } else {
                         if (idProductoPresentacion == "0") {
-                            stock = lista[i].cantidadMpCalc;
-                            stockLibre = lista[i].cantidadMpCalc - lista[i].cantidadSeparadaMpCalc;
+                            stock = lista[i].cantidadDisponibleMPCalc;
+                            stockLibre = lista[i].cantidadDisponibleMPCalc - lista[i].cantidadSeparadaMpCalc + lista[i].cantidadEsperadaMpCalc;
                         }
                         if (idProductoPresentacion == "1") {
-                            stock = lista[i].cantidadAlternativaCalc;
-                            stockLibre = lista[i].cantidadAlternativaCalc - lista[i].cantidadSeparadaAlternativaCalc;
+                            stock = lista[i].cantidadDisponibleAlternativaCalc;
+                            stockLibre = lista[i].cantidadDisponibleAlternativaCalc - lista[i].cantidadSeparadaAlternativaCalc + lista[i].cantidadEsperadaAlternativaCalc;
                         }
                         if (idProductoPresentacion == "2") {
-                            stock = lista[i].cantidadProveedorCalc;
-                            stockLibre = lista[i].cantidadProveedorCalc - lista[i].cantidadSeparadaProveedorCalc;
+                            stock = lista[i].cantidadDisponibleProveedorCalc;
+                            stockLibre = lista[i].cantidadDisponibleProveedorCalc - lista[i].cantidadSeparadaProveedorCalc + lista[i].cantidadEsperadaProveedorCalc;
                         }
 
 
@@ -2894,7 +2894,7 @@ jQuery(function ($) {
                             }
                         }
 
-                        htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + 'STOCK: ' + stock + '</label>';
+                        htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + 'DISPONIBLE: ' + stock + '</label>';
                     }
 
 
