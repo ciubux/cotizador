@@ -65,6 +65,11 @@ jQuery(function ($) {
         location.reload();
     });
 
+    $("#btnRegistroMasivo").click(function () {
+        var texto = $("#idCiudad option:selected").text();
+        $("#modalCMPCSCiudadtitulo").html(texto);
+    });
+
     $("#btnAculizarControlCiudad").click(function () {
         actualizarControlStock($("#idCiudad").val(), []);
     });
@@ -127,6 +132,138 @@ jQuery(function ($) {
         ExportarTablaExcelJsFormat(dataExcelDescargar, nombreArchivo, ciudadNombre, [], estilosColumnas);
     });
 
+    $("#btnModalCMPCSAceptar").click(async function () {
+        const fileInput = document.getElementById('modalCMPCSExcel');
+
+        if (fileInput.files.length === 0) {
+            $.alert({
+                title: "VALIDAR",
+                type: 'orange',
+                content: "Por favor, selecciona un archivo Excel.",
+                buttons: {
+                    OK: function () {
+                    }
+                }
+            });
+            return;
+        }
+
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+
+        reader.onload = async (e) => {
+            const buffer = e.target.result;
+            const workbook = new ExcelJS.Workbook();
+
+            try {
+                await workbook.xlsx.load(buffer);
+
+                const worksheet = workbook.getWorksheet(1);
+                const listaCargaStock = [];
+
+                worksheet.eachRow(function (row, rowNumber) {
+                    if (rowNumber > 1) {
+
+                        let celdaSku = row.getCell(1).value;         // Columna A
+                        let celdaStockMin = row.getCell(4).value;    // Columna D
+                        let celdaStockMax = row.getCell(5).value;    // Columna E
+                        let celdaStockAle = row.getCell(6).value;    // Columna F
+
+                        if (celdaSku) {
+                            listaCargaStock.push({
+                                SKU: celdaSku.toString().trim(),
+                                CANTIDAD_MINIMA: celdaStockMin ? parseInt(celdaStockMin) : 0,
+                                CANTIDAD_MAXIMA: celdaStockMax ? parseInt(celdaStockMax) : 0,
+                                CANTIDAD_ALERTA: celdaStockAle ? parseInt(celdaStockAle) : 0
+                            });
+                        }
+                    }
+                });
+
+                //console.log("Datos leídos correctamente:", listaCargaStock);
+
+                var idCiudad = $("#idCiudad").val();
+                enviarDatosAlServidor(idCiudad, listaCargaStock);
+
+            } catch (error) {
+                $.alert({
+                    title: "ERROR",
+                    type: 'red',
+                    content: "Ocurrió un error al procesar el archivo Excel.",
+                    buttons: {
+                        OK: function () {
+                        }
+                    }
+                });
+            }
+        };
+
+        reader.readAsArrayBuffer(file);
+    });
+
+    function enviarDatosAlServidor(idCiudad, listaCargaStock) {
+        var arraySkus = [];
+        var arrayMins = [];
+        var arrayMaxs = [];
+        var arrayAlers = [];
+
+        listaCargaStock.forEach(function (item) {
+            arraySkus.push(item.SKU);
+            arrayMins.push(item.CANTIDAD_MINIMA);
+            arrayMaxs.push(item.CANTIDAD_MAXIMA);
+            arrayAlers.push(item.CANTIDAD_ALERTA);
+        });
+
+        $.ajax({
+            url: '/ProductoControlStock/RegistroMasivoAlertas', 
+            type: 'POST',
+            dataType: 'json', 
+            data: {
+                idCiudad: idCiudad,
+                skus: arraySkus,
+                cMins: arrayMins,
+                cMaxs: arrayMaxs,
+                cAlers: arrayAlers
+            },
+            success: function (response) {
+                if (response.success === 1) {
+                    $.alert({
+                        title: "OPERACIÓN EXITOSA",
+                        type: 'green',
+                        content: 'Se actualizaron las alertas de stock.',
+                        buttons: {
+                            OK: function () {
+                                location.reload();
+                            }
+                        }
+                    });
+
+                    location.reload();
+                } else {
+                    $.alert({
+                        title: "ERROR",
+                        type: 'red',
+                        content: "No se pudo realizar el registro. " + (response.message || ""),
+                        buttons: {
+                            OK: function () {
+                            }
+                        }
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                $.alert({
+                    title: "ERROR",
+                    type: 'red',
+                    content: "Error desconocido.",
+                    buttons: {
+                        OK: function () {
+                        }
+                    }
+                });
+            }
+        });
+    }
 
     function changeInputFiltro(propiedad, valor, tipo) {
         $.ajax({

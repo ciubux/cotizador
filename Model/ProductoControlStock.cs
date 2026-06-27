@@ -22,7 +22,11 @@ namespace Model
         public int cantidadAtenderCs { get; set; }
         public int cantidadRecibirCs { get; set; }
 
-        public int cantidadVirtualCs { get { return this.cantidadCs + this.cantidadRecibirCs - this.cantidadAtenderCs; } }
+        public int cantidadReservaAgregarCs { get; set; }
+        public int cantidadReservaDescontarCs { get; set; }
+
+        public int cantidadDisponibleCs { get { return this.cantidadCs + this.cantidadReservaAgregarCs - this.cantidadReservaDescontarCs; } }
+        public int cantidadVirtualCs { get { return this.cantidadDisponibleCs + this.cantidadRecibirCs - this.cantidadAtenderCs; } }
         public int cantidadSugeridaPedirCs { get { return this.cantidadVirtualCs > this.cantidadMaxima ? 0 : this.cantidadMaxima - this.cantidadVirtualCs; } }
 
 
@@ -76,6 +80,31 @@ namespace Model
             }
         }
 
+        public decimal cantidadReservaAgregarPresentacion
+        {
+            get
+            {
+                return ConvertirCantidadPresentacion(this.cantidadReservaAgregarCs);
+            }
+        }
+
+        public decimal cantidadReservaDescontarPresentacion
+        {
+            get
+            {
+                return ConvertirCantidadPresentacion(this.cantidadReservaDescontarCs);
+            }
+        }
+
+
+        public decimal cantidadDisponiblePresentacion
+        {
+            get
+            {
+                return ConvertirCantidadPresentacion(this.cantidadDisponibleCs);
+            }
+        }
+
         public decimal cantidadVirtualPresentacion
         {
             get
@@ -116,42 +145,20 @@ namespace Model
             }
         }
 
-        public string estadoStockReal
+        public string estadoStockReal { get { return EstadoStock(this.cantidadCs); } }
+
+        public string estadoStockVirtual { get { return EstadoStock(this.cantidadVirtualCs); } }
+
+        public string estadoStockDisponible { get { return EstadoStock(this.cantidadDisponibleCs); } }
+
+        private string EstadoStock(int cantidadStock)
         {
-            get
-            {
-                string estado = "cubierto";
-                
-                if (this.cantidadCs <= this.cantidadMinima)
-                {
-                    estado = "critico";
-                }
-                else if(this.cantidadCs <= this.cantidadAlerta)
-                {
-                    estado = "alerta";
-                }
+            string estado = "cubierto";
 
-                return estado;
-            }
-        }
+            if (cantidadStock <= this.cantidadMinima) { estado = "critico"; }
+            else if (cantidadStock <= this.cantidadAlerta) { estado = "alerta"; }
 
-        public string estadoStockVirtual
-        {
-            get
-            {
-                string estado = "cubierto";
-
-                if (this.cantidadVirtualCs <= this.cantidadMinima)
-                {
-                    estado = "critico";
-                }
-                else if (this.cantidadVirtualCs <= this.cantidadAlerta)
-                {
-                    estado = "alerta";
-                }
-
-                return estado;
-            }
+            return estado;
         }
 
         private decimal ConvertirCantidadPresentacion(decimal cantidadOriginal)

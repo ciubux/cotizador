@@ -24,5 +24,13 @@ namespace BusinessLayer
                 dal.CalcularControlStock(idUsuario, idCiudad, controlStockIds);
             }
         }
+
+        public void InsertProductosControlStock(Guid idUsuario, Guid idCiudad, List<ProductoControlStock> productosControlStock)
+        {
+            using (ProductoControlStockDAL dal = new ProductoControlStockDAL())
+            {
+                dal.InsertProductosControlStock(idUsuario, idCiudad, productosControlStock);
+            }
+        }
     }
 }

@@ -107,5 +107,37 @@ namespace DataLayer
 
             ExecuteNonQuery(objCommand);
         }
+
+        public void InsertProductosControlStock(Guid idUsuario, Guid idCiudad, List<ProductoControlStock> productosControlStock)
+        {
+            var objCommand = GetSqlCommand("pi_productos_control_stock");
+
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID_PRODUCTO", typeof(Guid)));
+            tvp.Columns.Add(new DataColumn("CANTIDAD_MINIMA", typeof(int)));
+            tvp.Columns.Add(new DataColumn("CANTIDAD_MAXIMA", typeof(int)));
+            tvp.Columns.Add(new DataColumn("CANTIDAD_ALERTA", typeof(int)));
+
+            foreach (ProductoControlStock item in productosControlStock)
+            {
+                DataRow rowObj = tvp.NewRow();
+
+                rowObj["ID_PRODUCTO"] = item.producto.idProducto;
+                rowObj["CANTIDAD_MINIMA"] = item.cantidadMinima;
+                rowObj["CANTIDAD_MAXIMA"] = item.cantidadMaxima;
+                rowObj["CANTIDAD_ALERTA"] = item.cantidadAlerta;
+
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@productosControlStock", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.ProductoControlStockList";
+
+            ExecuteNonQuery(objCommand);
+        }
     }
 }

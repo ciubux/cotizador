@@ -100,6 +100,44 @@ namespace Cotizador.Controllers
             });
         }
 
+        [HttpPost]
+        public string RegistroMasivoAlertas(Guid idCiudad, List<string> skus, List<int> cMins, List<int> cMaxs, List<int> cAlers)
+        {
+            if (this.Logueado == null || !this.Logueado.visualizaControlStock)
+            {
+                return JsonConvert.SerializeObject(new { success = 0, message = "No autorizado o sesión expirada" });
+            }
+
+            
+            ProductoBL blProducto = new ProductoBL();
+            List<Producto> productos = blProducto.GetProductosBySKU(skus);
+
+            List<ProductoControlStock> alertas = new List<ProductoControlStock>();
+
+            for (int i = 0; i < skus.Count; i++)
+            {
+                Producto prod = productos.Where(p => p.sku.Equals(skus.ElementAt(i))).FirstOrDefault();
+                if (prod != null)
+                {
+                    ProductoControlStock item = new ProductoControlStock();
+                    item.producto = prod;
+                    item.cantidadMaxima = cMaxs.ElementAt(i);
+                    item.cantidadMinima = cMins.ElementAt(i);
+                    item.cantidadAlerta = cAlers.ElementAt(i);
+
+                    alertas.Add(item);
+                }
+            }
+            ProductoControlStockBL bl = new ProductoControlStockBL();
+            bl.InsertProductosControlStock(this.Logueado.idUsuario, idCiudad, alertas);
+            
+            return JsonConvert.SerializeObject(new
+            {
+                success = 1
+            });
+        }
+
+
         public ControlStockFiltro instanciarFiltroControlStock()
         {
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];

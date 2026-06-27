@@ -121,6 +121,7 @@
         </div>
 
         <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px;">
+            <button id="btnRegistroMasivo" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCargaMasivaProductoControlStock">Cargar Alertas</button>
             <button id="btnAgregarFabricante" type="button" class="btn btn-primary" style="display: none;">Registrar Nuevo Fabricante</button>
             <button id="btnExportExcel" type="button" class="btn btn-primary bouton-image botonExcel">Exportar</button>
         </div>
@@ -227,6 +228,53 @@
             </tbody>
         </table>
     </form>
+</div>
+
+
+<div class="modal fade" id="modalCargaMasivaProductoControlStock" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalCargaMasivaProductoControlStockTitle">Registrar Alertas Stock En <span id="modalCMPCSCiudadtitulo"></span></h4>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="numero" class="control-label col-xs-3">Archivo:</label>
+                                <div class="col-xs-9">
+                                    <input id="modalCMPCSExcel" name="file" type="file"
+                                           class="btn btn-primary" data-max-size="2097152" data-max-size-text="2MB"
+                                           accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <p>
+                                <b>CONSIDERACIONES</b>
+                                <ul>
+                                    <li>El formato del archivo debe ser el mismo que la descarga de resultados de búsqueda.</li>
+                                    <li>Si alguna de las cantidades es 0 el registro se eliminará.</li>
+                                    <li>Si existe el registro de producto ya existe en la sede, se actualizará por el indicado en el archivo.</li>
+                                    <li>Todas las cantidades deben estar en la unidad Mínima.</li>
+                                </ul>
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="btnModalCMPCSCancelar" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnModalCMPCSAceptar" class="btn btn-primary">Cargar Datos</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 
