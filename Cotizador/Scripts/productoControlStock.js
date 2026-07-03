@@ -183,7 +183,7 @@ jQuery(function ($) {
                 //console.log("Datos leídos correctamente:", listaCargaStock);
 
                 var idCiudad = $("#idCiudad").val();
-                enviarDatosAlServidor(idCiudad, listaCargaStock);
+                registroMasivoAlertas(idCiudad, listaCargaStock);
 
             } catch (error) {
                 $.alert({
@@ -201,7 +201,7 @@ jQuery(function ($) {
         reader.readAsArrayBuffer(file);
     });
 
-    function enviarDatosAlServidor(idCiudad, listaCargaStock) {
+    function registroMasivoAlertas(idCiudad, listaCargaStock) {
         var arraySkus = [];
         var arrayMins = [];
         var arrayMaxs = [];

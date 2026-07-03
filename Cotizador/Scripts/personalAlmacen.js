@@ -61,7 +61,7 @@ jQuery(function ($) {
                 var p = list[i];
                 rows += '<tr>' +
                     '<td>' + p.idPersonalAlmacen + '</td>' +
-                    '<td>' + (p.sedePrincipal ? p.sedePrincipal.nombre : "N/A") + '</td>' +
+                    '<td>' + (p.sedePrincipal ? p.sedePrincipal.nombre : "-") + '</td>' +
                     '<td>' + p.nroDocumento + '</td>' +
                     '<td>' + p.apellidoPaterno + ' ' + p.apellidoMaterno + ', ' + p.nombres + '</td>' +
                     '<td>' + p.tipo + '</td>' +
@@ -96,5 +96,15 @@ jQuery(function ($) {
         $("#modalEditarPersonalTitle").text("Registrar Personal");
         $("#btnFinalizarEdicionPersonal").text("Registrar");
         $("#modalEditarPersonal").modal("show");
+    });
+
+    $("#btnExportExcel").click(function () {
+        const dataExcelDescargar = [["SEDE", "NRO. DOC.", "NOMBRES", "APELLIDO PATERNO", "APELLIDO MATERNO", "TIPO", "BREVETE"]];
+        for (var i = 0; i < PERSONAL_LAST_SEARCH.length; i++) {
+            var obj = PERSONAL_LAST_SEARCH[i];
+            var ItemRow = [(obj.sedePrincipal ? obj.sedePrincipal.nombre : "-"), obj.nroDocumento, obj.nombres, obj.apellidoPaterno, obj.apellidoMaterno, obj.tipo, obj.brevete];
+            dataExcelDescargar.push(ItemRow);
+        }
+        ExportarTablaExcelJs(dataExcelDescargar, "Personal_Alamcen", "PERSONAL_ALMACEN");
     });
 });

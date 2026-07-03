@@ -253,6 +253,19 @@ $(document).on('click', ".btnLogAnularDatoHistorico", function () {
     
 });
 
+function CambiarSedeBuscarClienteGlobal(idCiudad) {
+    $.ajax({
+        url: "/Cliente/SetSedeBusquedaClientesGlobal",
+        type: 'POST',
+        dataType: 'JSON',
+        data: {
+            idCiudad: idCiudad
+        },
+        success: function () {
+
+        }
+    });
+}
 
 $(document).on('click', "#lnkHistorialCostosEspeciales", function () {
     idProductoViewMostrarLog = $(this).attr("idProducto");

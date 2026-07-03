@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "406";
+    TempData["ScriptVersion"] = "410";
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
 }
@@ -177,7 +177,9 @@
                         var linkMantenimientoEmpresaDescuento = "";
 
                         var linkControlStock = "";
+                        var linkStockReservadoCliente = "";
                     }
+
                     @if (this.Session["pagina"] != null)
                     {
                         switch ((int)this.Session["pagina"])
@@ -229,6 +231,8 @@
                             case 725: linkRegistrarAjusteStock = "active"; linkMovimientosAlmacen = "active"; break;
                             case 726: linkBusquedaAjusteStock = "active"; linkMovimientosAlmacen = "active"; break;
                             case 728: linkControlStock = "active"; linkMovimientosAlmacen = "active"; break;
+                            case 781: linkStockReservadoCliente = "active"; linkMovimientosAlmacen = "active"; break;
+
 
                             case 705: linkBusquedaVehiculos = "active"; linkMovimientosAlmacen = "active"; break;
                             case 706: linkBusquedaPersonalAlmacen = "active"; linkMovimientosAlmacen = "active"; break;
@@ -382,7 +386,7 @@
                             </li>
                         }
 
-                        if (usuario.creaGuias || usuario.administraGuias || usuario.visualizaGuias || usuario.registraAjusteStock || usuario.visualizaControlStock)
+                        if (usuario.creaGuias || usuario.administraGuias || usuario.visualizaGuias || usuario.registraAjusteStock || usuario.visualizaControlStock || usuario.modificaClienteProductoReservado)
                         {
 
                             <li class="@linkMovimientosAlmacen">
@@ -423,6 +427,11 @@
                                     @if (usuario.visualizaControlStock)
                                     {
                                         <li id="linkControlStock" class="@linkControlStock">@Html.ActionLink("Control Stock", "ControlAlertaStock", "ProductoControlStock")</li>
+                                    }
+
+                                    @if (usuario.modificaClienteProductoReservado)
+                                    {
+                                        <li id="linkStockReservadoCliente" class="@linkStockReservadoCliente">@Html.ActionLink("Stock Reservado Cliente", "List", "ClienteProductoReservado")</li>
                                     }
 
                                     @if (usuario.visualizaConsolidadoAtencion)

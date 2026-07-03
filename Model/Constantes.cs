@@ -103,6 +103,8 @@ namespace Model
         public static String VAR_SESSION_PEDIDO_ALMACEN_LISTA = "pedidoAlmacenList";
         public static String VAR_SESSION_PEDIDO_ALMACEN_VER = "pedidoAlmacenVer";
 
+        public static String VAR_SESSION_CLIENTEPRODUCTORESERVADO_BUSQUEDA = "clienteProductoReservadoBusqueda";
+
         public static String VAR_SESSION_CLIENTE = "cliente";
         public static String VAR_SESSION_CLIENTE_BUSQUEDA = "clienteBusqueda";
         public static String VAR_SESSION_CLIENTE_LITE_BUSQUEDA = "clienteLiteBusqueda";
@@ -621,6 +623,8 @@ namespace Model
 
         public const String VISUALIZA_CONTROL_STOCK = "P728";
 
+        public const String MODIFICA_CLIENTE_PRODUCTO_RESERVADO = "P781";
+
         public enum paginas
         {
             /*COTIZACION*/
@@ -881,6 +885,9 @@ namespace Model
 
             [Display(Name = "PRODUCTOS HOMOLOGADOS TECNICA EN NEXTSOFT")]
             ProductosHomologadosTecnica = 746,
+
+            [Display(Name = "PRODUCTOS RESERVADOS CLIENTES")]
+            ProductosReservadosCliente = 781,
 
             [Display(Name = "EDITA CONFIGURACION EMPRESA")]
             EditaConfiguracionEmpresa = 151

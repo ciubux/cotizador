@@ -232,6 +232,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ClienteProductoReservadoController.cs" />
     <Compile Include="Controllers\DocumentoExternoController.cs" />
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Controllers\EmpresaDescuentoController.cs" />
@@ -499,6 +500,7 @@
     <Content Include="images\user_icon_2.png" />
     <Content Include="Scripts\excellib\exceljs.min.js" />
     <Content Include="Scripts\empresaDescuento.js" />
+    <Content Include="Scripts\clienteProductoReservado.js" />
     <Content Include="Scripts\productoControlStock.js" />
     <Content Include="Scripts\personalAlmacen.js" />
     <Content Include="Scripts\consolidadoAtencion.js" />
@@ -815,6 +817,7 @@
     <Content Include="Views\ProductoControlStock\ControlAlertaStock.cshtml" />
     <Content Include="Views\Stock\_ModalStockPendienteRecepcion.cshtml" />
     <Content Include="Views\Precio\_ModalPrecioCotizacionesPuntuales.cshtml" />
+    <Content Include="Views\ClienteProductoReservado\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

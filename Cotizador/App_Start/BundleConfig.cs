@@ -27,6 +27,9 @@ namespace Cotizador
                         "~/Scripts/factura1.1.7.js"
                         ));
 
+            bundles.Add(new ScriptBundle("~/bundles/clienteProductoReservado").Include(
+                        "~/Scripts/clienteProductoReservado.js"
+                        ));
             bundles.Add(new ScriptBundle("~/bundles/fabricante").Include(
                         "~/Scripts/fabricante.js"
                         ));

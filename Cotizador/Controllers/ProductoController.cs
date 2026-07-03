@@ -1,8 +1,10 @@
 ﻿using BusinessLayer;
-using Cotizador.Models;
 using Cotizador.ExcelExport;
+using Cotizador.Models;
 using Model;
+using Model.NextSoft;
 using Newtonsoft.Json;
+using NLog;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using System;
@@ -10,10 +12,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Threading.Tasks;
-using Model.NextSoft;
 
 namespace Cotizador.Controllers
 {
@@ -253,6 +254,7 @@ namespace Cotizador.Controllers
             String resultado = bl.getProductosBusqueda(texto_busqueda, false, this.Session["proveedor"] != null ? (String)this.Session["proveedor"] : "Todos", this.Session["familia"] != null ? (String)this.Session["familia"] : "Todas", null, incluyeDescontinuados);
             return resultado;
         }
+       
 
         public string UpdateRestriccionVenta()
         {

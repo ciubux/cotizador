@@ -519,6 +519,24 @@ namespace Cotizador.Controllers
 
             return clienteBL.getCLientesBusqueda(data, this.ClienteSession.ciudad.idCiudad, usuario.idUsuario);
         }
+
+        public String SetSedeBusquedaClientesGlobal(Guid idCiudad)
+        {
+            this.Session["s_idCiudadSearchClientesGlobal"] = idCiudad;
+
+            return "";
+        }
+
+        public String SearchClientesGlobal()
+        {
+            String data = this.Request.Params["data[q]"];
+            ClienteBL clienteBL = new ClienteBL();
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Guid idCiudad = (Guid)this.Session["s_idCiudadSearchClientesGlobal"];
+
+            return clienteBL.getCLientesBusqueda(data, idCiudad, usuario.idUsuario);
+        }
+
         public String SearchClienteSunat()
         {
             String data = this.Request.Params["data[q]"];

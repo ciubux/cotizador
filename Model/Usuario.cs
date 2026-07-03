@@ -269,6 +269,7 @@ namespace Model
 
         public bool visualizaControlStock { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_CONTROL_STOCK)).FirstOrDefault() != null; } }
 
+        public bool modificaClienteProductoReservado { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_CLIENTE_PRODUCTO_RESERVADO)).FirstOrDefault() != null; } }
 
         public bool modificaMaestroVehiculos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_MAESTRO_VEHICULOS)).FirstOrDefault() != null; } }
         public bool modificaMaestroPersonalAlmacen { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_MAESTRO_PERSONAL_ALMACEN)).FirstOrDefault() != null; } }

@@ -52,6 +52,7 @@
     <Compile Include="AlmacenDAL.cs" />
     <Compile Include="ClienteContactoTipoDAL.cs" />
     <Compile Include="EmpresaDAL.cs" />
+    <Compile Include="ClienteProductoReservadoDAL.cs" />
     <Compile Include="PersonalAlmacenDAL.cs" />
     <Compile Include="ConsolidadoAtencionDAL.cs" />
     <Compile Include="ProductoControlStockDAL.cs" />
