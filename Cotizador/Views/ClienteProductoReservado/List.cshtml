@@ -1,0 +1,284 @@
+﻿@{
+    ViewBag.Title = "Stock Reservado Clientes";
+    Model.ClienteProductoReservado search = ViewBag.search;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+
+<div class="container">
+    <input type="hidden" id="idClienteProductoReservado" value="" />
+
+    <form class="form-horizontal">
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group row">
+                    <label class="control-label col-xs-4">Ciudad:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("GetCiudades", "Ciudad", new { ciudadSelectId = "idCiudadBusqueda", selectedValue = search.ciudad.idCiudad })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group row">
+                    <label class="control-label col-xs-4">Cliente:</label>
+                    <div class="col-xs-8">
+                        <select class="form-control input-sm" id="idClienteBusqueda" name="idClienteBusqueda" required>
+                            @if (search.cliente != null && !search.cliente.idCliente.Equals(Guid.Empty))
+                            {
+                                <option value="@search.cliente.idCliente">@search.cliente.ToString()</option>
+                            }
+                            else
+                            {
+                                <option value=""></option>
+
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group row">
+                    <label class="control-label col-xs-4">Estado:</label>
+                    <div class="col-xs-8">
+                        <select id="estadoBusqueda" class="form-control">
+                            <option value="1" @(search.Estado == 1 ? "selected" : "")>Activo</option>
+                            <option value="0" @(search.Estado == 0 ? "selected" : "")>Inactivo</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
+            <button id="btnLimpiarBusqueda" type="button" class="btn btn-primary bouton-image botonClean">Limpiar</button>
+            <button id="btnBusqueda" type="button" class="btn btn-primary bouton-image botonSearch">Buscar</button>
+        </div>
+
+        <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px;">
+            <button id="btnAbrirModalCargaMasiva" type="button" class="btn btn-warning">Carga Masiva</button>
+            <button id="btnAgregar" type="button" class="btn btn-primary">Registrar Nuevo</button>
+            <button id="btnExportExcel" type="button" class="btn btn-primary bouton-image botonExcel">Exportar Resultados</button>
+        </div>
+
+        <table id="tableRegistros" class="table" data-paging="true" data-sorting="true">
+            <thead>
+                <tr>
+                    <th data-name="idClienteProductoReservado" data-visible="false"></th>
+                    <th data-name="ciudad">Ciudad</th>
+                    <th data-name="cliente">Cliente</th>
+                    <th data-name="producto">Producto</th>
+                    <th data-name="producto">Unidad</th>
+                    <th data-name="cantidadOriginal">Cant. Original</th>
+                    <th data-name="cantidadReserva">Reserva</th>
+                    <th data-name="cantidadAtendida">Atendida</th>
+                    <th data-name="opciones" data-breakpoints="xs"></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </form>
+</div>
+
+<div class="modal fade" id="modalEditarClienteProductoReservado"  tabindex="-1">
+    <div class="modal-dialog modal-lg" style="width: 650px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalEditarClienteProductoReservadoTitle"></h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <input type="hidden" id="modal_id" value="" />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Ciudad:</label>
+                                <div class="col-xs-8">
+                                    @Html.Action("GetCiudades", "Ciudad", new { ciudadSelectId = "modal_idCiudad" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Cliente:</label>
+                                <div class="col-xs-8">
+                                    <select class="form-control input-sm" id="modal_idCliente" name="modal_idCliente" required>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Producto:</label>
+                                <div class="col-xs-8">
+                                    <select class="form-control" id="modal_idProducto" name="producto">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Unidad Conteo:</label>
+                                <div class="col-xs-8">
+                                    <p id="modal_unidadConteo"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Cantidad a Reservar:</label>
+                                <div class="col-xs-8">
+                                    <input type="number" id="modal_cantidadOriginal" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnFinalizarEdicion" class="btn btn-primary"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalCargaMasivaClienteProductoReservado" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Carga Masiva de Reservas en la sede de <span id="modalCPRCiudadtitulo"></span></h4>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="form-group">
+                                <label class="control-label col-xs-3">Archivo:</label>
+                                <div class="col-xs-9">
+                                    <input id="modalCPRExcelFile" name="file" type="file"
+                                           class="btn btn-primary" data-max-size="2097152" data-max-size-text="2MB"
+                                           accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <p>
+                                <b>CONSIDERACIONES</b>
+                                <ul>
+                                    <li>El formato del archivo debe ser el mismo que la descarga de exportación.</li>
+                                    <li>Si la <b>CANT. ORIGINAL</b> es 0, la reserva se eliminará (desactivará).</li>
+                                    <li>Si la reserva ya existe, se actualizará.</li>
+                                    <li>Asegúrese de seleccionar la Sede correcta en los filtros antes de cargar.</li>
+                                </ul>
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnModalCargaMasivaCPRAceptar" class="btn btn-primary">Procesar Excel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalAgregarReserva" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Agregar a Cantidad de Reserva</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <input type="hidden" id="modal_res_id" />
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-4">Sede:</label>
+                        <div class="col-xs-8">
+                            <input type="text" id="modal_res_sede" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-4">Cliente:</label>
+                        <div class="col-xs-8">
+                            <input type="text" id="modal_res_cliente" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-4">Producto (SKU):</label>
+                        <div class="col-xs-8">
+                            <input type="text" id="modal_res_sku" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-4">Unidad de Conteo:</label>
+                        <div class="col-xs-8">
+                            <input type="text" id="modal_res_unidad" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-4">Cantidad Original:</label>
+                        <div class="col-xs-8">
+                            <input type="text" id="modal_res_cant_original" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-4">Reserva Actual:</label>
+                        <div class="col-xs-8">
+                            <input type="text" id="modal_res_cant_actual" class="form-control" readonly />
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-4 text-primary"><b>Agregar a Reserva:</b></label>
+                        <div class="col-xs-8">
+                            <input type="number" id="modal_res_cant_agregar" class="form-control" value="0" min="0" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-4 text-success"><b>Nueva Cantidad Reservada:</b></label>
+                        <div class="col-xs-8">
+                            <input type="text" id="modal_res_cant_resultante" class="form-control font-weight-bold text-success" readonly />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnGuardarReserva" class="btn btn-primary">Guardar Reserva</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #modal_idProducto_chosen {
+        width: 100% !important;
+    }
+
+    #modal_idCliente_chosen {
+        width: 100% !important;
+    }
+</style>
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/clienteProductoReservado")
+}
