@@ -658,7 +658,19 @@ namespace Cotizador.Controllers
             }
         }
 
+        public String GetProducto(Guid idProducto)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (usuario == null)
+            {
+                return "";
+            }
 
+            ProductoBL productoBL = new ProductoBL();
+            Producto producto = productoBL.getProductoById(idProducto);
+
+            return JsonConvert.SerializeObject(producto);
+        }
 
         [HttpPost]
         public ActionResult LoadNEW(HttpPostedFileBase file)
