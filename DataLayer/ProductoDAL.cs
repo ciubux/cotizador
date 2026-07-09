@@ -1769,7 +1769,7 @@ namespace DataLayer
 
         public List<RegistroCargaStock> StockProducto(string sku, Guid idUsuario, int idEmpresaUI = 0)
         {
-            var objCommand = GetSqlCommand("ps_stock_global_producto");
+            var objCommand = GetSqlCommand("ps_stock_global_producto_b");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             InputParameterAdd.Varchar(objCommand, "sku", sku);
             InputParameterAdd.Int(objCommand, "idEmpresaUI", idEmpresaUI);
@@ -2022,6 +2022,22 @@ namespace DataLayer
                 item.cantidadEsperadaAlternativaCalc = item.cantidadEsperadaMpCalc * ((Decimal)item.producto.equivalenciaAlternativa);
                 item.cantidadEsperadaAlternativaCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadEsperadaAlternativaCalc));
 
+                item.cantidadReservadaEntregarConteo = (int)Converter.GetDecimal(row, "stock_reservado_entregar_unidad_conteo");
+                item.cantidadReservadaEntregarMpCalc = ((Decimal)item.cantidadReservadaEntregarConteo) / ((Decimal)item.producto.equivalenciaUnidadEstandarUnidadConteo);
+                item.cantidadReservadaEntregarMpCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadReservadaEntregarMpCalc));
+                item.cantidadReservadaEntregarProveedorCalc = item.cantidadReservadaEntregarMpCalc / ((Decimal)item.producto.equivalenciaProveedor);
+                item.cantidadReservadaEntregarProveedorCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadReservadaEntregarProveedorCalc));
+                item.cantidadReservadaEntregarAlternativaCalc = item.cantidadReservadaEntregarMpCalc * ((Decimal)item.producto.equivalenciaAlternativa);
+                item.cantidadReservadaEntregarAlternativaCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadReservadaEntregarAlternativaCalc));
+
+                item.cantidadReservadaRecibirConteo = (int)Converter.GetDecimal(row, "stock_reservado_recibir_unidad_conteo");
+                item.cantidadReservadaRecibirMpCalc = ((Decimal)item.cantidadReservadaRecibirConteo) / ((Decimal)item.producto.equivalenciaUnidadEstandarUnidadConteo);
+                item.cantidadReservadaRecibirMpCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadReservadaRecibirMpCalc));
+                item.cantidadReservadaRecibirProveedorCalc = item.cantidadReservadaRecibirMpCalc / ((Decimal)item.producto.equivalenciaProveedor);
+                item.cantidadReservadaRecibirProveedorCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadReservadaRecibirProveedorCalc));
+                item.cantidadReservadaRecibirAlternativaCalc = item.cantidadReservadaRecibirMpCalc * ((Decimal)item.producto.equivalenciaAlternativa);
+                item.cantidadReservadaRecibirAlternativaCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadReservadaRecibirAlternativaCalc));
+
                 item.tieneRegistroStock = Converter.GetInt(row, "tiene_registro_stock") > 0 ? true : false;
                 item.registradoPeridoAplicable = Converter.GetInt(row, "registrado_periodo_aplicable") > 0 ? true : false;
 
@@ -2034,7 +2050,7 @@ namespace DataLayer
 
         public List<RegistroCargaStock> StockProductosSede(List<Guid> idProductos, Guid idCiudad, Guid idUsuario, Guid? idCliente = null)
         {
-            var objCommand = GetSqlCommand("ps_stock_productos_sede");
+            var objCommand = GetSqlCommand("ps_stock_productos_sede_b");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
 

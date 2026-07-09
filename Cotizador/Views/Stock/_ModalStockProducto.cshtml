@@ -86,6 +86,7 @@
                 <br />
                 <div class="row">
                     <div class="col-sm-12 col-lg-12">
+                        <p><b>*</b> El número que esta entre llaves "{}" es el stock disponible que resta del stock fisico el stock reservado a clientes.</p>
                         <p><b>*</b> El número que esta en el cuadro verde en positivo "+" debajo del stock de cada sede indica la cantidad del producto por recibir en la sede (En pedidos que tienen plazo de entrega activo, o que su plazo de recepción comenzará dentro de los próximos <span class="spnRSPDiasPendientePost">14</span> días, o cuyo plazo de recepción se venció hace <span class="spnRSPDiasPendienteAnt">7</span> días o menos.</p>
                         <p><b>*</b> El número que esta en el cuadro rojo en negativo "-" debajo del stock de cada sede indica la cantidad del producto por atender en la sede (En pedidos que tienen plazo de entrega activo, o que su plazo de entrega comenzará dentro de los próximos <span class="spnRSPDiasPendientePost">14</span> días, o cuyo plazo de entrega se venció hace <span class="spnRSPDiasPendienteAnt">7</span> días o menos.</p>
                     </div>
@@ -157,28 +158,32 @@
 
                      var htmlStockSedes = "";
                      var htmlOptionsUnidad = "";
-                     var stock, stockSeparado, stockEsperado;
-                     var stockTotal, stockTotalSeparado, stockTotalEsperado;
-                     var stockTotalMP, stockTotalSeparadoMP, stockTotalEsperadoMP;
-                     var stockTotalAlternativa, stockTotalSeparadoAlternativa, stockTotalEsperadoAlternativa;
-                     var stockTotalProveedor, stockTotalSeparadoProveedor, stockTotalEsperadoProveedor;
-                     var stockTotalConteo, stockTotalSeparadoConteo, stockTotalEsperadoConteo;
+                     var stock, stockSeparado, stockEsperado, stockDisponible;
+                     var stockTotal, stockTotalSeparado, stockTotalEsperado, stockTotalDispoible;
+                     var stockTotalMP, stockTotalSeparadoMP, stockTotalEsperadoMP, stockTotalDispoibleMP;
+                     var stockTotalAlternativa, stockTotalSeparadoAlternativa, stockTotalEsperadoAlternativa, stockTotalDispoibleAlternativa;
+                     var stockTotalProveedor, stockTotalSeparadoProveedor, stockTotalEsperadoProveedor, stockTotalDispoibleProveedor;
+                     var stockTotalConteo, stockTotalSeparadoConteo, stockTotalEsperadoConteo, stockTotalDispoibleConteo;
                      var disponible = false;
                      var unidadSelected = "";
-                     stockTotal = 0; stockTotalSeparado = 0; stockTotalEsperado = 0;
-                     stockTotalMP = 0; stockTotalSeparadoMP = 0; stockTotalEsperadoMP = 0;
-                     stockTotalAlternativa = 0; stockTotalSeparadoAlternativa = 0; stockTotalEsperadoAlternativa = 0;
-                     stockTotalProveedor = 0; stockTotalSeparadoProveedor = 0; stockTotalEsperadoProveedor = 0;
-                     stockTotalConteo = 0; stockTotalSeparadoConteo = 0; stockTotalEsperadoConteo = 0;
+                     stockTotal = 0; stockTotalSeparado = 0; stockTotalEsperado = 0; stockTotalDispoible = 0;
+                     stockTotalMP = 0; stockTotalSeparadoMP = 0; stockTotalEsperadoMP = 0; stockTotalDispoibleMP = 0;
+                     stockTotalAlternativa = 0; stockTotalSeparadoAlternativa = 0; stockTotalEsperadoAlternativa = 0; stockTotalDispoibleAlternativa = 0;
+                     stockTotalProveedor = 0; stockTotalSeparadoProveedor = 0; stockTotalEsperadoProveedor = 0; stockTotalDispoibleProveedor = 0;
+                     stockTotalConteo = 0; stockTotalSeparadoConteo = 0; stockTotalEsperadoConteo = 0; stockTotalDispoibleConteo = 0;
 
                      var stockMP = "";
                      var stockAlternativo = "";
                      var stockProveedor = "";
                      var stockConteo = "";
 
+                     var stockDisponibleMP = "";
+                     var stockDisponibleAlternativo = "";
+                     var stockDisponibleProveedor = "";
+                     var stockDisponibleConteo = "";
 
                      for (var i = 0; i < lista.length; i++) {
-                         stock = 0; stockSeparado = 0; stockEsperado = 0;
+                         stock = 0; stockSeparado = 0; stockEsperado = 0; stockDisponible = 0;
                          atributosStockSede = "";
 
                          if (lista[i].ciudad.idCiudad == idCiudad) {
@@ -195,6 +200,11 @@
                                  stockAlternativo = stock;
                                  stockProveedor = stock;
                                  stockConteo = stock;
+
+                                 stockDisponibleMP = 0;
+                                 stockDisponibleAlternativo = 0;
+                                 stockDisponibleProveedor = 0;
+                                 stockDisponibleConteo = 0;
                              } else {
                                  disponible = true;
 
@@ -202,6 +212,11 @@
                                  stockAlternativo = lista[i].cantidadAlternativaCalc;
                                  stockProveedor = lista[i].cantidadProveedorCalc;
                                  stockConteo = lista[i].cantidadConteo;
+
+                                 stockDisponibleMP = stockMP - lista[i].cantidadReservadaEntregarMpCalc + lista[i].cantidadReservadaRecibirMpCalc;
+                                 stockDisponibleAlternativo = stockAlternativo - lista[i].cantidadReservadaEntregarAlternativaCalc + lista[i].cantidadReservadaRecibirAlternativaCalc;
+                                 stockDisponibleProveedor = stockProveedor - lista[i].cantidadReservadaEntregarProveedorCalc + lista[i].cantidadReservadaRecibirProveedorCalc;
+                                 stockDisponibleConteo = stockConteo - lista[i].cantidadReservadaEntregarConteo + lista[i].cantidadReservadaRecibirConteo;
 
                                  if (idProductoPresentacion == '0') {
                                      stock = lista[i].cantidadMpCalc;
@@ -225,28 +240,45 @@
                              if (idProductoPresentacion == '0') {
                                  stockSeparado = lista[i].cantidadSeparadaMpCalc;
                                  stockEsperado = lista[i].cantidadEsperadaMpCalc;
+                                 stockDisponible = stockDisponibleMP;
                              }
 
                              if (idProductoPresentacion == '1') {
                                  stockSeparado = lista[i].cantidadSeparadaAlternativaCalc;
                                  stockEsperado = lista[i].cantidadEsperadaAlternativaCalc;
+                                 stockDisponible = stockDisponibleAlternativo;
                              }
                              if (idProductoPresentacion == '2') {
                                  stockSeparado = lista[i].cantidadSeparadaProveedorCalc;
                                  stockEsperado = lista[i].cantidadEsperadaProveedorCalc;
+                                 stockDisponible = stockDisponibleProveedor;
                              }
 
                              stockTotalSeparado = stockTotalSeparado + stockSeparado;
                              stockTotalEsperado = stockTotalEsperado + stockEsperado;
+                             stockTotalDispoible = stockTotalDispoible + stockDisponible;
 
                              stockTotalSeparadoMP = stockTotalSeparadoMP + lista[i].cantidadSeparadaMpCalc;
                              stockTotalEsperadoMP = stockTotalEsperadoMP + lista[i].cantidadEsperadaMpCalc;
+                             stockTotalDispoibleMP = stockTotalDispoibleMP + stockDisponibleMP;
                              stockTotalSeparadoAlternativa = stockTotalSeparadoAlternativa + lista[i].cantidadSeparadaAlternativaCalc;
                              stockTotalEsperadoAlternativa = stockTotalEsperadoAlternativa + lista[i].cantidadEsperadaAlternativaCalc;
+                             stockTotalDispoibleAlternativa = stockTotalDispoibleAlternativa + stockDisponibleAlternativo;
                              stockTotalSeparadoProveedor = stockTotalSeparadoProveedor + lista[i].cantidadSeparadaProveedorCalc;
                              stockTotalEsperadoProveedor = stockTotalEsperadoProveedor + lista[i].cantidadEsperadaProveedorCalc;
+                             stockTotalDispoibleProveedor = stockTotalDispoibleProveedor + stockDisponibleProveedor;
                              stockTotalSeparadoConteo = stockTotalSeparadoConteo + lista[i].cantidadSeparadaConteo;
                              stockTotalEsperadoConteo = stockTotalEsperadoConteo + lista[i].cantidadEsperadaConteo;
+                             stockTotalDispoibleConteo = stockTotalDispoibleConteo + stockDisponibleConteo;
+
+                             if (stock != "No Registrado") {
+                                 stock = stock + ' {' + stockDisponible + '}';
+                                 stockMP = stockMP + ' {' + stockDisponibleMP + '}';
+                                 stockAlternativo = stockAlternativo + ' {' + stockDisponibleAlternativo + '}';
+                                 stockProveedor = stockProveedor + ' {' + stockDisponibleProveedor + '}';
+                                 stockConteo = stockConteo + ' {' + stockDisponibleConteo + '}';
+                             }
+                             
 
                              if (stockEsperado > 0) {
                                  stock = stock + ' [+' + stockEsperado + ']';
@@ -319,6 +351,11 @@
                                  stockProveedor = lista[i].cantidadProveedorCalc;
                                  stockConteo = lista[i].cantidadConteo;
 
+                                 stockDisponibleMP = stockMP - lista[i].cantidadReservadaEntregarMpCalc + lista[i].cantidadReservadaRecibirMpCalc;
+                                 stockDisponibleAlternativo = stockAlternativo - lista[i].cantidadReservadaEntregarAlternativaCalc + lista[i].cantidadReservadaRecibirAlternativaCalc;
+                                 stockDisponibleProveedor = stockProveedor - lista[i].cantidadReservadaEntregarProveedorCalc + lista[i].cantidadReservadaRecibirProveedorCalc;
+                                 stockDisponibleConteo = stockConteo - lista[i].cantidadReservadaEntregarConteo + lista[i].cantidadReservadaRecibirConteo;
+
                                  if (idProductoPresentacion == '0') {
                                      stock = lista[i].cantidadMpCalc;
                                  }
@@ -337,19 +374,23 @@
                                  stockTotalProveedor = stockTotalProveedor + lista[i].cantidadProveedorCalc;
                                  stockTotalConteo = stockTotalConteo + lista[i].cantidadConteo;
                              }
+                             
 
                              if (idProductoPresentacion == '0') {
                                  stockSeparado = lista[i].cantidadSeparadaMpCalc;
                                  stockEsperado = lista[i].cantidadEsperadaMpCalc;
+                                 stockDisponible = stockDisponibleMP;
                              }
 
                              if (idProductoPresentacion == '1') {
                                  stockSeparado = lista[i].cantidadSeparadaAlternativaCalc;
                                  stockEsperado = lista[i].cantidadEsperadaAlternativaCalc;
+                                 stockDisponible = stockDisponibleAlternativo;
                              }
                              if (idProductoPresentacion == '2') {
                                  stockSeparado = lista[i].cantidadSeparadaProveedorCalc;
                                  stockEsperado = lista[i].cantidadEsperadaProveedorCalc;
+                                 stockDisponible = stockDisponibleProveedor;
                              }
 
                              stockTotalSeparado = stockTotalSeparado + stockSeparado;
@@ -357,12 +398,24 @@
 
                              stockTotalSeparadoMP = stockTotalSeparadoMP + lista[i].cantidadSeparadaMpCalc;
                              stockTotalEsperadoMP = stockTotalEsperadoMP + lista[i].cantidadEsperadaMpCalc;
+                             stockTotalDispoibleMP = stockTotalDispoibleMP + stockDisponibleMP;
                              stockTotalSeparadoAlternativa = stockTotalSeparadoAlternativa + lista[i].cantidadSeparadaAlternativaCalc;
                              stockTotalEsperadoAlternativa = stockTotalEsperadoAlternativa + lista[i].cantidadEsperadaAlternativaCalc;
+                             stockTotalDispoibleAlternativa = stockTotalDispoibleAlternativa + stockDisponibleAlternativo;
                              stockTotalSeparadoProveedor = stockTotalSeparadoProveedor + lista[i].cantidadSeparadaProveedorCalc;
                              stockTotalEsperadoProveedor = stockTotalEsperadoProveedor + lista[i].cantidadEsperadaProveedorCalc;
+                             stockTotalDispoibleProveedor = stockTotalDispoibleProveedor + stockDisponibleProveedor;
                              stockTotalSeparadoConteo = stockTotalSeparadoConteo + lista[i].cantidadSeparadaConteo;
                              stockTotalEsperadoConteo = stockTotalEsperadoConteo + lista[i].cantidadEsperadaConteo;
+                             stockTotalDispoibleConteo = stockTotalDispoibleConteo + stockDisponibleConteo;
+
+                             if (stock != "No Registrado") {
+                                 stock = stock + ' {' + stockDisponible + '}';
+                                 stockMP = stockMP + ' {' + stockDisponibleMP + '}';
+                                 stockAlternativo = stockAlternativo + ' {' + stockDisponibleAlternativo + '}';
+                                 stockProveedor = stockProveedor + ' {' + stockDisponibleProveedor + '}';
+                                 stockConteo = stockConteo + ' {' + stockDisponibleConteo + '}';
+                             }
 
                              if (stockEsperado > 0) {
                                  stock = stock + ' [+' + stockEsperado + ']';
