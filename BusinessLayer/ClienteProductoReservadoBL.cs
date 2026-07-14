@@ -56,6 +56,22 @@ namespace BusinessLayer
                 dal.AgregarCantidadReserva(idClienteProductoReservado, cantidadAgregar, idUsuario);
             }
         }
+
+        public void InsertSolicitudesRecargaReserva(Guid idUsuario, List<ClienteProductoReservadoSolicitud> lista)
+        {
+            using (ClienteProductoReservadoDAL dal = new ClienteProductoReservadoDAL())
+            {
+                dal.InsertSolicitudesRecargaReserva(idUsuario, lista);
+            }
+        }
+
+        public List<ClienteProductoReservado> SelectDatosReservaSolicitarRecarga(Guid idUsuario, List<ClienteProductoReservado> reservas)
+        {
+            using (ClienteProductoReservadoDAL dal = new ClienteProductoReservadoDAL())
+            {
+                return dal.SelectDatosReservaSolicitarRecarga(idUsuario, reservas);
+            }
+        }
     }
 }
 

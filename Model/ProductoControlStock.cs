@@ -25,6 +25,12 @@ namespace Model
         public int cantidadReservaAgregarCs { get; set; }
         public int cantidadReservaDescontarCs { get; set; }
 
+        public Guid idClienteProductoReservado { get; set; }
+        public Guid idClienteProductoReservadoSolicitudActiva { get; set; }
+        public int cantidadSolicitudReservaActiva { get; set; }
+        public bool tieneRegistroReserva { get { return !this.idClienteProductoReservado.Equals(Guid.Empty); } }
+        public bool tieneSolicitudActivaRegistroReserva { get { return !this.idClienteProductoReservadoSolicitudActiva.Equals(Guid.Empty); } }
+
         public int cantidadDisponibleCs { get { return this.cantidadCs + this.cantidadReservaAgregarCs - this.cantidadReservaDescontarCs; } }
         public int cantidadVirtualCs { get { return this.cantidadDisponibleCs + this.cantidadRecibirCs - this.cantidadAtenderCs; } }
         public int cantidadSugeridaPedirCs { get { return this.cantidadVirtualCs > this.cantidadMaxima ? 0 : this.cantidadMaxima - this.cantidadVirtualCs; } }
@@ -142,6 +148,14 @@ namespace Model
             get
             {
                 return ConvertirCantidadPresentacion(this.cantidadSugeridaPedirCs);
+            }
+        }
+
+        public decimal cantidadSolicitudReservaActivaPresentacion
+        {
+            get
+            {
+                return ConvertirCantidadPresentacion(this.cantidadSolicitudReservaActiva);
             }
         }
 

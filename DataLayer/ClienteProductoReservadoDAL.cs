@@ -4,6 +4,7 @@ using Model;
 using Model.UTILES;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -178,6 +179,99 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
 
             ExecuteNonQuery(objCommand);
+        }
+
+
+        public void InsertSolicitudesRecargaReserva(Guid idUsuario, List<ClienteProductoReservadoSolicitud> lista)
+        {
+            var objCommand = GetSqlCommand("pi_cliente_producto_reservado_solicitud_masivo");
+
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID_CLIENTE_PRODUCTO_RESERVADO", typeof(Guid)));
+            tvp.Columns.Add(new DataColumn("CANTIDAD_AGREGAR", typeof(int)));
+
+            foreach (ClienteProductoReservadoSolicitud item in lista)
+            {
+                DataRow rowObj = tvp.NewRow();
+
+                rowObj["ID_CLIENTE_PRODUCTO_RESERVADO"] = item.clienteProductoReservado.idClienteProductoReservado;
+                rowObj["CANTIDAD_AGREGAR"] = item.cantidadSolicitada;
+
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@lista", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.ClienteProductoReservadoSolicitudList"; 
+
+            ExecuteNonQuery(objCommand);
+        }
+
+        public List<ClienteProductoReservado> SelectDatosReservaSolicitarRecarga(Guid idUsuario, List<ClienteProductoReservado> reservas)
+        {
+            var objCommand = GetSqlCommand("ps_datosReservasSolicitarRecarga");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID_CLIENTE_PRODUCTO_RESERVADO", typeof(Guid)));
+            tvp.Columns.Add(new DataColumn("CANTIDAD_AGREGAR", typeof(int)));
+
+            foreach (ClienteProductoReservado item in reservas)
+            {
+                DataRow rowObj = tvp.NewRow();
+
+                rowObj["ID_CLIENTE_PRODUCTO_RESERVADO"] = item.idClienteProductoReservado;
+                rowObj["CANTIDAD_AGREGAR"] = 0;
+
+                tvp.Rows.Add(rowObj);
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@lista", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.ClienteProductoReservadoSolicitudList";
+
+            DataTable dataTable = Execute(objCommand);
+            List<ClienteProductoReservado> lista = new List<ClienteProductoReservado>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                ClienteProductoReservado obj = new ClienteProductoReservado();
+                obj.idClienteProductoReservado = Converter.GetGuid(row, "id_cliente_producto_reservado");
+                obj.cantidadOriginal = Converter.GetInt(row, "cantidad_original");
+                obj.cantidadReserva = Converter.GetInt(row, "cantidad_reserva");
+                obj.fechaUltimaRecarga = Converter.GetDateTime(row, "fecha_ultima_recarga");
+
+                obj.producto = new Producto();
+                obj.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                obj.producto.sku = Converter.GetString(row, "sku");
+                obj.producto.descripcion = Converter.GetString(row, "descripcion");
+                obj.producto.unidadConteo = Converter.GetString(row, "unidad_conteo");
+
+                obj.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
+                obj.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+                obj.producto.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_estandar_unidad_conteo");
+                obj.producto.equivalenciaUnidadAlternativaUnidadConteo = obj.producto.equivalenciaUnidadEstandarUnidadConteo / obj.producto.equivalenciaAlternativa;
+                obj.producto.equivalenciaUnidadProveedorUnidadConteo = obj.producto.equivalenciaUnidadEstandarUnidadConteo * obj.producto.equivalenciaProveedor;
+
+                obj.producto.unidad = Converter.GetString(row, "unidad");
+                obj.producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
+                obj.producto.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
+
+                obj.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                obj.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
+
+                obj.solicitudRecargaActiva.idClienteProductoReservadoSolicitud = Converter.GetGuid(row, "id_cliente_producto_reservado_solicitud_activa");
+                obj.solicitudRecargaActiva.cantidadSolicitada = Converter.GetInt(row, "cantidad_solicitada_activa");
+
+                obj.Estado = Converter.GetInt(row, "estado");
+
+
+                lista.Add(obj);
+            }
+
+            return lista;
         }
     }
 }

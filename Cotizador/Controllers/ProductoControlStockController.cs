@@ -47,39 +47,40 @@ namespace Cotizador.Controllers
             int diasConsiderarPedidosAnt = int.Parse(parametroBL.getParametro("STOCK_DIAS_PEDIDOS_ENTREGA_VENCIDA"));
             int diasConsiderarPedidosPost = int.Parse(parametroBL.getParametro("STOCK_DIAS_PEDIDOS_ENTREGA_PENDIENTE"));
 
+           
+            List<object> listaExport = new List<object>();
+
+            foreach (ProductoControlStock item in lista)
+            {
+                item.idProductoPresentacion = filtro.idPresentacionUnidad;
+                listaExport.Add(new
+                {
+                    sku = item.producto.sku,
+                    producto = item.producto.descripcion,
+                    unidad = item.unidadPresentacion,
+                    cantMin = item.cantidadMinimaPresentacion,
+                    cantMax = item.cantidadMaximaPresentacion,
+                    cantAle = item.cantidadAlertaPresentacion,
+                    fechaStock = item.FechaCsDesc,
+                    stockReal = item.cantidadPresentacion,
+                    stockDisponible = item.cantidadDisponiblePresentacion,
+                    stockVirtual = item.cantidadVirtualPresentacion,
+                    sugeridoPedir = item.cantidadSugeridaPedirPresentacion,
+                    estadoStockReal = item.estadoStockReal,
+                    estadoStockVirtual = item.estadoStockVirtual,
+                    idClienteProductoReservado = item.idClienteProductoReservado,
+                    tieneRegistroReserva = item.tieneRegistroReserva,
+                    tieneSolicitudActivaRegistroReserva = item.tieneSolicitudActivaRegistroReserva,
+                    cantidadSolicitudReservaActiva = item.cantidadSolicitudReservaActivaPresentacion
+                });
+            }
+
             ViewBag.pagina = (int)Constantes.paginas.ControlStock;
             ViewBag.lista = lista;
             ViewBag.filtro = filtro;
             ViewBag.usuario = this.Logueado;
             ViewBag.diasConsiderarPedidosAnt = diasConsiderarPedidosAnt;
             ViewBag.diasConsiderarPedidosPost = diasConsiderarPedidosPost;
-
-            List<object> listaExport = new List<object>();
-
-            foreach (ProductoControlStock item in lista)
-            {
-                listaExport.Add(new
-                {
-                    sku = item.producto.sku,
-                    producto = item.producto.descripcion,
-                    unidad = item.unidadPresentacion,
-                    //cantMin = String.Format(Constantes.formatoDosDecimales, item.cantidadMinimaPresentacion),
-                    //cantMax = String.Format(Constantes.formatoDosDecimales, item.cantidadMaximaPresentacion),
-                    //cantAle = String.Format(Constantes.formatoDosDecimales, item.cantidadAlertaPresentacion),
-                    cantMin = item.cantidadMinimaPresentacion,
-                    cantMax = item.cantidadMaximaPresentacion,
-                    cantAle = item.cantidadAlertaPresentacion,
-                    fechaStock = item.FechaCsDesc,
-                    //stockReal = String.Format(Constantes.formatoDosDecimales, item.cantidadPresentacion),
-                    //stockVirtual = String.Format(Constantes.formatoDosDecimales, item.cantidadVirtualPresentacion),
-                    //sugeridoPedir = String.Format(Constantes.formatoDosDecimales, item.cantidadSugeridaPedirPresentacion),
-                    stockReal = item.cantidadPresentacion,
-                    stockVirtual = item.cantidadVirtualPresentacion,
-                    sugeridoPedir = item.cantidadSugeridaPedirPresentacion,
-                    estadoStockReal = item.estadoStockReal,
-                    estadoStockVirtual = item.estadoStockVirtual
-                });
-            }
 
             ViewBag.jsonLista = JsonConvert.SerializeObject(listaExport);
 
@@ -137,6 +138,61 @@ namespace Cotizador.Controllers
             });
         }
 
+        [HttpPost]
+        public string GetDatosReservaSolicitarRecarga(List<Guid> idsReservas)
+        {
+            try
+            {
+                if (idsReservas == null || idsReservas.Count == 0)
+                    return JsonConvert.SerializeObject(new { success = 0, message = "No hay reservas seleccionadas." });
+
+                ClienteProductoReservadoBL bl = new ClienteProductoReservadoBL();
+                List<ClienteProductoReservado> paramList = new List<ClienteProductoReservado>();
+
+                foreach (var id in idsReservas)
+                {
+                    paramList.Add(new ClienteProductoReservado { idClienteProductoReservado = id });
+                }
+
+                var lista = bl.SelectDatosReservaSolicitarRecarga(Logueado.idUsuario, paramList);
+
+                return JsonConvert.SerializeObject(new { success = 1, data = lista });
+            }
+            catch (Exception ex)
+            {
+                return JsonConvert.SerializeObject(new { success = 0, message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public string RegistrarSolicitudesRecarga(List<Guid> idsReservas, List<int> cantidades)
+        {
+            try
+            {
+                if (idsReservas == null || cantidades == null || idsReservas.Count != cantidades.Count)
+                    return JsonConvert.SerializeObject(new { success = 0, message = "Datos de entrada inválidos." });
+
+                List<ClienteProductoReservadoSolicitud> lista = new List<ClienteProductoReservadoSolicitud>();
+
+                for (int i = 0; i < idsReservas.Count; i++)
+                {
+                    lista.Add(new ClienteProductoReservadoSolicitud
+                    {
+                        clienteProductoReservado = new ClienteProductoReservado { idClienteProductoReservado = idsReservas[i] },
+                        cantidadSolicitada = cantidades[i]
+                    });
+                }
+
+                ClienteProductoReservadoBL bl = new ClienteProductoReservadoBL();
+                bl.InsertSolicitudesRecargaReserva(Logueado.idUsuario, lista);
+
+                return JsonConvert.SerializeObject(new { success = 1 });
+            }
+            catch (Exception ex)
+            {
+                return JsonConvert.SerializeObject(new { success = 0, message = ex.Message });
+            }
+        }
 
         public ControlStockFiltro instanciarFiltroControlStock()
         {

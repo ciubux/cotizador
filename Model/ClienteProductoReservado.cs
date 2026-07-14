@@ -32,12 +32,17 @@ namespace Model
         public Cliente cliente { get; set; }
         public Producto producto { get; set; }
 
+        public ClienteProductoReservadoSolicitud solicitudRecargaActiva { get; set; }
+
+
+
         public ClienteProductoReservado()
         {
             this.empresa = new Empresa();
             this.ciudad = new Ciudad();
             this.cliente = new Cliente();
             this.producto = new Producto();
+            this.solicitudRecargaActiva = new ClienteProductoReservadoSolicitud();
         }
     }
 }

@@ -99,14 +99,14 @@ jQuery(function ($) {
 
     $("#btnExportExcel").click(function () {
         const dataExcelDescargar = [["SKU", "PRODUCTO", "UNIDAD", "STOCK MÍNIMO", "STOCK MÁXIMO",
-                                    "STOCK ALERTA", "FECHA STOCK", "STOCK REAL", "STOCK VIRTUAL", "PEDIDO SUGERIDO"]];
+            "STOCK ALERTA", "FECHA STOCK", "STOCK REAL", "STOCK DISPONIBLE", "STOCK VIRTUAL", "PEDIDO SUGERIDO"]];
 
         var jsonTexto = $("#jsonDataResultados").val();
         var listaData = JSON.parse(jsonTexto);
 
         for (var i = 0; i < listaData.length; i++) {
             var ItemRow = [listaData[i].sku, listaData[i].producto, listaData[i].unidad, listaData[i].cantMin, listaData[i].cantMax,
-                listaData[i].cantAle, listaData[i].fechaStock, listaData[i].stockReal, listaData[i].stockVirtual, listaData[i].sugeridoPedir];
+                listaData[i].cantAle, listaData[i].fechaStock, listaData[i].stockReal, listaData[i].stockDisponible, listaData[i].stockVirtual, listaData[i].sugeridoPedir];
             dataExcelDescargar.push(ItemRow);
         }
 
@@ -123,6 +123,7 @@ jQuery(function ($) {
             { formatoCelda: "numero", anchoColumna: 15 }, // STOCK ALERTA
             { formatoCelda: "fecha", anchoColumna: 18 }, // FECHA STOCK
             { formatoCelda: "numero", anchoColumna: 15 }, // STOCK REAL
+            { formatoCelda: "numero", anchoColumna: 15 }, // STOCK DISPONIBLE
             { formatoCelda: "numero", anchoColumna: 15 }, // STOCK VIRTUAL
             { formatoCelda: "numero", anchoColumna: 15 } // PEDIDO SUGERIDO
             //{ formatoCelda: "texto", anchoColumna: 70, colorTexto: "#0000FF" }, 
@@ -318,5 +319,223 @@ jQuery(function ($) {
             }
         });
     }
+
+
+    $("#btnSolicitarRegargaStockReservas").click(function () {
+        var jsonTexto = $("#jsonDataResultados").val();
+        var listaData = JSON.parse(jsonTexto);
+        var idsReservas = [];
+
+        for (var i = 0; i < listaData.length; i++) {
+            if (listaData[i].tieneRegistroReserva && listaData[i].idClienteProductoReservado !== "00000000-0000-0000-0000-000000000000") {
+                idsReservas.push(listaData[i].idClienteProductoReservado);
+            }
+        }
+
+        if (idsReservas.length === 0) {
+            $.alert({ title: "Aviso", type: "orange", content: "No hay registros con reserva asociada en los resultados actuales." });
+            return;
+        }
+
+        $('body').loadingModal({ text: 'Cargando datos de reservas...' });
+
+        $.ajax({
+            url: '/ProductoControlStock/GetDatosReservaSolicitarRecarga',
+            type: 'POST',
+            dataType: 'json',
+            traditional: true, 
+            data: { idsReservas: idsReservas },
+            success: function (res) {
+                $('body').loadingModal('destroy');
+                if (res.success === 1) {
+                    llenarTablaSolicitudesRecarga(res.data);
+                    $("#modalSolicitarRecarga").modal("show");
+                } else {
+                    $.alert({ title: "ERROR", type: "red", content: res.message });
+                }
+            },
+            error: function () {
+                $('body').loadingModal('destroy');
+                $.alert({ title: "ERROR", type: "red", content: MENSAJE_ERROR });
+            }
+        });
+    });
+
+    function format2Dec(num) {
+        return parseFloat(num).toFixed(2);
+    }
+
+    function llenarTablaSolicitudesRecarga(data) {
+        var tbody = $("#tablaSolicitudRecarga tbody");
+        tbody.empty();
+        var tipoUnidadSeleccionada = parseInt($("#tipoUnidad").val());
+
+        data.forEach(function (item) {
+            var prod = item.producto;
+            var divisor = 1;
+            var unidadTexto = prod.unidadConteo;
+
+            if (tipoUnidadSeleccionada === 0) {
+                divisor = prod.equivalenciaUnidadEstandarUnidadConteo;
+                unidadTexto = prod.unidad;
+            } else if (tipoUnidadSeleccionada === 1) {
+                divisor = prod.equivalenciaUnidadAlternativaUnidadConteo;
+                unidadTexto = prod.unidad_alternativa;
+            } else if (tipoUnidadSeleccionada === 2) {
+                divisor = prod.equivalenciaUnidadProveedorUnidadConteo;
+                unidadTexto = prod.unidadProveedor;
+            }
+
+            var cantOrig = item.cantidadOriginal / divisor;
+            var cantRsv = item.cantidadReserva / divisor;
+
+            var htmlSolicitado = "";
+            if (item.solicitudRecargaActiva && item.solicitudRecargaActiva.cantidadSolicitada > 0) {
+                var cantSolActiva = item.solicitudRecargaActiva.cantidadSolicitada / divisor;
+                htmlSolicitado = `<br><span style="color: #337ab7; font-size: 85%;">Solicitado: ${format2Dec(cantSolActiva)}</span>`;
+            }
+
+            var tr = `<tr>
+                        <td>${item.ciudad.nombre}</td>
+                        <td>${prod.sku} - ${prod.descripcion}</td>
+                        <td>${unidadTexto}</td>
+                        <td>${format2Dec(cantOrig)}</td>
+                        <td class="reserva-actual" data-val="${cantRsv}">${format2Dec(cantRsv)}</td>
+                        <td>
+                            <input type="number" class="form-control input-sm input-solicitud-recarga" 
+                                   data-id="${item.idClienteProductoReservado}" 
+                                   data-divisor="${divisor}" 
+                                   min="0" step="1" 
+                                   onkeypress="return event.charCode >= 48 && event.charCode <= 57" 
+                                   style="width: 100px; display:inline-block;" />
+                            ${htmlSolicitado}
+                        </td>
+                        <td class="cantidad-resultante" style="font-weight:bold;">${format2Dec(cantRsv)}</td>
+                      </tr>`;
+
+            tbody.append(tr);
+        });
+
+        $(".input-solicitud-recarga").on("input", function () {
+            var row = $(this).closest("tr");
+            var resActual = parseFloat(row.find(".reserva-actual").attr("data-val"));
+            var ingresado = parseInt($(this).val());
+
+            if (isNaN(ingresado)) ingresado = 0;
+
+            var resultante = resActual + ingresado;
+            row.find(".cantidad-resultante").text(format2Dec(resultante));
+        });
+    }
+
+    $("#btnRegistrarSolicitudRecarga").click(function () {
+        var contNulosOCero = 0;
+        var ids = [];
+        var cants = [];
+
+        $(".input-solicitud-recarga").each(function () {
+            var val = $(this).val();
+            var num = parseInt(val);
+            var idReserva = $(this).attr("data-id");
+            var divisor = parseFloat($(this).attr("data-divisor"));
+
+            if (val.trim() === "" || isNaN(num) || num === 0) {
+                contNulosOCero++;
+                num = 0;
+            }
+
+            var cantidadEnMinima = num * divisor;
+
+            ids.push(idReserva);
+            cants.push(cantidadEnMinima);
+        });
+
+        var mensajeConfirmacion = "¿Está seguro de registrar estas solicitudes?";
+        if (contNulosOCero > 0) {
+            mensajeConfirmacion += `<br><br><span style='color:red;'><b>Aviso:</b> Hay ${contNulosOCero} registro(s) con cantidad vacía o en 0. Si tienen una solicitud activa previa, ésta será desactivada.</span>`;
+        }
+
+        $.confirm({
+            title: 'Confirmar Registro',
+            content: mensajeConfirmacion,
+            type: 'orange',
+            buttons: {
+                SI: {
+                    btnClass: 'btn-warning',
+                    action: function () {
+                        $('body').loadingModal({ text: 'Registrando solicitudes...' });
+                        $.ajax({
+                            url: '/ProductoControlStock/RegistrarSolicitudesRecarga',
+                            type: 'POST',
+                            dataType: 'json',
+                            traditional: true, 
+                            data: { idsReservas: ids, cantidades: cants },
+                            success: function (res) {
+                                $('body').loadingModal('destroy');
+                                if (res.success === 1) {
+                                    $.alert({
+                                        title: "ÉXITO",
+                                        type: "green",
+                                        content: "Las solicitudes de reserva se registraron correctamente.",
+                                        buttons: {
+                                            OK: function () {
+                                                $("#modalSolicitarRecarga").modal("hide");
+                                                location.reload(); 
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    $.alert({ title: "ERROR", type: "red", content: res.message });
+                                }
+                            },
+                            error: function () {
+                                $('body').loadingModal('destroy');
+                                $.alert({ title: "ERROR", type: "red", content: MENSAJE_ERROR });
+                            }
+                        });
+                    }
+                },
+                NO: {
+                    btnClass: 'btn-success',
+                    action: function() {
+
+                    }
+                }
+            }
+        });
+    });
+
+    $(document).on("click", ".btnSolicitarRecargaFila", function () {
+        var idReserva = $(this).attr("data-idreserva");
+
+        if (!idReserva || idReserva === "00000000-0000-0000-0000-000000000000") {
+            return;
+        }
+
+        var idsReservas = [idReserva];
+
+        $('body').loadingModal({ text: 'Cargando datos de la reserva...' });
+
+        $.ajax({
+            url: '/ProductoControlStock/GetDatosReservaSolicitarRecarga',
+            type: 'POST',
+            dataType: 'json',
+            traditional: true,
+            data: { idsReservas: idsReservas },
+            success: function (res) {
+                $('body').loadingModal('destroy');
+                if (res.success === 1) {
+                    llenarTablaSolicitudesRecarga(res.data);
+                    $("#modalSolicitarRecarga").modal("show");
+                } else {
+                    $.alert({ title: "ERROR", type: "red", content: res.message });
+                }
+            },
+            error: function () {
+                $('body').loadingModal('destroy');
+                $.alert({ title: "ERROR", type: "red", content: MENSAJE_ERROR });
+            }
+        });
+    });
 });
 

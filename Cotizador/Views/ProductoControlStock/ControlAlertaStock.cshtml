@@ -114,10 +114,14 @@
         </div>
 
         <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
-            <button id="btnLimpiarBusqueda" type="button" class="btn btn-primary  bouton-image botonClean">Limpiar</button>
-            <button id="btnBusqueda" type="button" class="btn btn-primary  bouton-image botonSearch">Buscar</button>
+            <button id="btnBusqueda" type="button" class="btn btn-primary  bouton-image botonSearch right">Buscar</button>
+            <button id="btnLimpiarBusqueda" type="button" class="btn btn-primary  bouton-image botonClean right" style="margin-right: 5px;">Limpiar</button>
             <br /><br />
             <button id="btnAculizarControlResultados" type="button" class="btn btn-warning right">Actualizar Stocks Resultados</button>
+            @if (lista != null && lista.Any(x => x.tieneRegistroReserva))
+            {
+                <button id="btnSolicitarRegargaStockReservas" type="button" class="btn btn-success right" style="margin-right: 5px;">Solicitar Recarga Stock</button>
+            }
         </div>
 
         <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px;">
@@ -144,17 +148,25 @@
                     <th data-name="cantidadAlerta" data-visible="true" data-sortable="true">Stock Alerta</th>
                     <th data-name="fechaCalculoStock" data-visible="true" data-sortable="true">Fecha Stock</th>
                     <th data-name="cantidadCalculoStock" data-visible="true" data-sortable="true">Stock Real</th>
+                    <th data-name="cantidadCalculoStockDisponible" data-visible="true" data-sortable="true">
+                        Stock Disponible
+                        <label class="lblInfoDescripcionLarga tooltip-label">
+                            <img src="/images/icon_info_22.png">
+                            <span class="tooltip-label-text tooltip-label-text-info tooltiptext" style="width: 200px; left: -200px;">
+                                Se calcula considerando el stock reservado en el stock físico.<br>
+                            </span>
+                        </label>
+                    </th>
                     <th data-name="cantidadCalculoStockVirtual" data-visible="true" data-sortable="true">
                         Stock Virtual
                         <label class="lblInfoDescripcionLarga tooltip-label">
                             <img src="/images/icon_info_22.png">
                             <span class="tooltip-label-text tooltip-label-text-info tooltiptext" style="width: 350px; left: -350px;">
-                                Se calcula sumando al stock físico la cantidad pendiente por recibir (cuadro verde con signo "+") y restando la cantidad que esta pendiente de atención (cuadro rojo con signo "-") en pedidos que tienen plazo de entrega activo, o que su plazo de entrega comenzará dentro de los próximos @ViewBag.diasConsiderarPedidosPost días, o cuyo plazo de entrega se venció hace @ViewBag.diasConsiderarPedidosAnt días o menos.<br>
+                                Se calcula sumando al stock disponible la cantidad pendiente por recibir (cuadro verde con signo "+") y restando la cantidad que esta pendiente de atención (cuadro rojo con signo "-") en pedidos que tienen plazo de entrega activo, o que su plazo de entrega comenzará dentro de los próximos @ViewBag.diasConsiderarPedidosPost días, o cuyo plazo de entrega se venció hace @ViewBag.diasConsiderarPedidosAnt días o menos.<br>
                             </span>
                         </label>
-
                     </th>
-                    <th data-name="cantidadCalculoStockVirtual" data-visible="true" data-sortable="true">
+                    <th data-name="cantidadPedidoSugerido" data-visible="true" data-sortable="true">
                         Pedido Sugerido
                         <label class="lblInfoDescripcionLarga tooltip-label">
                             <img src="/images/icon_info_22.png">
@@ -162,7 +174,6 @@
                                 Cantidad sugerida a comprar para que el stock virutal este cubierto. Se calcula restando al stock máximo el stock virtual.<br>
                             </span>
                         </label>
-
                     </th>
                     <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
                 </tr>
@@ -171,7 +182,6 @@
             <tbody>
                 @foreach (Model.ProductoControlStock item in lista)
                 {
-                    item.idProductoPresentacion = filtro.idPresentacionUnidad;
                     <tr>
                         <td>@item.producto.sku</td>
                         <td>@item.producto.descripcion</td>
@@ -192,6 +202,33 @@
                             else
                             {
                                 <span class="label label-success" style="font-size: 100%;">@String.Format(formatoDosDecimales, item.cantidadPresentacion)</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.cantidadDisponibleCs <= item.cantidadMinima)
+                            {
+                                <span class="label label-danger" style="font-size: 100%;">@String.Format(formatoDosDecimales, item.cantidadDisponiblePresentacion)</span>
+                            }
+                            else if (item.cantidadDisponibleCs <= item.cantidadAlerta)
+                            {
+                                <span class="label label-warning" style="font-size: 100%;">@String.Format(formatoDosDecimales, item.cantidadDisponiblePresentacion)</span>
+                            }
+                            else
+                            {
+                                <span class="label label-success" style="font-size: 100%;">@String.Format(formatoDosDecimales, item.cantidadDisponiblePresentacion)</span>
+                            }
+
+                            @if (item.tieneRegistroReserva)
+                            {
+                                <i class="glyphicon glyphicon-ok" style="color: #337ab7; margin-left: 5px;" title="Tiene registro de reserva"></i>
+                            }
+
+                            @if (item.tieneSolicitudActivaRegistroReserva)
+                            {
+                                <br />
+                                <span class="label label-warning label-solicitado">
+                                    Solicitado:  @((item.cantidadSolicitudReservaActiva > 0 ? "+" : "") + String.Format(formatoDosDecimales, item.cantidadSolicitudReservaActivaPresentacion))
+                                </span>
                             }
                         </td>
                         <td>
@@ -222,6 +259,13 @@
                                     idCiudad="@filtro.idCiudad" style="margin-top: 7px;">
                                 <img src="/images/icon_stock.png" height="25" />
                             </button>
+
+                            @if (item.tieneRegistroReserva)
+                            {
+                                <button type="button" title="Solicitar Reserva" class="btn btn-info btn-sm btnSolicitarRecargaFila" data-idreserva="@item.idClienteProductoReservado" style="margin-top: 7px; margin-left: 5px;">
+                                    <i class="glyphicon glyphicon-plus-sign"></i> Solicitar
+                                </button>
+                            }
                         </td>
                     </tr>
                 }
@@ -320,7 +364,49 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalSolicitarRecarga" tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" style="width: 80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Solicitar Recarga de Stock para Reservas</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped" id="tablaSolicitudRecarga">
+                        <thead>
+                            <tr>
+                                <th>Sede</th>
+                                <th>Producto</th>
+                                <th>Unidad</th>
+                                <th>Cantidad Original</th>
+                                <th>Reserva Actual</th>
+                                <th>Cantidad Agregar</th>
+                                <th>Cantidad Resultante</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnRegistrarSolicitudRecarga" class="btn btn-primary">Registrar Solicitud</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+<style>
+
+    .label-solicitado {
+        font-size: 85%;
+        display: inline-block;
+        margin-top: 5px;
+        padding-top: 5px;
+    }
+
+</style>
 
 @Html.Partial("../Stock/_ModalStockProducto")
 
