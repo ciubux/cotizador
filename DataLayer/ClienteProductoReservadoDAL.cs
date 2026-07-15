@@ -102,6 +102,10 @@ namespace DataLayer
                 obj.producto.sku = Converter.GetString(row, "sku_producto");
                 obj.producto.descripcion = Converter.GetString(row, "descripcion_producto");
 
+                obj.solicitudRecargaActiva.idClienteProductoReservadoSolicitud = Converter.GetGuid(row, "id_cliente_producto_reservado_solicitud");
+                obj.solicitudRecargaActiva.cantidadSolicitada = Converter.GetInt(row, "cantidad_solicitada");
+                
+
                 lista.Add(obj);
             }
 

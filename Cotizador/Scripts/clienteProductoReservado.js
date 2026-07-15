@@ -72,6 +72,12 @@ jQuery(function ($) {
             var rows = "";
             for (var i = 0; i < list.length; i++) {
                 var p = list[i];
+
+                var etiquetaCantidadSolicitada = "";
+                if (p.tieneSolicitudRecargaActiva) {
+                    etiquetaCantidadSolicitada = '<br/> <span class="label label-warning label-solicitado"> Solicitado: ' + p.solicitudRecargaActiva.cantidadSolicitada + ' </span> ';
+                }
+
                 rows += '<tr>' +
                     '<td>' + p.idClienteProductoReservado + '</td>' +
                     '<td>' + (p.ciudad ? p.ciudad.nombre : "-") + '</td>' +
@@ -79,7 +85,7 @@ jQuery(function ($) {
                     '<td>' + (p.producto && p.producto.sku ? p.producto.sku + " - " + p.producto.descripcion : "-") + '</td>' +
                     '<td>' + p.unidadConteo + '</td>' +
                     '<td>' + p.cantidadOriginal + '</td>' +
-                    '<td>' + p.cantidadReserva + '</td>' +
+                    '<td>' + p.cantidadReserva + etiquetaCantidadSolicitada + '</td>' +
                     '<td>' + p.cantidadAtendida + '</td>' +
                     '<td>' +
                     '<button type="button" class="btn btn-primary btnEditar" data-id="' + p.idClienteProductoReservado + '">Editar</button> ' +
@@ -101,7 +107,7 @@ jQuery(function ($) {
         $("#idCiudadBusqueda").val("");
         $("#idClienteBusqueda").val("");
         $("#estadoBusqueda").val("1");
-        $("#btnBusqueda").click();
+        //$("#btnBusqueda").click();
     });
 
     $(document).on('click', '.btnEditar', function () {
@@ -323,6 +329,16 @@ jQuery(function ($) {
 
             $("#modal_res_cant_agregar").val(0);
             $("#modal_res_cant_resultante").val(reservaActual);
+
+            if (p.tieneSolicitudRecargaActiva) {
+                $("#divSolicitudReservaActiva").show();
+                $("#modal_res_cant_solicitada").val(p.solicitudRecargaActiva.cantidadSolicitada);
+                $("#modal_res_cant_agregar").val(p.solicitudRecargaActiva.cantidadSolicitada);
+                $("#modal_res_cant_resultante").val(reservaActual + p.solicitudRecargaActiva.cantidadSolicitada);
+            } else {
+                $("#divSolicitudReservaActiva").hide();
+            }
+            
 
             $("#modalAgregarReserva").modal("show");
         }
