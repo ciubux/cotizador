@@ -389,11 +389,27 @@ jQuery(function ($) {
             var cantOrig = item.cantidadOriginal / divisor;
             var cantRsv = item.cantidadReserva / divisor;
 
+            var idReservaStr = item.idClienteProductoReservado;
+            var tdSugerido = $("td[idreserva='" + idReservaStr + "']"); 
+            var cantSugeridaConvertida = 0;
+
+            if (tdSugerido.length > 0) {
+                var cantSugeridaMinima = parseFloat(tdSugerido.attr("cantidadsugerida"));
+
+                if (!isNaN(cantSugeridaMinima) && cantSugeridaMinima > 0) {
+                    cantSugeridaConvertida = Math.floor(cantSugeridaMinima / divisor);
+                }
+            }
+
             var htmlSolicitado = "";
             if (item.solicitudRecargaActiva && item.solicitudRecargaActiva.cantidadSolicitada > 0) {
                 var cantSolActiva = item.solicitudRecargaActiva.cantidadSolicitada / divisor;
                 htmlSolicitado = `<br><span style="color: #337ab7; font-size: 85%;">Solicitado: ${format2Dec(cantSolActiva)}</span>`;
             }
+
+            var resultanteInicial = cantRsv + cantSugeridaConvertida;
+
+            var minInput = cantRsv * -1;
 
             var tr = `<tr>
                         <td>${item.ciudad.nombre}</td>
@@ -405,12 +421,13 @@ jQuery(function ($) {
                             <input type="number" class="form-control input-sm input-solicitud-recarga" 
                                    data-id="${item.idClienteProductoReservado}" 
                                    data-divisor="${divisor}" 
-                                   min="0" step="1" 
+                                   value="${cantSugeridaConvertida > 0 ? cantSugeridaConvertida : ''}"
+                                   min="${minInput}" step="1" 
                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57" 
                                    style="width: 100px; display:inline-block;" />
                             ${htmlSolicitado}
                         </td>
-                        <td class="cantidad-resultante" style="font-weight:bold;">${format2Dec(cantRsv)}</td>
+                        <td class="cantidad-resultante" style="font-weight:bold;">${format2Dec(resultanteInicial)}</td>
                       </tr>`;
 
             tbody.append(tr);
@@ -452,7 +469,7 @@ jQuery(function ($) {
 
         var mensajeConfirmacion = "¿Está seguro de registrar estas solicitudes?";
         if (contNulosOCero > 0) {
-            mensajeConfirmacion += `<br><br><span style='color:red;'><b>Aviso:</b> Hay ${contNulosOCero} registro(s) con cantidad vacía o en 0. Si tienen una solicitud activa previa, ésta será desactivada.</span>`;
+            mensajeConfirmacion += `<br><br><span style='color:red;'><b>Aviso:</b> Hay ${contNulosOCero} registro(s) con cantidad vacía o en 0. Si tienen una solicitud activa previa, ésta será descartada.</span>`;
         }
 
         $.confirm({

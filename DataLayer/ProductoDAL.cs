@@ -1824,6 +1824,21 @@ namespace DataLayer
                 item.cantidadEsperadaAlternativaCalc = item.cantidadEsperadaMpCalc * ((Decimal)item.producto.equivalenciaAlternativa);
                 item.cantidadEsperadaAlternativaCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadEsperadaAlternativaCalc));
 
+                item.cantidadReservadaEntregarConteo = (int)Converter.GetDecimal(row, "stock_reservado_entregar_unidad_conteo");
+                item.cantidadReservadaEntregarMpCalc = ((Decimal)item.cantidadReservadaEntregarConteo) / ((Decimal)item.producto.equivalenciaUnidadEstandarUnidadConteo);
+                item.cantidadReservadaEntregarMpCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadReservadaEntregarMpCalc));
+                item.cantidadReservadaEntregarProveedorCalc = item.cantidadReservadaEntregarMpCalc / ((Decimal)item.producto.equivalenciaProveedor);
+                item.cantidadReservadaEntregarProveedorCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadReservadaEntregarProveedorCalc));
+                item.cantidadReservadaEntregarAlternativaCalc = item.cantidadReservadaEntregarMpCalc * ((Decimal)item.producto.equivalenciaAlternativa);
+                item.cantidadReservadaEntregarAlternativaCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadReservadaEntregarAlternativaCalc));
+
+                item.cantidadReservadaRecibirConteo = (int)Converter.GetDecimal(row, "stock_reservado_recibir_unidad_conteo");
+                item.cantidadReservadaRecibirMpCalc = ((Decimal)item.cantidadReservadaRecibirConteo) / ((Decimal)item.producto.equivalenciaUnidadEstandarUnidadConteo);
+                item.cantidadReservadaRecibirMpCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadReservadaRecibirMpCalc));
+                item.cantidadReservadaRecibirProveedorCalc = item.cantidadReservadaRecibirMpCalc / ((Decimal)item.producto.equivalenciaProveedor);
+                item.cantidadReservadaRecibirProveedorCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadReservadaRecibirProveedorCalc));
+                item.cantidadReservadaRecibirAlternativaCalc = item.cantidadReservadaRecibirMpCalc * ((Decimal)item.producto.equivalenciaAlternativa);
+                item.cantidadReservadaRecibirAlternativaCalc = Decimal.Parse(String.Format(Constantes.formatoDosDecimales, item.cantidadReservadaRecibirAlternativaCalc));
 
                 item.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
                 item.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");

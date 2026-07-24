@@ -33,7 +33,7 @@ namespace Model
 
         public int cantidadDisponibleCs { get { return this.cantidadCs + this.cantidadReservaAgregarCs - this.cantidadReservaDescontarCs; } }
         public int cantidadVirtualCs { get { return this.cantidadDisponibleCs + this.cantidadRecibirCs - this.cantidadAtenderCs; } }
-        public int cantidadSugeridaPedirCs { get { return this.cantidadVirtualCs > this.cantidadMaxima ? 0 : this.cantidadMaxima - this.cantidadVirtualCs; } }
+        public int cantidadSugeridaPedirCs { get { return (this.cantidadVirtualCs - this.cantidadSolicitudReservaActiva) > this.cantidadMaxima ? 0 : this.cantidadMaxima - this.cantidadVirtualCs + this.cantidadSolicitudReservaActiva; } }
 
 
         public string unidadCs { get; set; }

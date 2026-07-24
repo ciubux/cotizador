@@ -34,6 +34,8 @@ namespace Cotizador.Controllers
 
             ClienteProductoReservado objSearch = (ClienteProductoReservado)this.Session[Constantes.VAR_SESSION_CLIENTEPRODUCTORESERVADO_BUSQUEDA];
 
+            this.Session["s_idCiudadSearchClientesGlobal"] = objSearch.ciudad.idCiudad;
+
             ViewBag.pagina = (int)Constantes.paginas.ProductosReservadosCliente;
             ViewBag.search = objSearch;
 
@@ -66,10 +68,13 @@ namespace Cotizador.Controllers
                 obj.cliente.idCliente = Guid.Parse(this.Request.Params["idCliente"]);
             }
 
+            obj.idPresentacionUnidad = string.IsNullOrEmpty(this.Request.Params["idPresentacion"]) ? 1 : int.Parse(this.Request.Params["idPresentacion"]);
             obj.Estado = string.IsNullOrEmpty(this.Request.Params["estado"]) ? 1 : int.Parse(this.Request.Params["estado"]);
          
             ClienteProductoReservadoBL bL = new ClienteProductoReservadoBL();
             List<ClienteProductoReservado> list = bL.getClienteProductosReservados(obj);
+
+            this.Session[Constantes.VAR_SESSION_CLIENTEPRODUCTORESERVADO_BUSQUEDA] = obj;
 
             return JsonConvert.SerializeObject(list);
         }
@@ -82,7 +87,8 @@ namespace Cotizador.Controllers
             obj.ciudad = new Ciudad();
             obj.cliente = new Cliente();
             obj.producto = new Producto();
-
+            obj.idPresentacionUnidad = 2;
+             
             if (this.Logueado != null)
             {
                 obj.ciudad = this.Logueado.sedeMP;

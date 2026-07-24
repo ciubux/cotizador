@@ -253,7 +253,7 @@
                                 <span class="label label-stock-less" style="margin-left: 1px;">-@String.Format(formatoDosDecimales, item.cantidadAtenderPresentacion) </span>
                             </a>
                         </td>
-                        <td>@String.Format(formatoDosDecimales, item.cantidadSugeridaPedirPresentacion)</td>
+                        <td idreserva="@item.idClienteProductoReservado" cantidadsugerida="@item.cantidadSugeridaPedirCs">@String.Format(formatoDosDecimales, item.cantidadSugeridaPedirPresentacion)</td>
                         <td>
                             <button type="button" title="Consultar Stock" class="verModalStockProducto btn" sku="@item.producto.sku" idProductoPresentacion="@filtro.idPresentacionUnidad"
                                     idCiudad="@filtro.idCiudad" style="margin-top: 7px;">
@@ -378,8 +378,8 @@
                                 <th>Sede</th>
                                 <th>Producto</th>
                                 <th>Unidad</th>
-                                <th>Cantidad Original</th>
-                                <th>Reserva Actual</th>
+                                <th>Reserva Base</th>
+                                <th>Reserva Activa</th>
                                 <th>Cantidad Agregar</th>
                                 <th>Cantidad Resultante</th>
                             </tr>

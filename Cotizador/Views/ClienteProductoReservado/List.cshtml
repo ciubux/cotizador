@@ -51,6 +51,22 @@
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group row">
+                    <label class="control-label col-xs-4" for="tipoUnidad">Unidad:</label>
+                    <div class="col-xs-8">
+                        <select class="form-control" id="tipoUnidad" name="tipoUnidad">
+                            <option @(search.idPresentacionUnidad == 0 ? "selected" : "") value="0">MP</option>
+                            <option @(search.idPresentacionUnidad == 1 ? "selected" : "") value="1">Alternativa</option>
+                            <option @(search.idPresentacionUnidad == 2 ? "selected" : "") value="2">Proveedor</option>
+                            <option @(search.idPresentacionUnidad == 3 ? "selected" : "") value="3">Conteo</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row pull-right" style="margin-bottom:10px; margin-right:0px">
             <button id="btnLimpiarBusqueda" type="button" class="btn btn-primary bouton-image botonClean">Limpiar</button>
             <button id="btnBusqueda" type="button" class="btn btn-primary bouton-image botonSearch">Buscar</button>
@@ -69,9 +85,9 @@
                     <th data-name="ciudad">Ciudad</th>
                     <th data-name="cliente">Cliente</th>
                     <th data-name="producto">Producto</th>
-                    <th data-name="producto">Unidad</th>
-                    <th data-name="cantidadOriginal">Cant. Original</th>
-                    <th data-name="cantidadReserva">Reserva</th>
+                    <th data-name="unidad">Unidad</th>
+                    <th data-name="cantidadOriginal">Reserva Base</th>
+                    <th data-name="cantidadReserva">Reserva Activa</th>
                     <th data-name="cantidadAtendida">Atendida</th>
                     <th data-name="opciones" data-breakpoints="xs"></th>
                 </tr>
@@ -135,7 +151,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label col-xs-4">Cantidad a Reservar:</label>
+                                <label class="control-label col-xs-4">Reserva Base:</label>
                                 <div class="col-xs-8">
                                     <input type="number" id="modal_cantidadOriginal" class="form-control" />
                                 </div>
@@ -180,7 +196,7 @@
                                 <b>CONSIDERACIONES</b>
                                 <ul>
                                     <li>El formato del archivo debe ser el mismo que la descarga de exportación.</li>
-                                    <li>Si la <b>CANT. ORIGINAL</b> es 0, la reserva se eliminará (desactivará).</li>
+                                    <li>Si la <b>Reserva Base</b> es 0, la reserva se eliminará (desactivará).</li>
                                     <li>Si la reserva ya existe, se actualizará.</li>
                                     <li>Asegúrese de seleccionar la Sede correcta en los filtros antes de cargar.</li>
                                 </ul>
@@ -198,7 +214,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modalAgregarReserva" tabindex="-1">
+@*<div class="modal fade" id="modalAgregarReserva" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -233,13 +249,13 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-xs-4">Cantidad Original:</label>
+                        <label class="control-label col-xs-4">Reserva Base:</label>
                         <div class="col-xs-8">
                             <input type="text" id="modal_res_cant_original" class="form-control" readonly />
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-xs-4">Reserva Actual:</label>
+                        <label class="control-label col-xs-4">Reserva Activa:</label>
                         <div class="col-xs-8">
                             <input type="text" id="modal_res_cant_actual" class="form-control" readonly />
                         </div>
@@ -262,6 +278,111 @@
                         <label class="control-label col-xs-4 text-success"><b>Nueva Cantidad Reservada:</b></label>
                         <div class="col-xs-8">
                             <input type="text" id="modal_res_cant_resultante" class="form-control font-weight-bold text-success" readonly />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnGuardarReserva" class="btn btn-primary">Guardar Reserva</button>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+<div class="modal fade" id="modalAgregarReserva" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Agregar a Cantidad de Reserva</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <input type="hidden" id="modal_res_id" />
+                    <input type="hidden" id="modal_res_divisor" value="1" /> <div class="form-group">
+                        <label class="control-label col-xs-4">Sede:</label>
+                        <div class="col-xs-8">
+                            <input type="text" id="modal_res_sede" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-4">Cliente:</label>
+                        <div class="col-xs-8">
+                            <input type="text" id="modal_res_cliente" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-4">Producto (SKU):</label>
+                        <div class="col-xs-8">
+                            <input type="text" id="modal_res_sku" class="form-control" readonly />
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="form-group" style="margin-bottom: 5px;">
+                        <div class="col-xs-4"></div>
+                        <div class="col-xs-4 text-center"><b>Unid. Selec.</b></div>
+                        <div class="col-xs-4 text-center"><b>Unid. Conteo</b></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-4">Unidad:</label>
+                        <div class="col-xs-4">
+                            <select id="modal_res_tipoUnidad" class="form-control"></select>
+                        </div>
+                        <div class="col-xs-4">
+                            <input type="text" id="modal_res_unidad_conteo" class="form-control text-center" readonly />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-4">Reserva Base:</label>
+                        <div class="col-xs-4">
+                            <input type="text" id="modal_res_cant_original_selec" class="form-control" readonly />
+                        </div>
+                        <div class="col-xs-4">
+                            <input type="text" id="modal_res_cant_original_base" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-4">Reserva Activa:</label>
+                        <div class="col-xs-4">
+                            <input type="text" id="modal_res_cant_actual_selec" class="form-control" readonly />
+                        </div>
+                        <div class="col-xs-4">
+                            <input type="text" id="modal_res_cant_actual_base" class="form-control" readonly />
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="divSolicitudReservaActivaModal" style="display:none;">
+                        <label class="control-label col-xs-4 text-warning">Solicitado:</label>
+                        <div class="col-xs-4">
+                            <input type="text" id="modal_res_cant_solicitada_selec" class="form-control" readonly />
+                        </div>
+                        <div class="col-xs-4">
+                            <input type="text" id="modal_res_cant_solicitada_base" class="form-control" readonly />
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-4 text-primary"><b>Agregar a Reserva:</b></label>
+                        <div class="col-xs-4">
+                            <input type="number" id="modal_res_cant_agregar_selec" class="form-control border-primary" value="0" min="0" step="1" />
+                        </div>
+                        <div class="col-xs-4">
+                            <input type="text" id="modal_res_cant_agregar_base" class="form-control" readonly value="0" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-4 text-success"><b>Nueva Cantidad Reserva:</b></label>
+                        <div class="col-xs-4">
+                            <input type="text" id="modal_res_cant_resultante_selec" class="form-control font-weight-bold text-success" readonly />
+                        </div>
+                        <div class="col-xs-4">
+                            <input type="text" id="modal_res_cant_resultante_base" class="form-control font-weight-bold text-success" readonly />
                         </div>
                     </div>
                 </form>

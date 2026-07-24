@@ -53,12 +53,70 @@ jQuery(function ($) {
         }, 'JSON');
     });
 
+    $("#tipoUnidad").change(function () {
+        if (LAST_SEARCH_DATA && LAST_SEARCH_DATA.length > 0) {
+            renderizarTablaRegistros();
+        }
+    });
 
     $("#btnBusqueda").click(function () {
         var dataFiltro = {
             idCiudad: $("#idCiudadBusqueda").val(),
             idCliente: $("#idClienteBusqueda").val(),
-            estado: $("#estadoBusqueda").val()
+            estado: $("#estadoBusqueda").val(),
+            idPresentacion: $("#tipoUnidad").val() 
+        };
+
+        $.post("/ClienteProductoReservado/Search", dataFiltro, function (list) {
+            LAST_SEARCH_DATA = list;
+            renderizarTablaRegistros(); 
+        }, 'JSON');
+    });
+
+    function renderizarTablaRegistros() {
+        $("#tableRegistros > tbody").empty();
+        $("#tableRegistros").footable({
+            "paging": { "enabled": true }
+        });
+
+        var tipoUnidad = $("#tipoUnidad").val();
+        var rows = "";
+
+        for (var i = 0; i < LAST_SEARCH_DATA.length; i++) {
+            var p = LAST_SEARCH_DATA[i];
+
+            var conv = obtenerDatosConvertidos(p, tipoUnidad);
+
+            var etiquetaCantidadSolicitada = "";
+            if (p.tieneSolicitudRecargaActiva) {
+                etiquetaCantidadSolicitada = '<br/> <span class="label label-warning label-solicitado"> Solicitado: ' + conv.cantidadSolicitada + ' </span> ';
+            }
+
+            rows += '<tr>' +
+                '<td>' + p.idClienteProductoReservado + '</td>' +
+                '<td>' + (p.ciudad ? p.ciudad.nombre : "-") + '</td>' +
+                '<td>' + (p.cliente && p.cliente.ruc ? p.cliente.ruc + " - " + p.cliente.razonSocial : "-") + '</td>' +
+                '<td>' + (p.producto && p.producto.sku ? p.producto.sku + " - " + p.producto.descripcion : "-") + '</td>' +
+                '<td>' + conv.unidadTexto + '</td>' +
+                '<td>' + conv.cantidadOriginal + '</td>' +
+                '<td>' + conv.cantidadReserva + etiquetaCantidadSolicitada + '</td>' +
+                '<td>' + conv.cantidadAtendida + '</td>' +
+                '<td>' +
+                '<button type="button" class="btn btn-primary btnEditar" data-id="' + p.idClienteProductoReservado + '">Editar Reserva Base</button> ' +
+                '<button type="button" class="btn btn-success btnAbrirReserva" data-id="' + p.idClienteProductoReservado + '">+ Reserva</button>' +
+                '</td>' +
+                '</tr>';
+        }
+
+        $("#tableRegistros tbody").html(rows);
+    }
+    /*
+    $("#btnBusqueda").click(function () {
+        var dataFiltro = {
+            idCiudad: $("#idCiudadBusqueda").val(),
+            idCliente: $("#idClienteBusqueda").val(),
+            estado: $("#estadoBusqueda").val(),
+            idPresentacion: $("#tipoUnidad").val()
         };
 
         $.post("/ClienteProductoReservado/Search", dataFiltro, function (list) {
@@ -88,7 +146,7 @@ jQuery(function ($) {
                     '<td>' + p.cantidadReserva + etiquetaCantidadSolicitada + '</td>' +
                     '<td>' + p.cantidadAtendida + '</td>' +
                     '<td>' +
-                    '<button type="button" class="btn btn-primary btnEditar" data-id="' + p.idClienteProductoReservado + '">Editar</button> ' +
+                    '<button type="button" class="btn btn-primary btnEditar" data-id="' + p.idClienteProductoReservado + '">Editar Reserva Base</button> ' +
                     '<button type="button" class="btn btn-success btnAbrirReserva" data-id="' + p.idClienteProductoReservado + '">+ Reserva</button>' +
                     '</td>' +
                     '</tr>';
@@ -97,8 +155,13 @@ jQuery(function ($) {
             $("#tableRegistros tbody").html(rows);
         }, 'JSON');
     });
-
+    */
     $("#modal_idCiudad").change(function () {
+        var idCiudad = $(this).val();
+        CambiarSedeBuscarClienteGlobal(idCiudad);
+    });
+
+    $("#idCiudadBusqueda").change(function () {
         var idCiudad = $(this).val();
         CambiarSedeBuscarClienteGlobal(idCiudad);
     });
@@ -132,7 +195,7 @@ jQuery(function ($) {
     });
 
     $("#btnExportExcel").click(function () {
-        const dataExcelDescargar = [["SEDE", "RUC CLIENTE", "CLIENTE", "SKU PRODUCTO", "PRODUCTO", "UNIDAD", "CANT. ORIGINAL", "CANT. RESERVA", "CANT. ATENDIDA"]];
+        const dataExcelDescargar = [["SEDE", "RUC CLIENTE", "CLIENTE", "SKU PRODUCTO", "PRODUCTO", "UNIDAD", "RESERVA BASE", "RESERVA ACTIVA", "CANT. ATENDIDA"]];
 
         for (var i = 0; i < LAST_SEARCH_DATA.length; i++) {
             var obj = LAST_SEARCH_DATA[i];
@@ -160,7 +223,7 @@ jQuery(function ($) {
                 $("#modal_idCliente").trigger('chosen:close');
                 $("#modal_idCiudad").focus();
                 return false;
-            }
+            } 
         });
 
         $("select#modal_idCliente").ajaxChosen({
@@ -174,6 +237,26 @@ jQuery(function ($) {
             loadingImg: "Content/chosen/images/loading.gif"
         }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
 
+
+        $("select#idClienteBusqueda").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
+            if ($("#idCiudadBusqueda").val() == "" || $("#idCiudadBusqueda").val() == null) {
+                alert("Debe seleccionar la sede MP previamente.");
+                $("#idClienteBusqueda").trigger('chosen:close');
+                $("#idCiudadBusqueda").focus();
+                return false;
+            }
+        });
+
+        $("select#idClienteBusqueda").ajaxChosen({
+            dataType: "json",
+            type: "GET",
+            minTermLength: 5,
+            afterTypeDelay: 300,
+            cache: false,
+            url: "/Cliente/SearchClientesGlobal"
+        }, {
+            loadingImg: "Content/chosen/images/loading.gif"
+        }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
     }
 
     $("#modal_idProducto").change(function () {
@@ -244,7 +327,7 @@ jQuery(function ($) {
                     if (rowNumber > 1) { 
                         let celdaRuc = row.getCell(2).value;      // Columna B: RUC CLIENTE
                         let celdaSku = row.getCell(4).value;      // Columna D: SKU PRODUCTO
-                        let celdaCantidad = row.getCell(7).value; // Columna G: CANT. ORIGINAL
+                        let celdaCantidad = row.getCell(7).value; // Columna G: RESERVA BASE
 
                         if (celdaSku && celdaRuc) {
                             listaCarga.push({
@@ -311,7 +394,7 @@ jQuery(function ($) {
         });
     }
 
-
+    /*
     $(document).on('click', '.btnAbrirReserva', function () {
         var id = $(this).data("id");
         var p = LAST_SEARCH_DATA.find(x => x.idClienteProductoReservado == id);
@@ -331,12 +414,13 @@ jQuery(function ($) {
             $("#modal_res_cant_resultante").val(reservaActual);
 
             if (p.tieneSolicitudRecargaActiva) {
-                $("#divSolicitudReservaActiva").show();
+                //$("#divSolicitudReservaActiva").show();
                 $("#modal_res_cant_solicitada").val(p.solicitudRecargaActiva.cantidadSolicitada);
                 $("#modal_res_cant_agregar").val(p.solicitudRecargaActiva.cantidadSolicitada);
                 $("#modal_res_cant_resultante").val(reservaActual + p.solicitudRecargaActiva.cantidadSolicitada);
             } else {
-                $("#divSolicitudReservaActiva").hide();
+                //$("#divSolicitudReservaActiva").hide();
+                $("#modal_res_cant_solicitada").val("0");
             }
             
 
@@ -379,6 +463,214 @@ jQuery(function ($) {
                             if (res.success === 1) {
                                 $("#modalAgregarReserva").modal("hide");
                                 $("#btnBusqueda").click(); 
+                            } else {
+                                $.alert({
+                                    title: "ERROR",
+                                    type: 'red',
+                                    content: "Ocurrió un error: " + res.message
+                                });
+                            }
+                        }, 'JSON');
+                    }
+                },
+                no: {
+                    text: 'NO',
+                    btnClass: 'btn-success',
+                    action: function () {
+                    }
+                }
+            }
+        });
+    });*/
+
+    function obtenerDatosConvertidos(p, tipoUnidad) {
+        var res = {
+            unidadTexto: p.unidadConteo || "-",
+            divisor: 1,
+            cantidadOriginal: 0,
+            cantidadReserva: 0,
+            cantidadAtendida: 0,
+            cantidadSolicitada: 0
+        };
+
+        var prod = p.producto || {};
+
+        if (tipoUnidad == "0") {
+            res.unidadTexto = prod.unidad || "-";
+            res.divisor = prod.equivalenciaUnidadEstandarUnidadConteo || 1;
+        } else if (tipoUnidad == "1") {
+            res.unidadTexto = prod.unidad_alternativa || "-";
+            res.divisor = prod.equivalenciaUnidadAlternativaUnidadConteo || 1;
+        } else if (tipoUnidad == "2") {
+            res.unidadTexto = prod.unidadProveedor || "-";
+            res.divisor = prod.equivalenciaUnidadProveedorUnidadConteo || 1;
+        } else { // 3
+            res.unidadTexto = p.unidadConteo || "-";
+            res.divisor = 1;
+        }
+
+        if (res.divisor === 0) res.divisor = 1;
+
+        res.cantidadOriginal = Number(((p.cantidadOriginal || 0) / res.divisor).toFixed(2));
+        res.cantidadReserva = Number(((p.cantidadReserva || 0) / res.divisor).toFixed(2));
+
+        if (p.tieneSolicitudRecargaActiva && p.solicitudRecargaActiva) {
+            res.cantidadSolicitada = Number(((p.solicitudRecargaActiva.cantidadSolicitada || 0) / res.divisor).toFixed(2));
+        }
+
+        return res;
+    }
+
+
+    $(document).on('click', '.btnAbrirReserva', function () {
+        var id = $(this).data("id");
+        var p = LAST_SEARCH_DATA.find(x => x.idClienteProductoReservado == id);
+
+        if (p) {
+            var prod = p.producto || {};
+
+            $("#modal_res_id").val(p.idClienteProductoReservado);
+            $("#modal_res_id").data("fila_producto", p);
+
+            $("#modal_res_sede").val(p.ciudad ? p.ciudad.nombre : "-");
+            $("#modal_res_cliente").val(p.cliente && p.cliente.razonSocial ? p.cliente.razonSocial : "-");
+            $("#modal_res_sku").val(prod.sku ? prod.sku : "-");
+            $("#modal_res_unidad_conteo").val(p.unidadConteo || "-");
+
+            var eqEstandar = prod.equivalenciaUnidadEstandarUnidadConteo || 1;
+            var eqAlternativa = prod.equivalenciaUnidadAlternativaUnidadConteo || 1;
+            var eqProveedor = prod.equivalenciaUnidadProveedorUnidadConteo || 1;
+
+            var selectHtml = "";
+
+            if (prod.unidadProveedor && eqEstandar !== eqProveedor) {
+                selectHtml += '<option value="2">' + prod.unidadProveedor + '</option>';
+            }
+
+            if (prod.unidad && eqEstandar !== eqAlternativa) {
+                selectHtml += '<option value="0">' + prod.unidad + '</option>';
+            }
+            if (prod.unidad_alternativa && eqAlternativa !== 1) {
+                selectHtml += '<option value="1">' + prod.unidad_alternativa + '</option>';
+            }
+            selectHtml += '<option value="3">' + (p.unidadConteo || 'Conteo') + '</option>';
+
+            $("#modal_res_tipoUnidad").html(selectHtml);
+
+            var ordenUnidades = ["2", "0", "1", "3"]; 
+            var unidadFiltro = $("#tipoUnidad").val() || "3";
+
+            var startIndex = ordenUnidades.indexOf(unidadFiltro);
+            if (startIndex === -1) startIndex = 0; 
+
+            var unidadAsignar = "3"; 
+
+            for (var i = startIndex; i < ordenUnidades.length; i++) {
+                if ($("#modal_res_tipoUnidad option[value='" + ordenUnidades[i] + "']").length > 0) {
+                    unidadAsignar = ordenUnidades[i];
+                    break; 
+                }
+            }
+
+            $("#modal_res_tipoUnidad").val(unidadAsignar);
+
+            $("#modal_res_cant_original_base").val(p.cantidadOriginal || 0);
+            $("#modal_res_cant_actual_base").val(p.cantidadReserva || 0);
+
+            if (p.tieneSolicitudRecargaActiva && p.solicitudRecargaActiva) {
+                $("#divSolicitudReservaActivaModal").show();
+                $("#modal_res_cant_solicitada_base").val(p.solicitudRecargaActiva.cantidadSolicitada || 0);
+            } else {
+                $("#divSolicitudReservaActivaModal").hide();
+                $("#modal_res_cant_solicitada_base").val(0);
+            }
+
+            $("#modal_res_tipoUnidad").trigger("change");
+
+            $("#modalAgregarReserva").modal("show");
+        }
+    });
+
+
+    $("#modal_res_tipoUnidad").change(function () {
+        var p = $("#modal_res_id").data("fila_producto");
+        if (!p) return;
+
+        var tipoUnidad = $(this).val();
+        var prod = p.producto || {};
+        var divisor = 1;
+
+        if (tipoUnidad == "0") divisor = prod.equivalenciaUnidadEstandarUnidadConteo || 1;
+        else if (tipoUnidad == "1") divisor = prod.equivalenciaUnidadAlternativaUnidadConteo || 1;
+        else if (tipoUnidad == "2") divisor = prod.equivalenciaUnidadProveedorUnidadConteo || 1;
+        else divisor = 1;
+
+        if (divisor === 0) divisor = 1; 
+        $("#modal_res_divisor").val(divisor);
+
+        var origBase = parseFloat($("#modal_res_cant_original_base").val()) || 0;
+        var actBase = parseFloat($("#modal_res_cant_actual_base").val()) || 0;
+        var solBase = parseFloat($("#modal_res_cant_solicitada_base").val()) || 0;
+
+        $("#modal_res_cant_original_selec").val(Number((origBase / divisor).toFixed(2)));
+        $("#modal_res_cant_actual_selec").val(Number((actBase / divisor).toFixed(2)));
+
+        var solSelec = Number((solBase / divisor).toFixed(2));
+        $("#modal_res_cant_solicitada_selec").val(solSelec);
+
+        var cantSugeridaEntera = Math.floor(solBase / divisor);
+        $("#modal_res_cant_agregar_selec").val(cantSugeridaEntera);
+
+        $("#modal_res_cant_agregar_selec").trigger("input");
+    });
+    
+    
+
+    $("#modal_res_cant_agregar_selec").on('input', function () {
+        var divisor = parseFloat($("#modal_res_divisor").val()) || 1;
+        var agregarSelec = parseFloat($(this).val()) || 0;
+
+        var agregarBase = Math.round(agregarSelec * divisor); 
+        $("#modal_res_cant_agregar_base").val(agregarBase);
+
+        var actSelec = parseFloat($("#modal_res_cant_actual_selec").val()) || 0;
+        $("#modal_res_cant_resultante_selec").val(Number((actSelec + agregarSelec).toFixed(2)));
+
+        var actBase = parseFloat($("#modal_res_cant_actual_base").val()) || 0;
+        $("#modal_res_cant_resultante_base").val(actBase + agregarBase);
+    });
+
+
+    $("#btnGuardarReserva").click(function () {
+        var agregarBase = parseInt($("#modal_res_cant_agregar_base").val()) || 0;
+
+        var agregarSelec = parseFloat($("#modal_res_cant_agregar_selec").val()) || 0;
+        var resultanteSelec = $("#modal_res_cant_resultante_selec").val();
+        var unidadNombre = $("#modal_res_tipoUnidad option:selected").text();
+
+        if (agregarSelec <= 0) {
+            alert("Debe ingresar una cantidad mayor a 0 para agregar a la reserva.");
+            return;
+        }
+
+        $.confirm({
+            title: 'Confirmar Actualización',
+            content: '¿Está seguro de agregar <b>' + agregarSelec + ' ' + unidadNombre + '</b> a la reserva?<br><br>La nueva cantidad en reserva será: <b>' + resultanteSelec + ' ' + unidadNombre + '</b>.',
+            type: 'orange',
+            buttons: {
+                si: {
+                    text: 'SI',
+                    btnClass: 'btn-warning',
+                    action: function () {
+                        var data = {
+                            idClienteProductoReservado: $("#modal_res_id").val(),
+                            cantidadAgregar: agregarBase
+                        };
+
+                        $.post('/ClienteProductoReservado/AgregarReserva', data, function (res) {
+                            if (res.success === 1) {
+                                $("#modalAgregarReserva").modal("hide");
+                                $("#btnBusqueda").click();
                             } else {
                                 $.alert({
                                     title: "ERROR",

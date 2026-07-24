@@ -34,6 +34,8 @@ namespace Model
 
         public ClienteProductoReservadoSolicitud solicitudRecargaActiva { get; set; }
 
+        public int idPresentacionUnidad { get; set; }
+
         public bool tieneSolicitudRecargaActiva { get { return !this.solicitudRecargaActiva.idClienteProductoReservadoSolicitud.Equals(Guid.Empty); } }
 
         public ClienteProductoReservado()

@@ -53,6 +53,15 @@ namespace DataLayer
                 obj.producto.idProducto = Converter.GetGuid(row, "id_producto");
                 obj.producto.sku = Converter.GetString(row, "sku_producto");
                 obj.producto.descripcion = Converter.GetString(row, "descripcion_producto");
+
+                obj.producto.unidad = Converter.GetString(row, "unidad");
+                obj.producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
+                obj.producto.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
+                obj.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
+                obj.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+                obj.producto.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_estandar_unidad_conteo");
+                obj.producto.equivalenciaUnidadAlternativaUnidadConteo = obj.producto.equivalenciaUnidadEstandarUnidadConteo / obj.producto.equivalenciaAlternativa;
+                obj.producto.equivalenciaUnidadProveedorUnidadConteo = obj.producto.equivalenciaUnidadEstandarUnidadConteo * obj.producto.equivalenciaProveedor;
             }
 
             return obj;
@@ -101,6 +110,16 @@ namespace DataLayer
                 obj.producto.idProducto = Converter.GetGuid(row, "id_producto");
                 obj.producto.sku = Converter.GetString(row, "sku_producto");
                 obj.producto.descripcion = Converter.GetString(row, "descripcion_producto");
+
+                obj.producto.unidad = Converter.GetString(row, "unidad");
+                obj.producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
+                obj.producto.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
+                obj.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
+                obj.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+                obj.producto.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_estandar_unidad_conteo");
+                obj.producto.equivalenciaUnidadAlternativaUnidadConteo = obj.producto.equivalenciaUnidadEstandarUnidadConteo / obj.producto.equivalenciaAlternativa;
+                obj.producto.equivalenciaUnidadProveedorUnidadConteo = obj.producto.equivalenciaUnidadEstandarUnidadConteo * obj.producto.equivalenciaProveedor;
+
 
                 obj.solicitudRecargaActiva.idClienteProductoReservadoSolicitud = Converter.GetGuid(row, "id_cliente_producto_reservado_solicitud");
                 obj.solicitudRecargaActiva.cantidadSolicitada = Converter.GetInt(row, "cantidad_solicitada");
