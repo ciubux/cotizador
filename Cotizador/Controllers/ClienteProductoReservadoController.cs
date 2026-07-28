@@ -66,6 +66,8 @@ namespace Cotizador.Controllers
             if (!string.IsNullOrEmpty(this.Request.Params["idCliente"]))
             {
                 obj.cliente.idCliente = Guid.Parse(this.Request.Params["idCliente"]);
+                ClienteBL blCliente = new ClienteBL();
+                obj.cliente = blCliente.getCliente(obj.cliente.idCliente);
             }
 
             obj.idPresentacionUnidad = string.IsNullOrEmpty(this.Request.Params["idPresentacion"]) ? 1 : int.Parse(this.Request.Params["idPresentacion"]);

@@ -409,7 +409,7 @@ jQuery(function ($) {
 
             var resultanteInicial = cantRsv + cantSugeridaConvertida;
 
-            var minInput = cantRsv * -1;
+            var minInput = Math.trunc(cantRsv * -1);
 
             var tr = `<tr>
                         <td>${item.ciudad.nombre}</td>
@@ -423,7 +423,7 @@ jQuery(function ($) {
                                    data-divisor="${divisor}" 
                                    value="${cantSugeridaConvertida > 0 ? cantSugeridaConvertida : ''}"
                                    min="${minInput}" step="1" 
-                                   onkeypress="return event.charCode >= 48 && event.charCode <= 57" 
+                                   onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode <= 45" 
                                    style="width: 100px; display:inline-block;" />
                             ${htmlSolicitado}
                         </td>
@@ -437,8 +437,16 @@ jQuery(function ($) {
             var row = $(this).closest("tr");
             var resActual = parseFloat(row.find(".reserva-actual").attr("data-val"));
             var ingresado = parseInt($(this).val());
+            var min = parseInt($(this).attr("min"));
 
-            if (isNaN(ingresado)) ingresado = 0;
+            if (isNaN(ingresado)) {
+                ingresado = 0;
+            } else {
+                if (ingresado < min) {
+                    ingresado = min;
+                    $(this).val(ingresado);
+                }
+            }
 
             var resultante = resActual + ingresado;
             row.find(".cantidad-resultante").text(format2Dec(resultante));

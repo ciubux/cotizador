@@ -48,6 +48,7 @@ namespace DataLayer
 
                 obj.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                 obj.cliente.ruc = Converter.GetString(row, "ruc_cliente");
+                obj.cliente.codigo = Converter.GetString(row, "codigo_cliente");
                 obj.cliente.razonSocial = Converter.GetString(row, "razon_social_cliente");
 
                 obj.producto.idProducto = Converter.GetGuid(row, "id_producto");
@@ -105,6 +106,7 @@ namespace DataLayer
 
                 obj.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
                 obj.cliente.ruc = Converter.GetString(row, "ruc_cliente");
+                obj.cliente.codigo = Converter.GetString(row, "codigo_cliente");
                 obj.cliente.razonSocial = Converter.GetString(row, "razon_social_cliente");
 
                 obj.producto.idProducto = Converter.GetGuid(row, "id_producto");

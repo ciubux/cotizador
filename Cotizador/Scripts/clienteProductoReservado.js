@@ -7,13 +7,29 @@ jQuery(function ($) {
         cargarChosenCliente();
         cargarChosenProducto();
     });
-
+    /*
     function limpiarFormulario() {
         $("#modal_id").val("0"); 
         $("#modal_idCiudad").val("");
         $("#modal_idCliente").val("");
         $("#modal_idProducto").val("");
         $("#modal_cantidadOriginal").val("");
+    }*/
+
+    function limpiarFormulario() {
+        $("#modal_id").val("0");
+        $("#modal_idCiudad").val("");
+
+        $("#modal_idCliente").empty().append('<option value=""></option>').val("").trigger('chosen:updated');
+        $("#modal_idProducto").empty().append('<option value=""></option>').val("").trigger('chosen:updated');
+
+        $("#modal_cantidadOriginal").val("");
+        $("#modal_unidadConteo").text("");
+        $("#modal_divisor").val("1");
+
+        $("#modal_idCiudad").prop("disabled", false);
+        $("#modal_idCliente").prop("disabled", false).trigger('chosen:updated');
+        $("#modal_idProducto").prop("disabled", false).trigger('chosen:updated');
     }
 
     function validar() {
@@ -31,7 +47,7 @@ jQuery(function ($) {
         }
         return true;
     }
-
+    /*
     $("#btnFinalizarEdicion").click(function () {
         var isNew = $("#modal_id").val() === "0" || $("#modal_id").val() === "";
         var url = isNew ? "/ClienteProductoReservado/Create" : "/ClienteProductoReservado/Update";
@@ -49,6 +65,32 @@ jQuery(function ($) {
 
         $.post(url, data, function (res) {
             $("#modalEditar").modal("hide");
+            $("#btnBusqueda").click(); 
+        }, 'JSON');
+    });*/
+
+    $("#btnFinalizarEdicion").click(function () {
+        var isNew = $("#modal_id").val() === "0" || $("#modal_id").val() === "";
+        var url = isNew ? "/ClienteProductoReservado/Create" : "/ClienteProductoReservado/Update";
+
+        if (!validar()) return;
+
+        var divisor = parseFloat($("#modal_divisor").val()) || 1;
+        var cantidadIngresadaSelec = parseFloat($("#modal_cantidadOriginal").val()) || 0;
+
+        var cantidadOriginalBase = Math.round(cantidadIngresadaSelec * divisor);
+
+        var data = {
+            idClienteProductoReservado: isNew ? "" : $("#modal_id").val(),
+            idCiudad: $("#modal_idCiudad").val(),
+            idCliente: $("#modal_idCliente").val(),
+            idProducto: $("#modal_idProducto").val(),
+            cantidadOriginal: cantidadOriginalBase, 
+            estado: 1
+        };
+
+        $.post(url, data, function (res) {
+            $("#modalEditarClienteProductoReservado").modal("hide");
             $("#btnBusqueda").click(); 
         }, 'JSON');
     });
@@ -173,6 +215,7 @@ jQuery(function ($) {
         //$("#btnBusqueda").click();
     });
 
+    /*
     $(document).on('click', '.btnEditar', function () {
         var id = $(this).data("id");
         var p = LAST_SEARCH_DATA.find(x => x.idClienteProductoReservado == id);
@@ -186,6 +229,78 @@ jQuery(function ($) {
             $("#modalEditarClienteProductoReservado").modal("show");
         }
     });
+    */
+
+    $(document).on('click', '.btnEditar', function () {
+        var id = $(this).data("id");
+        var p = LAST_SEARCH_DATA.find(x => x.idClienteProductoReservado == id);
+
+        if (p) {
+            limpiarFormulario();
+
+            $("#modal_id").val(p.idClienteProductoReservado);
+
+            var cli = p.cliente || {};
+            var idCliente = cli.idCliente || "";
+
+            var prod = p.producto || {};
+            var idProducto = prod.idProducto || "";
+
+            var ciu = p.ciudad || {};
+            var idCiudad = ciu.idCiudad || "";
+
+            var textoCliente = "R. Social: " + (cli.razonSocial || "") + " - COD: " + (cli.codigo || "") + " - RUC: " + (cli.ruc || "");
+
+            $("#modal_idCliente")
+                .html('<option value="' + idCliente + '">' + textoCliente + '</option>')
+                .val(idCliente)
+                .trigger('chosen:updated');
+
+            var textoProducto = prod.descripcion || "";
+
+            $("#modal_idProducto")
+                .html('<option value="' + idProducto + '">' + textoProducto + '</option>')
+                .val(idProducto)
+                .trigger('chosen:updated');
+
+            $("#modal_idCiudad").val(idCiudad);
+
+            var tipoUnidad = $("#tipoUnidad").val();
+            var unidadTexto = p.unidadConteo || "-";
+            var divisor = 1;
+
+            if (tipoUnidad == "0") {
+                unidadTexto = prod.unidad || "-";
+                divisor = prod.equivalenciaUnidadEstandarUnidadConteo || 1;
+            } else if (tipoUnidad == "1") {
+                unidadTexto = prod.unidad_alternativa || "-";
+                divisor = prod.equivalenciaUnidadAlternativaUnidadConteo || 1;
+            } else if (tipoUnidad == "2") {
+                unidadTexto = prod.unidadProveedor || "-";
+                divisor = prod.equivalenciaUnidadProveedorUnidadConteo || 1;
+            } else {
+                unidadTexto = p.unidadConteo || "-";
+                divisor = 1;
+            }
+
+            if (divisor === 0) divisor = 1;
+
+            $("#modal_divisor").val(divisor);
+            $("#modal_unidadConteo").text(unidadTexto);
+
+            var cantOriginalSelec = Math.floor((p.cantidadOriginal || 0) / divisor);
+            $("#modal_cantidadOriginal").val(cantOriginalSelec);
+
+            $("#modal_idCiudad").prop("disabled", true);
+            $("#modal_idCliente").prop("disabled", true).trigger('chosen:updated');
+            $("#modal_idProducto").prop("disabled", true).trigger('chosen:updated');
+
+            $("#modalEditarClienteProductoReservadoTitle").text("Editar Registro");
+            $("#btnFinalizarEdicion").text("Actualizar");
+            $("#modalEditarClienteProductoReservado").modal("show");
+        }
+    });
+
 
     $("#btnAgregar").click(function () {
         limpiarFormulario();
@@ -259,10 +374,47 @@ jQuery(function ($) {
         }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
     }
 
+    /*
     $("#modal_idProducto").change(function () {
         var data = { idProducto: $("#modal_idProducto").val() };
         $.post("/Producto/GetProducto", data, function (res) {
             $("#modal_unidadConteo").html(res.unidadConteo);
+        }, 'JSON');
+    });
+    */
+
+    $("#modal_idProducto").change(function () {
+        var idProd = $(this).val();
+        if (!idProd) {
+            $("#modal_unidadConteo").text("");
+            $("#modal_divisor").val("1");
+            return;
+        }
+
+        var data = { idProducto: idProd };
+        $.post("/Producto/GetProducto", data, function (res) {
+            var tipoUnidad = $("#tipoUnidad").val();
+            var unidadTexto = res.unidadConteo || "-";
+            var divisor = 1;
+
+            if (tipoUnidad == "0") {
+                unidadTexto = res.unidad || "-";
+                divisor = res.equivalenciaUnidadEstandarUnidadConteo || 1;
+            } else if (tipoUnidad == "1") {
+                unidadTexto = res.unidad_alternativa || "-";
+                divisor = res.equivalenciaUnidadAlternativaUnidadConteo || 1;
+            } else if (tipoUnidad == "2") {
+                unidadTexto = res.unidadProveedor || "-";
+                divisor = res.equivalenciaUnidadProveedorUnidadConteo || 1;
+            } else {
+                unidadTexto = res.unidadConteo || "-";
+                divisor = 1;
+            }
+
+            if (divisor === 0) divisor = 1;
+
+            $("#modal_divisor").val(divisor);
+            $("#modal_unidadConteo").text(unidadTexto);
         }, 'JSON');
     });
 
@@ -394,94 +546,6 @@ jQuery(function ($) {
         });
     }
 
-    /*
-    $(document).on('click', '.btnAbrirReserva', function () {
-        var id = $(this).data("id");
-        var p = LAST_SEARCH_DATA.find(x => x.idClienteProductoReservado == id);
-
-        if (p) {
-            $("#modal_res_id").val(p.idClienteProductoReservado);
-            $("#modal_res_sede").val(p.ciudad ? p.ciudad.nombre : "-");
-            $("#modal_res_cliente").val(p.cliente && p.cliente.razonSocial ? p.cliente.razonSocial : "-");
-            $("#modal_res_sku").val(p.producto && p.producto.sku ? p.producto.sku : "-");
-            $("#modal_res_unidad").val(p.unidadConteo);
-            $("#modal_res_cant_original").val(p.cantidadOriginal || 0);
-
-            var reservaActual = p.cantidadReserva || 0;
-            $("#modal_res_cant_actual").val(reservaActual);
-
-            $("#modal_res_cant_agregar").val(0);
-            $("#modal_res_cant_resultante").val(reservaActual);
-
-            if (p.tieneSolicitudRecargaActiva) {
-                //$("#divSolicitudReservaActiva").show();
-                $("#modal_res_cant_solicitada").val(p.solicitudRecargaActiva.cantidadSolicitada);
-                $("#modal_res_cant_agregar").val(p.solicitudRecargaActiva.cantidadSolicitada);
-                $("#modal_res_cant_resultante").val(reservaActual + p.solicitudRecargaActiva.cantidadSolicitada);
-            } else {
-                //$("#divSolicitudReservaActiva").hide();
-                $("#modal_res_cant_solicitada").val("0");
-            }
-            
-
-            $("#modalAgregarReserva").modal("show");
-        }
-    });
-
-    $("#modal_res_cant_agregar").on('input', function () {
-        var actual = parseInt($("#modal_res_cant_actual").val()) || 0;
-        var agregar = parseInt($(this).val()) || 0;
-
-        var resultante = actual + agregar;
-        $("#modal_res_cant_resultante").val(resultante);
-    });
-
-    $("#btnGuardarReserva").click(function () {
-        var agregar = parseInt($("#modal_res_cant_agregar").val()) || 0;
-        var resultante = $("#modal_res_cant_resultante").val();
-
-        if (agregar <= 0) {
-            alert("Debe ingresar una cantidad mayor a 0 para agregar a la reserva.");
-            return;
-        }
-
-        $.confirm({
-            title: 'Confirmar Actualización',
-            content: '¿Está seguro de agregar <b>' + agregar + '</b> a la reserva?<br><br>La nueva cantidad en reserva será: <b>' + resultante + '</b>.',
-            type: 'orange',
-            buttons: {
-                si: {
-                    text: 'SI',
-                    btnClass: 'btn-warning',
-                    action: function () {
-                        var data = {
-                            idClienteProductoReservado: $("#modal_res_id").val(),
-                            cantidadAgregar: agregar
-                        };
-
-                        $.post('/ClienteProductoReservado/AgregarReserva', data, function (res) {
-                            if (res.success === 1) {
-                                $("#modalAgregarReserva").modal("hide");
-                                $("#btnBusqueda").click(); 
-                            } else {
-                                $.alert({
-                                    title: "ERROR",
-                                    type: 'red',
-                                    content: "Ocurrió un error: " + res.message
-                                });
-                            }
-                        }, 'JSON');
-                    }
-                },
-                no: {
-                    text: 'NO',
-                    btnClass: 'btn-success',
-                    action: function () {
-                    }
-                }
-            }
-        });
-    });*/
 
     function obtenerDatosConvertidos(p, tipoUnidad) {
         var res = {
@@ -627,35 +691,60 @@ jQuery(function ($) {
     
 
     $("#modal_res_cant_agregar_selec").on('input', function () {
-        var divisor = parseFloat($("#modal_res_divisor").val()) || 1;
-        var agregarSelec = parseFloat($(this).val()) || 0;
+        if ($(this).val() === "-") return;
 
-        var agregarBase = Math.round(agregarSelec * divisor); 
+        var divisor = parseFloat($("#modal_res_divisor").val()) || 1;
+
+        var valorIngresado = parseFloat($(this).val()) || 0;
+        var agregarSelec = parseInt(valorIngresado, 10);
+
+        if (valorIngresado !== agregarSelec && !isNaN(valorIngresado)) {
+            $(this).val(agregarSelec);
+        }
+
+        var agregarBase = Math.round(agregarSelec * divisor);
         $("#modal_res_cant_agregar_base").val(agregarBase);
 
         var actSelec = parseFloat($("#modal_res_cant_actual_selec").val()) || 0;
-        $("#modal_res_cant_resultante_selec").val(Number((actSelec + agregarSelec).toFixed(2)));
+        var resultanteSelec = Number((actSelec + agregarSelec).toFixed(2));
+        $("#modal_res_cant_resultante_selec").val(resultanteSelec);
 
         var actBase = parseFloat($("#modal_res_cant_actual_base").val()) || 0;
-        $("#modal_res_cant_resultante_base").val(actBase + agregarBase);
-    });
+        var resultanteBase = actBase + agregarBase;
+        $("#modal_res_cant_resultante_base").val(resultanteBase);
 
+        if (resultanteBase < 0) {
+            $("#modal_res_cant_resultante_selec").removeClass("text-success").addClass("text-danger");
+            $("#modal_res_cant_resultante_base").removeClass("text-success").addClass("text-danger");
+        } else {
+            $("#modal_res_cant_resultante_selec").removeClass("text-danger").addClass("text-success");
+            $("#modal_res_cant_resultante_base").removeClass("text-danger").addClass("text-success");
+        }
+    });
 
     $("#btnGuardarReserva").click(function () {
         var agregarBase = parseInt($("#modal_res_cant_agregar_base").val()) || 0;
-
-        var agregarSelec = parseFloat($("#modal_res_cant_agregar_selec").val()) || 0;
+        var agregarSelec = parseInt($("#modal_res_cant_agregar_selec").val()) || 0;
+        var resultanteBase = parseInt($("#modal_res_cant_resultante_base").val()) || 0;
         var resultanteSelec = $("#modal_res_cant_resultante_selec").val();
         var unidadNombre = $("#modal_res_tipoUnidad option:selected").text();
 
-        if (agregarSelec <= 0) {
-            alert("Debe ingresar una cantidad mayor a 0 para agregar a la reserva.");
+        if (agregarSelec === 0) {
+            $.alert({ title: "VALIDAR", type: 'orange', content: "Debe ingresar una cantidad diferente de 0 para realizar un ajuste." });
             return;
         }
 
+        if (resultanteBase < 0) {
+            $.alert({ title: "VALIDAR", type: 'orange', content: "La cantidad resultante de la reserva no puede ser menor a 0." });
+            return;
+        }
+
+        var accionTexto = agregarSelec > 0 ? "agregar" : "descontar";
+        var cantidadMostrar = Math.abs(agregarSelec); 
+
         $.confirm({
-            title: 'Confirmar Actualización',
-            content: '¿Está seguro de agregar <b>' + agregarSelec + ' ' + unidadNombre + '</b> a la reserva?<br><br>La nueva cantidad en reserva será: <b>' + resultanteSelec + ' ' + unidadNombre + '</b>.',
+            title: 'Confirmar Ajuste',
+            content: '¿Está seguro de ' + accionTexto + ' <b>' + cantidadMostrar + ' ' + unidadNombre + '</b> de la reserva?<br><br>La nueva cantidad en reserva será: <b>' + resultanteSelec + ' ' + unidadNombre + '</b>.',
             type: 'orange',
             buttons: {
                 si: {
@@ -689,5 +778,12 @@ jQuery(function ($) {
                 }
             }
         });
+    });
+    
+
+    $("#modal_res_cant_agregar_selec").on('keydown', function (e) {
+        if (e.key === '.' || e.key === ',') {
+            e.preventDefault();
+        }
     });
 });

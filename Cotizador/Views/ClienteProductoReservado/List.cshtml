@@ -97,7 +97,7 @@
     </form>
 </div>
 
-<div class="modal fade" id="modalEditarClienteProductoReservado"  tabindex="-1">
+@*<div class="modal fade" id="modalEditarClienteProductoReservado"  tabindex="-1">
     <div class="modal-dialog modal-lg" style="width: 650px;">
         <div class="modal-content">
             <div class="modal-header">
@@ -144,6 +144,76 @@
                                 <label class="control-label col-xs-4">Unidad Conteo:</label>
                                 <div class="col-xs-8">
                                     <p id="modal_unidadConteo"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Reserva Base:</label>
+                                <div class="col-xs-8">
+                                    <input type="number" id="modal_cantidadOriginal" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnFinalizarEdicion" class="btn btn-primary"></button>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+<div class="modal fade" id="modalEditarClienteProductoReservado" tabindex="-1">
+    <div class="modal-dialog modal-lg" style="width: 650px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalEditarClienteProductoReservadoTitle"></h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <input type="hidden" id="modal_id" value="" />
+                    <input type="hidden" id="modal_divisor" value="1" /> <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Ciudad:</label>
+                                <div class="col-xs-8">
+                                    @Html.Action("GetCiudades", "Ciudad", new { ciudadSelectId = "modal_idCiudad" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Cliente:</label>
+                                <div class="col-xs-8">
+                                    <select class="form-control input-sm" id="modal_idCliente" name="modal_idCliente" required>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Producto:</label>
+                                <div class="col-xs-8">
+                                    <select class="form-control" id="modal_idProducto" name="producto">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Unidad:</label>
+                                <div class="col-xs-8">
+                                    <p id="modal_unidadConteo" class="form-control-static"></p>
                                 </div>
                             </div>
                         </div>
@@ -214,81 +284,6 @@
     </div>
 </div>
 
-@*<div class="modal fade" id="modalAgregarReserva" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Agregar a Cantidad de Reserva</h4>
-            </div>
-            <div class="modal-body">
-                <form class="form-horizontal">
-                    <input type="hidden" id="modal_res_id" />
-
-                    <div class="form-group">
-                        <label class="control-label col-xs-4">Sede:</label>
-                        <div class="col-xs-8">
-                            <input type="text" id="modal_res_sede" class="form-control" readonly />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-xs-4">Cliente:</label>
-                        <div class="col-xs-8">
-                            <input type="text" id="modal_res_cliente" class="form-control" readonly />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-xs-4">Producto (SKU):</label>
-                        <div class="col-xs-8">
-                            <input type="text" id="modal_res_sku" class="form-control" readonly />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-xs-4">Unidad de Conteo:</label>
-                        <div class="col-xs-8">
-                            <input type="text" id="modal_res_unidad" class="form-control" readonly />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-xs-4">Reserva Base:</label>
-                        <div class="col-xs-8">
-                            <input type="text" id="modal_res_cant_original" class="form-control" readonly />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-xs-4">Reserva Activa:</label>
-                        <div class="col-xs-8">
-                            <input type="text" id="modal_res_cant_actual" class="form-control" readonly />
-                        </div>
-                    </div>
-                    <div class="form-group" id="divSolicitudReservaActiva">
-                        <label class="control-label col-xs-4">Solicitado:</label>
-                        <div class="col-xs-8">
-                            <input type="text" id="modal_res_cant_solicitada" class="form-control" readonly />
-                        </div>
-                    </div>
-                    <hr />
-
-                    <div class="form-group">
-                        <label class="control-label col-xs-4 text-primary"><b>Agregar a Reserva:</b></label>
-                        <div class="col-xs-8">
-                            <input type="number" id="modal_res_cant_agregar" class="form-control" value="0" min="0" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-xs-4 text-success"><b>Nueva Cantidad Reservada:</b></label>
-                        <div class="col-xs-8">
-                            <input type="text" id="modal_res_cant_resultante" class="form-control font-weight-bold text-success" readonly />
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" id="btnGuardarReserva" class="btn btn-primary">Guardar Reserva</button>
-            </div>
-        </div>
-    </div>
-</div>*@
 
 <div class="modal fade" id="modalAgregarReserva" tabindex="-1">
     <div class="modal-dialog modal-lg">
@@ -370,7 +365,7 @@
                     <div class="form-group">
                         <label class="control-label col-xs-4 text-primary"><b>Agregar a Reserva:</b></label>
                         <div class="col-xs-4">
-                            <input type="number" id="modal_res_cant_agregar_selec" class="form-control border-primary" value="0" min="0" step="1" />
+                            <input type="number" id="modal_res_cant_agregar_selec" class="form-control border-primary" value="0" step="1" />
                         </div>
                         <div class="col-xs-4">
                             <input type="text" id="modal_res_cant_agregar_base" class="form-control" readonly value="0" />
@@ -403,6 +398,15 @@
     #modal_idCliente_chosen {
         width: 100% !important;
     }
+
+    input.form-control.text-danger {
+        color: #a94442 !important;
+    }
+
+    input.form-control.text-success {
+        color: #3c763d !important;
+    }
+
 </style>
 
 @section Scripts {
