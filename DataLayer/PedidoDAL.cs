@@ -1483,6 +1483,8 @@ namespace DataLayer
                 pedido.direccionEntrega.codigoMP = Converter.GetString(row, "direccion_entrega_codigo_mp");
                 pedido.direccionEntrega.nombre = Converter.GetString(row, "direccion_entrega_nombre");
 
+                pedido.IdUsuarioRegistro = Converter.GetGuid(row, "id_usuario_creacion");
+
                 pedido.moneda = new Moneda();
                 pedido.moneda.codigo = Converter.GetString(row, "moneda");
 

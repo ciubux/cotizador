@@ -38,7 +38,7 @@ namespace DataLayer
                 obj.porcentajeMargenMinimo = Converter.GetDecimal(row, "porcentaje_margen_minimo");
                 obj.porcentajeDescuentoInframargen = Converter.GetDecimal(row, "porcentaje_descuento_infra_margen");
                 obj.porcentajeMDGanaciaMax = Converter.GetDecimal(row, "porcentaje_md_ganancia_max");
-                obj.atencionTerciarizada = Converter.GetDecimal(row, "atencion_terciarizada") == 1 ? true : false;
+                obj.atencionTerciarizada = Converter.GetInt(row, "atencion_terciarizada") == 1 ? true : false;
                 obj.facturacionHabilitada = Converter.GetDecimal(row, "facturacion_habilitada") == 1 ? true : false;
                 obj.emiteGuias = Converter.GetDecimal(row, "emite_guias") == 1 ? true : false;
 
@@ -86,6 +86,7 @@ namespace DataLayer
                 obj.codigo = Converter.GetString(row, "codigo");
                 obj.ruc = Converter.GetString(row, "ruc");
                 obj.razonSocial = Converter.GetString(row, "razon_social");
+                obj.atencionTerciarizada = Converter.GetInt(row, "atencion_terciarizada") == 1 ? true : false; ;
                 obj.factorCosto = Converter.GetDecimal(row, "factor_costo");
                 obj.porcentajeMargenMinimo = Converter.GetDecimal(row, "porcentaje_margen_minimo");
                 obj.porcentajeDescuentoInframargen = Converter.GetDecimal(row, "porcentaje_descuento_infra_margen");

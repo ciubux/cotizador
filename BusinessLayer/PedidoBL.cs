@@ -642,7 +642,7 @@ namespace BusinessLayer
             if (pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.PendienteAprobacion)
             {
                 // Si no es un pedido de venta MP, se revisa si tiene inframargen
-                if (!pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP) && pedido.tipoPedido == Pedido.tiposPedido.Venta)
+                if (!pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_MP) && pedido.tipoPedido == Pedido.tiposPedido.Venta)
                 {
                     UsuarioDAL usuarioDal = new UsuarioDAL();
                     Usuario usuarioEmpresa = usuarioDal.getUsuario(pedido.IdUsuarioRegistro);
@@ -668,7 +668,7 @@ namespace BusinessLayer
                 //}
 
 
-                if (!pedido.usuario.codigoEmpresa.Equals(Constantes.EMPRESA_CODIGO_MP) && /*!pedido.usuario.emiteGuiasEmpresa &&*/
+                if (!pedido.empresa.codigo.Equals(Constantes.EMPRESA_CODIGO_MP) && /*!pedido.usuario.emiteGuiasEmpresa &&*/
                     pedido.seguimientoPedido.estado == SeguimientoPedido.estadosSeguimientoPedido.Ingresado &&
                     pedido.seguimientoCrediticioPedido.estado == SeguimientoCrediticioPedido.estadosSeguimientoCrediticioPedido.Liberado)
                 {
@@ -1307,19 +1307,22 @@ namespace BusinessLayer
 
             ClienteDAL clienteDal = new ClienteDAL();
 
-            Guid idCliente = clienteDal.getClienteEmpresa(pedido.usuario.idEmpresa, pedido.ciudad.idCiudad);
+            EmpresaDAL empresaDal = new EmpresaDAL();
+            Empresa empresa = empresaDal.getEmpresaByCliente(pedido.cliente.idCliente);
+
+            Guid idCliente = clienteDal.getClienteEmpresa(empresa.idEmpresa, pedido.ciudad.idCiudad);
             Cliente clienteEmp = clienteDal.getCliente(idCliente);
             pMP.cliente = clienteEmp;
 
             UsuarioDAL usuarioDal = new UsuarioDAL();
-            EmpresaDAL empresaDal = new EmpresaDAL();
-            Empresa empresa = empresaDal.getEmpresaByCliente(pedido.cliente.idCliente);
+            
+            
 
             Usuario usuarioZAS = usuarioDal.getUsuario(Constantes.IDUSUARIOZAS);
             pMP.usuario = usuarioZAS;
             pMP.IdUsuarioRegistro = usuarioZAS.idUsuario;
             pMP.esPagoContado = false;
-            pMP.entregaATerceros = pedido.usuario.atencionTerciarizadaEmpresa;
+            pMP.entregaATerceros = empresa.atencionTerciarizada;
             pMP.entregaTerciarizada = false;
 
             if (pMP.entregaATerceros)
@@ -1332,7 +1335,7 @@ namespace BusinessLayer
                 pMP.numeroReferenciaCliente = "";
             }
 
-            pMP.observaciones = pMP.observaciones + " N° Pedido " + pedido.usuario.razonSocialEmpresa + ": " + pedido.numeroPedido.ToString() + ". Cliente: " + pedido.cliente.nombreCliente;
+            pMP.observaciones = pMP.observaciones + " N° Pedido " + empresa.razonSocial + ": " + pedido.numeroPedido.ToString() + ". Cliente: " + pedido.cliente.nombreCliente;
 
             List<Guid> idsProductos = new List<Guid>();
 
