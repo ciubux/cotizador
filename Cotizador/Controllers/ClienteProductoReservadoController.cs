@@ -233,5 +233,25 @@ namespace Cotizador.Controllers
                 return JsonConvert.SerializeObject(new { success = 0, message = ex.Message });
             }
         }
+
+        [HttpPost]
+        public String HistorialMovimientosReserva()
+        {
+            try
+            {
+                Guid idClienteProductoReservado = Guid.Parse(Request["idClienteProductoReservado"].ToString());
+
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+                ClienteProductoReservadoBL bl = new ClienteProductoReservadoBL();
+                ClienteProductoReservado obj = bl.getClienteProductoReservadoMovimientos(idClienteProductoReservado, usuario.idUsuario);
+
+                return JsonConvert.SerializeObject(new { success = 1, obj = obj });
+            }
+            catch (Exception ex)
+            {
+                return JsonConvert.SerializeObject(new { success = 0, message = ex.Message });
+            }
+        }
     }
 }

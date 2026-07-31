@@ -34,6 +34,7 @@ namespace Model
 
         public ClienteProductoReservadoSolicitud solicitudRecargaActiva { get; set; }
 
+        public List<ClienteProductoReservadoMovimiento> movimientos { get; set; }
         public int idPresentacionUnidad { get; set; }
 
         public bool tieneSolicitudRecargaActiva { get { return !this.solicitudRecargaActiva.idClienteProductoReservadoSolicitud.Equals(Guid.Empty); } }
@@ -45,6 +46,7 @@ namespace Model
             this.cliente = new Cliente();
             this.producto = new Producto();
             this.solicitudRecargaActiva = new ClienteProductoReservadoSolicitud();
+            this.movimientos = new List<ClienteProductoReservadoMovimiento>();
         }
     }
 }

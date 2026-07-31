@@ -1,0 +1,256 @@
+﻿<div class="modal fade" id="modalHistorialMovimientosReserva" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalHistorialMovimientosReservaTitle"><b>Historial de Movimientos de Reserva de Stock</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label class="control-label col-xs-3">Cliente:</label>
+                                <div class="col-xs-9">
+                                    <p class="form-control-static" id="lblClienteHMR"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label class="control-label col-xs-3">Producto:</label>
+                                <div class="col-xs-9">
+                                    <p class="form-control-static" id="lblProductoHMR"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label for="selectUnidadHMR" class="control-label col-xs-3">Unidad:</label>
+                                <div class="col-xs-5">
+                                    <select class="form-control" id="selectUnidadHMR"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label col-xs-6">Reserva Activa:</label>
+                                <div class="col-xs-6">
+                                    <p class="form-control-static font-weight-bold" id="lblReservaActivaHMR">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label col-xs-6">Reserva Base:</label>
+                                <div class="col-xs-6">
+                                    <p class="form-control-static font-weight-bold" id="lblReservaBaseHMR">0</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <table id="tableHistorialMovimientosReserva" class="table table-striped table-bordered"
+                       data-editing="false"
+                       data-sorting="true"
+                       data-show-toggle="false">
+                    <thead>
+                        <tr>
+                            <th data-name="tipoDescripcion">Tipo</th>
+                            <th data-name="cantidad">Cantidad</th>
+                            <th data-name="informacionAdicional">Info</th>
+                            <th data-name="fechaMovmiento">Fecha Movimiento</th>
+                            <th data-name="fechaRegistro">Fecha Registro</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var dataReservaHMR = null;
+
+    function funcionesModalHistorialMovimientosReserva() {
+
+        $(document).on('click', ".btn-ver-movimientos-clienteproductoreservado", function () {
+            var idClienteProductoReservado = $(this).attr("idClienteProductoReservado");
+            cargarHistorialMovimientosReserva(idClienteProductoReservado);
+        });
+
+        $(document).on('change', "#selectUnidadHMR", function () {
+            if (dataReservaHMR != null) {
+                renderizarCantidadesYTabla();
+            }
+        });
+
+        function cargarHistorialMovimientosReserva(idClienteProductoReservado) {
+            $('body').loadingModal({
+                text: 'Cargando historial...'
+            });
+            $('body').loadingModal('show');
+
+            $.ajax({
+                url: "/ClienteProductoReservado/HistorialMovimientosReserva",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idClienteProductoReservado: idClienteProductoReservado
+                },
+                error: function (detalle) {
+                    $('body').loadingModal('hide');
+                    alert("Error al obtener el historial de movimientos.");
+                },
+                success: function (result) {
+                    $('body').loadingModal('hide');
+
+                    if (result.success == 1) {
+                        dataReservaHMR = result.obj;
+                        llenarDatosCabecera();
+                        configurarSelectorUnidades();
+                        renderizarCantidadesYTabla();
+                        $("#modalHistorialMovimientosReserva").modal('show');
+                    } else {
+                        alert("Error: " + (result.message || "No se pudo cargar la información."));
+                    }
+                }
+            });
+        }
+
+        function llenarDatosCabecera() {
+            var clienteText = (dataReservaHMR.cliente.ruc || "") + " - " + (dataReservaHMR.cliente.razonSocial || "");
+            var productoText = (dataReservaHMR.producto.sku || "") + " - " + (dataReservaHMR.producto.descripcion || "");
+
+            $("#lblClienteHMR").text(clienteText);
+            $("#lblProductoHMR").text(productoText);
+        }
+
+
+        function configurarSelectorUnidades() {
+            var p = dataReservaHMR.producto;
+            var $select = $("#selectUnidadHMR");
+            $select.empty();
+
+
+            $select.append(new Option(p.unidadProveedor, "2"));
+
+            if (p.equivalenciaUnidadProveedorUnidadConteo !== p.equivalenciaUnidadEstandarUnidadConteo) {
+                $select.append(new Option(p.unidad, "0"));
+            }
+
+            if (p.equivalenciaUnidadEstandarUnidadConteo !== p.equivalenciaUnidadAlternativaUnidadConteo) {
+                $select.append(new Option(p.unidad_alternativa, "1"));
+            }
+
+            if (p.equivalenciaUnidadAlternativaUnidadConteo !== 1) {
+                $select.append(new Option(dataReservaHMR.unidadConteo, "3"));
+            }
+
+            $select.prop("selectedIndex", 0);
+        }
+
+        function convertirCantidad(cantidadConteo, tipoUnidad) {
+            var p = dataReservaHMR.producto;
+            var valor = 0;
+
+            switch (tipoUnidad) {
+                case "0": // MP
+                    valor = cantidadConteo / (p.equivalenciaUnidadEstandarUnidadConteo || 1);
+                    break;
+                case "1": // Alternativa
+                    valor = cantidadConteo / (p.equivalenciaUnidadAlternativaUnidadConteo || 1);
+                    break;
+                case "2": // Proveedor
+                    valor = cantidadConteo / (p.equivalenciaUnidadProveedorUnidadConteo || 1);
+                    break;
+                case "3": // Conteo
+                default:
+                    valor = cantidadConteo;
+                    break;
+            }
+
+            return Number.isInteger(valor) ? valor : Number(valor.toFixed(2));
+        }
+
+        // Formatea fecha en DD/MM/YYYY
+        function formatearFechaDDMMYYYY(fechaStr) {
+            if (!fechaStr) return "-";
+            var fecha = new Date(fechaStr);
+            if (isNaN(fecha.getTime())) {
+                // Intento de parseo por substring de formato ISO
+                var partes = fechaStr.substr(0, 10).split("-");
+                if (partes.length === 3) {
+                    return partes[2] + "/" + partes[1] + "/" + partes[0];
+                }
+                return fechaStr;
+            }
+            var dia = String(fecha.getDate()).padStart(2, '0');
+            var mes = String(fecha.getMonth() + 1).padStart(2, '0');
+            var anio = fecha.getFullYear();
+            return dia + "/" + mes + "/" + anio;
+        }
+
+        function renderizarCantidadesYTabla() {
+            var unidadSeleccionada = $("#selectUnidadHMR").val();
+
+            var reservaActivaConv = convertirCantidad(dataReservaHMR.cantidadReserva, unidadSeleccionada);
+            var reservaBaseConv = convertirCantidad(dataReservaHMR.cantidadOriginal, unidadSeleccionada);
+
+            $("#lblReservaActivaHMR").text(reservaActivaConv);
+            $("#lblReservaBaseHMR").text(reservaBaseConv);
+
+            var $tbody = $("#tableHistorialMovimientosReserva > tbody");
+            $tbody.empty();
+
+            if (typeof FooTable !== 'undefined') {
+                FooTable.init('#tableHistorialMovimientosReserva');
+            }
+
+            var movimientos = dataReservaHMR.movimientos || [];
+
+            for (var i = 0; i < movimientos.length; i++) {
+                var mov = movimientos[i];
+                var cantidadConv = convertirCantidad(mov.cantidad, unidadSeleccionada);
+                var fechaMov = formatearFechaDDMMYYYY(mov.fechaMovmiento);
+                var fechaReg = formatearFechaDDMMYYYY(mov.FechaRegistro);
+
+                $tbody.append(
+                    '<tr>' +
+                        '<td>' + (mov.tipoDescripcion || "") + '</td>' +
+                        '<td class="text-right">' + cantidadConv + '</td>' +
+                        '<td>' + (mov.informacionAdicional || "") + '</td>' +
+                        '<td>' + fechaMov + '</td>' +
+                        '<td>' + fechaReg + '</td>' +
+                    '</tr>'
+                );
+            }
+        }
+    }
+
+    if (window.addEventListener) {
+        window.addEventListener('load', funcionesModalHistorialMovimientosReserva, false);
+    } else if (window.attachEvent) {
+        window.attachEvent('onload', funcionesModalHistorialMovimientosReserva);
+    }
+</script>
+
+

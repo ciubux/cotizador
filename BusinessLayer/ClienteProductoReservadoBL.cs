@@ -12,8 +12,15 @@ namespace BusinessLayer
         {
             using (ClienteProductoReservadoDAL dal = new ClienteProductoReservadoDAL())
             {
-                ClienteProductoReservado obj = dal.getClienteProductoReservado(idClienteProductoReservado, idUsuario);
-                return obj;
+                return dal.getClienteProductoReservado(idClienteProductoReservado, idUsuario);
+            }
+        }
+
+        public ClienteProductoReservado getClienteProductoReservadoMovimientos(Guid idClienteProductoReservado, Guid idUsuario)
+        {
+            using (ClienteProductoReservadoDAL dal = new ClienteProductoReservadoDAL())
+            {
+                return dal.getClienteProductoReservadoMovimientos(idClienteProductoReservado, idUsuario);
             }
         }
 

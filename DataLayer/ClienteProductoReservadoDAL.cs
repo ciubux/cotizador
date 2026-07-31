@@ -68,6 +68,83 @@ namespace DataLayer
             return obj;
         }
 
+        public ClienteProductoReservado getClienteProductoReservadoMovimientos(Guid idClienteProductoReservado, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_cliente_producto_reservado_movimientos");
+            InputParameterAdd.Guid(objCommand, "idClienteProductoReservado", idClienteProductoReservado);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataSet dataSet = ExecuteDataSet(objCommand);
+
+            DataTable reservaDataTable = dataSet.Tables[0];
+            DataTable movimeintosDataTable = dataSet.Tables[1];
+
+            ClienteProductoReservado obj = new ClienteProductoReservado();
+
+            foreach (DataRow row in reservaDataTable.Rows)
+            {
+                obj.idClienteProductoReservado = Converter.GetGuid(row, "id_cliente_producto_reservado");
+
+                obj.cantidadOriginal = Converter.GetInt(row, "cantidad_original");
+                obj.cantidadReserva = Converter.GetInt(row, "cantidad_reserva");
+                obj.cantidadAtendida = Converter.GetInt(row, "cantidad_atendida");
+                obj.unidadConteo = Converter.GetString(row, "unidad_conteo");
+                obj.fechaUltimaRecarga = Converter.GetDateTime(row, "fecha_ultima_recarga");
+                obj.Estado = Converter.GetInt(row, "estado");
+
+                obj.empresa.idEmpresa = Converter.GetInt(row, "id_empresa");
+
+                obj.ciudad.idCiudad = Converter.GetGuid(row, "id_ciudad");
+                obj.ciudad.nombre = Converter.GetString(row, "nombre_ciudad");
+
+                obj.cliente.idCliente = Converter.GetGuid(row, "id_cliente");
+                obj.cliente.ruc = Converter.GetString(row, "ruc_cliente");
+                obj.cliente.codigo = Converter.GetString(row, "codigo_cliente");
+                obj.cliente.razonSocial = Converter.GetString(row, "razon_social_cliente");
+
+                obj.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                obj.producto.sku = Converter.GetString(row, "sku_producto");
+                obj.producto.descripcion = Converter.GetString(row, "descripcion_producto");
+
+                obj.producto.unidad = Converter.GetString(row, "unidad");
+                obj.producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
+                obj.producto.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
+                obj.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
+                obj.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+                obj.producto.equivalenciaUnidadEstandarUnidadConteo = Converter.GetInt(row, "equivalencia_unidad_estandar_unidad_conteo");
+                obj.producto.equivalenciaUnidadAlternativaUnidadConteo = obj.producto.equivalenciaUnidadEstandarUnidadConteo / obj.producto.equivalenciaAlternativa;
+                obj.producto.equivalenciaUnidadProveedorUnidadConteo = obj.producto.equivalenciaUnidadEstandarUnidadConteo * obj.producto.equivalenciaProveedor;
+            }
+
+            foreach (DataRow row in movimeintosDataTable.Rows)
+            {
+                ClienteProductoReservadoMovimiento mov = new ClienteProductoReservadoMovimiento();
+                mov.idClienteProductoReservadoMovimiento = Converter.GetGuid(row, "id_cliente_producto_reservado_movimiento");
+
+                mov.tipo = Converter.GetString(row, "tipo");
+                mov.cantidad = Converter.GetInt(row, "cantidad");
+                mov.fechaMovmiento = Converter.GetDateTime(row, "fecha_movimiento");
+                mov.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
+
+                switch(mov.tipo)
+                {
+                    case ClienteProductoReservadoMovimiento.ANULACION_VENTA:
+                    case ClienteProductoReservadoMovimiento.VENTA:
+                    case ClienteProductoReservadoMovimiento.EXTORNO_VENTA:
+                        mov.informacionAdicional = Converter.GetString(row, "serie_documento") + "-" + Converter.GetString(row, "numero_documento");
+                        break; 
+                }
+
+                if (mov.tipo.Equals(ClienteProductoReservadoMovimiento.EXTORNO_VENTA)) {
+                    mov.informacionAdicional = Converter.GetString(row, "tipo_documento") + mov.informacionAdicional;
+                }
+
+                obj.movimientos.Add(mov);
+            }
+
+            return obj;
+        }
+
         public List<ClienteProductoReservado> getClienteProductosReservados(ClienteProductoReservado filtroObj)
         {
             var objCommand = GetSqlCommand("ps_cliente_productos_reservados");

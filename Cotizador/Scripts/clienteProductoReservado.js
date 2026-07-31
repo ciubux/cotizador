@@ -144,8 +144,9 @@ jQuery(function ($) {
                 '<td>' + conv.cantidadReserva + etiquetaCantidadSolicitada + '</td>' +
                 '<td>' + conv.cantidadAtendida + '</td>' +
                 '<td>' +
-                '<button type="button" class="btn btn-primary btnEditar" data-id="' + p.idClienteProductoReservado + '">Editar Reserva Base</button> ' +
-                '<button type="button" class="btn btn-success btnAbrirReserva" data-id="' + p.idClienteProductoReservado + '">+ Reserva</button>' +
+                '<button type="button" class="btn btn-primary btnEditar" data-id="' + p.idClienteProductoReservado + '">Editar Reserva Base</button> <br/>' +
+                '<button type="button" class="btn btn-success btnAbrirReserva" data-id="' + p.idClienteProductoReservado + '">+ Reserva</button><br/>' +
+                '<button type="button" class="btn btn-info btn-ver-movimientos-clienteproductoreservado" idClienteProductoReservado="' + p.idClienteProductoReservado + '">Movimientos</button>' +
                 '</td>' +
                 '</tr>';
         }
