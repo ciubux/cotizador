@@ -4896,7 +4896,95 @@ jQuery(function ($) {
         });
     });
 
+    $("#btnDestruncarPedido").click(function () {
+        var hoy = new Date();
+        var dd = String(hoy.getDate()).padStart(2, '0');
+        var mm = String(hoy.getMonth() + 1).padStart(2, '0'); // Enero es 0
+        var yyyy = hoy.getFullYear();
+        var fechaHoy = yyyy + '-' + mm + '-' + dd;
 
+        $.confirm({
+            title: 'CONFIRMACIÓN',
+            content: '' +
+                '<div class="form-group">' +
+                '<label>¿Está seguro que desea revertir el truncado del pedido?</label>' +
+                '<br/><br/>' +
+                '<label>Fecha de Entrega Extendida:</label>' +
+                '<input type="date" class="form-control fecha-asignacion" style="width: 120px;" required />' +
+                '</div>',
+            type: 'orange',
+            onContentReady: function () {
+                this.$content.find('.fecha-asignacion').attr('min', fechaHoy);
+            },
+            buttons: {
+                confirm: {
+                    text: 'Sí',
+                    btnClass: 'btn-red',
+                    action: function () {
+                        var inputFecha = this.$content.find('.fecha-asignacion').val();
+
+                        if (!inputFecha) {
+                            $.alert({
+                                title: 'VALIDACIÓN',
+                                content: 'Por favor, seleccione una fecha.',
+                                type: 'orange'
+                            });
+                            return false; 
+                        }
+
+                        if (inputFecha < fechaHoy) {
+                            $.alert({
+                                title: 'VALIDACIÓN',
+                                content: 'La fecha seleccionada no puede ser anterior a hoy.',
+                                type: 'orange'
+                            });
+                            return false;
+                        }
+
+                        var idPedido = $("#verIdPedido").val();
+
+                        $.ajax({
+                            url: "/Pedido/DestruncarPedido",
+                            data: {
+                                idPedido: idPedido,
+                                fechaEntregaExtendida: inputFecha 
+                            },
+                            type: 'POST',
+                            error: function (detalle) {
+                                $.alert({
+                                    title: 'ERROR',
+                                    content: "Ocurrió un error al intentar revertir el truncado del pedido.",
+                                    type: 'red',
+                                    buttons: {
+                                        OK: function () {
+                                        }
+                                    }
+                                });
+                            },
+                            success: function () {
+                                $.alert({
+                                    title: 'REGISTRO EXITOSO',
+                                    content: "Se revertió el truncado del pedido correctamente.",
+                                    type: 'green',
+                                    buttons: {
+                                        OK: function () {
+                                            location.reload();
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+                },
+                cancel: {
+                    text: 'No',
+                    action: function () {
+                    }
+                }
+            }
+        });
+    });
+    /*
     $("#btnDestruncarPedido").click(function () {
         $.confirm({
             title: 'Confirmación',
@@ -4957,7 +5045,7 @@ jQuery(function ($) {
             },
 
         });
-    });
+    });*/
 
 
     $('#modalAprobacion').on('shown.bs.modal', function (e) {

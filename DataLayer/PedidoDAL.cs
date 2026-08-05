@@ -1912,6 +1912,9 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             var objCommand = GetSqlCommand("pu_pedidotruncar");
             InputParameterAdd.Guid(objCommand, "idPedido", pedido.idPedido);
             InputParameterAdd.Int(objCommand, "truncado", pedido.truncado);
+            if (pedido.fechaEntregaExtendida.HasValue) { 
+                InputParameterAdd.DateTime(objCommand, "fechaEntregaExtendida", pedido.fechaEntregaExtendida.Value);
+            }
             InputParameterAdd.Guid(objCommand, "idUsuario", pedido.usuario.idUsuario);
             ExecuteNonQuery(objCommand);
 
