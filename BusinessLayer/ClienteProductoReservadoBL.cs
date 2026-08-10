@@ -56,6 +56,14 @@ namespace BusinessLayer
             }
         }
 
+        public void EliminarClienteProductoReservado(Guid idClienteProductoReservado, Guid idUsuario)
+        {
+            using (ClienteProductoReservadoDAL dal = new ClienteProductoReservadoDAL())
+            {
+                dal.EliminarClienteProductoReservado(idClienteProductoReservado, idUsuario);
+            }
+        }
+
         public void AgregarCantidadReserva(Guid idClienteProductoReservado, int cantidadAgregar, Guid idUsuario)
         {
             using (ClienteProductoReservadoDAL dal = new ClienteProductoReservadoDAL())

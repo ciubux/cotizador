@@ -251,6 +251,42 @@ namespace DataLayer
             return lista;
         }
 
+        public List<Usuario> getUsuariosRolesSede(List<int> idRol, Guid idCiudad, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("ps_roles_usuarios_sede");
+
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
+
+            List<Usuario> lista = new List<Usuario>();
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(int)));
+
+            foreach (int rol in idRol)
+            {
+                DataRow rowObj = tvp.NewRow();
+                rowObj["ID"] = rol;
+                tvp.Rows.Add(rowObj);
+            }
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@idRoles", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.IntegerList";
+
+
+            DataTable dataTable = Execute(objCommand);
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Usuario obj = new Usuario();
+                obj.idUsuario = Converter.GetGuid(row, "id_usuario");
+                obj.email = Converter.GetString(row, "email");
+                obj.nombre = Converter.GetString(row, "nombre");
+                lista.Add(obj);
+            }
+
+            return lista;
+        }
+
         public ReporteMatriz ListaRolesUsuarios(Guid idUsuario)
         {
             var objCommand = GetSqlCommand("ps_roles_usuarios_list");

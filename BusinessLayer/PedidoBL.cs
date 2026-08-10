@@ -560,12 +560,38 @@ namespace BusinessLayer
             }
         }
 
-        public Pedido DestruncarPedido(Pedido pedido)
+        public Pedido DestruncarPedido(Pedido pedido, bool notificar = false)
         {
             using (var dal = new PedidoDAL())
             {
                 pedido.truncado = 0;
-                return dal.UpdateTruncado(pedido);
+                Pedido procesado = dal.UpdateTruncado(pedido);
+
+                if (notificar)
+                {
+                    UsuarioDAL usuarioDal = new UsuarioDAL();
+                    RolDAL rolDal = new RolDAL();
+                    Mensaje notificacion = new Mensaje();
+                    notificacion.titulo = "SE DESTRUNCÓ EL PEDIDO N° " + pedido.numeroPedido;
+                    notificacion.mensaje = "El usuario " + pedido.usuario.nombre + " destruncó el pedido N° " + pedido.numeroPedido + " y extendió la fecha de entrega hasta " + pedido.fechaEntregaExtendidaString + ".";
+
+                    notificacion.fechaInicioMensaje = DateTime.Now;
+                    notificacion.fechaVencimientoMensaje = DateTime.Now.AddDays(7);
+                    notificacion.user = pedido.usuario;
+                    notificacion.importancia = "Alta";
+
+                    List<int> idRoles = new List<int>();
+                    idRoles.Add(Constantes.IDROLCOORDINADOR);
+
+                    notificacion.listUsuario = rolDal.getUsuariosRolesSede(idRoles, pedido.ciudad.idCiudad, pedido.usuario.idUsuario);
+                    notificacion.listUsuario.RemoveAll(item => item.idUsuario == pedido.usuario.idUsuario);
+                    if (notificacion.listUsuario.Count > 0) { 
+                        MensajeDAL mensajeDal = new MensajeDAL();
+                        mensajeDal.insertMensaje(notificacion);
+                    }
+                }
+
+                return procesado;
             }
         }
 

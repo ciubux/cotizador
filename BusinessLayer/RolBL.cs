@@ -88,6 +88,13 @@ namespace BusinessLayer
             }
         }
 
+        public List<Usuario> getUsuariosRolesSede(List<int> idRol, Guid idCiudad, Guid idUsuario)
+        {
+            using (var dal = new RolDAL())
+            {
+                return dal.getUsuariosRolesSede(idRol, idCiudad, idUsuario);
+            }
+        }
         public ReporteMatriz ListaRolesUsuarios(Guid idUsuario)
         {
             using (RolDAL dal = new RolDAL())

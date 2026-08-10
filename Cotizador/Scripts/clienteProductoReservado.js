@@ -134,6 +134,15 @@ jQuery(function ($) {
                 etiquetaCantidadSolicitada = '<br/> <span class="label label-warning label-solicitado"> Solicitado: ' + conv.cantidadSolicitada + ' </span> ';
             }
 
+            var btnEliminar = "";
+            if (p.cantidadReserva === 0) {
+                btnEliminar = `<button type="button" class="btn btn-danger btn-sm btn-eliminar-reserva" 
+                   idClienteProductoReservado="${p.idClienteProductoReservado}" 
+                   title="Eliminar Registro">
+                   <span class="glyphicon glyphicon-trash"></span>
+                   </button>`;
+            }
+
             rows += '<tr>' +
                 '<td>' + p.idClienteProductoReservado + '</td>' +
                 '<td>' + (p.ciudad ? p.ciudad.nombre : "-") + '</td>' +
@@ -146,7 +155,8 @@ jQuery(function ($) {
                 '<td>' +
                 '<button type="button" class="btn btn-primary btnEditar" data-id="' + p.idClienteProductoReservado + '">Editar Reserva Base</button> <br/>' +
                 '<button type="button" class="btn btn-success btnAbrirReserva" data-id="' + p.idClienteProductoReservado + '">+ Reserva</button><br/>' +
-                '<button type="button" class="btn btn-info btn-ver-movimientos-clienteproductoreservado" idClienteProductoReservado="' + p.idClienteProductoReservado + '">Movimientos</button>' +
+                '<button type="button" class="btn btn-info btn-ver-movimientos-clienteproductoreservado" idClienteProductoReservado="' + p.idClienteProductoReservado + '">Movimientos</button><br/>' +
+                btnEliminar +
                 '</td>' +
                 '</tr>';
         }
@@ -302,6 +312,53 @@ jQuery(function ($) {
         }
     });
 
+    $(document).on('click', ".btn-eliminar-reserva", function () {
+        var idClienteProductoReservado = $(this).attr("idClienteProductoReservado");
+
+        $.confirm({
+            title: 'Confirmación',
+            content: '¿Está seguro que desea eliminar este registro?',
+            type: 'red',
+            buttons: {
+                confirm: {
+                    text: 'SI',
+                    btnClass: 'btn-red',
+                    action: function () {
+                        $('body').loadingModal({ text: 'Eliminando...' });
+                        $('body').loadingModal('show');
+
+                        $.ajax({
+                            url: "/ClienteProductoReservado/Eliminar",
+                            type: 'POST',
+                            dataType: 'JSON',
+                            data: {
+                                idClienteProductoReservado: idClienteProductoReservado
+                            },
+                            success: function (result) {
+                                $('body').loadingModal('hide');
+
+                                if (result.success == 1) {
+                                    location.reload();
+                                } else {
+                                    alert("Error: " + result.message);
+                                }
+                            },
+                            error: function (detalle) {
+                                $('body').loadingModal('hide');
+                                alert("Ocurrió un error en la conexión al servidor.");
+                            }
+                        });
+                    }
+                },
+                cancel: {
+                    text: 'Cancelar',
+                    action: function () {
+
+                    }
+                }
+            }
+        });
+    });
 
     $("#btnAgregar").click(function () {
         limpiarFormulario();

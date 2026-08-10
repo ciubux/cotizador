@@ -283,6 +283,14 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
 
+        public void EliminarClienteProductoReservado(Guid idClienteProductoReservado, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pu_cliente_producto_reservado_eliminar");
+            InputParameterAdd.Guid(objCommand, "idClienteProductoReservado", idClienteProductoReservado);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            ExecuteNonQuery(objCommand);
+        }
 
         public void InsertSolicitudesRecargaReserva(Guid idUsuario, List<ClienteProductoReservadoSolicitud> lista)
         {

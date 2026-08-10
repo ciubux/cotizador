@@ -44,6 +44,7 @@ namespace Model
 
         public static int IDROLJEFEFACTURACION = 3;
         public static int IDROLJEFECREDITOS = 11;
+        public static int IDROLCOORDINADOR = 9;
 
         public static Guid IDUSUARIOZAS = new Guid("C7E67D0D-10DD-41DB-8708-132341E946A2");
 

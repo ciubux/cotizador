@@ -214,6 +214,25 @@ namespace Cotizador.Controllers
         }
 
         [HttpPost]
+        public String Eliminar()
+        {
+            try
+            {
+                Guid idClienteProductoReservado = Guid.Parse(Request["idClienteProductoReservado"].ToString());
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+                ClienteProductoReservadoBL bl = new ClienteProductoReservadoBL();
+                bl.EliminarClienteProductoReservado(idClienteProductoReservado, usuario.idUsuario);
+
+                return JsonConvert.SerializeObject(new { success = 1, message = "Reserva eliminada." });
+            }
+            catch (Exception ex)
+            {
+                return JsonConvert.SerializeObject(new { success = 0, message = ex.Message });
+            }
+        }
+
+        [HttpPost]
         public String AgregarReserva()
         {
             try
