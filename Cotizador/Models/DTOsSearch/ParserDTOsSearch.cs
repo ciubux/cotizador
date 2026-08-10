@@ -289,7 +289,9 @@ namespace Cotizador.Models.DTOsSearch
                 pedidoDTO.numeroReferenciaCliente = pedidoTmp.numeroReferenciaCliente;
                 pedidoDTO.usuario_nombre = pedidoTmp.usuario.nombre;
                 pedidoDTO.fechaHoraRegistro = pedidoTmp.fechaHoraRegistro;
+                pedidoDTO.fechaHoraRegistroValue = pedidoTmp.FechaRegistro.ToString("yyyyMMddHHmm"); ;
                 pedidoDTO.rangoFechasEntrega = pedidoTmp.rangoFechasEntrega;
+                pedidoDTO.rangoFechasEntregaValue = pedidoTmp.rangoFechasEntregaValue;
                 pedidoDTO.rangoHoraEntrega = pedidoTmp.rangoHoraEntrega;
                 pedidoDTO.montoTotal = pedidoTmp.montoTotal;
                 pedidoDTO.ubigeoEntrega_distrito = pedidoTmp.ubigeoEntrega.Distrito;

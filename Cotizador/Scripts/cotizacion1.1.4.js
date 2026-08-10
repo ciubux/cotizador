@@ -4508,8 +4508,8 @@ jQuery(function ($) {
                         '<td>' + cotizacionList[i].codigo + nroPedidoOrigen + '</td>' +
                         '<td><img src="/images/logos/icon_' + cotizacionList[i].empresa_codigo + '.png" height="27"/></td>' +
                         '<td>' + cotizacionList[i].usuario_nombre + '</td>' +
-                        //ToString("dd/MM/yyyy")
-                        '<td>' + invertirFormatoFecha(cotizacionList[i].fecha.substr(0, 10)) + '</td>' +
+                    //ToString("dd/MM/yyyy")
+                        '<td data-sort-value="' + cotizacionList[i].fecha.substr(0, 10) + '">' + invertirFormatoFecha(cotizacionList[i].fecha.substr(0, 10)) + '</td>' +
 
 
                         '<td>' + creadoPara + '</td>' +

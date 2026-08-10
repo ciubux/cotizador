@@ -4251,9 +4251,9 @@ jQuery(function ($) {
                         '<td>  ' + grupoCliente + '</td>' +
                         '<td>  ' + pedidoList[i].numeroReferenciaCliente+'  </td>' +
                         '<td>  ' + pedidoList[i].usuario.nombre + '  </td>' +
-                        '<td>  ' + pedidoList[i].fechaHoraRegistro + '</td>' +
-                        //'<td>  ' + pedidoList[i].fechaHoraSolicitud + '</td>' +                        
-                        '<td>  ' + pedidoList[i].rangoFechasEntrega + '</td>' +
+                        '<td data-sort-value="' + pedidoList[i].fechaHoraRegistroValue + '">  ' + pedidoList[i].fechaHoraRegistro + '</td>' +
+                        //'<td>  ' + pedidoList[i].fechaHoraSolicitud + '</td>' +
+                        '<td data-sort-value="' + pedidoList[i].rangoFechasEntregaValue + '">  ' + pedidoList[i].rangoFechasEntrega + '</td>' +
                         //'<td>  ' + fechaProgramacion+ '</td>' +
                         '<td>  ' + pedidoList[i].montoTotal + '  </td>' +
                         '<td>  ' + pedidoList[i].ubigeoEntrega.Distrito + '  </td>' +

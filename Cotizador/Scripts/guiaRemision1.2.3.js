@@ -2853,8 +2853,8 @@ jQuery(function ($) {
                         '<td>  ' + guiaRemisionList[i].pedido_numeroPedidoString + '</td>' +
                         '<td>  ' + guiaRemisionList[i].motivoTrasladoString + '</td>' +
                         '<td>  ' + guiaRemisionList[i].usuario_nombre + '</td>' +
-                        '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaEmision.substr(0, 10)) + '</td>' +
-                        '<td>  ' + invertirFormatoFecha(guiaRemisionList[i].fechaTraslado.substr(0, 10)) + '</td>' +
+                        '<td data-sort-value="' + guiaRemisionList[i].fechaEmision.substr(0, 10) + '">  ' + invertirFormatoFecha(guiaRemisionList[i].fechaEmision.substr(0, 10)) + '</td>' +
+                        '<td data-sort-value="' + guiaRemisionList[i].fechaTraslado.substr(0, 10) + '">  ' + invertirFormatoFecha(guiaRemisionList[i].fechaTraslado.substr(0, 10)) + '</td>' +
                         '<td>  ' + clienteRazonSocial + '</td>' +
                         '<td>  ' + guiaRemisionList[i].pedido_cliente_ruc + '</td>' +
                         '<td>  ' + guiaRemisionList[i].ciudadOrigen_nombre + '</td>' +

@@ -237,6 +237,42 @@ namespace Model
             }
         }
 
+        public String rangoFechasEntregaValue
+        {
+            get
+            {
+                String rangoFechasEntrega = String.Empty;
+                if (this.fechaEntregaDesde != null && this.fechaEntregaHasta != null)
+                {
+                    String entregaDesde = this.fechaEntregaDesde.Value.ToString("yyyyMMdd");
+                    String entregaHasta = this.fechaEntregaHasta.Value.ToString("yyyyMMdd");
+
+                    if (!fechaEntregaExtendida.HasValue)
+                    {
+                        if (entregaDesde.Equals(entregaHasta))
+                        {
+                            return entregaDesde+"00000000";
+                        }
+                        else
+                        {
+                            return entregaDesde + "" + entregaHasta;
+                        }
+                    }
+                    else
+                    {
+                        entregaHasta = this.fechaEntregaExtendida.Value.ToString("yyyyMMdd");
+                        return entregaDesde + "" + entregaHasta;
+                    }
+
+                }
+                else
+                {
+                    return "";
+                }
+
+            }
+        }
+
         [Display(Name = "Horarios de Entrega:")]
         public String rangoHoraEntrega
         {
@@ -279,6 +315,11 @@ namespace Model
         public String fechaHoraRegistro
         {
             get { return this.FechaRegistro.ToString("dd/MM/yyyy HH:mm"); }
+        }
+
+        public String fechaHoraRegistroValue
+        {
+            get { return this.FechaRegistro.ToString("yyyyMMddHHmm"); }
         }
 
         public String numeroGrupoPedidoString

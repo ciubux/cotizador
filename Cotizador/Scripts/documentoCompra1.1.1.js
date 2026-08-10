@@ -914,8 +914,8 @@ jQuery(function ($) {
 
                         '<td>  ' + movimientoAlmacen + '</td>' +
                         '<td>  ' + documentoCompraList[i].usuario.nombre + '</td>' +
-                        '<td>  ' + invertirFormatoFecha(documentoCompraList[i].fechaEmision.substr(0, 10)) + '</td>' +
-                        '<td>  ' + invertirFormatoFecha(documentoCompraList[i].fechaVencimiento.substr(0, 10)) + '</td>' +
+                        '<td data-sort-value="' + documentoCompraList[i].fechaEmision.substr(0, 10) + '">  ' + invertirFormatoFecha(documentoCompraList[i].fechaEmision.substr(0, 10)) + '</td>' +
+                        '<td data-sort-value="' + documentoCompraList[i].fechaVencimiento.substr(0, 10) + '">  ' + invertirFormatoFecha(documentoCompraList[i].fechaVencimiento.substr(0, 10)) + '</td>' +
                         '<td>  ' + documentoCompraList[i].proveedor.codigo + '</td>' +
                         '<td>  ' + documentoCompraList[i].proveedor.razonSocial + '</td>' +
                         '<td>  ' + documentoCompraList[i].proveedor.ruc + '</td>' +

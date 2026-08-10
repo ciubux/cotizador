@@ -3860,7 +3860,7 @@ jQuery(function ($) {
                         $("#btnEditarPedido").html("Editar");
                     }
 
-                    if (usuario.codigoEmpresa != 'MP' && pedido.seguimientoPedido_estado == ESTADO_INGRESADO && pedido.seguimientoCrediticioPedido_estado == ESTADO_LIBERADO) {
+                    if (pedido.empresa_codigo != 'MP' && pedido.seguimientoPedido_estado == ESTADO_INGRESADO && pedido.seguimientoCrediticioPedido_estado == ESTADO_LIBERADO) {
                         $("#btnEditarPedido").hide();
                     } else {
                         $("#btnEditarPedido").show();
@@ -4122,12 +4122,18 @@ jQuery(function ($) {
                     && pedido.seguimientoPedido_estado != ESTADO_RECIBIDO
                     && pedido.seguimientoPedido_estado != ESTADO_RECIBIDO_PARCIALMENTE
                 ) {
-
                     $("#btnEliminarPedido").show();
                 }
                 else {
                     $("#btnEliminarPedido").hide();
                 }
+
+                if (pedido.empresa_codigo != 'MP' && pedido.seguimientoPedido_estado == ESTADO_INGRESADO && pedido.seguimientoCrediticioPedido_estado == ESTADO_LIBERADO) {
+                    $("#btnEliminarPedido").hide();
+                } else {
+                    $("#btnEliminarPedido").show();
+                }
+
                 $("#modalVerPedido").modal('show');
 
                 setTimeout(function () { cargarStockProductos(); }, 1000);
@@ -6133,9 +6139,9 @@ jQuery(function ($) {
                         '<td>  ' + grupoCliente + '</td>' +
                         '<td>  ' + pedidoList[i].numeroReferenciaCliente+'  </td>' +
                         '<td>  ' + pedidoList[i].usuario_nombre + '  </td>' +
-                        '<td>  ' + pedidoList[i].fechaHoraRegistro + '</td>' +
-                        //'<td>  ' + pedidoList[i].fechaHoraSolicitud + '</td>' +                        
-                        '<td>  ' + pedidoList[i].rangoFechasEntrega + '</td>' +
+                        '<td data-sort-value="' + pedidoList[i].fechaHoraRegistroValue + '">  ' + pedidoList[i].fechaHoraRegistro + '</td>' +
+                    //'<td>  ' + pedidoList[i].fechaHoraSolicitud + '</td>' +
+                        '<td data-sort-value="' + pedidoList[i].rangoFechasEntregaValue + '">  ' + pedidoList[i].rangoFechasEntrega + '</td>' +
                         '<td>  ' + pedidoList[i].rangoHoraEntrega + '</td>' + //horarioEntrega
                         '<td>  ' + pedidoList[i].montoTotal + '  </td>' +
                         '<td>  ' + pedidoList[i].ubigeoEntrega_distrito + '  </td>' +

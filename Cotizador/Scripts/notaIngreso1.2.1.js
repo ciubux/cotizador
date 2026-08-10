@@ -2298,8 +2298,8 @@ jQuery(function ($) {
                         '<td>  ' + notaIngresoList[i].pedido_numeroPedidoString + '</td>' +
                         '<td>  ' + notaIngresoList[i].motivoTrasladoString + '</td>' +
                         '<td>  ' + notaIngresoList[i].usuario_nombre + '</td>' +
-                        '<td>  ' + invertirFormatoFecha(notaIngresoList[i].fechaEmision.substr(0, 10)) + '</td>' +
-                        '<td>  ' + invertirFormatoFecha(notaIngresoList[i].fechaTraslado.substr(0, 10)) + '</td>' +
+                        '<td data-sort-value="' + notaIngresoList[i].fechaEmision.substr(0, 10) + '">  ' + invertirFormatoFecha(notaIngresoList[i].fechaEmision.substr(0, 10)) + '</td>' +
+                        '<td data-sort-value="' + notaIngresoList[i].fechaTraslado.substr(0, 10) + '">  ' + invertirFormatoFecha(notaIngresoList[i].fechaTraslado.substr(0, 10)) + '</td>' +
                         '<td>  ' + notaIngresoList[i].pedido_cliente_razonSocial + '</td>' +
                         '<td>  ' + notaIngresoList[i].pedido_cliente_ruc + '</td>' +
                         '<td>  ' + notaIngresoList[i].ciudadDestino_nombre + '</td>' +

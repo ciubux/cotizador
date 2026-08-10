@@ -31,8 +31,10 @@ namespace Cotizador.Models.DTOsSearch
         public String usuario_nombre { get; set; }
 
         public String fechaHoraRegistro { get; set; }
+        public String fechaHoraRegistroValue { get; set; }
 
         public String rangoFechasEntrega { get; set; }
+        public String rangoFechasEntregaValue { get; set; }
 
         public String rangoHoraEntrega { get; set; }
 

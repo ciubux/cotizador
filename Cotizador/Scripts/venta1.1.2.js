@@ -3995,8 +3995,8 @@ jQuery(function ($) {
                 '<td>  ' + ventaList[i].pedido.numeroPedidoString + '</td>' +
                 '<td>  ' + ventaList[i].guiaRemision.serieDocumento + '</td>' +
                 '<td>  ' + ventaList[i].documentoVenta.numero + '</td>' +
-                //'<td>  ' + ventaList[i].usuario.nombre + '</td>' +
-                '<td>  ' + $.datepicker.formatDate('dd/mm/yy', new Date(ventaList[i].guiaRemision.fechaEmision)) + '</td>' +
+            //'<td>  ' + ventaList[i].usuario.nombre + '</td>' +
+                '<td data-sort-value="' + ventaList[i].guiaRemision.fechaEmision.substr(0, 10) + '">  ' + $.datepicker.formatDate('dd/mm/yy', new Date(ventaList[i].guiaRemision.fechaEmision)) + '</td>' +
                 '<td>  ' + ventaList[i].cliente.codigo + '</td>' +
                 '<td>  ' + ventaList[i].cliente.razonSocial + '</td>' +
                 '<td>  ' + ventaList[i].cliente.ruc + '</td>' +
