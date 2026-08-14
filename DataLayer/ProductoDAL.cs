@@ -1412,6 +1412,7 @@ namespace DataLayer
 
                 item.codigoSunat = Converter.GetString(row, "codigo_sunat");
                 item.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
+                item.fechaActualizacionNextSoft = Converter.GetDateTime(row, "actualizacion_nextsoft");
 
                 item.image = Converter.GetBytes(row, "imagen");
                 item.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");

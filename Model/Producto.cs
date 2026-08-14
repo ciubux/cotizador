@@ -214,6 +214,8 @@ namespace Model
         public Decimal descuentoBaseEmpresa { get; set; }
         public String tipoDescuentoBaseEmpresa { get; set; }
 
+        public DateTime fechaActualizacionNextSoft { get; set; }
+
         public Decimal precioProveedor {
             get {
                 return (precioSinIgv * equivalenciaProveedor);
@@ -395,6 +397,14 @@ namespace Model
             get
             {
                 return EnumHelper<TipoProducto>.GetDisplayValue(this.tipoProducto);
+            }
+        }
+
+        public bool registradoNextSis
+        {
+            get
+            {
+                return this.fechaActualizacionNextSoft.CompareTo(new DateTime(2020, 1, 1)) > 0;
             }
         }
 

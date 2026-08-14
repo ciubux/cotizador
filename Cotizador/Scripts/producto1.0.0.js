@@ -295,6 +295,48 @@ jQuery(function ($) {
     }
 
 
+    $('#btnEnviarProductoNextsis').click(function () {
+        $("btnEnviarProductoNextsis").attr("disabled", "disabled");
+        $.ajax({
+            url: "/Producto/RegistrarProductosNextsis",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idProducto: $(this).attr("idproducto")
+            },
+            error: function (error) {
+                mostrarMensajeErrorProceso("ERROR");
+            },
+            success: function (res) {
+                if (res.success == 1) {
+                    $.alert({
+                        title: "Envio Correcto",
+                        content: "Se envió el producto a NextSis.",
+                        type: 'green',
+                        buttons: {
+                            OK: function () {
+                                $("btnEnviarProductoNextsis").removeAttr("disabled");
+                                $('#btnEnviarProductoNextsis').hide();
+                            }
+                        }
+                    });
+                } else {
+                    $.alert({
+                        title: "Error en envío",
+                        content: "Mensaje Nextsis: " + res.message,
+                        type: 'red',
+                        buttons: {
+                            OK: function () {
+                                $("btnEnviarProductoNextsis").removeAttr("disabled");
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+
     $(document).on('click', ".dropdown-select-stock-state a", function () {
         var idProducto= $(this).closest(".dropdown-icons-select").attr("idProducto");
         var restriccion = $(this).attr("state");
@@ -946,6 +988,7 @@ jQuery(function ($) {
                 $("#verUnidadEstandarInternacional").html(producto.unidadEstandarInternacional);
                 $("#verTipo").html(producto.tipoProductoToString);
 
+                
                
                 $("#verTipoCambio").html(Number(producto.tipoCambio).toFixed(cantidadDecimales));
 
@@ -1031,6 +1074,12 @@ jQuery(function ($) {
                 }
                 else {
                     $("#verCompraRestringida").html("No");
+                }
+
+                $("#btnEnviarProductoNextsis").attr("idproducto", producto.idProducto);
+                $("#btnEnviarProductoNextsis").hide();
+                if (!producto.registradoNextSis) {
+                    $("#btnEnviarProductoNextsis").show();
                 }
 
                 $("#verCantidadMaximaPedidoRestringido").html(producto.cantidadMaximaPedidoRestringido);

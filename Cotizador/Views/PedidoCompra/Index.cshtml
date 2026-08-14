@@ -254,6 +254,18 @@
                                                                        EnumHelper.GetSelectList(typeof(Model.SeguimientoPedido.estadosSeguimientoPedido), pedido.seguimientoPedido.estado),
                                                                        new { @class = "form-control" }
                                                                        )
+
+                        <label class="radio-label" style="margin-left: 15px;margin-top: 5px;">
+                            @if (pedido.truncado == -1)
+                            {
+                                <input checked type="checkbox" name="pedido_buscarTruncados" id="pedido_buscarTruncados" value="1">
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="pedido_buscarTruncados" id="pedido_buscarTruncados" value="1">
+                            }
+                            Incluir truncados
+                        </label>
                     </div>
                 </div>
             </div>
@@ -794,6 +806,10 @@
                     {
                         <button type="button" id="btnActualizarPedido" class="btn btn-primary" data-toggle='modal' data-target='#modalActualizarPedido'>Observaciones y Adjuntos</button>
                         <button type="button" id="btnEditarPedido" class="btn btn-primary ">Editar</button>
+                    }
+                    @if (pedido.usuario.tomaPedidosCompra || pedido.usuario.apruebaPedidosCompra)
+                    {
+                        <button type="button" id="btnTruncarPedido" class="btn btn-warning">Truncar</button>
                     }
                     @if (pedido.usuario.apruebaPedidosCompra)
                     {

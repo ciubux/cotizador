@@ -383,7 +383,7 @@ namespace BusinessLayer
             }
         }
 
-        public async Task RegistroMasivoNextSoftAsync(List<Producto> lista, Guid idUsuario)
+        public async Task<ServiceResponse> RegistroMasivoNextSoftAsync(List<Producto> lista, Guid idUsuario)
         {
             ProductoWS ws = new ProductoWS();
             ws.urlApi = Constantes.NEXTSOFT_API_URL;
@@ -395,6 +395,11 @@ namespace BusinessLayer
 
             dynamic resultDatos = (dynamic)result;
             int codigoResult = resultDatos.crearproductoResult.codigo;
+            string mensaje = resultDatos.crearproductoResult.mensaje;
+
+            ServiceResponse respuesta = new ServiceResponse();
+            respuesta.code = codigoResult;
+            respuesta.message = mensaje; 
 
             if (codigoResult == 0)
             {
@@ -411,6 +416,8 @@ namespace BusinessLayer
                     logDAL.insertLogWS("NEXTSYS_REGISTRO_LISTADO_PRODUCTOS", JsonConvert.SerializeObject(envio), JsonConvert.SerializeObject(result), idUsuario);
                 }
             }
+
+            return respuesta;
         }
 
 

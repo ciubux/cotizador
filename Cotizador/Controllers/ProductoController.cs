@@ -104,23 +104,26 @@ namespace Cotizador.Controllers
         }
 
         [HttpPost]
-        public async Task<string> registrarProductosNextsysPasoAPaso()
+        public async Task<string> RegistrarProductosNextsis()
         {
             ProductoBL bl = new ProductoBL();
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
-            List<Producto> lista = bl.SearchProductosRegistrarNextSys();
+            Guid idProducto = Guid.Parse(Request["idProducto"].ToString());
+            ProductoBL productoBL = new ProductoBL();
+            Producto producto = productoBL.getProductoById(idProducto);
 
-            foreach (Producto item in lista)
+            List<Producto> items = new List<Producto>();
+            items.Add(producto);    
+
+            ServiceResponse respuesta = await bl.RegistroMasivoNextSoftAsync(items, usuario.idUsuario);
+
+            if (respuesta.code == 0)
             {
-                List<Producto> items = new List<Producto>();
-                items.Add(item);
-                await bl.RegistroMasivoNextSoftAsync(items, usuario.idUsuario);
+                List<object> result = await bl.ActualizarFactoresProductos(usuario.idUsuario);
             }
 
-
-            List<object> result = await bl.ActualizarFactoresProductos(usuario.idUsuario);
-            return JsonConvert.SerializeObject(ConverterMPToNextSoft.toProductoList(lista));
+            return JsonConvert.SerializeObject(new { success = respuesta.code == 0 ? 1 : 0, message = respuesta.message });
             //return JsonConvert.SerializeObject(result);
         }
 

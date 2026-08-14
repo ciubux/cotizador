@@ -552,6 +552,19 @@ namespace Cotizador.Controllers
             return RedirectToAction("Index", "PedidoCompra");
         }
 
+        public void TruncarPedido()
+        {
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] != null)
+            {
+                Pedido pedido = new Pedido(Pedido.ClasesPedido.Compra);
+                pedido.idPedido = Guid.Parse(this.Request.Params["idPedido"]);
+                pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+                PedidoBL pedidoBL = new PedidoBL();
+                pedidoBL.TruncarPedido(pedido);
+
+            }
+        }
 
 
         #region CONTROLES CHOOSEN
@@ -806,6 +819,23 @@ namespace Cotizador.Controllers
             propertyInfo.SetValue(pedido, this.Request.Params["valor"]);
             this.Session[Constantes.VAR_SESSION_PEDIDO_COMPRA] = pedido;
         }
+
+        public void ChangeInputInt()
+        {
+            Pedido pedido = this.PedidoSession;
+            PropertyInfo propertyInfo = pedido.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(pedido, Int32.Parse(this.Request.Params["valor"]));
+            this.PedidoSession = pedido;
+        }
+
+        public void ChangeInputBool()
+        {
+            Pedido pedido = this.PedidoSession;
+            PropertyInfo propertyInfo = pedido.GetType().GetProperty(this.Request.Params["propiedad"]);
+            propertyInfo.SetValue(pedido, Int32.Parse(this.Request.Params["valor"]) == 1 ? true : false);
+            this.PedidoSession = pedido;
+        }
+
 
         public void ChangeUbigeoEntrega()
         {

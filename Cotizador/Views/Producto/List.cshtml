@@ -796,6 +796,12 @@
             </div>
 
             <div class="modal-footer">
+                <div class="pull-left">
+                    @if (producto.usuario.modificaMaestroProductos)
+                    {
+                        <button type="button" id="btnEnviarProductoNextsis" class="btn btn-warning">Enviar A NextSis</button>
+                    }
+                </div>
                 <div class="pull-right">
                     <button type="button" id="btnCancelarVerProducto" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     @if (producto.usuario.modificaMaestroProductos)

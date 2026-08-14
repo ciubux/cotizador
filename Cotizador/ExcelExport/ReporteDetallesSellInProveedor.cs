@@ -1,20 +1,20 @@
-﻿using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
-using NPOI.HSSF.UserModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.IO;
-using System.Data;
+﻿using BusinessLayer;
+using Cotizador.Models.OBJsFiltro;
 using Model;
 using Model.UTILES;
-using Cotizador.Models.OBJsFiltro;
 using Newtonsoft.Json;
 using NPOI.HSSF.Model;
+using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
-using BusinessLayer;
-
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Cotizador.ExcelExport
@@ -73,11 +73,14 @@ namespace Cotizador.ExcelExport
                 fourDecCellStyle.BorderRight = BorderStyle.Thin;
                 fourDecCellStyle.Indention = 1;
 
+                /*
                 IDataFormat format = wb.CreateDataFormat();
                 ICellStyle dateFormatStyle = wb.CreateCellStyle();
                 dateFormatStyle.DataFormat = format.GetFormat("yyyy-mm-dd");
-
-
+                */
+                IDataFormat format = wb.CreateDataFormat();
+                ICellStyle dateFormatStyle = wb.CreateCellStyle();
+                dateFormatStyle.DataFormat = format.GetFormat("dd/MM/yyyy");
 
                 // create sheet
                 sheet = (HSSFSheet)wb.CreateSheet("Reporte");
@@ -212,15 +215,46 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(3)); indexColumn++;
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(4)); indexColumn++;
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(5)); indexColumn++;
-                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(6)); indexColumn++;
+                    
+                    if (string.IsNullOrEmpty(obj.ElementAt(6)))
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "", dateFormatStyle);
+                    }
+                    else
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], DateTime.ParseExact(obj.ElementAt(6), "dd/MM/yyyy", CultureInfo.InvariantCulture), dateFormatStyle);
+                    }
+                    indexColumn++;
+                    //UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(6)); indexColumn++;
+
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(7)); indexColumn++;
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(8)); indexColumn++;
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(9)); indexColumn++;
-                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(10)); indexColumn++;
+
+                    if (string.IsNullOrEmpty(obj.ElementAt(10)))
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "", dateFormatStyle);
+                    }
+                    else
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], DateTime.ParseExact(obj.ElementAt(10), "dd/MM/yyyy", CultureInfo.InvariantCulture), dateFormatStyle);
+                    }
+                    indexColumn++;
+                    //UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(10)); indexColumn++;
 
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(11)); indexColumn++;
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(12)); indexColumn++;
-                    UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(13)); indexColumn++;
+
+                    if (string.IsNullOrEmpty(obj.ElementAt(13)))
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], "", dateFormatStyle);
+                    }
+                    else
+                    {
+                        UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], DateTime.ParseExact(obj.ElementAt(13), "dd/MM/yyyy", CultureInfo.InvariantCulture), dateFormatStyle);
+                    }
+                    indexColumn++;
+                    //UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(13)); indexColumn++;
 
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(14)); indexColumn++;
                     UtilesHelper.setValorCelda(sheet, i, UtilesHelper.columnas[indexColumn], obj.ElementAt(15)); indexColumn++;

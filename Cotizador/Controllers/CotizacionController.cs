@@ -2128,8 +2128,12 @@ namespace Cotizador.Controllers
             cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
             cotizacion.seguimientoCotizacion.estado = estado;
             cotizacion.seguimientoCotizacion.observacion = observacion;
+
+            Usuario tmp = cotizacion.usuario;
+
             cotizacion.usuario = us;
             cotizacionBL.cambiarEstadoCotizacion(cotizacion);
+            cotizacion.usuario = tmp;
 
             if (cotizacion.seguimientoCotizacion.estado == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada)
             {
@@ -2138,8 +2142,6 @@ namespace Cotizador.Controllers
                 //TO DO: Aceptar automaticamente si aplica
                 if (cotizacion.aceptacionAutomatica)
                 {
-                    Usuario tmp = cotizacion.usuario;
-
                     cotizacion.fechaModificacion = DateTime.Now;// cotizacionSession.fechaModificacion;
                     cotizacion.seguimientoCotizacion = new SeguimientoCotizacion();
                     cotizacion.seguimientoCotizacion.estado = SeguimientoCotizacion.estadosSeguimientoCotizacion.Aceptada;

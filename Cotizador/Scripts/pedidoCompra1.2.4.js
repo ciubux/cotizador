@@ -2654,7 +2654,13 @@ jQuery(function ($) {
 
                 $("#idPedido").val(pedido.idPedido);
 
-                $("#verNumero").html(pedido.numeroPedidoString);
+                var numeroPedido = pedido.numeroPedidoString;
+                if (pedido.truncado == 1) {
+                    numeroPedido = numeroPedido + '<br/><span style="color:red; font-weight: bold;">TRUNCADO</span>';
+                }
+
+
+                $("#verNumero").html(numeroPedido);
                 $("#verNumeroGrupo").html(pedido.numeroGrupoPedidoString);
                 $("#verCotizacionCodigo").html(pedido.cotizacion.numeroCotizacionString);
                 $("#verTipoPedido").html(pedido.tiposPedidoCompraString);
@@ -2960,7 +2966,8 @@ jQuery(function ($) {
 
 
 
-
+                //TRUNCAR PEDIDO 
+                $("#btnTruncarPedido").hide();
 
 
                 //APROBAR PEDIDO
@@ -3053,6 +3060,16 @@ jQuery(function ($) {
                         $("#btnIngresarPedidoCompra").show();
                     }
                     else { $("#btnAtenderPedidoCompra").show(); }
+
+
+                    if (pedido.truncado != 1) {
+                        if (usuario.truncaPedidos) {
+                            $("#btnTruncarPedido").show();
+                        }
+
+                    } else {
+                        
+                    }
                 }
 
                 //CANCELAR PROGRAMACION
@@ -3681,6 +3698,67 @@ jQuery(function ($) {
 
     
 
+    $("#btnTruncarPedido").click(function () {
+        $.confirm({
+            title: 'Confirmación',
+            content: '¿Está seguro que desea truncar el pedido?',
+            type: 'orange',
+            buttons: {
+                confirm: {
+                    text: 'Sí',
+                    btnClass: 'btn-red',
+                    action: function () {
+                        var idPedido = $("#idPedido").val();
+
+                        $.ajax({
+                            url: "/PedidoCompra/TruncarPedido",
+                            data: {
+                                idPedido: idPedido,
+                            },
+                            type: 'POST',
+                            error: function (detalle) {
+                                $.alert({
+                                    title: 'ERROR',
+                                    content: "Ocurrió un error al intentar truncar el pedido.",
+                                    type: 'red',
+                                    buttons: {
+
+                                        OK: function () {
+                                        }
+                                    }
+                                });
+                            },
+                            success: function () {
+                                $.alert({
+                                    title: 'REGISTRO EXITOSO',
+                                    content: "Se truncó el pedido correctamente.",
+                                    type: 'green',
+                                    buttons: {
+
+                                        OK: function () {
+                                            location.reload();
+                                        }
+                                    }
+                                });
+                            }
+                        });
+
+
+
+                    }
+                },
+                cancel: {
+                    text: 'No',
+                    //btnClass: 'btn-blue',
+                    //                        keys: ['enter', 'shift'],
+                    action: function () {
+
+                    }
+                }
+            },
+
+        });
+    });
 
 
 
@@ -3847,13 +3925,6 @@ jQuery(function ($) {
             row.insertAfter(row.next());
         }
     });
-
-
-
-
-
-
-
 
 
 
@@ -4233,6 +4304,11 @@ jQuery(function ($) {
                         fechaProgramacion = invertirFormatoFecha(pedidoList[i].fechaProgramacion.substr(0, 10));
                     }
 
+                    var truncado = '';
+                    if (pedidoList[i].truncado == 1) {
+                        truncado = '<br/><span style="color:red; font-weight: bold;">TRUNCADO</span>'
+                    }
+
                   /*  var codigoCliente = pedidoList[i].cliente.codigo;
                     if (codigoCliente == null || codigoCliente == 'null') {
                         codigoCliente = '';
@@ -4257,7 +4333,7 @@ jQuery(function ($) {
                         //'<td>  ' + fechaProgramacion+ '</td>' +
                         '<td>  ' + pedidoList[i].montoTotal + '  </td>' +
                         '<td>  ' + pedidoList[i].ubigeoEntrega.Distrito + '  </td>' +
-                        '<td>  ' + pedidoList[i].seguimientoPedido.estadoString+'</td>' +
+                        '<td>  ' + pedidoList[i].seguimientoPedido.estadoString + truncado + '</td>' +
                       //  '<td>  ' + pedidoList[i].seguimientoPedido.usuario.nombre+'  </td>' +
                       //  '<td>  ' + observacion+'  </td>' +
                         '<td>  ' + pedidoList[i].seguimientoCrediticioPedido.estadoString + '</td>' +
@@ -4304,7 +4380,16 @@ jQuery(function ($) {
             }
         });
     });
-    
+
+    $("#pedido_buscarTruncados").change(function () {
+        var valor = $("#pedido_buscarTruncados:checked").val();
+
+        if (valor == 1) { valor = -1; }
+        else { valor = 0; }
+        changeInputInt("truncado", valor);
+    });
+
+
     $("#pedido_fechaEntregaDesde").change(function () {
         var fechaEntregaDesde = $("#pedido_fechaEntregaDesde").val();
         var fechaEntregaHasta = $("#pedido_fechaEntregaHasta").val();
@@ -4525,8 +4610,19 @@ jQuery(function ($) {
             success: function (ciudad) {
             }
         });
-    });  
+    });
 
+    function changeInputInt(propiedad, valor) {
+        $.ajax({
+            url: "/PedidoCompra/ChangeInputInt",
+            type: 'POST',
+            data: {
+                propiedad: propiedad,
+                valor: valor
+            },
+            success: function () { }
+        });
+    }
 
 
     $(document).on('click', "a.verMas", function () {
