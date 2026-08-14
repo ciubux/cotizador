@@ -39,6 +39,9 @@ namespace Model
 
         public bool tieneSolicitudRecargaActiva { get { return !this.solicitudRecargaActiva.idClienteProductoReservadoSolicitud.Equals(Guid.Empty); } }
 
+
+        public int filtroTieneSolicitudRecargaActiva { get; set; }
+
         public ClienteProductoReservado()
         {
             this.empresa = new Empresa();

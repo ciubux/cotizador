@@ -22,6 +22,9 @@ namespace Cotizador.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
+            this.Session["proveedor"] = null;
+            this.Session["familia"] = null;
+
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.ProductosReservadosCliente;
 
             if (this.Session[Constantes.VAR_SESSION_CLIENTEPRODUCTORESERVADO_BUSQUEDA] == null) 
@@ -29,10 +32,11 @@ namespace Cotizador.Controllers
                 instanciarClienteProductoReservadoBusqueda();
             }
 
-            this.Session["proveedor"] = null;
-            this.Session["familia"] = null;
 
+            
             ClienteProductoReservado objSearch = (ClienteProductoReservado)this.Session[Constantes.VAR_SESSION_CLIENTEPRODUCTORESERVADO_BUSQUEDA];
+
+            this.Session["proveedor"] = objSearch.producto.proveedor;
 
             this.Session["s_idCiudadSearchClientesGlobal"] = objSearch.ciudad.idCiudad;
 
@@ -72,7 +76,14 @@ namespace Cotizador.Controllers
 
             obj.idPresentacionUnidad = string.IsNullOrEmpty(this.Request.Params["idPresentacion"]) ? 1 : int.Parse(this.Request.Params["idPresentacion"]);
             obj.Estado = string.IsNullOrEmpty(this.Request.Params["estado"]) ? 1 : int.Parse(this.Request.Params["estado"]);
-         
+
+            obj.producto.sku = string.IsNullOrEmpty(this.Request.Params["sku"]) ? "" : this.Request.Params["sku"].ToString();
+            obj.producto.proveedor = string.IsNullOrEmpty(this.Request.Params["proveedor"]) ? "Todos" : this.Request.Params["proveedor"].ToString();
+            obj.filtroTieneSolicitudRecargaActiva = string.IsNullOrEmpty(this.Request.Params["tieneSolicitudRecaga"]) ? -1 : int.Parse(this.Request.Params["tieneSolicitudRecaga"]);
+
+
+            this.Session["proveedor"] = obj.producto.proveedor;
+
             ClienteProductoReservadoBL bL = new ClienteProductoReservadoBL();
             List<ClienteProductoReservado> list = bL.getClienteProductosReservados(obj);
 
@@ -90,7 +101,11 @@ namespace Cotizador.Controllers
             obj.cliente = new Cliente();
             obj.producto = new Producto();
             obj.idPresentacionUnidad = 2;
-             
+            obj.producto = new Producto();
+            obj.producto.sku = "";
+            obj.producto.proveedor = "Todos";
+            obj.filtroTieneSolicitudRecargaActiva = -1;
+
             if (this.Logueado != null)
             {
                 obj.ciudad = this.Logueado.sedeMP;

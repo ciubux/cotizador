@@ -150,7 +150,11 @@ namespace DataLayer
             var objCommand = GetSqlCommand("ps_cliente_productos_reservados");
 
             InputParameterAdd.Int(objCommand, "estado", filtroObj.Estado);
-            InputParameterAdd.Guid(objCommand, "idUsuario", filtroObj.usuario.idUsuario); 
+            InputParameterAdd.Int(objCommand, "tieneSolicitudVigente", filtroObj.filtroTieneSolicitudRecargaActiva);
+            InputParameterAdd.Guid(objCommand, "idUsuario", filtroObj.usuario.idUsuario);
+
+            InputParameterAdd.Varchar(objCommand, "sku", filtroObj.producto.sku);
+            InputParameterAdd.Varchar(objCommand, "proveedor", filtroObj.producto.proveedor);
 
             if (filtroObj.ciudad != null && filtroObj.ciudad.idCiudad != Guid.Empty)
             {

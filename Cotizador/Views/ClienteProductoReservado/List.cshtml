@@ -51,6 +51,42 @@
             </div>
         </div>
 
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="skuProducto">SKU:</label>
+                    <div class="col-xs-8">
+                        <input class="form-control" type="text" id="skuProducto" name="skuProducto" value="@search.producto.sku">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <!--Proveedor-->
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="proveedor">Proveedor:</label>
+                    <div class="col-xs-8">
+                        <div>
+                            @Html.Action("list", "Proveedor")
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="tieneSolicitudStock">Solicitud Recarga Stock:</label>
+                    <div class="col-xs-8">
+                        <select class="form-control" id="tieneSolicitudStock" name="tieneSolicitudStock">
+                            <option @(search.filtroTieneSolicitudRecargaActiva == -1 ? "selected" : "") value="-1">-</option>
+                            <option @(search.filtroTieneSolicitudRecargaActiva == 0 ? "selected" : "") value="0">No Tiene Solcitud</option>
+                            <option @(search.filtroTieneSolicitudRecargaActiva == 1 ? "selected" : "") value="1">Tiene Solicitud</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group row">

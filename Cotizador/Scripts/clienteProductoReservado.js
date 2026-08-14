@@ -106,7 +106,10 @@ jQuery(function ($) {
             idCiudad: $("#idCiudadBusqueda").val(),
             idCliente: $("#idClienteBusqueda").val(),
             estado: $("#estadoBusqueda").val(),
-            idPresentacion: $("#tipoUnidad").val() 
+            idPresentacion: $("#tipoUnidad").val(),
+            sku: $("#skuProducto").val(),
+            proveedor: $("#proveedor").val(),
+            tieneSolicitudRecaga: $("#tieneSolicitudStock").val()
         };
 
         $.post("/ClienteProductoReservado/Search", dataFiltro, function (list) {
@@ -223,6 +226,9 @@ jQuery(function ($) {
         $("#idCiudadBusqueda").val("");
         $("#idClienteBusqueda").val("");
         $("#estadoBusqueda").val("1");
+        $("#skuProducto").val("");
+        $("#proveedor").val("Todos");
+        $("#tieneSolicitudStock").val("-1");
         //$("#btnBusqueda").click();
     });
 
