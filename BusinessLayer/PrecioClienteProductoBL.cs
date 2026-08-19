@@ -41,5 +41,12 @@ namespace BusinessLayer
             }
         }
 
+        public List<PrecioClienteProducto> GetPreciosVencidosNoRenovadosPorActualizacionPrecioLista(Guid idUsuario, DateTime fechaDesde)
+        {
+            using (PrecioClienteProductoDAL dal = new PrecioClienteProductoDAL())
+            {
+                return dal.GetPreciosVencidosNoRenovadosPorActualizacionPrecioLista(idUsuario, fechaDesde);
+            }
+        }
     }
 }

@@ -61,6 +61,7 @@ namespace Model
         public bool estadoCanasta { get; set; }
 
         public GrupoCliente grupoCliente { get; set; }
+        public Cotizacion cotizacion { get; set; }
 
         public MetaDataZAS metaDataVigenciaCorregida { 
             get {
