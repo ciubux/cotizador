@@ -3130,8 +3130,8 @@ namespace Cotizador.Controllers
                 PedidoBL pedidoBL = new PedidoBL();
                 Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
                 pedido.idPedido = Guid.Parse(this.Request.Params["idPedido"]);
-                pedido = pedidoBL.GetPedido(pedido, pedido.usuario);
                 pedido.usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+                pedido = pedidoBL.GetPedido(pedido, pedido.usuario);
 
                 String[] fechaEntrega = this.Request.Params["fechaEntregaExtendida"].Split('-');
                 pedido.fechaEntregaExtendida = new DateTime(Int32.Parse(fechaEntrega[0]), Int32.Parse(fechaEntrega[1]), Int32.Parse(fechaEntrega[2]), 0, 0, 0);

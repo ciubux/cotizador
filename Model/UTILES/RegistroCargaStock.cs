@@ -67,7 +67,12 @@ namespace Model.UTILES
         public decimal cantidadDisponibleProveedorCalc { get { return cantidadProveedorCalc + cantidadReservadaRecibirProveedorCalc - cantidadReservadaEntregarProveedorCalc; } }
         public decimal cantidadDisponibleMPCalc { get { return cantidadMpCalc + cantidadReservadaRecibirMpCalc - cantidadReservadaEntregarMpCalc; } }
         public decimal cantidadDisponibleAlternativaCalc { get { return cantidadAlternativaCalc + cantidadReservadaRecibirAlternativaCalc - cantidadReservadaEntregarAlternativaCalc; } }
-        
+
+        public int cantidadVirutalConteo { get { return cantidadDisponibleConteo + cantidadEsperadaConteo - cantidadSeparadaConteo; } }
+        public decimal cantidadVirutalProveedorCalc { get { return cantidadDisponibleProveedorCalc + cantidadEsperadaProveedorCalc - cantidadSeparadaProveedorCalc; } }
+        public decimal cantidadVirutalMPCalc { get { return cantidadDisponibleMPCalc + cantidadEsperadaMpCalc - cantidadSeparadaMpCalc; } }
+        public decimal cantidadVirutalAlternativaCalc { get { return cantidadDisponibleAlternativaCalc + cantidadEsperadaAlternativaCalc - cantidadSeparadaAlternativaCalc; } }
+
         public int estado { get; set; }
         
         public int diferenciaCantidadValidacion { get; set; }

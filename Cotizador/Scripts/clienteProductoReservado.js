@@ -7,14 +7,7 @@ jQuery(function ($) {
         cargarChosenCliente();
         cargarChosenProducto();
     });
-    /*
-    function limpiarFormulario() {
-        $("#modal_id").val("0"); 
-        $("#modal_idCiudad").val("");
-        $("#modal_idCliente").val("");
-        $("#modal_idProducto").val("");
-        $("#modal_cantidadOriginal").val("");
-    }*/
+    
 
     function limpiarFormulario() {
         $("#modal_id").val("0");
@@ -47,27 +40,6 @@ jQuery(function ($) {
         }
         return true;
     }
-    /*
-    $("#btnFinalizarEdicion").click(function () {
-        var isNew = $("#modal_id").val() === "0" || $("#modal_id").val() === "";
-        var url = isNew ? "/ClienteProductoReservado/Create" : "/ClienteProductoReservado/Update";
-
-        if (!validar()) return;
-
-        var data = {
-            idClienteProductoReservado: isNew ? "" : $("#modal_id").val(),
-            idCiudad: $("#modal_idCiudad").val(),
-            idCliente: $("#modal_idCliente").val(),
-            idProducto: $("#modal_idProducto").val(),
-            cantidadOriginal: $("#modal_cantidadOriginal").val(),
-            estado: 1 
-        };
-
-        $.post(url, data, function (res) {
-            $("#modalEditar").modal("hide");
-            $("#btnBusqueda").click(); 
-        }, 'JSON');
-    });*/
 
     $("#btnFinalizarEdicion").click(function () {
         var isNew = $("#modal_id").val() === "0" || $("#modal_id").val() === "";
@@ -112,12 +84,15 @@ jQuery(function ($) {
             tieneSolicitudRecaga: $("#tieneSolicitudStock").val()
         };
 
+
         $.post("/ClienteProductoReservado/Search", dataFiltro, function (list) {
             LAST_SEARCH_DATA = list;
+            $('#btnMostrarStocks').attr("idciudad", $("#idCiudadBusqueda").val());
             renderizarTablaRegistros(); 
         }, 'JSON');
     });
 
+    /*
     function renderizarTablaRegistros() {
         $("#tableRegistros > tbody").empty();
         $("#tableRegistros").footable({
@@ -165,53 +140,74 @@ jQuery(function ($) {
         }
 
         $("#tableRegistros tbody").html(rows);
-    }
-    /*
-    $("#btnBusqueda").click(function () {
-        var dataFiltro = {
-            idCiudad: $("#idCiudadBusqueda").val(),
-            idCliente: $("#idClienteBusqueda").val(),
-            estado: $("#estadoBusqueda").val(),
-            idPresentacion: $("#tipoUnidad").val()
-        };
+    }*/
 
-        $.post("/ClienteProductoReservado/Search", dataFiltro, function (list) {
-            LAST_SEARCH_DATA = list;
+    function renderizarTablaRegistros() {
+        $("#tableRegistros > tbody").empty();
+        $("#tableRegistros").footable({
+            "paging": { "enabled": true }
+        });
 
-            $("#tableRegistros > tbody").empty();
-            $("#tableRegistros").footable({
-                "paging": { "enabled": true }
-            });
+        var tipoUnidad = $("#tipoUnidad").val();
+        var rows = "";
+        var idCiudad = $('#btnMostrarStocks').attr("idciudad");
+        
+        for (var i = 0; i < LAST_SEARCH_DATA.length; i++) {
+            var p = LAST_SEARCH_DATA[i];
 
-            var rows = "";
-            for (var i = 0; i < list.length; i++) {
-                var p = list[i];
+            var conv = obtenerDatosConvertidos(p, tipoUnidad);
 
-                var etiquetaCantidadSolicitada = "";
-                if (p.tieneSolicitudRecargaActiva) {
-                    etiquetaCantidadSolicitada = '<br/> <span class="label label-warning label-solicitado"> Solicitado: ' + p.solicitudRecargaActiva.cantidadSolicitada + ' </span> ';
-                }
-
-                rows += '<tr>' +
-                    '<td>' + p.idClienteProductoReservado + '</td>' +
-                    '<td>' + (p.ciudad ? p.ciudad.nombre : "-") + '</td>' +
-                    '<td>' + (p.cliente && p.cliente.ruc ? p.cliente.ruc + " - " + p.cliente.razonSocial : "-") + '</td>' +
-                    '<td>' + (p.producto && p.producto.sku ? p.producto.sku + " - " + p.producto.descripcion : "-") + '</td>' +
-                    '<td>' + p.unidadConteo + '</td>' +
-                    '<td>' + p.cantidadOriginal + '</td>' +
-                    '<td>' + p.cantidadReserva + etiquetaCantidadSolicitada + '</td>' +
-                    '<td>' + p.cantidadAtendida + '</td>' +
-                    '<td>' +
-                    '<button type="button" class="btn btn-primary btnEditar" data-id="' + p.idClienteProductoReservado + '">Editar Reserva Base</button> ' +
-                    '<button type="button" class="btn btn-success btnAbrirReserva" data-id="' + p.idClienteProductoReservado + '">+ Reserva</button>' +
-                    '</td>' +
-                    '</tr>';
+            var etiquetaCantidadSolicitada = "";
+            if (p.tieneSolicitudRecargaActiva) {
+                etiquetaCantidadSolicitada = '<br/> <span class="label label-warning label-solicitado"> Solicitado: ' + conv.cantidadSolicitada + ' </span> ';
             }
-            
-            $("#tableRegistros tbody").html(rows);
-        }, 'JSON');
-    });
-    */
+
+            var btnEliminar = "";
+            if (p.cantidadReserva === 0) {
+                btnEliminar = `<button type="button" class="btn btn-danger btn-sm btn-eliminar-reserva" 
+                   idClienteProductoReservado="${p.idClienteProductoReservado}" 
+                   title="Eliminar Registro">
+                   <span class="glyphicon glyphicon-trash"></span>
+                   </button>`;
+            }
+
+                    
+
+            rows += '<tr>' +
+                '<td>' + p.idClienteProductoReservado + '</td>' +
+                '<td>' + (p.ciudad ? p.ciudad.nombre : "-") + '</td>' +
+                '<td>' + (p.cliente && p.cliente.ruc ? p.cliente.ruc + " - " + p.cliente.razonSocial : "-") + '</td>' +
+                '<td>' + (p.producto && p.producto.sku ? p.producto.sku + " - " + p.producto.descripcion : "-") + '</td>' +
+                '<td>' + conv.unidadTexto + '</td>' +
+                '<td>' + conv.cantidadOriginal + '</td>' +
+                '<td>' + conv.cantidadReserva + etiquetaCantidadSolicitada + '</td>' +
+                '<td>' + conv.cantidadAtendida + '</td>' +
+                '<td>' + conv.stockReal + '</td>' +
+                '<td>' + conv.stockDisponible + '</td>' +
+                '<td>' + conv.stockVirtual +
+                    '<br/>' + 
+                    '<a class="verModalStockPendienteRecepcion" idproducto="' + p.producto.idProducto + '" idproductopresentacion="' + tipoUnidad + '" idciudad="' + idCiudad + '" fechainicio="" fechafin="">' +
+                        '<span class="label label-stock-plus">+' + conv.stockEsperado + '</span>' + 
+                    '</a>' + 
+                    '<a class="verModalStockPendienteAtencion" idproducto="' + p.producto.idProducto + '" idproductopresentacion="' + tipoUnidad + '" idciudad="' + idCiudad + '" fechainicio="" fechafin="">' +
+                        '<span class="label label-stock-less" style="margin-left: 1px;">-' + conv.stockSeparado + ' </span>' + 
+                    '</a>' + 
+                '</td>' +
+                '<td>' +
+                '<button type="button" class="btn btn-primary btnEditar" data-id="' + p.idClienteProductoReservado + '">Editar Reserva Base</button> <br/>' +
+                '<button type="button" class="btn btn-success btnAbrirReserva" data-id="' + p.idClienteProductoReservado + '">+ Reserva</button><br/>' +
+                '<button type="button" class="btn btn-info btn-ver-movimientos-clienteproductoreservado" idClienteProductoReservado="' + p.idClienteProductoReservado + '">Movimientos</button><br/>' +
+                btnEliminar +
+                '</td>' +
+                '</tr>';
+        }
+
+        $("#tableRegistros tbody").html(rows);
+    }
+
+
+
+
     $("#modal_idCiudad").change(function () {
         var idCiudad = $(this).val();
         CambiarSedeBuscarClienteGlobal(idCiudad);
@@ -232,21 +228,7 @@ jQuery(function ($) {
         //$("#btnBusqueda").click();
     });
 
-    /*
-    $(document).on('click', '.btnEditar', function () {
-        var id = $(this).data("id");
-        var p = LAST_SEARCH_DATA.find(x => x.idClienteProductoReservado == id);
-
-        if (p) {
-            $("#modal_id").val(p.idClienteProductoReservado);
-            $("#modal_cantidadOriginal").val(p.cantidadOriginal);
-
-            $("#modalEditarClienteProductoReservadoTitle").text("Editar Registro");
-            $("#btnFinalizarEdicion").text("Actualizar");
-            $("#modalEditarClienteProductoReservado").modal("show");
-        }
-    });
-    */
+    
 
     $(document).on('click', '.btnEditar', function () {
         var id = $(this).data("id");
@@ -438,15 +420,7 @@ jQuery(function ($) {
         }, { placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" });
     }
 
-    /*
-    $("#modal_idProducto").change(function () {
-        var data = { idProducto: $("#modal_idProducto").val() };
-        $.post("/Producto/GetProducto", data, function (res) {
-            $("#modal_unidadConteo").html(res.unidadConteo);
-        }, 'JSON');
-    });
-    */
-
+  
     $("#modal_idProducto").change(function () {
         var idProd = $(this).val();
         if (!idProd) {
@@ -618,7 +592,12 @@ jQuery(function ($) {
             cantidadOriginal: 0,
             cantidadReserva: 0,
             cantidadAtendida: 0,
-            cantidadSolicitada: 0
+            cantidadSolicitada: 0,
+            stockEsperado: 0,
+            stockSeparado: 0,
+            stockReal: "-",
+            stockDisponible: "-",
+            stockVirtual: "-"
         };
 
         var prod = p.producto || {};
@@ -641,14 +620,49 @@ jQuery(function ($) {
 
         res.cantidadOriginal = Number(((p.cantidadOriginal || 0) / res.divisor).toFixed(2));
         res.cantidadReserva = Number(((p.cantidadReserva || 0) / res.divisor).toFixed(2));
+        res.cantidadAtendida = Number(((p.cantidadAtendida || 0) / res.divisor).toFixed(2));
 
         if (p.tieneSolicitudRecargaActiva && p.solicitudRecargaActiva) {
             res.cantidadSolicitada = Number(((p.solicitudRecargaActiva.cantidadSolicitada || 0) / res.divisor).toFixed(2));
         }
 
+        if (p.datosStock) {
+            var st = p.datosStock;
+            if (st.stockNoDisponible) {
+                res.stockReal = "N/D";
+                res.stockDisponible = "N/D";
+                res.stockVirtual = "N/D";
+            } else {
+                if (tipoUnidad == "0") { // MP
+                    res.stockReal = st.cantidadMpCalc;
+                    res.stockDisponible = st.cantidadDisponibleMPCalc;
+                    res.stockVirtual = st.cantidadVirutalMPCalc;
+                    res.stockEsperado = st.cantidadEsperadaMpCalc.toFixed(2);
+                    res.stockSeparado = st.cantidadSeparadaMpCalc.toFixed(2);
+                } else if (tipoUnidad == "1") { // Alternativa
+                    res.stockReal = st.cantidadAlternativaCalc;
+                    res.stockDisponible = st.cantidadDisponibleAlternativaCalc;
+                    res.stockVirtual = st.cantidadVirutalAlternativaCalc;
+                    res.stockEsperado = st.cantidadEsperadaAlternativaCalc.toFixed(2);
+                    res.stockSeparado = st.cantidadSeparadaAlternativaCalc.toFixed(2);
+                } else if (tipoUnidad == "2") { // Proveedor
+                    res.stockReal = st.cantidadProveedorCalc;
+                    res.stockDisponible = st.cantidadDisponibleProveedorCalc;
+                    res.stockVirtual = st.cantidadVirutalProveedorCalc;
+                    res.stockEsperado = st.cantidadEsperadaProveedorCalc.toFixed(2);
+                    res.stockSeparado = st.cantidadSeparadaProveedorCalc.toFixed(2);
+                } else { // 3: Conteo
+                    res.stockReal = st.cantidadConteo;
+                    res.stockDisponible = st.cantidadDisponibleConteo;
+                    res.stockVirtual = st.cantidadVirutalConteo;
+                    res.stockEsperado = st.cantidadEsperadaConteo;
+                    res.stockSeparado = st.cantidadSeparadaConteo;
+                }
+            }
+        }
+
         return res;
     }
-
 
     $(document).on('click', '.btnAbrirReserva', function () {
         var id = $(this).data("id");
@@ -850,4 +864,63 @@ jQuery(function ($) {
             e.preventDefault();
         }
     });
+
+    $("#btnMostrarStocks").click(function () {
+        mostrarStockProductosPagina();
+    });
+
+    function mostrarStockProductosPagina() {
+        if (!LAST_SEARCH_DATA || LAST_SEARCH_DATA.length === 0) return;
+
+        var idCiudad = $("#idCiudadBusqueda").val();
+
+        var setIds = new Set();
+        LAST_SEARCH_DATA.forEach(function (item) {
+            if (item.producto && item.producto.idProducto) {
+                setIds.add(item.producto.idProducto);
+            }
+        });
+
+        var idsProductos = Array.from(setIds).join(";");
+
+        if (idCiudad == "" || idsProductos == "") {
+            $.alert({ title: "VALIDAR", type: 'orange', content: "Debe realizar una búsqueda con Sede seleccionada primero." });
+            return;
+        }
+
+        var $btn = $('#btnMostrarStocks');
+        $btn.prop("disabled", true).text("Cargando Stocks...");
+
+        $.ajax({
+            url: "/Stock/GetStockProductos",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                idCiudad: idCiudad,
+                ids: idsProductos
+            },
+            error: function () {
+                $btn.prop("disabled", false).text("Mostrar Stocks");
+                $.alert({ title: "ERROR", type: 'red', content: "Ocurrió un error al obtener el stock." });
+            },
+            success: function (listaStocks) {
+                $btn.prop("disabled", false).text("Mostrar Stocks");
+
+                var mapaStocks = {};
+                for (var i = 0; i < listaStocks.length; i++) {
+                    mapaStocks[listaStocks[i].producto.idProducto] = listaStocks[i];
+                }
+
+                for (var j = 0; j < LAST_SEARCH_DATA.length; j++) {
+                    var idProd = LAST_SEARCH_DATA[j].producto.idProducto;
+                    if (mapaStocks[idProd]) {
+                        LAST_SEARCH_DATA[j].datosStock = mapaStocks[idProd];
+                    }
+                }
+
+                renderizarTablaRegistros();
+            }
+        });
+    }
+    
 });
