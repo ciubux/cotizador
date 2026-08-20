@@ -562,6 +562,39 @@ namespace Cotizador.Controllers
             return View();
         }
 
-        
+
+        public ActionResult ReportePreciosVencidosPorActualizacion(string fechaDesde = "")
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.ReporteProductosPendientesAtencion;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (this.Session[Constantes.VAR_SESSION_USUARIO] == null || !usuario.visualizaReporteSellOutVendedores)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            DateTime fDesde = DateTime.Now;
+            if (fechaDesde.Trim().Equals(""))
+            {
+                fDesde = new DateTime(fDesde.Year, fDesde.Month, fDesde.Day, 0, 0, 0);
+            }
+            else {
+                String[] fTemp = fechaDesde.Split('/');
+                fDesde = new DateTime(Int32.Parse(fTemp[2]), Int32.Parse(fTemp[1]), Int32.Parse(fTemp[0]));
+            }
+
+            List<PrecioClienteProducto> lista = new List<PrecioClienteProducto>();
+            if (Request.HttpMethod.Equals("POST"))
+            {
+                PrecioClienteProductoBL pcpBl = new PrecioClienteProductoBL();
+                lista = pcpBl.GetPreciosVencidosNoRenovadosPorActualizacionPrecioLista(usuario.idUsuario, fDesde);
+            }
+
+            ViewBag.fechaDesde = fDesde;
+            ViewBag.resultados = lista;
+            ViewBag.usuario = usuario;
+
+            return View();
+        }
     }
 }

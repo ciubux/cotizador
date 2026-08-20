@@ -226,9 +226,9 @@ namespace DataLayer
 
         public List<PrecioClienteProducto> GetPreciosVencidosNoRenovadosPorActualizacionPrecioLista(Guid idUsuario, DateTime fechaDesde)
         {
-            var objCommand = GetSqlCommand("ps_getprecioGrupoClienteProducto");
-            InputParameterAdd.Guid(objCommand, "@idUsuario", idUsuario);
-            InputParameterAdd.DateTime(objCommand, "@fechaDesde", fechaDesde);
+            var objCommand = GetSqlCommand("ps_precios_cotizados_vencidos_no_renovados_actualizacion_precio_lista");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.DateTime(objCommand, "fechaDesde", fechaDesde);
             DataTable preciosDataSet = Execute(objCommand);
 
             List<PrecioClienteProducto> precioListaList = new List<PrecioClienteProducto>();

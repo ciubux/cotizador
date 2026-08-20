@@ -1,0 +1,132 @@
+﻿@{
+    ViewBag.Title = "Reporte de Precios Cotizados Vencidos Por Actualizacion De Precio De Lista";
+
+    DateTime fechaDesde = ViewBag.fechaDesde;
+    List<Model.PrecioClienteProducto> resultados = ViewBag.resultados;
+
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+
+    <form class="form-horizontal" method="post">
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-4" for="fechaDesde">Fecha Desde:</label>
+                    <div class="col-xs-8">
+                        <input class="form-control" type="text" id="fechaDesde" name="fechaDesde" value="@fechaDesde.ToString("dd/MM/yyyy")">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pull-left" style="margin-top: 20px; margin-bottom: 10px; margin-left: 0px">
+            @if (resultados.Count > 0)
+            {
+                <button id="btnExportarResultadosExcel" type="button" class="btn btn-primary bouton-image botonExcel">Descargar Reporte</button>
+            }
+        </div>
+
+        <div class="row pull-right" style="margin-top: 20px; margin-bottom: 10px; margin-right: 0px">
+            <button id="btnSearchRepPVPAPNR" type="submit" class="btn btn-success">Buscar</button>
+        </div>
+
+    </form>
+
+    <div class="row">
+        <div class="col-sm-6 col-lg-4">
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-lg-12">
+            <table id="tablePreciosCotizados" class="table" data-editing="false"
+                   data-sorting="true"
+                   data-editing-allow-add="false"
+                   data-editing-allow-delete="false"
+                   data-editing-allow-edit="false"
+                   data-paging="true" data-paging-count-format="{CP} de {TP}" 
+                   data-show-toggle="false">
+                <thead class="thead-dark">
+                    <tr>
+                        <th data-sortable="true">N° Cotización</th>
+                        <th data-sortable="true">Tipo Cotización</th>
+                        <th data-sortable="true">Cliente o Grupo</th>
+                        <th data-sortable="true">Producto</th>
+                        <th>Unidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Flete</th>
+                        <th>Precio Cotizado</th>
+                        <th data-sortable="true">Inicio Vigencia</th>
+                        <th data-sortable="true">Fin Vigencia</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Model.PrecioClienteProducto fila in resultados)
+                    {
+                        <tr data-expanded="true">
+                            <td>@fila.cotizacion.codigo</td>
+                            <td>@(fila.cliente != null ? "CLIENTE" : "GRUPO")</td>
+                            <td>@(fila.cliente != null ? "(" + fila.cliente.codigo + ") " + fila.cliente.ruc + " - " + fila.cliente.razonSocial  : "(" + fila.grupoCliente.codigo + ") " + fila.grupoCliente.nombre)</td>
+                            <td>@(fila.producto.sku + " - " + fila.producto.descripcion)</td>
+                            <td>@fila.unidad</td>
+                            <td>@fila.precioUnitario</td>
+                            <td>@fila.flete</td>
+                            <td>@fila.precioNeto</td>
+                            <td data-sort-value="@fila.fechaInicioVigencia.Value.ToString("yyyyMMdd")">@fila.fechaInicioVigencia.Value.ToString("dd/MM/yyyy")</td>
+                            <td data-sort-value="@fila.fechaFinVigencia.Value.ToString("yyyyMMdd")">@fila.fechaFinVigencia.Value.ToString("dd/MM/yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+<script type="text/javascript">
+
+
+    function funcionesReportePreciosVencidosActualizacion() {
+        $.datepicker.regional['es'] = {
+                            closeText: 'Cerrar',
+            prevText: '< Ant',
+            nextText: 'Sig >',
+            currentText: 'Hoy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        $("#fechaDesde").datepicker({ dateFormat: "dd/mm/yy" });
+
+        $('#tablePreciosCotizados').footable();
+    };
+
+    if (window.addEventListener) 
+    {
+        window.addEventListener('load', funcionesReportePreciosVencidosActualizacion, false); 
+    }
+    else if (window.attachEvent) 
+    {
+        window.attachEvent('onload', funcionesReportePreciosVencidosActualizacion);
+    }
+
+</script>

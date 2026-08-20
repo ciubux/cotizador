@@ -163,6 +163,7 @@
                         var linkReporteProductosPendientesAtencion = "";
                         var linkReporteSellOutVendedores = "";
                         var linkReporteSellInProveedores = "";
+                        var linkReportePreciosVencidosPorActualizacion = "";
 
                         var linkBusquedaVehiculos = "";
                         var linkBusquedaPersonalAlmacen = "";
@@ -300,6 +301,8 @@
                             case 910: linkReporteProductosPendientesAtencion = "active"; linkReportes = "active"; break;
                             case 911: linkReporteSellOutVendedores = "active"; linkReportes = "active"; break;
                             case 912: linkReporteSellInProveedores = "active"; linkReportes = "active"; break;
+
+                            case 915: linkReportePreciosVencidosPorActualizacion = "active"; linkReportes = "active"; break;
                         }
 
                         if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
@@ -792,6 +795,11 @@
                                     @if (usuario.visualizaReporteSellInProveedores)
                                     {
                                         <li id="linkReporteSellInProveedores" class="@linkReporteSellInProveedores">@Html.ActionLink("SellIn Proveedores", "SellInProveedores", "Reporte")</li>
+                                    }
+
+                                    @if (usuario.visualizaReporteSellOutVendedores)
+                                    {
+                                        <li id="linkReportePreciosVencidosPorActualizacion" class="@linkReportePreciosVencidosPorActualizacion">@Html.ActionLink("Precios Vencidos Por Actualización", "ReportePreciosVencidosPorActualizacion", "Reporte")</li>
                                     }
                                 </ul>
                             </li>
