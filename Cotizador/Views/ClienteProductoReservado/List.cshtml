@@ -1,6 +1,8 @@
 ﻿@{
     ViewBag.Title = "Stock Reservado Clientes";
     Model.ClienteProductoReservado search = ViewBag.search;
+    string tipoPuntual = "PUNTUAL";
+    string tipoPermanente = "PERMANENTE";
 }
 
 <div class="page-header">
@@ -189,6 +191,18 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Tipo:</label>
+                                <div class="col-xs-8">
+                                    <select class="form-control input-sm" id="modal_tipo" name="modal_tipo" required>
+                                        <option value=""></option>
+                                        <option value="@tipoPermanente">@tipoPermanente</option>
+                                        <option value="@tipoPuntual">@tipoPuntual</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label col-xs-4">Reserva Base:</label>

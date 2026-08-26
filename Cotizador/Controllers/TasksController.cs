@@ -162,6 +162,13 @@ namespace Cotizador.Controllers
             //bl.EnviarMailTecnica(pedido);
         }
 
+        public async Task EmitirSolicitudesRecargaClienteProductoReservado()
+        {
+            Guid idUsuario = Constantes.IDUSUARIOZAS;
+
+            ClienteProductoReservadoBL bl = new ClienteProductoReservadoBL();
+            bl.ProcesarSolicitudesAutomaticas(idUsuario);
+        }
 
         public async Task<String> envSW()
         {

@@ -9,6 +9,8 @@ namespace Model
 {
     public class ClienteProductoReservado : Auditoria
     {
+        public const string TIPO_PERMANENTE = "PERMANENTE";
+        public const string TIPO_PUNTUAL = "PUNTUAL";
         public Guid idClienteProductoReservado { get; set; }
 
         public Empresa empresa { get; set; }
@@ -24,6 +26,9 @@ namespace Model
 
         [Display(Name = "Unidad Conteo:")]
         public string unidadConteo { get; set; }
+
+        [Display(Name = "Tipo:")]
+        public string tipo { get; set; }
 
         [Display(Name = "Fecha Última Recarga:")]
         public DateTime? fechaUltimaRecarga { get; set; }

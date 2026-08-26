@@ -38,6 +38,7 @@ namespace DataLayer
                 obj.cantidadReserva = Converter.GetInt(row, "cantidad_reserva");
                 obj.cantidadAtendida = Converter.GetInt(row, "cantidad_atendida");
                 obj.unidadConteo = Converter.GetString(row, "unidad_conteo");
+                obj.tipo = Converter.GetString(row, "tipo");
                 obj.fechaUltimaRecarga = Converter.GetDateTime(row, "fecha_ultima_recarga");
                 obj.Estado = Converter.GetInt(row, "estado");
 
@@ -89,6 +90,7 @@ namespace DataLayer
                 obj.cantidadReserva = Converter.GetInt(row, "cantidad_reserva");
                 obj.cantidadAtendida = Converter.GetInt(row, "cantidad_atendida");
                 obj.unidadConteo = Converter.GetString(row, "unidad_conteo");
+                obj.tipo = Converter.GetString(row, "tipo");
                 obj.fechaUltimaRecarga = Converter.GetDateTime(row, "fecha_ultima_recarga");
                 obj.Estado = Converter.GetInt(row, "estado");
 
@@ -177,6 +179,7 @@ namespace DataLayer
                 obj.cantidadReserva = Converter.GetInt(row, "cantidad_reserva");
                 obj.cantidadAtendida = Converter.GetInt(row, "cantidad_atendida");
                 obj.unidadConteo = Converter.GetString(row, "unidad_conteo");
+                obj.tipo = Converter.GetString(row, "tipo");
                 obj.fechaUltimaRecarga = Converter.GetDateTime(row, "fecha_ultima_recarga");
                 obj.Estado = Converter.GetInt(row, "estado");
 
@@ -221,6 +224,7 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCliente", obj.cliente.idCliente);
             InputParameterAdd.Guid(objCommand, "idProducto", obj.producto.idProducto);
             InputParameterAdd.Guid(objCommand, "idCiudad", obj.ciudad.idCiudad);
+            InputParameterAdd.Varchar(objCommand, "tipo", obj.tipo);
             InputParameterAdd.Int(objCommand, "cantidadOriginal", obj.cantidadOriginal.GetValueOrDefault(0));
             InputParameterAdd.Guid(objCommand, "idUsuario", obj.IdUsuarioRegistro);
 
@@ -239,6 +243,7 @@ namespace DataLayer
             var objCommand = GetSqlCommand("pu_cliente_producto_reservado");
 
             InputParameterAdd.Guid(objCommand, "idClienteProductoReservado", obj.idClienteProductoReservado);
+            InputParameterAdd.Varchar(objCommand, "tipo", obj.tipo);
             InputParameterAdd.Int(objCommand, "cantidadOriginal", obj.cantidadOriginal.GetValueOrDefault(0));
             InputParameterAdd.Int(objCommand, "estado", obj.Estado);
             InputParameterAdd.Guid(objCommand, "idUsuario", obj.IdUsuarioRegistro);
@@ -265,6 +270,7 @@ namespace DataLayer
                 DataRow rowObj = tvp.NewRow();
                 rowObj["RUC_CLIENTE"] = item.cliente.ruc;
                 rowObj["ID_PRODUCTO"] = item.producto.idProducto;
+                rowObj["TIPO"] = item.tipo;
                 rowObj["CANTIDAD_ORIGINAL"] = item.cantidadOriginal.GetValueOrDefault(0);
                 tvp.Rows.Add(rowObj);
             }
@@ -386,6 +392,15 @@ namespace DataLayer
             }
 
             return lista;
+        }
+
+        public void ProcesarSolicitudesAutomaticas(Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pp_solicitudes_automaicas_cliente_producto_reservado");
+
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            ExecuteNonQuery(objCommand);
         }
     }
 }

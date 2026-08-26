@@ -12,6 +12,7 @@ jQuery(function ($) {
     function limpiarFormulario() {
         $("#modal_id").val("0");
         $("#modal_idCiudad").val("");
+        $("#modal_tipo").val("");
 
         $("#modal_idCliente").empty().append('<option value=""></option>').val("").trigger('chosen:updated');
         $("#modal_idProducto").empty().append('<option value=""></option>').val("").trigger('chosen:updated');
@@ -28,6 +29,9 @@ jQuery(function ($) {
     function validar() {
         if ($("#modal_idCiudad").val() == "") {
             alert("Seleccione una ciudad"); return false;
+        }
+        if ($("#modal_tipo").val() == "") {
+            alert("Seleccione un tipo"); return false;
         }
         if ($("#modal_idCliente").val() == "") {
             alert("Seleccione un cliente"); return false;
@@ -57,6 +61,7 @@ jQuery(function ($) {
             idCiudad: $("#modal_idCiudad").val(),
             idCliente: $("#modal_idCliente").val(),
             idProducto: $("#modal_idProducto").val(),
+            tipo: $("#modal_tipo").val(),
             cantidadOriginal: cantidadOriginalBase, 
             estado: 1
         };
@@ -263,6 +268,7 @@ jQuery(function ($) {
                 .trigger('chosen:updated');
 
             $("#modal_idCiudad").val(idCiudad);
+            $("#modal_tipo").val(p.tipo);
 
             var tipoUnidad = $("#tipoUnidad").val();
             var unidadTexto = p.unidadConteo || "-";

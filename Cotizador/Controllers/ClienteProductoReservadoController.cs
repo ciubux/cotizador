@@ -135,6 +135,7 @@ namespace Cotizador.Controllers
             obj.cliente.idCliente = Guid.Parse(Request["idCliente"].ToString());
             obj.producto.idProducto = Guid.Parse(Request["idProducto"].ToString());
             obj.ciudad.idCiudad = Guid.Parse(Request["idCiudad"].ToString());
+            obj.tipo = Request["tipo"];
 
             if (!string.IsNullOrEmpty(Request["cantidadOriginal"]))
             {
@@ -160,6 +161,8 @@ namespace Cotizador.Controllers
 
             string strId = Request["idClienteProductoReservado"];
             obj.idClienteProductoReservado = string.IsNullOrEmpty(strId) ? Guid.Empty : Guid.Parse(strId.ToString());
+
+            obj.tipo = Request["tipo"];
 
             if (!string.IsNullOrEmpty(Request["cantidadOriginal"]))
             {

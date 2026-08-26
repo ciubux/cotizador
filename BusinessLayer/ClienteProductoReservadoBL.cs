@@ -87,6 +87,14 @@ namespace BusinessLayer
                 return dal.SelectDatosReservaSolicitarRecarga(idUsuario, reservas);
             }
         }
+
+        public void ProcesarSolicitudesAutomaticas(Guid idUsuario)
+        {
+            using (ClienteProductoReservadoDAL dal = new ClienteProductoReservadoDAL())
+            {
+                dal.ProcesarSolicitudesAutomaticas(idUsuario);
+            }
+        }
     }
 }
 
