@@ -327,7 +327,7 @@ jQuery(function ($) {
         var idsReservas = [];
 
         for (var i = 0; i < listaData.length; i++) {
-            if (listaData[i].tieneRegistroReserva && listaData[i].idClienteProductoReservado !== "00000000-0000-0000-0000-000000000000") {
+            if (listaData[i].puedeRegistrarSolicitudReservaStock && listaData[i].idClienteProductoReservado !== "00000000-0000-0000-0000-000000000000") {
                 idsReservas.push(listaData[i].idClienteProductoReservado);
             }
         }

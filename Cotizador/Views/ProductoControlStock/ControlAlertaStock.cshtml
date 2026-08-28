@@ -8,7 +8,6 @@
     string formatoDosDecimales = "{0:0.00}";
 
     string idsControl = string.Join(";", lista.Select(x => x.idProductoControlStock));
-
 }
 
 <div class="page-header">
@@ -262,7 +261,7 @@
                                 <img src="/images/icon_stock.png" height="25" />
                             </button>
 
-                            @if (item.tieneRegistroReserva)
+                            @if (item.puedeRegistrarSolicitudReservaStock)
                             {
                                 <button type="button" title="Solicitar Reserva" class="btn btn-info btn-sm btnSolicitarRecargaFila" data-idreserva="@item.idClienteProductoReservado" style="margin-top: 7px; margin-left: 5px;">
                                     <i class="glyphicon glyphicon-plus-sign"></i> Solicitar

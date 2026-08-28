@@ -26,9 +26,11 @@ namespace Model
         public int cantidadReservaDescontarCs { get; set; }
 
         public Guid idClienteProductoReservado { get; set; }
+        public string tipoClienteProductoReservado { get; set; }
         public Guid idClienteProductoReservadoSolicitudActiva { get; set; }
         public int cantidadSolicitudReservaActiva { get; set; }
         public bool tieneRegistroReserva { get { return !this.idClienteProductoReservado.Equals(Guid.Empty); } }
+        public bool puedeRegistrarSolicitudReservaStock { get { return !this.idClienteProductoReservado.Equals(Guid.Empty) && this.tipoClienteProductoReservado == ClienteProductoReservado.TIPO_PUNTUAL; } }
         public bool tieneSolicitudActivaRegistroReserva { get { return !this.idClienteProductoReservadoSolicitudActiva.Equals(Guid.Empty); } }
 
         public int cantidadDisponibleCs { get { return this.cantidadCs + this.cantidadReservaAgregarCs - this.cantidadReservaDescontarCs; } }

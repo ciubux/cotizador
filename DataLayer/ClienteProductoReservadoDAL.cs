@@ -155,6 +155,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "tieneSolicitudVigente", filtroObj.filtroTieneSolicitudRecargaActiva);
             InputParameterAdd.Guid(objCommand, "idUsuario", filtroObj.usuario.idUsuario);
 
+            InputParameterAdd.Varchar(objCommand, "tipo", filtroObj.tipo);
             InputParameterAdd.Varchar(objCommand, "sku", filtroObj.producto.sku);
             InputParameterAdd.Varchar(objCommand, "proveedor", filtroObj.producto.proveedor);
 

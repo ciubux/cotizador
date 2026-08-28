@@ -79,6 +79,7 @@ namespace DataLayer
                 obj.Estado = Converter.GetInt(row, "estado");
 
                 obj.idClienteProductoReservado = Converter.GetGuid(row, "id_cliente_producto_reservado");
+                obj.tipoClienteProductoReservado = Converter.GetString(row, "tipo_cliente_producto_reservado");
                 obj.idClienteProductoReservadoSolicitudActiva = Converter.GetGuid(row, "id_cliente_producto_reservado_solicitud_activa");
                 obj.cantidadSolicitudReservaActiva = Converter.GetInt(row, "cantidad_solicitada_activa");
 

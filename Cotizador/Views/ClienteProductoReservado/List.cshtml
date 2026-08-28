@@ -42,6 +42,16 @@
             </div>
             <div class="col-sm-6 col-lg-4">
                 <div class="form-group row">
+                    <label class="control-label col-xs-4">Tipo:</label>
+                    <div class="col-xs-8">
+                        <select id="tipoReserva" class="form-control">
+                            <option value="TODOS" @(search.tipo.Equals("TODOS") ? "selected" : "")>TODOS</option>
+                            <option value="@tipoPermanente" @(search.tipo.Equals(tipoPermanente) ? "selected" : "")>@tipoPermanente</option>
+                            <option value="@tipoPuntual" @(search.tipo.Equals(tipoPuntual) ? "selected" : "")>@tipoPuntual</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
                     <label class="control-label col-xs-4">Estado:</label>
                     <div class="col-xs-8">
                         <select id="estadoBusqueda" class="form-control">
@@ -122,6 +132,7 @@
                 <tr>
                     <th data-name="idClienteProductoReservado" data-visible="false"></th>
                     <th data-name="ciudad">Ciudad</th>
+                    <th data-name="tipo">Tipo</th>
                     <th data-name="cliente">Cliente</th>
                     <th data-name="producto">Producto</th>
                     <th data-name="unidad">Unidad</th>
@@ -316,6 +327,69 @@
                     </div>
 
                     <div class="form-group">
+                        <label class="control-label col-xs-4 text-info">Stock Real:</label>
+                        <div class="col-xs-4">
+                            <input type="text" id="modal_res_stock_real_selec" class="form-control text-info" readonly />
+                        </div>
+                        <div class="col-xs-4">
+                            <input type="text" id="modal_res_stock_real_base" class="form-control text-info" readonly />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-4 text-info">Stock Disponible:</label>
+                        <div class="col-xs-4">
+                            <input type="text" id="modal_res_stock_disp_selec" class="form-control text-info" style="margin-bottom: 5px;" readonly />
+                            <a class="modal_res_stock_pend_recep_select verModalStockPendienteRecepcion" idproducto="" idproductopresentacion="" idciudad="" fechainicio="" fechafin="" style="cursor:pointer;" title="Pendiente por Recepcionar">
+                                <span class="label label-stock-plus">+0</span>
+                            </a>
+                            <a class="modal_res_stock_pend_aten_select verModalStockPendienteAtencion" idproducto="" idproductopresentacion="" idciudad="" fechainicio="" fechafin="" style="cursor:pointer;" title="Pendiente por Atender">
+                                <span class="label label-stock-less" style="margin-left: 1px;">-0</span>
+                            </a>
+                        </div>
+                        <div class="col-xs-4">
+                            <input type="text" id="modal_res_stock_disp_base" class="form-control text-info" style="margin-bottom: 5px;" readonly />
+                            <a class="modal_res_stock_pend_recep_base verModalStockPendienteRecepcion" idproducto="" idproductopresentacion="" idciudad="" fechainicio="" fechafin="" style="cursor:pointer;" title="Pendiente por Recepcionar">
+                                <span class="label label-stock-plus">+0</span>
+                            </a>
+                            <a class="modal_res_stock_pend_aten_base verModalStockPendienteAtencion" idproducto="" idproductopresentacion="" idciudad="" fechainicio="" fechafin="" style="cursor:pointer;" title="Pendiente por Atender">
+                                <span class="label label-stock-less" style="margin-left: 1px;">-0</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    @*<div class="form-group">
+                        <label class="control-label col-xs-4 text-info">Stock Disponible:</label>
+                        <div class="col-xs-4">
+                            <input type="text" id="modal_res_stock_disp_selec" class="form-control text-info" readonly />
+                            <a class="modal_res_stock_pend_recep_select" idproducto="" idproductopresentacion="" idciudad="" fechainicio="" fechafin="">
+                                <span class="label label-stock-plus">0</span>
+                            </a>
+                            <a class="modal_res_stock_pend_aten_select" idproducto="" idproductopresentacion="" idciudad="" fechainicio="" fechafin="">
+                                <span class="label label-stock-less" style="margin-left: 1px;">-0</span>
+                            </a>
+                        </div>
+                        <div class="col-xs-4">
+                            <input type="text" id="modal_res_stock_disp_base" class="form-control text-info" readonly />
+                            <a class="modal_res_stock_pend_recep_base" idproducto="" idproductopresentacion="" idciudad="" fechainicio="" fechafin="">
+                                <span class="label label-stock-plus">0</span>
+                            </a>
+                            <a class="modal_res_stock_pend_aten_base" idproducto="" idproductopresentacion="" idciudad="" fechainicio="" fechafin="">
+                                <span class="label label-stock-less" style="margin-left: 1px;">-0</span>
+                            </a>
+                        </div>
+                    </div>*@
+                    <div class="form-group">
+                        <label class="control-label col-xs-4 text-info">Stock Virtual:</label>
+                        <div class="col-xs-4">
+                            <input type="text" id="modal_res_stock_virt_selec" class="form-control text-info" readonly />
+                        </div>
+                        <div class="col-xs-4">
+                            <input type="text" id="modal_res_stock_virt_base" class="form-control text-info" readonly />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label class="control-label col-xs-4">Reserva Base:</label>
                         <div class="col-xs-4">
                             <input type="text" id="modal_res_cant_original_selec" class="form-control" readonly />
@@ -368,11 +442,21 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" id="btnGuardarReserva" class="btn btn-primary">Guardar Reserva</button>
+                <button type="button" id="btnGuardarReserva" class="btn btn-primary">Aceptar</button>
             </div>
         </div>
     </div>
 </div>
+
+
+@Html.Partial("../Stock/_ModalStockProducto")
+
+@Html.Partial("../Stock/_ModalStockPendienteAtencion")
+
+@Html.Partial("../Stock/_ModalStockPendienteRecepcion")
+
+@Html.Partial("../Pedido/_ModalPedidoReadOnly")
+
 
 @Html.Partial("../ClienteProductoReservado/_ModalHistorialMovimientos")
 

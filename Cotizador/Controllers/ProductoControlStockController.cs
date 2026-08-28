@@ -71,6 +71,7 @@ namespace Cotizador.Controllers
                     idClienteProductoReservado = item.idClienteProductoReservado,
                     tieneRegistroReserva = item.tieneRegistroReserva,
                     tieneSolicitudActivaRegistroReserva = item.tieneSolicitudActivaRegistroReserva,
+                    puedeRegistrarSolicitudReservaStock = item.puedeRegistrarSolicitudReservaStock,
                     cantidadSolicitudReservaActiva = item.cantidadSolicitudReservaActivaPresentacion
                 });
             }

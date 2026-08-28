@@ -15,7 +15,6 @@ namespace Cotizador.Controllers
         [HttpGet]
         public ActionResult List()
         {
-            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             if (Logueado == null || !Logueado.modificaClienteProductoReservado)
             {
@@ -42,6 +41,7 @@ namespace Cotizador.Controllers
 
             ViewBag.pagina = (int)Constantes.paginas.ProductosReservadosCliente;
             ViewBag.search = objSearch;
+            ViewBag.usuario = this.Logueado;
 
             return View();
         }
@@ -76,7 +76,7 @@ namespace Cotizador.Controllers
 
             obj.idPresentacionUnidad = string.IsNullOrEmpty(this.Request.Params["idPresentacion"]) ? 1 : int.Parse(this.Request.Params["idPresentacion"]);
             obj.Estado = string.IsNullOrEmpty(this.Request.Params["estado"]) ? 1 : int.Parse(this.Request.Params["estado"]);
-
+            obj.tipo = string.IsNullOrEmpty(this.Request.Params["tipo"]) ? "TODOS" : this.Request.Params["tipo"];
             obj.producto.sku = string.IsNullOrEmpty(this.Request.Params["sku"]) ? "" : this.Request.Params["sku"].ToString();
             obj.producto.proveedor = string.IsNullOrEmpty(this.Request.Params["proveedor"]) ? "Todos" : this.Request.Params["proveedor"].ToString();
             obj.filtroTieneSolicitudRecargaActiva = string.IsNullOrEmpty(this.Request.Params["tieneSolicitudRecaga"]) ? -1 : int.Parse(this.Request.Params["tieneSolicitudRecaga"]);
@@ -100,6 +100,7 @@ namespace Cotizador.Controllers
             obj.ciudad = new Ciudad();
             obj.cliente = new Cliente();
             obj.producto = new Producto();
+            obj.tipo = "TODOS";
             obj.idPresentacionUnidad = 2;
             obj.producto = new Producto();
             obj.producto.sku = "";
