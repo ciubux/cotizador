@@ -643,7 +643,6 @@ jQuery(function ($) {
         return res;
     }
 
-    // 1. EVENTO CLIC PARA ABRIR Y CARGAR EL STOCK POR AJAX
     $(document).on('click', '.btnAbrirReserva', function () {
         var id = $(this).data("id");
         var p = LAST_SEARCH_DATA.find(x => x.idClienteProductoReservado == id);
@@ -652,18 +651,19 @@ jQuery(function ($) {
             var prod = p.producto || {};
             var idCiudad = $("#idCiudadBusqueda").val() || (p.ciudad ? p.ciudad.idCiudad : "");
 
-            // Iniciar carga del modal de espera
             $('body').loadingModal({ text: 'Obteniendo Stock Actualizado...' });
             $('body').loadingModal('show');
 
-            // Llamada AJAX para obtener el Stock del producto seleccionado
+            var idsProds = [];
+            idsProds.push(prod.idProducto);
+
             $.ajax({
                 url: "/Stock/GetStockProductos",
                 type: 'POST',
                 dataType: 'JSON',
                 data: {
                     idCiudad: idCiudad,
-                    ids: prod.idProducto // Se solicita stock solo de este ID
+                    ids: idsProds
                 },
                 success: function (listaStocks) {
                     $('body').loadingModal('hide');
@@ -685,7 +685,6 @@ jQuery(function ($) {
         }
     });
 
-    // 2. FUNCIÓN DE RENDERIZADO AL ABRIR EL MODAL
     function abrirModalReservaConDatos(p) {
         var prod = p.producto || {};
 
@@ -745,12 +744,10 @@ jQuery(function ($) {
             $("#modal_res_cant_solicitada_base").val(0);
         }
 
-        // Ejecutar el recálculo y configuración visual disparando el Change
         $("#modal_res_tipoUnidad").trigger("change");
         $("#modalAgregarReserva").modal("show");
     }
 
-    // 3. RECÁLCULO DINÁMICO DE UNIDADES Y STOCKS AL CAMBIAR SELECT
     $("#modal_res_tipoUnidad").change(function () {
         var p = $("#modal_res_id").data("fila_producto");
         if (!p) return;
@@ -780,7 +777,6 @@ jQuery(function ($) {
         var cantSugeridaEntera = Math.floor(solBase / divisor);
         $("#modal_res_cant_agregar_selec").val(cantSugeridaEntera);
 
-        // RECALCULAR NUEVOS CAMPOS DE STOCK Y MOVIMIENTOS PENDIENTES
         if (p.datosStock && !p.datosStock.stockNoDisponible) {
             var st = p.datosStock;
             var srBase = st.cantidadConteo;
@@ -790,39 +786,31 @@ jQuery(function ($) {
             var recepBase = st.cantidadEsperadaConteo || 0;
             var atenBase = st.cantidadSeparadaConteo || 0;
 
-            // Renderizar inputs Base
             $("#modal_res_stock_real_base").val(srBase);
             $("#modal_res_stock_disp_base").val(sdBase);
             $("#modal_res_stock_virt_base").val(svBase);
 
-            // Renderizar inputs Unid. Seleccionada
             $("#modal_res_stock_real_selec").val(Number((srBase / divisor).toFixed(2)));
             $("#modal_res_stock_disp_selec").val(Number((sdBase / divisor).toFixed(2)));
             $("#modal_res_stock_virt_selec").val(Number((svBase / divisor).toFixed(2)));
 
-            // Asignar etiquetas visuales (+ / -) de cantidades pendientes Base
             $(".modal_res_stock_pend_recep_base span").text("+" + recepBase);
             $(".modal_res_stock_pend_aten_base span").text("-" + atenBase);
 
-            // Asignar etiquetas visuales (+ / -) de cantidades pendientes Unid. Seleccionada
             $(".modal_res_stock_pend_recep_select span").text("+" + Number((recepBase / divisor).toFixed(2)));
             $(".modal_res_stock_pend_aten_select span").text("-" + Number((atenBase / divisor).toFixed(2)));
 
-            // Ajustar los atributos de las clases para el ModalStockPendienteAtencion/Recepcion si los usas
             var idCiudadFiltro = $("#idCiudadBusqueda").val() || (p.ciudad ? p.ciudad.idCiudad : "");
 
-            // Asigna los parámetros a todos (Selec y Base)
             $(".modal_res_stock_pend_recep_base, .modal_res_stock_pend_aten_base, .modal_res_stock_pend_recep_select, .modal_res_stock_pend_aten_select").attr({
                 "idproducto": prod.idProducto,
                 "idciudad": idCiudadFiltro
             });
 
-            // En Selec mandas el select actual y en Base fuerzas siempre el "3" (Conteo)
             $(".modal_res_stock_pend_recep_select, .modal_res_stock_pend_aten_select").attr("idproductopresentacion", tipoUnidad);
             $(".modal_res_stock_pend_recep_base, .modal_res_stock_pend_aten_base").attr("idproductopresentacion", "3");
 
         } else {
-            // Caso en el que no existe información de Stock o Stock No Disponible
             $("#modal_res_stock_real_base, #modal_res_stock_real_selec").val("N/D");
             $("#modal_res_stock_disp_base, #modal_res_stock_disp_selec").val("N/D");
             $("#modal_res_stock_virt_base, #modal_res_stock_virt_selec").val("N/D");
@@ -834,174 +822,6 @@ jQuery(function ($) {
         $("#modal_res_cant_agregar_selec").trigger("input");
     });
 
-    /*
-    $(document).on('click', '.btnAbrirReserva', function () {
-        var id = $(this).data("id");
-        var p = LAST_SEARCH_DATA.find(x => x.idClienteProductoReservado == id);
-
-        if (p) {
-            var prod = p.producto || {};
-            var idCiudad = $("#idCiudadBusqueda").val() || (p.ciudad ? p.ciudad.idCiudad : "");
-
-            // Iniciar carga
-            $('body').loadingModal({ text: 'Obteniendo Stock Actualizado...' });
-            $('body').loadingModal('show');
-            var idsProds = [];
-            idsProds.push(prod.idProducto);
-            // Llamada AJAX para obtener el Stock del producto
-            $.ajax({
-                url: "/Stock/GetStockProductos",
-                type: 'POST',
-                dataType: 'JSON',
-                data: {
-                    idCiudad: idCiudad,
-                    ids: idsProds  // Se envía solo el ID del producto de esta fila
-                },
-                success: function (listaStocks) {
-                    $('body').loadingModal('hide');
-
-                    // Asignamos el stock devuelto (o null si no hay)
-                    if (listaStocks && listaStocks.length > 0) {
-                        p.datosStock = listaStocks[0];
-                    } else {
-                        p.datosStock = null;
-                    }
-
-                    abrirModalReservaConDatos(p);
-                },
-                error: function () {
-                    $('body').loadingModal('hide');
-                    $.alert({ title: "ERROR", type: 'red', content: "No se pudo obtener el stock. Se abrirá sin datos de stock." });
-                    abrirModalReservaConDatos(p); // Abrimos igual por si necesita hacer la reserva a ciegas
-                }
-            });
-        }
-    });
-
-    function abrirModalReservaConDatos(p) {
-        var prod = p.producto || {};
-
-        $("#modal_res_id").val(p.idClienteProductoReservado);
-        $("#modal_res_id").data("fila_producto", p);
-
-        $("#modal_res_sede").val(p.ciudad ? p.ciudad.nombre : "-");
-        $("#modal_res_cliente").val(p.cliente && p.cliente.razonSocial ? p.cliente.razonSocial : "-");
-        $("#modal_res_sku").val(prod.sku ? prod.sku : "-");
-        $("#modal_res_unidad_conteo").val(p.unidadConteo || "-");
-
-        var eqEstandar = prod.equivalenciaUnidadEstandarUnidadConteo || 1;
-        var eqAlternativa = prod.equivalenciaUnidadAlternativaUnidadConteo || 1;
-        var eqProveedor = prod.equivalenciaUnidadProveedorUnidadConteo || 1;
-
-        var selectHtml = "";
-
-        if (prod.unidadProveedor && eqEstandar !== eqProveedor) {
-            selectHtml += '<option value="2">' + prod.unidadProveedor + '</option>';
-        }
-
-        if (prod.unidad && eqEstandar !== eqAlternativa) {
-            selectHtml += '<option value="0">' + prod.unidad + '</option>';
-        }
-        if (prod.unidad_alternativa && eqAlternativa !== 1) {
-            selectHtml += '<option value="1">' + prod.unidad_alternativa + '</option>';
-        }
-        selectHtml += '<option value="3">' + (p.unidadConteo || 'Conteo') + '</option>';
-
-        $("#modal_res_tipoUnidad").html(selectHtml);
-
-        var ordenUnidades = ["2", "0", "1", "3"];
-        var unidadFiltro = $("#tipoUnidad").val() || "3";
-
-        var startIndex = ordenUnidades.indexOf(unidadFiltro);
-        if (startIndex === -1) startIndex = 0;
-
-        var unidadAsignar = "3";
-
-        for (var i = startIndex; i < ordenUnidades.length; i++) {
-            if ($("#modal_res_tipoUnidad option[value='" + ordenUnidades[i] + "']").length > 0) {
-                unidadAsignar = ordenUnidades[i];
-                break;
-            }
-        }
-
-        $("#modal_res_tipoUnidad").val(unidadAsignar);
-
-        $("#modal_res_cant_original_base").val(p.cantidadOriginal || 0);
-        $("#modal_res_cant_actual_base").val(p.cantidadReserva || 0);
-
-        if (p.tieneSolicitudRecargaActiva && p.solicitudRecargaActiva) {
-            $("#divSolicitudReservaActivaModal").show();
-            $("#modal_res_cant_solicitada_base").val(p.solicitudRecargaActiva.cantidadSolicitada || 0);
-        } else {
-            $("#divSolicitudReservaActivaModal").hide();
-            $("#modal_res_cant_solicitada_base").val(0);
-        }
-
-        // AGREGAR VALORES BASE DE STOCK (En unidad Mínima/Conteo)
-        if (p.datosStock && !p.datosStock.stockNoDisponible) {
-            var st = p.datosStock;
-            $("#modal_res_stock_real_base").val(st.cantidadConteo);
-            $("#modal_res_stock_disp_base").val(st.cantidadDisponibleConteo);
-            $("#modal_res_stock_virt_base").val(st.cantidadVirutalConteo);
-        } else {
-            $("#modal_res_stock_real_base").val("N/D");
-            $("#modal_res_stock_disp_base").val("N/D");
-            $("#modal_res_stock_virt_base").val("N/D");
-        }
-
-        $("#modal_res_tipoUnidad").trigger("change");
-        $("#modalAgregarReserva").modal("show");
-    }
-
-    $("#modal_res_tipoUnidad").change(function () {
-        var p = $("#modal_res_id").data("fila_producto");
-        if (!p) return;
-
-        var tipoUnidad = $(this).val();
-        var prod = p.producto || {};
-        var divisor = 1;
-
-        if (tipoUnidad == "0") divisor = prod.equivalenciaUnidadEstandarUnidadConteo || 1;
-        else if (tipoUnidad == "1") divisor = prod.equivalenciaUnidadAlternativaUnidadConteo || 1;
-        else if (tipoUnidad == "2") divisor = prod.equivalenciaUnidadProveedorUnidadConteo || 1;
-        else divisor = 1;
-
-        if (divisor === 0) divisor = 1;
-        $("#modal_res_divisor").val(divisor);
-
-        var origBase = parseFloat($("#modal_res_cant_original_base").val()) || 0;
-        var actBase = parseFloat($("#modal_res_cant_actual_base").val()) || 0;
-        var solBase = parseFloat($("#modal_res_cant_solicitada_base").val()) || 0;
-
-        $("#modal_res_cant_original_selec").val(Number((origBase / divisor).toFixed(2)));
-        $("#modal_res_cant_actual_selec").val(Number((actBase / divisor).toFixed(2)));
-
-        var solSelec = Number((solBase / divisor).toFixed(2));
-        $("#modal_res_cant_solicitada_selec").val(solSelec);
-
-        var cantSugeridaEntera = Math.floor(solBase / divisor);
-        $("#modal_res_cant_agregar_selec").val(cantSugeridaEntera);
-
-        // RECALCULAR NUEVOS CAMPOS DE STOCK
-        var stockRealBase = $("#modal_res_stock_real_base").val();
-
-        if (stockRealBase === "N/D" || stockRealBase === "") {
-            $("#modal_res_stock_real_selec").val("N/D");
-            $("#modal_res_stock_disp_selec").val("N/D");
-            $("#modal_res_stock_virt_selec").val("N/D");
-        } else {
-            var srBase = parseFloat(stockRealBase) || 0;
-            var sdBase = parseFloat($("#modal_res_stock_disp_base").val()) || 0;
-            var svBase = parseFloat($("#modal_res_stock_virt_base").val()) || 0;
-
-            $("#modal_res_stock_real_selec").val(Number((srBase / divisor).toFixed(2)));
-            $("#modal_res_stock_disp_selec").val(Number((sdBase / divisor).toFixed(2)));
-            $("#modal_res_stock_virt_selec").val(Number((svBase / divisor).toFixed(2)));
-        }
-
-        $("#modal_res_cant_agregar_selec").trigger("input");
-    });
-    */
 
     $("#modal_res_cant_agregar_selec").on('input', function () {
         if ($(this).val() === "-") return;
