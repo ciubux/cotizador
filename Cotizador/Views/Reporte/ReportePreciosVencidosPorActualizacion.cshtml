@@ -24,6 +24,51 @@
             </div>
         </div>
 
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-xs-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" for="idResponsableComercial">Responsable Comercial:</label>
+                    <div class="col-xs-9">
+                        @Html.Action("GetResponsablesComerciales", "Vendedor",
+                        new
+                        {
+                            vendedorSelectId = "idResponsableComercial",
+                            selectedValue = ViewBag.idResponsableComercial,
+                            disabled = ViewBag.usuario.modificaFiltroVendedor ? "" : "disabled"
+                        })
+                    </div>
+                </div>
+            </div>
+            <!--Supervisor Comercial-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" for="idSupervisorComercial">Supervisor Comercial:</label>
+                    <div class="col-xs-9">
+                        @Html.Action("GetSupervisoresComerciales", "Vendedor",
+                        new
+                        {
+                            vendedorSelectId = "idSupervisorComercial",
+                            selectedValue = ViewBag.idSupervisorComercial,
+                        })
+                    </div>
+                </div>
+            </div>
+            <!--Asistente Servicio al Cliente-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    <label class="control-label col-xs-3" for="idAsistenteServicioCliente">Asistente Cliente:</label>
+                    <div class="col-xs-9">
+                        @Html.Action("GetAsistentesServicioCliente", "Vendedor",
+                        new
+                        {
+                            vendedorSelectId = "idAsistenteServicioCliente",
+                            selectedValue = ViewBag.idAsistenteServicioCliente,
+                        })
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row pull-left" style="margin-top: 20px; margin-bottom: 10px; margin-left: 0px">
             @if (resultados.Count > 0)
             {

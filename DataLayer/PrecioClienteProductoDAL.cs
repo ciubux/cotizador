@@ -224,11 +224,14 @@ namespace DataLayer
             return precioListaList;
         }
 
-        public List<PrecioClienteProducto> GetPreciosVencidosNoRenovadosPorActualizacionPrecioLista(Guid idUsuario, DateTime fechaDesde)
+        public List<PrecioClienteProducto> GetPreciosVencidosNoRenovadosPorActualizacionPrecioLista(Guid idUsuario, DateTime fechaDesde, int idResponsableComercial, int idSupervisorComercial, int idAsistenteServicioCliente)
         {
             var objCommand = GetSqlCommand("ps_precios_cotizados_vencidos_no_renovados_actualizacion_precio_lista");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
             InputParameterAdd.DateTime(objCommand, "fechaDesde", fechaDesde);
+            InputParameterAdd.Int(objCommand, "idResponsableComercial", idResponsableComercial);
+            InputParameterAdd.Int(objCommand, "idSupervisorComercial", idSupervisorComercial);
+            InputParameterAdd.Int(objCommand, "idAsistenteServicioCliente", idAsistenteServicioCliente);
             DataTable preciosDataSet = Execute(objCommand);
 
             List<PrecioClienteProducto> precioListaList = new List<PrecioClienteProducto>();

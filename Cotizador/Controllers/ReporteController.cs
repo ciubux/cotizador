@@ -563,7 +563,7 @@ namespace Cotizador.Controllers
         }
 
 
-        public ActionResult ReportePreciosVencidosPorActualizacion(string fechaDesde = "")
+        public ActionResult ReportePreciosVencidosPorActualizacion(string fechaDesde = "", int idResponsableComercial = 0, int idSupervisorComercial =  0, int idAsistenteServicioCliente = 0)
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.ReporteProductosPendientesAtencion;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -583,14 +583,22 @@ namespace Cotizador.Controllers
                 fDesde = new DateTime(Int32.Parse(fTemp[2]), Int32.Parse(fTemp[1]), Int32.Parse(fTemp[0]));
             }
 
+            if (usuario.esResponsableComercial && !usuario.modificaFiltroVendedor)
+            {
+                idResponsableComercial = usuario.vendedor.idVendedor;
+            }
+
             List<PrecioClienteProducto> lista = new List<PrecioClienteProducto>();
             if (Request.HttpMethod.Equals("POST"))
             {
                 PrecioClienteProductoBL pcpBl = new PrecioClienteProductoBL();
-                lista = pcpBl.GetPreciosVencidosNoRenovadosPorActualizacionPrecioLista(usuario.idUsuario, fDesde);
+                lista = pcpBl.GetPreciosVencidosNoRenovadosPorActualizacionPrecioLista(usuario.idUsuario, fDesde, idResponsableComercial, idSupervisorComercial, idAsistenteServicioCliente);
             }
 
             ViewBag.fechaDesde = fDesde;
+            ViewBag.idResponsableComercial = idResponsableComercial;
+            ViewBag.idSupervisorComercial = idSupervisorComercial;
+            ViewBag.idAsistenteServicioCliente = idAsistenteServicioCliente;
             ViewBag.resultados = lista;
             ViewBag.usuario = usuario;
 
