@@ -1180,8 +1180,10 @@ jQuery(function ($) {
                         $("#btnFacturarGuiaRemision").show();
                         if (guiaRemision.empresa_emite_guias) {
                             $("#btnGenerarGuiaAtencion").show();
+                            if (!guiaRemision.existeMovRelacionado) {
+                                $("#btnGenerarGuiaReal").show();
+                            }
                         }
-                        $("#btnGenerarGuiaReal").show();
                     }
 
                     $("#guiaRemision_tipoExtorno").val(guiaRemision.tipoExtorno);
