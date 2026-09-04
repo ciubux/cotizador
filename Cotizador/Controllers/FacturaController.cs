@@ -551,6 +551,7 @@ namespace Cotizador.Controllers
         public ActionResult Index()
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.BusquedaFacturas;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
 
             if (this.Session[Constantes.VAR_SESSION_USUARIO] == null)
             {
@@ -579,6 +580,15 @@ namespace Cotizador.Controllers
             {
                 existeCliente = 1;
             }
+
+            if (this.Session[Constantes.VAR_SESSION_FACTURA_LISTASERIES] == null)
+            {
+                SerieDocumentoBL serieBl = new SerieDocumentoBL();
+                this.Session[Constantes.VAR_SESSION_FACTURA_LISTASERIES] = serieBl.getSeriesDocumento(Guid.Empty, usuario.idEmpresa); 
+            }
+
+            ViewBag.listaSeries = (List<SerieDocumentoElectronico>) this.Session[Constantes.VAR_SESSION_FACTURA_LISTASERIES];
+
 
             GuiaRemision guiaRemision = new GuiaRemision();
             guiaRemision.motivoTraslado = GuiaRemision.motivosTraslado.Venta;
@@ -645,6 +655,7 @@ namespace Cotizador.Controllers
                 this.FacturaSession.numero = this.Request.Params["numero"];
             }
 
+            this.FacturaSession.serie = this.Request.Params["serie"];
 
             if (this.Request.Params["numeroPedido"] == null || this.Request.Params["numeroPedido"].Trim().Length == 0)
             {
@@ -903,12 +914,21 @@ namespace Cotizador.Controllers
         public String ChangeIdCiudad()
         {
             Guid idCiudad = Guid.Empty;
+            string idCiudadSel = "";
             if (this.Request.Params["idCiudad"] != null && !this.Request.Params["idCiudad"].Equals(""))
             {
-                idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
+                idCiudadSel = this.Request.Params["idCiudad"];
+                idCiudad = Guid.Parse(idCiudadSel);
             }
             CiudadBL ciudadBL = new CiudadBL();
             Ciudad ciudad = ciudadBL.getCiudad(idCiudad);
+
+            if (idCiudadSel.Equals(Guid.Empty.ToString())) {
+                ciudad = new Ciudad();
+                ciudad.idCiudad = Guid.Empty;
+                ciudad.nombre = "TODOS";
+            }
+
             this.FacturaSession.ciudad = ciudad;
             return JsonConvert.SerializeObject(ciudad);
         }

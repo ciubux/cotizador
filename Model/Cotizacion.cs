@@ -60,6 +60,7 @@ namespace Model
 
         [Display(Name = "Aceptación Automática:")]
         public bool aceptacionAutomatica { get; set; }
+        public bool aceptacionAutomaticaCambioValidacion { get; set; }
         public Int64 codigoAntecedente { get; set; }
 
         [Display(Name = "Número Cotización:")]

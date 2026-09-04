@@ -339,6 +339,8 @@ namespace DataLayer
                         Constantes.PORCENTAJE_MAX_APROBACION = Decimal.Parse(valorParametro); break;
                     case "DEBUG":
                         Constantes.DEBUG = int.Parse(valorParametro); break;
+                    case "COTIZACION_AGREGA_CLINTE_LITE":
+                        Constantes.COTIZACION_AGREGA_CLINTE_LITE = int.Parse(valorParametro) == 1; break;
                     case "DIAS_MAX_BUSQUEDA_PRECIOS":
                         Constantes.DIAS_MAX_BUSQUEDA_PRECIOS = int.Parse(valorParametro); break;
                     case "OBSERVACION":

@@ -24,7 +24,37 @@ jQuery(function ($) {
 
         calcularFechaVencimiento();
 
+        var selFiltroCiudad = $('#idCiudadSel').val();
+        if ($('#idCiudad option').length > 3) {
+            if (selFiltroCiudad == 'TODOS') {
+                $('#idCiudad').append('<option selected value="' + ID_SEDE_TODOS + '" >TODOS</option>');
+            } else {
+                $('#idCiudad').append('<option value="' + ID_SEDE_TODOS + '" >TODOS</option>');
+            }
+        }
+
+        mostrarSeriesSegunSede();
     });
+
+    function mostrarSeriesSegunSede() {
+        var idSede = $('#idCiudad').val();
+
+        $('#documentoVenta_serie option').show();
+
+        if (idSede !== '' && idSede !== ID_SEDE_TODOS) {
+
+            $('#documentoVenta_serie option').filter(function () {
+                var opcionValor = $(this).val();
+                var opcionIdSede = $(this).attr('idsede');
+
+                return opcionValor !== 'TODAS' && opcionIdSede !== idSede;
+            }).hide();
+
+            if ($('#documentoVenta_serie option:selected').css('display') === 'none') {
+                $('#documentoVenta_serie').val('TODAS');
+            }
+        }
+    }
 
     window.onafterprint = function () {
         if ($("#pagina").val() == 14) {
@@ -61,7 +91,7 @@ jQuery(function ($) {
     function cargarChosenCliente() {
 
         $("#idCliente").chosen({ placeholder_text_single: "Buscar Cliente", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
-            if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
+            if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null || $("#idCiudad").val() == ID_SEDE_TODOS) {
                 alert("Debe seleccionar la sede MP previamente.");
                 $("#idCliente").trigger('chosen:close');
                 $("#idCiudad").focus();
@@ -902,6 +932,7 @@ jQuery(function ($) {
 
         var idCliente = $("#idCliente").val();
         var numero = $("#documentoVenta_numero").val();
+        var serie = $("#documentoVenta_serie").val();
 
         var numeroPedido = $("#documentoVenta_pedido_numeroPedido").val();
         var numeroGuiaRemision = $("#documentoVenta_guiaRemision_numeroDocumento").val();
@@ -924,6 +955,7 @@ jQuery(function ($) {
             data: {
                 idCiudad: idCiudad,
                 idCliente: idCliente,
+                serie: serie,
                 numero: numero,
                 numeroPedido: numeroPedido,
                 numeroGuiaRemision: numeroGuiaRemision,
@@ -1073,6 +1105,8 @@ jQuery(function ($) {
 
             }
         });
+
+        mostrarSeriesSegunSede();
     });
 
 

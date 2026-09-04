@@ -58,6 +58,21 @@ jQuery(function ($) {
             }
         }
 
+
+        if ($("#alertarCambioAceptacionAutomatica").length) {
+            var alertarCambioAceptacionAuto = $("#alertarCambioAceptacionAutomatica").val();
+            if (alertarCambioAceptacionAuto == '1') {
+                $.alert({
+                    title: "CAMBIO DE PRECIO",
+                    type: 'orange',
+                    content: 'Se detectó cambio de precio por lo que se desactivó la aceptación automática. Si la cotización se debe aceptar autoamticamente vuelva a activarla.',
+                    buttons: {
+                        OK: function () { }
+                    }
+                });
+            }
+        }
+
         cambiarMostrarValidezOfertaEnDias();
   //      setTimeout(autoGuardarCotizacion, MILISEGUNDOS_AUTOGUARDADO);
         obtenerConstantes();
@@ -655,35 +670,40 @@ jQuery(function ($) {
             return false;
         }
 
+        var modal = document.getElementById("modalAgregarClienteLite");
 
-        $.confirm({
-            title: 'REGISTRO NUEVO CLIENTE',
-            content: 'Seleccione tipo de registro de cliente que desea realizar:',
-            type: 'orange',
-            buttons: {
-                aplica: {
-                    text: 'DATOS COMPLETOS',
-                    btnClass: 'btn-success',
-                    action: function () {
-                        abrirEditorCliente();
-                    }
-                },
-                noAplica: {
-                    text: 'DATOS BÁSICOS (Cliente potencial)',
-                    btnClass: 'btn-warning',
-                    action: function () {
-                        $('#modalAgregarClienteLite').modal('show')
-                    }
-                },
-                cancelar: {
-                    text: 'CANCELAR',
-                    btnClass: '',
-                    action: function () {
+        if ($("#modalAgregarClienteLite").length > 0) {
+            $.confirm({
+                title: 'REGISTRO NUEVO CLIENTE',
+                content: 'Seleccione tipo de registro de cliente que desea realizar:',
+                type: 'orange',
+                buttons: {
+                    aplica: {
+                        text: 'DATOS COMPLETOS',
+                        btnClass: 'btn-success',
+                        action: function () {
+                            abrirEditorCliente();
+                        }
+                    },
+                    noAplica: {
+                        text: 'DATOS BÁSICOS (Cliente potencial)',
+                        btnClass: 'btn-warning',
+                        action: function () {
+                            $('#modalAgregarClienteLite').modal('show')
+                        }
+                    },
+                    cancelar: {
+                        text: 'CANCELAR',
+                        btnClass: '',
+                        action: function () {
 
+                        }
                     }
                 }
-            }
-        });
+            });
+        } else {
+            abrirEditorCliente();
+        }
     });
 
 

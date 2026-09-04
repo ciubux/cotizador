@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using NLog;
 using NPOI.HSSF.Model;
 using NPOI.HSSF.UserModel;
+using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
@@ -344,8 +345,17 @@ namespace Cotizador.Controllers
                     this.CotizacionSession = cotizacion;
                 }
 
+                ViewBag.alertarCambioAceptacionAutomatica = false;
+                if (cotizacion.aceptacionAutomaticaCambioValidacion)
+                {
+                    ViewBag.alertarCambioAceptacionAutomatica = true;
+                    cotizacion.aceptacionAutomaticaCambioValidacion = false;
+
+                    this.CotizacionSession = cotizacion;
+                }
+
                 int existeCliente = 0;
-                if (cotizacion.cliente.idCliente != Guid.Empty)// || cotizacion.grupo.idGrupoCliente != Guid.Empty)
+                if (cotizacion.cliente.idCliente != Guid.Empty) // || cotizacion.grupo.idGrupoCliente != Guid.Empty)
                 {
                     existeCliente = 1;
                 }
@@ -377,6 +387,8 @@ namespace Cotizador.Controllers
                 ViewBag.cotizacion = cotizacion;
                 ViewBag.promocionSelect = cotizacion.promocion;
                 ViewBag.busquedaProductosIncluyeDescontinuados = 0;
+                ViewBag.agregaClienteLite = Constantes.COTIZACION_AGREGA_CLINTE_LITE;
+
                 if (this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"] != null)
                 {
                     ViewBag.busquedaProductosIncluyeDescontinuados = int.Parse(this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"].ToString());
@@ -384,7 +396,7 @@ namespace Cotizador.Controllers
             }
             catch (Exception ex)
             {
-                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                Model.Log log = new Model.Log(ex.ToString(), TipoLog.Error, usuario);
                 LogBL logBL = new LogBL();
                 logBL.insertLog(log);
             }
@@ -487,7 +499,7 @@ namespace Cotizador.Controllers
             catch (Exception ex)
             {
                 Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
-                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                Model.Log log = new Model.Log(ex.ToString(), TipoLog.Error, usuario);
                 LogBL logBL = new LogBL();
                 logBL.insertLog(log);
             }
@@ -1046,12 +1058,20 @@ namespace Cotizador.Controllers
         [HttpPost]
         public String ChangeDetalle(List<DocumentoDetalleJson> cotizacionDetalleJsonList)
         {
-            IDocumento documento = this.CotizacionSession;
-            
+            Cotizacion documento = this.CotizacionSession;
+            int cantCambiaPrecioPrev = documento.documentoDetalle.Where(d => d.cambioPrecioEdicion).ToList().Count;
             List<DocumentoDetalle> documentoDetalle = HelperDocumento.updateDocumentoDetalle(documento, cotizacionDetalleJsonList, this.CotizacionSession.ajusteCalculoPrecios);
+            int cantCambiaPrecioPost = documento.documentoDetalle.Where(d => d.cambioPrecioEdicion).ToList().Count;
+
+            if (!documento.idCotizacion.Equals(Guid.Empty) &&  documento.aceptacionAutomatica && cantCambiaPrecioPost > cantCambiaPrecioPrev)
+            {
+                documento.aceptacionAutomatica = false;
+                documento.aceptacionAutomaticaCambioValidacion = true;
+            }
+
             documento.documentoDetalle = documentoDetalle;
             HelperDocumento.calcularMontosTotales(documento);
-            this.CotizacionSession = (Cotizacion)documento;
+            this.CotizacionSession = documento;
             return "{\"cantidad\":\""+ documento.documentoDetalle.Count + "\"}";
         }
         
@@ -2971,7 +2991,7 @@ namespace Cotizador.Controllers
                         }
                         catch (Exception ex)
                         {
-                            Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                            Model.Log log = new Model.Log(ex.ToString(), TipoLog.Error, usuario);
                             LogBL logBL = new LogBL();
                             logBL.insertLog(log);
                         }
@@ -2982,7 +3002,7 @@ namespace Cotizador.Controllers
             }
             catch (Exception ex)
             {
-                Log log = new Log(ex.ToString(), TipoLog.Error, usuario);
+                Model.Log log = new Model.Log(ex.ToString(), TipoLog.Error, usuario);
                 LogBL logBL = new LogBL();
                 logBL.insertLog(log);
 

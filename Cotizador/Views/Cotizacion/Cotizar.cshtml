@@ -60,6 +60,8 @@
     <input type="hidden" id="clienteSedePrincipal" value="@clienteSedePrincipal" />
     <input type="hidden" value="@ViewBag.debug" />
     <input type="hidden" id="productosInactivosRemovidos" value="@ViewBag.productosInactivosRemovidos" />
+    <input type="hidden" id="alertarCambioAceptacionAutomatica" value="@(ViewBag.alertarCambioAceptacionAutomatica?"1":"0")" />
+    
     <form class="form-horizontal">
         <div class="row">
             <!--NÚMERO COTIZACION-->
@@ -133,36 +135,36 @@
 
                     @if (cotizacion.empresa.idEmpresa == cotizacion.usuario.idEmpresa)
                     {
-                    <div class="col-xs-5">
-                        <select class="form-control input-sm" id="idCliente" name="idCliente" required>
-                            @if (ViewBag.existeCliente == 1)
-                            {
-                                <option selected value="@ViewBag.idClienteGrupo">@ViewBag.clienteGrupo</option>
-                            }
-                            else
-                            {
-                                <option value=""></option>
-                            }
-                        </select>
-                    </div>
+                        <div class="col-xs-5">
+                            <select class="form-control input-sm" id="idCliente" name="idCliente" required>
+                                @if (ViewBag.existeCliente == 1)
+                                {
+                                    <option selected value="@ViewBag.idClienteGrupo">@ViewBag.clienteGrupo</option>
+                                }
+                                else
+                                {
+                                    <option value=""></option>
+                                }
+                            </select>
+                        </div>
 
-                    <div class="col-xs-3">
-                        <button id="btnAgregarCliente" type="button" title="Nuevo Cliente" class="btn btn-primary bouton-image-add addBouton" style="padding: 6px 8px;"></button>
-                    </div>
+                        <div class="col-xs-3">
+                            <button id="btnAgregarCliente" type="button" title="Nuevo Cliente" class="btn btn-primary bouton-image-add addBouton" style="padding: 6px 8px;"></button>
+                        </div>
                     }
                     else
                     {
-                    <div class="col-xs-8">
-                        @if (ViewBag.existeCliente == 1)
-                        {
-                            <input type="hidden" id="idCliente" value="@ViewBag.idClienteGrupo" />
-                            <p class="form-control-static">@ViewBag.clienteGrupo</p>
-                        }
-                        else
-                        {
-                            <p class="form-control-static text-danger">*NO SELECCIONADO</p>
-                        }
-                    </div>
+                        <div class="col-xs-8">
+                            @if (ViewBag.existeCliente == 1)
+                            {
+                                <input type="hidden" id="idCliente" value="@ViewBag.idClienteGrupo" />
+                                <p class="form-control-static">@ViewBag.clienteGrupo</p>
+                            }
+                            else
+                            {
+                                <p class="form-control-static text-danger">*NO SELECCIONADO</p>
+                            }
+                        </div>
                     }
                 </div>
             </div>
@@ -250,7 +252,7 @@
                 </div>
             </div>
 
-           
+
         </div>
 
         <div class="row">
@@ -296,7 +298,7 @@
 
             @if (cotizacion.usuario.fijaVigenciaPreciosCotizacion)
             {
-                <div class="col-sm-6 col-lg-4" style="display: @displayFijaPrecios;"  id="divFijaPrecios">
+                <div class="col-sm-6 col-lg-4" style="display: @displayFijaPrecios;" id="divFijaPrecios">
                     <div class="onoffswitch" title="La vigencia de los precios de esta cotización no será cambiada automáticamente cuando el precio de lista del procducto cambie.">
                         <input type="checkbox" name="onoffswitch" @nacpChecked class="onoffswitch-checkbox" id="chkNoAfectoCambioPrecios">
                         <label class="onoffswitch-label" for="chkNoAfectoCambioPrecios"></label>
@@ -1424,6 +1426,8 @@
 
 
 
+ @if (ViewBag.agregaClienteLite)
+ {
 <!-- MODAL AGREGAR CLIENTE LITE -->
 <div class="modal fade" id="modalAgregarClienteLite" tabindex="-1">
     <div class="modal-dialog">
@@ -1455,10 +1459,10 @@
                                 <label for="nclIdOrigen" class="control-label col-xs-4">Origen :</label>
                                 <div class="col-xs-8">
                                     @Html.Action("GetOrigenes", "Origen",
-                                    new
-                                    {
-                                        origenSelectId = "nclIdOrigen"
-                                    })
+                                      new
+                                      {
+                                          origenSelectId = "nclIdOrigen"
+                                      })
                                 </div>
                             </div>
                         </div>
@@ -1468,10 +1472,10 @@
                                 <label for="nclIdRubro" class="control-label col-xs-4">Rubro :</label>
                                 <div class="col-xs-8">
                                     @Html.Action("GetRubros", "Rubro",
-                                        new
-                                        {
-                                            rubroSelectId = "nclIdRubro"
-                                        })
+                                    new
+                                      {
+                                          rubroSelectId = "nclIdRubro"
+                                      })
                                 </div>
                             </div>
                         </div>
@@ -1537,7 +1541,7 @@
         </div>
     </div>
 </div>
-
+ }
 
 
 

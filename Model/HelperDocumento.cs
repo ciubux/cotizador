@@ -132,6 +132,7 @@ namespace Model
                     if (precioNetoAnterior != documentoDetalle.precioNeto || documentoDetalle.porcentajeDescuento != cotizacionDetalleJson.porcentajeDescuento)
                     {
                         documentoDetalle.validar = true;
+                        documentoDetalle.cambioPrecioEdicion = true;
                     }
 
                     documentoDetalle.porcentajeDescuento = cotizacionDetalleJson.porcentajeDescuento;

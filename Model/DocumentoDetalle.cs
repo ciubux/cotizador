@@ -354,7 +354,7 @@ namespace Model
         
         public bool validar { get; set; }
 
-
+        public bool cambioPrecioEdicion { get; set; }
 
         public PrecioClienteProducto precioCliente;
 

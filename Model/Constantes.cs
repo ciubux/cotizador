@@ -248,6 +248,7 @@ namespace Model
         public static String VAR_SESSION_FACTURA = "factura";
         public static String VAR_SESSION_FACTURA_BUSQUEDA = "facturaBusqueda";
         public static String VAR_SESSION_FACTURA_LISTA = "facturaList";
+        public static String VAR_SESSION_FACTURA_LISTASERIES = "facturaListSeries";
         public static String VAR_SESSION_FACTURA_VER = "facturaVer";
 
         public static String VAR_SESSION_BOLETA = "boleta";
@@ -397,6 +398,7 @@ namespace Model
         public static Decimal PORCENTAJE_MAX_APROBACION = 3.00M;
         public static int PLAZO_OFERTA_DIAS = 2;
         public static int DEBUG = 1;
+        public static bool COTIZACION_AGREGA_CLINTE_LITE = false;
         public static int DIAS_MAX_BUSQUEDA_PRECIOS = 730;
         public static int MILISEGUNDOS_AUTOGUARDADO = 5000;
         public static int DIAS_MAX_VIGENCIA_PRECIOS_COTIZACION = 180;
