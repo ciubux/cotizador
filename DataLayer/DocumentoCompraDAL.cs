@@ -183,10 +183,18 @@ namespace DataLayer
                 InputParameterAdd.VarcharEmpty(objCommand, "numero", String.Empty);
             }
 
+            if (!documentoCompra.ciudad.idCiudad.Equals(Guid.Empty) || (documentoCompra.ciudad.nombre != null && documentoCompra.ciudad.nombre.Equals("TODOS")))
+            {
+                InputParameterAdd.Guid(objCommand, "idCiudad", documentoCompra.ciudad.idCiudad);
+            }
+            else
+            {
+                InputParameterAdd.Guid(objCommand, "idCiudad", new Guid("89c00221-5e92-4044-a6cc-2edfb8c92214"));
+            }
+
             InputParameterAdd.Guid(objCommand, "idProveedor", documentoCompra.proveedor.idProveedor);
             InputParameterAdd.Bit(objCommand, "buscaSedesGrupoCliente", documentoCompra.buscarSedesGrupoCliente);
             InputParameterAdd.Int(objCommand, "idGrupoCliente", documentoCompra.idGrupoCliente);
-            InputParameterAdd.Guid(objCommand, "idCiudad", documentoCompra.ciudad.idCiudad);
             InputParameterAdd.Guid(objCommand, "idUsuario", documentoCompra.usuario.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fechaDesde", new DateTime(documentoCompra.fechaEmisionDesde.Year, documentoCompra.fechaEmisionDesde.Month, documentoCompra.fechaEmisionDesde.Day, 0, 0, 0));
             InputParameterAdd.DateTime(objCommand, "fechaHasta", new DateTime(documentoCompra.fechaEmisionHasta.Year, documentoCompra.fechaEmisionHasta.Month, documentoCompra.fechaEmisionHasta.Day, 23, 59, 59));

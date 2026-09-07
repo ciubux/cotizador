@@ -22,6 +22,16 @@ jQuery(function ($) {
         cargarChosenCliente();
         $("#btnBusqueda").click();
         calcularFechaVencimiento();
+
+        var selFiltroCiudad = $('#idCiudadSel').val();
+        if ($('#idCiudad option').length > 3) {
+            if (selFiltroCiudad == 'TODOS') {
+                $('#idCiudad').append('<option selected value="' + ID_SEDE_TODOS + '" >TODOS</option>');
+            } else {
+                $('#idCiudad').append('<option value="' + ID_SEDE_TODOS + '" >TODOS</option>');
+            }
+        }
+
     });
 
     window.onafterprint = function () {
@@ -59,7 +69,7 @@ jQuery(function ($) {
     function cargarChosenCliente() {
 
         $("#idCliente").chosen({ placeholder_text_single: "Buscar Proveedor", no_results_text: "No se encontró Cliente" }).on('chosen:showing_dropdown', function (evt, params) {
-            if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null) {
+            if ($("#idCiudad").val() == "" || $("#idCiudad").val() == null || $("#idCiudad").val() == ID_SEDE_TODOS) {
                 alert("Debe seleccionar la sede MP previamente.");
                 $("#idCliente").trigger('chosen:close');
                 $("#idCiudad").focus();

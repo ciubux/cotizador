@@ -652,12 +652,24 @@ namespace Cotizador.Controllers
         public String ChangeIdCiudad()
         {
             Guid idCiudad = Guid.Empty;
+            string idCiudadSel = "";
+
             if (this.Request.Params["idCiudad"] != null && !this.Request.Params["idCiudad"].Equals(""))
             {
-                idCiudad = Guid.Parse(this.Request.Params["idCiudad"]);
+                idCiudadSel = this.Request.Params["idCiudad"];
+                idCiudad = Guid.Parse(idCiudadSel);
             }
             CiudadBL ciudadBL = new CiudadBL();
             Ciudad ciudad = ciudadBL.getCiudad(idCiudad);
+
+
+            if (idCiudadSel.Equals(Guid.Empty.ToString()))
+            {
+                ciudad = new Ciudad();
+                ciudad.idCiudad = Guid.Empty;
+                ciudad.nombre = "TODOS";
+            }
+
             this.documentoCompraSession.ciudad = ciudad;
             return JsonConvert.SerializeObject(ciudad);
         }
