@@ -214,6 +214,20 @@ namespace Model
         public Decimal descuentoBaseEmpresa { get; set; }
         public String tipoDescuentoBaseEmpresa { get; set; }
 
+
+        [Display(Name = "Peso (KG):")]
+        public Decimal peso { get; set; }
+
+        [Display(Name = "Alto (cm):")]
+        public Decimal alto { get; set; }
+
+        [Display(Name = "Ancho (cm):")]
+        public Decimal ancho { get; set; }
+
+        [Display(Name = "Profundidad (cm):")]
+        public Decimal profundidad { get; set; }
+
+
         public DateTime fechaActualizacionNextSoft { get; set; }
 
         public Decimal precioProveedor {
@@ -652,6 +666,11 @@ namespace Model
                     case "kit": cp.nombre = Producto.nombreAtributo("kit"); break;
                     case "valida_stock": cp.nombre = Producto.nombreAtributo("validaStock"); break;
 
+                    case "peso": cp.nombre = Producto.nombreAtributo("peso"); break;
+                    case "alto": cp.nombre = Producto.nombreAtributo("alto"); break;
+                    case "ancho": cp.nombre = Producto.nombreAtributo("ancho"); break;
+                    case "profundidad": cp.nombre = Producto.nombreAtributo("profundidad"); break;
+
                     default: cp.nombre = "[NOT_FOUND]"; break;
 
                         /* TO DO: Evaluar si se usan
@@ -762,6 +781,11 @@ namespace Model
 
                     case "descripcion_larga": lc = instanciarLogCambio(campo); lc.valor = this.descripcionLarga.ToString(); break;
                     case "agregar_descripcion_cotizacion": lc = instanciarLogCambio(campo); lc.valor = this.agregarDescripcionCotizacion.ToString(); break;
+
+                    case "peso": lc = instanciarLogCambio(campo); lc.valor = this.peso.ToString(); break;
+                    case "alto": lc = instanciarLogCambio(campo); lc.valor = this.alto.ToString(); break;
+                    case "ancho": lc = instanciarLogCambio(campo); lc.valor = this.ancho.ToString(); break;
+                    case "profundidad": lc = instanciarLogCambio(campo); lc.valor = this.profundidad.ToString(); break;
                 }
 
                 if (soloRegistro && !campo.registra)
@@ -1556,6 +1580,66 @@ namespace Model
                         else
                         {
                             this.validaStock = int.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "peso":
+                        if (this.peso == decimal.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.peso = decimal.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "alto":
+                        if (this.alto == decimal.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.alto  = decimal.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "ancho":
+                        if (this.ancho == decimal.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.ancho = decimal.Parse(cambio.valor);
+                            lista.Add(cambio);
+                        }
+                        break;
+                    case "profundidad":
+                        if (this.profundidad == decimal.Parse(cambio.valor))
+                        {
+                            if (cambio.persisteCambio)
+                            {
+                                cambio.repiteDato = true;
+                                lista.Add(cambio);
+                            }
+                        }
+                        else
+                        {
+                            this.profundidad = decimal.Parse(cambio.valor);
                             lista.Add(cambio);
                         }
                         break;

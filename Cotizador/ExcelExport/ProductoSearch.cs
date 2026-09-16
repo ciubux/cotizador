@@ -311,6 +311,11 @@ namespace Cotizador.ExcelExport
                     UtilesHelper.setValorCelda(sheet, i, "AW", obj.codigoFactorUnidadMP);
                     UtilesHelper.setValorCelda(sheet, i, "AX", obj.codigoFactorUnidadProveedor);
 
+                    UtilesHelper.setValorCelda(sheet, i, "AY", (double)obj.peso);
+                    UtilesHelper.setValorCelda(sheet, i, "AZ", (double)obj.alto);
+                    UtilesHelper.setValorCelda(sheet, i, "BA", (double)obj.ancho);
+                    UtilesHelper.setValorCelda(sheet, i, "BB", (double)obj.profundidad);
+
                     i++;
                 }
 
@@ -376,6 +381,10 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, 1, "AV", "Unidad Alternativa Abrv.", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "AW", "Unidad MP Abrv.", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "AX", "Unidad Proveedor Abrv.", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "AY", "Peso", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "AZ", "Alto", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "BA", "Ancho", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "BB", "Profundida", titleCellStyle);
 
                 MemoryStream ms = new MemoryStream();
                 using (MemoryStream tempStream = new MemoryStream())

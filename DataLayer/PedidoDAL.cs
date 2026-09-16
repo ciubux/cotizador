@@ -2965,6 +2965,54 @@ mad.unidad, pr.id_producto, pr.sku, pr.descripcion*/
             return lista;
         }
 
+        public PedidoDetalle getDetallePedidoProducto(Guid idPedido, string sku)
+        {
+            var objCommand = GetSqlCommand("ps_pedido_detalle_producto");
+            PedidoDetalle det = new PedidoDetalle(false, false);
+
+            InputParameterAdd.Guid(objCommand, "idPedido", idPedido);
+            InputParameterAdd.Varchar(objCommand, "sku", sku);
+
+            DataTable dataTable = Execute(objCommand);
+            foreach (DataRow row in dataTable.Rows)
+            {
+                det.producto = new Producto();
+                det.ProductoPresentacion = new ProductoPresentacion();
+
+                det.idPedidoDetalle = Converter.GetGuid(row, "id_pedido_detalle");
+                det.ProductoPresentacion.IdProductoPresentacion = Converter.GetInt(row, "id_producto_presentacion"); 
+                det.unidad = Converter.GetString(row, "unidad");
+                det.producto.idProducto = Converter.GetGuid(row, "id_producto");
+                det.producto.sku = Converter.GetString(row, "sku");
+                det.producto.descripcion = Converter.GetString(row, "nombre_producto");
+
+                det.producto.unidad = Converter.GetString(row, "unidad_mp");
+                det.producto.unidad_alternativa = Converter.GetString(row, "unidad_alternativa");
+                det.producto.unidadProveedor = Converter.GetString(row, "unidad_proveedor");
+                det.producto.equivalenciaAlternativa = Converter.GetInt(row, "equivalencia");
+                det.producto.equivalenciaProveedor = Converter.GetInt(row, "equivalencia_proveedor");
+            }
+
+            return det;
+        }
+
+        public string CambiarUnidadDetalle(Guid idPedidoDetalle, int idPresentacion, Guid idUsuario)
+        {
+            var objCommand = GetSqlCommand("pu_pedido_detalle_cambiar_unidad");
+
+            string estadoProceso = "NO_RESPONSE";
+            InputParameterAdd.Guid(objCommand, "idPedidoDetalle", idPedidoDetalle);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+            InputParameterAdd.Int(objCommand, "idPresentacion", idPresentacion);
+
+            OutputParameterAdd.Varchar(objCommand, "estadoProceso", 50);
+            ExecuteNonQuery(objCommand);
+
+            estadoProceso = (string)objCommand.Parameters["@estadoProceso"].Value;
+
+            return estadoProceso;
+        }
+
         public List<Pedido> SelectPedidosConsolidar(Guid idCiudad, Guid idUsuario, DateTime fecha, Guid idConsolidadoAtencion)
         {
             var objCommand = GetSqlCommand("ps_pedidos_consolidar_atencion");

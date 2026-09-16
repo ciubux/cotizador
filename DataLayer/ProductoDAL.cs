@@ -1150,6 +1150,11 @@ namespace DataLayer
 
                 item.compraRestringida = Converter.GetInt(row, "compra_restringida");
 
+                item.peso = Converter.GetDecimal(row, "peso");
+                item.alto = Converter.GetDecimal(row, "alto");
+                item.ancho = Converter.GetDecimal(row, "ancho");
+                item.profundidad = Converter.GetDecimal(row, "profundidad");
+
                 item.image = Converter.GetBytes(row, "imagen");
                 item.Estado = Converter.GetInt(row, "estado");
                 item.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");
@@ -1414,6 +1419,11 @@ namespace DataLayer
                 item.fechaInicioVigencia = Converter.GetDateTime(row, "fecha_inicio_vigencia");
                 item.fechaActualizacionNextSoft = Converter.GetDateTime(row, "actualizacion_nextsoft");
 
+                item.peso = Converter.GetDecimal(row, "peso");
+                item.alto = Converter.GetDecimal(row, "alto");
+                item.ancho = Converter.GetDecimal(row, "ancho");
+                item.profundidad = Converter.GetDecimal(row, "profundidad");
+
                 item.image = Converter.GetBytes(row, "imagen");
                 item.ventaRestringida = (Producto.TipoVentaRestringida)Converter.GetInt(row, "descontinuado");
                 item.compraRestringida = Converter.GetInt(row, "compra_restringida");
@@ -1491,6 +1501,10 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "precioProvinciaOriginal", producto.precioProvinciasOriginal);
             InputParameterAdd.Decimal(objCommand, "tipoCambio", producto.tipoCambio);
 
+            InputParameterAdd.Decimal(objCommand, "peso", producto.peso);
+            InputParameterAdd.Decimal(objCommand, "alto", producto.alto);
+            InputParameterAdd.Decimal(objCommand, "ancho", producto.ancho);
+            InputParameterAdd.Decimal(objCommand, "profundidad", producto.profundidad);
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");
 
@@ -1605,6 +1619,11 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "precioOriginal", producto.precioOriginal);
             InputParameterAdd.Decimal(objCommand, "precioProvinciaOriginal", producto.precioProvinciasOriginal);
             InputParameterAdd.Decimal(objCommand, "tipoCambio", producto.tipoCambio);
+
+            InputParameterAdd.Decimal(objCommand, "peso", producto.peso);
+            InputParameterAdd.Decimal(objCommand, "alto", producto.alto);
+            InputParameterAdd.Decimal(objCommand, "ancho", producto.ancho);
+            InputParameterAdd.Decimal(objCommand, "profundidad", producto.profundidad);
 
             ExecuteNonQuery(objCommand);
 

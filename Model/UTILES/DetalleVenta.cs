@@ -9,6 +9,8 @@ namespace Model.UTILES
     public class DetalleVenta
     {
         public Guid idProducto { get; set; }
+
+        public Producto producto { get; set; }
         public string sku { get; set; }
         public decimal precioUnitario { get; set; }
 

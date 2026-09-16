@@ -1663,5 +1663,39 @@ namespace BusinessLayer
             }
         }
 
+        public PedidoDetalle getDetallePedidoProducto(Guid idPedido, string sku)
+        {
+            using (PedidoDAL dal = new PedidoDAL())
+            {
+                return dal.getDetallePedidoProducto(idPedido, sku);
+            }
+        }
+
+        public bool CambiarUnidadDetalle(Guid idPedidoDetalle, int idPresentacion, Guid idUsuario, out string respuesta)
+        {
+            bool res = false;
+            respuesta = "No procesado.";
+            using (PedidoDAL dal = new PedidoDAL())
+            {
+                string codProceso = dal.CambiarUnidadDetalle(idPedidoDetalle, idPresentacion, idUsuario);
+                switch(codProceso)
+                {
+                    case "SUCCESS": 
+                        res = true; respuesta = "Cambio exitoso."; break;
+                    case "SUCCESS_ERROR_REL":
+                        res = false; respuesta = "No se pudo cambiar la unidad del pedido relacionado."; break;
+                    case "NO_ATOMIZABLE":
+                        res = false; respuesta = "No se puede reducir la unidad del producto."; break;
+                    case "PRODUCTO_ATENDIDO":
+                        res = false; respuesta = "El producto ya ha sido atentido en otra guía del mismo pedido."; break;
+                    case "NO_PROCESADO":
+                        res = false; respuesta = "No se pudo procesar."; break;
+                    case "PROCESAR":
+                        res = false; respuesta = "Error al actualizar la unidad."; break;
+                }
+            }
+
+            return res;
+        }
     }
 }

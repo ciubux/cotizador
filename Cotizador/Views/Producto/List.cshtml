@@ -680,6 +680,43 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.alto, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verAlto"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.ancho, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verAncho"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.profundidad, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verProfundidad"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(c => producto.peso, htmlAttributes: new { @class = "control-label col-xs-6 col-sm-6 col-lg-4" })
+                                    <div class="col-xs-6 col-sm-6 col-lg-8">
+                                        <p class="form-control-static" id="verPeso"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </fieldset>
                     <br />
                     <fieldset id="fieldSetConfiguraciones">

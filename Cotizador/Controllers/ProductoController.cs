@@ -1892,6 +1892,50 @@ namespace Cotizador.Controllers
                                 productoStaging.codigoFactorUnidadProveedor = "";
                             }
 
+                            pos = posicionInicial + 50;
+                            try
+                            {
+                                Double? val = sheet.GetRow(row).GetCell(pos).NumericCellValue;
+                                productoStaging.peso = Convert.ToDecimal(val);
+                            }
+                            catch (Exception e)
+                            {
+                                productoStaging.peso = 0;
+                            }
+
+                            pos = posicionInicial + 51;
+                            try
+                            {
+                                Double? val = sheet.GetRow(row).GetCell(pos).NumericCellValue;
+                                productoStaging.alto = Convert.ToDecimal(val);
+                            }
+                            catch (Exception e)
+                            {
+                                productoStaging.alto = 0;
+                            }
+
+                            pos = posicionInicial + 52;
+                            try
+                            {
+                                Double? val = sheet.GetRow(row).GetCell(pos).NumericCellValue;
+                                productoStaging.ancho = Convert.ToDecimal(val);
+                            }
+                            catch (Exception e)
+                            {
+                                productoStaging.ancho = 0;
+                            }
+
+                            pos = posicionInicial + 53;
+                            try
+                            {
+                                Double? val = sheet.GetRow(row).GetCell(pos).NumericCellValue;
+                                productoStaging.profundidad = Convert.ToDecimal(val);
+                            }
+                            catch (Exception e)
+                            {
+                                productoStaging.profundidad = 0;
+                            }
+
                             productoStaging.tipoCambio = tipoCambio;
                             productoStaging.calcularCostoPrecio();
                             productoStaging.calcularEquivalenciasConteo();

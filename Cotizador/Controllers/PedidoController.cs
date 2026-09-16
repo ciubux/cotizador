@@ -3979,6 +3979,37 @@ namespace Cotizador.Controllers
             this.Session["pedidoDRCantidades"] = cantidades;
             this.Session["pedidoDRComentarios"] = comentarios;
         }
+
+        public String GetDetallePedidoProductoAtomizar(Guid idPedido, string sku)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            PedidoBL pedidoBL = new PedidoBL();
+
+            PedidoDetalle det = pedidoBL.getDetallePedidoProducto(idPedido, sku);
+            
+            return JsonConvert.SerializeObject(det);
+        }
+
+        public String AplicarCambioUnidad(Guid idPedido, Guid idDetallePedido, int idProductoPresentacion)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            PedidoBL pedidoBL = new PedidoBL();
+
+            string message;
+            bool success = pedidoBL.CambiarUnidadDetalle(idDetallePedido, idProductoPresentacion, usuario.idUsuario, out message);
+
+            if (success)
+            {
+                Pedido pedido = new Pedido(Pedido.ClasesPedido.Venta);
+                pedido.idPedido = Guid.Parse(Request["idPedido"].ToString());
+                pedido = pedidoBL.GetPedido(pedido, usuario);
+
+                pedido.usuario = usuario;
+
+                this.Session[Constantes.VAR_SESSION_PEDIDO_VER] = pedido;
+            }
+
+            return JsonConvert.SerializeObject(new { success = success, message = message, tipo = "V"});
+        }
     }
 }
- 

@@ -819,6 +819,22 @@ jQuery(function ($) {
         changeInputDecimal("costoSinIgv", $("#producto_costoSinIgv").val());
     });
 
+    $("#producto_peso").change(function () {
+        changeInputDecimal("peso", $("#producto_peso").val());
+    });
+
+    $("#producto_alto").change(function () {
+        changeInputDecimal("alto", $("#producto_alto").val());
+    });
+
+    $("#producto_ancho").change(function () {
+        changeInputDecimal("ancho", $("#producto_ancho").val());
+    });
+
+    $("#producto_profundidad").change(function () {
+        changeInputDecimal("profundidad", $("#producto_profundidad").val());
+    });
+
     $("#chkValidarStock").change(function () {
         var valor = 1;
         if (!$('#chkValidarStock').prop('checked')) {
@@ -988,7 +1004,10 @@ jQuery(function ($) {
                 $("#verUnidadEstandarInternacional").html(producto.unidadEstandarInternacional);
                 $("#verTipo").html(producto.tipoProductoToString);
 
-                
+                $("#verPeso").html(Number(producto.peso).toFixed(cantidadDecimales));
+                $("#verAlto").html(Number(producto.alto).toFixed(cantidadDecimales));
+                $("#verAncho").html(Number(producto.ancho).toFixed(cantidadDecimales));
+                $("#verProfundidad").html(Number(producto.profundidad).toFixed(cantidadDecimales));
                
                 $("#verTipoCambio").html(Number(producto.tipoCambio).toFixed(cantidadDecimales));
 
