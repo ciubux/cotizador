@@ -1,0 +1,237 @@
+﻿
+<div class="modal fade" tabindex="-1" id="modalAtomizarUnidad">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalAtomizarUnidadTitle"><b><span id="titleModalAtomizarUnidad"></span></b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="numero" class="control-label col-xs-3">Producto:</label>
+                            <div class="col-xs-9">
+                                <p class="" id="modalAU_ver_producto"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="numero" class="control-label col-xs-3">Unidad:</label>
+                            <div class="col-xs-9">
+                                <p class="" id="modalAU_ver_unidad"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="numero" class="control-label col-lg-3">Unidad Nueva:</label>
+                            <div class="col-lg-9">
+                                <select class="form-control" id="modalAU_unidad_nueva" name="unidad_nueva">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <br />
+                <br />
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12 text-right">
+                        <button id="btnAplicarAtomizacionUnidad" type="button" class="btn btn-primary">Aplicar Cambio</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+        function funcionesModalAtomizarUnidad() {    
+            var idDetallePedido = "";
+
+            $(document).on('click', ".verModalAtomizarUnidad", function () {
+                llenarDatosDetallePedido(this);
+                alert("post ajax: " + idDetallePedido);
+                
+            });
+
+            $(document).on('click', "#btnAplicarAtomizacionUnidad", function () {
+                var idUnidadNueva = $("#modalAU_unidad_nueva").val();
+                var idPedido = $(this).data("idpedido");
+                var sku = $(this).data("sku");
+                alert(idDetallePedido);
+                if (!idUnidadNueva) {
+                    $.alert({ title: "Atención", content: "No ha seleccionado una unidad nueva válida.", type: "orange" });
+                    return;
+                }
+
+                $.confirm({
+                    title: 'CONFIRMACIÓN',
+                    content: '¿Está seguro que desea atomizar este producto a la unidad seleccionada?',
+                    type: 'orange',
+                    buttons: {
+                        confirm: {
+                            text: 'SÍ',
+                            btnClass: 'btn-red',
+                            action: function () {
+                                $('body').loadingModal({ text: 'Aplicando cambio unidad...' });
+                                $('body').loadingModal('show');
+
+                                $.ajax({
+                                    url: "/Pedido/AplicarCambioUnidad", 
+                                    type: 'POST',
+                                    dataType: 'JSON',
+                                    data: {
+                                        idPedido: idPedido,
+                                        idDetallePedido: idDetallePedido,
+                                        idProductoPresentacion: idUnidadNueva
+                                    },
+                                    error: function () {
+                                        $('body').loadingModal('hide');
+                                        $.alert({
+                                            title: "ERROR",
+                                            content: "Ocurrió un error. Si persiste contacte con TI.",
+                                            type: "red"
+                                        });
+                                    },
+                                    success: function (result) {
+                                        $('body').loadingModal('hide');
+
+                                        if (result.success) {
+
+                                            setTimeout(function () { 
+                                                $.ajax({
+                                                    url: "/GuiaRemision/iniciarAtencionDesdePedido",
+                                                    type: 'POST',
+                                                    data: { tipo: result.tipo },
+                                                    error: function (detalle) {
+                                                        $('body').loadingModal('hide')
+                                                        alert("Ocurrió un problema al recargar, actualice la pagina y asegurese que se realizó el cambio de unidad.");
+                                                    },
+                                                    success: function () {
+                                                        $('body').loadingModal('hide')
+                                                        window.location = '/GuiaRemision/Guiar';
+                                                    }
+                                                });
+                                            }, 5000);
+
+                                            $.alert({
+                                                title: "Operación Exitosa",
+                                                content: result.message,
+                                                type: "green",
+                                                buttons: {
+                                                    OK: function () {
+                                                        $('body').loadingModal({ text: 'Cargando...' });
+                                                        $('body').loadingModal('show');
+                                                    }
+                                                }
+                                            });
+                                        } else {
+                                            $.alert({
+                                                title: "ERROR",
+                                                content: result.message,
+                                                type: "red"
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                        },
+                        cancel: {
+                            text: 'NO',
+                            btnClass: 'btn-green',
+                            action: function () { }
+                        }
+                    }
+                });
+            });
+
+            function llenarDatosDetallePedido(elementButton) {
+                var idPedido = $(elementButton).attr("idpedido");
+                var sku = $(elementButton).attr("sku");
+                var currentUnitID = parseInt($(elementButton).attr("idProductoPresentacion"), 10);
+
+                $("#btnAplicarAtomizacionUnidad").data("idpedido", idPedido);
+                $("#btnAplicarAtomizacionUnidad").data("sku", sku);
+
+                $('body').loadingModal({ text: 'Cargando datos del producto...' });
+                $('body').loadingModal('show');
+
+                $.ajax({
+                    url: "/Pedido/GetDetallePedidoProductoAtomizar", 
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: {
+                        idPedido: idPedido,
+                        sku: sku
+                    },
+                    error: function () {
+                        $('body').loadingModal('hide');
+                        $.alert({ title: "ERROR", type: "red", content: "Ocurrió un error al cargar la información." });
+                    },
+                    success: function (res) {
+                        $('body').loadingModal('hide');
+
+                        if (res && res.producto) {
+                            alert(res.idPedidoDetalle);
+                            idDetallePedido = res.idPedidoDetalle;
+                            alert(idDetallePedido);
+                            $("#titleModalAtomizarUnidad").text("Atomizar Producto");
+
+                            $("#modalAU_ver_producto").text(res.producto.sku + " - " + res.producto.descripcion);
+                            $("#modalAU_ver_unidad").text(res.unidad);
+
+                            var $select = $("#modalAU_unidad_nueva");
+                            $select.empty();
+
+                            if (currentUnitID === 2) {
+                                if (res.producto.unidad && res.producto.equivalenciaProveedor > 1) {
+                                    $select.append('<option value="0">' + res.producto.unidad + '</option>');
+                                }
+                                if (res.producto.unidad_alternativa && res.producto.equivalenciaAlternativa > 1) {
+                                    $select.append('<option value="1">' + res.producto.unidad_alternativa + '</option>');
+                                }
+                            } else if (currentUnitID === 0) {
+                                if (res.producto.unidad_alternativa && res.producto.equivalenciaAlternativa > 1) {
+                                    $select.append('<option value="1">' + res.producto.unidad_alternativa + '</option>');
+                                }
+                            }
+
+                            if ($select.children('option').length === 0) {
+                                $select.append('<option value="">No existen unidades menores configuradas</option>');
+                                $("#btnAplicarAtomizacionUnidad").prop("disabled", true);
+                            } else {
+                                $("#btnAplicarAtomizacionUnidad").prop("disabled", false);
+                            }
+
+                            $("#modalAtomizarUnidad").modal('show');
+                        }
+                    }
+                });
+            }
+
+        };
+
+        
+        if (window.addEventListener) { // W3C standard
+            window.addEventListener('load', funcionesModalAtomizarUnidad, false);
+        } else if (window.attachEvent) { // Microsoft
+            window.attachEvent('onload', funcionesModalAtomizarUnidad);
+        }
+
+</script>
+
