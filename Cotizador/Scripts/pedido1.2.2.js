@@ -4257,6 +4257,18 @@ jQuery(function ($) {
                             }
                         }
 
+                        if (lista[i].cantidadReservadaRecibirConteo > 0) {
+                            if (idProductoPresentacion == "0") {
+                                stock = stock + " (R: " + lista[i].cantidadReservadaRecibirMpCalc + ")";
+                            }
+                            if (idProductoPresentacion == "1") {
+                                stock = stock + " (R: " + lista[i].cantidadReservadaRecibirAlternativaCalc + ")";
+                            }
+                            if (idProductoPresentacion == "2") {
+                                stock = stock + " (R: " + lista[i].cantidadReservadaRecibirProveedorCalc + ")";
+                            }
+                        }
+
                         htmlCantidadPendienteAtencion = htmlCantidadPendienteAtencion + 'DISPONIBLE: ' + stock + '</label>';
                     }
 

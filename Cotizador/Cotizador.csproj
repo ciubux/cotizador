@@ -821,6 +821,7 @@
     <Content Include="Views\ClienteProductoReservado\_ModalHistorialMovimientos.cshtml" />
     <Content Include="Views\Reporte\ReportePreciosVencidosPorActualizacion.cshtml" />
     <Content Include="Views\Pedido\_ModalAtomizarUnidad.cshtml" />
+    <Content Include="Views\ClienteProductoReservado\_ModalReservasActivasProducto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

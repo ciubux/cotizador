@@ -334,6 +334,63 @@ jQuery(function ($) {
         $("#modalEditarClienteProductoReservado").modal("show");
     });
 
+
+    $("#btnRevisarReservasPermanentes").click(function () {
+        $.confirm({
+            title: 'Confirmación',
+            content: '¿Está seguro que desea ejecutar el proceso de emisión de solicitudes de reserva activa automáticas para reservas permanentes?',
+            type: 'orange',
+            buttons: {
+                confirm: {
+                    text: 'SI',
+                    btnClass: 'btn-red',
+                    action: function () {
+                        $('body').loadingModal({ text: 'Procesando...' });
+                        $('body').loadingModal('show');
+
+                        $.ajax({
+                            url: "/Tasks/EmitirSolicitudesRecargaClienteProductoReservado",
+                            type: 'POST',
+                            data: {
+                            },
+                            success: function () {
+                                $('body').loadingModal('hide');
+                                $.alert({
+                                    title: "OPERACIÓN EXITOSA",
+                                    type: 'green',
+                                    content: 'Se ejecutó el proceso correctamente.',
+                                    buttons: {
+                                        OK: function () {
+                                            location.reload();
+                                        }
+                                    }
+                                });
+                            },
+                            error: function (detalle) {
+                                $('body').loadingModal('hide');
+                                $.alert({
+                                    title: "ERROR",
+                                    type: 'red',
+                                    content: 'Ocurrió un error en la conexión al servidor.',
+                                    buttons: {
+                                        OK: function () {
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+                },
+                cancel: {
+                    text: 'Cancelar',
+                    action: function () {
+
+                    }
+                }
+            }
+        });
+    }); 
+
     $("#btnExportExcel").click(function () {
         const dataExcelDescargar = [["SEDE", "RUC CLIENTE", "CLIENTE", "SKU PRODUCTO", "PRODUCTO", "UNIDAD", "RESERVA BASE", "RESERVA ACTIVA", "CANT. ATENDIDA"]];
 

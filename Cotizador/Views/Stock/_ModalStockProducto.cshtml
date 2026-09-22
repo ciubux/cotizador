@@ -24,7 +24,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
                 <div class="row">
                     <div class="col-sm-6 col-lg-8">
@@ -278,7 +278,7 @@
                                  stockProveedor = stockProveedor + ' {' + stockDisponibleProveedor + '}';
                                  stockConteo = stockConteo + ' {' + stockDisponibleConteo + '}';
                              }
-                             
+
 
                              if (stockEsperado > 0) {
                                  stock = stock + ' [+' + stockEsperado + ']';
@@ -374,7 +374,7 @@
                                  stockTotalProveedor = stockTotalProveedor + lista[i].cantidadProveedorCalc;
                                  stockTotalConteo = stockTotalConteo + lista[i].cantidadConteo;
                              }
-                             
+
 
                              if (idProductoPresentacion == '0') {
                                  stockSeparado = lista[i].cantidadSeparadaMpCalc;
@@ -395,6 +395,7 @@
 
                              stockTotalSeparado = stockTotalSeparado + stockSeparado;
                              stockTotalEsperado = stockTotalEsperado + stockEsperado;
+                             stockTotalDispoible = stockTotalDispoible + stockDisponible;
 
                              stockTotalSeparadoMP = stockTotalSeparadoMP + lista[i].cantidadSeparadaMpCalc;
                              stockTotalEsperadoMP = stockTotalEsperadoMP + lista[i].cantidadEsperadaMpCalc;
@@ -446,7 +447,7 @@
 
                      if (disponible) {
                          $("#divCiudadModalStockSedeProducto").show();
-                         var stockTotalText = stockTotal.toFixed(2) + " [+" + stockTotalEsperado.toFixed(2) + "]" + " [-" + stockTotalSeparado.toFixed(2) + "]";
+                         var stockTotalText = stockTotal.toFixed(2) + ' {' + stockTotalDispoible.toFixed(2) + '}' + " [+" + stockTotalEsperado.toFixed(2) + "]" + " [-" + stockTotalSeparado.toFixed(2) + "]";
                          stockTotalText = armarHtmlLinkPendienteAtencion(stockTotalText, idProducto, idProductoPresentacion, "@Guid.Empty", '', '');
 
                          $("#verStockTodasSedes").html(stockTotalText);
@@ -488,6 +489,11 @@
 
         function armarHtmlLinkPendienteAtencion(stockText, idProducto, idProductoPresentacion, idCiudad, fechaInicio, fechaFin) {
             const dataAttrs = `idProducto="${idProducto}" idProductoPresentacion="${idProductoPresentacion}" idCiudad="${idCiudad}" fechaInicio="${fechaInicio}" fechaFin="${fechaFin}"`;
+
+            const linkReservasActivas = `<a class="verModalReservasActivasProducto" ${dataAttrs}>{`;
+            stockText = stockText.replace("{", linkReservasActivas);
+            stockText = stockText.replace("}", "}</a>");
+
 
             stockText = stockText.replace(/\[/, "<br/>[");
 
@@ -543,7 +549,7 @@
                         $("#divSelEmpresaStockProductoSedes").hide();
                     }
 
-                    
+
                     llenarCuadroStock();
                 }
             });
@@ -599,3 +605,5 @@
 
 
 @Html.Partial("../Stock/_ModalKardexStockProducto")
+
+@Html.Partial("../ClienteProductoReservado/_ModalReservasActivasProducto")

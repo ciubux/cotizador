@@ -119,7 +119,7 @@
             <button id="btnAculizarControlResultados" type="button" class="btn btn-warning right">Actualizar Stocks Resultados</button>
             @if (lista != null && lista.Any(x => x.tieneRegistroReserva))
             {
-                <button id="btnSolicitarRegargaStockReservas" type="button" class="btn btn-success right" style="margin-right: 5px;">Solicitar Recarga Stock</button>
+                <button id="btnSolicitarRegargaStockReservas" type="button" class="btn btn-info btn-sm right" style="margin-right: 5px;">Solicitar Reserva Activa</button>
             }
         </div>
 
@@ -369,7 +369,7 @@
     <div class="modal-dialog modal-lg" style="width: 80%;">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Solicitar Recarga de Stock para Reservas</h4>
+                <h4 class="modal-title">Solicitar Recarga de Reserva Activa para Reservas Puntuales</h4>
             </div>
             <div class="modal-body">
                 <div class="table-responsive">

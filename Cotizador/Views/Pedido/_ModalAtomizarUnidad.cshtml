@@ -65,15 +65,12 @@
 
             $(document).on('click', ".verModalAtomizarUnidad", function () {
                 llenarDatosDetallePedido(this);
-                alert("post ajax: " + idDetallePedido);
-                
             });
 
             $(document).on('click', "#btnAplicarAtomizacionUnidad", function () {
                 var idUnidadNueva = $("#modalAU_unidad_nueva").val();
                 var idPedido = $(this).data("idpedido");
                 var sku = $(this).data("sku");
-                alert(idDetallePedido);
                 if (!idUnidadNueva) {
                     $.alert({ title: "Atención", content: "No ha seleccionado una unidad nueva válida.", type: "orange" });
                     return;
@@ -81,7 +78,7 @@
 
                 $.confirm({
                     title: 'CONFIRMACIÓN',
-                    content: '¿Está seguro que desea atomizar este producto a la unidad seleccionada?',
+                    content: '¿Está seguro que desea cambiar la unidad de este producto? Al realizar el cambio se volvera a inicar el proceso de emisión de guía y se deberán volver a ingresar los datos de la guía.',
                     type: 'orange',
                     buttons: {
                         confirm: {
@@ -187,9 +184,7 @@
                         $('body').loadingModal('hide');
 
                         if (res && res.producto) {
-                            alert(res.idPedidoDetalle);
                             idDetallePedido = res.idPedidoDetalle;
-                            alert(idDetallePedido);
                             $("#titleModalAtomizarUnidad").text("Atomizar Producto");
 
                             $("#modalAU_ver_producto").text(res.producto.sku + " - " + res.producto.descripcion);

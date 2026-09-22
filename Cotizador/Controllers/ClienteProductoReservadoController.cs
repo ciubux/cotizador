@@ -92,6 +92,49 @@ namespace Cotizador.Controllers
             return JsonConvert.SerializeObject(list);
         }
 
+        public String ListForProducto(Guid idProducto, Guid idCiudad, int idPresentacion)
+        {
+            ProductoBL blProducto = new ProductoBL();
+            CiudadBL blCiudad = new CiudadBL();
+
+            Ciudad ciudad = new Ciudad();
+            if (!idCiudad.Equals(Guid.Empty))
+            {
+                ciudad = blCiudad.getCiudad(idCiudad);
+            }
+            else
+            {
+                ciudad.idCiudad = idCiudad;
+                ciudad.nombre = "TODOS";
+            }
+
+            Producto producto = blProducto.getProductoById(idProducto);
+
+            ClienteProductoReservado obj = new ClienteProductoReservado();
+
+            obj.ciudad.idCiudad = idCiudad;
+            obj.idPresentacionUnidad = idPresentacion;
+            obj.producto.sku = producto.sku;
+
+            obj.Estado = 1;
+            obj.tipo = "TODOS";
+            obj.producto.proveedor = "Todos";
+            obj.filtroTieneSolicitudRecargaActiva = -1;
+            obj.usuario = this.Logueado;
+
+            ClienteProductoReservadoBL bL = new ClienteProductoReservadoBL();
+            List<ClienteProductoReservado> list = bL.getClienteProductosReservados(obj);;
+
+            var result = new
+            {
+                producto = producto,
+                ciudad = ciudad,
+                lista = list
+            };
+
+            return JsonConvert.SerializeObject(result);
+        }
+
         private void instanciarClienteProductoReservadoBusqueda()
         {
             ClienteProductoReservado obj = new ClienteProductoReservado();

@@ -211,7 +211,7 @@ namespace Cotizador.ExcelExport
 
                 /*Cabecera, Sub total*/
                 int rTotal = (list.Count) + 1;
-                int cTotal = 50 + 2;
+                int cTotal = 60 + 2;
 
                 /*Se crean todas las celdas*/
                 for (int r = 0; r < rTotal; r++)
@@ -384,7 +384,7 @@ namespace Cotizador.ExcelExport
                 UtilesHelper.setValorCelda(sheet, 1, "AY", "Peso", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "AZ", "Alto", titleCellStyle);
                 UtilesHelper.setValorCelda(sheet, 1, "BA", "Ancho", titleCellStyle);
-                UtilesHelper.setValorCelda(sheet, 1, "BB", "Profundida", titleCellStyle);
+                UtilesHelper.setValorCelda(sheet, 1, "BB", "Profundidad", titleCellStyle);
 
                 MemoryStream ms = new MemoryStream();
                 using (MemoryStream tempStream = new MemoryStream())
