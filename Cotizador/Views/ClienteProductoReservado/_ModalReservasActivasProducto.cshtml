@@ -82,19 +82,17 @@ function funcionesModalReservasActivasProducto() {
     var idPedido = '';
     var idProductoPresentacion = 0;
 
-    // 1. Evento para abrir el modal desde el link
     $(document).on('click', ".verModalReservasActivasProducto", function (e) {
         e.preventDefault();
 
         idProducto = $(this).attr("idProducto");
-        idPedido = $(this).attr("idpedido"); // Capturado según tus instrucciones
+        idPedido = $(this).attr("idpedido"); 
         idCiudad = $(this).attr("idCiudad");
         idProductoPresentacion = $(this).attr("idProductoPresentacion") || 0;
 
         cargarReservasActivas();
     });
 
-    // 2. Evento para cambiar de unidad en tiempo real
     $(document).on('change', "#selectUnidadProductoReservasActivas", function () {
         var idPresentacion = $(this).val();
         idProductoPresentacion = idPresentacion;
@@ -112,18 +110,18 @@ function funcionesModalReservasActivasProducto() {
         });
     });
 
-    // 3. Función principal AJAX y renderizado
+
     function cargarReservasActivas() {
         $('body').loadingModal({ text: 'Cargando Reservas...' });
         $('body').loadingModal('show');
 
         $.ajax({
-            url: "/ClienteProductoReservado/ListForProducto", // Ajusta "ControllerName" a tu controlador real
+            url: "/ClienteProductoReservado/ListForProducto", 
             type: 'POST',
             dataType: 'JSON',
             data: {
                 idProducto: idProducto,
-                idpedido: idPedido, // Se envía según tu requerimiento (asegúrate de que tu Action lo reciba si lo necesitas)
+                idpedido: idPedido, 
                 idCiudad: idCiudad,
                 idPresentacion: idProductoPresentacion
             },
@@ -136,21 +134,17 @@ function funcionesModalReservasActivasProducto() {
                 var ciudad = result.ciudad;
                 var lista = result.lista;
 
-                // Armar Select de Unidades
                 var htmlOptionsUnidad = "";
                 var unidadSelected = "";
 
-                // Unidad MP (0)
                 unidadSelected = (idProductoPresentacion == '0') ? "selected" : "";
                 htmlOptionsUnidad += '<option value="0" ' + unidadSelected + '>' + producto.unidad + '</option>';
 
-                // Unidad Alternativa (1)
                 if (producto.equivalenciaAlternativa > 1) {
                     unidadSelected = (idProductoPresentacion == '1') ? "selected" : "";
                     htmlOptionsUnidad += '<option value="1" ' + unidadSelected + '>' + producto.unidad_alternativa + '</option>';
                 }
 
-                // Unidad Proveedor (2)
                 if (producto.equivalenciaProveedor > 1) {
                     unidadSelected = (idProductoPresentacion == '2') ? "selected" : "";
                     htmlOptionsUnidad += '<option value="2" ' + unidadSelected + '>' + producto.unidadProveedor + '</option>';
@@ -158,12 +152,10 @@ function funcionesModalReservasActivasProducto() {
 
                 $("#selectUnidadProductoReservasActivas").html(htmlOptionsUnidad);
 
-                // Llenar Cabecera
                 $("#verSedeReservasActivas").html(ciudad.nombre);
                 $("#verNombreProductoReservasActivas").html(producto.descripcion);
                 $("#verSkuProductoReservasActivas").html(producto.sku);
 
-                // Construir Tabla
                 var htmlList = "";
 
                 for (var i = 0; i < lista.length; i++) {
@@ -171,7 +163,6 @@ function funcionesModalReservasActivasProducto() {
                     var cantidadBase = parseFloat(item.cantidadOriginal) || 0;
                     var cantidadActiva = parseFloat(item.cantidadReserva) || 0;
 
-                    // Cálculos de conversión
                     var eqEstandar = producto.equivalenciaUnidadEstandarUnidadConteo || 1;
                     var eqAlternativa = (eqEstandar / (producto.equivalenciaAlternativa || 1));
                     var eqProveedor = (eqEstandar * (producto.equivalenciaProveedor || 1));
@@ -184,7 +175,6 @@ function funcionesModalReservasActivasProducto() {
                     var activaAlternativa = (cantidadActiva / eqAlternativa).toFixed(2);
                     var activaProveedor = (cantidadActiva / eqProveedor).toFixed(2);
 
-                    // Determinar valor inicial a mostrar
                     var mostrarBase = baseMP;
                     var mostrarActiva = activaMP;
 
@@ -196,7 +186,6 @@ function funcionesModalReservasActivasProducto() {
                         mostrarActiva = activaProveedor;
                     }
 
-                    // Formato Cliente: codigo - (ruc) razonSocial
                     var textoCliente = item.cliente.codigo + ' - (' + item.cliente.ruc + ') ' + item.cliente.razonSocial;
 
                     htmlList += '<tr>' +
