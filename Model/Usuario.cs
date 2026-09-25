@@ -251,7 +251,10 @@ namespace Model
 
         public bool modificaMaestroEmpresaDescuento { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_MAESTRO_EMPRESADESCUENTO)).FirstOrDefault() != null; } }
 
-        
+
+
+        public bool visualizaListaPrecios { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_MAESTRO_LISTA_PRECIOS)).FirstOrDefault() != null; } }
+        public bool modificaMaestroListaPrecios { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_MAESTRO_LISTA_PRECIOS)).FirstOrDefault() != null; } }
 
         public bool modificaRestriccionVentaProducto { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_RESTRICCION_VENTA_PRODUCTO)).FirstOrDefault() != null; } }
         

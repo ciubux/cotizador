@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "Búsqueda de Listas de Precios";
+}
+
+<div class="container-fluid" style="background: #fff; padding: 20px; border-radius: 5px;">
+
+    <!-- Filtros y Botones -->
+    <div class="row" style="margin-bottom: 15px;">
+        <div class="col-sm-6">
+            <h4 style="margin: 0;"><b>Listas de Precios</b></h4>
+        </div>
+        <div class="col-sm-6 text-right">
+            <button id="btnBuscar" type="button" class="btn btn-primary">Buscar</button>
+            <a href="@Url.Action("Editar", "ListaPrecios")" class="btn btn-success">Registrar Nuevo</a>
+        </div>
+    </div>
+
+    <!-- Tabla Principal Footable -->
+    <table id="tableListas" class="table" data-paging="true" data-sorting="true">
+        <thead>
+            <tr>
+                <th data-name="nombre">Nombre</th>
+                <th data-name="comentarios">Comentarios</th>
+                <th data-name="opciones" data-sortable="false">Opciones</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<!-- Modal Ver Lista de Precios -->
+<div class="modal fade" id="modalVerLista" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><b>Detalle de Lista de Precios</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Nombre:</label>
+                            <p id="lblVerNombre" class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Comentarios:</label>
+                            <p id="lblVerComentarios" class="form-control-static"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+                <h5><b>Items</b></h5>
+
+                <!-- Tabla de Items Footable -->
+                <table id="tableVerItems" class="table" data-paging="true" data-sorting="true">
+                    <thead>
+                        <tr>
+                            <th data-name="sku">SKU</th>
+                            <th data-name="nombre">Nombre</th>
+                            <th data-name="unidad">Unidad</th>
+                            <th data-name="precio">Precio</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" id="btnModalEditar" class="btn btn-primary">Editar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/listaPrecios")
+}

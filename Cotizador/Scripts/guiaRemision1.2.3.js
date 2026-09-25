@@ -1285,7 +1285,12 @@ jQuery(function ($) {
                 ) {
                     $("#btnIngresar").show()
                     $("#btnFacturarGuiaRemision").hide();
-                    $("#btnExtornar").hide();
+                    
+                    if (guiaRemision.tipoExtorno > 0) {
+                        $("#btnExtornar").hide();
+                    } else {
+                        $("#btnExtornar").show();
+                    }
                 }
                 else if (guiaRemision.motivoTraslado != MOTIVO_TRASLADO_SALIDA_VENTA.charCodeAt(0)
                     && guiaRemision.motivoTraslado != MOTIVO_TRASLADO_SALIDA_TRANSFERENCIA_GRATUITA.charCodeAt(0)

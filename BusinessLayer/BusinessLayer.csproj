@@ -105,6 +105,7 @@
     <Compile Include="EmpresaProductoSeparadoBL.cs" />
     <Compile Include="EmpresaProductoReservadoBL.cs" />
     <Compile Include="EmpresaDescuentoBL.cs" />
+    <Compile Include="ListaPreciosBL.cs" />
     <Compile Include="PersonalAlmacenBL.cs" />
     <Compile Include="ConsolidadoAtencionBL.cs" />
     <Compile Include="ProductoControlStockBL.cs" />

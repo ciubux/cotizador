@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "444";
+    TempData["ScriptVersion"] = "445";
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
 }
@@ -179,6 +179,9 @@
 
                         var linkControlStock = "";
                         var linkStockReservadoCliente = "";
+
+                        var linkBusquedaListaPrecios = "";
+                        var linkRegistroListaPrecios = "";
                     }
 
                     @if (this.Session["pagina"] != null)
@@ -294,6 +297,8 @@
                             case 771: linkMantenimientoPromocion = "active"; linkMaestros = "active"; break;
                             case 45: linkCrearMensaje = "active"; linkMaestros = "active"; break;
 
+                            case 790: linkBusquedaListaPrecios = "active"; linkMaestros = "active"; break;
+                            case 791: linkRegistroListaPrecios = "active"; linkMaestros = "active"; break;
 
 
                             case 901: linkReporteSellOutPersonalizado = "active"; linkReportes = "active"; break;
@@ -535,6 +540,7 @@
                             || usuario.visualizaGrupoClientes || usuario.visualizaProductos || usuario.realizaCargaMasivaProductos || usuario.esVendedor
                             || usuario.modificaOrigen || usuario.visualizaOrigenes || usuario.modificaSubDistribuidor || usuario.visualizaSubDistribuidores
                             || usuario.modificaRubro || usuario.visualizaRubros || usuario.modificaPromocion
+                            || usuario.visualizaListaPrecios || usuario.modificaMaestroListaPrecios 
                             )
                         {
                             <li class="@linkMaestros">
@@ -613,6 +619,16 @@
                                     @if (usuario.modificaMaestroEmpresaDescuento)
                                     {
                                         <li id="linkMantenimientoEmpresaDescuento" class="@linkMantenimientoEmpresaDescuento">@Html.ActionLink("Producto - Descuento Base", "List", "EmpresaDescuento")</li>
+                                    }
+
+                                    @if (usuario.visualizaListaPrecios)
+                                    {
+                                        <li id="linkBusquedaListaPrecios" class="@linkBusquedaListaPrecios">@Html.ActionLink("Lista Precios - Búsqueda", "List", "ListaPrecios")</li>
+                                    }
+
+                                    @if (usuario.modificaMaestroListaPrecios)
+                                    {
+                                        <li id="linkRegistroListaPrecios" class="@linkRegistroListaPrecios">@Html.ActionLink("Lista Precios - Registro/Edición", "Editar", "ListaPrecios")</li>
                                     }
 
                                     @if (usuario.modificaPromocion)

@@ -63,6 +63,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlertaValidacion.cs" />
+    <Compile Include="ListaPreciosItem.cs" />
+    <Compile Include="ListaPrecios.cs" />
     <Compile Include="ClienteProductoReservadoMovimiento.cs" />
     <Compile Include="ClienteProductoReservadoSolicitud.cs" />
     <Compile Include="EmpresaProductoSeparado.cs" />

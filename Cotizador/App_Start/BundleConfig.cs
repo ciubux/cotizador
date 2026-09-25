@@ -282,6 +282,10 @@ namespace Cotizador
                       ));
 
 
+            bundles.Add(new ScriptBundle("~/bundles/listaPrecios").Include(
+                        "~/Scripts/listaPrecios.js"
+                        ));
+
             bundles.Add(new ScriptBundle("~/bundles/jquery-chosen").Include(
                        "~/Scripts/chosen/chosen.jquery.min.js", "~/Scripts/chosen/chosen.ajaxaddition.jquery.js", "~/Scripts/chosen/PrintArea.js"));
 

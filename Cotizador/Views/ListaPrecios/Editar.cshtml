@@ -1,0 +1,89 @@
+﻿@model Model.ListaPrecios
+@{
+    var obj = (Model.ListaPrecios)ViewBag.listaPrecios;
+}
+
+<div class="container-fluid" style="background: #fff; padding: 20px; border-radius: 5px;">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label>Nombre:</label>
+                <input type="text" class="form-control cabecera-input" data-propiedad="nombre" data-tipo="string" value="@obj.nombre" />
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label>Comentarios:</label>
+                <textarea type="text" class="form-control cabecera-input" data-propiedad="comentarios" data-tipo="string" rows="4" maxlength="2000" value="@obj.comentarios"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row" style="margin-bottom: 15px;">
+        <div class="col-xs-6">
+            <h4 style="margin: 0; padding-top: 5px;"><b>Items</b></h4>
+        </div>
+        <div class="col-xs-6 text-right">
+            <button id="btnAgregarItem" type="button" class="btn btn-success">+ Agregar Item</button>
+        </div>
+    </div>
+
+    <div class="row" style="font-weight: bold; padding: 10px 0; border-bottom: 2px solid #ddd; background-color: #f9f9f9;">
+        <div class="col-xs-2">SKU</div>
+        <div class="col-xs-3">Nombre</div>
+        <div class="col-xs-1">Unidad</div>
+        <div class="col-xs-2">Precio Lima</div>
+        <div class="col-xs-2">Precio Provincias</div>
+        <div class="col-xs-1">Precio</div>
+        <div class="col-xs-1 text-center">Acción</div>
+    </div>
+
+    <div id="contenedorItems">
+        @if (obj.items != null)
+        {
+            foreach (var item in obj.items.Where(x => x.Estado != 0))
+            {
+                <div class="row item-row" style="padding: 10px 0; border-bottom: 1px solid #eee; display: flex; align-items: center;" data-idproducto="@item.producto.idProducto">
+                    <div class="col-xs-2">@item.producto.sku</div>
+                    <div class="col-xs-3">@item.producto.descripcion</div>
+                    <div class="col-xs-1">@item.unidad</div>
+                    <div class="col-xs-2">@item.producto.precioSinIgv.ToString("0.00")</div>
+                    <div class="col-xs-2">@item.producto.precioProvinciaSinIgv.ToString("0.00")</div>
+                    <div class="col-xs-1">
+                        <input type="text" class="form-control input-precio"
+                               onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46"
+                               data-idproducto="@item.producto.idProducto"
+                               value="@item.precio.ToString("0.00")" />
+                    </div>
+                    <div class="col-xs-1 text-center">
+                        <button class="btn btn-danger btn-sm btnEliminarItem" data-idproducto="@item.producto.idProducto" title="Remover Item">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+    <hr />
+
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-sm-12 text-left">
+            <button id="btnGuardarAvance" type="button" class="btn btn-primary">Guardar</button>
+        </div>
+        <div class="col-sm-12 text-right">
+            <button id="btnCancelarRegistroListaPrecios" type="button" class="btn btn-danger">Cancelar</button>
+            <button id="btnFinalizarRegistro" type="button" class="btn btn-success">
+                @(obj.idListaPrecios == Guid.Empty ? "Finalizar Registro" : "Finalizar Edición")
+            </button>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/listaPrecios")
+}

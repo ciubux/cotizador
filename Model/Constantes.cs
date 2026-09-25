@@ -106,6 +106,11 @@ namespace Model
 
         public static String VAR_SESSION_CLIENTEPRODUCTORESERVADO_BUSQUEDA = "clienteProductoReservadoBusqueda";
 
+        public static String VAR_SESSION_LISTAPRECIOS = "listaPreciosBusqueda";
+        public static String VAR_SESSION_LISTAPRECIOS_BUSQUEDA = "listaPreciosBusqueda";
+        public static String VAR_SESSION_LISTAPRECIOS_VER = "listaPreciosVer";
+        public static String VAR_SESSION_LISTAPRECIOS_LISTA = "listaPreciosLista";
+
         public static String VAR_SESSION_CLIENTE = "cliente";
         public static String VAR_SESSION_CLIENTE_BUSQUEDA = "clienteBusqueda";
         public static String VAR_SESSION_CLIENTE_LITE_BUSQUEDA = "clienteLiteBusqueda";
@@ -628,6 +633,9 @@ namespace Model
 
         public const String MODIFICA_CLIENTE_PRODUCTO_RESERVADO = "P781";
 
+        public const String VISUALIZA_MAESTRO_LISTA_PRECIOS = "P790";
+        public const String MODIFICA_MAESTRO_LISTA_PRECIOS = "P791";
+
         public enum paginas
         {
             /*COTIZACION*/
@@ -891,6 +899,12 @@ namespace Model
 
             [Display(Name = "PRODUCTOS RESERVADOS CLIENTES")]
             ProductosReservadosCliente = 781,
+
+            [Display(Name = "BUSQUEDA LISTA PRECIOS")]
+            BusquedaListaPrecios = 790,
+
+            [Display(Name = "REGISTRO/EDICIÓN LISTA DE PRECIOS")]
+            RegistroListaPrecios  = 791,
 
             [Display(Name = "EDITA CONFIGURACION EMPRESA")]
             EditaConfiguracionEmpresa = 151
