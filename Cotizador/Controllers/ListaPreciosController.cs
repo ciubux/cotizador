@@ -52,6 +52,25 @@ namespace Cotizador.Controllers
         }
 
 
+        public ActionResult ListasPreciosSeleccionar(string selectId, string selectedValue = null, bool incluirSeleccione = true, string textoSeleccione)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            List<ListaPrecios> listas = new List<ListaPrecios>(); 
+            ListaPreciosBL bl = new ListaPreciosBL();
+
+            var model = new ListaPreciosViewModels
+            {
+                Data = listas,
+                SelectId = selectId,
+                incluirSeleccione = incluirSeleccione,
+                textoSeleccione = textoSeleccione,
+                SelectedValue = selectedValue
+            };
+
+            return PartialView("_SelectListaPrecios", model);
+        }
+
         [HttpGet]
         public ActionResult List() 
         {

@@ -340,6 +340,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ListaPreciosViewModels.cs" />
     <Compile Include="Models\DTOsShow\CierreStockDetalleDTOshow.cs" />
     <Compile Include="Models\DTOsShow\CierreStockDTOshow.cs" />
     <Compile Include="Models\AreaViewModels.cs" />
@@ -826,6 +827,7 @@
     <Content Include="Views\ClienteProductoReservado\_ModalReservasActivasProducto.cshtml" />
     <Content Include="Views\ListaPrecios\Editar.cshtml" />
     <Content Include="Views\ListaPrecios\List.cshtml" />
+    <Content Include="Views\ListaPrecios\_SelectListaPrecios.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

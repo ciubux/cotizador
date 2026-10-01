@@ -1,0 +1,59 @@
+﻿@model Cotizador.Models.ListaPreciosViewModels
+
+@if (Model.incluirSeleccione)
+{
+    if (Model.disabled != null && Model.disabled.Equals("disabled"))
+    {
+        @Html.DropDownList(
+            Model.SelectId,
+            Model.Listas, Model.textoSeleccione,
+            new
+            {
+                id = Model.SelectId,
+                name = Model.SelectId,
+                @class = "form-control",
+                @disabled = Model.disabled
+            })
+    }
+    else
+    {
+        @Html.DropDownList(
+            Model.SelectId,
+            Model.Listas, Model.textoSeleccione,
+            new
+            {
+                id = Model.SelectId,
+                name = Model.SelectId,
+                @class = "form-control"
+            })
+    }
+
+}
+else
+{
+    if (Model.disabled != null && Model.disabled.Equals("disabled"))
+    {
+        @Html.DropDownList(
+                        Model.SelectId,
+                        Model.Listas,
+                        new
+                        {
+                            id = Model.SelectId,
+                            name = Model.SelectId,
+                            @class = "form-control",
+                            @disabled = Model.disabled
+                        })
+    }
+    else
+    {
+        @Html.DropDownList(
+                    Model.SelectId,
+                    Model.Listas,
+                    new
+                    {
+                        id = Model.SelectId,
+                        name = Model.SelectId,
+                        @class = "form-control"
+                    })
+    }
+}
