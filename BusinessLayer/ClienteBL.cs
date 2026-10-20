@@ -1002,5 +1002,13 @@ namespace BusinessLayer
                 return dal.OtrasEmpresasCliente(idUsuario, idCliente, ruc, idCiudad);
             }
         }
+
+        public Guid GetClienteEmpresa(int idEmpresa, Guid idCiudad) 
+        {
+            using (ClienteDAL dal = new ClienteDAL())
+            {
+                return dal.getClienteEmpresa(idEmpresa, idCiudad);
+            }
+        }
     }
 }

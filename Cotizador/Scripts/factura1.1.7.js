@@ -255,6 +255,9 @@ jQuery(function ($) {
     var fechaEmisionHasta = $("#fechaEmisionHastatmp").val();
     $("#documentoVenta_fechaEmisionHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaEmisionHasta);
 
+    $("#documentoVenta_fechaRegistroDesde").datepicker({ dateFormat: "dd/mm/yy" });
+    $("#documentoVenta_fechaRegistroHasta").datepicker({ dateFormat: "dd/mm/yy" });
+
     $("#txtNCAjustesFecha").datepicker({ dateFormat: "dd/mm/yy", minDate: 0 });
 
     var documentoVenta_fechaEmision = $("#documentoVenta_fechaEmisiontmp").val();
@@ -318,6 +321,31 @@ jQuery(function ($) {
         });
     });
 
+    $("#documentoVenta_fechaRegistroDesde").change(function () {
+        var fechaDesde = $("#documentoVenta_fechaRegistroDesde").val();
+        $.ajax({
+            url: "/Factura/ChangeFechaRegistroDesde",
+            type: 'POST',
+            data: {
+                fechaDesde: fechaDesde
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#documentoVenta_fechaRegistroHasta").change(function () {
+        var fechaHasta = $("#documentoVenta_fechaRegistroHasta").val();
+        $.ajax({
+            url: "/Factura/ChangeFechaRegistroHasta",
+            type: 'POST',
+            data: {
+                fechaHasta: fechaHasta
+            },
+            success: function () {
+            }
+        });
+    });
 
 
 

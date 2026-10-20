@@ -367,6 +367,136 @@ jQuery(function ($) {
     });
 
 
+    $("#btnAplicarListaPrecios").click(function () {
+        ValidarListaPrecios(true);
+    });
+
+    function ValidarListaPrecios(mostrarMensaje, funcionCallBack) {
+        $.ajax({
+            url: "/Cotizacion/EvaluarListaPrecios",
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+            },
+            success: function (res) {
+                if (res.itemsEncontrados > 0) {
+                    if (res.itemsCambiar > 0) {
+                        var msj = 'Hay ' + res.itemsEncontrados + ' productos de la cotización de la lista de precios, de los cuales ' + res.itemsCambiar + ' no tienen precio diferente: ' ;
+                        msj = msj + "</br>";
+
+                        for (var i = 0; i < res.listaCambios.length; i++) {
+                            msj = msj + res.listaCambios[i] + "</br>";
+                        }
+
+                        msj = msj + "</br>";
+
+                        msj = msj + " ¿Desea actualizar los precios? Si no los actualiza no podrá registrar la cotización a menos que desmarque la lista de precios.";
+
+                        $.confirm({
+                            title: 'CONFIRMAR ACTUALIZACIÓN PRECIOS',
+                            content: msj,
+                            type: 'orange',
+                            buttons: {
+                                aplica: {
+                                    text: 'NO',
+                                    btnClass: 'btn-success',
+                                    action: function () {
+                                    }
+                                },
+                                noAplica: {
+                                    text: 'SI',
+                                    btnClass: 'btn-warning',
+                                    action: function () {
+                                        $.ajax({
+                                            url: "/Cotizacion/ActualizarPreciosAListaPrecios",
+                                            dataType: 'JSON',
+                                            type: 'POST',
+                                            data: {
+                                            },
+                                            error: function () {
+                                                $.alert({
+                                                    title: "ERROR",
+                                                    type: 'red',
+                                                    content: 'Ocurrió un error al actualizar.',
+                                                    buttons: {
+                                                        OK: function () {
+                                                        }
+                                                    }
+                                                });
+                                            },
+                                            success: function (resAct) {
+                                                $.alert({
+                                                    title: "ACTUALIZACIÓN CORRECTA",
+                                                    type: 'green',
+                                                    content: 'Se actualizaron los precios de ' + resAct.itemsCambiados + ' producto.',
+                                                    buttons: {
+                                                        OK: function () {
+                                                            location.reload();
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                        });
+                    } else {
+                        if (mostrarMensaje) {
+                            $.alert({
+                                title: "LISTA PRECIOS REVISADA",
+                                type: "green",
+                                content: "No se encontraron productos de la cotización en la lista de precios seleccionada.",
+                                buttons: {
+                                    OK: function () {
+                                    }
+                                }
+                            });
+                        }
+                        if (typeof funcionCallBack === 'function') {
+                            funcionCallBack();
+                        }
+                    }
+                } else {
+                    if (mostrarMensaje) {
+                        $.alert({
+                            title: "LISTA PRECIOS REVISADA",
+                            type: "green",
+                            content: "No se encontraron productos de la cotización en la lista de precios seleccionada.",
+                            buttons: {
+                                OK: function () {
+                                }
+                            }
+                        });
+                    }
+                    if (typeof funcionCallBack === 'function') {
+                        funcionCallBack();
+                    }
+                }
+            }
+        });
+    }
+
+    $("#idListaPrecios").change(function () {
+        var idLista = $("#idListaPrecios").val();
+        changeListaPrecios(idLista);
+        if (idLista == "") {
+            $("#btnAplicarListaPrecios").hide();
+        } else {
+            $("#btnAplicarListaPrecios").show();
+        }
+    });
+
+    function changeListaPrecios(idLista) {
+        $.ajax({
+            url: "/Cotizacion/ChangeIdListaPrecios",
+            type: 'POST',
+            data: {
+                idLista: idLista
+            },
+            success: function () { }
+        });
+    }
 
     function changeInputBoolean(propiedad, valor) {
         $.ajax({
@@ -2078,48 +2208,49 @@ jQuery(function ($) {
         if (!validarIngresoDatosObligatoriosCotizacion())
             return false;
 
-        if ($("#pagina").val() == PAGINA_MANTENIMIENTO_COTIZACION) {
-            
-            var sedePrincipal = parseInt($('#clienteSedePrincipal').val());
+        ValidarListaPrecios(false, function () {
+            if ($("#pagina").val() == PAGINA_MANTENIMIENTO_COTIZACION) {
+                var sedePrincipal = parseInt($('#clienteSedePrincipal').val());
 
-            if (continuarLuego == 0 && sedePrincipal == 1 && $('#tipoCotizacion').val() == 0) {
-                $.confirm({
-                    title: 'Cliente Multiregional Identificado',
-                    content: '<div><div class="col-sm-12"><b>¿Desea que al momento de aceptar esta cotización los precios se registren en las siguientes sedes?</b></div><div class="col-sm-12">' + listaTextoSedesCliente + '</div></div>',
-                    type: 'orange',
-                    buttons: {
-                        aplica: {
-                            text: 'SI',
-                            btnClass: 'btn-success',
-                            action: function () {
-                                $('#aplicaSedes').val("1");
-                                callCreate(continuarLuego);
-                            }
-                        },
-                        noAplica: {
-                            text: 'NO, solo registrar precios para ' + $("#idCiudad option:selected").text(),
-                            btnClass: 'btn-danger',
-                            action: function () {
-                                callCreate(continuarLuego);
-                            }
-                        },
-                        cancelar: {
-                            text: 'Cancelar',
-                            btnClass: '',
-                            action: function () {
-                                activarBotonesFinalizarCreacion();
+                if (continuarLuego == 0 && sedePrincipal == 1 && $('#tipoCotizacion').val() == 0) {
+                    $.confirm({
+                        title: 'Cliente Multiregional Identificado',
+                        content: '<div><div class="col-sm-12"><b>¿Desea que al momento de aceptar esta cotización los precios se registren en las siguientes sedes?</b></div><div class="col-sm-12">' + listaTextoSedesCliente + '</div></div>',
+                        type: 'orange',
+                        buttons: {
+                            aplica: {
+                                text: 'SI',
+                                btnClass: 'btn-success',
+                                action: function () {
+                                    $('#aplicaSedes').val("1");
+                                    callCreate(continuarLuego);
+                                }
+                            },
+                            noAplica: {
+                                text: 'NO, solo registrar precios para ' + $("#idCiudad option:selected").text(),
+                                btnClass: 'btn-danger',
+                                action: function () {
+                                    callCreate(continuarLuego);
+                                }
+                            },
+                            cancelar: {
+                                text: 'Cancelar',
+                                btnClass: '',
+                                action: function () {
+                                    activarBotonesFinalizarCreacion();
+                                }
                             }
                         }
-                    }
-                });
-            } else {
+                    });
+                } else {
+                    callCreate(continuarLuego);
+                }
+            }
+            else {
+                //Espacio para mostrar mensaje de Cliente a los cuales se le aplicará la cotización Grupal
                 callCreate(continuarLuego);
             }
-        }
-        else {
-            //Espacio para mostrar mensaje de Cliente a los cuales se le aplicará la cotización Grupal
-            callCreate(continuarLuego);
-        }
+        });
     }
 
     
@@ -2191,41 +2322,43 @@ jQuery(function ($) {
         if (!validarIngresoDatosObligatoriosCotizacion())
             return false;
 
-        var sedePrincipal = parseInt($('#clienteSedePrincipal').val());
+        ValidarListaPrecios(false, function () {
+            var sedePrincipal = parseInt($('#clienteSedePrincipal').val());
 
-        if (continuarLuego == 0 && sedePrincipal == 1 && $('#tipoCotizacion').val() == 0) {
-            $.confirm({
-                title: 'Cliente Multiregional Identificado',
-                content: '<div><div class="col-sm-12"><b>¿Desea que al momento de aceptar esta cotización los precios se registren en las siguientes sedes?</b></div><div class="col-sm-12">' + listaTextoSedesCliente + '</div></div>',
-                type: 'orange',
-                buttons: {
-                    aplica: {
-                        text: 'SI',
-                        btnClass: 'btn-success',
-                        action: function () {
-                            $('#aplicaSedes').val("1");
-                            callUpdate(continuarLuego);
-                        }
-                    },
-                    noAplica: {
-                        text: 'NO, solo registrar precios para ' + $("#idCiudad option:selected").text(),
-                        btnClass: 'btn-danger',
-                        action: function () {
-                            callUpdate(continuarLuego);
-                        }
-                    },
-                    cancelar: {
-                        text: 'Cancelar',
-                        btnClass: '',
-                        action: function () {
-                            activarBotonesFinalizarCreacion();
+            if (continuarLuego == 0 && sedePrincipal == 1 && $('#tipoCotizacion').val() == 0) {
+                $.confirm({
+                    title: 'Cliente Multiregional Identificado',
+                    content: '<div><div class="col-sm-12"><b>¿Desea que al momento de aceptar esta cotización los precios se registren en las siguientes sedes?</b></div><div class="col-sm-12">' + listaTextoSedesCliente + '</div></div>',
+                    type: 'orange',
+                    buttons: {
+                        aplica: {
+                            text: 'SI',
+                            btnClass: 'btn-success',
+                            action: function () {
+                                $('#aplicaSedes').val("1");
+                                callUpdate(continuarLuego);
+                            }
+                        },
+                        noAplica: {
+                            text: 'NO, solo registrar precios para ' + $("#idCiudad option:selected").text(),
+                            btnClass: 'btn-danger',
+                            action: function () {
+                                callUpdate(continuarLuego);
+                            }
+                        },
+                        cancelar: {
+                            text: 'Cancelar',
+                            btnClass: '',
+                            action: function () {
+                                activarBotonesFinalizarCreacion();
+                            }
                         }
                     }
-                }
-            });
-        } else {
-            callUpdate(continuarLuego);
-        }  
+                });
+            } else {
+                callUpdate(continuarLuego);
+            } 
+        });
     }
 
     function callUpdate(continuarLuego) {
@@ -2491,7 +2624,8 @@ jQuery(function ($) {
                 $("#verEstado").html(cotizacion.seguimientoCotizacion_estadoString);
                 $("#verModificadoPor").html(cotizacion.seguimientoCotizacion_usuario_nombre);
                 $("#verObservacionEstado").html(cotizacion.seguimientoCotizacion_observacion);
-
+                $("#verListaPrecios").html(cotizacion.listaPrecios_nombre);
+                
 
                 $("#verObservaciones").html(cotizacion.observaciones);
                 $("#verObservacionesInterno").html(cotizacion.observacionesInterno);

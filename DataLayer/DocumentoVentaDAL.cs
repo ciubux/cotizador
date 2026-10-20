@@ -811,6 +811,15 @@ namespace DataLayer
             InputParameterAdd.Varchar(objCommand, "sku", documentoVenta.sku);
             InputParameterAdd.Int(objCommand, "idAsesor", documentoVenta.responsableComercial.idVendedor);
 
+            if (documentoVenta.fechaRegistroDesde.HasValue)
+            {
+                InputParameterAdd.DateTime(objCommand, "fechaRegistroDesde", documentoVenta.fechaRegistroDesde.Value);
+            }
+            if (documentoVenta.fechaRegistroHasta.HasValue)
+            {
+                InputParameterAdd.DateTime(objCommand, "fechaRegistroHasta", documentoVenta.fechaRegistroHasta.Value);
+            }
+
 
             //   InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
             DataTable dataTable = Execute(objCommand);

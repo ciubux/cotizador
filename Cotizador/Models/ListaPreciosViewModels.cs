@@ -26,7 +26,7 @@ namespace Cotizador.Models
                 {
                     Value = c.idListaPrecios.ToString(),
                     Text = c.nombre,
-                    Selected = SelectedValue != null && SelectedValue == c.idListaPrecios.ToString()
+                    Selected = SelectedValue != string.Empty && SelectedValue == c.idListaPrecios.ToString()
                 });
             }
         }

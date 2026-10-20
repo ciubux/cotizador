@@ -1,4 +1,5 @@
-﻿using Cotizador.Models.DTOs;
+﻿using Castle.Core.Logging;
+using Cotizador.Models.DTOs;
 using Cotizador.Models.DTOshow;
 using DataLayer;
 using Model;
@@ -105,6 +106,8 @@ namespace Cotizador.Models.DTOsShow
             cotizacionDTOshow.cliente_codigoRazonSocial = cotizacion.cliente.codigoRazonSocial;
             cotizacionDTOshow.cliente_nombreComercial = cotizacion.cliente.nombreComercial == null ? "" : cotizacion.cliente.nombreComercial;
             cotizacionDTOshow.cliente_tipoDocumento = cotizacion.cliente.tipoDocumentoIdentidad == DocumentoVenta.TiposDocumentoIdentidad.RUC ? "RUC" : "DNI";
+
+            cotizacionDTOshow.listaPrecios_nombre = cotizacion.listaPrecios != null ? cotizacion.listaPrecios.nombre : "NO APLICA";
 
             cotizacionDTOshow.estaVencida = cotizacion.estaVencida;
 

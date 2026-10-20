@@ -453,6 +453,12 @@ namespace BusinessLayer
                     cotizacion.validezOfertaEnDias = diferencia.Days;
                 }
 
+                if (cotizacion.listaPrecios != null && !cotizacion.listaPrecios.idListaPrecios.Equals(Guid.Empty))
+                {
+                    ListaPreciosDAL lpDal = new ListaPreciosDAL();
+                    cotizacion.listaPrecios = lpDal.GetListaPrecios(cotizacion.listaPrecios.idListaPrecios, usuario.idUsuario);
+                }
+
                 Boolean validar = true;
                 
                 if (estadoAnteriorCotizacion != null && estadoAnteriorCotizacion.Value == SeguimientoCotizacion.estadosSeguimientoCotizacion.Aprobada)

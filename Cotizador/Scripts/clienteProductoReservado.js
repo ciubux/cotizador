@@ -39,9 +39,9 @@ jQuery(function ($) {
         if ($("#modal_idProducto").val() == "") {
             alert("Seleccione un producto"); return false;
         }
-        if ($("#modal_cantidadOriginal").val().trim() === "" || parseInt($("#modal_cantidadOriginal").val()) <= 0) {
+        /*if ($("#modal_cantidadOriginal").val().trim() === "" || parseInt($("#modal_cantidadOriginal").val()) <= 0) {
             alert("Ingrese una cantidad original mayor a 0"); return false;
-        }
+        }*/
         return true;
     }
 

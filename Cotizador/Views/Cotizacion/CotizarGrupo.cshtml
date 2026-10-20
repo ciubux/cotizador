@@ -196,7 +196,7 @@
                         </div>
 
                         <div class="row" style="margin-top: 7px;">
-                            <div class="col-xs-12" >
+                            <div class="col-xs-12">
                                 <div class="form-group">
                                     <div class="onoffswitch" title="La cotización se aceptará automáticamente al ser aprobada.">
                                         <input type="checkbox" name="onoffswitch" @acepAutChecked class="onoffswitch-checkbox" id="chkAceptacionAutomatica">
@@ -220,7 +220,7 @@
                 </div>
             </div>
 
-            
+
         </div>
 
         <div class="row">
@@ -263,46 +263,46 @@
 
 
         <!--
-                <div class="row">
+            <div class="row">
 
 
 
-                    <div class="col-sm-6 col-lg-5">
+                <div class="col-sm-6 col-lg-5">
 
-                        <div class="form-group">
-                            <label for="igv" class="control-label col-xs-4">¿Precios unitarios incluyen IGV?:</label>
-                            <div class="col-xs-8">
-                                <div class="radio radio-inline">
-                                    <label class="radio-label">
-                                        @if (cotizacion.incluidoIGV)
-        {
-                                        <input class="radio-input" disabled checked type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
-        }
-        else
-        {
-                                    <input class="radio-input" disabled type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
-        }
+                    <div class="form-group">
+                        <label for="igv" class="control-label col-xs-4">¿Precios unitarios incluyen IGV?:</label>
+                        <div class="col-xs-8">
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    @if (cotizacion.incluidoIGV)
+    {
+                                    <input class="radio-input" disabled checked type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
+    }
+    else
+    {
+                                <input class="radio-input" disabled type="radio" name="igv" id="igvsi" value="1">@ViewBag.Si;
+    }
 
-                                    </label>
-                                </div>
-                                <div class="radio radio-inline">
-                                    <label class="radio-label">
-                                        @if (!cotizacion.incluidoIGV)
-        {
-                                        <input class="radio-input" disabled checked type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
-        }
-        else
-        {
-                                    <input class="radio-input" disabled type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
-        }
-                                    </label>
-                                </div>
+                                </label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <label class="radio-label">
+                                    @if (!cotizacion.incluidoIGV)
+    {
+                                    <input class="radio-input" disabled checked type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
+    }
+    else
+    {
+                                <input class="radio-input" disabled type="radio" name="igv" id="igvno" value="0">@ViewBag.No;
+    }
+                                </label>
                             </div>
                         </div>
                     </div>
-
                 </div>
-                    -->
+
+            </div>
+                -->
 
 
 
@@ -677,6 +677,29 @@
         @{ var esRecotizacion = @cotizacion.esRecotizacion ? 1 : 0;}
 
         <input type="hidden" id="esRecotizacion" value="@esRecotizacion" />
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-9">
+                <div class="form-group">
+                    <label for="idListaPrecios" class="control-label col-xs-2">Lista de Precios:</label>
+                    <div class="col-xs-8">
+                        @Html.Action("ListasPreciosSeleccionar", "ListaPrecios",
+                            new
+                            {
+                                SelectId = "idListaPrecios",
+                                incluirSeleccione = true,
+                                textoSeleccione = "NO APLICA",
+                                selectedValue = cotizacion.listaPrecios != null ? cotizacion.listaPrecios.idListaPrecios.ToString() : string.Empty
+                            })
+                        <span>*Al seleccionar la lista de precios se forzará que los productos de la cotizacion tengan el precio definido en la lista.</span>
+                    </div>
+                    <div class="col-xs-2">
+                        <button id="btnAplicarListaPrecios" type="button" class="btn btn-primary" tipoValidacion="CREAR_COT_CLI" style="@(cotizacion.listaPrecios != null ? "" : "display: none;")">Validar Precios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
 
         <div class="row">
             <div class="col-sm-6 col-lg-9">

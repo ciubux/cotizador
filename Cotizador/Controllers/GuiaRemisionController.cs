@@ -162,6 +162,9 @@ namespace Cotizador.Controllers
 
             guiaRemision.fechaTrasladoDesde = DateTime.Now.AddDays(-Constantes.DIAS_DESDE_BUSQUEDA);
             guiaRemision.fechaTrasladoHasta = DateTime.Now.AddDays(0);
+            guiaRemision.fechaRegistroDesde = null;
+            guiaRemision.fechaRegistroHasta = null;
+
             guiaRemision.estaFacturado = true;
 
             this.Session[Constantes.VAR_SESSION_GUIA_BUSQUEDA] = guiaRemision;
@@ -2243,7 +2246,18 @@ namespace Cotizador.Controllers
             this.GuiaRemisionSession.fechaTrasladoHasta = new DateTime(Int32.Parse(movHasta[2]), Int32.Parse(movHasta[1]), Int32.Parse(movHasta[0]), 23, 59, 59);
         }
 
-        
+
+        public void ChangeFechaRegistroDesde()
+        {
+            String[] movDesde = this.Request.Params["fechaDesde"].Split('/');
+            this.GuiaRemisionSession.fechaRegistroDesde = new DateTime(Int32.Parse(movDesde[2]), Int32.Parse(movDesde[1]), Int32.Parse(movDesde[0]));
+        }
+
+        public void ChangeFechaRegistroHasta()
+        {
+            String[] movHasta = this.Request.Params["fechaHasta"].Split('/');
+            this.GuiaRemisionSession.fechaRegistroHasta = new DateTime(Int32.Parse(movHasta[2]), Int32.Parse(movHasta[1]), Int32.Parse(movHasta[0]), 23, 59, 59);
+        }
 
         public String ChangeIdAlmacen()
         {

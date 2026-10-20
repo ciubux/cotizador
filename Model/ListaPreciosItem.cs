@@ -28,5 +28,24 @@ namespace Model
             this.producto = new Producto();
         }
 
+        public decimal precioPresentacion(int idPresentacion)
+        {
+            decimal precioPres = this.precio;
+
+            switch (this.idProductoPresentacion)
+            {
+                case 0: precioPres = precioPres / this.producto.equivalenciaAlternativa; break;
+                case 2: precioPres = precioPres / (this.producto.equivalenciaProveedor * this.producto.equivalenciaAlternativa); break;
+            }
+
+            switch (idPresentacion)
+            {
+                case 0: precioPres = precioPres * this.producto.equivalenciaAlternativa; break;
+                case 2: precioPres = precioPres * this.producto.equivalenciaProveedor * this.producto.equivalenciaAlternativa; break;
+            }
+
+            return precioPres;
+        }
+
     }
 }

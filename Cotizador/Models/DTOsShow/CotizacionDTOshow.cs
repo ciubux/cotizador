@@ -66,6 +66,8 @@ namespace Cotizador.Models.DTOshow
         public String cliente_tipoDocumento { get; set; }
         public int tipoCotizacion { get; set; }
 
+        public String listaPrecios_nombre { get; set; }
+        
         public Decimal utilidadVisible { get; set; }
         public Decimal utilidadFleteVisible { get; set; }
         public Decimal margenFleteVisible { get; set; }

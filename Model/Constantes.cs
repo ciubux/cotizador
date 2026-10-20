@@ -636,6 +636,8 @@ namespace Model
         public const String VISUALIZA_MAESTRO_LISTA_PRECIOS = "P790";
         public const String MODIFICA_MAESTRO_LISTA_PRECIOS = "P791";
 
+        public const String FILTRA_FECHA_CREACION_REGISTRO = "P181";
+
         public enum paginas
         {
             /*COTIZACION*/

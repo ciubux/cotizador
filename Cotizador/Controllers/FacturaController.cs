@@ -872,7 +872,8 @@ namespace Cotizador.Controllers
                 documentoVenta.ciudad.idCiudad = Guid.Empty;
             }
 
-
+            documentoVenta.fechaRegistroDesde = null;
+            documentoVenta.fechaRegistroHasta = null;
 
             //pedidoTmp.usuarioBusqueda = pedidoTmp.usuario;
             this.Session[Constantes.VAR_SESSION_FACTURA_BUSQUEDA] = documentoVenta;
@@ -943,6 +944,18 @@ namespace Cotizador.Controllers
         {
             String[] desde = this.Request.Params["fechaEmisionHasta"].Split('/');
             this.FacturaSession.fechaEmisionHasta = new DateTime(Int32.Parse(desde[2]), Int32.Parse(desde[1]), Int32.Parse(desde[0]));
+        }
+
+        public void ChangeFechaRegistroDesde()
+        {
+            String[] desde = this.Request.Params["fechaDesde"].Split('/');
+            this.FacturaSession.fechaRegistroDesde = new DateTime(Int32.Parse(desde[2]), Int32.Parse(desde[1]), Int32.Parse(desde[0]));
+        }
+
+        public void ChangeFechaRegistroHasta()
+        {
+            String[] desde = this.Request.Params["fechaHasta"].Split('/');
+            this.FacturaSession.fechaRegistroHasta = new DateTime(Int32.Parse(desde[2]), Int32.Parse(desde[1]), Int32.Parse(desde[0]), 23, 59, 59);
         }
 
         public void ChangeSolicitadoAnulacion()

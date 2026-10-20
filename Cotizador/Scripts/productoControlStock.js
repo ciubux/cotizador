@@ -12,6 +12,7 @@ jQuery(function ($) {
             }
         });
 
+        cargarChosenProducto();
     });
 
     $("#idCiudad").change(function () {
@@ -559,6 +560,186 @@ jQuery(function ($) {
             error: function () {
                 $('body').loadingModal('destroy');
                 $.alert({ title: "ERROR", type: "red", content: MENSAJE_ERROR });
+            }
+        });
+    });
+
+    var PRODUCTO_SELECCIONADO_NUEVA_RESERVA = null;
+
+    function cargarChosenProducto() {
+        $("#modal_idProducto").chosen({ width: "100%", placeholder_text_single: "Seleccione el producto", no_results_text: "No se encontró Producto" });
+
+        $("#modal_idProducto").ajaxChosen({
+            dataType: "json",
+            type: "GET",
+            minTermLength: 5,
+            afterTypeDelay: 300,
+            allow_single_deselect: true,
+            cache: false,
+            url: "/Producto/Search"
+        }, {
+            loadingImg: "Content/chosen/images/loading.gif"
+        }, { placeholder_text_single: "Seleccione el producto", no_results_text: "No se encontró Producto" });
+    }
+
+    // 1. Abrir modal al hacer clic en "btnAgregarNuevaReserva"
+    $("#btnAgregarNuevaReserva").click(function () {
+        var idCiudad = $("#idCiudad").val();
+        var nombreCiudad = $("#idCiudad option:selected").text().trim();
+
+        if (!idCiudad || idCiudad === "00000000-0000-0000-0000-000000000000" || idCiudad === "") {
+            $.alert({
+                title: "Aviso",
+                type: "orange",
+                content: "Debe seleccionar una Sede específica en los filtros de búsqueda antes de solicitar una reserva."
+            });
+            return;
+        }
+
+        // Limpiar formulario y setear sede
+        PRODUCTO_SELECCIONADO_NUEVA_RESERVA = null;
+        $("#modal_nueva_idCiudad").val(idCiudad);
+        $("#modal_nueva_nombreCiudad").val(nombreCiudad);
+        $("#modal_nueva_unidad").html('<option value="">Seleccione un producto</option>');
+        $("#modal_nueva_cantidad").val("");
+
+        $('#modal_idProducto').empty().append('<option value=""></option>').val('').trigger('chosen:updated');
+        $('#modal_idProducto').trigger('liszt:updated');
+
+        $("#modalAgregarNuevaReserva").modal("show");
+    });
+
+    // 2. Al seleccionar un producto, obtener sus datos y armar el selector de unidades
+    $("#modal_idProducto").change(function () {
+        var idProd = $(this).val();
+        if (!idProd) {
+            PRODUCTO_SELECCIONADO_NUEVA_RESERVA = null;
+            $("#modal_nueva_unidad").html('<option value="">Seleccione un producto</option>');
+            return;
+        }
+
+        $.post("/Producto/GetProducto", { idProducto: idProd }, function (res) {
+            PRODUCTO_SELECCIONADO_NUEVA_RESERVA = res;
+
+            var eqEstandar = res.equivalenciaUnidadEstandarUnidadConteo || 1;
+            var eqAlternativa = res.equivalenciaUnidadAlternativaUnidadConteo || 1;
+            var eqProveedor = res.equivalenciaUnidadProveedorUnidadConteo || 1;
+
+            var htmlUnidades = "";
+
+            // Unidad MP (0): Siempre aparece y será la seleccionada por defecto
+            var textoMP = res.unidad || "MP";
+            htmlUnidades += `<option value="0" selected>${textoMP}</option>`;
+
+            // Unidad Alternativa (1): Si equivalenciaUnidadAlternativaUnidadConteo != equivalenciaUnidadEstandarUnidadConteo
+            if (eqAlternativa !== eqEstandar && res.unidad_alternativa) {
+                htmlUnidades += `<option value="1">${res.unidad_alternativa}</option>`;
+            }
+
+            // Unidad Proveedor (2): Si equivalenciaUnidadProveedorUnidadConteo != equivalenciaUnidadEstandarUnidadConteo
+            if (eqProveedor !== eqEstandar && res.unidadProveedor) {
+                htmlUnidades += `<option value="2">${res.unidadProveedor}</option>`;
+            }
+
+            $("#modal_nueva_unidad").html(htmlUnidades);
+            $("#modal_nueva_unidad").val("0"); // Por defecto unidad MP
+        }, 'JSON');
+    });
+
+    // 3. Registrar la solicitud convirtiendo la cantidad a la unidad alternativa
+    $("#btnGuardarNuevaReserva").click(function () {
+        var idCiudad = $("#modal_nueva_idCiudad").val();
+        var idProducto = $("#modal_idProducto").val();
+        var tipoUnidad = $("#modal_nueva_unidad").val();
+        var cantIngresada = parseInt($("#modal_nueva_cantidad").val(), 10);
+
+        if (!idProducto || !PRODUCTO_SELECCIONADO_NUEVA_RESERVA) {
+            $.alert({ title: "VALIDAR", type: "orange", content: "Por favor, seleccione un producto." });
+            return;
+        }
+
+        if (isNaN(cantIngresada) || cantIngresada <= 0) {
+            $.alert({ title: "VALIDAR", type: "orange", content: "Por favor, ingrese una cantidad entera mayor a 0." });
+            return;
+        }
+
+        var prod = PRODUCTO_SELECCIONADO_NUEVA_RESERVA;
+        var eqEstandarConteo = prod.equivalenciaUnidadEstandarUnidadConteo || 1;
+        var eqAlternativaConteo = prod.equivalenciaUnidadAlternativaUnidadConteo || 1;
+        var eqProveedorConteo = prod.equivalenciaUnidadProveedorUnidadConteo || 1;
+
+        if (eqAlternativaConteo === 0) eqAlternativaConteo = 1;
+
+        // Primero pasamos la cantidad seleccionada a la unidad base (conteo) y luego la dividimos entre la equivalencia de la unidad alternativa
+        // O usando las equivalencias directas del producto:
+        // - Si eligió MP (0): 1 MP = (eqEstandarConteo / eqAlternativaConteo) unidades alternativas (que equivale a prod.equivalenciaAlternativa)
+        // - Si eligió Alternativa (1): se mantiene igual
+        // - Si eligió Proveedor (2): 1 Prov = (eqProveedorConteo / eqAlternativaConteo) unidades alternativas
+        var factorElegidaAConteo = 1;
+        if (tipoUnidad === "0") {
+            factorElegidaAConteo = eqEstandarConteo;
+        } else if (tipoUnidad === "1") {
+            factorElegidaAConteo = eqAlternativaConteo;
+        } else if (tipoUnidad === "2") {
+            factorElegidaAConteo = eqProveedorConteo;
+        }
+
+        var cantidadEnUnidadAlternativa = Math.round((cantIngresada * factorElegidaAConteo) / eqAlternativaConteo);
+
+        if (cantidadEnUnidadAlternativa <= 0) {
+            $.alert({ title: "VALIDAR", type: "orange", content: "La cantidad convertida a la unidad alternativa debe ser al menos 1." });
+            return;
+        }
+
+        var nombreUnidadSeleccionada = $("#modal_nueva_unidad option:selected").text();
+
+        $.confirm({
+            title: 'Confirmar Solicitud',
+            content: `¿Está seguro de registrar la solicitud de reserva por <b>${cantIngresada} ${nombreUnidadSeleccionada}</b> para el producto seleccionado?`,
+            type: 'orange',
+            buttons: {
+                SI: {
+                    btnClass: 'btn-warning',
+                    action: function () {
+                        $('body').loadingModal({ text: 'Registrando solicitud de reserva...' });
+
+                        $.ajax({
+                            url: '/ProductoControlStock/RegistrarNuevaReservaConSolicitud',
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {
+                                idCiudad: idCiudad,
+                                idProducto: idProducto,
+                                cantidadSolicitada: cantidadEnUnidadAlternativa
+                            },
+                            success: function (res) {
+                                $('body').loadingModal('destroy');
+                                if (res.success === 1) {
+                                    $.alert({
+                                        title: "ÉXITO",
+                                        type: "green",
+                                        content: "La solicitud de reserva del nuevo producto se registró correctamente.",
+                                        buttons: {
+                                            OK: function () {
+                                                $("#modalAgregarNuevaReserva").modal("hide");
+                                                location.reload();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    $.alert({ title: "ERROR", type: "red", content: res.message || MENSAJE_ERROR });
+                                }
+                            },
+                            error: function () {
+                                $('body').loadingModal('destroy'); $.alert({ title: "ERROR", type: "red", content: MENSAJE_ERROR });
+                            }
+                        });
+                    }
+                },
+                NO: {
+                    btnClass: 'btn-success',
+                    action: function () { }
+                }
             }
         });
     });

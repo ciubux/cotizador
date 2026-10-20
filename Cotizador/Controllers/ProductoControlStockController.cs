@@ -293,5 +293,69 @@ namespace Cotizador.Controllers
 
             this.Session["s_controlStockFiltro"] = obj;
         }
+
+        [HttpPost]
+        public string RegistrarNuevaReservaConSolicitud(Guid idCiudad, Guid idProducto, int cantidadSolicitada)
+        {
+            try
+            {
+                if (this.Logueado == null || !this.Logueado.visualizaControlStock)
+                {
+                    return JsonConvert.SerializeObject(new { success = 0, message = "No autorizado o sesión expirada." });
+                }
+
+                if (idCiudad == Guid.Empty)
+                {
+                    return JsonConvert.SerializeObject(new { success = 0, message = "Debe seleccionar una sede válida en el filtro de búsqueda." });
+                }
+
+                if (idProducto == Guid.Empty || cantidadSolicitada <= 0)
+                {
+                    return JsonConvert.SerializeObject(new { success = 0, message = "Datos del producto o cantidad inválidos." });
+                }
+
+                ClienteBL clienteBL = new ClienteBL();
+                Guid idCliente = clienteBL.GetClienteEmpresa(this.Logueado.empresaVer.idEmpresa, idCiudad);
+
+                if (idCliente == Guid.Empty)
+                {
+                    return JsonConvert.SerializeObject(new { success = 0, message = "No se encontró un cliente asociado a la empresa para la sede seleccionada." });
+                }
+
+                ClienteProductoReservado nuevaReserva = new ClienteProductoReservado();
+                nuevaReserva.cliente = new Cliente { idCliente = idCliente };
+                nuevaReserva.producto = new Producto { idProducto = idProducto };
+                nuevaReserva.ciudad = new Ciudad { idCiudad = idCiudad };
+                nuevaReserva.tipo = "PUNTUAL";
+                nuevaReserva.cantidadOriginal = 0;
+                nuevaReserva.cantidadSolicitada = cantidadSolicitada;
+                nuevaReserva.esSolicitud = true;
+                nuevaReserva.Estado = 1;
+                nuevaReserva.IdUsuarioRegistro = this.Logueado.idUsuario;
+
+                ClienteProductoReservadoBL reservaBL = new ClienteProductoReservadoBL();
+                nuevaReserva = reservaBL.insertClienteProductoReservado(nuevaReserva);
+
+                if (nuevaReserva.idClienteProductoReservado != Guid.Empty)
+                {
+                    List<ClienteProductoReservadoSolicitud> listaSolicitudes = new List<ClienteProductoReservadoSolicitud>
+                    {
+                        new ClienteProductoReservadoSolicitud
+                        {
+                            clienteProductoReservado = new ClienteProductoReservado { idClienteProductoReservado = nuevaReserva.idClienteProductoReservado },
+                            cantidadSolicitada = cantidadSolicitada
+                        }
+                    };
+
+                    reservaBL.InsertSolicitudesRecargaReserva(this.Logueado.idUsuario, listaSolicitudes);
+                }
+
+                return JsonConvert.SerializeObject(new { success = 1 });
+            }
+            catch (Exception ex)
+            {
+                return JsonConvert.SerializeObject(new { success = 0, message = ex.Message });
+            }
+        }
     }
 }

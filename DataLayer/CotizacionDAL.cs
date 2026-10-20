@@ -58,6 +58,11 @@ namespace DataLayer
                 InputParameterAdd.Guid(objCommand, "idPedidoOrigen", cotizacion.idPedidoOrigen);
             }
 
+            if (cotizacion.listaPrecios != null && !cotizacion.listaPrecios.idListaPrecios.Equals(Guid.Empty))
+            {
+                InputParameterAdd.Guid(objCommand, "idListaPrecios", cotizacion.listaPrecios.idListaPrecios);
+            }
+
             //if (cotizacion.promocion.idPromocion == Guid.Empty)
             //    InputParameterAdd.Guid(objCommand, "idPromocion", null); //puede ser null
             //else
@@ -165,6 +170,11 @@ namespace DataLayer
                 InputParameterAdd.Int(objCommand, "idGrupoCliente", null);
                 InputParameterAdd.Guid(objCommand, "idCiudad", cotizacion.ciudad.idCiudad);
             }
+
+            if (cotizacion.listaPrecios != null && !cotizacion.listaPrecios.idListaPrecios.Equals(Guid.Empty)) {
+                InputParameterAdd.Guid(objCommand, "idListaPrecios", cotizacion.listaPrecios.idListaPrecios);
+            }
+
             //porcentajeFlete
             InputParameterAdd.Decimal(objCommand, "porcentajeFlete", cotizacion.flete);
             InputParameterAdd.Decimal(objCommand, "igv", cotizacion.igv);
@@ -347,6 +357,14 @@ namespace DataLayer
 
                 cotizacion.idPedidoOrigen = Converter.GetGuid(row, "id_pedido_origen");
                 cotizacion.nroPedidoOrigen = Converter.GetString(row, "numero_pedido_origen");
+
+                Guid idListaPrecios = Converter.GetGuid(row, "id_lista_precios");
+                if (!idListaPrecios.Equals(Guid.Empty))
+                {
+                    cotizacion.listaPrecios = new ListaPrecios();
+                    cotizacion.listaPrecios.idListaPrecios = idListaPrecios;
+                }
+                
 
                 //CLIENTE
                 cotizacion.cliente = new Cliente();

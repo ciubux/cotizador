@@ -227,6 +227,8 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idCiudad", obj.ciudad.idCiudad);
             InputParameterAdd.Varchar(objCommand, "tipo", obj.tipo);
             InputParameterAdd.Int(objCommand, "cantidadOriginal", obj.cantidadOriginal.GetValueOrDefault(0));
+            InputParameterAdd.Int(objCommand, "cantidadSolicitada", obj.cantidadSolicitada);
+            InputParameterAdd.Int(objCommand, "esSolicitud", obj.esSolicitud ? 1 : 0);
             InputParameterAdd.Guid(objCommand, "idUsuario", obj.IdUsuarioRegistro);
 
             OutputParameterAdd.UniqueIdentifier(objCommand, "newId");

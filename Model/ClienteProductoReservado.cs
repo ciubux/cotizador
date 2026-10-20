@@ -24,6 +24,9 @@ namespace Model
         [Display(Name = "Cantidad Atendida:")]
         public int? cantidadAtendida { get; set; }
 
+        public int cantidadSolicitada { get; set; }
+        public bool esSolicitud { get; set; }
+
         [Display(Name = "Unidad Conteo:")]
         public string unidadConteo { get; set; }
 
@@ -36,6 +39,7 @@ namespace Model
         public Ciudad ciudad { get; set; }
         public Cliente cliente { get; set; }
         public Producto producto { get; set; }
+
 
         public ClienteProductoReservadoSolicitud solicitudRecargaActiva { get; set; }
 

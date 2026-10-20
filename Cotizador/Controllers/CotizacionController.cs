@@ -21,6 +21,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Management;
 using System.Web.Mvc;
 using static Model.SeguimientoCotizacion;
 
@@ -90,6 +91,7 @@ namespace Cotizador.Controllers
             cotizacionTmp.usuarioBusqueda = new Usuario { idUsuario = Guid.Empty };
             cotizacionTmp.aplicaSedes = false;
             cotizacionTmp.observacionesFijas = "";
+            cotizacionTmp.listaPrecios = null;
             this.CotizacionSession = cotizacionTmp;
             this.Session[Constantes.VAR_SESSION_COTIZACION_LISTA] = new List<Cotizacion>();
         }
@@ -3008,6 +3010,110 @@ namespace Cotizador.Controllers
 
                 return "{\"success\":\"false\",\"message\":\"Error al cargar el fichero.\"}";
             }
+        }
+
+
+        public String ChangeIdListaPrecios()
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            Cotizacion cotizacion = this.CotizacionSession;
+            cotizacion.listaPrecios = new ListaPrecios();
+            bool success = false;
+
+            Guid idLista = Guid.Empty;
+            if (this.Request.Params["idLista"] != null && !this.Request.Params["idLista"].Equals(""))
+            {
+                idLista = Guid.Parse(this.Request.Params["idLista"]);
+            }
+
+            if (idLista.Equals(Guid.Empty))
+            {
+                cotizacion.listaPrecios = null;
+            } else
+            {
+                ListaPreciosBL listaBl = new ListaPreciosBL();
+                cotizacion.listaPrecios = listaBl.GetListaPrecios(idLista, usuario.idUsuario);
+            }
+
+            this.CotizacionSession = cotizacion;
+            success = true;
+
+            return JsonConvert.SerializeObject(new {success = success});
+        }
+
+        [HttpPost]
+        public string EvaluarListaPrecios()
+        {
+            Cotizacion cot = CotizacionSession;
+
+            List<string> cambios = new List<string>();
+            int cantidadItems = 0;
+            int cantidadCambios = 0;
+
+            if (cot.listaPrecios != null)
+            {
+                foreach (CotizacionDetalle det in cot.cotizacionDetalleList)
+                {
+                    ListaPreciosItem item = cot.listaPrecios.items.FirstOrDefault(x => x.producto.idProducto == det.producto.idProducto);
+
+                    if (item != null)
+                    {
+                        cantidadItems++;
+
+                        int idPresentacion = 0;
+                        if (det.esPrecioAlternativo)
+                        {
+                            idPresentacion = det.ProductoPresentacion.IdProductoPresentacion;
+                        }
+
+                        decimal precioUnid = item.precioPresentacion(idPresentacion);
+                        precioUnid = Decimal.Parse(String.Format(Constantes.formatoDecimalesPrecioNeto, precioUnid));
+
+                        if (det.precioNeto != precioUnid)
+                        {
+                            cantidadCambios++;
+                            cambios.Add(det.producto.sku + ": De " + String.Format(Constantes.formatoDecimalesPrecioNeto, det.precioNeto) + " a " + String.Format(Constantes.formatoDecimalesPrecioNeto, precioUnid));
+                        }
+                    }
+                }
+            }
+
+            return JsonConvert.SerializeObject(new { itemsEncontrados = cantidadItems, itemsCambiar = cantidadCambios, listaCambios = cambios});
+        }
+
+        [HttpPost]
+        public string ActualizarPreciosAListaPrecios()
+        {
+            Cotizacion cot = CotizacionSession;
+
+            int cantidadCambios = 0;
+
+            foreach (CotizacionDetalle det in cot.cotizacionDetalleList)
+            {
+                ListaPreciosItem item = cot.listaPrecios.items.FirstOrDefault(x => x.producto.idProducto == det.producto.idProducto);
+
+                if (item != null)
+                {
+                    int idPresentacion = 0;
+
+                    decimal precioMP = item.precioPresentacion(idPresentacion);
+                    precioMP = Decimal.Parse(String.Format(Constantes.formatoDecimalesPrecioNeto, precioMP));
+
+                    if (det.precioNeto != precioMP)
+                    {
+                        det.precioNeto = precioMP;
+                        det.porcentajeDescuento = (1 - (precioMP / det.producto.precioSinIgv)) * 100;
+                        cantidadCambios++;
+                    }
+                }
+            }
+
+            if (cantidadCambios > 0)
+            {
+                HelperDocumento.calcularMontosTotales(cot);
+            }
+
+            return JsonConvert.SerializeObject(new { itemsCambiados = cantidadCambios });
         }
     }
 }

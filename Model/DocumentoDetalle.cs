@@ -176,9 +176,16 @@ namespace Model
 
         //Es el precio definido por el usuario
         protected Decimal _precioNeto;
+        
+        //   public Decimal precioNeto { get; set; }
 
-     //   public Decimal precioNeto { get; set; }
-
+        public Decimal precioNetoMP
+        {
+            get
+            {
+                return _precioNeto;
+            }
+        }
 
         public Decimal precioNeto
         {

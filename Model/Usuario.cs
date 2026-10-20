@@ -353,6 +353,8 @@ namespace Model
         public bool multiEmpresa { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MULTI_EMPRESA)).FirstOrDefault() != null; } }
         public bool vistaIntegradaMultiEmpresa { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISTA_INTEGRADA_MULTIEMPRESA)).FirstOrDefault() != null; } }
         public bool reporteIntegradoMultiEmpresa { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REPORTE_INTEGRADO_MULTIEMPRESA)).FirstOrDefault() != null; } }
+        public bool filtraFechaCreacionRegistro { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.FILTRA_FECHA_CREACION_REGISTRO)).FirstOrDefault() != null; } }
+
 
         /*Roles*/
         public bool modificaRol { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_ROL)).FirstOrDefault() != null; } }

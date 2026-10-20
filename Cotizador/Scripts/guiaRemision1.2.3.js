@@ -636,6 +636,8 @@ jQuery(function ($) {
     var fechaTrasladoHasta = $("#fechaTrasladoHastatmp").val();
     $("#guiaRemision_fechaTrasladoHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaTrasladoHasta);
 
+    $("#guiaRemision_fechaRegistroDesde").datepicker({ dateFormat: "dd/mm/yy" });
+    $("#guiaRemision_fechaRegistroHasta").datepicker({ dateFormat: "dd/mm/yy" });
 
     var documentoVenta_fechaEmision = $("#documentoVenta_fechaEmisiontmp").val();
     var documentoVenta_fechaEmisionMin = $("#documentoVenta_fechaEmisionMin").val();
@@ -2984,6 +2986,32 @@ jQuery(function ($) {
             type: 'POST',
             data: {
                 fechaTrasladoHasta: fechaTrasladoHasta
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#guiaRemision_fechaRegistroDesde").change(function () {
+        var fechaDesde = $("#guiaRemision_fechaRegistroDesde").val();
+        $.ajax({
+            url: "/GuiaRemision/ChangefechaRegistroDesde",
+            type: 'POST',
+            data: {
+                fechaDesde: fechaDesde
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#guiaRemision_fechaRegistroHasta").change(function () {
+        var fechaHasta = $("#guiaRemision_fechaRegistroHasta").val();
+        $.ajax({
+            url: "/GuiaRemision/ChangefechaRegistroHasta",
+            type: 'POST',
+            data: {
+                fechaHasta: fechaHasta
             },
             success: function () {
             }

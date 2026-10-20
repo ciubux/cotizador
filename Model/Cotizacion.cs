@@ -97,6 +97,11 @@ namespace Model
         //  public Usuario usuario_aprobador { get; set; }
         public Decimal igv { get; set; }
 
+
+        [Display(Name = "Lista Precios:")]
+        public ListaPrecios listaPrecios { get; set; }
+
+
         [Display(Name = "Moneda:")]
         public Moneda moneda { get; set; }
 

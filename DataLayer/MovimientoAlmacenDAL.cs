@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using Newtonsoft.Json;
 using Model.CONFIGCLASSES;
 using System.ComponentModel.Design;
+using System.Security.Policy;
 
 namespace DataLayer
 {
@@ -1222,6 +1223,18 @@ namespace DataLayer
             InputParameterAdd.Guid(objCommand, "idUsuario", guiaRemision.usuario.idUsuario);
             InputParameterAdd.DateTime(objCommand, "fechaTrasladoDesde", guiaRemision.fechaTrasladoDesde);
             InputParameterAdd.DateTime(objCommand, "fechaTrasladoHasta", guiaRemision.fechaTrasladoHasta);
+
+            if (guiaRemision.fechaRegistroDesde.HasValue)
+            {
+                InputParameterAdd.DateTime(objCommand, "fechaRegistroDesde", guiaRemision.fechaRegistroDesde.Value);
+            }
+            if (guiaRemision.fechaRegistroHasta.HasValue)
+            {
+                InputParameterAdd.DateTime(objCommand, "fechaRegistroHasta", guiaRemision.fechaRegistroHasta.Value);
+            }
+            
+
+
             InputParameterAdd.Int(objCommand, "anulado", guiaRemision.estaAnulado ? 1 : 0);
             InputParameterAdd.Int(objCommand, "facturado", guiaRemision.estaFacturado ? 1 : 0);
             InputParameterAdd.BigInt(objCommand, "numeroPedido", guiaRemision.pedido.numeroPedido);
