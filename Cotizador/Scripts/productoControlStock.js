@@ -582,7 +582,6 @@ jQuery(function ($) {
         }, { placeholder_text_single: "Seleccione el producto", no_results_text: "No se encontró Producto" });
     }
 
-    // 1. Abrir modal al hacer clic en "btnAgregarNuevaReserva"
     $("#btnAgregarNuevaReserva").click(function () {
         var idCiudad = $("#idCiudad").val();
         var nombreCiudad = $("#idCiudad option:selected").text().trim();
@@ -596,7 +595,6 @@ jQuery(function ($) {
             return;
         }
 
-        // Limpiar formulario y setear sede
         PRODUCTO_SELECCIONADO_NUEVA_RESERVA = null;
         $("#modal_nueva_idCiudad").val(idCiudad);
         $("#modal_nueva_nombreCiudad").val(nombreCiudad);
@@ -609,7 +607,6 @@ jQuery(function ($) {
         $("#modalAgregarNuevaReserva").modal("show");
     });
 
-    // 2. Al seleccionar un producto, obtener sus datos y armar el selector de unidades
     $("#modal_idProducto").change(function () {
         var idProd = $(this).val();
         if (!idProd) {
@@ -627,26 +624,22 @@ jQuery(function ($) {
 
             var htmlUnidades = "";
 
-            // Unidad MP (0): Siempre aparece y será la seleccionada por defecto
             var textoMP = res.unidad || "MP";
             htmlUnidades += `<option value="0" selected>${textoMP}</option>`;
 
-            // Unidad Alternativa (1): Si equivalenciaUnidadAlternativaUnidadConteo != equivalenciaUnidadEstandarUnidadConteo
             if (eqAlternativa !== eqEstandar && res.unidad_alternativa) {
                 htmlUnidades += `<option value="1">${res.unidad_alternativa}</option>`;
             }
 
-            // Unidad Proveedor (2): Si equivalenciaUnidadProveedorUnidadConteo != equivalenciaUnidadEstandarUnidadConteo
             if (eqProveedor !== eqEstandar && res.unidadProveedor) {
                 htmlUnidades += `<option value="2">${res.unidadProveedor}</option>`;
             }
 
             $("#modal_nueva_unidad").html(htmlUnidades);
-            $("#modal_nueva_unidad").val("0"); // Por defecto unidad MP
+            $("#modal_nueva_unidad").val("0"); 
         }, 'JSON');
     });
 
-    // 3. Registrar la solicitud convirtiendo la cantidad a la unidad alternativa
     $("#btnGuardarNuevaReserva").click(function () {
         var idCiudad = $("#modal_nueva_idCiudad").val();
         var idProducto = $("#modal_idProducto").val();
@@ -670,11 +663,6 @@ jQuery(function ($) {
 
         if (eqAlternativaConteo === 0) eqAlternativaConteo = 1;
 
-        // Primero pasamos la cantidad seleccionada a la unidad base (conteo) y luego la dividimos entre la equivalencia de la unidad alternativa
-        // O usando las equivalencias directas del producto:
-        // - Si eligió MP (0): 1 MP = (eqEstandarConteo / eqAlternativaConteo) unidades alternativas (que equivale a prod.equivalenciaAlternativa)
-        // - Si eligió Alternativa (1): se mantiene igual
-        // - Si eligió Proveedor (2): 1 Prov = (eqProveedorConteo / eqAlternativaConteo) unidades alternativas
         var factorElegidaAConteo = 1;
         if (tipoUnidad === "0") {
             factorElegidaAConteo = eqEstandarConteo;

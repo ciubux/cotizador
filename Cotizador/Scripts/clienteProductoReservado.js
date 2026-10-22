@@ -119,6 +119,7 @@ jQuery(function ($) {
         }, 'JSON');
     });
 
+
     function renderizarTablaRegistros() {
         $("#tableRegistros > tbody").empty();
         $("#tableRegistros").footable({
@@ -139,6 +140,11 @@ jQuery(function ($) {
                 etiquetaCantidadSolicitada = '<br/> <span class="label label-warning label-solicitado"> Solicitado: ' + conv.cantidadSolicitada + ' </span> ';
             }
 
+            var etiquetaSolicitudReservaBase = "";
+            if (p.esSolicitud) {
+                etiquetaSolicitudReservaBase = '<br/> <span class="label label-info"> Solicitado: ' + conv.cantidadSolicitadaReservaBase + ' </span>';
+            }
+
             var btnEliminar = "";
             if (p.cantidadReserva === 0) {
                 btnEliminar = `<button type="button" class="btn btn-danger btn-sm btn-eliminar-reserva" 
@@ -157,7 +163,7 @@ jQuery(function ($) {
                 '<td>' + (p.cliente && p.cliente.ruc ? p.cliente.ruc + " - " + p.cliente.razonSocial : "-") + '</td>' +
                 '<td>' + (p.producto && p.producto.sku ? p.producto.sku + " - " + p.producto.descripcion : "-") + '</td>' +
                 '<td>' + conv.unidadTexto + '</td>' +
-                '<td>' + conv.cantidadOriginal + '</td>' +
+                '<td>' + conv.cantidadOriginal + etiquetaSolicitudReservaBase + '</td>' +
                 '<td>' + conv.cantidadReserva + etiquetaCantidadSolicitada + '</td>' +
                 '<td>' + conv.cantidadAtendida + '</td>' +
                 '<td>' + conv.stockReal + '</td>' +
@@ -206,7 +212,7 @@ jQuery(function ($) {
         //$("#btnBusqueda").click();
     });
 
-    
+
 
     $(document).on('click', '.btnEditar', function () {
         var id = $(this).data("id");
@@ -267,6 +273,17 @@ jQuery(function ($) {
             $("#modal_unidadConteo").text(unidadTexto);
 
             var cantOriginalSelec = Math.floor((p.cantidadOriginal || 0) / divisor);
+
+            if (p.esSolicitud) {
+                cantOriginalSelec = Math.floor((p.cantidadSolicitada || 0) / divisor);
+
+                $.alert({
+                    title: 'Aviso',
+                    content: 'Esta reserva fue solicitada por el cliente. Se ha cargado la cantidad solicitada (' + cantOriginalSelec + ' ' + unidadTexto + ') como Reserva Base sugerida.',
+                    type: 'blue' 
+                });
+            }
+
             $("#modal_cantidadOriginal").val(cantOriginalSelec);
 
             $("#modal_idCiudad").prop("disabled", true);
@@ -621,6 +638,7 @@ jQuery(function ($) {
     }
 
 
+
     function obtenerDatosConvertidos(p, tipoUnidad) {
         var res = {
             unidadTexto: p.unidadConteo || "-",
@@ -629,6 +647,7 @@ jQuery(function ($) {
             cantidadReserva: 0,
             cantidadAtendida: 0,
             cantidadSolicitada: 0,
+            cantidadSolicitadaReservaBase: 0,
             stockEsperado: 0,
             stockSeparado: 0,
             stockReal: "-",
@@ -657,6 +676,7 @@ jQuery(function ($) {
         res.cantidadOriginal = Number(((p.cantidadOriginal || 0) / res.divisor).toFixed(2));
         res.cantidadReserva = Number(((p.cantidadReserva || 0) / res.divisor).toFixed(2));
         res.cantidadAtendida = Number(((p.cantidadAtendida || 0) / res.divisor).toFixed(2));
+        res.cantidadSolicitadaReservaBase = Number(((p.cantidadSolicitada || 0) / res.divisor).toFixed(2));
 
         if (p.tieneSolicitudRecargaActiva && p.solicitudRecargaActiva) {
             res.cantidadSolicitada = Number(((p.solicitudRecargaActiva.cantidadSolicitada || 0) / res.divisor).toFixed(2));

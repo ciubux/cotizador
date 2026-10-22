@@ -38,6 +38,8 @@ namespace DataLayer
                 obj.cantidadReserva = Converter.GetInt(row, "cantidad_reserva");
                 obj.cantidadAtendida = Converter.GetInt(row, "cantidad_atendida");
                 obj.unidadConteo = Converter.GetString(row, "unidad_conteo");
+                obj.cantidadSolicitada = Converter.GetInt(row, "cantidad_solicitada_cliente");
+                obj.esSolicitud = Converter.GetInt(row, "es_solicitud") == 1;
                 obj.tipo = Converter.GetString(row, "tipo");
                 obj.fechaUltimaRecarga = Converter.GetDateTime(row, "fecha_ultima_recarga");
                 obj.Estado = Converter.GetInt(row, "estado");
@@ -180,6 +182,9 @@ namespace DataLayer
                 obj.cantidadReserva = Converter.GetInt(row, "cantidad_reserva");
                 obj.cantidadAtendida = Converter.GetInt(row, "cantidad_atendida");
                 obj.unidadConteo = Converter.GetString(row, "unidad_conteo");
+                obj.cantidadSolicitada = Converter.GetInt(row, "cantidad_solicitada_cliente");
+                obj.esSolicitud = Converter.GetInt(row, "es_solicitud") == 1;
+                
                 obj.tipo = Converter.GetString(row, "tipo");
                 obj.fechaUltimaRecarga = Converter.GetDateTime(row, "fecha_ultima_recarga");
                 obj.Estado = Converter.GetInt(row, "estado");
