@@ -415,6 +415,123 @@ namespace DataLayer
             return resultados;
         }
 
+        public List<List<String>> reporteRotacionProductos(Guid idUsuario, Guid idCiudad, int meses, String proveedor, String sku)
+        {
+            var objCommand = GetSqlCommand("ps_reporte_rotacion_productos");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            if (idCiudad != null && idCiudad != Guid.Empty)
+            {
+                InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
+            }
+
+            InputParameterAdd.Int(objCommand, "meses", meses);
+            InputParameterAdd.VarcharEmpty(objCommand, "proveedor", proveedor);
+            InputParameterAdd.VarcharEmpty(objCommand, "sku", sku);
+
+            DataTable dataTable = Execute(objCommand);
+
+            List<List<String>> resultados = new List<List<String>>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                List<String> item = new List<String>();
+
+                item.Add(Converter.GetString(row, "id_producto")); /* 0: id_producto */
+                item.Add(Converter.GetString(row, "sku")); /* 1: sku */
+                item.Add(Converter.GetString(row, "descripcion")); /* 2: descripcion */
+                item.Add(Converter.GetString(row, "familia")); /* 3: familia */
+                item.Add(Converter.GetString(row, "proveedor")); /* 4: proveedor */
+                item.Add(Converter.GetInt(row, "descontinuado").ToString()); /* 5: descontinuado */
+
+                Decimal precioRef = Converter.GetDecimal(row, "precio_referencial");
+                item.Add(String.Format(Constantes.formatoDosDecimales, precioRef)); /* 6: precio_referencial */
+
+                item.Add(Converter.GetString(row, "unidad")); /* 7: unidad (MP) */
+                item.Add(Converter.GetString(row, "unidad_alternativa")); /* 8: unidad_alternativa */
+                item.Add(Converter.GetString(row, "unidad_proveedor")); /* 9: unidad_proveedor */
+                item.Add(Converter.GetString(row, "unidad_conteo")); /* 10: unidad_conteo */
+
+                item.Add(Converter.GetInt(row, "equivalencia").ToString()); /* 11: equivalencia */
+                item.Add(Converter.GetInt(row, "equivalencia_proveedor").ToString()); /* 12: equivalencia_proveedor */
+                item.Add(Converter.GetInt(row, "equivalencia_unidad_estandar_unidad_conteo").ToString()); /* 13: equivalencia_unidad_estandar_unidad_conteo */
+                item.Add(Converter.GetInt(row, "equivalencia_unidad_alternativa_unidad_conteo").ToString()); /* 14: equivalencia_unidad_alternativa_unidad_conteo */
+                item.Add(Converter.GetInt(row, "equivalencia_unidad_proveedor_unidad_conteo").ToString()); /* 15: equivalencia_unidad_proveedor_unidad_conteo */
+
+                item.Add(Converter.GetInt(row, "cantidad_salida_venta_conteo").ToString()); /* 16: cantidad_salida_venta_conteo */
+                item.Add(Converter.GetInt(row, "cantidad_devolucion_venta_conteo").ToString()); /* 17: cantidad_devolucion_venta_conteo */
+                item.Add(Converter.GetInt(row, "salida_neta_unidad_conteo").ToString()); /* 18: salida_neta_unidad_conteo */
+
+                Decimal rotacionMensual = Converter.GetDecimal(row, "rotacion_mensual_conteo");
+                Decimal rotacionDiaria = Converter.GetDecimal(row, "rotacion_diaria_conteo");
+
+                item.Add(String.Format(Constantes.formatoCuatroDecimales, rotacionMensual)); /* 19: rotacion_mensual_conteo */
+                item.Add(String.Format(Constantes.formatoCuatroDecimales, rotacionDiaria)); /* 20: rotacion_diaria_conteo */
+
+                item.Add(row.IsNull("fecha_ultima_salida") ? "" : Converter.GetDateTime(row, "fecha_ultima_salida").ToString("dd/MM/yyyy")); /* 21: fecha_ultima_salida */
+                item.Add(row.IsNull("dias_sin_venta") ? "" : Converter.GetInt(row, "dias_sin_venta").ToString()); /* 22: dias_sin_venta */
+
+                item.Add(row.IsNull("fecha_ultima_compra") ? "" : Converter.GetDateTime(row, "fecha_ultima_compra").ToString("dd/MM/yyyy")); /* 23: fecha_ultima_compra */
+                item.Add(row.IsNull("dias_desde_ultima_compra") ? "" : Converter.GetInt(row, "dias_desde_ultima_compra").ToString()); /* 24: dias_desde_ultima_compra */
+
+                resultados.Add(item);
+            }
+
+            return resultados;
+        }
+
+        public List<List<String>> reporteRotacionCostosProductos(Guid idUsuario, Guid idCiudad, List<Guid> idsProductos, List<int> cantidadesConteo)
+        {
+            var objCommand = GetSqlCommand("ps_reporte_rotacion_costos_productos");
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            if (idCiudad != null && idCiudad != Guid.Empty)
+            {
+                InputParameterAdd.Guid(objCommand, "idCiudad", idCiudad);
+            }
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID_PRODUCTO", typeof(Guid)));
+            tvp.Columns.Add(new DataColumn("CANTIDAD", typeof(int)));
+
+            if (idsProductos != null && cantidadesConteo != null)
+            {
+                int total = Math.Min(idsProductos.Count, cantidadesConteo.Count);
+                for (int i = 0; i < total; i++)
+                {
+                    DataRow rowObj = tvp.NewRow();
+                    rowObj["ID_PRODUCTO"] = idsProductos[i];
+                    rowObj["CANTIDAD"] = cantidadesConteo[i];
+                    tvp.Rows.Add(rowObj);
+                }
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@productoList", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.ProductoCantidadList";
+
+            DataTable dataTable = Execute(objCommand);
+
+            List<List<String>> resultados = new List<List<String>>();
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                List<String> item = new List<String>();
+
+                item.Add(Converter.GetString(row, "id_producto")); /* 0: id_producto */
+                item.Add(Converter.GetInt(row, "stock_conteo").ToString()); /* 1: stock_conteo */
+                item.Add(Converter.GetInt(row, "cantidad_cubierta_compras").ToString()); /* 2: cantidad_cubierta_compras */
+                item.Add(Converter.GetInt(row, "cantidad_completada_catalogo").ToString()); /* 3: cantidad_completada_catalogo */
+
+                Decimal costoPromedioConteo = Converter.GetDecimal(row, "costo_promedio_unidad_conteo");
+                item.Add(costoPromedioConteo.ToString("0.000000", System.Globalization.CultureInfo.InvariantCulture)); /* 4: costo_promedio_unidad_conteo */
+
+                resultados.Add(item);
+            }
+
+            return resultados;
+        }
+
     }
 }
  

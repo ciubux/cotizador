@@ -1509,8 +1509,8 @@ namespace Cotizador.Controllers
 
         public async Task<string> Create()
         {
-            try
-            {
+           /* try
+            {*/
                 UsuarioBL usuarioBL = new UsuarioBL();
                 Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 int continuarLuego = int.Parse(Request["continuarLuego"].ToString());
@@ -1587,12 +1587,12 @@ namespace Cotizador.Controllers
                 var v = new { codigo = codigo, estado = estado, observacion = observacion };
                 String resultado = JsonConvert.SerializeObject(v);
                 return resultado;
-            }
+            /*}
             catch (Exception e)
             {
                 logger.Error(e, agregarUsuarioAlMensaje(e.Message));
                 throw e;
-            }
+            }*/
 
         }
 

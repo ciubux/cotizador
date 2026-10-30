@@ -263,6 +263,7 @@ namespace Model
 
         public bool realizaCargaMasivaStock { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.CARGA_MASIVA_STOCK)).FirstOrDefault() != null; } }
         public bool visualizaReporteGlobalStock { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_REPORTE_GLOBAL_STOCK)).FirstOrDefault() != null; } }
+        public bool visualizaReporteRotacionProductos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_REPORTE_ROTACION_PRODUCTOS)).FirstOrDefault() != null; } }
 
         //ALMACEN
         public bool registraAjusteStock { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.REGISTRA_AJUSTE_STOCK)).FirstOrDefault() != null; } }

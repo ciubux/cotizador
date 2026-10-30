@@ -3452,3 +3452,4 @@ C:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.CoreCompileInputs
 C:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.csproj.Up2Date
 C:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.dll
 C:\Repo\freelos\cotizador\Cotizador\obj\Debug\Cotizador.pdb
+C:\Repo\freelos\cotizador\Cotizador\bin\ICSharpCode.SharpZipLib.dll

@@ -79,5 +79,21 @@ namespace BusinessLayer
                 return list;
             }
         }
+
+        public List<List<String>> reporteRotacionProductos(Guid idUsuario, Guid idCiudad, int meses, String proveedor, String sku)
+        {
+            using (ReporteDAL dal = new ReporteDAL())
+            {
+                return dal.reporteRotacionProductos(idUsuario, idCiudad, meses, proveedor, sku);
+            }
+        }
+
+        public List<List<String>> reporteRotacionCostosProductos(Guid idUsuario, Guid idCiudad, List<Guid> idsProductos, List<int> cantidadesConteo)
+        {
+            using (ReporteDAL dal = new ReporteDAL())
+            {
+                return dal.reporteRotacionCostosProductos(idUsuario, idCiudad, idsProductos, cantidadesConteo);
+            }
+        }
     }
 }

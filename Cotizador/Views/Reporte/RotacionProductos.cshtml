@@ -1,0 +1,695 @@
+﻿@{
+    ViewBag.Title = "Rotación de Productos";
+    Guid idCiudadSeleccionada = ViewBag.idCiudad != null ? (Guid)ViewBag.idCiudad : Guid.Empty;
+    int mesesSeleccionados = ViewBag.meses != null ? (int)ViewBag.meses : 3;
+    string proveedorSeleccionado = ViewBag.proveedor != null ? (string)ViewBag.proveedor : "Todos";
+    string skuFiltro = ViewBag.sku != null ? (string)ViewBag.sku : "";
+    int tipoUnidadSeleccionada = ViewBag.tipoUnidad != null ? (int)ViewBag.tipoUnidad : 0;
+    bool esPost = ViewBag.esPost != null ? (bool)ViewBag.esPost : false;
+    string jsonResultados = ViewBag.jsonResultados != null ? (string)ViewBag.jsonResultados : "[]";
+}
+
+<div class="page-header">
+    <h3><b>Rotación de Productos</b></h3>
+</div>
+
+<form id="formRotacionProductos" method="post" action="@Url.Action("RotacionProductos", "Reporte")" class="form-horizontal">
+    <div class="row">
+        <!-- Filtro Sede -->
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label class="control-label col-xs-4" for="idCiudad">Sede:</label>
+                <div class="col-xs-8">
+                    @Html.Action("GetCiudades", "Ciudad", new { ciudadSelectId = "idCiudad", selectedValue = idCiudadSeleccionada })
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtro Meses Rotación -->
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label class="control-label col-xs-4" for="meses">Meses Evaluar:</label>
+                <div class="col-xs-8">
+                    <select id="meses" name="meses" class="form-control">
+                        @for (int m = 1; m <= 12; m++)
+                        {
+                            <option value="@m" @(mesesSeleccionados == m ? "selected" : "")>@m @(m == 1 ? "Mes" : "Meses")</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Selector Tipo de Unidad -->
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label class="control-label col-xs-4" for="tipoUnidad">Unidad Vista:</label>
+                <div class="col-xs-8">
+                    <select id="tipoUnidad" name="tipoUnidad" class="form-control">
+                        <option value="0" @(tipoUnidadSeleccionada == 0 ? "selected" : "")>MP</option>
+                        <option value="1" @(tipoUnidadSeleccionada == 1 ? "selected" : "")>Alternativa</option>
+                        <option value="2" @(tipoUnidadSeleccionada == 2 ? "selected" : "")>Proveedor</option>
+                        <option value="3" @(tipoUnidadSeleccionada == 3 ? "selected" : "")>Conteo</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 5px;">
+        <!-- Filtro Proveedor -->
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label class="control-label col-xs-4" for="proveedor">Proveedor:</label>
+                <div class="col-xs-8">
+                    <div>
+                        @Html.Action("list", "Proveedor")
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtro SKU -->
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label class="control-label col-xs-4" for="sku">SKU:</label>
+                <div class="col-xs-8">
+                    <input type="text" class="form-control" id="sku" name="sku" value="@skuFiltro" placeholder="" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 5px;">
+
+        <div class="col-sm-12 col-lg-12 text-right">
+            <button type="submit" id="btnBuscar" class="btn btn-primary bouton-image botonSearch">
+                Buscar
+            </button>
+            <button type="button" id="btnConsultarStock" class="btn btn-info" disabled>
+                Cargar Stock
+            </button>
+            <button type="button" id="btnConsultarCostos" class="btn btn-warning" disabled>
+                Calcular Costo Stock
+            </button>
+            <button type="button" id="btnExportExcel" class="btn btn-primary bouton-image botonExcel" disabled>
+                Exportar
+            </button>
+        </div>
+    </div>
+</form>
+
+<hr />
+
+<input type="hidden" id="hdnEsPost" value="@(esPost ? "1" : "0")" />
+
+<div class="row">
+    <div class="col-xs-12">
+        <table id="tableRotacion" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
+               data-editing-allow-add="false"
+               data-editing-allow-delete="false"
+               data-editing-allow-edit="false"
+               data-sorting="true"
+               data-show-toggle="false">
+            <thead>
+                <tr>
+                    <th data-name="sku" data-visible="true" data-sortable="true">SKU</th>
+                    <th data-name="descripcion" data-visible="true" data-sortable="true">Descripción</th>
+                    <th data-name="familia" data-visible="true" data-sortable="true" data-breakpoints="xs sm">Familia</th>
+                    <th data-name="proveedor" data-visible="true" data-sortable="true" data-breakpoints="xs sm">Prov.</th>
+                    <th data-name="unidad" data-visible="true" data-sortable="true">Unidad</th>
+                    <th data-name="precioRef" data-visible="true" data-sortable="true">Precio Ref.</th>
+                    <th data-name="salidaVenta" data-visible="true" data-sortable="true" data-breakpoints="xs sm">Salidas Venta</th>
+                    <th data-name="devolVenta" data-visible="true" data-sortable="true" data-breakpoints="xs sm">Devol. Venta</th>
+                    <th data-name="salidaNeta" data-visible="true" data-sortable="true">Salida Neta</th>
+                    <th data-name="rotacionMensual" data-visible="true" data-sortable="true">Rotación Mensual</th>
+                    <th data-name="rotacionDiaria" data-visible="true" data-sortable="true">Rotación Diaria</th>
+                    <th data-name="ultimaSalida" data-visible="true" data-sortable="true" data-breakpoints="xs sm">Últ. Salida</th>
+                    <th data-name="diasSinVenta" data-visible="true" data-sortable="true">Días sin Venta</th>
+                    <th data-name="ultimaCompra" data-visible="true" data-sortable="true" data-breakpoints="xs sm">Últ. Compra</th>
+                    <th data-name="diasUltCompra" data-visible="true" data-sortable="true" data-breakpoints="xs sm">Días Últ. Compra</th>
+                    <!-- Columnas: Stock -->
+                    <th data-name="stockReal" data-visible="true" data-sortable="true">Stock Real</th>
+                    <th data-name="stockDisp" data-visible="true" data-sortable="true">Stock Disp.</th>
+                    <th data-name="diasCobertura" data-visible="true" data-sortable="true">Días Cobertura</th>
+                    <!-- Columnas: Costos -->
+                    <th data-name="costoUnit" data-visible="true" data-sortable="true">Costo Unit. (S/)</th>
+                    <th data-name="costoTotal" data-visible="true" data-sortable="true">Costo Stock Total (S/)</th>
+
+                    <th data-name="opciones" data-visible="true" data-sortable="false" data-breakpoints="xs"></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+@Html.Partial("../Stock/_ModalStockProducto")
+
+@Html.Partial("../Stock/_ModalStockPendienteAtencion")
+
+@Html.Partial("../Stock/_ModalStockPendienteRecepcion")
+
+@Html.Partial("../Pedido/_ModalPedidoReadOnly")
+
+
+
+@section Scripts {
+    <script type="text/javascript">
+
+    var MATRIZ_INICIAL = @Html.Raw(string.IsNullOrEmpty(jsonResultados) ? "[]" : jsonResultados);
+    var DATA_ROTACION = [];
+    var STOCK_CARGADO = false;
+    var COSTOS_CARGADOS = false;
+
+    jQuery(function ($) {
+
+        $(document).ready(function () {
+            var esPost = $("#hdnEsPost").val() === "1";
+            if (esPost) {
+                inicializarDatosDesdePost();
+            } else {
+                $("#tableRotacion > tbody").empty();
+                $("#tableRotacion").footable({
+                    "paging": { "enabled": true }
+                });
+            }
+        });
+
+        function inicializarDatosDesdePost() {
+            var matriz = MATRIZ_INICIAL || [];
+
+            DATA_ROTACION = [];
+            STOCK_CARGADO = false;
+            COSTOS_CARGADOS = false;
+
+            for (var i = 0; i < matriz.length; i++) {
+                var r = matriz[i];
+                var itemObj = {
+                    idProducto: r[0],
+                    sku: r[1],
+                    descripcion: r[2],
+                    familia: r[3],
+                    proveedor: r[4],
+                    descontinuado: parseInt(r[5], 10) || 0,
+                    precioReferencial: parseNumero(r[6]),
+
+                    unidadMP: r[7],
+                    unidadAlternativa: r[8],
+                    unidadProveedor: r[9],
+                    unidadConteo: r[10],
+
+                    equivalencia: parseInt(r[11], 10) || 1,
+                    equivalenciaProveedor: parseInt(r[12], 10) || 1,
+                    eqEstandarConteo: parseInt(r[13], 10) || 1,
+                    eqAlternativaConteo: parseInt(r[14], 10) || 1,
+                    eqProveedorConteo: parseInt(r[15], 10) || 1,
+
+                    salidaVentaConteo: parseInt(r[16], 10) || 0,
+                    devolucionVentaConteo: parseInt(r[17], 10) || 0,
+                    salidaNetaConteo: parseInt(r[18], 10) || 0,
+                    rotacionMensualConteo: parseNumero(r[19]),
+                    rotacionDiariaConteo: parseNumero(r[20]),
+
+                    fechaUltimaSalida: r[21] || "-",
+                    diasSinVenta: r[22] !== "" ? parseInt(r[22], 10) : null,
+                    fechaUltimaCompra: r[23] || "-",
+                    diasDesdeUltimaCompra: r[24] !== "" ? parseInt(r[24], 10) : null,
+
+                    tieneDatosStock: false,
+                    stockRealConteo: null,
+                    stockDisponibleConteo: null,
+
+                    tieneDatosCosto: false,
+                    costoUnitarioConteo: null
+                };
+
+                DATA_ROTACION.push(itemObj);
+            }
+
+            actualizarEstadoBotones();
+            renderizarTablaRotacion();
+        }
+
+        function parseNumero(valorStr) {
+            if (!valorStr) return 0;
+            var limpio = valorStr.toString().replace(/,/g, '');
+            return parseFloat(limpio) || 0;
+        }
+
+
+        function actualizarEstadoBotones() {
+            if (!DATA_ROTACION || DATA_ROTACION.length === 0) {
+                $("#btnConsultarStock").prop("disabled", true);
+                $("#btnConsultarCostos").prop("disabled", true);
+                $("#btnExportExcel").prop("disabled", true);
+                return;
+            }
+
+            $("#btnExportExcel").prop("disabled", false);
+
+            if (!STOCK_CARGADO) {
+                $("#btnConsultarStock").prop("disabled", false);
+                $("#btnConsultarCostos").prop("disabled", true);
+            } else if (STOCK_CARGADO && !COSTOS_CARGADOS) {
+                $("#btnConsultarStock").prop("disabled", true);
+                $("#btnConsultarCostos").prop("disabled", false);
+            } else {
+                $("#btnConsultarStock").prop("disabled", true);
+                $("#btnConsultarCostos").prop("disabled", true);
+            }
+        }
+
+
+        function obtenerValoresConvertidos(item, tipoUnidad) {
+            var divisor = 1;
+            var unidadTexto = item.unidadConteo || "-";
+
+            if (tipoUnidad === "0") {
+                unidadTexto = item.unidadMP || "-";
+                divisor = item.eqEstandarConteo || 1;
+            } else if (tipoUnidad === "1") {
+                unidadTexto = item.unidadAlternativa || "-";
+                divisor = item.eqAlternativaConteo || 1;
+            } else if (tipoUnidad === "2") {
+                unidadTexto = item.unidadProveedor || "-";
+                divisor = item.eqProveedorConteo || 1;
+            } else {
+                unidadTexto = item.unidadConteo || "-";
+                divisor = 1;
+            }
+
+            if (divisor <= 0) divisor = 1;
+
+            var salidaVenta = item.salidaVentaConteo / divisor;
+            var devolucionVenta = item.devolucionVentaConteo / divisor;
+            var salidaNeta = item.salidaNetaConteo / divisor;
+            var rotacionMensual = item.rotacionMensualConteo / divisor;
+            var rotacionDiaria = item.rotacionDiariaConteo / divisor;
+
+            var stockRealTexto = "-";
+            var stockDispTexto = "-";
+            var stockEsperadoTexto = "0.00";
+            var stockSeparadoTexto = "0.00";
+            var diasCoberturaTexto = "-";
+
+            if (item.tieneDatosStock) {
+                if (item.stockNoDisponible) {
+                    stockRealTexto = "N/D";
+                    stockDispTexto = "N/D";
+                    diasCoberturaTexto = "N/D";
+                } else if (item.datosStock) {
+                    var st = item.datosStock;
+                    if (tipoUnidad === "0") { // MP
+                        stockRealTexto = parseFloat(st.cantidadMpCalc || 0).toFixed(2);
+                        stockDispTexto = parseFloat(st.cantidadDisponibleMPCalc || 0).toFixed(2);
+                        stockEsperadoTexto = parseFloat(st.cantidadEsperadaMpCalc || 0).toFixed(2);
+                        stockSeparadoTexto = parseFloat(st.cantidadSeparadaMpCalc || 0).toFixed(2);
+                    } else if (tipoUnidad === "1") { // Alternativa
+                        stockRealTexto = parseFloat(st.cantidadAlternativaCalc || 0).toFixed(2);
+                        stockDispTexto = parseFloat(st.cantidadDisponibleAlternativaCalc || 0).toFixed(2);
+                        stockEsperadoTexto = parseFloat(st.cantidadEsperadaAlternativaCalc || 0).toFixed(2);
+                        stockSeparadoTexto = parseFloat(st.cantidadSeparadaAlternativaCalc || 0).toFixed(2);
+                    } else if (tipoUnidad === "2") { // Proveedor
+                        stockRealTexto = parseFloat(st.cantidadProveedorCalc || 0).toFixed(2);
+                        stockDispTexto = parseFloat(st.cantidadDisponibleProveedorCalc || 0).toFixed(2);
+                        stockEsperadoTexto = parseFloat(st.cantidadEsperadaProveedorCalc || 0).toFixed(2);
+                        stockSeparadoTexto = parseFloat(st.cantidadSeparadaProveedorCalc || 0).toFixed(2);
+                    } else { // 3: Conteo
+                        stockRealTexto = parseFloat(st.cantidadConteo || 0).toFixed(2);
+                        stockDispTexto = parseFloat(st.cantidadDisponibleConteo || 0).toFixed(2);
+                        stockEsperadoTexto = parseFloat(st.cantidadEsperadaConteo || 0).toFixed(2);
+                        stockSeparadoTexto = parseFloat(st.cantidadSeparadaConteo || 0).toFixed(2);
+                    }
+
+                    if (item.stockRealConteo <= 0) {
+                        diasCoberturaTexto = "0";
+                    } else if (item.rotacionDiariaConteo <= 0) {
+                        diasCoberturaTexto = "Sin Rotación";
+                    } else {
+                        var diasCob = Math.round(item.stockRealConteo / item.rotacionDiariaConteo);
+                        diasCoberturaTexto = diasCob.toString();
+                    }
+                } else {
+                    stockRealTexto = "0.00";
+                    stockDispTexto = "0.00";
+                    stockEsperadoTexto = "0.00";
+                    stockSeparadoTexto = "0.00";
+                    diasCoberturaTexto = "0";
+                }
+            }
+
+            var costoUnitTexto = "-";
+            var costoTotalTexto = "-";
+
+            if (item.tieneDatosCosto && item.costoUnitarioConteo !== null) {
+                if (item.stockNoDisponible) {
+                    costoUnitTexto = "N/D";
+                    costoTotalTexto = "N/D";
+                } else {
+                    var costoUnitConv = item.costoUnitarioConteo * divisor;
+                    costoUnitTexto = costoUnitConv.toFixed(2);
+
+                    if (item.tieneDatosStock && item.stockRealConteo !== null) {
+                        var costoTotal = item.stockRealConteo * item.costoUnitarioConteo;
+                        costoTotalTexto = costoTotal.toFixed(2);
+                    }
+                }
+            }
+
+            return {
+                unidadTexto: unidadTexto,
+                divisor: divisor,
+                salidaVenta: salidaVenta.toFixed(2),
+                devolucionVenta: devolucionVenta.toFixed(2),
+                salidaNeta: salidaNeta.toFixed(2),
+                rotacionMensual: rotacionMensual.toFixed(2),
+                rotacionDiaria: rotacionDiaria.toFixed(2),
+                stockReal: stockRealTexto,
+                stockDisponible: stockDispTexto,
+                stockEsperado: stockEsperadoTexto,
+                stockSeparado: stockSeparadoTexto,
+                diasCobertura: diasCoberturaTexto,
+                costoUnitario: costoUnitTexto,
+                costoTotal: costoTotalTexto
+            };
+        }
+
+        function renderizarTablaRotacion() {
+            $("#tableRotacion > tbody").empty();
+            $("#tableRotacion").footable({
+                "paging": { "enabled": true }
+            });
+
+            var tipoUnidad = $("#tipoUnidad").val();
+            var idCiudad = $("#idCiudad").val() || "";
+            var rowsHtml = "";
+
+            for (var i = 0; i < DATA_ROTACION.length; i++) {
+                var item = DATA_ROTACION[i];
+                var conv = obtenerValoresConvertidos(item, tipoUnidad);
+
+                var diasSinVentaStr = item.diasSinVenta !== null ? item.diasSinVenta : "-";
+                var diasUltCompraStr = item.diasDesdeUltimaCompra !== null ? item.diasDesdeUltimaCompra : "-";
+
+                var celdaStockDisponible = conv.stockDisponible;
+                if (item.tieneDatosStock && !item.stockNoDisponible) {
+                    celdaStockDisponible += '<br/>' +
+                        '<a class="verModalStockPendienteRecepcion" idproducto="' + item.idProducto + '" idproductopresentacion="' + tipoUnidad + '" idciudad="' + idCiudad + '" fechainicio="" fechafin="">' +
+                        '<span class="label label-stock-plus">+' + conv.stockEsperado + '</span>' +
+                        '</a>' +
+                        '<a class="verModalStockPendienteAtencion" idproducto="' + item.idProducto + '" idproductopresentacion="' + tipoUnidad + '" idciudad="' + idCiudad + '" fechainicio="" fechafin="">' +
+                        '<span class="label label-stock-less" style="margin-left: 1px;">-' + conv.stockSeparado + ' </span>' +
+                        '</a>';
+                }
+
+                var btnConsultarStockModal = '<button type="button" title="Consultar Stock" class="verModalStockProducto btn" ' +
+                    'sku="' + item.sku + '" ' +
+                    'idProductoPresentacion="' + tipoUnidad + '" ' +
+                    'idCiudad="' + idCiudad + '" ' +
+                    'style="margin-top: 7px;">' +
+                    '<img src="/images/icon_stock.png" height="25" />' +
+                    '</button>';
+
+                rowsHtml += '<tr>' +
+                    '<td>' + item.sku + '</td>' +
+                    '<td>' + item.descripcion + '</td>' +
+                    '<td>' + item.familia + '</td>' +
+                    '<td>' + item.proveedor + '</td>' +
+                    '<td>' + conv.unidadTexto + '</td>' +
+                    '<td>' + item.precioReferencial.toFixed(2) + '</td>' +
+                    '<td>' + conv.salidaVenta + '</td>' +
+                    '<td>' + conv.devolucionVenta + '</td>' +
+                    '<td>' + conv.salidaNeta + '</td>' +
+                    '<td>' + conv.rotacionMensual + '</td>' +
+                    '<td>' + conv.rotacionDiaria + '</td>' +
+                    '<td>' + item.fechaUltimaSalida + '</td>' +
+                    '<td>' + diasSinVentaStr + '</td>' +
+                    '<td>' + item.fechaUltimaCompra + '</td>' +
+                    '<td>' + diasUltCompraStr + '</td>' +
+                    '<td>' + conv.stockReal + '</td>' +
+                    '<td>' + celdaStockDisponible + '</td>' +
+                    '<td>' + conv.diasCobertura + '</td>' +
+                    '<td>' + conv.costoUnitario + '</td>' +
+                    '<td>' + conv.costoTotal + '</td>' +
+                    '<td>' + btnConsultarStockModal + '</td>' +
+                    '</tr>';
+            }
+
+            $("#tableRotacion tbody").html(rowsHtml);
+        }
+
+
+        $("#tipoUnidad").change(function () {
+            if (DATA_ROTACION && DATA_ROTACION.length > 0) {
+                renderizarTablaRotacion();
+            }
+        });
+
+        $("#btnConsultarStock").click(function () {
+            consultarStockProductosRotacion();
+        });
+
+        function consultarStockProductosRotacion() {
+            if (!DATA_ROTACION || DATA_ROTACION.length === 0 || STOCK_CARGADO) return;
+
+            var idCiudad = $("#idCiudad").val();
+
+            var setIds = new Set();
+            DATA_ROTACION.forEach(function (item) {
+                if (item.idProducto) {
+                    setIds.add(item.idProducto);
+                }
+            });
+
+            var idsProductos = Array.from(setIds).join(";");
+
+            if (!idCiudad || idCiudad === "" || idCiudad === "00000000-0000-0000-0000-000000000000" || idsProductos === "") {
+                $.alert({ title: "VALIDAR", type: 'orange', content: "Debe realizar una búsqueda con Sede seleccionada primero." });
+                return;
+            }
+
+            var $btn = $('#btnConsultarStock');
+            $btn.prop("disabled", true).text("Cargando Stocks...");
+
+            $.ajax({
+                url: "/Stock/GetStockProductos",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    idCiudad: idCiudad,
+                    ids: idsProductos
+                },
+                error: function () {
+                    $btn.prop("disabled", false).text("Cargar Stock");
+                    $.alert({ title: "ERROR", type: 'red', content: "Ocurrió un error al obtener el stock." });
+                },
+                success: function (listaStocks) {
+                    $btn.text("Cargar Stock");
+
+                    var mapaStocks = {};
+                    if (listaStocks && listaStocks.length > 0) {
+                        for (var i = 0; i < listaStocks.length; i++) {
+                            if (listaStocks[i].producto && listaStocks[i].producto.idProducto) {
+                                mapaStocks[listaStocks[i].producto.idProducto.toLowerCase()] = listaStocks[i];
+                            }
+                        }
+                    }
+
+                    for (var j = 0; j < DATA_ROTACION.length; j++) {
+                        var idProd = (DATA_ROTACION[j].idProducto || "").toLowerCase();
+                        var st = mapaStocks[idProd];
+
+                        if (st) {
+                            DATA_ROTACION[j].datosStock = st;
+                            DATA_ROTACION[j].tieneDatosStock = true;
+
+                            if (st.stockNoDisponible) {
+                                DATA_ROTACION[j].stockNoDisponible = true;
+                                DATA_ROTACION[j].stockRealConteo = 0;
+                                DATA_ROTACION[j].stockDisponibleConteo = 0;
+                            } else {
+                                DATA_ROTACION[j].stockNoDisponible = false;
+                                DATA_ROTACION[j].stockRealConteo = parseFloat(st.cantidadConteo) || 0;
+                                DATA_ROTACION[j].stockDisponibleConteo = parseFloat(st.cantidadDisponibleConteo) || 0;
+                            }
+                        } else {
+                            DATA_ROTACION[j].datosStock = null;
+                            DATA_ROTACION[j].tieneDatosStock = true;
+                            DATA_ROTACION[j].stockNoDisponible = false;
+                            DATA_ROTACION[j].stockRealConteo = 0;
+                            DATA_ROTACION[j].stockDisponibleConteo = 0;
+                        }
+                    }
+
+                    STOCK_CARGADO = true;
+                    actualizarEstadoBotones();
+                    renderizarTablaRotacion();
+                }
+            });
+        }
+
+        $("#btnConsultarCostos").click(function () {
+            consultarCostosProductosRotacion();
+        });
+
+        function consultarCostosProductosRotacion() {
+            if (!DATA_ROTACION || DATA_ROTACION.length === 0 || !STOCK_CARGADO || COSTOS_CARGADOS) return;
+
+            var idCiudad = $("#idCiudad").val();
+            var idsProductos = [];
+            var cantidadesConteo = [];
+
+            for (var i = 0; i < DATA_ROTACION.length; i++) {
+                var item = DATA_ROTACION[i];
+                if (item.idProducto) {
+                    idsProductos.push(item.idProducto);
+                    var cantStock = (!item.stockNoDisponible && item.stockRealConteo && item.stockRealConteo > 0)
+                        ? Math.round(item.stockRealConteo)
+                        : 0;
+                    cantidadesConteo.push(cantStock);
+                }
+            }
+
+            if (idsProductos.length === 0) return;
+
+            var $btn = $("#btnConsultarCostos");
+            $btn.prop("disabled", true).text("Cargando Costos...");
+
+            $.ajax({
+                url: "/Reporte/GetCostosProductosRotacion",
+                type: "POST",
+                dataType: "JSON",
+                traditional: true,
+                data: {
+                    idCiudad: idCiudad,
+                    idsProductos: idsProductos,
+                    cantidadesConteo: cantidadesConteo
+                },
+                error: function () {
+                    $btn.prop("disabled", false).text("Calcular Costo Stock");
+                    $.alert({ title: "ERROR", type: 'red', content: "Ocurrió un error al obtener los costos." });
+                },
+                success: function (listaCostos) {
+                    $btn.text("Calcular Costo Stock");
+
+                    var mapaCostos = {};
+                    if (listaCostos && listaCostos.length > 0) {
+                        for (var i = 0; i < listaCostos.length; i++) {
+                            var filaCosto = listaCostos[i];
+                            var idProdKey = (filaCosto[0] || "").toLowerCase();
+                            mapaCostos[idProdKey] = {
+                                stockConteo: parseInt(filaCosto[1], 10) || 0,
+                                cantidadCubiertaCompras: parseInt(filaCosto[2], 10) || 0,
+                                cantidadCompletadaCatalogo: parseInt(filaCosto[3], 10) || 0,
+                                costoPromedioConteo: parseNumero(filaCosto[4])
+                            };
+                        }
+                    }
+
+                    for (var j = 0; j < DATA_ROTACION.length; j++) {
+                        var idProd = (DATA_ROTACION[j].idProducto || "").toLowerCase();
+                        var datosCosto = mapaCostos[idProd];
+
+                        if (datosCosto) {
+                            DATA_ROTACION[j].tieneDatosCosto = true;
+                            DATA_ROTACION[j].costoUnitarioConteo = datosCosto.costoPromedioConteo;
+                            DATA_ROTACION[j].cantidadCubiertaCompras = datosCosto.cantidadCubiertaCompras;
+                            DATA_ROTACION[j].cantidadCompletadaCatalogo = datosCosto.cantidadCompletadaCatalogo;
+                        } else {
+                            DATA_ROTACION[j].tieneDatosCosto = true;
+                            DATA_ROTACION[j].costoUnitarioConteo = 0;
+                        }
+                    }
+
+                    COSTOS_CARGADOS = true;
+                    actualizarEstadoBotones();
+                    renderizarTablaRotacion();
+                }
+            });
+        }
+
+
+        $("#btnExportExcel").click(function () {
+            if (!DATA_ROTACION || DATA_ROTACION.length === 0) {
+                $.alert({ title: "VALIDAR", type: 'orange', content: "No hay resultados para exportar." });
+                return;
+            }
+
+            var tipoUnidad = $("#tipoUnidad").val();
+
+            const dataExcelDescargar = [[
+                "SKU",
+                "DESCRIPCIÓN",
+                "FAMILIA",
+                "PROVEEDOR",
+                "UNIDAD",
+                "PRECIO REF.",
+                "SALIDAS VENTA",
+                "DEVOL. VENTA",
+                "SALIDA NETA",
+                "ROTACIÓN MENSUAL",
+                "ROTACIÓN DIARIA",
+                "ÚLT. SALIDA",
+                "DÍAS SIN VENTA",
+                "ÚLT. COMPRA",
+                "DÍAS ÚLT. COMPRA",
+                "STOCK REAL",
+                "STOCK DISP.",
+                "DÍAS COBERTURA",
+                "COSTO UNIT.",
+                "COSTO STOCK TOTAL"
+            ]];
+
+            for (var i = 0; i < DATA_ROTACION.length; i++) {
+                var item = DATA_ROTACION[i];
+                var conv = obtenerValoresConvertidos(item, tipoUnidad);
+
+                var diasSinVentaVal = item.diasSinVenta !== null ? item.diasSinVenta : "-";
+                var diasUltCompraVal = item.diasDesdeUltimaCompra !== null ? item.diasDesdeUltimaCompra : "-";
+
+                var stockRealExcel = (conv.stockReal !== "-" && conv.stockReal !== "N/D") ? Number(conv.stockReal) : conv.stockReal;
+                var stockDispExcel = (conv.stockDisponible !== "-" && conv.stockDisponible !== "N/D") ? Number(conv.stockDisponible) : conv.stockDisponible;
+                var diasCobExcel = (conv.diasCobertura !== "-" && conv.diasCobertura !== "N/D" && conv.diasCobertura !== "Sin Rotación") ? Number(conv.diasCobertura) : conv.diasCobertura;
+                var costoUnitExcel = (conv.costoUnitario !== "-" && conv.costoUnitario !== "N/D") ? Number(conv.costoUnitario) : conv.costoUnitario;
+                var costoTotalExcel = (conv.costoTotal !== "-" && conv.costoTotal !== "N/D") ? Number(conv.costoTotal) : conv.costoTotal;
+
+                var ItemRow = [
+                    item.sku || "-",
+                    item.descripcion || "-",
+                    item.familia || "-",
+                    item.proveedor || "-",
+                    conv.unidadTexto,
+                    Number(item.precioReferencial.toFixed(2)),
+                    Number(conv.salidaVenta),
+                    Number(conv.devolucionVenta),
+                    Number(conv.salidaNeta),
+                    Number(conv.rotacionMensual),
+                    Number(conv.rotacionDiaria),
+                    item.fechaUltimaSalida,
+                    diasSinVentaVal,
+                    item.fechaUltimaCompra,
+                    diasUltCompraVal,
+                    stockRealExcel,
+                    stockDispExcel,
+                    diasCobExcel,
+                    costoUnitExcel,
+                    costoTotalExcel
+                ];
+
+                dataExcelDescargar.push(ItemRow);
+            }
+
+            var ciudadNombre = $("#idCiudad option:selected").text().trim();
+            if (!ciudadNombre || ciudadNombre === "") {
+                ciudadNombre = "Todas";
+            }
+
+            var nombreArchivo = "Rotacion_Productos_" + ciudadNombre.replace(/\s+/g, '_');
+
+            ExportarTablaExcelJs(dataExcelDescargar, nombreArchivo, "ROTACION_PRODUCTOS");
+        });
+
+    });
+    </script>
+}

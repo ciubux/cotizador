@@ -163,6 +163,7 @@
                         var linkReporteProductosPendientesAtencion = "";
                         var linkReporteSellOutVendedores = "";
                         var linkReporteSellInProveedores = "";
+                        var linkReporteRotacionProductos = "";
                         var linkReportePreciosVencidosPorActualizacion = "";
 
                         var linkBusquedaVehiculos = "";
@@ -308,6 +309,7 @@
                             case 912: linkReporteSellInProveedores = "active"; linkReportes = "active"; break;
 
                             case 915: linkReportePreciosVencidosPorActualizacion = "active"; linkReportes = "active"; break;
+                            case 916: linkReporteRotacionProductos = "active"; linkReportes = "active"; break;
                         }
 
                         if (usuario.creaCotizaciones || usuario.apruebaCotizaciones || usuario.visualizaCotizaciones)
@@ -430,6 +432,11 @@
                                     @if (usuario.registraAjusteStock)
                                     {
                                         <li id="linkRegistraAjusteStock" class="@linkRegistrarAjusteStock">@Html.ActionLink("Almacén - Registrar Ajuste Stock", "Editar", "AjusteAlmacen")</li>
+                                    }
+
+                                    @if (usuario.visualizaReporteRotacionProductos)
+                                    {
+                                        <li id="linkReporteRotacionProductos" class="@linkReporteRotacionProductos">@Html.ActionLink("Rotación Productos", "RotacionProductos", "Reporte")</li>
                                     }
 
                                     @if (usuario.visualizaControlStock)

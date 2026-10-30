@@ -604,5 +604,92 @@ namespace Cotizador.Controllers
 
             return View();
         }
+
+        [HttpGet]
+        public ActionResult RotacionProductos()
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.ReporteRotacionProductos;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (usuario == null || !usuario.visualizaReporteRotacionProductos)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            this.Session["proveedor"] = "Todos";
+
+            ViewBag.usuario = usuario;
+            ViewBag.idCiudad = Guid.Empty;
+            ViewBag.meses = 3;
+            ViewBag.proveedor = "Todos";
+            ViewBag.sku = "";
+            ViewBag.tipoUnidad = 0; 
+            ViewBag.esPost = false;
+            ViewBag.jsonResultados = "[]";
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult RotacionProductos(Guid? idCiudad, int? meses, string proveedor, string sku, int? tipoUnidad)
+        {
+            this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.ReporteRotacionProductos;
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+
+            if (usuario == null || !usuario.visualizaReporteRotacionProductos)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            Guid ciudadFiltro = idCiudad ?? Guid.Empty;
+            int mesesFiltro = meses ?? 3;
+            string provFiltro = string.IsNullOrEmpty(proveedor) ? "Todos" : proveedor;
+            string skuFiltro = sku ?? "";
+            int unidadFiltro = tipoUnidad ?? 0;
+
+            this.Session["proveedor"] = provFiltro;
+
+            ReporteBL bl = new ReporteBL();
+            List<List<String>> resultados = bl.reporteRotacionProductos(
+                usuario.idUsuario,
+                ciudadFiltro,
+                mesesFiltro,
+                provFiltro,
+                skuFiltro
+            );
+
+            ViewBag.usuario = usuario;
+            ViewBag.idCiudad = ciudadFiltro;
+            ViewBag.meses = mesesFiltro;
+            ViewBag.proveedor = provFiltro;
+            ViewBag.sku = skuFiltro;
+            ViewBag.tipoUnidad = unidadFiltro;
+            ViewBag.esPost = true;
+            ViewBag.jsonResultados = Newtonsoft.Json.JsonConvert.SerializeObject(resultados);
+
+            return View();
+        }
+
+        [HttpPost]
+        public String GetCostosProductosRotacion(Guid? idCiudad, List<Guid> idsProductos, List<int> cantidadesConteo)
+        {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
+            if (usuario == null)
+            {
+                return "[]";
+            }
+
+            Guid ciudadFiltro = idCiudad ?? Guid.Empty;
+            ReporteBL bl = new ReporteBL();
+
+            List<List<String>> resultados = bl.reporteRotacionCostosProductos(
+                usuario.idUsuario,
+                ciudadFiltro,
+                idsProductos,
+                cantidadesConteo
+            );
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(resultados);
+        }
     }
 }

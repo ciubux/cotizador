@@ -556,6 +556,8 @@ namespace Model
         public const String CARGA_MASIVA_STOCK = "P721";
         public const String VISUALIZA_REPORTE_GLOBAL_STOCK = "P722";
 
+        public const String VISUALIZA_REPORTE_ROTACION_PRODUCTOS = "P916";
+
         public const String REGISTRA_AJUSTE_STOCK = "P725";
         public const String APRUEBA_AJUSTE_STOCK = "P726";
 
@@ -853,6 +855,8 @@ namespace Model
             [Display(Name = "REASIGNACION CARTERA")]
             ReasignacionCartera = 630,
 
+            [Display(Name = "REPORTE ROTACION PRODUCTOS")]
+            ReporteRotacionProductos = 916,
 
             /*PARAMETRO*/
             [Display(Name = "TIPO CLIENTE CONTACTO")]
