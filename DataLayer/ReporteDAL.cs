@@ -1,12 +1,13 @@
 ﻿using Framework.DAL;
 using Framework.DAL.Settings.Implementations;
+using Model;
+using Model.UTILES;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using Model;
-using Model.UTILES;
+using static Model.Producto;
 
 namespace DataLayer
 {
@@ -415,7 +416,7 @@ namespace DataLayer
             return resultados;
         }
 
-        public List<List<String>> reporteRotacionProductos(Guid idUsuario, Guid idCiudad, int meses, String proveedor, String sku)
+        public List<List<String>> reporteRotacionProductos(Guid idUsuario, Guid idCiudad, int meses, String proveedor, String sku, int tipoVentaRestringida)
         {
             var objCommand = GetSqlCommand("ps_reporte_rotacion_productos");
             InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
@@ -428,6 +429,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "meses", meses);
             InputParameterAdd.VarcharEmpty(objCommand, "proveedor", proveedor);
             InputParameterAdd.VarcharEmpty(objCommand, "sku", sku);
+            InputParameterAdd.Int(objCommand, "tipoVentaRestringida", tipoVentaRestringida);
 
             DataTable dataTable = Execute(objCommand);
 

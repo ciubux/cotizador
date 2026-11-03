@@ -80,11 +80,11 @@ namespace BusinessLayer
             }
         }
 
-        public List<List<String>> reporteRotacionProductos(Guid idUsuario, Guid idCiudad, int meses, String proveedor, String sku)
+        public List<List<String>> reporteRotacionProductos(Guid idUsuario, Guid idCiudad, int meses, String proveedor, String sku, int tipoVentaRestringida)
         {
             using (ReporteDAL dal = new ReporteDAL())
             {
-                return dal.reporteRotacionProductos(idUsuario, idCiudad, meses, proveedor, sku);
+                return dal.reporteRotacionProductos(idUsuario, idCiudad, meses, proveedor, sku, tipoVentaRestringida);
             }
         }
 

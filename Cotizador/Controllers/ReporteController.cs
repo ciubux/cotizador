@@ -626,12 +626,13 @@ namespace Cotizador.Controllers
             ViewBag.tipoUnidad = 0; 
             ViewBag.esPost = false;
             ViewBag.jsonResultados = "[]";
+            ViewBag.tipoVentaRestringidaBusqueda = -1;
 
             return View();
         }
 
         [HttpPost]
-        public ActionResult RotacionProductos(Guid? idCiudad, int? meses, string proveedor, string sku, int? tipoUnidad)
+        public ActionResult RotacionProductos(Guid? idCiudad, int? meses, string proveedor, string sku, int? tipoUnidad, int? tipoVentaRestringidaBusqueda)
         {
             this.Session[Constantes.VAR_SESSION_PAGINA] = (int)Constantes.paginas.ReporteRotacionProductos;
             Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
@@ -646,6 +647,7 @@ namespace Cotizador.Controllers
             string provFiltro = string.IsNullOrEmpty(proveedor) ? "Todos" : proveedor;
             string skuFiltro = sku ?? "";
             int unidadFiltro = tipoUnidad ?? 0;
+            int ventaRestringidaFiltro = tipoVentaRestringidaBusqueda ?? -1;
 
             this.Session["proveedor"] = provFiltro;
 
@@ -655,7 +657,8 @@ namespace Cotizador.Controllers
                 ciudadFiltro,
                 mesesFiltro,
                 provFiltro,
-                skuFiltro
+                skuFiltro,
+                ventaRestringidaFiltro
             );
 
             ViewBag.usuario = usuario;
@@ -663,6 +666,7 @@ namespace Cotizador.Controllers
             ViewBag.meses = mesesFiltro;
             ViewBag.proveedor = provFiltro;
             ViewBag.sku = skuFiltro;
+            ViewBag.tipoVentaRestringidaBusqueda = ventaRestringidaFiltro;
             ViewBag.tipoUnidad = unidadFiltro;
             ViewBag.esPost = true;
             ViewBag.jsonResultados = Newtonsoft.Json.JsonConvert.SerializeObject(resultados);

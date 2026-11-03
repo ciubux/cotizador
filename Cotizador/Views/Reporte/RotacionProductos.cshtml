@@ -7,6 +7,7 @@
     int tipoUnidadSeleccionada = ViewBag.tipoUnidad != null ? (int)ViewBag.tipoUnidad : 0;
     bool esPost = ViewBag.esPost != null ? (bool)ViewBag.esPost : false;
     string jsonResultados = ViewBag.jsonResultados != null ? (string)ViewBag.jsonResultados : "[]";
+    int tipoVentaRestringidaBusqueda = ViewBag.tipoVentaRestringidaBusqueda != null ? (int)ViewBag.tipoVentaRestringidaBusqueda : -1;
 }
 
 <div class="page-header">
@@ -75,6 +76,25 @@
                 <label class="control-label col-xs-4" for="sku">SKU:</label>
                 <div class="col-xs-8">
                     <input type="text" class="form-control" id="sku" name="sku" value="@skuFiltro" placeholder="" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtro Venta Restringida -->
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label class="control-label col-xs-4" for="tipoVentaRestringidaBusqueda">Venta Restringida:</label>
+                <div class="col-xs-8">
+                    <select class="form-control" id="tipoVentaRestringidaBusqueda" name="tipoVentaRestringidaBusqueda">
+                        <option @(tipoVentaRestringidaBusqueda == -1 ? "selected" : "") value="-1">Seleccione</option>
+                        <option @(tipoVentaRestringidaBusqueda == 0 ? "selected" : "") value="0">Sin restricción</option>
+                        <option @(tipoVentaRestringidaBusqueda == 1 ? "selected" : "") value="1">Descontinuado</option>
+                        <option @(tipoVentaRestringidaBusqueda == 2 ? "selected" : "") value="2">Inestabilidad de precios</option>
+                        <option @(tipoVentaRestringidaBusqueda == 3 ? "selected" : "") value="3">Stock limitado</option>
+                        <option @(tipoVentaRestringidaBusqueda == 4 ? "selected" : "") value="4">Venta Controlada</option>
+                        <option @(tipoVentaRestringidaBusqueda == 5 ? "selected" : "") value="5">Producto NO Stockeable</option>
+                        <option @(tipoVentaRestringidaBusqueda == 9999 ? "selected" : "") value="9999">Todos los restringidos</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -382,9 +402,17 @@
             });
 
             var tipoUnidad = $("#tipoUnidad").val();
-            var idCiudad = $("#idCiudad").val() || "";
+            var idCiudad = $("#idCiudad").val();
+            if (!idCiudad || idCiudad.trim() === "") {
+                idCiudad = "00000000-0000-0000-0000-000000000000";
+            }
             var rowsHtml = "";
 
+            var idCiudadModalStock = (idCiudad === "00000000-0000-0000-0000-000000000000")
+                ? "15526227-2108-4113-b46a-1c8ab5c0e581"
+                : idCiudad;
+
+            
             for (var i = 0; i < DATA_ROTACION.length; i++) {
                 var item = DATA_ROTACION[i];
                 var conv = obtenerValoresConvertidos(item, tipoUnidad);
@@ -406,7 +434,7 @@
                 var btnConsultarStockModal = '<button type="button" title="Consultar Stock" class="verModalStockProducto btn" ' +
                     'sku="' + item.sku + '" ' +
                     'idProductoPresentacion="' + tipoUnidad + '" ' +
-                    'idCiudad="' + idCiudad + '" ' +
+                    'idCiudad="' + idCiudadModalStock + '" ' +
                     'style="margin-top: 7px;">' +
                     '<img src="/images/icon_stock.png" height="25" />' +
                     '</button>';
@@ -453,7 +481,13 @@
         function consultarStockProductosRotacion() {
             if (!DATA_ROTACION || DATA_ROTACION.length === 0 || STOCK_CARGADO) return;
 
+            var $btn = $('#btnConsultarStock');
+            $btn.prop("disabled", true).text("Cargando Stocks...");
+
             var idCiudad = $("#idCiudad").val();
+            if (!idCiudad || idCiudad.trim() === "") {
+                idCiudad = "00000000-0000-0000-0000-000000000000";
+            }
 
             var setIds = new Set();
             DATA_ROTACION.forEach(function (item) {
@@ -464,8 +498,9 @@
 
             var idsProductos = Array.from(setIds).join(";");
 
-            if (!idCiudad || idCiudad === "" || idCiudad === "00000000-0000-0000-0000-000000000000" || idsProductos === "") {
-                $.alert({ title: "VALIDAR", type: 'orange', content: "Debe realizar una búsqueda con Sede seleccionada primero." });
+
+            if (idsProductos === "") {
+                $.alert({ title: "VALIDAR", type: 'orange', content: "No hay productos en los resultados para consultar stock." });
                 return;
             }
 
@@ -537,6 +572,10 @@
             if (!DATA_ROTACION || DATA_ROTACION.length === 0 || !STOCK_CARGADO || COSTOS_CARGADOS) return;
 
             var idCiudad = $("#idCiudad").val();
+            if (!idCiudad || idCiudad.trim() === "") {
+                idCiudad = "00000000-0000-0000-0000-000000000000";
+            }
+
             var idsProductos = [];
             var cantidadesConteo = [];
 
