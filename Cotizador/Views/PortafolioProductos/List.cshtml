@@ -1,0 +1,194 @@
+﻿@{
+    ViewBag.Title = "Portafolio de Productos";
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+
+<form class="form-horizontal" onsubmit="return false;">
+    <div class="row">
+        <!-- Filtro Nombre -->
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label class="control-label col-xs-4" for="filtro_nombre">Nombre:</label>
+                <div class="col-xs-8">
+                    <input type="text" class="form-control" id="filtro_nombre" name="filtro_nombre" placeholder="Ingrese nombre..." />
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtro Estado -->
+        <div class="col-sm-6 col-lg-4">
+            <div class="form-group">
+                <label class="control-label col-xs-4" for="filtro_estado">Estado:</label>
+                <div class="col-xs-8">
+                    <select class="form-control" id="filtro_estado" name="filtro_estado">
+                        <option value="1" selected>Activo</option>
+                        <option value="0">Inactivo</option>
+                        <option value="-1">Todos</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botones de Búsqueda y Registro -->
+    <div class="row pull-right" style="margin-bottom:10px; margin-right:0px;">
+        <button id="btnLimpiarBusqueda" type="button" class="btn btn-primary bouton-image botonClean">Limpiar</button>
+        <button id="btnBusqueda" type="button" class="btn btn-primary bouton-image botonSearch">Buscar</button>
+    </div>
+
+    <div id="divExportButton" class="row pull-left" style="margin-bottom:10px; margin-left:0px;">
+        <button id="btnNuevoPortafolio" type="button" class="btn btn-primary">Registrar Nuevo</button>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <table id="tablePortafolios" class="table" data-editing="false" data-paging="true" data-paging-count-format="{CP} de {TP}"
+           data-editing-allow-add="false"
+           data-editing-allow-delete="false"
+           data-editing-allow-edit="false"
+           data-sorting="true"
+           data-show-toggle="false">
+        <thead>
+            <tr>
+                <th data-name="nombre" data-visible="true" data-sortable="true">Nombre</th>
+                <th data-name="estado" data-visible="true" data-sortable="true">Estado</th>
+                <th data-name="opciones" data-visible="true" data-sortable="false">Opciones</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</form>
+
+<div class="modal fade" id="modalVerPortafolio" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><b>Detalle de Portafolio de Productos</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p></p>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <input type="hidden" id="ver_idPortafolio" />
+
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Nombre:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="lblVerNombre"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Estado:</label>
+                                <div class="col-xs-8">
+                                    <p class="form-control-static" id="lblVerEstado"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="form-group">
+                                <label class="control-label col-xs-2 col-sm-2 col-lg-2">Comentarios:</label>
+                                <div class="col-xs-10 col-sm-10 col-lg-10">
+                                    <p class="form-control-static" id="lblVerComentarios"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="form-group">
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" id="showPortafolioProductos" href="#portafolio_productos">Productos <span id="badgeCantProductos" class="badge">0</span></a></li>
+                        <li><a data-toggle="tab" id="showPortafolioRoles" href="#portafolio_roles">Roles Asignados <span id="badgeCantRoles" class="badge">0</span></a></li>
+                        <li><a data-toggle="tab" id="showPortafolioUsuarios" href="#portafolio_usuarios">Usuarios Asignados <span id="badgeCantUsuarios" class="badge">0</span></a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="portafolio_productos" class="tab-pane fade in active">
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="col-xs-12">
+                                    <table id="tableVerProductos" class="table" data-editing="false" data-paging="true" data-paging-size="10" data-sorting="true" data-show-toggle="false">
+                                        <thead>
+                                            <tr>
+                                                <th data-name="sku" data-sortable="true">SKU</th>
+                                                <th data-name="descripcion" data-sortable="true">Descripción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="portafolio_roles" class="tab-pane fade">
+                            <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
+                                <div class="col-sm-6 col-lg-6">
+                                </div>
+                                <div class="col-sm-6 col-lg-6 text-right">
+                                    <button type="button" id="btnModalIrRoles" class="btn btn-info">Gestionar Roles</button>
+                                </div>
+                            </div>
+                            <table id="tableVerRoles" class="table" data-editing="false" data-paging="true" data-paging-size="10" data-sorting="true" data-show-toggle="false">
+                                <thead>
+                                    <tr>
+                                        <th data-name="codigo" data-sortable="true">Código</th>
+                                        <th data-name="nombre" data-sortable="true">Nombre del Rol</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                        <div id="portafolio_usuarios" class="tab-pane fade">
+                            <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
+                                <div class="col-sm-6 col-lg-6">
+                                </div>
+                                <div class="col-sm-6 col-lg-6 text-right">
+                                    <button type="button" id="btnModalIrUsuarios" class="btn btn-info">Gestionar Usuarios</button>
+                                </div>
+                            </div>
+                            <table id="tableVerUsuarios" class="table" data-editing="false" data-paging="true" data-paging-size="10" data-sorting="true" data-show-toggle="false">
+                                <thead>
+                                    <tr>
+                                        <th data-name="nombre" data-sortable="true">Nombre</th>
+                                        <th data-name="email" data-sortable="true">Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <div class="pull-right">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnModalIrEditar" class="btn btn-primary">Editar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/portafolioProductos")
+}

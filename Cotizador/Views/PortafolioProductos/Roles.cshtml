@@ -1,0 +1,57 @@
+﻿@{    
+    List<Model.VistaDashboard> VistasDashboard = ViewBag.vistasDashboard;
+    Model.Rol RolVistaDashboard = ViewBag.rolVistaDashboard;
+  
+    ViewBag.Title = "Vistas Dashboard asignadas a "+RolVistaDashboard.nombre+"";
+    int idVistaDashboardTemp = 0;
+    int numero = 0;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+
+<div class="container">
+    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
+    <input type="hidden" value="@ViewBag.debug" />
+    
+    <div class="col-md-10">
+        
+        @foreach (Model.VistaDashboard vd in VistasDashboard)
+        {
+            if (idVistaDashboardTemp != vd.tipoVistaDashboard.idTipoVistaDashboard)
+            {                
+                idVistaDashboardTemp = vd.tipoVistaDashboard.idTipoVistaDashboard;
+                string titulo = "</div>" + (numero == 0 ? "" : "<br>") + "<div class=\"row\"><div class=\"col-sm-12 col-lg-12 col-xs-12\"><h4>" + vd.tipoVistaDashboard.nombre + "</h4></div>";
+
+                @Html.Raw(titulo)
+                numero = +1;
+            }
+
+            string itemChecked = RolVistaDashboard.TieneVistaDashboard(vd.idVistaDashboard) ? "checked" : "";
+
+            <div class="col-sm-6 col-lg-4 col-xs-12">
+                <label class="radio-label">
+                    <input type="checkbox" @itemChecked class="chk-rol VistaDashboardEditar" name="vistaDashboard_@vd.idVistaDashboard" id="vistaDashboard_@vd.idVistaDashboard" value="@vd.idVistaDashboard">
+                    <span>@vd.nombre - (@vd.codigo)</span>
+                </label>
+            </div>
+        }
+
+    </div>
+
+        <div class="row">
+            <div class="pull-right">
+                <button type="button" id="btnCancelarVistaDashboard" class="btn btn-danger">Cancelar</button>
+                <button id="btnFinalizarEdicionVistaDashboard" type="button" class="btn btn-success">Finalizar Edición</button>
+            </div>
+        </div>
+
+    
+</div>
+
+
+
+@section Scripts {
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/rol")
+}
