@@ -1372,60 +1372,79 @@ namespace BusinessLayer
 
                 if (det.precioNeto > 0)
                 {
-                    if (det.esPrecioAlternativo)
+                    if (empresa.tipoFormula.Equals(Empresa.TF_CARGO_SOBRE_COSTO))
                     {
-                        margenDet = (((det.precioNeto * det.ProductoPresentacion.Equivalencia) - det.producto.costoLista) / (det.precioNeto * det.ProductoPresentacion.Equivalencia)) * 100;
-                    } else
-                    {
-                        margenDet = ((det.precioNeto - det.producto.costoLista) / det.precioNeto) * 100;
-                    }
-
-                    det.tieneInfraMargenEmpresaExterna = false;
-
-
-                    if (margenDet < empresa.porcentajeMargenMinimo)
-                    {
-                    
-                        // Formula descuento inframargen
                         if (det.esPrecioAlternativo)
                         {
-                            det.precioNeto = det.precioNeto * det.ProductoPresentacion.Equivalencia * ((100 - empresa.porcentajeDescuentoInframargen) / 100);
-                        } else
-                        {
-                            det.precioNeto = det.precioNeto * ((100 - empresa.porcentajeDescuentoInframargen) / 100);
-                        }
-                    
-                        /* Descuento a la ganancia
-                        if (det.esPrecioAlternativo)
-                        {
-                            //det.precioNeto = det.precioNeto * det.ProductoPresentacion.Equivalencia * ((100 - usuarioEmpresa.pDescuentoInfraMargen) / 100);
-                            det.precioNeto = det.producto.costoLista + ((det.precioNeto * det.ProductoPresentacion.Equivalencia) - det.producto.costoLista) * ((100 - empresa.porcentajeDescuentoInframargen) / 100);
+                            margenDet = (((det.precioNeto * det.ProductoPresentacion.Equivalencia) - det.producto.costoLista) / (det.precioNeto * det.ProductoPresentacion.Equivalencia)) * 100;
                         }
                         else
                         {
-                            det.precioNeto = det.producto.costoLista + (det.precioNeto - det.producto.costoLista) * ((100 - empresa.porcentajeDescuentoInframargen) / 100);
+                            margenDet = ((det.precioNeto - det.producto.costoLista) / det.precioNeto) * 100;
                         }
-                        */
 
-                        pMP.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
+                        det.tieneInfraMargenEmpresaExterna = false;
 
-                        det.tieneInfraMargenEmpresaExterna = true;
-                    } else
+
+                        if (margenDet < empresa.porcentajeMargenMinimo)
+                        {
+
+                            // Formula descuento inframargen
+                            if (det.esPrecioAlternativo)
+                            {
+                                det.precioNeto = det.precioNeto * det.ProductoPresentacion.Equivalencia * ((100 - empresa.porcentajeDescuentoInframargen) / 100);
+                            }
+                            else
+                            {
+                                det.precioNeto = det.precioNeto * ((100 - empresa.porcentajeDescuentoInframargen) / 100);
+                            }
+
+                            /* Descuento a la ganancia
+                            if (det.esPrecioAlternativo)
+                            {
+                                //det.precioNeto = det.precioNeto * det.ProductoPresentacion.Equivalencia * ((100 - usuarioEmpresa.pDescuentoInfraMargen) / 100);
+                                det.precioNeto = det.producto.costoLista + ((det.precioNeto * det.ProductoPresentacion.Equivalencia) - det.producto.costoLista) * ((100 - empresa.porcentajeDescuentoInframargen) / 100);
+                            }
+                            else
+                            {
+                                det.precioNeto = det.producto.costoLista + (det.precioNeto - det.producto.costoLista) * ((100 - empresa.porcentajeDescuentoInframargen) / 100);
+                            }
+                            */
+
+                            pMP.seguimientoPedido.estado = SeguimientoPedido.estadosSeguimientoPedido.Ingresado;
+
+                            det.tieneInfraMargenEmpresaExterna = true;
+                        }
+                        else
+                        {
+                            decimal precioVentaMP = det.producto.costoLista * empresa.factorCosto;
+                            decimal precioVentaGanMax = det.precioNeto * (100 - empresa.porcentajeMDGanaciaMax) / 100;
+
+                            if (det.esPrecioAlternativo)
+                            {
+                                precioVentaGanMax = det.precioNeto * det.ProductoPresentacion.Equivalencia * (100 - empresa.porcentajeMDGanaciaMax) / 100;
+                            }
+
+                            if (precioVentaMP >= precioVentaGanMax)
+                            { // Escenario Primavera
+                                det.precioNeto = precioVentaMP;
+                            }
+                            else
+                            { // Escenario Verano
+                                det.precioNeto = precioVentaGanMax;
+                            }
+                        }
+                    }
+
+                    if (empresa.tipoFormula.Equals(Empresa.TF_PORCENTAJE_VENTA_MAS_COSTO))
                     {
-                        decimal precioVentaMP = det.producto.costoLista * empresa.factorCosto;
-                        decimal precioVentaGanMax = det.precioNeto * (100 - empresa.porcentajeMDGanaciaMax) / 100;
-
                         if (det.esPrecioAlternativo)
                         {
-                            precioVentaGanMax = det.precioNeto * det.ProductoPresentacion.Equivalencia * (100 - empresa.porcentajeMDGanaciaMax) / 100;
+                            det.precioNeto = (det.precioNeto * (empresa.porcentajeVenta / 100) * det.ProductoPresentacion.Equivalencia) + det.producto.costoLista;
                         }
-
-                        if (precioVentaMP >= precioVentaGanMax)
-                        { // Escenario Primavera
-                            det.precioNeto = precioVentaMP;
-                        } else
-                        { // Escenario Verano
-                            det.precioNeto = precioVentaGanMax;
+                        else
+                        {
+                            det.precioNeto = (det.precioNeto * (empresa.porcentajeVenta / 100)) + det.producto.costoLista;
                         }
                     }
                 }

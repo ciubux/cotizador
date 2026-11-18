@@ -569,6 +569,7 @@ namespace Cotizador.Controllers
         {
             try
             {
+                Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
                 String texto_busqueda = this.Request.Params["data[q]"];
                 ProductoBL bl = new ProductoBL();
 
@@ -579,7 +580,7 @@ namespace Cotizador.Controllers
                 }
 
                 OrdenCompraCliente occ = this.OrdenCompraClienteSession;
-                String resultado = bl.getProductosBusqueda(texto_busqueda, false, this.Session["proveedor"] != null ? (String)this.Session["proveedor"] : "Todos", this.Session["familia"] != null ? (String)this.Session["familia"] : "Todas", Pedido.tiposPedido.Venta, incluyeDescontinuados);
+                String resultado = bl.getProductosBusqueda(usuario.idUsuario, texto_busqueda, false, this.Session["proveedor"] != null ? (String)this.Session["proveedor"] : "Todos", this.Session["familia"] != null ? (String)this.Session["familia"] : "Todas", Pedido.tiposPedido.Venta, incluyeDescontinuados);
                 return resultado;
             }
             catch (Exception e)

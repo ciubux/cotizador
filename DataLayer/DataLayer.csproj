@@ -57,6 +57,7 @@
     <Compile Include="ConsolidadoAtencionDAL.cs" />
     <Compile Include="ProductoControlStockDAL.cs" />
     <Compile Include="ListaPreciosDAL.cs" />
+    <Compile Include="PortafolioProductosDAL.cs" />
     <Compile Include="VehiculoDAL.cs" />
     <Compile Include="ReporteDAL.cs" />
     <Compile Include="MensajeDAL.cs" />

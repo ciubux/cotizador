@@ -240,6 +240,7 @@
     <Compile Include="Controllers\ProductoControlStockController.cs" />
     <Compile Include="Controllers\PersonalAlmacenController.cs" />
     <Compile Include="Controllers\ConsolidadoAtencionController.cs" />
+    <Compile Include="Controllers\PortafolioProductosController.cs" />
     <Compile Include="Controllers\VehiculoController.cs" />
     <Compile Include="Controllers\PrecioEspecialController.cs" />
     <Compile Include="Controllers\ArchivoAdjuntoController.cs" />
@@ -507,6 +508,7 @@
     <Content Include="Scripts\productoControlStock.js" />
     <Content Include="Scripts\personalAlmacen.js" />
     <Content Include="Scripts\consolidadoAtencion.js" />
+    <Content Include="Scripts\portafolioProductos.js" />
     <Content Include="Scripts\vehiculo.js" />
     <Content Include="Scripts\precioEspecial.js" />
     <Content Include="Scripts\app\cotizador\cotizador.js" />
@@ -829,6 +831,10 @@
     <Content Include="Views\ListaPrecios\List.cshtml" />
     <Content Include="Views\ListaPrecios\_SelectListaPrecios.cshtml" />
     <Content Include="Views\Reporte\RotacionProductos.cshtml" />
+    <Content Include="Views\PortafolioProductos\Editar.cshtml" />
+    <Content Include="Views\PortafolioProductos\List.cshtml" />
+    <Content Include="Views\PortafolioProductos\Usuarios.cshtml" />
+    <Content Include="Views\PortafolioProductos\Roles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

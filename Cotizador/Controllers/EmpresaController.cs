@@ -53,6 +53,9 @@ namespace Cotizador.Controllers
 
             ViewBag.empresa = obj;
 
+            ViewBag.tf_csc = Empresa.TF_CARGO_SOBRE_COSTO;
+            ViewBag.tf_pvmc = Empresa.TF_PORCENTAJE_VENTA_MAS_COSTO;
+
             return View();
         }
 
@@ -79,6 +82,8 @@ namespace Cotizador.Controllers
             obj.porcentajeDescuentoInframargen = Decimal.Parse(this.Request.Params["empresa.porcentajeDescuentoInframargen"]);
             obj.porcentajeMargenMinimo = Decimal.Parse(this.Request.Params["empresa.porcentajeMargenMinimo"]);
             obj.porcentajeMDGanaciaMax = Decimal.Parse(this.Request.Params["empresa.porcentajeMDGanaciaMax"]);
+            obj.tipoFormula = this.Request.Params["empresa.tipoFormula"].ToString();
+            obj.porcentajeVenta = Decimal.Parse(this.Request.Params["empresa.porcentajeVenta"]);
 
             bl.ActualizarParametrosEmpresa(obj);
 

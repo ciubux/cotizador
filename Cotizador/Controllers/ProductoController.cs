@@ -268,6 +268,7 @@ namespace Cotizador.Controllers
 
         public String Search()
         {
+            Usuario usuario = (Usuario)this.Session[Constantes.VAR_SESSION_USUARIO];
             String texto_busqueda = this.Request.Params["data[q]"];
             int incluyeDescontinuados = 0;
             if (this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"] != null)
@@ -275,7 +276,7 @@ namespace Cotizador.Controllers
                 incluyeDescontinuados = int.Parse(this.Session[Constantes.VAR_SESSION_PRODUCTO_SEARCH_PARAM + "incluyeDescontinuados"].ToString());
             }
             ProductoBL bl = new ProductoBL();
-            String resultado = bl.getProductosBusqueda(texto_busqueda, false, this.Session["proveedor"] != null ? (String)this.Session["proveedor"] : "Todos", this.Session["familia"] != null ? (String)this.Session["familia"] : "Todas", null, incluyeDescontinuados);
+            String resultado = bl.getProductosBusqueda(usuario.idUsuario, texto_busqueda, false, this.Session["proveedor"] != null ? (String)this.Session["proveedor"] : "Todos", this.Session["familia"] != null ? (String)this.Session["familia"] : "Todas", null, incluyeDescontinuados);
             return resultado;
         }
        

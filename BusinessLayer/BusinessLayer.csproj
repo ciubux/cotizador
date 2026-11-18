@@ -109,6 +109,7 @@
     <Compile Include="PersonalAlmacenBL.cs" />
     <Compile Include="ConsolidadoAtencionBL.cs" />
     <Compile Include="ProductoControlStockBL.cs" />
+    <Compile Include="PortafolioProductosBL.cs" />
     <Compile Include="VehiculoBL.cs" />
     <Compile Include="ReporteBL.cs" />
     <Compile Include="MensajeBL.cs" />

@@ -57,7 +57,7 @@ namespace DataLayer
             ExecuteNonQuery(objCommand);
         }
 
-        public List<Producto> getProductosBusqueda(String textoBusqueda, bool considerarDescontinuados, String proveedor, String familia, Pedido.tiposPedido? tipoPedido = null, int incluyeDescontinuados = 1)
+        public List<Producto> getProductosBusqueda(Guid idUsuario, String textoBusqueda, bool considerarDescontinuados, String proveedor, String familia, Pedido.tiposPedido? tipoPedido = null, int incluyeDescontinuados = 1)
         {
             var objCommand = GetSqlCommand("ps_getproductos_search");
             InputParameterAdd.Varchar(objCommand, "textoBusqueda", textoBusqueda);
@@ -66,6 +66,7 @@ namespace DataLayer
             InputParameterAdd.Int(objCommand, "considerarDescontinuados", considerarDescontinuados ? 1 : 0);
             InputParameterAdd.Int(objCommand, "incluyeDescontinuados", incluyeDescontinuados);
             InputParameterAdd.Char(objCommand, "tipoPedido", tipoPedido == null ? null : ((Char)tipoPedido).ToString());
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
 
             DataTable dataTable = Execute(objCommand);
             List<Producto> lista = new List<Producto>();

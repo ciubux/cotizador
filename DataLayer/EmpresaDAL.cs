@@ -34,10 +34,12 @@ namespace DataLayer
                 obj.nombre = Converter.GetString(row, "nombre");
                 obj.urlWeb = Converter.GetString(row, "url_web");
                 obj.razonSocial = Converter.GetString(row, "razon_social");
+                obj.tipoFormula = Converter.GetString(row, "tipo_formula");
                 obj.factorCosto = Converter.GetDecimal(row, "factor_costo");
                 obj.porcentajeMargenMinimo = Converter.GetDecimal(row, "porcentaje_margen_minimo");
                 obj.porcentajeDescuentoInframargen = Converter.GetDecimal(row, "porcentaje_descuento_infra_margen");
                 obj.porcentajeMDGanaciaMax = Converter.GetDecimal(row, "porcentaje_md_ganancia_max");
+                obj.porcentajeVenta = Converter.GetDecimal(row, "porcentaje_venta");
                 obj.atencionTerciarizada = Converter.GetInt(row, "atencion_terciarizada") == 1 ? true : false;
                 obj.facturacionHabilitada = Converter.GetDecimal(row, "facturacion_habilitada") == 1 ? true : false;
                 obj.emiteGuias = Converter.GetDecimal(row, "emite_guias") == 1 ? true : false;
@@ -67,6 +69,8 @@ namespace DataLayer
             InputParameterAdd.Decimal(objCommand, "factorCosto", empresa.factorCosto);
             InputParameterAdd.Decimal(objCommand, "porcentajeGananciaMax", empresa.porcentajeMDGanaciaMax);
             InputParameterAdd.Decimal(objCommand, "porcentajeDescuentoInfraMargen", empresa.porcentajeDescuentoInframargen);
+            InputParameterAdd.Varchar(objCommand, "tipoFormula", empresa.tipoFormula);
+            InputParameterAdd.Decimal(objCommand, "porcentajeVenta", empresa.porcentajeVenta);
             InputParameterAdd.Guid(objCommand, "idUsuario", empresa.usuario.idUsuario);
 
             ExecuteNonQuery(objCommand);
@@ -91,6 +95,8 @@ namespace DataLayer
                 obj.porcentajeMargenMinimo = Converter.GetDecimal(row, "porcentaje_margen_minimo");
                 obj.porcentajeDescuentoInframargen = Converter.GetDecimal(row, "porcentaje_descuento_infra_margen");
                 obj.porcentajeMDGanaciaMax = Converter.GetDecimal(row, "porcentaje_md_ganancia_max");
+                obj.porcentajeVenta = Converter.GetDecimal(row, "porcentaje_venta");
+                obj.tipoFormula = Converter.GetString(row, "tipo_formula");
             }
 
             return obj;

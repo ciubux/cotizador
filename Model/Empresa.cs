@@ -8,6 +8,9 @@ namespace Model
 {
     public class Empresa : Auditoria
     {
+        public static String TF_PORCENTAJE_VENTA_MAS_COSTO = "PORCENTAJE_VENTA_MAS_COSTO";
+        public static String TF_CARGO_SOBRE_COSTO = "CARGO_SOBRE_COSTO";
+
         public int idEmpresa { get; set; }
 
         [Display(Name = "Código:")]
@@ -35,6 +38,13 @@ namespace Model
 
         [Display(Name = "Porcentaje Ganancia Máxima(Mk Down):")]
         public decimal porcentajeMDGanaciaMax { get; set; }
+
+        [Display(Name = "Porcentaje Venta(Mk Down):")]
+        public decimal porcentajeVenta { get; set; }
+
+        
+        [Display(Name = "Tipo Formula:")]
+        public string tipoFormula { get; set; }
 
 
         public int idEmpresaVisualizaStock { get; set; }

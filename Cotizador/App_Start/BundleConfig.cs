@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using Model;
+using System.Web;
 using System.Web.Optimization;
 
 namespace Cotizador
@@ -172,6 +173,11 @@ namespace Cotizador
             bundles.Add(new ScriptBundle("~/bundles/rol").Include(
                      "~/Scripts/rol1.0.0.js"
                      ));
+
+            bundles.Add(new ScriptBundle("~/bundles/portafolioProductos").Include(
+                     "~/Scripts/portafolioProductos.js"
+                     ));
+            
 
             bundles.Add(new ScriptBundle("~/bundles/account").Include(
                      "~/Scripts/account1.0.0.js"

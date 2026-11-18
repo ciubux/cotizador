@@ -203,6 +203,10 @@ namespace Model
         public static String VAR_SESSION_PERSONALALMACEN_LISTA = "personalALmacenList";
         public static String VAR_SESSION_PERSONALALMACEN_VER = "personalALmacenVer";
 
+        public static String VAR_SESSION_PORTAFOLIO_PRODUCTOS = "portafolioProductos";
+        public static String VAR_SESSION_PORTAFOLIO_PRODUCTOS_BUSQUEDA = "portafolioProductosBusqueda";
+        public static String VAR_SESSION_PORTAFOLIO_PRODUCTOS_LISTA = "portafolioProductosList";
+        public static String VAR_SESSION_PORTAFOLIO_PRODUCTOS_VER = "portafolioProductosVer";
 
         public static String VAR_SESSION_CONSOLIDADOATENCION = "consolidadoAtencion";
         public static String VAR_SESSION_CONSOLIDADOATENCION_BUSQUEDA = "consolidadoAtencionBusqueda";
