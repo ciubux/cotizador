@@ -131,6 +131,7 @@ namespace Cotizador.Models.DTOsSearch
                 guiaremisionDTO.pedido_numeroPedidoString = guiaremisionTmp.pedido.numeroPedidoString;
                 guiaremisionDTO.usuario_nombre = guiaremisionTmp.usuario.nombre;
                 guiaremisionDTO.fechaEmision = guiaremisionTmp.fechaEmision;
+                guiaremisionDTO.fechaRegistro = guiaremisionTmp.FechaRegistroDesc;
                 guiaremisionDTO.estaNoEntregado = guiaremisionTmp.estaNoEntregado;
                 guiaremisionDTO.fechaTraslado = guiaremisionTmp.fechaTraslado;
                 guiaremisionDTO.estaAnulado = guiaremisionTmp.estaAnulado;
@@ -168,6 +169,7 @@ namespace Cotizador.Models.DTOsSearch
                 notaingresoDTO.usuario_nombre = notaingresoTmp.usuario.nombre;
                 notaingresoDTO.fechaEmision = notaingresoTmp.fechaEmision;
                 notaingresoDTO.fechaTraslado = notaingresoTmp.fechaTraslado;
+                notaingresoDTO.fechaRegistro = notaingresoTmp.FechaRegistroDesc;
                 notaingresoDTO.pedido_cliente_razonSocial = notaingresoTmp.pedido.cliente.razonSocial;
                 notaingresoDTO.pedido_cliente_ruc = notaingresoTmp.pedido.cliente.ruc;
                 notaingresoDTO.ciudadDestino_nombre = notaingresoTmp.ciudadDestino.nombre;

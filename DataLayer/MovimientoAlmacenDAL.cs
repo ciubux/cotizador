@@ -1255,6 +1255,7 @@ namespace DataLayer
                 guiaRemision.numeroDocumento = Converter.GetLong(row, "numero_documento");
                 guiaRemision.idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
                 guiaRemision.fechaTraslado = Converter.GetDateTime(row, "fecha_traslado");
+                guiaRemision.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
                 guiaRemision.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
                 guiaRemision.atencionParcial = Converter.GetBool(row, "atencion_parcial");
                 guiaRemision.ultimaAtencionParcial = Converter.GetBool(row, "ultima_atencion_parcial");
@@ -1750,6 +1751,17 @@ namespace DataLayer
             InputParameterAdd.DateTime(objCommand, "fechaEmisionHasta", notaIngreso.fechaEmisionHasta);
             //InputParameterAdd.DateTime(objCommand, "fechaTrasladoDesde", notaIngreso.fechaTrasladoDesde);
             //InputParameterAdd.DateTime(objCommand, "fechaTrasladoHasta", notaIngreso.fechaTrasladoHasta);
+
+            if (notaIngreso.fechaRegistroDesde.HasValue)
+            {
+                InputParameterAdd.DateTime(objCommand, "fechaRegistroDesde", notaIngreso.fechaRegistroDesde.Value);
+            }
+            if (notaIngreso.fechaRegistroHasta.HasValue)
+            {
+                InputParameterAdd.DateTime(objCommand, "fechaRegistroHasta", notaIngreso.fechaRegistroHasta.Value);
+            }
+
+
             InputParameterAdd.Int(objCommand, "anulado", notaIngreso.estaAnulado ? 1 : 0);
             InputParameterAdd.Int(objCommand, "numeroGuiaReferencia", notaIngreso.numeroGuiaReferencia);
             InputParameterAdd.BigInt(objCommand, "numeroPedido", notaIngreso.pedido.numeroPedido);
@@ -1769,8 +1781,9 @@ namespace DataLayer
                 notaIngreso.idMovimientoAlmacen = Converter.GetGuid(row, "id_movimiento_almacen");
                 notaIngreso.fechaTraslado = Converter.GetDateTime(row, "fecha_traslado");
                 notaIngreso.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
-           //     notaIngreso.atencionParcial = Converter.GetBool(row, "atencion_parcial");
-           //     notaIngreso.ultimaAtencionParcial = Converter.GetBool(row, "ultima_atencion_parcial");
+                notaIngreso.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
+                //     notaIngreso.atencionParcial = Converter.GetBool(row, "atencion_parcial");
+                //     notaIngreso.ultimaAtencionParcial = Converter.GetBool(row, "ultima_atencion_parcial");
                 notaIngreso.estaAnulado = Converter.GetBool(row, "anulado");
                 notaIngreso.estaFacturado = Converter.GetBool(row, "facturado");
                 notaIngreso.estaNoEntregado = Converter.GetBool(row, "no_entregado");

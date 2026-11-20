@@ -256,6 +256,8 @@ namespace Model
         public bool visualizaListaPrecios { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.VISUALIZA_MAESTRO_LISTA_PRECIOS)).FirstOrDefault() != null; } }
         public bool modificaMaestroListaPrecios { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_MAESTRO_LISTA_PRECIOS)).FirstOrDefault() != null; } }
 
+        public bool modificaPortafolioProductos { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_PORTAFOLIO_PRODUCTOS)).FirstOrDefault() != null; } }
+
         public bool modificaRestriccionVentaProducto { get { return this.permisoList.Where(u => u.codigo.Equals(Constantes.MODIFICA_RESTRICCION_VENTA_PRODUCTO)).FirstOrDefault() != null; } }
         
         //public bool modificaProducto { get; set; }

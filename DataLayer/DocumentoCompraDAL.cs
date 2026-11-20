@@ -206,6 +206,14 @@ namespace DataLayer
             InputParameterAdd.VarcharEmpty(objCommand, "sku", documentoCompra.sku);
 
 
+            if (documentoCompra.fechaRegistroDesde.HasValue)
+            {
+                InputParameterAdd.DateTime(objCommand, "fechaRegistroDesde", documentoCompra.fechaRegistroDesde.Value);
+            }
+            if (documentoCompra.fechaRegistroHasta.HasValue)
+            {
+                InputParameterAdd.DateTime(objCommand, "fechaRegistroHasta", documentoCompra.fechaRegistroHasta.Value);
+            }
 
             //   InputParameterAdd.Int(objCommand, "estado", (int)pedido.seguimientoPedido.estado);
             DataTable dataTable = Execute(objCommand);
@@ -246,8 +254,7 @@ namespace DataLayer
                 documentoCompra.fechaVencimiento = Converter.GetDateTime(row, "fecha_vencimiento");
                 documentoCompra.estadoDocumentoSunat = (DocumentoCompra.EstadosDocumentoSunat)Converter.GetInt(row, "estado");
 
-
-
+                documentoCompra.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
 
 
 

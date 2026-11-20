@@ -240,7 +240,8 @@ jQuery(function ($) {
     var documentoVenta_fechaVencimiento = $("#documentoCompra_fechaVencimientotmp").val();
     $("#documentoCompra_fechaVencimiento").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", documentoVenta_fechaVencimiento);
 
-
+    $("#documentoCompra_fechaRegistroDesde").datepicker({ dateFormat: "dd/mm/yy" });
+    $("#documentoCompra_fechaRegistroHasta").datepicker({ dateFormat: "dd/mm/yy" });
 
     /**
      * FIN DE CONTROLES DE FECHAS
@@ -295,6 +296,31 @@ jQuery(function ($) {
         });
     });
 
+    $("#documentoCompra_fechaRegistroDesde").change(function () {
+        var fechaDesde = $("#documentoCompra_fechaRegistroDesde").val();
+        $.ajax({
+            url: "/DocumentoCompra/ChangeFechaRegistroDesde",
+            type: 'POST',
+            data: {
+                fechaDesde: fechaDesde
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#documentoCompra_fechaRegistroHasta").change(function () {
+        var fechaHasta = $("#documentoCompra_fechaRegistroHasta").val();
+        $.ajax({
+            url: "/DocumentoCompra/ChangeFechaRegistroHasta",
+            type: 'POST',
+            data: {
+                fechaHasta: fechaHasta
+            },
+            success: function () {
+            }
+        });
+    });
 
  
   
@@ -916,6 +942,11 @@ jQuery(function ($) {
                         movimientoAlmacen = documentoCompraList[i].notaIngreso.serieNumeroNotaIngreso;
                     }
 
+                    var fechaRegistroDC = "";
+                    if ($("#documentoCompra_fechaRegistroDesde").length > 0) {
+                        fechaRegistroDC = '<br/><span class="spn-nombre-comercial">[R:' + documentoCompraList[i].FechaRegistroDesc + ']</span>';
+                    }
+
                     var rowDocumentoCompra = '<tr data-expanded="false">'+
                         '<td>  ' + documentoCompraList[i].idDocumentoCompra + '</td>' +
                         '<td>  ' + documentoCompraList[i].serieNumero + '</td>' +
@@ -924,7 +955,7 @@ jQuery(function ($) {
 
                         '<td>  ' + movimientoAlmacen + '</td>' +
                         '<td>  ' + documentoCompraList[i].usuario.nombre + '</td>' +
-                        '<td data-sort-value="' + documentoCompraList[i].fechaEmision.substr(0, 10) + '">  ' + invertirFormatoFecha(documentoCompraList[i].fechaEmision.substr(0, 10)) + '</td>' +
+                        '<td data-sort-value="' + documentoCompraList[i].fechaEmision.substr(0, 10) + '">  ' + invertirFormatoFecha(documentoCompraList[i].fechaEmision.substr(0, 10)) + fechaRegistroDC + '</td>' +
                         '<td data-sort-value="' + documentoCompraList[i].fechaVencimiento.substr(0, 10) + '">  ' + invertirFormatoFecha(documentoCompraList[i].fechaVencimiento.substr(0, 10)) + '</td>' +
                         '<td>  ' + documentoCompraList[i].proveedor.codigo + '</td>' +
                         '<td>  ' + documentoCompraList[i].proveedor.razonSocial + '</td>' +

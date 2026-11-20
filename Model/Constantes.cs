@@ -642,6 +642,7 @@ namespace Model
         public const String VISUALIZA_MAESTRO_LISTA_PRECIOS = "P790";
         public const String MODIFICA_MAESTRO_LISTA_PRECIOS = "P791";
 
+        public const String MODIFICA_PORTAFOLIO_PRODUCTOS = "P785";
         public const String FILTRA_FECHA_CREACION_REGISTRO = "P181";
 
         public enum paginas
@@ -915,6 +916,11 @@ namespace Model
 
             [Display(Name = "REGISTRO/EDICIÓN LISTA DE PRECIOS")]
             RegistroListaPrecios  = 791,
+
+
+            [Display(Name = "BUSQUEDA PORTAFOLIOS PRODUCTOS")]
+            BusquedaPortafolioProductos = 785,
+
 
             [Display(Name = "EDITA CONFIGURACION EMPRESA")]
             EditaConfiguracionEmpresa = 151

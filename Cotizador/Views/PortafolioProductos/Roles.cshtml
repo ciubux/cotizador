@@ -1,57 +1,190 @@
-﻿@{    
-    List<Model.VistaDashboard> VistasDashboard = ViewBag.vistasDashboard;
-    Model.Rol RolVistaDashboard = ViewBag.rolVistaDashboard;
-  
-    ViewBag.Title = "Vistas Dashboard asignadas a "+RolVistaDashboard.nombre+"";
-    int idVistaDashboardTemp = 0;
-    int numero = 0;
+﻿@model Model.PortafolioProductos
+@{
+    var obj = (Model.PortafolioProductos)ViewBag.portafolio;
+    var roles = (List<Model.Rol>)ViewBag.roles ?? new List<Model.Rol>();
+    var idsAsignados = obj.roles != null
+        ? new HashSet<int>(obj.roles.Select(r => r.idRol))
+        : new HashSet<int>();
+
+    ViewBag.Title = "Roles del Portafolio";
 }
 
 <div class="page-header">
-    <h3>@ViewBag.Title</h3>
+    <h3><b>Gestionar Roles - @obj.nombre</b></h3>
 </div>
 
-<div class="container">
-    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
-    <input type="hidden" value="@ViewBag.debug" />
-    
-    <div class="col-md-10">
-        
-        @foreach (Model.VistaDashboard vd in VistasDashboard)
-        {
-            if (idVistaDashboardTemp != vd.tipoVistaDashboard.idTipoVistaDashboard)
-            {                
-                idVistaDashboardTemp = vd.tipoVistaDashboard.idTipoVistaDashboard;
-                string titulo = "</div>" + (numero == 0 ? "" : "<br>") + "<div class=\"row\"><div class=\"col-sm-12 col-lg-12 col-xs-12\"><h4>" + vd.tipoVistaDashboard.nombre + "</h4></div>";
+<div class="container-fluid" style="background: #fff; padding: 20px; border-radius: 5px;" id="contenedorRolesPortafolio">
+    <input type="hidden" id="roles_idPortafolio" value="@obj.idPortafolioProductos" />
 
-                @Html.Raw(titulo)
-                numero = +1;
-            }
-
-            string itemChecked = RolVistaDashboard.TieneVistaDashboard(vd.idVistaDashboard) ? "checked" : "";
-
-            <div class="col-sm-6 col-lg-4 col-xs-12">
-                <label class="radio-label">
-                    <input type="checkbox" @itemChecked class="chk-rol VistaDashboardEditar" name="vistaDashboard_@vd.idVistaDashboard" id="vistaDashboard_@vd.idVistaDashboard" value="@vd.idVistaDashboard">
-                    <span>@vd.nombre - (@vd.codigo)</span>
-                </label>
-            </div>
-        }
-
+    <!-- Barra superior: Título, contador y filtro rápido -->
+    <div class="row" style="margin-bottom: 15px; display: flex; align-items: center; flex-wrap: wrap;">
+        <div class="col-xs-12 col-sm-6">
+            <h4 style="margin: 0;">
+                <b>Roles del Sistema</b>
+                <span id="badgeTotalRolesSeleccionados" class="badge" style="margin-left: 6px;">@idsAsignados.Count</span>
+                <small class="text-muted" style="font-size: 12px; margin-left: 4px;">seleccionado(s)</small>
+            </h4>
+        </div>
+        <div class="col-xs-12 col-sm-6 text-right" style="margin-top: 5px;">
+            <input type="text" id="filtroTablaRoles" class="form-control input-sm"
+                   placeholder="Filtrar por código o nombre de rol..."
+                   style="display: inline-block; width: 280px; max-width: 100%;" />
+        </div>
     </div>
 
-        <div class="row">
-            <div class="pull-right">
-                <button type="button" id="btnCancelarVistaDashboard" class="btn btn-danger">Cancelar</button>
-                <button id="btnFinalizarEdicionVistaDashboard" type="button" class="btn btn-success">Finalizar Edición</button>
-            </div>
-        </div>
+    <!-- Tabla de Roles -->
+    <div class="table-responsive">
+        <table id="tableAsignarRoles" class="table table-roles-modern">
+            <thead>
+                <tr>
+                    <th style="width: 60px; text-align: center;">
+                        <label class="chk-sobrio-wrap" title="Seleccionar / Deseleccionar todos">
+                            <input type="checkbox" id="chkSeleccionarTodosRoles" />
+                            <span class="chk-sobrio-box"></span>
+                        </label>
+                    </th>
+                    <th style="width: 180px;">Código</th>
+                    <th>Nombre del Rol</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Model.Rol ro in roles)
+                {
+                    bool estaMarcado = idsAsignados.Contains(ro.idRol);
+                    <tr class="fila-rol @(estaMarcado ? "fila-rol-seleccionada" : "")">
+                        <td style="text-align: center;">
+                            <label class="chk-sobrio-wrap">
+                                <input type="checkbox"
+                                       class="chk-rol-portafolio"
+                                       name="rol_@ro.idRol"
+                                       id="rol_@ro.idRol"
+                                       value="@ro.idRol"
+                                       @(estaMarcado ? "checked" : "") />
+                                <span class="chk-sobrio-box"></span>
+                            </label>
+                        </td>
+                        <td class="rol-codigo"><b>@ro.codigo</b></td>
+                        <td class="rol-nombre">@ro.nombre</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 
-    
+    <hr />
+
+    <!-- Botones Finales -->
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-xs-6 text-left">
+            <button id="btnVolverListado" type="button" class="btn btn-default">Volver al Listado</button>
+        </div>
+        <div class="col-xs-6 text-right">
+            <button id="btnFinalizarRolesPortafolio" type="button" class="btn btn-primary">Finalizar</button>
+        </div>
+    </div>
 </div>
 
+<style>
+    /* Tabla sobria y moderna */
+    .table-roles-modern {
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 0;
+    }
 
+        .table-roles-modern thead th {
+            background-color: #f8fafc;
+            color: #334155;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            border-bottom: 2px solid #e2e8f0 !important;
+            padding: 12px 14px !important;
+            vertical-align: middle !important;
+        }
+
+        .table-roles-modern tbody td {
+            padding: 10px 14px !important;
+            vertical-align: middle !important;
+            border-top: 1px solid #edf2f7 !important;
+            color: #1e293b;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+
+        .table-roles-modern tbody tr:hover td {
+            background-color: #f1f5f9;
+        }
+
+        .table-roles-modern tbody tr.fila-rol-seleccionada td {
+            background-color: #eef5ff;
+        }
+
+        .table-roles-modern tbody tr.fila-rol-seleccionada:hover td {
+            background-color: #e2eeff;
+        }
+
+    /* Checkbox personalizado moderno y sobrio */
+    .chk-sobrio-wrap {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        margin: 0;
+        cursor: pointer;
+        user-select: none;
+    }
+
+        .chk-sobrio-wrap input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+    .chk-sobrio-box {
+        height: 18px;
+        width: 18px;
+        background-color: #ffffff;
+        border: 1.5px solid #94a3b8;
+        border-radius: 4px;
+        display: inline-block;
+        position: relative;
+        transition: all 0.15s ease;
+    }
+
+    .chk-sobrio-wrap:hover .chk-sobrio-box {
+        border-color: #337ab7;
+    }
+
+    .chk-sobrio-wrap input:checked ~ .chk-sobrio-box {
+        background-color: #337ab7;
+        border-color: #337ab7;
+    }
+
+    .chk-sobrio-box:after {
+        content: "";
+        position: absolute;
+        display: none;
+        left: 5px;
+        top: 1px;
+        width: 5px;
+        height: 10px;
+        border: solid #ffffff;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+
+    .chk-sobrio-wrap input:checked ~ .chk-sobrio-box:after {
+        display: block;
+    }
+</style>
 
 @section Scripts {
-    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/rol")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/portafolioProductos")
 }

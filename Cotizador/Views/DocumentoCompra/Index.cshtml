@@ -193,7 +193,29 @@
 
         </div>
 
+        @if (documentoCompra.usuario.filtraFechaCreacionRegistro)
+        {
+        <div class="row">
+            <!--FECHA REGISTRO-->
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => documentoCompra.fechaRegistroDesde, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        <input class="form-control" id="documentoCompra_fechaRegistroDesde" name="documentoCompra_fechaRegistroDesde" value="@documentoCompra.FechaRegistroDesdeFormatoFecha">
+                    </div>
+                </div>
+            </div>
 
+            <div class="col-sm-6 col-lg-4">
+                <div class="form-group">
+                    @Html.LabelFor(p => documentoCompra.fechaRegistroHasta, htmlAttributes: new { @class = "control-label col-xs-4" })
+                    <div class="col-xs-8">
+                        <input class="form-control" id="documentoCompra_fechaRegistroHasta" name="documentoCompra_fechaRegistroHasta" value="@documentoCompra.FechaRegistroHastaFormatoFecha">
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
 
         <div class="row">
             <div class="col-sm-6 col-lg-4">

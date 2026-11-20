@@ -1,77 +1,89 @@
-﻿@{
-    Model.Rol rol = ViewBag.rol;
-    ViewBag.Title = "Listado de Usuarios asignados al Rol \"" + rol.nombre + "\"";
-
-    var itemHeredaChecked = "";
+﻿@model Model.PortafolioProductos
+@{
+    var obj = (Model.PortafolioProductos)ViewBag.portafolio;
+    ViewBag.Title = "Usuarios del Portafolio";
 }
 
 <div class="page-header">
-    <h3>@ViewBag.Title</h3>
+    <h3><b>Gestionar Usuarios - @obj.nombre</b></h3>
 </div>
-<div class="container">
-    <input type="hidden" id="pagina" value="@ViewBag.pagina" />
-    <input type="hidden" value="@ViewBag.debug" />
-    <input type="hidden" id="idRol" value="@rol.idRol" />
 
-    <br /><br />
-    @if (rol.idRol != 0)
-    {
+<div class="container-fluid" style="background: #fff; padding: 20px; border-radius: 5px;" id="contenedorUsuariosPortafolio">
+    <input type="hidden" id="usuarios_idPortafolio" value="@obj.idPortafolioProductos" />
 
+    <form class="form-horizontal" onsubmit="return false;">
         <div class="row">
-            <div class="col-xs-12 col-lg-6">
+            <div class="col-xs-12 col-lg-8">
                 <!--Usuario-->
                 <div class="form-group">
                     <label for="idUsuario" class="control-label col-xs-3">Buscar Usuario:</label>
-
                     <div class="col-xs-6">
                         <select class="form-control input-sm" id="idUsuario" name="idUsuario" required>
                             <option value=""></option>
                         </select>
                     </div>
-
                     <div class="col-xs-3">
-                        <button id="btnAgregarUsuarioRol" type="button" class="btn btn-primary">Agregar</button>
+                        <button type="button" id="btnAgregarUsuarioPortafolio" class="btn btn-success btn-sm">
+                            + Agregar
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+    </form>
 
-        <div class="row">
-            <div class="col-sm-12 col-lg-12">
-                <table id="tableUsuariosRol" class="table" data-editing="false"
-                       data-editing-allow-add="false"
-                       data-editing-allow-delete="false"
-                       data-editing-allow-edit="false"
-                       data-show-toggle="false">
-                    <thead>
-                        <tr>
-                            <th data-name="idUsuario" data-visible="false"></th>
-                            <th data-name="email" data-visible="true" data-sortable="true" data-sorted="true" data-direction="DESC">Email</th>
-                            <th data-name="nombre" data-visible="true" data-sortable="true">Nombre</th>
-                            <th data-name="opciones" data-sortable="true" data-breakpoints="xs"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (Model.Usuario item in rol.usuarios)
-                        {
-                            <tr data-expanded="true">
-                                <td>  @item.idUsuario </td>
-                                <td>  @item.email </td>
-                                <td>  @item.nombre </td>
-                                <td>
-                                    <button type="button" class="btn btn-danger btnQuitarUsuarioRol" idUsuario="@item.idUsuario">Remover</button>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+    <hr />
+
+    <div class="row" style="margin-bottom: 15px;">
+        <div class="col-xs-12">
+            <h4 style="margin: 0;">
+                <b>Usuarios Asignados</b> <span id="badgeTotalUsuariosAsignados" class="badge">@(obj.usuarios != null ? obj.usuarios.Count : 0)</span>
+            </h4>
         </div>
-    }
+    </div>
+
+    <div class="row" style="font-weight: bold; padding: 10px 0; border-bottom: 2px solid #ddd; background-color: #f9f9f9;">
+        <div class="col-xs-11">Usuario</div>
+        <div class="col-xs-1 text-center">Acción</div>
+    </div>
+
+    <div id="contenedorListaUsuarios">
+        @if (obj.usuarios != null)
+        {
+            foreach (var u in obj.usuarios)
+            {
+                <div class="row usuario-row" style="padding: 10px 0; border-bottom: 1px solid #eee; display: flex; align-items: center;" data-idusuario="@u.idUsuario">
+                    <div class="col-xs-11">
+                        <b>@u.nombre</b> @(!string.IsNullOrWhiteSpace(u.email) ? "(" + u.email + ")" : "")
+                    </div>
+                    <div class="col-xs-1 text-center">
+                        <button type="button" class="btn btn-danger btn-sm btnEliminarUsuarioPortafolio" data-idusuario="@u.idUsuario" title="Quitar Usuario">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+    <hr />
+
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-xs-6 text-left">
+            <button id="btnVolverListado" type="button" class="btn btn-default">Volver al Listado</button>
+        </div>
+        <div class="col-xs-6 text-right">
+            <button id="btnFinalizarUsuariosPortafolio" type="button" class="btn btn-primary">Finalizar</button>
+        </div>
+    </div>
 </div>
 
-
+<style>
+    #contenedorUsuariosPortafolio .chosen-container {
+        width: 100% !important;
+    }
+</style>
 
 @section Scripts {
-    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/rol")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?nocache=" + TempData["ScriptVersion"] + "\"></script>", "~/bundles/portafolioProductos")
 }

@@ -331,6 +331,8 @@ jQuery(function ($) {
     var fechaTrasladoHasta = $("#fechaTrasladoHastatmp").val();
     $("#notaIngreso_fechaTrasladoHasta").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", fechaTrasladoHasta);
 
+    $("#notaIngreso_fechaRegistroDesde").datepicker({ dateFormat: "dd/mm/yy" });
+    $("#notaIngreso_fechaRegistroHasta").datepicker({ dateFormat: "dd/mm/yy" });
 
     var documentoVenta_fechaEmision = $("#documentoVenta_fechaEmisiontmp").val();
     $("#documentoVenta_fechaEmision").datepicker({ dateFormat: "dd/mm/yy" }).datepicker("setDate", documentoVenta_fechaEmision);
@@ -2292,13 +2294,18 @@ jQuery(function ($) {
                         noEntregadoLectura = '<input disabled type="checkbox"></input>'
                     }
 
+                    var fechaRegistroNI = "";
+                    if ($("#notaIngreso_fechaRegistroDesde").length > 0) {
+                        fechaRegistroNI = '<br/><span class="spn-nombre-comercial">[R:' + notaIngresoList[i].fechaRegistro + ']</span>';
+                    }
+
                     var guiaRemision = '<tr data-expanded="false">' +
                         '<td>  ' + notaIngresoList[i].idMovimientoAlmacen + '</td>' +
                         '<td>  ' + notaIngresoList[i].serieNumeroNotaIngreso + '</td>' +
                         '<td>  ' + notaIngresoList[i].pedido_numeroPedidoString + '</td>' +
                         '<td>  ' + notaIngresoList[i].motivoTrasladoString + '</td>' +
                         '<td>  ' + notaIngresoList[i].usuario_nombre + '</td>' +
-                        '<td data-sort-value="' + notaIngresoList[i].fechaEmision.substr(0, 10) + '">  ' + invertirFormatoFecha(notaIngresoList[i].fechaEmision.substr(0, 10)) + '</td>' +
+                        '<td data-sort-value="' + notaIngresoList[i].fechaEmision.substr(0, 10) + '">  ' + invertirFormatoFecha(notaIngresoList[i].fechaEmision.substr(0, 10)) + fechaRegistroNI +'</td>' +
                         '<td data-sort-value="' + notaIngresoList[i].fechaTraslado.substr(0, 10) + '">  ' + invertirFormatoFecha(notaIngresoList[i].fechaTraslado.substr(0, 10)) + '</td>' +
                         '<td>  ' + notaIngresoList[i].pedido_cliente_razonSocial + '</td>' +
                         '<td>  ' + notaIngresoList[i].pedido_cliente_ruc + '</td>' +
@@ -2445,6 +2452,32 @@ jQuery(function ($) {
             type: 'POST',
             data: {
                 fechaTrasladoHasta: fechaTrasladoHasta
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#notaIngreso_fechaRegistroDesde").change(function () {
+        var fechaDesde = $("#notaIngreso_fechaRegistroDesde").val();
+        $.ajax({
+            url: "/NotaIngreso/ChangefechaRegistroDesde",
+            type: 'POST',
+            data: {
+                fechaDesde: fechaDesde
+            },
+            success: function () {
+            }
+        });
+    });
+
+    $("#notaIngreso_fechaRegistroHasta").change(function () {
+        var fechaHasta = $("#notaIngreso_fechaRegistroHasta").val();
+        $.ajax({
+            url: "/NotaIngreso/ChangefechaRegistroHasta",
+            type: 'POST',
+            data: {
+                fechaHasta: fechaHasta
             },
             success: function () {
             }

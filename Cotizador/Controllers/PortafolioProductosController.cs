@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using Model.UTILES;
+using NPOI.POIFS.FileSystem;
 
 namespace Cotizador.Controllers
 {
@@ -21,10 +22,12 @@ namespace Cotizador.Controllers
         [HttpGet]
         public ActionResult List()
         {
-            if (this.Logueado == null)
+            if (this.Logueado == null || !this.Logueado.modificaPortafolioProductos)
             {
                 return RedirectToAction("Login", "Account");
             }
+
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPortafolioProductos;
 
             return View();
         }
@@ -34,7 +37,7 @@ namespace Cotizador.Controllers
         {
             try
             {
-                if (this.Logueado == null)
+                if (this.Logueado == null || !this.Logueado.modificaPortafolioProductos)
                 {
                     return JsonConvert.SerializeObject(new { success = 0, message = "Sesión expirada." });
                 }
@@ -55,7 +58,7 @@ namespace Cotizador.Controllers
         {
             try
             {
-                if (this.Logueado == null)
+                if (this.Logueado == null || !this.Logueado.modificaPortafolioProductos)
                 {
                     return JsonConvert.SerializeObject(new { success = 0, message = "Sesión expirada." });
                 }
@@ -93,13 +96,22 @@ namespace Cotizador.Controllers
         }
 
         [HttpPost]
-        public String PrepararAccion(Guid idPortafolioProductos)
+        public String PrepararAccion(Guid idPortafolioProductos, bool desdeVer = false)
         {
             try
             {
                 PortafolioProductosBL bl = new PortafolioProductosBL();
-                PortafolioProductos obj = bl.getPortafolioProductos(idPortafolioProductos);
-                this.Session[Constantes.VAR_SESSION_PORTAFOLIO_PRODUCTOS] = obj;
+
+                if(desdeVer)
+                {
+                    this.Session[Constantes.VAR_SESSION_PORTAFOLIO_PRODUCTOS] = this.Session[Constantes.VAR_SESSION_PORTAFOLIO_PRODUCTOS_VER];
+                } else
+                {
+                    PortafolioProductos obj = bl.getPortafolioProductos(idPortafolioProductos);
+                    this.Session[Constantes.VAR_SESSION_PORTAFOLIO_PRODUCTOS] = obj;
+                }
+
+                
 
                 return JsonConvert.SerializeObject(new { success = 1 });
             }
@@ -112,11 +124,12 @@ namespace Cotizador.Controllers
         [HttpGet]
         public ActionResult Editar()
         {
-            if (this.Logueado == null)
+            if (this.Logueado == null || !this.Logueado.modificaPortafolioProductos)
             {
                 return RedirectToAction("Login", "Account");
             }
 
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPortafolioProductos;
             PortafolioProductos obj = (PortafolioProductos)this.Session[Constantes.VAR_SESSION_PORTAFOLIO_PRODUCTOS];
 
             if (obj == null)
@@ -278,7 +291,7 @@ namespace Cotizador.Controllers
         {
             try
             {
-                if (this.Logueado == null)
+                if (this.Logueado == null || !this.Logueado.modificaPortafolioProductos)
                 {
                     return JsonConvert.SerializeObject(new { success = 0, message = "La sesión expiró." });
                 }
@@ -325,6 +338,106 @@ namespace Cotizador.Controllers
         {
             this.Session[Constantes.VAR_SESSION_PORTAFOLIO_PRODUCTOS] = null;
             return JsonConvert.SerializeObject(new { success = 1 });
+        }
+
+        [HttpGet]
+        public ActionResult Usuarios()
+        {
+            if (this.Logueado == null || !this.Logueado.modificaPortafolioProductos)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPortafolioProductos;
+            PortafolioProductos obj = (PortafolioProductos)this.Session[Constantes.VAR_SESSION_PORTAFOLIO_PRODUCTOS];
+
+            if (obj == null || obj.idPortafolioProductos == Guid.Empty)
+            {
+                return RedirectToAction("List");
+            }
+
+            ViewBag.portafolio = obj;
+            return View();
+        }
+
+        [HttpPost]
+        public String GuardarUsuarios(Guid idPortafolioProductos, List<Guid> idsUsuarios)
+        {
+            try
+            {
+                if (this.Logueado == null || !this.Logueado.modificaPortafolioProductos)
+                {
+                    return JsonConvert.SerializeObject(new { success = 0, message = "La sesión expiró." });
+                }
+
+                PortafolioProductosBL bl = new PortafolioProductosBL();
+                bl.updatePortafolioProductosUsuarios(
+                    idPortafolioProductos,
+                    this.Logueado.idUsuario,
+                    idsUsuarios ?? new List<Guid>()
+                );
+
+                this.Session[Constantes.VAR_SESSION_PORTAFOLIO_PRODUCTOS] = null;
+
+                return JsonConvert.SerializeObject(new { success = 1 });
+            }
+            catch (Exception ex)
+            {
+                return JsonConvert.SerializeObject(new { success = 0, message = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Roles()
+        {
+            if (this.Logueado == null || !this.Logueado.modificaPortafolioProductos)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            this.Session[Constantes.VAR_SESSION_PAGINA] = Constantes.paginas.BusquedaPortafolioProductos;
+            PortafolioProductos obj = (PortafolioProductos)this.Session[Constantes.VAR_SESSION_PORTAFOLIO_PRODUCTOS];
+
+            if (obj == null || obj.idPortafolioProductos == Guid.Empty)
+            {
+                return RedirectToAction("List");
+            }
+
+            RolBL rolbl = new RolBL();
+            Rol rol = new Rol();
+            rol.Estado = 1;
+            List<Rol> roles = rolbl.getRoles(rol);
+
+            ViewBag.portafolio = obj;
+            ViewBag.roles = roles;
+            return View();
+        }
+
+        [HttpPost]
+        public String GuardarRoles(Guid idPortafolioProductos, List<int> idsRoles)
+        {
+            try
+            {
+                if (this.Logueado == null || !this.Logueado.modificaPortafolioProductos)
+                {
+                    return JsonConvert.SerializeObject(new { success = 0, message = "La sesión expiró." });
+                }
+
+                PortafolioProductosBL bl = new PortafolioProductosBL();
+                bl.updatePortafolioProductosRoles(
+                    idPortafolioProductos,
+                    this.Logueado.idUsuario,
+                    idsRoles ?? new List<int>()
+                );
+
+                this.Session[Constantes.VAR_SESSION_PORTAFOLIO_PRODUCTOS] = null;
+
+                return JsonConvert.SerializeObject(new { success = 1 });
+            }
+            catch (Exception ex)
+            {
+                return JsonConvert.SerializeObject(new { success = 0, message = ex.Message });
+            }
         }
     }
 }

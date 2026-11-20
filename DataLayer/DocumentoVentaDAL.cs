@@ -860,6 +860,7 @@ namespace DataLayer
                 documentoVenta.cPE_CABECERA_BE.NRO_DOC_EMI= Converter.GetString(row, "NRO_DOC_EMI");
 
                 documentoVenta.fechaEmision = Converter.GetDateTime(row, "fecha_emision");
+                documentoVenta.FechaRegistro = Converter.GetDateTime(row, "fecha_creacion");
                 documentoVenta.fechaVencimiento = Converter.GetDateTime(row, "fecha_vencimiento");
                 documentoVenta.estadoDocumentoSunat = (DocumentoVenta.EstadosDocumentoSunat)Converter.GetInt(row, "estado");
                 

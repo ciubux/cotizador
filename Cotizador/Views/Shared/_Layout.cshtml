@@ -1,5 +1,5 @@
 ﻿@{
-    TempData["ScriptVersion"] = "45";
+    TempData["ScriptVersion"] = "464";
     var usuario = (Model.Usuario)this.Session["usuario"] == null ? new Model.Usuario() : (Model.Usuario)this.Session["usuario"];
     int pagina = ViewBag.pagina == null ? 0 : ViewBag.pagina;
 }
@@ -183,6 +183,8 @@
 
                         var linkBusquedaListaPrecios = "";
                         var linkRegistroListaPrecios = "";
+
+                        var linkBusquedaPortafolioProductos = "";
                     }
 
                     @if (this.Session["pagina"] != null)
@@ -300,6 +302,8 @@
 
                             case 790: linkBusquedaListaPrecios = "active"; linkMaestros = "active"; break;
                             case 791: linkRegistroListaPrecios = "active"; linkMaestros = "active"; break;
+
+                            case 785: linkBusquedaPortafolioProductos = "active"; linkMaestros = "active"; break;
 
 
                             case 901: linkReporteSellOutPersonalizado = "active"; linkReportes = "active"; break;
@@ -637,6 +641,12 @@
                                     {
                                         <li id="linkRegistroListaPrecios" class="@linkRegistroListaPrecios">@Html.ActionLink("Lista Precios - Registro/Edición", "Editar", "ListaPrecios")</li>
                                     }
+
+                                    @if (usuario.modificaPortafolioProductos)
+                                    {
+                                        <li id="linkBusquedaPortafolioProductos" class="@linkBusquedaPortafolioProductos">@Html.ActionLink("Portafolios Productos", "List", "PortafolioProductos")</li>
+                                    }
+                                    
 
                                     @if (usuario.modificaPromocion)
                                     {

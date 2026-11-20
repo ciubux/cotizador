@@ -3,9 +3,16 @@
 jQuery(function ($) {
     var MENSAJE_ERROR = "La operación no se procesó correctamente; Contacte con el Administrador.";
 
+
     $(document).ready(function () {
         if ($("#tablePortafolios").length > 0) {
             $("#btnBusqueda").click();
+        }
+        if ($("#contenedorUsuariosPortafolio").length > 0) {
+            cargarChosenUsuario();
+        }
+        if ($("#contenedorRolesPortafolio").length > 0) {
+            sincronizarEstadoRoles();
         }
     });
 
@@ -144,8 +151,8 @@ jQuery(function ($) {
     });
 
 
-    function prepararYRedirigir(idPortafolio, urlDestino) {
-        $.post("/PortafolioProductos/PrepararAccion", { idPortafolioProductos: idPortafolio }, function (res) {
+    function prepararYRedirigir(idPortafolio, urlDestino, desdeVer = false) {
+        $.post("/PortafolioProductos/PrepararAccion", { idPortafolioProductos: idPortafolio, desdeVer: desdeVer }, function (res) {
             if (res && res.success === 1) {
                 window.location = urlDestino;
             } else {
@@ -167,15 +174,15 @@ jQuery(function ($) {
     });
 
     $("#btnModalIrEditar").click(function () {
-        window.location = "/PortafolioProductos/Editar";
+        prepararYRedirigir($("#ver_idPortafolio").val(), "/PortafolioProductos/Editar", true);
     });
 
     $("#btnModalIrRoles").click(function () {
-        window.location = "/PortafolioProductos/Roles";
+        prepararYRedirigir($("#ver_idPortafolio").val(), "/PortafolioProductos/Roles", true);
     });
 
     $("#btnModalIrUsuarios").click(function () {
-        window.location = "/PortafolioProductos/Usuarios";
+        prepararYRedirigir($("#ver_idPortafolio").val(), "/PortafolioProductos/Usuarios", true);
     });
 
 
@@ -442,4 +449,206 @@ jQuery(function ($) {
         });
     });
 
+
+    
+    function cargarChosenUsuario() {
+        $("#idUsuario").chosen({
+            placeholder_text_single: "Buscar Usuario",
+            no_results_text: "No se encontró Usuario"
+        }).on('chosen:showing_dropdown', function (evt, params) {
+
+        });
+
+        $("#idUsuario").ajaxChosen({
+            dataType: "json",
+            type: "GET",
+            minTermLength: 5,
+            afterTypeDelay: 300,
+            cache: false,
+            url: "/Usuario/SearchUsuarios"
+        }, {
+            loadingImg: "/Content/chosen/images/loading.gif"
+        }, {
+            placeholder_text_single: "Buscar Usuario",
+            no_results_text: "No se encontró Usuario"
+        });
+    }
+
+    function actualizarContadorUsuarios() {
+        var total = $("#contenedorListaUsuarios .usuario-row").length;
+        $("#badgeTotalUsuariosAsignados").text(total);
+    }
+
+    $("#btnAgregarUsuarioPortafolio").click(function () {
+        var idUsuario = $("#idUsuario").val();
+        var textoUsuario = $.trim($("#idUsuario option:selected").text());
+
+        if (!idUsuario) {
+            $.alert({
+                title: "Validación",
+                type: "orange",
+                content: "Debe buscar y seleccionar un usuario primero."
+            });
+            return;
+        }
+
+        if ($('#contenedorListaUsuarios .usuario-row[data-idusuario="' + idUsuario + '"]').length > 0) {
+            $.alert({
+                title: "Usuario Duplicado",
+                type: "orange",
+                content: "El usuario seleccionado ya se encuentra asignado al portafolio."
+            });
+            return;
+        }
+
+        var filaHtml =
+            '<div class="row usuario-row" style="padding: 10px 0; border-bottom: 1px solid #eee; display: flex; align-items: center;" data-idusuario="' + idUsuario + '">' +
+            '<div class="col-xs-11"><b>' + textoUsuario + '</b></div>' +
+            '<div class="col-xs-1 text-center">' +
+            '<button type="button" class="btn btn-danger btn-sm btnEliminarUsuarioPortafolio" data-idusuario="' + idUsuario + '" title="Quitar Usuario">' +
+            '<i class="glyphicon glyphicon-trash"></i>' +
+            '</button>' +
+            '</div>' +
+            '</div>';
+
+        $("#contenedorListaUsuarios").append(filaHtml);
+        actualizarContadorUsuarios();
+
+        $("#idUsuario").val("").trigger("chosen:updated");
+    });
+
+    $(document).on("click", ".btnEliminarUsuarioPortafolio", function () {
+        $(this).closest(".usuario-row").remove();
+        actualizarContadorUsuarios();
+    });
+
+    $("#btnFinalizarUsuariosPortafolio").click(function () {
+        var idPortafolio = $("#usuarios_idPortafolio").val();
+        var idsUsuarios = [];
+
+        $("#contenedorListaUsuarios .usuario-row").each(function () {
+            var id = $(this).attr("data-idusuario");
+            if (id) {
+                idsUsuarios.push(id);
+            }
+        });
+
+        $.ajax({
+            url: "/PortafolioProductos/GuardarUsuarios",
+            type: "POST",
+            dataType: "JSON",
+            traditional: true,
+            data: {
+                idPortafolioProductos: idPortafolio,
+                idsUsuarios: idsUsuarios
+            },
+            success: function (res) {
+                if (res && res.success === 1) {
+                    window.location = "/PortafolioProductos/List";
+                } else {
+                    $.alert({
+                        title: "Error",
+                        type: "red",
+                        content: (res && res.message) ? res.message : MENSAJE_ERROR
+                    });
+                }
+            },
+            error: function () {
+                $.alert({
+                    title: "Error",
+                    type: "red",
+                    content: MENSAJE_ERROR
+                });
+            }
+        });
+    });
+    
+    function sincronizarEstadoRoles() {
+        var $visibles = $("#tableAsignarRoles tbody tr.fila-rol:visible .chk-rol-portafolio");
+        var $todos = $("#tableAsignarRoles tbody .chk-rol-portafolio");
+        var totalMarcados = $todos.filter(":checked").length;
+
+        $("#badgeTotalRolesSeleccionados").text(totalMarcados);
+
+        if ($visibles.length > 0 && $visibles.length === $visibles.filter(":checked").length) {
+            $("#chkSeleccionarTodosRoles").prop("checked", true);
+        } else {
+            $("#chkSeleccionarTodosRoles").prop("checked", false);
+        }
+    }
+
+    $(document).on("change", ".chk-rol-portafolio", function () {
+        var $chk = $(this);
+        $chk.closest("tr").toggleClass("fila-rol-seleccionada", $chk.is(":checked"));
+        sincronizarEstadoRoles();
+    });
+
+    $(document).on("click", "#tableAsignarRoles tbody tr.fila-rol", function (e) {
+        if ($(e.target).is("input[type='checkbox']") || $(e.target).closest("label.chk-sobrio-wrap").length > 0) {
+            return;
+        }
+        var $chk = $(this).find(".chk-rol-portafolio");
+        $chk.prop("checked", !$chk.is(":checked")).trigger("change");
+    });
+
+    $(document).on("change", "#chkSeleccionarTodosRoles", function () {
+        var marcado = $(this).is(":checked");
+        $("#tableAsignarRoles tbody tr.fila-rol:visible .chk-rol-portafolio").each(function () {
+            $(this).prop("checked", marcado);
+            $(this).closest("tr").toggleClass("fila-rol-seleccionada", marcado);
+        });
+        sincronizarEstadoRoles();
+    });
+
+    $("#filtroTablaRoles").on("keyup", function () {
+        var texto = ($(this).val() || "").toLowerCase();
+        $("#tableAsignarRoles tbody tr.fila-rol").each(function () {
+            var $tr = $(this);
+            var codigo = $tr.find(".rol-codigo").text().toLowerCase();
+            var nombre = $tr.find(".rol-nombre").text().toLowerCase();
+            $tr.toggle(codigo.indexOf(texto) > -1 || nombre.indexOf(texto) > -1);
+        });
+        sincronizarEstadoRoles();
+    });
+
+    $("#btnFinalizarRolesPortafolio").click(function () {
+        var idPortafolio = $("#roles_idPortafolio").val();
+        var idsRoles = [];
+
+        $("#tableAsignarRoles tbody .chk-rol-portafolio:checked").each(function () {
+            var id = parseInt($(this).val(), 10);
+            if (!isNaN(id)) {
+                idsRoles.push(id);
+            }
+        });
+
+        $.ajax({
+            url: "/PortafolioProductos/GuardarRoles",
+            type: "POST",
+            dataType: "JSON",
+            traditional: true,
+            data: {
+                idPortafolioProductos: idPortafolio,
+                idsRoles: idsRoles
+            },
+            success: function (res) {
+                if (res && res.success === 1) {
+                    window.location = "/PortafolioProductos/List";
+                } else {
+                    $.alert({
+                        title: "Error",
+                        type: "red",
+                        content: (res && res.message) ? res.message : MENSAJE_ERROR
+                    });
+                }
+            },
+            error: function () {
+                $.alert({
+                    title: "Error",
+                    type: "red",
+                    content: MENSAJE_ERROR
+                });
+            }
+        });
+    });
 });

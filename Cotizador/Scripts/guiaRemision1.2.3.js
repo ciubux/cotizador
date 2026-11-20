@@ -2856,13 +2856,18 @@ jQuery(function ($) {
                             'Fact. Ped. Origen</button > ';
                     }
 
+                    var fechaRegistroGuia = "";
+                    if ($("#guiaRemision_fechaRegistroDesde").length > 0) {
+                        fechaRegistroGuia = '<br/><span class="spn-nombre-comercial">[R:' + guiaRemisionList[i].fechaRegistro + ']</span>';
+                    }
+
                     var guiaRemision = '<tr data-expanded="false">' +
                         '<td>  ' + guiaRemisionList[i].idMovimientoAlmacen + '</td>' +
                         '<td>  ' + guiaRemisionList[i].serieNumeroGuia + '</td>' +
                         '<td>  ' + guiaRemisionList[i].pedido_numeroPedidoString + '</td>' +
                         '<td>  ' + guiaRemisionList[i].motivoTrasladoString + '</td>' +
                         '<td>  ' + guiaRemisionList[i].usuario_nombre + '</td>' +
-                        '<td data-sort-value="' + guiaRemisionList[i].fechaEmision.substr(0, 10) + '">  ' + invertirFormatoFecha(guiaRemisionList[i].fechaEmision.substr(0, 10)) + '</td>' +
+                        '<td data-sort-value="' + guiaRemisionList[i].fechaEmision.substr(0, 10) + '">  ' + invertirFormatoFecha(guiaRemisionList[i].fechaEmision.substr(0, 10)) + fechaRegistroGuia + '</td>' +
                         '<td data-sort-value="' + guiaRemisionList[i].fechaTraslado.substr(0, 10) + '">  ' + invertirFormatoFecha(guiaRemisionList[i].fechaTraslado.substr(0, 10)) + '</td>' +
                         '<td>  ' + clienteRazonSocial + '</td>' +
                         '<td>  ' + guiaRemisionList[i].pedido_cliente_ruc + '</td>' +

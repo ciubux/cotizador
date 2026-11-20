@@ -895,7 +895,17 @@ namespace Cotizador.Controllers
             this.NotaIngresoSession.fechaTrasladoHasta = new DateTime(Int32.Parse(movHasta[2]), Int32.Parse(movHasta[1]), Int32.Parse(movHasta[0]), 23, 59, 59);
         }
 
+        public void ChangeFechaRegistroDesde()
+        {
+            String[] movDesde = this.Request.Params["fechaDesde"].Split('/');
+            this.NotaIngresoSession.fechaRegistroDesde = new DateTime(Int32.Parse(movDesde[2]), Int32.Parse(movDesde[1]), Int32.Parse(movDesde[0]));
+        }
 
+        public void ChangeFechaRegistroHasta()
+        {
+            String[] movHasta = this.Request.Params["fechaHasta"].Split('/');
+            this.NotaIngresoSession.fechaRegistroHasta = new DateTime(Int32.Parse(movHasta[2]), Int32.Parse(movHasta[1]), Int32.Parse(movHasta[0]), 23, 59, 59);
+        }
         public String ChangeIdCiudad()
         {
             NotaIngreso notaIngreso = this.NotaIngresoSession;

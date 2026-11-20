@@ -151,5 +151,60 @@ namespace DataLayer
 
             return obj;
         }
+
+        public void updatePortafolioProductosUsuarios(Guid idPortafolio, Guid idUsuario, List<Guid> idsUsuarios)
+        {
+            var objCommand = GetSqlCommand("pi_portafolio_productos_usuarios");
+            InputParameterAdd.Guid(objCommand, "idPortafolio", idPortafolio);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(Guid)));
+
+            if (idsUsuarios != null)
+            {
+                foreach (Guid id in idsUsuarios)
+                {
+                    if (id != Guid.Empty)
+                    {
+                        DataRow rowObj = tvp.NewRow();
+                        rowObj["ID"] = id;
+                        tvp.Rows.Add(rowObj);
+                    }
+                }
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@usuarios", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.UniqueIdentifierList";
+
+            ExecuteNonQuery(objCommand);
+        }
+
+        public void updatePortafolioProductosRoles(Guid idPortafolio, Guid idUsuario, List<int> idsRoles)
+        {
+            var objCommand = GetSqlCommand("pi_portafolio_productos_roles");
+            InputParameterAdd.Guid(objCommand, "idPortafolio", idPortafolio);
+            InputParameterAdd.Guid(objCommand, "idUsuario", idUsuario);
+
+            DataTable tvp = new DataTable();
+            tvp.Columns.Add(new DataColumn("ID", typeof(int)));
+
+            if (idsRoles != null)
+            {
+                foreach (int id in idsRoles)
+                {
+                    DataRow rowObj = tvp.NewRow();
+                    rowObj["ID"] = id;
+                    tvp.Rows.Add(rowObj);
+                }
+            }
+
+            SqlParameter tvparam = objCommand.Parameters.AddWithValue("@roles", tvp);
+            tvparam.SqlDbType = SqlDbType.Structured;
+            tvparam.TypeName = "dbo.IntegerList";
+
+            ExecuteNonQuery(objCommand);
+        }
     }
 }

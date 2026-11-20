@@ -686,6 +686,18 @@ namespace Cotizador.Controllers
             this.documentoCompraSession.fechaEmisionHasta = new DateTime(Int32.Parse(desde[2]), Int32.Parse(desde[1]), Int32.Parse(desde[0]));
         }
 
+        public void ChangeFechaRegistroDesde()
+        {
+            String[] desde = this.Request.Params["fechaDesde"].Split('/');
+            this.documentoCompraSession.fechaRegistroDesde = new DateTime(Int32.Parse(desde[2]), Int32.Parse(desde[1]), Int32.Parse(desde[0]));
+        }
+
+        public void ChangeFechaRegistroHasta()
+        {
+            String[] desde = this.Request.Params["fechaHasta"].Split('/');
+            this.documentoCompraSession.fechaRegistroHasta = new DateTime(Int32.Parse(desde[2]), Int32.Parse(desde[1]), Int32.Parse(desde[0]), 23, 59, 59);
+        }
+
         public void ChangeSolicitadoAnulacion()
         {
             this.documentoCompraSession.solicitadoAnulacion = Int32.Parse(this.Request.Params["solicitadoAnulacion"]) == 1;

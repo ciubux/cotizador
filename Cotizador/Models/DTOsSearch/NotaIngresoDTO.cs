@@ -14,6 +14,7 @@ namespace Cotizador.Models.DTOs
         public String usuario_nombre { get; set; }
         public DateTime? fechaEmision { get; set; }
         public DateTime? fechaTraslado { get; set; }
+        public String fechaRegistro { get; set; }
         public String pedido_cliente_razonSocial { get; set; }
         public String pedido_cliente_ruc { get; set; }
         public String ciudadDestino_nombre { get; set; }

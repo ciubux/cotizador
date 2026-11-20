@@ -34,5 +34,21 @@ namespace BusinessLayer
                 return dal.insertOrUpdatePortafolioProductos(obj, skus, idUsuario);
             }
         }
+
+        public void updatePortafolioProductosUsuarios(Guid idPortafolio, Guid idUsuario, List<Guid> idsUsuarios)
+        {
+            using (PortafolioProductosDAL dal = new PortafolioProductosDAL())
+            {
+                dal.updatePortafolioProductosUsuarios(idPortafolio, idUsuario, idsUsuarios);
+            }
+        }
+
+        public void updatePortafolioProductosRoles(Guid idPortafolio, Guid idUsuario, List<int> idsRoles)
+        {
+            using (PortafolioProductosDAL dal = new PortafolioProductosDAL())
+            {
+                dal.updatePortafolioProductosRoles(idPortafolio, idUsuario, idsRoles);
+            }
+        }
     }
 }

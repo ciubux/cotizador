@@ -1062,6 +1062,11 @@ jQuery(function ($) {
                         movimientoAlmacen = facturaList[i].notaIngreso.serieNumeroNotaIngreso;
                     }
 
+                    var fechaRegistroCPE = "";
+                    if ($("#documentoVenta_fechaRegistroDesde").length > 0) {
+                        fechaRegistroCPE = '<br/><span class="spn-nombre-comercial">[R:' + facturaList[i].FechaRegistroDesc + ']</span>';
+                    }
+
                     var factura = '<tr data-expanded="false">' +
                         '<td>  ' + facturaList[i].idDocumentoVenta + '</td>' +
                         '<td>  ' + facturaList[i].serieNumero + '</td>' +
@@ -1073,7 +1078,7 @@ jQuery(function ($) {
 
 
                         '<td>  ' + facturaList[i].usuario.nombre + '</td>' +
-                        '<td data-sort-value="' + facturaList[i].fechaEmision.substr(0, 10) + '">  ' + invertirFormatoFecha(facturaList[i].fechaEmision.substr(0, 10)) + '</td>' +
+                        '<td data-sort-value="' + facturaList[i].fechaEmision.substr(0, 10) + '">  ' + invertirFormatoFecha(facturaList[i].fechaEmision.substr(0, 10)) + fechaRegistroCPE + '</td>' +
                         '<td data-sort-value="' + facturaList[i].fechaVencimiento.substr(0, 10) + '">  ' + invertirFormatoFecha(facturaList[i].fechaVencimiento.substr(0, 10)) + '</td>' +
                         '<td>  ' + facturaList[i].cliente.codigo + '</td>' +
                         '<td>  ' + facturaList[i].cliente.razonSocial + '</td>' +
